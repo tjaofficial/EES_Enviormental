@@ -387,7 +387,11 @@
                         Truck ID
                     </th>
                     <td id="formCborder">
-                        {{ data.truck_id5 }}
+                        {% if data.truck_id5 == NULL %}
+                            {{ empty.truck_id5 }}
+                        {% else %}
+                            {{ data.truck_id5 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
