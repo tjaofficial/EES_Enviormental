@@ -1,0 +1,35 @@
+{% load static %}
+
+<html>
+    <head>
+       <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="page">
+            <div id="login">
+                <h1>Register</h1>
+                <h2>Sidock Group, Inc.</h2>
+                <h2>DTE EES Coke Sign-In</h2>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {% for field in form%}
+                        {{ field.label }}:
+                        {{ field }}<br><br>
+                    {% endfor %}
+                    {{ profile_form.cert_date.label }}:
+                    {{ profile_form.cert_date }}
+                    <br><br>
+                    <input type="submit" name="create_user">
+                </form>
+
+                <p>
+                    Already have an acoount? <a href="{% url 'Login'  %}">Login</a>
+                </p>
+
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor%}
+            </div>
+        </div>
+    </body>
+</html>

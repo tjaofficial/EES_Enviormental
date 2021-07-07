@@ -1,0 +1,56 @@
+#page{
+    background-color: aqua;
+    height: 100%;
+    width: 100%;
+    display: inline-flex;
+}
+#timeTabs{
+    background-color: antiquewhite;
+    width: auto;
+    height: auto;
+}
+#uncompleted{
+    width: 100%;
+    height: auto;
+    background-color: blue;
+    font-size: 23px;
+    color: white;
+    padding-top: 19px;
+    padding-bottom: 19px;
+    padding-left: 19px;
+    padding-right: 19px;
+    border: 2px black solid;
+}
+#formTabsSelected{
+    width: 300px;
+    height: auto;
+    background-color: lightgray;
+    font-size: 23px;
+    color: white;
+    margin: auto;
+    padding-top: 19px;
+    padding-bottom: 19px;
+    padding-left: 19px;
+    border: 2px black solid;
+}
+#formTabsUnselected{
+    width: 300px;
+    height: auto;
+    background-color: yellow;
+    font-size: 23px;
+    color: black;
+    margin: auto;
+    padding-top: 19px;
+    padding-bottom: 19px;
+    padding-left: 19px;
+    border: 2px black solid;
+}
+#pt_admin_box1{
+    border: 2px black solid; 
+    height: 40px; 
+    padding-left: 30px; 
+    padding-right: 30px;
+}
+#pt_admin_box2{
+    
+}

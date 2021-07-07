@@ -1,0 +1,89 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list %}
+         
+
+       <li>Today: {{ todays_log.date_save }} {{ oven1 }}, {{ oven2 }}, {{ oven3 }}, {{ oven4 }}</li>
+
+        <li>
+            
+        </li>
+<div>   
+    <table style="border-collapse: collapse; text-align: center;">
+        <tr>
+            <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                Oven No.
+            </th>
+            <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                Most Recent Reading
+            </th>
+            <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                Next Reading to be Completed By
+            </th>
+            <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                Days Left
+            </th>
+        </tr>
+       {% for item in poop %}
+        <tr>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.o1 }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.exp_date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.due_date }}
+            </td>
+        </tr>
+         <tr>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.o2 }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.exp_date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+               {{ item.due_date }}
+            </td>
+            
+        </tr>
+        <tr>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.o3 }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.exp_date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+               {{ item.due_date }}
+            
+        </tr>
+        <tr>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.o4 }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                {{ item.exp_date }}
+            </td>
+            <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+               {{ item.due_date }}
+            </td>
+            
+        </tr>
+        {% endfor %}
+    </table>
+</div>    
+{% endblock %}

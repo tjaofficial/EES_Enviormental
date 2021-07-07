@@ -1,0 +1,468 @@
+<html>
+
+    <style>
+        #boxc1{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 200px;
+            max-width: 200px;
+            height: 35px;
+        }
+        #boxTitle{
+            font-size: 30px;
+        }
+        #formDbox1{
+            width: 130px; 
+            text-align: right;
+            border-left: 3px solid black;
+            padding-bottom: 7px;
+            padding-top: 7px;
+        }
+        #formDbox2{
+            width: 100px; 
+            text-align: center;
+            
+        }
+        #formDbox3{
+            width: 130px; 
+            text-align: center;
+            border-left: 3px solid black;
+            border-right: 3px solid black;
+            padding-bottom: 7px;
+            padding-top: 7px;
+        }
+        #formCborder{
+            width: 125px;
+            border-right: 3px solid black;
+            padding-bottom: 7px;
+            padding-top: 7px;
+        }
+        #formCborder2{
+            width: 125px;
+            border-right: 3px solid black;
+            border-left: 3px solid black;
+            padding-bottom: 7px;
+            padding-top: 7px;
+        }
+        #alltrucks{
+            margin: auto;
+            width: fit-content;
+            display: flex;
+        }
+        #formCspace{
+            padding: 10px;
+        }
+    </style>
+
+
+
+    <a href="{{ back.0.link }}">Back</a>
+    <table style="border-collapse: collapse; margin: auto;">
+        <tr>
+            <th id="boxTitle" colspan="5" style="text-align: center;">
+                Fugiative Dust Inspections - <br>Weekly Random Truck Inspection - Form (D)
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <th colspan="3" style="text-align: center;">
+                Facility Name: EES Coke Battery LLC
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <th colspan="3" style="text-align: center;">
+                Week Of: {{ data.week_start }} - {{ data.week_end }}
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <td style="height: 25px;" ></td>
+        </tr>
+    </table>
+    <form action="" method="POST">
+        <div id="alltrucks">
+            <div id="formCspace">
+                <table style="border-collapse: collapse;">
+                    <tr style="border: 3px solid black;" >
+                        <th colspan="2" style="width: 150px; text-align: center;">
+                            Truck #1
+                        </th>
+                    </tr>
+                    <tr>
+                        <th id="formDbox1">
+                            Truck ID
+                        </th>
+                        <td id="formCborder">
+                            {% if data.truck_id1 == NULL %}
+                                {{ empty.truck_id1 }}
+                            {% else %}
+                                {{ data.truck_id1 }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th id="formDbox1">
+                            Date: 
+                        </th>
+                        <td id="formCborder">
+                             {{ data.date1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th id="formDbox1">
+                            Time:
+                        </th>
+                        <td id="formCborder">
+                            {{ data.time1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th id="formDbox1">
+                            Contents:
+                        </th>
+                        <td id="formCborder">
+                            {{ data.contents1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th id="formDbox1">
+                            6" or greater freeboard?
+                        </th>
+                        <td id="formCborder">
+                            {{ data.freeboard1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th id="formDbox1">
+                            If NO, is material adequately wetted and stable?
+                        </th>
+                        <td id="formCborder">
+                            {{ data.wetted1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" id="formDbox3">
+                            Comments:
+                        </th>
+                    </tr>
+                    <tr style="border-bottom: 3px solid black; text-align: center;">
+                        <td id="formCborder2" colspan="2">
+                            {{ data.comments1 }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="formCspace">
+                <table style="border-collapse: collapse;">
+                <tr style="border: 3px solid black;" >
+                    <th colspan="2" style="width: 150px; text-align: center;">
+                        Truck #2
+                    </th>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Truck ID
+                    </th>
+                    <td id="formCborder">
+                        {% if data.truck_id2 == NULL %}
+                            {{ empty.truck_id2 }}
+                        {% else %}
+                            {{ data.truck_id2 }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Date:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.date2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Time:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.time2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Contents:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.contents2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        6" or greater freeboard?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.freeboard2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        If NO, is material adequately wetted and stable?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.wetted2 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" id="formDbox3">
+                        Comments:
+                    </th>
+                </tr>
+                <tr style="border-bottom: 3px solid black; text-align: center;">
+                    <td id="formCborder2" colspan="2">
+                        {{ data.comments2 }}
+                    </td>
+                </tr>
+            </table>
+            </div>
+            <div id="formCspace">
+                <table style="border-collapse: collapse;">
+                <tr style="border: 3px solid black;" >
+                    <th colspan="2" style="width: 150px; text-align: center;">
+                        Truck #3
+                    </th>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Truck ID
+                    </th>
+                    <td id="formCborder">
+                        {% if data.truck_id3 == NULL %}
+                                {{ empty.truck_id3 }}
+                            {% else %}
+                                {{ data.truck_id3 }}
+                            {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Date:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.date3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Time:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.time3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Contents:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.contents3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        6" or greater freeboard?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.freeboard3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        If NO, is material adequately wetted and stable?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.wetted3 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" id="formDbox3">
+                        Comments:
+                    </th>
+                </tr>
+                <tr style="border-bottom: 3px solid black; text-align: center;">
+                    <td id="formCborder2" colspan="2">
+                        {{ data.comments3 }}
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+        <div id="alltrucks">
+            <div id="formCspace">
+                <table style="border-collapse: collapse;">
+                <tr style="border: 3px solid black;" >
+                    <th colspan="2" style="width: 150px; text-align: center;">
+                        Truck #4
+                    </th>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Truck ID
+                    </th>
+                    <td id="formCborder">
+                        {% if data.truck_id4 == NULL %}
+                            {{ empty.truck_id4 }}
+                        {% else %}
+                            {{ data.truck_id4 }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Date:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.date4 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Time:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.time4 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Contents:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.contents4 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        6" or greater freeboard?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.freeboard4 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        If NO, is material adequately wetted and stable?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.wetted4 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" id="formDbox3">
+                        Comments:
+                    </th>
+                </tr>
+                <tr style="border-bottom: 3px solid black; text-align: center;">
+                    <td id="formCborder2" colspan="2">
+                        {{ data.comments4 }}
+                    </td>
+                </tr>
+            </table>
+            </div>
+            <div id="formCspace">
+                <table style="border-collapse: collapse;">
+                <tr style="border: 3px solid black;" >
+                    <th colspan="2" style="width: 150px; text-align: center;">
+                        Truck #5
+                    </th>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Truck ID
+                    </th>
+                    <td id="formCborder">
+                        {{ data.truck_id5 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Date:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.date5 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Time:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.time5 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        Contents:
+                    </th>
+                    <td id="formCborder">
+                        {{ data.contents5 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        6" or greater freeboard?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.freeboard5 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th id="formDbox1">
+                        If NO, is material adequately wetted and stable?
+                    </th>
+                    <td id="formCborder">
+                        {{ data.wetted5 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" id="formDbox3">
+                        Comments:
+                    </th>
+                </tr>
+                <tr style="border-bottom: 3px solid black; text-align: center;">
+                    <td id="formCborder2" colspan="2">
+                        {{ data.comments5 }}
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+       <!-- <table style="border-collapse: collapse; margin: auto;">
+            <tr>
+                <td style="height: 40px" > </td>
+            </tr> 
+            <tr>
+                <td colspan="6" style="width: 1218px;  border: 1px solid black; font-size: 20px;">Any Issues? Describe{{ form.issues }}</td>
+            </tr>
+            <tr>
+                <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue{{ form.notified }}</td>
+                <td colspan="1" style="width: 203px; border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
+                <td colspan="1" style="width: 203px; border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken{{ form.cor_action }}</td>
+            </tr>
+        </table>--->
+        <br><br>
+        <input type="submit" value="Save" style="font-size: 40px">
+        <br><br><br>
+        <input type="submit" value="Submit Form" style="font-size: 40px">
+    </form>
+    
+</html>

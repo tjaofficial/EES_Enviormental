@@ -1,0 +1,22 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    #path("", views.index, name="index"),
+    #path("tobe", views.tobe, name="tobe"),
+    path("Register", views.register_view, name="Register"),
+    path("Login", views.login_view, name="Login"),
+    path("Logout", views.logout_view, name="Logout"),
+    path("daily_battery_profile", views.daily_battery_profile_view, name="daily_battery_profile"),
+    path("IncompleteForms", views.IncompleteForms, name="IncompleteForms"),
+    path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),
+    path("admin_data", views.admin_data_view, name="admin_data"),
+    path("Daily/Method303/formA1", views.formA1, name="formA1"),
+    path("Daily/Method303/formA2", views.formA2, name="formA2"),
+    path("Daily/Method303/formA3", views.formA3, name="formA3"),
+    path("Daily/Method303/formA4", views.formA4, name="formA4"),
+    path("Daily/Method303/formA5", views.formA5, name="formA5"),
+    path("Daily/formB", views.formB, name="formB"),
+    path("Daily/formC", views.formC, name="formC"),
+    path("Daily/formD", views.formD, name="formD")
+]

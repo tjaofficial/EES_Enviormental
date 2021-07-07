@@ -1,0 +1,609 @@
+<html>
+    <style>
+        #paperSize{
+            width: 1400px;
+            margin: auto;
+            padding-top: 50px;
+        }
+        #boxTitle{
+            font-size: 30px;
+        }
+        #boxa1{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 150px;
+            max-width: 150px;
+            height: 35px;
+        }
+        #boxa2{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 80px;
+            max-width: 80px;
+            height: 35px;
+        }
+        #boxa3{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 300px;
+            max-width: 300px;
+            height: 35px;
+        }
+        #boxa4{
+            align-content: center;
+            text-align: left;
+            min-width: 250px;
+            max-width: 250px;
+            height: 35px;
+        }
+        #boxa5{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 100px;
+            max-width: 100px;
+            height: 35px;
+        }
+        #boxa6{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            height: 25px;
+            width: 30px;
+        }
+        #noteBox{
+            border-collapse: collapse; 
+            margin: auto;
+            width: 1100px;
+        }
+    </style>
+
+<body>
+    <div id="paperSize">
+        <div>
+            <a href="../{{ back.0.link }}">Back</a>
+        </div>
+        <div style="padding-top: 75px;">
+            <form>
+                <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <th id="boxTitle" colspan="5" style="text-align: left;">Method 303 Lids and Offtakes - Form (A-3)</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: left;">Facility Name: EES Coke Battery LLC</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ request.user.first_name }} {{ request.user.last_name }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ todays_log.date_save }}
+                    </tr>
+                    <tr>
+                        <th colspan="6">
+                            Battery No. 5 &nbsp; &nbsp; &nbsp; 
+                            Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
+                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ todays_log.inop_ovens }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="6">
+                            Crew:
+                            &nbsp; &nbsp;{{ todays_log.crew }}
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                            Battery Foreman:
+                            &nbsp; &nbsp;{{ todays_log.foreman }}
+                        </th>
+                    </tr>
+                </table>
+                
+                
+                
+                <table style="border-collapse: collapse; margin: auto; margin-left: 250px;">
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <th id="boxa4" colspan="5">Start Time:<input type="time"> <br> End Time:<input type="time"></th>
+                        <th id="boxa4" colspan="5"></th>
+                        <th id="boxa4" colspan="6">Start Time:<input type="time"> <br> End Time:<input type="time"></th>
+                        <th id="boxa4" colspan="1"></th>
+                    </tr>
+                    <tr>
+                        <th id="boxa5" style="max-width: 100px;"colspan="9">
+                            OFFTAKES AND MINI STANDPIPES
+                        </th>
+                        <th></th>
+                        <th id="boxa5" style="max-width: 100px;"colspan="6">
+                            LIDS
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td id="boxa6" colspan="1">
+                            Oven
+                        </td>
+                        <td id="boxa6" colspan="8">
+                            Location
+                        </td>
+                        <td></td>
+                        <td id="boxa6" colspan="1">
+                            Oven
+                        </td>
+                        <td id="boxa6" colspan="5">
+                            Location
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6">D</td>
+                        <td id="boxa6">C</td>
+                        <td id="boxa6">F</td>
+                        <td id="boxa6">S</td>
+                        <td id="boxa6">B</td>
+                        <td id="boxa6">P</td>
+                        <td id="boxa6">O</td>
+                        <td id="boxa6">MS</td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                         <td id="boxa6"></td>
+                        <td id="boxa6">D</td>
+                        <td id="boxa6">1</td>
+                        <td id="boxa6">2</td>
+                        <td id="boxa6">3</td>
+                        <td id="boxa6">4</td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; <input style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input style="width: 40px;" type="text">sec</td>
+                        <td colspan="7" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; <input style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input style="width: 40px;" type="text">sec</td>
+                    </tr>
+                </table>
+                <br><br>
+                <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <td style="width: 150px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                            D = Dampered off
+                        </td>
+                        <td style="width: 254px; text-align: center;">
+                            Total Traverse Time
+                        </td>
+                        <td rowspan="2" style="width: 354px; text-align: left;">
+                            = 340 + 10 sec * # of leaks) = <input style="width: 40px;" type="text">sec
+                        </td>
+                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                            Valid Run?
+                        </td>
+                        <td></td>
+                    </tr>    
+                    <tr> 
+                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                            C = Cap
+                        </td>
+                        <td style="text-align: center;">
+                            (Offtakes)
+                        </td>
+                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                            <input type="radio" id="yes" name="yesNo" value="yes">
+                            <label for="yes">Yes</label>
+                            <input type="radio" id="no" name="yesNo" value="no">
+                            <label for="no">No</label>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                            F = Flange
+                        </td>
+                        <td style="text-align: center;"></td>
+                        <td></td>
+                    </tr>
+                    <tr> 
+                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                            S = Slip Joint
+                        </td>
+                        <td style="text-align: center;">
+                            Allowed Traverse Time:
+                        </td>
+                        <td rowspan="2" style="width: 354px; text-align: left;">
+                            = 340 + 10 sec * # of leaks) = <input style="width: 40px;" type="text">sec
+                        </td>
+                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                            Valid Run?
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                            B = Base
+                        </td>
+                        <td style="text-align: center;">
+                            (Lids)
+                        </td>
+                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                            <input type="radio" id="yes" name="yesNo" value="yes">
+                            <label for="yes">Yes</label>
+                            <input type="radio" id="no" name="yesNo" value="no">
+                            <label for="no">No</label>
+                        </td>
+                    </tr> 
+                    <tr> 
+                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                            P = Piping
+                        </td>
+                        <td style="text-align: center;"></td>
+                        <td></td>
+                    </tr> 
+                    <tr> 
+                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                            O = Other
+                        </td>
+                        <td colspan="3" style="text-align: center;">
+                            Total Offtake Leaks: <input type="number"> Total Leaking Lids: <input type="number">
+                        </td>
+                    </tr>    
+                    <tr>  
+                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                            MS = Mini Standpipe
+                        </td>
+                        <td style="text-align: center;"></td>
+                        <td></td>
+                    </tr>
+                </table>    
+                
+                    
+                    
+                    
+                    
+                <table style="border-collapse: collapse; margin: auto;">    
+                     <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <td style="width: 100px;"></td>
+                        <td></td>
+                        <td>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text"> x 100
+                        </td>
+                        <td></td>
+                        <td style="width: 75px"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center; margin: auto; width: 133px;">
+                            % Leaking Lids = 
+                        </td>
+                        <td>
+                            ---------------------- = 
+                        </td>
+                        <td>
+                            --------------------------------- = 
+                        </td>
+                        <td>
+                            <input style="width: 40px;" type="text">%
+                        </td>
+                        <td></td>
+                    </tr>
+                     <tr>
+                         <td></td>
+                         <td></td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                        </td>
+                        <td>
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - <input style="width: 30px;" type="number" value="{{ todays_log.inop_ovens }}">) - <input style="width: 40px;" type="text">
+                        </td>
+                         <td></td>
+                         <td></td>
+                    </tr>
+                       <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <td style="width: 100px;"></td>
+                        <td></td>
+                        <td>
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text"> x 100
+                        </td>
+                        <td></td>
+                        <td style="width: 75px"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center; margin: auto; width: 133px;">
+                            % Leaking Lids = 
+                        </td>
+                        <td>
+                            ---------------------- = 
+                        </td>
+                        <td>
+                            --------------------------------- = 
+                        </td>
+                        <td>
+                            <input style="width: 40px;" type="text">%
+                        </td>
+                        <td></td>
+                    </tr>
+                     <tr>
+                         <td></td>
+                         <td></td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                        </td>
+                        <td>
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - <input style="width: 30px;" type="number" value="{{ todays_log.inop_ovens }}">) - <input style="width: 40px;" type="text">
+                        </td>
+                         <td></td>
+                         <td></td>
+                    </tr>
+                   <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <td style="text-align: center; margin: auto; " colspan="6">
+                            Where: P<sub>ve</sub> = Leaking Lids Obsered, P<sub>ovn</sub> = Lids Per Oven, P<sub>no</sub> = Lids Not Observed, N = Number of Ovens, N<sub>i</sub> = Inoperable Oven,<br> T<sub>ve</sub> = Leaking Offtakes Observed, T<sub>ovn</sub> = Ofttakes Per Oven, J = Permanent Jumper Pipes, T<sub>no</sub> = Offtakes Not Observed
+                        </td>
+                    </tr> 
+                </table>
+                <div id="noteBox">
+                    Notes: <br>
+                    <textarea name="comments" rows="6" cols="90" style="font-size: 20px;">N/A</textarea>
+                </div>
+                
+                
+                
+                
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
+                <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                    <tr>
+                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">Any Issues? Describe<input type="text" style="font-size: 20px; width: 900px;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue<input type="text" style="font-size: 20px; width: 500px;"></td>
+                        <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="date" style="font-size: 20px;"></td>
+                        <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="time" style="font-size: 20px;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">
+                            Signature:<input type="text" style="font-size: 20px; width: 500px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken<input type="text" style="font-size: 20px; width: 900px;"></td>
+                    </tr>
+                </table>
+                <br><br>
+                <input type="submit" value="Save" style="font-size: 40px">
+                <br><br><br>
+                <input type="submit" value="Submit Form" style="font-size: 40px">
+            </form> 
+        </div>    
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+</html>

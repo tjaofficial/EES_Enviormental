@@ -1,0 +1,46 @@
+{% load static %}
+
+<html>
+    <head>
+       <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="page">
+            <div id="timeTabs">
+                
+                    <div id="formTabsSelected">
+                        <a href="{% url 'IncompleteForms' %}">Dashboard - Hello, {{ request.user.first_name }}!<br><br></a>
+                        <a href="{% url 'Logout' %}">Logout</a>
+                    </div>
+                <a href="dailyForms.html">
+                    <div id="formTabsUnselected">
+                        Daily Forms
+                    </div>
+                </a>
+                <a href="monthlyForms.html">
+                    <div id="formTabsUnselected">
+                        Monthly Forms
+                    </div>
+                </a>    
+                <a href="quarterlyForms.html">    
+                    <div id="formTabsUnselected">
+                        Quarterly Forms
+                    </div>
+                </a>    
+                <a href="semiAnnualForms.html">    
+                    <div id="formTabsUnselected">
+                        Semi-Annual Forms
+                    </div>
+                </a>
+                <a href="{% url 'admin_data' %}">    
+                    <div id="formTabsUnselected">
+                        Admin Data
+                    </div>
+                </a>
+            </div>
+            {% block list%}
+            
+            {% endblock %}
+        </div>
+    </body>
+</html>

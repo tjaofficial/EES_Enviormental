@@ -1,0 +1,257 @@
+<html>
+    <style>
+        #paperSize{
+            width: 1400px;
+            margin: auto;
+            padding-top: 50px;
+        }
+        #boxTitle{
+            font-size: 30px;
+        }
+        #boxa1{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 150px;
+            max-width: 150px;
+            height: 35px;
+        }
+        #boxa2{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 80px;
+            max-width: 80px;
+            height: 35px;
+        }
+        #boxa3{
+            align-content: center;
+            text-align: center;
+            border: 1px solid black;
+            min-width: 300px;
+            max-width: 300px;
+            height: 35px;
+        }
+    </style>
+
+<body>
+    <div id="paperSize">
+        <div>
+            <a href="../{{ back.0.link }}">Back</a>
+        </div>
+        <div style="padding-top: 75px;">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <th id="boxTitle" colspan="5" style="text-align: left;">
+                            Method 303 Charging - Form (A-1)
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: left;">
+                            Facility Name: EES Coke Battery LLC
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <th colspan="6">
+                            Inspectors Name: &nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp;{{ data.date }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <th colspan="6">
+                            Battery No. 5 &nbsp; &nbsp; &nbsp; 
+                            Crew:
+                            &nbsp; &nbsp;{{ data.crew }}
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                            Battery Foreman:
+                            &nbsp; &nbsp;{{ data.foreman }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <th colspan="6">
+                            Start Time:{{ data.start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ data.stop }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <td id="boxa2">Charge Number</td>
+                        <td id="boxa2">Oven Number</td>
+                        <td id="boxa1">Start Time</td>
+                        <td id="boxa1">Stop Time</td>
+                        <td id="boxa1">Visible Emissions (sec)</td>
+                        <td id="boxa3">Comments</td>
+                    </tr>
+                    <tr>
+                        <td id="boxa2" style="text-align: center;">1</td>
+                        <td id="boxa2">
+                            {{ readings.c1_no }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c1_start }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c1_stop }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c1_sec }}
+                        </td>
+                        <td id="boxa3">
+                            {{ readings.c1_comments }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxa2" style="text-align: center;">2</td>
+                        <td id="boxa2">
+                            {{ readings.c2_no }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c2_start }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c2_stop }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c2_sec }}
+                        </td>
+                        <td id="boxa3">
+                            {{ readings.c2_comments }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxa2" style="text-align: center;">3</td>
+                        <td id="boxa2">
+                            {{ readings.c3_no }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c3_start }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c3_stop }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c3_sec }}
+                        </td>
+                        <td id="boxa3">
+                            {{ readings.c3_comments }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxa2" style="text-align: center;">4</td>
+                        <td id="boxa2">
+                            {{ readings.c4_no }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c4_start }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c4_stop }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c4_sec }}
+                        </td>
+                        <td id="boxa3">
+                            {{ readings.c4_comments }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxa2" style="text-align: center;">5</td>
+                        <td id="boxa2">
+                            {{ readings.c5_no }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c5_start }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c5_stop }}
+                        </td>
+                        <td id="boxa1">
+                            {{ readings.c5_sec }}
+                        </td>
+                        <td id="boxa3">
+                            {{ readings.c5_comments }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td id="boxa1">Total(Seconds):</td>
+                        <td id="boxa1">add all 5 charges</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > 
+                            LC #: {{ readings.larry_car }}
+                        </td>
+                    </tr> 
+                    <tr style="font-size: 20px;">
+                        <td>Comments:</td>
+                    </tr>
+                    <tr style="font-size: 20px;text-align: center;">
+                        <td colspan="6">
+                            {{ readings.comments }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                </table>
+                <br><br>
+                <input type="submit" value="Save" style="font-size: 40px">
+                <br><br><br>
+                <input type="submit" value="Submit Form" style="font-size: 40px">
+            </form> 
+        </div>    
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+</html>

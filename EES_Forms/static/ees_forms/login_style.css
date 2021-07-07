@@ -1,0 +1,11 @@
+#page{
+    background-color: aqua;
+    height: 100%;
+    width: 100%;
+}
+#login{
+    margin: auto;
+    width: 310px;
+    text-align: center;
+    padding-top: 200px;
+}
