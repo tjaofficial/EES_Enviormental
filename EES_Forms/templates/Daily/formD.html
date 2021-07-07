@@ -113,7 +113,11 @@
                             Date: 
                         </th>
                         <td id="formCborder">
-                             {{ data.date1 }}
+                             {% if data.date1 == NULL %}
+                                {{ empty.date1 }}
+                            {% else %}
+                                {{ data.date1 }}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -121,7 +125,11 @@
                             Time:
                         </th>
                         <td id="formCborder">
-                            {{ data.time1 }}
+                            {% if data.time1 == NULL %}
+                                {{ empty.time1 }}
+                            {% else %}
+                                {{ data.time1 }}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -129,7 +137,11 @@
                             Contents:
                         </th>
                         <td id="formCborder">
-                            {{ data.contents1 }}
+                            {% if data.contents1 == NULL %}
+                                {{ empty.contents1 }}
+                            {% else %}
+                                {{ data.contents1 }}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -137,7 +149,11 @@
                             6" or greater freeboard?
                         </th>
                         <td id="formCborder">
-                            {{ data.freeboard1 }}
+                            {% if data.freeboard1 == NULL %}
+                                {{ empty.freeboard1 }}
+                            {% else %}
+                                {{ data.freeboard1 }}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -145,7 +161,11 @@
                             If NO, is material adequately wetted and stable?
                         </th>
                         <td id="formCborder">
-                            {{ data.wetted1 }}
+                            {% if data.wetted1 == NULL %}
+                                {{ empty.wetted1 }}
+                            {% else %}
+                                {{ data.wetted1 }}
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -155,7 +175,11 @@
                     </tr>
                     <tr style="border-bottom: 3px solid black; text-align: center;">
                         <td id="formCborder2" colspan="2">
-                            {{ data.comments1 }}
+                            {% if data.comments1 == NULL %}
+                                {{ empty.comments1 }}
+                            {% else %}
+                                {{ data.comments1 }}
+                            {% endif %}
                         </td>
                     </tr>
                 </table>
@@ -184,7 +208,11 @@
                         Date:
                     </th>
                     <td id="formCborder">
-                        {{ data.date2 }}
+                        {% if data.date2 == NULL %}
+                            {{ empty.date2 }}
+                        {% else %}
+                            {{ data.date2 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -192,7 +220,11 @@
                         Time:
                     </th>
                     <td id="formCborder">
-                        {{ data.time2 }}
+                        {% if data.time2 == NULL %}
+                            {{ empty.time2 }}
+                        {% else %}
+                            {{ data.time2 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -200,7 +232,11 @@
                         Contents:
                     </th>
                     <td id="formCborder">
-                        {{ data.contents2 }}
+                        {% if data.contents2 == NULL %}
+                            {{ empty.contents2 }}
+                        {% else %}
+                            {{ data.contents2 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -208,7 +244,11 @@
                         6" or greater freeboard?
                     </th>
                     <td id="formCborder">
-                        {{ data.freeboard2 }}
+                        {% if data.freeboard2 == NULL %}
+                            {{ empty.freeboard2 }}
+                        {% else %}
+                            {{ data.freeboard2 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -216,7 +256,11 @@
                         If NO, is material adequately wetted and stable?
                     </th>
                     <td id="formCborder">
-                        {{ data.wetted2 }}
+                        {% if data.wetted2 == NULL %}
+                            {{ empty.wetted2 }}
+                        {% else %}
+                            {{ data.wetted2 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -226,7 +270,11 @@
                 </tr>
                 <tr style="border-bottom: 3px solid black; text-align: center;">
                     <td id="formCborder2" colspan="2">
-                        {{ data.comments2 }}
+                        {% if data.comments2 == NULL %}
+                            {{ empty.comments2 }}
+                        {% else %}
+                            {{ data.comments2 }}
+                        {% endif %}
                     </td>
                 </tr>
             </table>
@@ -244,10 +292,10 @@
                     </th>
                     <td id="formCborder">
                         {% if data.truck_id3 == NULL %}
-                                {{ empty.truck_id3 }}
-                            {% else %}
-                                {{ data.truck_id3 }}
-                            {% endif %}
+                            {{ empty.truck_id3 }}
+                        {% else %}
+                            {{ data.truck_id3 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -255,7 +303,11 @@
                         Date:
                     </th>
                     <td id="formCborder">
-                        {{ data.date3 }}
+                        {% if data.date3 == NULL %}
+                            {{ empty.date3 }}
+                        {% else %}
+                            {{ data.date3 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -263,7 +315,11 @@
                         Time:
                     </th>
                     <td id="formCborder">
-                        {{ data.time3 }}
+                        {% if data.time3 == NULL %}
+                            {{ empty.time3 }}
+                        {% else %}
+                            {{ data.time3 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -271,7 +327,11 @@
                         Contents:
                     </th>
                     <td id="formCborder">
-                        {{ data.contents3 }}
+                        {% if data.contents3 == NULL %}
+                            {{ empty.contents3 }}
+                        {% else %}
+                            {{ data.contents3 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -279,7 +339,11 @@
                         6" or greater freeboard?
                     </th>
                     <td id="formCborder">
-                        {{ data.freeboard3 }}
+                        {% if data.freeboard3 == NULL %}
+                            {{ empty.freeboard3 }}
+                        {% else %}
+                            {{ data.freeboard3 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -287,7 +351,11 @@
                         If NO, is material adequately wetted and stable?
                     </th>
                     <td id="formCborder">
-                        {{ data.wetted3 }}
+                        {% if data.wetted3 == NULL %}
+                            {{ empty.wetted3 }}
+                        {% else %}
+                            {{ data.wetted3 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -297,7 +365,11 @@
                 </tr>
                 <tr style="border-bottom: 3px solid black; text-align: center;">
                     <td id="formCborder2" colspan="2">
-                        {{ data.comments3 }}
+                        {% if data.comments3 == NULL %}
+                            {{ empty.comments3 }}
+                        {% else %}
+                            {{ data.comments3 }}
+                        {% endif %}
                     </td>
                 </tr>
             </table>
@@ -328,7 +400,11 @@
                         Date:
                     </th>
                     <td id="formCborder">
-                        {{ data.date4 }}
+                        {% if data.date4 == NULL %}
+                            {{ empty.date4 }}
+                        {% else %}
+                            {{ data.date4 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -336,7 +412,11 @@
                         Time:
                     </th>
                     <td id="formCborder">
-                        {{ data.time4 }}
+                        {% if data.time4 == NULL %}
+                            {{ empty.time4 }}
+                        {% else %}
+                            {{ data.time4 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -344,7 +424,11 @@
                         Contents:
                     </th>
                     <td id="formCborder">
-                        {{ data.contents4 }}
+                        {% if data.contents4 == NULL %}
+                            {{ empty.contents4 }}
+                        {% else %}
+                            {{ data.contents4 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -352,7 +436,11 @@
                         6" or greater freeboard?
                     </th>
                     <td id="formCborder">
-                        {{ data.freeboard4 }}
+                        {% if data.freeboard4 == NULL %}
+                            {{ empty.freeboard4 }}
+                        {% else %}
+                            {{ data.freeboard4 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -360,7 +448,11 @@
                         If NO, is material adequately wetted and stable?
                     </th>
                     <td id="formCborder">
-                        {{ data.wetted4 }}
+                        {% if data.wetted4 == NULL %}
+                            {{ empty.wetted4 }}
+                        {% else %}
+                            {{ data.wetted4 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -370,7 +462,11 @@
                 </tr>
                 <tr style="border-bottom: 3px solid black; text-align: center;">
                     <td id="formCborder2" colspan="2">
-                        {{ data.comments4 }}
+                        {% if data.comments4 == NULL %}
+                            {{ empty.comments4 }}
+                        {% else %}
+                            {{ data.comments4 }}
+                        {% endif %}
                     </td>
                 </tr>
             </table>
@@ -399,7 +495,7 @@
                         Date:
                     </th>
                     <td id="formCborder">
-                         {% if data.date5 == NULL %}
+                        {% if data.date5 == NULL %}
                             {{ empty.date5 }}
                         {% else %}
                             {{ data.date5 }}
@@ -411,7 +507,11 @@
                         Time:
                     </th>
                     <td id="formCborder">
-                        {{ data.time5 }}
+                        {% if data.time5 == NULL %}
+                            {{ empty.time5 }}
+                        {% else %}
+                            {{ data.time5 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -419,7 +519,11 @@
                         Contents:
                     </th>
                     <td id="formCborder">
-                        {{ data.contents5 }}
+                        {% if data.contents5 == NULL %}
+                            {{ empty.contents5 }}
+                        {% else %}
+                            {{ data.contents5 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -427,7 +531,11 @@
                         6" or greater freeboard?
                     </th>
                     <td id="formCborder">
-                        {{ data.freeboard5 }}
+                        {% if data.freeboard5 == NULL %}
+                            {{ empty.freeboard5 }}
+                        {% else %}
+                            {{ data.freeboard5 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -435,7 +543,11 @@
                         If NO, is material adequately wetted and stable?
                     </th>
                     <td id="formCborder">
-                        {{ data.wetted5 }}
+                        {% if data.wetted5 == NULL %}
+                            {{ empty.wetted5 }}
+                        {% else %}
+                            {{ data.wetted5 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -445,7 +557,11 @@
                 </tr>
                 <tr style="border-bottom: 3px solid black; text-align: center;">
                     <td id="formCborder2" colspan="2">
-                        {{ data.comments5 }}
+                        {% if data.comments5 == NULL %}
+                            {{ empty.comments5 }}
+                        {% else %}
+                            {{ data.comments5 }}
+                        {% endif %}
                     </td>
                 </tr>
             </table>
