@@ -325,25 +325,26 @@ def formD(request):
     week = week_almost.week_start
     
     if week == last_friday:
-        if week_almost.truck_id1:
-            data = week_almost
-            empty_form = formD_form()
-
-            
-    else:
-        #initial_data = {
-            #'date1' : todays_log.date_save
-        #}
-        data = formD_form(initial = initial_data)
+        data = week_almost
+        empty_form = formD_form()
+        
         if request.method == "POST":
             form = formD_form(request.POST)
             form.save()
 
             return redirect('IncompleteForms')
-        else:
-            data = formD_form(initial = initial_data)
+
+    else:
+        data = formD_form()
+        empty_form = formD_form()
+        if request.method == "POST":
+            form = formD_form(request.POST)
+            form.save()
+
+            return redirect('IncompleteForms')
+        
     return render (request, "Daily/formD.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
     })
 
 

@@ -76,7 +76,11 @@
         </tr>
         <tr>
             <th colspan="3" style="text-align: center;">
-                Week Of: {{ data.week_start }} - {{ data.week_end }}
+                Week Of: {% if week == last_friday %}
+                            {{ week }} - {{ week_almost.week_end }}
+                        {% else %}
+                            {{ last_friday }} - {{ end_week }}
+                        {% endif %}
             </th>
             <th></th>
             <th></th>
