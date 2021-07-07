@@ -399,7 +399,11 @@
                         Date:
                     </th>
                     <td id="formCborder">
-                        {{ data.date5 }}
+                         {% if data.date5 == NULL %}
+                            {{ empty.date5 }}
+                        {% else %}
+                            {{ data.date5 }}
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
