@@ -330,18 +330,31 @@ def formD(request):
         
         if request.method == "POST":
             form = formD_form(request.POST)
-            form.save()
-
-            return redirect('IncompleteForms')
+            
+            
+            
+            A_valid = form.is_valid()
+            print(form.errors)
+            if A_valid:
+                print('penis')
+                form.save()
+                
+                return redirect('IncompleteForms')
 
     else:
+        initial_data = {
+            'week_start' : last_friday,
+            'week_end' : end_week
+        }
         data = formD_form()
-        empty_form = formD_form()
+        empty_form = formD_form(initial= initial_data)
         if request.method == "POST":
             form = formD_form(request.POST)
-            form.save()
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
 
-            return redirect('IncompleteForms')
+                return redirect('IncompleteForms')
         
     return render (request, "Daily/formD.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week

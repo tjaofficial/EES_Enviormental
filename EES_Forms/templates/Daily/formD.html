@@ -58,7 +58,9 @@
 
 
     <a href="{{ back.0.link }}">Back</a>
-    <table style="border-collapse: collapse; margin: auto;">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table style="border-collapse: collapse; margin: auto;">
         <tr>
             <th id="boxTitle" colspan="5" style="text-align: center;">
                 Fugiative Dust Inspections - <br>Weekly Random Truck Inspection - Form (D)
@@ -76,10 +78,10 @@
         </tr>
         <tr>
             <th colspan="3" style="text-align: center;">
-                Week Of: {% if week == last_friday %}
+            Week Of:    {% if week == last_friday %}
                             {{ week }} - {{ week_almost.week_end }}
                         {% else %}
-                            {{ last_friday }} - {{ end_week }}
+                            {{ empty.week_start }} - {{ empty.week_end }}
                         {% endif %}
             </th>
             <th></th>
@@ -91,7 +93,6 @@
             <td style="height: 25px;" ></td>
         </tr>
     </table>
-    <form action="" method="POST">
         <div id="alltrucks">
             <div id="formCspace">
                 <table style="border-collapse: collapse;">

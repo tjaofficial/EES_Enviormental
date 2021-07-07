@@ -426,12 +426,14 @@ class formD_model(models.Model):
     week_start = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
-        default = last_friday
+        blank=True,
+        null=True
     )
     week_end = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
-        default = end_week
+        blank=True,
+        null=True
     )
     truck_id1 = models.CharField(
         max_length=30, 
