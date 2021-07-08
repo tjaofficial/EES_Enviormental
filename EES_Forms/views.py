@@ -183,6 +183,10 @@ def formA1(request):
             B = reads.save(commit=False)
             B.form = A
             B.save()
+            
+            done = Forms.objects.filter(form='A-1')[0]
+            done.submitted = True
+            done.save()
            # D = admin.save(commit=False)
            # D.form = C
             #D.save()

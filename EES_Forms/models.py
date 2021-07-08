@@ -87,7 +87,39 @@ source_choices = (
     ('Flange', 'Flange'),
     ('Expansion Joint', 'Expansion Joint')
 )
-
+paved_roads = (
+    ('#4 Booster Station', '#4 Booster Station'),
+    ('#5 Battery Road', '#5 Battery Road'),
+    ('Coal Dump Horseshoe', 'Coal Dump Horseshoe'),
+    ('Coal Handling Road (Partial)', 'Coal Handling Road (Partial)'),
+    ('Coke Plant Road', 'Coke Plant Road'),
+    ('Coke Plant Mech Road', 'Coke Plant Mech Road'),
+    ('North Gate Area', 'North Gate Area'),
+    ('Compund Road', 'Compund Road'),
+    ('D-4 Blast Furnace Road', 'D-4 Blast Furnace Road'),
+    ('Gap Gate Road', 'Gap Gate Road'),
+    ('#3 Ore Dock Road', '#3 Ore Dock Road'),
+    ('River Road', 'River Road'),
+    ('Weigh Station Road', 'Weigh Station Road'),
+    ('Zug Island Road', 'Zug Island Road')
+)
+unpaved_roads = (
+    ('North Gate Truck Turn', 'North Gate Truck Turn'),
+    ('Screening Station Road', 'Screening Station Road'),
+    ('Coal Handling Road (Partial)', 'Coal Handling Road (Partial)'),
+    ('Taj Mahal Road', 'Taj Mahal Road'),
+    ('PECS Approach', 'PECS Approach'),
+    ('No. 2 Boilerhouse Road', 'No. 2 Boilerhouse Road')
+)
+parking_lots = (
+    ('Gap Gate Parking', 'Gap Gate Parking'),
+    ('Truck Garage Area', 'Truck Garage Area'),
+    ('EES Coke Office Parking', 'EES Coke Office Parking'),
+)
+storage_piles = (
+    ('Area B Coke Storage Piles', 'Area B Coke Storage Piles'),
+    ('EES Coke Coal Storage Piles', 'EES Coke Coal Storage Piles'),
+)
 # Create your models here.
 
 
@@ -1064,18 +1096,70 @@ class formL_model(models.Model):
  #-----------------------------------------------------------------FORM M---------------<
 class formM_model(models.Model):
     date = models.CharField(max_length=30)
-    paved = models.CharField(max_length=30)
-    pav_start = models.CharField(max_length=30)
-    pav_stop = models.CharField(max_length=30)
-    unpaved = models.CharField(max_length=30)
-    unp_start = models.CharField(max_length=30)
-    unp_stop = models.CharField(max_length=30)
-    parking = models.CharField(max_length=30)
-    par_start = models.CharField(max_length=30)
-    par_stop = models.CharField(max_length=30)
-    storage = models.CharField(max_length=30)
-    sto_start = models.CharField(max_length=30)
-    sto_stop = models.CharField(max_length=30)
+    paved = models.CharField(
+        max_length=30,
+        choices = paved_roads
+    )
+    pav_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    pav_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    unpaved = models.CharField(
+        max_length=30,
+        choices = unpaved_roads
+    )
+    unp_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    unp_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    parking = models.CharField(
+        max_length=30,
+        choices = parking_lots
+    )
+    par_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    par_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    storage = models.CharField(
+        max_length=30,
+        choices = storage_piles
+    )
+    sto_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    sto_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
     observer = models.CharField(max_length=30)
     cert_date = models.CharField(max_length=30)
     
