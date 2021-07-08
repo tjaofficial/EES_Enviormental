@@ -81,6 +81,12 @@ wetted_choices = (
     ('Yes', 'Yes'),
     ('No', 'No')
 )
+source_choices = (
+    ('Inspection Cap', 'Inspection Cap'),
+    ('GooseNeck', 'GooseNeck'),
+    ('Flange', 'Flange'),
+    ('Expansion Joint', 'Expansion Joint')
+)
 
 # Create your models here.
 
@@ -190,7 +196,8 @@ class bat_info_model(models.Model):
     
     def __str__(self):
         return self.name
-    
+ 
+
 class subA5_model(models.Model):
     date = models.CharField(max_length=30)   
     estab = models.CharField(max_length=30)
@@ -236,6 +243,7 @@ class subA5_model(models.Model):
     def __str__(self):
         return self.date
     
+#----------------------------------------------------------------------FORM A5 - DATA---------------<
 class subA5_readings_model(models.Model):
     form = models.OneToOneField(
         subA5_model, 
@@ -415,7 +423,7 @@ class subA1_readings_model(models.Model):
     
     def __str__(self):
         return str(self.form)
-    
+ #----------------------------------------------------------------------FORM D---------------<   
     
 class formD_model(models.Model):
     today = datetime.date.today()
@@ -638,6 +646,452 @@ class formD_model(models.Model):
     
     def __str__(self):
         return str(self.week_start)
+#----------------------------------------------------------------------FORM E---------------<
+    
+class formE_model(models.Model):
+    observer = models.CharField(
+        max_length=30
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True
+    )
+    crew = models.CharField(
+        max_length=30, 
+        choices = crew_choices
+    )
+    foreman = models.CharField(
+        max_length=30,
+        choices = foreman_choices
+    )
+    start_time = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    end_time = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    leaks = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    oven1 = models.CharField(max_length=2)
+    time1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    source1 = models.CharField(
+        max_length=30,
+        choices = source_choices
+    )
+    comments1 = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.date)
+    
+#----------------------------------------------------------------------FORM G1---------------<
+class formG1_model(models.Model):
+    date = models.CharField(max_length=30)
+    estab = models.CharField(max_length=30)
+    county = models.CharField(max_length=30)
+    estab_no = models.CharField(max_length=30)
+    equip_loc = models.CharField(max_length=30)
+    district = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    observer = models.CharField(max_length=30)
+    cert_date = models.CharField(max_length=30)
+    process_equip1 = models.CharField(max_length=50)
+    process_equip2 = models.CharField(max_length=50)
+    op_mode1 = models.CharField(max_length=30)
+    op_mode2 = models.CharField(max_length=30)
+    background_color_start = models.CharField(max_length=30)
+    background_color_stop = models.CharField(max_length=30)
+    sky_conditions = models.CharField(max_length=30)
+    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_stop = models.CharField(max_length=4)
+    wind_direction =models.CharField(max_length=3)
+    emission_point_start = models.CharField(max_length=50)
+    emission_point_stop = models.CharField(max_length=50)
+    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_stop = models.CharField(max_length=4)
+    humidity = models.CharField(max_length=3)
+    height_above_ground = models.CharField(max_length=30)
+    height_rel_observer = models.CharField(max_length=30)
+    distance_from = models.CharField(max_length=30)
+    direction_from = models.CharField(max_length=30)
+    describe_emissions_start = models.CharField(max_length=30)
+    describe_emissions_stop = models.CharField(max_length=30)
+    emission_color_start = models.CharField(max_length=30)
+    emission_color_stop = models.CharField(max_length=30)
+    plume_type = models.CharField(max_length=30, choices= plume_type_choices)
+    water_drolet_present = models.CharField(max_length=30, choices= water_present_choices)
+    water_droplet_plume = models.CharField(max_length=30, choices= droplet_plume_choices)
+    plume_opacity_determined_start = models.CharField(max_length=50)
+    plume_opacity_determined_stop = models.CharField(max_length=50)
+    describe_background_start = models.CharField(max_length=30)
+    describe_background_stop = models.CharField(max_length=30)   
+    
+    def __str__(self):
+        return str(self.date)
+    
+#----------------------------------------------------------------------FORM H---------------<
+class formH_model(models.Model):
+    date = models.CharField(max_length=30)
+    estab = models.CharField(max_length=30)
+    county = models.CharField(max_length=30)
+    estab_no = models.CharField(max_length=30)
+    equip_loc = models.CharField(max_length=30)
+    district = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    observer = models.CharField(max_length=30)
+    cert_date = models.CharField(max_length=30)
+    process_equip1 = models.CharField(max_length=50)
+    process_equip2 = models.CharField(max_length=50)
+    op_mode1 = models.CharField(max_length=30)
+    op_mode2 = models.CharField(max_length=30)
+    background_color_start = models.CharField(max_length=30)
+    background_color_stop = models.CharField(max_length=30)
+    sky_conditions = models.CharField(max_length=30)
+    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_stop = models.CharField(max_length=4)
+    wind_direction =models.CharField(max_length=3)
+    emission_point_start = models.CharField(max_length=50)
+    emission_point_stop = models.CharField(max_length=50)
+    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_stop = models.CharField(max_length=4)
+    humidity = models.CharField(max_length=3)
+    height_above_ground = models.CharField(max_length=30)
+    height_rel_observer = models.CharField(max_length=30)
+    distance_from = models.CharField(max_length=30)
+    direction_from = models.CharField(max_length=30)
+    describe_emissions_start = models.CharField(max_length=30)
+    describe_emissions_stop = models.CharField(max_length=30)
+    emission_color_start = models.CharField(max_length=30)
+    emission_color_stop = models.CharField(max_length=30)
+    plume_type = models.CharField(max_length=30, choices= plume_type_choices)
+    water_drolet_present = models.CharField(max_length=30, choices= water_present_choices)
+    water_droplet_plume = models.CharField(max_length=30, choices= droplet_plume_choices)
+    plume_opacity_determined_start = models.CharField(max_length=50)
+    plume_opacity_determined_stop = models.CharField(max_length=50)
+    describe_background_start = models.CharField(max_length=30)
+    describe_background_stop = models.CharField(max_length=30)   
+    
+    def __str__(self):
+        return str(self.date)
+    
+#----------------------------------------------------------------------FORM I---------------<
+class formI_model(models.Model):
+    week_start = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    week_end = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    time_0 = models.CharField(max_length=30)
+    time_1 = models.CharField(max_length=30)
+    time_2 = models.CharField(max_length=30)
+    time_3 = models.CharField(max_length=30)
+    time_4 = models.CharField(max_length=30)
+    obser_0 = models.CharField(max_length=30)
+    obser_1 = models.CharField(max_length=30)
+    obser_2 = models.CharField(max_length=30)
+    obser_3 = models.CharField(max_length=30)
+    obser_4 = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.week_start)
+    
+#----------------------------------------------------------------------FORM L---------------<
+class formL_model(models.Model):
+    week_start = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    week_end = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    time_0 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_2 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_3 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_4 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_5 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_6 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    obser_0 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    obser_1 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    obser_2 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    obser_3 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    obser_4 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    obser_5 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    obser_6 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    vents_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    vents_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    vents_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    vents_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    vents_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    vents_5 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    vents_6 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_5 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    mixer_6 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices,
+        blank=True,
+        null=True
+    )
+    v_comments_0 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    v_comments_1 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    v_comments_2 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    v_comments_3 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    v_comments_4 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    v_comments_5 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    v_comments_6 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_0 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_1 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_2 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_3 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_4 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_5 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    m_comments_6 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    
+    def __str__(self):
+        return str(self.week_start)
+    
+ #-----------------------------------------------------------------FORM M---------------<
+class formM_model(models.Model):
+    date = models.CharField(max_length=30)
+    paved = models.CharField(max_length=30)
+    pav_start = models.CharField(max_length=30)
+    pav_stop = models.CharField(max_length=30)
+    unpaved = models.CharField(max_length=30)
+    unp_start = models.CharField(max_length=30)
+    unp_stop = models.CharField(max_length=30)
+    parking = models.CharField(max_length=30)
+    par_start = models.CharField(max_length=30)
+    par_stop = models.CharField(max_length=30)
+    storage = models.CharField(max_length=30)
+    sto_start = models.CharField(max_length=30)
+    sto_stop = models.CharField(max_length=30)
+    observer = models.CharField(max_length=30)
+    cert_date = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.date)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

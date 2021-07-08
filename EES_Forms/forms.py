@@ -432,3 +432,139 @@ class formD_form(ModelForm):
             'wetted5' : forms.Select(attrs={'style':'width: 80px;'}),
             'comments5' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'})
         }
+        
+class formE_form(ModelForm):
+    class Meta:
+        model = formE_model
+        fields = (
+            'observer',
+            'date',
+            'crew',
+            'foreman',
+            'start_time',
+            'end_time',
+            'leaks',
+            'oven1',
+            'time1',
+            'source1',
+            'comments1'
+        )
+        widgets ={
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'crew' : forms.Select(attrs={'style':'width: 40px;'}),
+            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
+            'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'leaks' : forms.Select(attrs={'style':'width: 40px;'}),
+            'oven1' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'time1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'source1' : forms.Select(attrs={'style':'width: 130px;'}),
+            'comments1' : forms.TextInput(attrs={'type':'text', 'style':'width: 220px;'})
+        }
+        
+        
+class formG1_form(ModelForm):
+    class Meta:
+        model = formG1_model
+        fields = ('__all__')
+        
+        widgets = {
+            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'wind_speed_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'ambient_temp_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+        }
+        
+class formH_form(ModelForm):
+    class Meta:
+        model = formH_model
+        fields = ('__all__')
+        
+        widgets = {
+            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'wind_speed_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'ambient_temp_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+        }
+
+        
+class formI_form(ModelForm):
+    class Meta:
+        model = formI_model
+        fields = ('__all__')
+        
+        widgets = {
+            'time_0' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'time_1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'time_2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'time_3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'time_4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'obser_0' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
+            'obser_1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
+            'obser_2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
+            'obser_3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
+            'obser_4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'})
+        }
+        
+        
+class formL_form(ModelForm):
+    class Meta:
+        model = formL_model
+        fields = ('__all__')
+        
+        widgets = {
+            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'})
+        }
+
+        
+class formM_form(ModelForm):
+    class Meta:
+        model = formM_model
+        fields = (
+            'date',
+            'paved',
+            'pav_start',
+            'pav_stop',
+            'unpaved',
+            'unp_start',
+            'unp_stop',
+            'parking',
+            'par_start',
+            'par_stop',
+            'storage',
+            'sto_start',
+            'sto_stop',
+            'observer',
+            'cert_date',
+        )
+        
+        widgets = {
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

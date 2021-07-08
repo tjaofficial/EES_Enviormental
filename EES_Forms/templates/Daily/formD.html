@@ -57,7 +57,7 @@
 
 
 
-    <a href="{{ back.0.link }}">Back</a>
+    <a href="{% url 'IncompleteForms' %}">Back</a>
     <form action="" method="POST">
         {% csrf_token %}
         <table style="border-collapse: collapse; margin: auto;">

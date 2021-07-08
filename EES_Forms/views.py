@@ -269,6 +269,9 @@ def formA5(request):
 
             B.form = A
             B.save()
+            done = Forms.objects.filter(form='A-5')[0]
+            done.submitted = True
+            done.save()
             
             return redirect('IncompleteForms')
     else:
@@ -327,17 +330,36 @@ def formD(request):
     if week == last_friday:
         data = week_almost
         empty_form = formD_form()
-        
         if request.method == "POST":
             form = formD_form(request.POST)
-            
-            
-            
             A_valid = form.is_valid()
-            print(form.errors)
             if A_valid:
-                print('penis')
-                form.save()
+                A = request.POST
+                for key, value in A.items():
+                    print({key : value})
+                print(week_almost.__dict__.keys())
+                    
+                #for key2, value2 in week_almost:
+                    #print(key2, value2)
+                    #if week_almost.key == value:
+                        
+                    #print(key)
+                    #print(value)
+                
+                
+                #week_almost.truck_id3 = A.truck_id3
+                
+                #week_almost.save()
+                
+                
+                
+                
+                #B = week_almost.save()
+                #A.truck_id3 = week_almost.truck_id3
+                
+                #A.save()
+                
+                
                 
                 return redirect('IncompleteForms')
 
@@ -359,14 +381,280 @@ def formD(request):
     return render (request, "Daily/formD.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
     })
+#----------------------------------------------------------------------FORM E---------------<
+@lock
+def formE(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    full_name = request.user.get_full_name()
+    initial_data = {
+        'date' : todays_log.date_save,
+        'observer' : full_name,
+        'crew' : todays_log.crew,
+        'foreman' : todays_log.foreman,
+    }
+    model = formE_form(initial=initial_data)
+    done = Forms.objects.filter(form='E')[0]
+    if request.method == "POST":
+        check = formE_form(request.POST)
+        #admin = pt_admin1_form(request)
+        A_valid = check.is_valid()
+        print(done)
+        if A_valid:
+            check.save()
+            done.submitted = True
+            done.save()
+            
+
+            return redirect('IncompleteForms')
+    else:
+        model = formE_form(initial=initial_data)
+    return render (request, "Daily/formE.html", {
+        "back": back, 'todays_log': todays_log, 'model': model,
+    })
+
+#----------------------------------------------------------------------FORM G1---------------<
+@lock
+def formG1(request):    
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    initial_data = {
+        'date' : todays_log.date_save,
+        'estab' : "EES COKE BATTERY",
+        'county' : "Wayne",
+        'estab_no' : "P0408",
+        'equip_loc' : "Zug Island",
+        'district' : "Detroit",
+        'city' : "River Rouge",
+        'observer' : full_name,
+        'cert_date' : cert_date,
+        'process_equip1' : "-",
+        'process_equip2' : "-",
+        'op_mode1' : "normal",
+        'op_mode2' : "normal",
+        'emission_point_start' : "Above Stack",
+        'emission_point_stop' : "Same",
+        'height_above_ground' : "150",
+        'height_rel_observer' : "150",
+        'water_drolet_present' : "No",
+        'water_droplet_plume' : "N/A",
+        'describe_background_start' : "Skies",
+        'describe_background_stop' : "Same"
+    }
+    data = formG1_form(initial=initial_data)
+    profile_form = user_profile_form()
+    readings_form = subA5_readings_form()
+    
+    if request.method == "POST":
+        form = formG1_form(request.POST)
+        #readings = subA5_readings_form(request.POST)
+        A_valid = form.is_valid()
+        #B_valid = readings.is_valid()
+        if A_valid:# and B_valid:
+            A = form.save()
+            #B = readings.save(commit=False)
+
+            #B.form = A
+            #B.save()
+            done = Forms.objects.filter(form='G-1')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+    else:
+        form = formG1_form(initial=initial_data)
+        #readings_form = subA5_readings_form()
+    return render (request, "Daily/formG1.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
+    })
 
 
+#----------------------------------------------------------------------FORM H---------------<
+@lock
+def formH(request):    
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    initial_data = {
+        'date' : todays_log.date_save,
+        'estab' : "EES COKE BATTERY",
+        'county' : "Wayne",
+        'estab_no' : "P0408",
+        'equip_loc' : "Zug Island",
+        'district' : "Detroit",
+        'city' : "River Rouge",
+        'observer' : full_name,
+        'cert_date' : cert_date,
+        'process_equip1' : "-",
+        'process_equip2' : "-",
+        'op_mode1' : "normal",
+        'op_mode2' : "normal",
+        'emission_point_start' : "Above Stack",
+        'emission_point_stop' : "Same",
+        'height_above_ground' : "300",
+        'height_rel_observer' : "300",
+        'water_drolet_present' : "No",
+        'water_droplet_plume' : "N/A",
+        'describe_background_start' : "Skies",
+        'describe_background_stop' : "Same"
+    }
+    data = formH_form(initial=initial_data)
+    profile_form = user_profile_form()
+    readings_form = subA5_readings_form()
+    
+    if request.method == "POST":
+        form = formH_form(request.POST)
+        #readings = subA5_readings_form(request.POST)
+        A_valid = form.is_valid()
+        #B_valid = readings.is_valid()
+        if A_valid:# and B_valid:
+            A = form.save()
+            #B = readings.save(commit=False)
 
+            #B.form = A
+            #B.save()
+            done = Forms.objects.filter(form='H')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+    else:
+        form = formH_form(initial=initial_data)
+        #readings_form = subA5_readings_form()
+    return render (request, "Daily/formH.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
+    })
 
+#----------------------------------------------------------------------FORM I---------------<
+@lock
+def formI(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    last_friday = today - datetime.timedelta(days=today.weekday() + 2)
+    one_week = datetime.timedelta(days=6)
+    end_week = last_friday + one_week
+    
+    week_start_dates = formI_model.objects.all().order_by('-week_start')
+    week_almost = week_start_dates[0]
+    week = week_almost.week_start
+    
+    if week == last_friday:
+        data = week_almost
+        empty_form = formI_form()
+        if request.method == "POST":
+            form = formI_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                A = request.POST
+                
+                return redirect('IncompleteForms')
 
+    else:
+        initial_data = {
+            'week_start' : last_friday,
+            'week_end' : end_week
+        }
+        data = formI_form()
+        empty_form = formI_form(initial= initial_data)
+        if request.method == "POST":
+            form = formI_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
 
+                return redirect('IncompleteForms')
+        
+    return render (request, "Daily/formI.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+    })
 
+#----------------------------------------------------------------------FORM L---------------<
+@lock
+def formL(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    last_friday = today - datetime.timedelta(days=today.weekday() + 2)
+    one_week = datetime.timedelta(days=6)
+    end_week = last_friday + one_week
+    
+    week_start_dates = formL_model.objects.all().order_by('-week_start')
+    week_almost = week_start_dates[0]
+    week = week_almost.week_start
+    
+    if week == last_friday:
+        data = week_almost
+        empty_form = formL_form()
+        if request.method == "POST":
+            form = formL_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                A = request.POST
+                
+                return redirect('IncompleteForms')
 
+    else:
+        initial_data = {
+            'week_start' : last_friday,
+            'week_end' : end_week
+        }
+        data = formL_form()
+        empty_form = formL_form(initial= initial_data)
+        if request.method == "POST":
+            form = formL_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
+                
+                done = Forms.objects.filter(form='L')[0]
+                done.submitted = True
+                done.save()
+
+                return redirect('IncompleteForms')
+        
+    return render (request, "Daily/formL.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+    })
+
+#------------------------------------------------------------------------FORM M---------------<
+@lock
+def formM(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    
+    initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name,
+            'cert_date' : cert_date
+    }
+    form = formM_form(initial=initial_data)
+    #submitted = False
+   # if request.method == "POST":
+   #     CReadings = FormCReadForm(request.POST)
+   #     CData = SubFormC1(request.POST)
+   #    A_valid = CReadings.is_valid()
+   #     B_valid = CData.is_valid()
+        #form.save()
+        #return HttpResponseRedirect('./formC?submitted=True')
+   #     if A_valid and B_valid:
+   #         A = CData.save()
+   #         B = CReadings.save(commit=False)
+   #         B.form = A
+   #         B.save()
+   #         return HttpResponseRedirect('./formC?submitted=True')
+   # else:
+   #    form = SubFormC1
+   #     read = FormCReadForm
+   #     if 'submitted' in request.GET:
+   #         submitted = True
+    return render (request, "Daily/formM.html", {
+        'now': todays_log, 'form': form,# 'read': read, 'submitted': submitted, "back": back
+    })
 
 
 
