@@ -678,6 +678,43 @@ class formD_model(models.Model):
     
     def __str__(self):
         return str(self.week_start)
+    
+    def whatever(self):
+        return{
+            'truck_id1' : self.truck_id1, 
+            'date1' : self.date1,
+            'time1' : self.time1,
+            'contents1' : self.contents1,
+            'freeboard1' : self.freeboard1,
+            'wetted1' : self.wetted1,
+            'comments1' : self.comments1,
+            'truck_id2' : self.truck_id2,
+            'date2' : self.date2,
+            'time2' : self.time2,
+            'contents2' : self.contents2,
+            'freeboard2' : self.freeboard2,
+            'wetted2' : self.wetted2,
+            'comments2' : self.comments2,
+            'time3' : self.time3,
+            'contents3' : self.contents3,
+            'freeboard3' : self.freeboard3,
+            'wetted3' : self.wetted3,
+            'comments3' : self.comments3,
+            'truck_id4' : self.truck_id4,
+            'date4' : self.date4,
+            'time4' : self.time4,
+            'contents4' : self.contents4,
+            'freeboard4' : self.freeboard4,
+            'wetted4' : self.wetted4,
+            'comments4' : self.comments4,
+            'truck_id5' : self.truck_id5,
+            'date5' : self.date5,
+            'time5' : self.time5,
+            'contents5' : self.contents5,
+            'freeboard5' : self.freeboard5,
+            'wetted5' : self.wetted5,
+            'comments5' : self.comments5,
+        }
 #----------------------------------------------------------------------FORM E---------------<
     
 class formE_model(models.Model):

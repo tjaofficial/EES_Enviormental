@@ -432,6 +432,7 @@ class formD_form(ModelForm):
             'wetted5' : forms.Select(attrs={'style':'width: 80px;'}),
             'comments5' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'})
         }
+
         
 class formE_form(ModelForm):
     class Meta:

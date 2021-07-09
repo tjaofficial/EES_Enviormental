@@ -102,9 +102,6 @@ def logout_view(request):
 def IncompleteForms(request):
     now = datetime.datetime.now()
     sub_forms = Forms.objects.all()
-    print(now.date())
-    print(sub_forms[0].date_submitted)
-    
     
     for forms in sub_forms:
         A = forms.date_submitted
@@ -385,9 +382,23 @@ def formD(request):
             A_valid = form.is_valid()
             if A_valid:
                 A = request.POST
-                for key, value in A.items():
-                    print({key : value})
-                print(week_almost.__dict__.keys())
+                
+            #    print (A)
+              #  for key, form_value in A.items():
+                  #  if key in week_almost.whatever():
+                       # data_value = week_almost.whatever()[key]
+                       # week_almost[data_value]
+                       # data_value = form_value
+                     #   week_almost.save()
+               # print(week_almost.whatever())
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                #print(week_almost.__dict__.keys())
                     
                 #for key2, value2 in week_almost:
                     #print(key2, value2)
