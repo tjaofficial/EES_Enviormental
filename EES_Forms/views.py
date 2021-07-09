@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from operator import itemgetter
 import datetime
 from .models import *
 from .forms import *
@@ -100,11 +101,28 @@ def logout_view(request):
 @lock
 def IncompleteForms(request):
     now = datetime.datetime.now()
+    sub_forms = Forms.objects.all()
+    print(now.date())
+    print(sub_forms[0].date_submitted)
+    
+    
+    for forms in sub_forms:
+        A = forms.date_submitted
+        if now.date() != A :
+            forms.submitted = False
+            forms.save()
+            
+
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
     
+    
+    
+    
+    
+    
     return render(request, "ees_forms/index.html", {
-        "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back
+        "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
@@ -114,15 +132,10 @@ def pt_admin1_view(request):
     #add_days = datetime.timedelta(days=91)
     
     
-    
-    def array_of_dates(reads):
-        penis = []
-        for item in reads:
-            o1 = item.o1
-            o2 = item.o2
-            o3 = item.o3
-            o4 = item.o4
-            date = item.form.date
+    def all_ovens(reads):
+        A = []
+        for items in reads:
+            date = items.form.date
             date_array = date.split("-")
             
             year = int(date_array[0])
@@ -132,22 +145,55 @@ def pt_admin1_view(request):
             form_date = datetime.datetime(year, month, day)
             added_date = form_date + datetime.timedelta(days=91)
             due_date = added_date - datetime.datetime.now() 
-            dateObject = {
-                'date': date,
-                'exp_date': added_date.date,
-                'due_date': due_date.days,
-                'o1': o1,
-                'o2': o2,
-                'o3': o3,
-                'o4': o4
-            }
-            penis.append(dateObject)
-        return penis
-    poop = array_of_dates(reads)
+            
+            if len(str(items.o1)) == 1 :
+                oven1 = "0" + str(items.o1)
+            else:
+                oven1 = items.o1
+            A.append((oven1, items.form.date, added_date.date, due_date.days)) 
+            
+            if len(str(items.o2)) == 1 :
+                oven2 = "0" + str(items.o2)
+            else:
+                oven2 = items.o2
+            A.append((oven2, items.form.date, added_date.date, due_date.days))
+                
+            if len(str(items.o3)) == 1 :
+                oven3 = "0" + str(items.o3)
+            else:
+                oven3 = items.o3
+            A.append((oven3, items.form.date, added_date.date, due_date.days))    
+                
+            if len(str(items.o4)) == 1 :
+                oven4 = "0" + str(items.o4)
+            else:
+                oven4 = items.o4
+            A.append((oven4, items.form.date, added_date.date, due_date.days))      
+
+        return A      
+    hello = all_ovens(reads)
+    func = lambda x: (x[0], x[1])
+    sort = sorted(hello, key = func, reverse=True)
+    
+    def final(sort):
+        B = []
+        i = 1
+        for new in sort:
+            B.append(new)
+        for x in sort:
+            for y in range(i, len(sort)):
+                tree = sort[y]
+                if tree[0] == x[0]:
+                    B.remove(tree)
+            i+=1
+        return B
+    cool = final(sort)
+        
+        
     
    
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'poop': poop
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 @lock

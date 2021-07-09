@@ -126,7 +126,7 @@ storage_piles = (
 class Forms(models.Model):
     form = models.CharField(max_length=30)
     link = models.CharField(max_length=30)
-    date = models.CharField(max_length=30)
+    date_submitted = models.DateField(auto_now_add=False, auto_now=False)
     submitted = models.BooleanField(default=False)
     
     def __str__(self):
