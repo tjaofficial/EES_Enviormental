@@ -695,6 +695,8 @@ class formD_model(models.Model):
             'freeboard2' : self.freeboard2,
             'wetted2' : self.wetted2,
             'comments2' : self.comments2,
+            'truck_id3' : self.truck_id3,
+            'date3' : self.date3,
             'time3' : self.time3,
             'contents3' : self.contents3,
             'freeboard3' : self.freeboard3,
