@@ -24,22 +24,23 @@
                 Days Left
             </th>
         </tr>
-       {% for item in poop %}
+       {% for item in cool %}
         <tr>
             <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                {{ item.o1 }}
+                {{ item.0 }}
             </td>
             <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                {{ item.date }}
+                {{ item.1 }}
             </td>
             <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                {{ item.exp_date }}
+                {{ item.2 }}
             </td>
             <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                {{ item.due_date }}
+                {{ item.3 }}
             </td>
         </tr>
-         <tr>
+        {% endfor %}
+        <!-- <tr>
             <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
                 {{ item.o2 }}
             </td>
@@ -82,8 +83,8 @@
                {{ item.due_date }}
             </td>
             
-        </tr>
-        {% endfor %}
+        </tr>-->
+        
     </table>
 </div>    
 {% endblock %}

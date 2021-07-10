@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from operator import itemgetter
 import datetime
 from .models import *
 from .forms import *
@@ -100,11 +101,26 @@ def logout_view(request):
 @lock
 def IncompleteForms(request):
     now = datetime.datetime.now()
+    sub_forms = Forms.objects.all()
+    
+    
+  #  for forms in sub_forms:
+   #     A = forms.date_submitted
+   #     if now.date() != A :
+    #        forms.submitted = False
+     #       forms.save()
+            
+
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
     
+    
+    
+    
+    
+    
     return render(request, "ees_forms/index.html", {
-        "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back
+        "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
@@ -114,15 +130,10 @@ def pt_admin1_view(request):
     #add_days = datetime.timedelta(days=91)
     
     
-    
-    def array_of_dates(reads):
-        penis = []
-        for item in reads:
-            o1 = item.o1
-            o2 = item.o2
-            o3 = item.o3
-            o4 = item.o4
-            date = item.form.date
+    def all_ovens(reads):
+        A = []
+        for items in reads:
+            date = items.form.date
             date_array = date.split("-")
             
             year = int(date_array[0])
@@ -132,22 +143,55 @@ def pt_admin1_view(request):
             form_date = datetime.datetime(year, month, day)
             added_date = form_date + datetime.timedelta(days=91)
             due_date = added_date - datetime.datetime.now() 
-            dateObject = {
-                'date': date,
-                'exp_date': added_date.date,
-                'due_date': due_date.days,
-                'o1': o1,
-                'o2': o2,
-                'o3': o3,
-                'o4': o4
-            }
-            penis.append(dateObject)
-        return penis
-    poop = array_of_dates(reads)
+            
+            if len(str(items.o1)) == 1 :
+                oven1 = "0" + str(items.o1)
+            else:
+                oven1 = items.o1
+            A.append((oven1, items.form.date, added_date.date, due_date.days)) 
+            
+            if len(str(items.o2)) == 1 :
+                oven2 = "0" + str(items.o2)
+            else:
+                oven2 = items.o2
+            A.append((oven2, items.form.date, added_date.date, due_date.days))
+                
+            if len(str(items.o3)) == 1 :
+                oven3 = "0" + str(items.o3)
+            else:
+                oven3 = items.o3
+            A.append((oven3, items.form.date, added_date.date, due_date.days))    
+                
+            if len(str(items.o4)) == 1 :
+                oven4 = "0" + str(items.o4)
+            else:
+                oven4 = items.o4
+            A.append((oven4, items.form.date, added_date.date, due_date.days))      
+
+        return A      
+    hello = all_ovens(reads)
+    func = lambda x: (x[0], x[1])
+    sort = sorted(hello, key = func, reverse=True)
+    
+    def final(sort):
+        B = []
+        i = 1
+        for new in sort:
+            B.append(new)
+        for x in sort:
+            for y in range(i, len(sort)):
+                tree = sort[y]
+                if tree[0] == x[0]:
+                    B.remove(tree)
+            i+=1
+        return B
+    cool = final(sort)
+        
+        
     
    
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'poop': poop
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 @lock
@@ -183,6 +227,10 @@ def formA1(request):
             B = reads.save(commit=False)
             B.form = A
             B.save()
+            
+            done = Forms.objects.filter(form='A-1')[0]
+            done.submitted = True
+            done.save()
            # D = admin.save(commit=False)
            # D.form = C
             #D.save()
@@ -269,6 +317,9 @@ def formA5(request):
 
             B.form = A
             B.save()
+            done = Forms.objects.filter(form='A-5')[0]
+            done.submitted = True
+            done.save()
             
             return redirect('IncompleteForms')
     else:
@@ -325,34 +376,373 @@ def formD(request):
     week = week_almost.week_start
     
     if week == last_friday:
-        if week_almost.truck_id1:
-            data = week_almost
-            empty_form = formD_form()
-
-            
-    else:
-        #initial_data = {
-            #'date1' : todays_log.date_save
-        #}
-        data = formD_form(initial = initial_data)
+        data = week_almost
+        initial_data = {
+            'week_start' : data.week_start,
+            'week_end' : data.week_end,
+            'truck_id1' : data.truck_id1, 
+            'date1' : data.date1,
+            'time1' : data.time1,
+            'contents1' : data.contents1,
+            'freeboard1' : data.freeboard1,
+            'wetted1' : data.wetted1,
+            'comments1' : data.comments1,
+            'truck_id2' : data.truck_id2,
+            'date2' : data.date2,
+            'time2' : data.time2,
+            'contents2' : data.contents2,
+            'freeboard2' : data.freeboard2,
+            'wetted2' : data.wetted2,
+            'comments2' : data.comments2,
+            'truck_id3' : data.truck_id3,
+            'date3' : data.date3,
+            'time3' : data.time3,
+            'contents3' : data.contents3,
+            'freeboard3' : data.freeboard3,
+            'wetted3' : data.wetted3,
+            'comments3' : data.comments3,
+            'truck_id4' : data.truck_id4,
+            'date4' : data.date4,
+            'time4' : data.time4,
+            'contents4' : data.contents4,
+            'freeboard4' : data.freeboard4,
+            'wetted4' : data.wetted4,
+            'comments4' : data.comments4,
+            'truck_id5' : data.truck_id5,
+            'date5' : data.date5,
+            'time5' : data.time5,
+            'contents5' : data.contents5,
+            'freeboard5' : data.freeboard5,
+            'wetted5' : data.wetted5,
+            'comments5' : data.comments5,
+        }
+        empty_form = formD_form(initial=initial_data)
+        done = Forms.objects.filter(form='D')[0]
         if request.method == "POST":
-            form = formD_form(request.POST)
-            form.save()
+            form = formD_form(request.POST, instance=week_almost)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
+
+                filled_out = True
+                for items in week_almost.whatever().values():
+                    if items == None:
+                        filled_out = False
+                        break
+                
+                if filled_out:
+                    done.submitted = True
+                    done.save()
+                else:
+                    done.submitted = False
+                    done.save()
 
             return redirect('IncompleteForms')
-        else:
-            data = formD_form(initial = initial_data)
+    else:
+        initial_data = {
+            'week_start' : last_friday,
+            'week_end' : end_week
+        }
+        data = formD_form()
+        empty_form = formD_form(initial= initial_data)
+        done = Forms.objects.filter(form='D')[0]
+        if request.method == "POST":
+            form = formD_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
+                
+                filled_out = True
+                for items in week_almost.whatever().values():
+                    if items == None:
+                        filled_out = False
+                        break
+                if filled_out: 
+                    done.submitted = True
+                    done.save()
+                else:
+                    done.submitted = False
+                    done.save()
+
+            return redirect('IncompleteForms')
+        
     return render (request, "Daily/formD.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+    })
+#----------------------------------------------------------------------FORM E---------------<
+@lock
+def formE(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    full_name = request.user.get_full_name()
+    initial_data = {
+        'date' : todays_log.date_save,
+        'observer' : full_name,
+        'crew' : todays_log.crew,
+        'foreman' : todays_log.foreman,
+    }
+    model = formE_form(initial=initial_data)
+    done = Forms.objects.filter(form='E')[0]
+    if request.method == "POST":
+        check = formE_form(request.POST)
+        #admin = pt_admin1_form(request)
+        A_valid = check.is_valid()
+        print(done)
+        if A_valid:
+            check.save()
+            done.submitted = True
+            done.save()
+            
+
+            return redirect('IncompleteForms')
+    else:
+        model = formE_form(initial=initial_data)
+    return render (request, "Daily/formE.html", {
+        "back": back, 'todays_log': todays_log, 'model': model,
+    })
+
+#----------------------------------------------------------------------FORM G1---------------<
+@lock
+def formG1(request):    
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    initial_data = {
+        'date' : todays_log.date_save,
+        'estab' : "EES COKE BATTERY",
+        'county' : "Wayne",
+        'estab_no' : "P0408",
+        'equip_loc' : "Zug Island",
+        'district' : "Detroit",
+        'city' : "River Rouge",
+        'observer' : full_name,
+        'cert_date' : cert_date,
+        'process_equip1' : "-",
+        'process_equip2' : "-",
+        'op_mode1' : "normal",
+        'op_mode2' : "normal",
+        'emission_point_start' : "Above Stack",
+        'emission_point_stop' : "Same",
+        'height_above_ground' : "150",
+        'height_rel_observer' : "150",
+        'water_drolet_present' : "No",
+        'water_droplet_plume' : "N/A",
+        'describe_background_start' : "Skies",
+        'describe_background_stop' : "Same"
+    }
+    data = formG1_form(initial=initial_data)
+    profile_form = user_profile_form()
+    readings_form = subA5_readings_form()
+    
+    if request.method == "POST":
+        form = formG1_form(request.POST)
+        #readings = subA5_readings_form(request.POST)
+        A_valid = form.is_valid()
+        #B_valid = readings.is_valid()
+        if A_valid:# and B_valid:
+            A = form.save()
+            #B = readings.save(commit=False)
+
+            #B.form = A
+            #B.save()
+            done = Forms.objects.filter(form='G-1')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+    else:
+        form = formG1_form(initial=initial_data)
+        #readings_form = subA5_readings_form()
+    return render (request, "Daily/formG1.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
     })
 
 
+#----------------------------------------------------------------------FORM H---------------<
+@lock
+def formH(request):    
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    initial_data = {
+        'date' : todays_log.date_save,
+        'estab' : "EES COKE BATTERY",
+        'county' : "Wayne",
+        'estab_no' : "P0408",
+        'equip_loc' : "Zug Island",
+        'district' : "Detroit",
+        'city' : "River Rouge",
+        'observer' : full_name,
+        'cert_date' : cert_date,
+        'process_equip1' : "-",
+        'process_equip2' : "-",
+        'op_mode1' : "normal",
+        'op_mode2' : "normal",
+        'emission_point_start' : "Above Stack",
+        'emission_point_stop' : "Same",
+        'height_above_ground' : "300",
+        'height_rel_observer' : "300",
+        'water_drolet_present' : "No",
+        'water_droplet_plume' : "N/A",
+        'describe_background_start' : "Skies",
+        'describe_background_stop' : "Same"
+    }
+    data = formH_form(initial=initial_data)
+    profile_form = user_profile_form()
+    readings_form = subA5_readings_form()
+    
+    if request.method == "POST":
+        form = formH_form(request.POST)
+        #readings = subA5_readings_form(request.POST)
+        A_valid = form.is_valid()
+        #B_valid = readings.is_valid()
+        if A_valid:# and B_valid:
+            A = form.save()
+            #B = readings.save(commit=False)
 
+            #B.form = A
+            #B.save()
+            done = Forms.objects.filter(form='H')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+    else:
+        form = formH_form(initial=initial_data)
+        #readings_form = subA5_readings_form()
+    return render (request, "Daily/formH.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
+    })
 
+#----------------------------------------------------------------------FORM I---------------<
+@lock
+def formI(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    last_friday = today - datetime.timedelta(days=today.weekday() + 2)
+    one_week = datetime.timedelta(days=6)
+    end_week = last_friday + one_week
+    
+    week_start_dates = formI_model.objects.all().order_by('-week_start')
+    week_almost = week_start_dates[0]
+    week = week_almost.week_start
+    
+    if week == last_friday:
+        data = week_almost
+        empty_form = formI_form()
+        if request.method == "POST":
+            form = formI_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                A = request.POST
+                
+                return redirect('IncompleteForms')
 
+    else:
+        initial_data = {
+            'week_start' : last_friday,
+            'week_end' : end_week
+        }
+        data = formI_form()
+        empty_form = formI_form(initial= initial_data)
+        if request.method == "POST":
+            form = formI_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
 
+                return redirect('IncompleteForms')
+        
+    return render (request, "Daily/formI.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+    })
 
+#----------------------------------------------------------------------FORM L---------------<
+@lock
+def formL(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    last_friday = today - datetime.timedelta(days=today.weekday() + 2)
+    one_week = datetime.timedelta(days=6)
+    end_week = last_friday + one_week
+    
+    week_start_dates = formL_model.objects.all().order_by('-week_start')
+    week_almost = week_start_dates[0]
+    week = week_almost.week_start
+    
+    if week == last_friday:
+        data = week_almost
+        empty_form = formL_form()
+        if request.method == "POST":
+            form = formL_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                A = request.POST
+                
+                return redirect('IncompleteForms')
 
+    else:
+        initial_data = {
+            'week_start' : last_friday,
+            'week_end' : end_week
+        }
+        data = formL_form()
+        empty_form = formL_form(initial= initial_data)
+        if request.method == "POST":
+            form = formL_form(request.POST)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
+                
+                done = Forms.objects.filter(form='L')[0]
+                done.submitted = True
+                done.save()
+
+                return redirect('IncompleteForms')
+        
+    return render (request, "Daily/formL.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+    })
+
+#------------------------------------------------------------------------FORM M---------------<
+@lock
+def formM(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    
+    initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name,
+            'cert_date' : cert_date
+    }
+    form = formM_form(initial=initial_data)
+    #submitted = False
+   # if request.method == "POST":
+   #     CReadings = FormCReadForm(request.POST)
+   #     CData = SubFormC1(request.POST)
+   #    A_valid = CReadings.is_valid()
+   #     B_valid = CData.is_valid()
+        #form.save()
+        #return HttpResponseRedirect('./formC?submitted=True')
+   #     if A_valid and B_valid:
+   #         A = CData.save()
+   #         B = CReadings.save(commit=False)
+   #         B.form = A
+   #         B.save()
+   #         return HttpResponseRedirect('./formC?submitted=True')
+   # else:
+   #    form = SubFormC1
+   #     read = FormCReadForm
+   #     if 'submitted' in request.GET:
+   #         submitted = True
+    return render (request, "Daily/formM.html", {
+        'now': todays_log, 'form': form,# 'read': read, 'submitted': submitted, "back": back
+    })
 
 
 

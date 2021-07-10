@@ -35,7 +35,7 @@
             <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <tr>
-                <th id="boxTitle" colspan="5" style="text-align: left;">Method 9D Fugitive Dust Inspections - Coal Field - Form (C)</th>
+                <th id="boxTitle" colspan="5" style="text-align: left;">Method 9D Observation - (M)</th>
                 <th></th>
             </tr>
             <tr>
@@ -51,7 +51,7 @@
             </tr> 
             <tr>
                 <th>
-                    Date: {{ now.month }}/{{ now.day }}/{{ now.year }}
+                    Date: {{ form.date }}
                 </th>
             </tr>
             <tr>
@@ -64,7 +64,9 @@
             <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <tr>
-                    <th style="text-decoration: underline; text-align: left;" colspan="3">Observe one vehicle per day traveling on Coal Field Road or in the coal field</th>
+                <th style="text-decoration: underline; text-align: left;" colspan="3">
+                    Observe one unpaved road, one paved road, one pile, and one paring lot per day
+                </th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -72,7 +74,7 @@
                     <th></th>
                 </tr>
             <tr>
-                    <th style="text-decoration: underline; text-align: left;" colspan="2">Observe one coal pile per day</th>
+                    <th style="text-decoration: underline; text-align: left;" colspan="2"></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -83,14 +85,12 @@
                 <td style="height: 40px" > </td>
             </tr> 
             <tr>
-                <td style="border-left: 1px black solid; border-top: 1px black solid;">
-                    Truck:
+                <td colspan="2" style="border-left: 1px black solid; border-top: 1px black solid;">
+                    PAVED: {{ form.paved }}
                 </td>
-                <td style="border-top: 1px black solid;">
-                    {{ form.truck_sel }}
-                </td>
+    
                 <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
-                    Start Time:{{ form.truck_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.truck_stop_time }}
+                    Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
                 </td>
                 <td></td>
                 <td></td>
@@ -155,14 +155,11 @@
                 <td style="height: 35px" > </td>
             </tr> 
             <tr>
-                <td style="border-left: 1px black solid; border-top: 1px black solid;">
-                    Area:
-                </td>
-                <td style="border-top: 1px black solid;">
-                    {{ form.area_sel }}
+                <td colspan="2" style="border-left: 1px black solid; border-top: 1px black solid;">
+                    UNPAVED: {{ form.unpaved }}
                 </td>
                 <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
-                    Start Time:{{ form.area_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.area_stop_time }}
+                    Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
                 </td>
                 <td></td>
                 <td></td>
@@ -217,6 +214,144 @@
                 </td>
                 <td id="boxc1">
                     {{ read.ARead12 }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                <td id="boxc1">=all values divided by 12</td>
+            </tr>
+            <tr>
+                <td style="height: 40px" > </td>
+            </tr> 
+            <tr>
+                <td colspan="2" style="border-left: 1px black solid; border-top: 1px black solid;">
+                    PARKING LOT: {{ form.parking }}
+                </td>
+                <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
+                    Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td id="boxc1">MIN/SEC</td>
+                <td id="boxc1">0</td>
+                <td id="boxc1">15</td>
+                <td id="boxc1">30</td>
+                <td id="boxc1">45</td>
+            </tr>
+            <tr>
+                <td id="boxc1">0</td>
+                <td id="boxc1">
+                    {{ read.TRead1 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead2 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead3 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead4 }}
+                </td>
+            </tr>
+            <tr>
+                <td id="boxc1">1</td>
+                <td id="boxc1">
+                    {{ read.TRead5 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead6 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead7 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead8 }}
+                </td>
+            </tr>
+            <tr>
+                <td id="boxc1">2</td>
+                <td id="boxc1">
+                    {{ read.TRead9 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead10 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead11 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead12 }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                <td id="boxc1">=all values divided by 12</td>
+            </tr>
+            <tr>
+                <td style="height: 40px" > </td>
+            </tr> 
+            <tr>
+                <td colspan="2" style="border-left: 1px black solid; border-top: 1px black solid;">
+                    STORAGE PILE: {{ form.storage }}
+                </td>
+                <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
+                    Start Time:{{ form.sto_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.sto_stop }}
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td id="boxc1">MIN/SEC</td>
+                <td id="boxc1">0</td>
+                <td id="boxc1">15</td>
+                <td id="boxc1">30</td>
+                <td id="boxc1">45</td>
+            </tr>
+            <tr>
+                <td id="boxc1">0</td>
+                <td id="boxc1">
+                    {{ read.TRead1 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead2 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead3 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead4 }}
+                </td>
+            </tr>
+            <tr>
+                <td id="boxc1">1</td>
+                <td id="boxc1">
+                    {{ read.TRead5 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead6 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead7 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead8 }}
+                </td>
+            </tr>
+            <tr>
+                <td id="boxc1">2</td>
+                <td id="boxc1">
+                    {{ read.TRead9 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead10 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead11 }}
+                </td>
+                <td id="boxc1">
+                    {{ read.TRead12 }}
                 </td>
             </tr>
             <tr>

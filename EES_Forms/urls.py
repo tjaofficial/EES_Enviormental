@@ -18,5 +18,11 @@ urlpatterns = [
     path("Daily/Method303/formA5", views.formA5, name="formA5"),
     path("Daily/formB", views.formB, name="formB"),
     path("Daily/formC", views.formC, name="formC"),
-    path("Daily/formD", views.formD, name="formD")
+    path("Daily/formD", views.formD, name="formD"),
+    path("Daily/formE", views.formE, name="formE"),
+    path("Daily/formG1", views.formG1, name="formG1"),
+    path("Daily/formH", views.formH, name="formH"),
+    path("Daily/formI", views.formI, name="formI"),
+    path("Daily/formL", views.formL, name="formL"),
+    path("Daily/formM", views.formM, name="formM")
 ]

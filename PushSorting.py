@@ -66,8 +66,26 @@ class subA5_form(ModelForm):
         from EES_Forms.models import *
         
         
+        def add_zero((x[0])):
+            for stuff in hello:
+                
         
         
+        
+        
+        for x in sort:
+            if len(B) == 0:
+                B.append(x)
+            else:    
+                for y in B:
+                    if y[0] == x[0]:
+                        if y[1] < x[1]:
+                            B.append(x)
+                    else:
+                        B.append(x)   
+        return B
+    cool = final(sort)
+    print (cool)        
         
          #for item in reads:
         #form_date = item.form.date
