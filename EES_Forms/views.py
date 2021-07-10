@@ -591,6 +591,12 @@ def formD(request):
             'freeboard5' : data.freeboard5,
             'wetted5' : data.wetted5,
             'comments5' : data.comments5,
+            'observer1' : data.observer1,
+            'observer2' : data.observer2,
+            'observer3' : data.observer3,
+            'observer4' : data.observer4,
+            'observer5' : data.observer5,
+            
         }
         empty_form = formD_form(initial=initial_data)
         done = Forms.objects.filter(form='D')[0]

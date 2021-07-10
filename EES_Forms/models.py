@@ -877,6 +877,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
+    observer1 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
     truck_id1 = models.CharField(
         max_length=30, 
         choices= truck_id_choices, 
@@ -889,10 +894,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
-    time1 = models.CharField(
-        max_length=30, 
+    time1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
         blank=True,
-        null=True
+        null = True,
     )
     contents1 = models.CharField(
         max_length=30, 
@@ -917,6 +923,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
+    observer2 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
     truck_id2 = models.CharField(
         max_length=30, 
         choices= truck_id_choices, 
@@ -929,10 +940,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
-    time2 = models.CharField(
-        max_length=30, 
+    time2 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
         blank=True,
-        null=True
+        null = True,
     )
     contents2 = models.CharField(
         max_length=30, 
@@ -957,6 +969,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
+    observer3 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
     truck_id3 = models.CharField(
         max_length=30, 
         choices= truck_id_choices, 
@@ -969,10 +986,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
-    time3 = models.CharField(
-        max_length=30, 
+    time3 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
         blank=True,
-        null=True
+        null = True,
     )
     contents3 = models.CharField(
         max_length=30, 
@@ -997,6 +1015,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
+    observer4 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
     truck_id4 = models.CharField(
         max_length=30, 
         choices= truck_id_choices, 
@@ -1009,10 +1032,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
-    time4 = models.CharField(
-        max_length=30, 
+    time4 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
         blank=True,
-        null=True
+        null = True,
     )
     contents4 = models.CharField(
         max_length=30, 
@@ -1037,6 +1061,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
+    observer5 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
     truck_id5 = models.CharField(
         max_length=30, 
         choices= truck_id_choices, 
@@ -1049,10 +1078,11 @@ class formD_model(models.Model):
         blank=True,
         null=True
     )
-    time5 = models.CharField(
-        max_length=30, 
+    time5 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
         blank=True,
-        null=True
+        null = True,
     )
     contents5 = models.CharField(
         max_length=30, 
