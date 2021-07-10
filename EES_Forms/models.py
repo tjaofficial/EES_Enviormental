@@ -61,7 +61,6 @@ yes_no_choices = (
     ('Yes', 'Yes'),
     ('No', 'No')
 )
-
 truck_id_choices = (
     ('#5', '#5'),
     ('#6', '#6'),
@@ -119,6 +118,10 @@ parking_lots = (
 storage_piles = (
     ('Area B Coke Storage Piles', 'Area B Coke Storage Piles'),
     ('EES Coke Coal Storage Piles', 'EES Coke Coal Storage Piles'),
+)
+larry_car_choices = (
+    ('1', '1'),
+    ('2', '2')
 )
 # Create your models here.
 
@@ -271,7 +274,6 @@ class subA5_model(models.Model):
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
     
-    
     def __str__(self):
         return self.date
     
@@ -409,11 +411,29 @@ class user_profile_model(models.Model):
     
 class subA1_model(models.Model):
     observer = models.CharField(max_length=30)
-    date = models.CharField(max_length=30)
-    crew = models.CharField(max_length=30)
-    foreman = models.CharField(max_length=30)
-    start = models.CharField(max_length=30)
-    stop = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    crew = models.CharField(
+        max_length=1, 
+        choices = crew_choices
+    )
+    foreman = models.CharField(
+        max_length=30,
+        choices = foreman_choices
+    )
+    start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
     
     def __str__(self):
         return str(self.date)
@@ -425,38 +445,168 @@ class subA1_readings_model(models.Model):
         on_delete=models.CASCADE, 
         primary_key=True,
     )
-    c1_no = models.CharField(max_length=30)
-    c2_no = models.CharField(max_length=30)
-    c3_no = models.CharField(max_length=30)
-    c4_no = models.CharField(max_length=30)
-    c5_no = models.CharField(max_length=30)
-    c1_start = models.CharField(max_length=30)
-    c2_start = models.CharField(max_length=30)
-    c3_start = models.CharField(max_length=30)
-    c4_start = models.CharField(max_length=30)
-    c5_start = models.CharField(max_length=30)
-    c1_stop = models.CharField(max_length=30)
-    c2_stop = models.CharField(max_length=30)
-    c3_stop = models.CharField(max_length=30)
-    c4_stop = models.CharField(max_length=30)
-    c5_stop = models.CharField(max_length=30)
-    c1_sec = models.CharField(max_length=30)
-    c2_sec = models.CharField(max_length=30)
-    c3_sec = models.CharField(max_length=30)
-    c4_sec = models.CharField(max_length=30)
-    c5_sec = models.CharField(max_length=30)
-    c1_comments = models.CharField(max_length=30)
-    c2_comments = models.CharField(max_length=30)
-    c3_comments = models.CharField(max_length=30)
-    c4_comments = models.CharField(max_length=30)
-    c5_comments = models.CharField(max_length=30)
-    larry_car = models.CharField(max_length=30)
-    comments = models.CharField(max_length=30)
+    c1_no = models.CharField(
+        max_length=2
+    )
+    c2_no = models.CharField(
+        max_length=2
+    )
+    c3_no = models.CharField(
+        max_length=2
+    )
+    c4_no = models.CharField(
+        max_length=2
+    )
+    c5_no = models.CharField(
+        max_length=2
+    )
+    c1_start = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c2_start = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c3_start = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c4_start = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c5_start = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c1_stop = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c2_stop = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c3_stop = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c4_stop = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c5_stop = models.TimeField(
+        auto_now_add = False,
+        auto_now = False,
+        blank = True,
+    )
+    c1_sec = models.CharField(
+        max_length=5
+    )
+    c2_sec = models.CharField(
+        max_length=5
+    )
+    c3_sec = models.CharField(
+        max_length=5
+    )
+    c4_sec = models.CharField(
+        max_length=5
+    )
+    c5_sec = models.CharField(
+        max_length=5
+    )
+    c1_comments = models.CharField(
+        max_length=30
+    )
+    c2_comments = models.CharField(
+        max_length=30
+    )
+    c3_comments = models.CharField(
+        max_length=30
+    )
+    c4_comments = models.CharField(
+        max_length=30
+    )
+    c5_comments = models.CharField(
+        max_length=30
+    )
+    larry_car = models.CharField(
+        max_length=30,
+        choices = larry_car_choices
+    )
+    comments = models.CharField(
+        max_length=300
+    )
     
     def __str__(self):
         return str(self.form)
  #----------------------------------------------------------------------FORM D---------------<   
     
+class formA2_model(models.Model):
+    observer = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    inop_ovens = models.CharField(max_length=2)
+    crew = models.CharField(
+        max_length=1, 
+        choices = crew_choices
+    )
+    foreman = models.CharField(
+        max_length=30,
+        choices = foreman_choices
+    )
+    p_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    p_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    c_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    c_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    p_temp_block_from = models.CharField(max_length=30)
+    p_temp_block_to = models.CharField(max_length=30)
+    c_temp_block_from = models.CharField(max_length=30)
+    c_temp_block_to = models.CharField(max_length=30)
+    p_traverse_time_min = models.CharField(max_length=30)
+    p_traverse_time_sec = models.CharField(max_length=30)
+    c_traverse_time_min = models.CharField(max_length=30)
+    c_traverse_time_sec = models.CharField(max_length=30)
+    total_traverse_time = models.CharField(max_length=30)
+    allowed_traverse_time = models.CharField(max_length=30)
+    valid_run = models.BooleanField(default=None)
+    leaking_doors = models.CharField(max_length=30)
+    doors_not_observed = models.CharField(max_length=30)
+    inop_doors = models.CharField(max_length=30)
+    percent_leaking = models.CharField(max_length=30)
+    notes = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.date)
 class formD_model(models.Model):
     today = datetime.date.today()
     last_friday = today - datetime.timedelta(days=today.weekday() + 2)
@@ -729,7 +879,7 @@ class formE_model(models.Model):
         blank=True
     )
     crew = models.CharField(
-        max_length=30, 
+        max_length=1, 
         choices = crew_choices
     )
     foreman = models.CharField(

@@ -83,22 +83,22 @@
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
-                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ request.user.first_name }} {{ request.user.last_name }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ todays_log.date_save }}
+                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
                     </tr>
                     <tr>
                         <th colspan="6">
                             Battery No. 5 &nbsp; &nbsp; &nbsp; 
                             Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
-                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ todays_log.inop_ovens }}
+                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
                         </th>
                     </tr>
                     <tr>
                         <th colspan="6">
                             Crew:
-                            &nbsp; &nbsp;{{ todays_log.crew }}
+                            &nbsp; &nbsp;{{ data.crew }}
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
                             Battery Foreman:
-                            &nbsp; &nbsp;{{ todays_log.foreman }}
+                            &nbsp; &nbsp;{{ data.foreman }}
                         </th>
                     </tr>
                 </table>

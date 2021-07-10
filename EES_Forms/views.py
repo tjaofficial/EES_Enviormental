@@ -248,8 +248,19 @@ def formA2(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    full_name = request.user.get_full_name()
+    initial_data = {
+        'date' : todays_log.date_save,
+        'observer' : full_name,
+        'crew' : todays_log.crew,
+        'foreman' : todays_log.foreman,
+        'inop_ovens' : todays_log.inop_ovens,
+    }
+    data = formA2_form(initial=initial_data)
+    
+    
     return render (request, "Daily/Method303/formA2.html", {
-        "back": back, 'todays_log': todays_log
+        "back": back, 'todays_log': todays_log, 'data': data
     })
 #------------------------------------------------------------------------A3---------------<
 @lock

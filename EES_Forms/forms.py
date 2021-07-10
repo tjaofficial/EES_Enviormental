@@ -49,6 +49,22 @@ class daily_battery_profile_form(ModelForm):
        
 
     
+class user_profile_form(forms.ModelForm):
+    class Meta:
+        model = user_profile_model
+        fields = ('cert_date',)
+        
+        widgets ={
+            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'})
+        }
+        
+        
+class pt_admin1_form(ModelForm):
+    class Meta:
+        model = pt_admin1_model
+        fields = ('add_days', 'days_left')
+        
+        
 class bat_info_form(ModelForm):
     class Meta:
         model = bat_info_model
@@ -266,8 +282,11 @@ class subA1_form(ModelForm):
         
         widgets = {
             'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'date' : forms.TextInput(attrs={'type':'text', 'style':'width:100px;'}),
-            'crew' : forms.TextInput(attrs={'type':'text', 'style':'width:30px;'})
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'crew' : forms.Select(attrs={'style':'width:40px;'}),
+            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
+            'start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
         }
         
 class subA1_readings_form(ModelForm):
@@ -304,52 +323,47 @@ class subA1_readings_form(ModelForm):
         )
         
         widgets = {
-            'c1_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'c1_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'c1_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c1_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c1_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c2_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'c2_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'c2_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c2_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c2_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c3_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'c3_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'c3_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c3_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c3_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c4_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'c4_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'c4_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c4_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c4_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c5_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'c5_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'c5_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c5_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c5_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
             'comments' : Textarea(attrs={'rows':7, 'cols':125}),
-            'c1_start' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c2_start' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c3_start' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c4_start' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c5_start' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c1_stop' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c2_stop' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c3_stop' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c4_stop' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'c5_stop' : forms.TextInput(attrs={'type':'text', 'style':'width: 100px;'}),
-            'larry_car' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
+            'c1_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c2_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c3_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c4_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c5_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c1_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c2_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c3_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c4_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c5_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'larry_car' : forms.Select(attrs={'style':'width: 60px;'}),
         }
     
     
-class user_profile_form(forms.ModelForm):
+class formA2_form(ModelForm):
     class Meta:
-        model = user_profile_model
-        fields = ('cert_date',)
-        
-        widgets ={
-            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'})
+        model = formA2_model
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px;'}),
+            'crew' : forms.Select(attrs={'style':'width:40px;'}),
+            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
         }
-        
-        
-class pt_admin1_form(ModelForm):
-    class Meta:
-        model = pt_admin1_model
-        fields = ('add_days', 'days_left')
-        
-        
 class formD_form(ModelForm):
     class Meta:
         model = formD_model
