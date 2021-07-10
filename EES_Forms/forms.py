@@ -45,7 +45,7 @@ class daily_battery_profile_form(ModelForm):
         
         widgets = {
             'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px;'})
-        }
+       }
        
 
     

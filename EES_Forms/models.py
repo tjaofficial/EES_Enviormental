@@ -159,8 +159,8 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
     
-class daily_battery_profile_model(models.Model):
     
+class daily_battery_profile_model(models.Model):
     foreman = models.CharField(max_length=10, choices=foreman_choices)
     crew = models.CharField(max_length=1, choices=crew_choices)
     inop_ovens = models.CharField(max_length=2)
