@@ -205,40 +205,107 @@ def formA1(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    org = subA1_model.objects.all().order_by('-date')
+    database_form = org[0]
+    org2 = subA1_readings_model.objects.all().order_by('-form')
+    database_form2 = org2[0]
+    
     full_name = request.user.get_full_name()
-    initial_data = {
-        'date' : todays_log.date_save,
-        'observer' : full_name,
-        'crew' : todays_log.crew,
-        'foreman' : todays_log.foreman,
-    }
-    data = subA1_form(initial=initial_data)
-    readings = subA1_readings_form()
-    #ptadmin = pt_admin1_form()
-    if request.method == "POST":
-        form = subA1_form(request.POST)
-        reads = subA1_readings_form(request.POST)
-        #admin = pt_admin1_form(request)
-        A_valid = form.is_valid()
-        B_valid = form.is_valid()
-        #c_valid = admin.is_valid()
-        if A_valid and B_valid:# and C_valid:
-            A = form.save()
-            B = reads.save(commit=False)
-            B.form = A
-            B.save()
-            
-            done = Forms.objects.filter(form='A-1')[0]
-            done.submitted = True
-            done.save()
-           # D = admin.save(commit=False)
-           # D.form = C
-            #D.save()
-            return redirect('IncompleteForms')
+   
+    if todays_log.date_save == database_form.date:
+        initial_data = {
+            'date' : database_form.date,
+            'observer' : database_form.observer,
+            'crew' : database_form.crew,
+            'foreman' : database_form.foreman,
+            'start' : database_form.start,
+            'stop' : database_form.stop,
+            'c1_no' : database_form2.c1_no,
+            'c2_no' : database_form2.c2_no,
+            'c3_no' : database_form2.c3_no,
+            'c4_no' : database_form2.c4_no,
+            'c5_no' : database_form2.c5_no,
+            'c1_start' : database_form2.c1_start,
+            'c2_start' : database_form2.c2_start,
+            'c3_start' : database_form2.c3_start,
+            'c4_start' : database_form2.c4_start,
+            'c5_start' : database_form2.c5_start,
+            'c1_stop' : database_form2.c1_stop,
+            'c2_stop' : database_form2.c2_stop,
+            'c3_stop' : database_form2.c3_stop,
+            'c4_stop' : database_form2.c4_stop,
+            'c5_stop' : database_form2.c5_stop,
+            'c1_sec' : database_form2.c1_sec,
+            'c2_sec' : database_form2.c2_sec,
+            'c3_sec' : database_form2.c3_sec,
+            'c4_sec' : database_form2.c4_sec,
+            'c5_sec' : database_form2.c5_sec,
+            'c1_comments' : database_form2.c1_comments,
+            'c2_comments' : database_form2.c2_comments,
+            'c3_comments' : database_form2.c3_comments,
+            'c4_comments' : database_form2.c4_comments,
+            'c5_comments' : database_form2.c5_comments,
+            'larry_car' : database_form2.larry_car,
+            'comments' : database_form2.comments,
+        }
+        data = subA1_form(initial=initial_data)
+        readings = subA1_readings_form(initial=initial_data)
+        #ptadmin = pt_admin1_form()
+        if request.method == "POST":
+            form = subA1_form(request.POST, instance=database_form)
+            reads = subA1_readings_form(request.POST, instance=database_form)
+            #admin = pt_admin1_form(request)
+            A_valid = form.is_valid()
+            B_valid = form.is_valid()
+            #c_valid = admin.is_valid()
+            if A_valid and B_valid:# and C_valid:
+                A = form.save()
+                B = reads.save(commit=False)
+                B.form = A
+                B.save()
+
+                done = Forms.objects.filter(form='A-1')[0]
+                done.submitted = True
+                done.save()
+               # D = admin.save(commit=False)
+               # D.form = C
+                #D.save()
+                return redirect('IncompleteForms')
+
     else:
-        form = subA1_form(initial=initial_data)
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name,
+            'crew' : todays_log.crew,
+            'foreman' : todays_log.foreman,
+        }
+        data = subA1_form(initial=initial_data)
         readings = subA1_readings_form()
-        ptadmin = pt_admin1_form()
+        #ptadmin = pt_admin1_form()
+        if request.method == "POST":
+            form = subA1_form(request.POST)
+            reads = subA1_readings_form(request.POST)
+            #admin = pt_admin1_form(request)
+            A_valid = form.is_valid()
+            B_valid = form.is_valid()
+            #c_valid = admin.is_valid()
+            if A_valid and B_valid:# and C_valid:
+                A = form.save()
+                B = reads.save(commit=False)
+                B.form = A
+                B.save()
+
+                done = Forms.objects.filter(form='A-1')[0]
+                done.submitted = True
+                done.save()
+               # D = admin.save(commit=False)
+               # D.form = C
+                #D.save()
+                return redirect('IncompleteForms')
+        else:
+            form = subA1_form(initial=initial_data)
+            readings = subA1_readings_form()
+            ptadmin = pt_admin1_form()
     return render (request, "Daily/Method303/formA1.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings
     })
@@ -341,7 +408,7 @@ def formA4(request):
         data = formA4_form(initial=initial_data)
         
         if request.method == "POST":
-            form = formA4_form(request.POST)
+            form = formA4_form(request.POST, instance=database_form)
             if form.is_valid():
                 form.save()
 
