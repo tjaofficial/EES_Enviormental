@@ -255,10 +255,22 @@ def formA2(request):
         'crew' : todays_log.crew,
         'foreman' : todays_log.foreman,
         'inop_ovens' : todays_log.inop_ovens,
+        'notes' : 'N/A',
     }
     data = formA2_form(initial=initial_data)
-    
-    
+    if request.method == "POST":
+        
+        form = formA2_form(request.POST)
+        if form.is_valid():
+            
+            form.save()
+            print('dick')
+            done = Forms.objects.filter(form='A-2')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+        
     return render (request, "Daily/Method303/formA2.html", {
         "back": back, 'todays_log': todays_log, 'data': data
     })

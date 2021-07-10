@@ -123,6 +123,21 @@ larry_car_choices = (
     ('1', '1'),
     ('2', '2')
 )
+door_location = (
+    ('Door', 'D'),
+    ('Chuck Door', 'C'),
+    ('Masonry', 'M')
+)
+door_zone = (
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    ('6', '6'),
+    ('7', '7'),
+    ('8', '8')
+)
 # Create your models here.
 
 
@@ -588,6 +603,43 @@ class formA2_model(models.Model):
         auto_now=False,
         blank=True
     )
+    
+    p_leak_oven1 = models.CharField(
+        max_length=2,
+        blank=True,
+        null = True
+    )
+    p_leak_loc1 = models.CharField(
+        max_length=30,
+        choices = door_location,
+        blank=True,
+        null = True
+    )
+    p_leak_zone1 = models.CharField(
+        max_length=30,
+        choices = door_zone,
+        blank=True,
+        null = True
+    )
+    c_leak_oven1 = models.CharField(
+        max_length=2,
+        blank=True,
+        null = True
+    )
+    c_leak_loc1 = models.CharField(
+        max_length=30,
+        choices = door_location,
+        blank=True,
+        null = True
+    )
+    c_leak_zone1 = models.CharField(
+        max_length=30,
+        choices = door_zone,
+        blank=True,
+        null = True
+    )
+    
+    
     p_temp_block_from = models.CharField(max_length=30)
     p_temp_block_to = models.CharField(max_length=30)
     c_temp_block_from = models.CharField(max_length=30)
@@ -607,6 +659,8 @@ class formA2_model(models.Model):
     
     def __str__(self):
         return str(self.date)
+    
+    
 class formD_model(models.Model):
     today = datetime.date.today()
     last_friday = today - datetime.timedelta(days=today.weekday() + 2)

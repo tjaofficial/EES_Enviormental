@@ -66,7 +66,8 @@
             <a href="{% url 'IncompleteForms' %}">Back</a>
         </div>
         <div style="padding-top: 75px;">
-            <form>
+            <form action="" method="POST">
+                {% csrf_token %}
                 <table style="border-collapse: collapse; margin: auto;">
                     <tr>
                         <th id="boxTitle" colspan="5" style="text-align: left;">Method 303 Doors - Form (A-2)</th>
@@ -110,9 +111,9 @@
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
-                        <th id="boxa4" colspan="5">Start Time:<input type="time"> <br> End Time:<input type="time"></th>
+                        <th id="boxa4" colspan="5">Start Time:{{ data.p_start }} <br> End Time:{{ data.p_stop }}</th>
                         <th id="boxa4" colspan="1"></th>
-                        <th id="boxa4" colspan="5">Start Time:<input type="time"> <br> End Time:<input type="time"></th>
+                        <th id="boxa4" colspan="5">Start Time:{{ data.c_start }} <br> End Time:{{ data.c_stop }}</th>
                         <th id="boxa4" colspan="1"></th>
                     </tr>
                     <tr>
@@ -148,148 +149,108 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6">D</td>
-                        <td id="boxa6">C</td>
-                        <td id="boxa6">M</td>
-                        <td id="boxa6"></td>
+                        <td id="boxa6">{{ data.p_leak_oven1 }}</td>
+                        <td colspan="3" id="boxa6">{{ data.p_leak_loc1 }}</td>
+                        <td id="boxa6">{{ data.p_leak_zone1 }}</td>
                         <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temp. Blocked</td>
-                         <td id="boxa6"></td>
-                        <td id="boxa6">D</td>
-                        <td id="boxa6">C</td>
-                        <td id="boxa6">M</td>
-                        <td id="boxa6"></td>
+                        <td id="boxa6">{{ data.c_leak_oven1 }}</td>
+                        <td colspan="3" id="boxa6">{{ data.c_leak_loc1 }}</td>
+                        <td id="boxa6">{{ data.c_leak_zone1 }}</td>
                         <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temp. Blocked</td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.p_temp_block_from }}&nbsp;to&nbsp;{{ data.p_temp_block_to}}</td>
                         <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text">&nbsp;to&nbsp;<input style="width: 40px;" type="text"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text">&nbsp;to&nbsp;<input style="width: 40px;" type="text"></td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.c_temp_block_from }}&nbsp;to&nbsp;{{ data.c_temp_block_to }}</td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                         <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
+                        <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Push Side Traverse Time: &nbsp; &nbsp; <input style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input style="width: 40px;" type="text">sec</td>
-                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Coke Side Traverse Time: &nbsp; &nbsp; <input style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input style="width: 40px;" type="text">sec</td>
+                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Push Side Traverse Time: &nbsp; &nbsp; {{ data.p_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.p_traverse_time_sec }}sec</td>
+                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Coke Side Traverse Time: &nbsp; &nbsp; {{ data.c_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec</td>
                     </tr>
                 </table>
                 <br><br><br>
@@ -299,7 +260,7 @@
                             D = Door
                         </td>
                         <td style="width: 400px; text-align: center;">
-                            Total Traverse Time <input style="width: 40px;" type="text">sec
+                            Total Traverse Time {{ data.total_traverse_time }}sec
                         </td>
                         <td></td>
                     </tr>    
@@ -317,13 +278,10 @@
                             M = Masonry
                         </td>
                         <td style="text-align: center;">
-                            T = 680 + (10 sec x #leaks) = <input style="width: 40px;" type="text">
+                            T = 680 + (10 sec x #leaks) = {{ data.allowed_traverse_time }}
                         </td>
                         <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            <input type="radio" id="yes" name="yesNo" value="yes">
-                            <label for="yes">Yes</label>
-                            <input type="radio" id="no" name="yesNo" value="no">
-                            <label for="no">No</label>
+                            {{ data.valid_run }}
                         </td>
                     </tr>
                 </table>    
@@ -343,7 +301,7 @@
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L<sub>y</sub> X 100
                         </td>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text"> x 100
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.leaking_doors }} x 100
                         </td>
                         <td></td>
                         <td style="width: 75px"></td>
@@ -360,7 +318,7 @@
                             --------------------------------- = 
                         </td>
                         <td>
-                            <input style="width: 40px;" type="text">%
+                            {{ data.percent_leaking }}%
                         </td>
                         <td></td>
                     </tr>
@@ -371,7 +329,7 @@
                             &nbsp;&nbsp;&nbsp; D<sub>t</sub> - D<sub>i</sub> - D<sub>no</sub>
                         </td>
                         <td>
-                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;170 - <input style="width: 40px;" type="text"> - <input style="width: 40px;" type="text">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;170 - {{ data.inop_doors }} - {{ data.doors_not_observed }}
                         </td>
                          <td></td>
                          <td></td>
@@ -387,7 +345,7 @@
                 </table>
                 <div id="noteBox">
                     Notes: <br>
-                    <textarea name="comments" rows="6" cols="90" style="font-size: 20px;">N/A</textarea>
+                    {{ data.notes }}
                 </div>
                 
                 
@@ -407,20 +365,30 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">Any Issues? Describe<input type="text" style="font-size: 20px; width: 900px;"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue<input type="text" style="font-size: 20px; width: 500px;"></td>
-                        <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="date" style="font-size: 20px;"></td>
-                        <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="time" style="font-size: 20px;"></td>
-                    </tr>
-                    <tr>
                         <td colspan="6" style="border: 1px solid black; font-size: 20px;">
-                            Signature:<input type="text" style="font-size: 20px; width: 500px;">
+                            Any Issues? Describe
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken<input type="text" style="font-size: 20px; width: 900px;"></td>
+                        <td colspan="4" style="border: 1px solid black; font-size: 20px;">
+                            EES Person Notified of Issue
+                        </td>
+                        <td colspan="1" style="border: 1px solid black; font-size: 20px;">
+                        
+                        </td>
+                        <td colspan="1" style="border: 1px solid black; font-size: 20px;">
+                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">
+                            Signature:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">
+                            Corrective Action Taken
+                        </td>
                     </tr>
                 </table>
                 <br><br>
