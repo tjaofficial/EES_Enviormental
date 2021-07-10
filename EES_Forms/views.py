@@ -308,26 +308,72 @@ def formA4(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    org = formA4_model.objects.all().order_by('-date')
+    database_form = org[0]
+    
     full_name = request.user.get_full_name()
-    initial_data = {
+    
+    if todays_log.date_save == database_form.date:
+        initial_data = {
+        'date' : database_form.date,
+        'observer' : database_form.observer,
+        'crew' : database_form.crew,
+        'foreman' : database_form.foreman,
+        'main_start' : database_form.main_start,
+        'main_stop' : database_form.main_stop,
+        'main_1' : database_form.main_1,
+        'main_2' : database_form.main_2,
+        'main_3' : database_form.main_3,
+        'main_4' : database_form.main_4,
+        'suction_main' : database_form.suction_main,
+        'oven_leak_1' : database_form.oven_leak_1,
+        'time_leak_1' : database_form.time_leak_1,
+        'date_temp_seal_leak_1' : database_form.date_temp_seal_leak_1,
+        'time_temp_seal_leak_1' : database_form.time_temp_seal_leak_1,
+        'temp_seal_by_leak_1' : database_form.temp_seal_by_leak_1,
+        'date_init_repair_leak_1' : database_form.date_init_repair_leak_1,
+        'time_init_repair_leak_1' : database_form.time_init_repair_leak_1,
+        'date_comp_repair_leak_1' : database_form.date_comp_repair_leak_1,
+        'time_comp_repair_leak_1' : database_form.time_comp_repair_leak_1,
+        'comp_by_leak_1' : database_form.comp_by_leak_1,
+        'notes' : database_form.notes,
+        }
+        data = formA4_form(initial=initial_data)
+        
+        if request.method == "POST":
+            form = formA4_form(request.POST)
+            if form.is_valid():
+                form.save()
+
+                done = Forms.objects.filter(form='A-4')[0]
+                done.submitted = True
+                done.save()
+
+                return redirect('IncompleteForms')
+            else:
+                print(form.errors)
+    
+    else:
+        initial_data = {
         'date' : todays_log.date_save,
         'observer' : full_name,
         'crew' : todays_log.crew,
         'foreman' : todays_log.foreman,
-    }
-    data = formA4_form(initial=initial_data)
-    if request.method == "POST":
-        form = formA4_form(request.POST)
-        if form.is_valid():
-            form.save()
-            print('dick')
-            done = Forms.objects.filter(form='A-4')[0]
-            done.submitted = True
-            done.save()
-            
-            return redirect('IncompleteForms')
-        else:
-            print(form.errors)
+        }
+        data = formA4_form(initial=initial_data)
+        
+        if request.method == "POST":
+            form = formA4_form(request.POST)
+            if form.is_valid():
+                form.save()
+                print('dick')
+                done = Forms.objects.filter(form='A-4')[0]
+                done.submitted = True
+                done.save()
+
+                return redirect('IncompleteForms')
+            else:
+                print(form.errors)
     
     return render (request, "Daily/Method303/formA4.html", {
         "back": back, 'todays_log': todays_log, 'data': data

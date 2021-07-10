@@ -800,7 +800,7 @@ class formA4_model(models.Model):
     oven_leak_1 = models.CharField(
         max_length=2,
         blank = True,
-        null = True
+        null = True,
     )
     time_leak_1 = models.TimeField(
         auto_now_add=False, 
