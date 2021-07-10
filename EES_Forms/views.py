@@ -361,7 +361,7 @@ def formA2(request):
         }
         data = formA2_form(initial=initial_data)
         if request.method == "POST":
-            form = formA2_form(request.POST)
+            form = formA2_form(request.POST, instance=database_form)
             if form.is_valid():
                 form.save()
 
@@ -402,26 +402,76 @@ def formA3(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    org = formA3_model.objects.all().order_by('-date')
+    database_form = org[0]
+    
     full_name = request.user.get_full_name()
-    initial_data = {
-        'date' : todays_log.date_save,
-        'observer' : full_name,
-        'crew' : todays_log.crew,
-        'foreman' : todays_log.foreman,
-        'inop_ovens' : todays_log.inop_ovens,
-        'notes' : 'N/A',
-    }
-    data = formA3_form(initial=initial_data)
-    if request.method == "POST":
-        form = formA3_form(request.POST)
-        if form.is_valid():
-            form.save()
+    
+    if todays_log.date_save == database_form.date:
+        initial_data = {
+            'date' : database_form.date,
+            'observer' : database_form.observer,
+            'crew' : database_form.crew,
+            'foreman' : database_form.foreman,
+            'inop_ovens' : database_form.inop_ovens,
+            'om_start' : database_form.om_start,
+            'om_stop' : database_form.om_stop,
+            'l_start' : database_form.l_start,
+            'l_stop' : database_form.l_stop,
+            'om_oven1' : database_form.om_oven1,
+            'om_loc1' : database_form.om_loc1,
+            'l_oven1' : database_form.l_oven1,
+            'l_loc1' : database_form.l_loc1,
+            'om_traverse_time_min' : database_form.om_traverse_time_min,
+            'om_traverse_time_sec' : database_form.om_traverse_time_sec,
+            'l_traverse_time_min' : database_form.l_traverse_time_min,
+            'l_traverse_time_sec' : database_form.l_traverse_time_sec,
+            'om_allowed_traverse_time' : database_form.om_allowed_traverse_time,
+            'l_allowed_traverse_time' : database_form.l_allowed_traverse_time,
+            'om_valid_run' : database_form.om_valid_run,
+            'l_valid_run' : database_form.l_valid_run,
+            'om_leaks' : database_form.om_leaks,
+            'l_leaks' : database_form.l_leaks,
+            'om_not_observed' : database_form.om_not_observed,
+            'l_not_observed' : database_form.l_not_observed,
+            'om_percent_leaking' : database_form.om_percent_leaking,
+            'l_percent_leaking' : database_form.l_percent_leaking,
+            'notes' : 'N/A',
+        }
+        data = formA3_form(initial=initial_data)
+        if request.method == "POST":
+            form = formA3_form(request.POST, instance=database_form)
+            if form.is_valid():
+                form.save()
 
-            done = Forms.objects.filter(form='A-3')[0]
-            done.submitted = True
-            done.save()
-            
-            return redirect('IncompleteForms')
+                done = Forms.objects.filter(form='A-3')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+
+                return redirect('IncompleteForms')
+    
+    else:
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name,
+            'crew' : todays_log.crew,
+            'foreman' : todays_log.foreman,
+            'inop_ovens' : todays_log.inop_ovens,
+            'notes' : 'N/A',
+        }
+        data = formA3_form(initial=initial_data)
+        if request.method == "POST":
+            form = formA3_form(request.POST)
+            if form.is_valid():
+                form.save()
+
+                done = Forms.objects.filter(form='A-3')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+
+                return redirect('IncompleteForms')
 
     return render (request, "Daily/Method303/formA3.html", {
         "back": back, 'todays_log': todays_log, 'data': data
