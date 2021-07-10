@@ -425,6 +425,36 @@ class formA3_form(ModelForm):
             'l_percent_leaking' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
             'notes' : Textarea(attrs={'rows':7, 'cols':125}),
         }
+        
+class formA4_form(ModelForm):
+    class Meta:
+        model = formA4_model
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'crew' : forms.Select(attrs={'style':'width:40px;'}),
+            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
+            'main_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'main_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'main_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'main_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'main_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'main_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'suction_main' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'oven_leak_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'time_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'date_temp_seal_leak_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_temp_seal_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'temp_seal_by_leak_1' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date_init_repair_leak_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_init_repair_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'date_comp_repair_leak_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_comp_repair_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comp_by_leak_1' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'notes' : Textarea(attrs={'rows':7, 'cols':125}),
+        }
+        
 class formD_form(ModelForm):
     class Meta:
         model = formD_model

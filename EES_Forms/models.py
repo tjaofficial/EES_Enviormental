@@ -757,7 +757,107 @@ class formA3_model(models.Model):
     def __str__(self):
         return str(self.date)
     
+class formA4_model(models.Model):
+    observer = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    crew = models.CharField(
+        max_length=1, 
+        choices = crew_choices
+    )
+    foreman = models.CharField(
+        max_length=30,
+        choices = foreman_choices
+    )
+    main_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    main_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    main_1 = models.CharField(
+        max_length=30
+    )
+    main_2 = models.CharField(
+        max_length=30
+    )
+    main_3 = models.CharField(
+        max_length=30
+    )
+    main_4 = models.CharField(
+        max_length=30
+    )
+    suction_main = models.CharField(
+        max_length=30
+    )
+    oven_leak_1 = models.CharField(
+        max_length=2,
+        blank = True,
+        null = True
+    )
+    time_leak_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True,
+    )
+    date_temp_seal_leak_1 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null = True,
+    )
+    time_temp_seal_leak_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True,
+    )
+    temp_seal_by_leak_1 = models.CharField(
+        max_length=30,
+        blank = True,
+        null = True,
+    )
+    date_init_repair_leak_1 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null = True,
+    )
+    time_init_repair_leak_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True,
+    )
+    date_comp_repair_leak_1 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null = True,
+    )
+    time_comp_repair_leak_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True,
+    )
+    comp_by_leak_1 = models.CharField(
+        max_length=30,
+        blank = True,
+        null = True,
+    )
+    notes = models.CharField(max_length=30)
     
+    def __str__(self):
+        return str(self.date)
     
 class formD_model(models.Model):
     today = datetime.date.today()
