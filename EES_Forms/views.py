@@ -721,7 +721,8 @@ def formD(request):
                             if items == None:
                                 filled_out = False
                                 break
-
+                        print(filled_out)
+                                
                         if filled_out:
                             done.submitted = True
                             done.save()
