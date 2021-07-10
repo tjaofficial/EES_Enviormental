@@ -14,6 +14,9 @@ daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 todays_log = daily_prof[0]
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
+sub_forms = Forms.objects.all()
+    
+    
 
 #------------------------------------------------------------------------REGISTER---------<
 # Create your views here.
@@ -101,14 +104,14 @@ def logout_view(request):
 @lock
 def IncompleteForms(request):
     now = datetime.datetime.now()
-    sub_forms = Forms.objects.all()
     
     
-  #  for forms in sub_forms:
-   #     A = forms.date_submitted
-   #     if now.date() != A :
-    #        forms.submitted = False
-     #       forms.save()
+    
+    for forms in sub_forms:
+        A = forms.date_submitted
+        if now.date() != A :
+            forms.submitted = False
+            forms.save()
             
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
@@ -266,6 +269,7 @@ def formA1(request):
 
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
+                done.date_submitted = todays_log.date_save
                 done.save()
                # D = admin.save(commit=False)
                # D.form = C
@@ -297,6 +301,7 @@ def formA1(request):
 
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
+                done.date_submitted = todays_log.date_save
                 done.save()
                # D = admin.save(commit=False)
                # D.form = C
@@ -315,27 +320,79 @@ def formA2(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    org = formA2_model.objects.all().order_by('-date')
+    database_form = org[0]
+    
     full_name = request.user.get_full_name()
-    initial_data = {
-        'date' : todays_log.date_save,
-        'observer' : full_name,
-        'crew' : todays_log.crew,
-        'foreman' : todays_log.foreman,
-        'inop_ovens' : todays_log.inop_ovens,
-        'notes' : 'N/A',
-    }
-    data = formA2_form(initial=initial_data)
-    if request.method == "POST":
-        form = formA2_form(request.POST)
-        if form.is_valid():
-            form.save()
+    
+    if todays_log.date_save == database_form.date:
+        initial_data = {
+            'date' : database_form.date,
+            'observer' : database_form.observer,
+            'crew' : database_form.crew,
+            'foreman' : database_form.foreman,
+            'inop_ovens' : database_form.inop_ovens,
+            'p_start' : database_form.p_start,
+            'p_stop' : database_form.p_stop,
+            'c_start' : database_form.c_start,
+            'c_stop' : database_form.c_stop,
+            'p_leak_oven1' : database_form.p_leak_oven1,
+            'p_leak_loc1' : database_form.p_leak_loc1,
+            'p_leak_zone1' : database_form.p_leak_zone1,
+            'c_leak_oven1' : database_form.c_leak_oven1,
+            'c_leak_loc1' : database_form.c_leak_loc1,
+            'c_leak_zone1' : database_form.c_leak_zone1,
+            'notes' : database_form.notes,
+            'p_temp_block_from' : database_form.p_temp_block_from,
+            'p_temp_block_to' : database_form.p_temp_block_to,
+            'c_temp_block_from' : database_form.c_temp_block_from,
+            'c_temp_block_to' : database_form.c_temp_block_to,
+            'p_traverse_time_min' : database_form.p_traverse_time_min,
+            'p_traverse_time_sec' : database_form.p_traverse_time_sec,
+            'c_traverse_time_min' : database_form.c_traverse_time_min,
+            'c_traverse_time_sec' : database_form.c_traverse_time_sec,
+            'total_traverse_time' : database_form.total_traverse_time,
+            'allowed_traverse_time' : database_form.allowed_traverse_time,
+            'valid_run' : database_form.valid_run,
+            'leaking_doors' : database_form.leaking_doors,
+            'doors_not_observed' : database_form.doors_not_observed,
+            'inop_doors' : database_form.inop_doors,
+            'percent_leaking' : database_form.percent_leaking,
+        }
+        data = formA2_form(initial=initial_data)
+        if request.method == "POST":
+            form = formA2_form(request.POST)
+            if form.is_valid():
+                form.save()
 
-            done = Forms.objects.filter(form='A-2')[0]
-            done.submitted = True
-            done.save()
-            
-            return redirect('IncompleteForms')
-        
+                done = Forms.objects.filter(form='A-2')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+
+                return redirect('IncompleteForms')
+    else:
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name,
+            'crew' : todays_log.crew,
+            'foreman' : todays_log.foreman,
+            'inop_ovens' : todays_log.inop_ovens,
+            'notes' : 'N/A',
+        }
+        data = formA2_form(initial=initial_data)
+        if request.method == "POST":
+            form = formA2_form(request.POST)
+            if form.is_valid():
+                form.save()
+
+                done = Forms.objects.filter(form='A-2')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+
+                return redirect('IncompleteForms')
+
     return render (request, "Daily/Method303/formA2.html", {
         "back": back, 'todays_log': todays_log, 'data': data
     })
@@ -721,7 +778,6 @@ def formD(request):
                             if items == None:
                                 filled_out = False
                                 break
-                        print(filled_out)
                                 
                         if filled_out:
                             done.submitted = True
