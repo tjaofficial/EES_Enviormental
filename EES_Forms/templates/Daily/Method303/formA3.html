@@ -67,7 +67,8 @@
             <a href="{% url 'IncompleteForms' %}">Back</a>
         </div>
         <div style="padding-top: 75px;">
-            <form>
+            <form action="" method="POST">
+                {% csrf_token %}
                 <table style="border-collapse: collapse; margin: auto;">
                     <tr>
                         <th id="boxTitle" colspan="5" style="text-align: left;">Method 303 Lids and Offtakes - Form (A-3)</th>
@@ -84,22 +85,22 @@
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
-                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ request.user.first_name }} {{ request.user.last_name }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ todays_log.date_save }}
+                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
                     </tr>
                     <tr>
                         <th colspan="6">
                             Battery No. 5 &nbsp; &nbsp; &nbsp; 
                             Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
-                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ todays_log.inop_ovens }}
+                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
                         </th>
                     </tr>
                     <tr>
                         <th colspan="6">
                             Crew:
-                            &nbsp; &nbsp;{{ todays_log.crew }}
+                            &nbsp; &nbsp;{{ data.crew }}
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
                             Battery Foreman:
-                            &nbsp; &nbsp;{{ todays_log.foreman }}
+                            &nbsp; &nbsp;{{ data.foreman }}
                         </th>
                     </tr>
                 </table>
@@ -111,9 +112,9 @@
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
-                        <th id="boxa4" colspan="5">Start Time:<input type="time"> <br> End Time:<input type="time"></th>
+                        <th id="boxa4" colspan="5">Start Time:{{ data.om_start }} <br> End Time:{{ data.om_stop }}</th>
                         <th id="boxa4" colspan="5"></th>
-                        <th id="boxa4" colspan="6">Start Time:<input type="time"> <br> End Time:<input type="time"></th>
+                        <th id="boxa4" colspan="6">Start Time:{{ data.l_start }} <br> End Time:{{ data.l_stop }}</th>
                         <th id="boxa4" colspan="1"></th>
                     </tr>
                     <tr>
@@ -143,22 +144,11 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6">D</td>
-                        <td id="boxa6">C</td>
-                        <td id="boxa6">F</td>
-                        <td id="boxa6">S</td>
-                        <td id="boxa6">B</td>
-                        <td id="boxa6">P</td>
-                        <td id="boxa6">O</td>
-                        <td id="boxa6">MS</td>
+                        <td id="boxa6">{{ data.om_oven1 }}</td>
+                        <td colspan="8" id="boxa6">{{ data.om_loc1 }}</td>
                         <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                         <td id="boxa6"></td>
-                        <td id="boxa6">D</td>
-                        <td id="boxa6">1</td>
-                        <td id="boxa6">2</td>
-                        <td id="boxa6">3</td>
-                        <td id="boxa6">4</td>
+                        <td id="boxa6">{{ data.l_oven1 }}</td>
+                        <td colspan="5" id="boxa6">{{ data.l_loc1 }}</td>
                         <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
@@ -333,8 +323,8 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="10" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; <input style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input style="width: 40px;" type="text">sec</td>
-                        <td colspan="7" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; <input style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input style="width: 40px;" type="text">sec</td>
+                        <td colspan="10" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; {{ data.om_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.om_traverse_time_sec }}sec</td>
+                        <td colspan="7" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; {{ data.l_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.l_traverse_time_sec }}sec</td>
                     </tr>
                 </table>
                 <br><br>
@@ -344,10 +334,10 @@
                             D = Dampered off
                         </td>
                         <td style="width: 254px; text-align: center;">
-                            Total Traverse Time
+                            Allowed Traverse Time
                         </td>
                         <td rowspan="2" style="width: 354px; text-align: left;">
-                            = 340 + 10 sec * # of leaks) = <input style="width: 40px;" type="text">sec
+                            = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
                         </td>
                         <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
                             Valid Run?
@@ -362,10 +352,7 @@
                             (Offtakes)
                         </td>
                         <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            <input type="radio" id="yes" name="yesNo" value="yes">
-                            <label for="yes">Yes</label>
-                            <input type="radio" id="no" name="yesNo" value="no">
-                            <label for="no">No</label>
+                            {{ data.om_valid_run }}
                         </td>
                     </tr>
                     <tr> 
@@ -383,7 +370,7 @@
                             Allowed Traverse Time:
                         </td>
                         <td rowspan="2" style="width: 354px; text-align: left;">
-                            = 340 + 10 sec * # of leaks) = <input style="width: 40px;" type="text">sec
+                            = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
                         </td>
                         <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
                             Valid Run?
@@ -397,10 +384,7 @@
                             (Lids)
                         </td>
                         <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            <input type="radio" id="yes" name="yesNo" value="yes">
-                            <label for="yes">Yes</label>
-                            <input type="radio" id="no" name="yesNo" value="no">
-                            <label for="no">No</label>
+                            {{ data.l_valid_run }}
                         </td>
                     </tr> 
                     <tr> 
@@ -415,7 +399,7 @@
                             O = Other
                         </td>
                         <td colspan="3" style="text-align: center;">
-                            Total Offtake Leaks: <input type="number"> Total Leaking Lids: <input type="number">
+                            Total Offtake Leaks: {{ data.om_leaks }} Total Leaking Lids: {{ data.l_leaks }}
                         </td>
                     </tr>    
                     <tr>  
@@ -442,7 +426,7 @@
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
                         </td>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text"> x 100
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
                         </td>
                         <td></td>
                         <td style="width: 75px"></td>
@@ -459,7 +443,7 @@
                             --------------------------------- = 
                         </td>
                         <td>
-                            <input style="width: 40px;" type="text">%
+                            {{ data.l_percent_leaking }}%
                         </td>
                         <td></td>
                     </tr>
@@ -470,7 +454,7 @@
                             &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                         </td>
                         <td>
-                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - <input style="width: 30px;" type="number" value="{{ todays_log.inop_ovens }}">) - <input style="width: 40px;" type="text">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.l_not_observed }}
                         </td>
                          <td></td>
                          <td></td>
@@ -485,7 +469,7 @@
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
                         </td>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text"> x 100
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
                         </td>
                         <td></td>
                         <td style="width: 75px"></td>
@@ -493,7 +477,7 @@
                     <tr>
                         <td></td>
                         <td style="text-align: center; margin: auto; width: 133px;">
-                            % Leaking Lids = 
+                            % Leaking Offtakes = 
                         </td>
                         <td>
                             ---------------------- = 
@@ -502,7 +486,7 @@
                             --------------------------------- = 
                         </td>
                         <td>
-                            <input style="width: 40px;" type="text">%
+                            {{ data.om_percent_leaking }}%
                         </td>
                         <td></td>
                     </tr>
@@ -513,7 +497,7 @@
                             &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                         </td>
                         <td>
-                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - <input style="width: 30px;" type="number" value="{{ todays_log.inop_ovens }}">) - <input style="width: 40px;" type="text">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.om_not_observed }}
                         </td>
                          <td></td>
                          <td></td>
@@ -529,7 +513,7 @@
                 </table>
                 <div id="noteBox">
                     Notes: <br>
-                    <textarea name="comments" rows="6" cols="90" style="font-size: 20px;">N/A</textarea>
+                    {{ data.notes }}
                 </div>
                 
                 
@@ -544,7 +528,7 @@
                  <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
                  <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
                  <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                <table style="border-collapse: collapse; margin: auto;">
+              <!--  <table style="border-collapse: collapse; margin: auto;">
                     <tr>
                         <td style="height: 40px" > </td>
                     </tr> 
@@ -564,7 +548,7 @@
                     <tr>
                         <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken<input type="text" style="font-size: 20px; width: 900px;"></td>
                     </tr>
-                </table>
+                </table>-->
                 <br><br>
                 <input type="submit" value="Save" style="font-size: 40px">
                 <br><br><br>

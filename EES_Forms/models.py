@@ -138,6 +138,23 @@ door_zone = (
     ('7', '7'),
     ('8', '8')
 )
+om_location = (
+    ('Dampered Off', 'D'),
+    ('Cap', 'C'),
+    ('Flange', 'F'),
+    ('Slip Joint', 'S'),
+    ('Base', 'B'),
+    ('Piping', 'P'),
+    ('Other', 'O'),
+    ('Mini Standpipe', 'MS')
+)
+l_location = (
+    ('Dampered Off', 'D'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+)
 # Create your models here.
 
 
@@ -659,6 +676,87 @@ class formA2_model(models.Model):
     
     def __str__(self):
         return str(self.date)
+    
+    
+class formA3_model(models.Model):
+    observer = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    inop_ovens = models.CharField(
+        max_length=2
+    )
+    crew = models.CharField(
+        max_length=1, 
+        choices = crew_choices
+    )
+    foreman = models.CharField(
+        max_length=30,
+        choices = foreman_choices
+    )
+    om_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    om_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    l_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    l_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    om_oven1 = models.CharField(
+        max_length=2,
+        blank=True,
+        null = True
+    )
+    om_loc1 = models.CharField(
+        max_length=30,
+        choices = om_location,
+        blank=True,
+        null = True
+    )
+    l_oven1 = models.CharField(
+        max_length=2,
+        blank=True,
+        null = True
+    )
+    l_loc1 = models.CharField(
+        max_length=30,
+        choices = l_location,
+        blank=True,
+        null = True
+    )
+    om_traverse_time_min = models.CharField(max_length=30)
+    om_traverse_time_sec = models.CharField(max_length=30)
+    l_traverse_time_min = models.CharField(max_length=30)
+    l_traverse_time_sec = models.CharField(max_length=30)
+    om_allowed_traverse_time = models.CharField(max_length=30)
+    l_allowed_traverse_time = models.CharField(max_length=30)
+    om_valid_run = models.BooleanField(default=None)
+    l_valid_run = models.BooleanField(default=None)
+    om_leaks = models.CharField(max_length=30)
+    l_leaks = models.CharField(max_length=30)
+    om_not_observed = models.CharField(max_length=30)
+    l_not_observed = models.CharField(max_length=30)
+    om_percent_leaking = models.CharField(max_length=30)
+    l_percent_leaking = models.CharField(max_length=30)
+    notes = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.date)
+    
     
     
 class formD_model(models.Model):

@@ -259,12 +259,10 @@ def formA2(request):
     }
     data = formA2_form(initial=initial_data)
     if request.method == "POST":
-        
         form = formA2_form(request.POST)
         if form.is_valid():
-            
             form.save()
-            print('dick')
+
             done = Forms.objects.filter(form='A-2')[0]
             done.submitted = True
             done.save()
@@ -280,8 +278,31 @@ def formA3(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    full_name = request.user.get_full_name()
+    initial_data = {
+        'date' : todays_log.date_save,
+        'observer' : full_name,
+        'crew' : todays_log.crew,
+        'foreman' : todays_log.foreman,
+        'inop_ovens' : todays_log.inop_ovens,
+        'notes' : 'N/A',
+    }
+    data = formA3_form(initial=initial_data)
+    if request.method == "POST":
+        form = formA3_form(request.POST)
+        if form.is_valid():
+            
+            form.save()
+            print('dick')
+            done = Forms.objects.filter(form='A-3')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+        else:
+            print(form.errors)
     return render (request, "Daily/Method303/formA3.html", {
-        "back": back, 'todays_log': todays_log
+        "back": back, 'todays_log': todays_log, 'data': data
     })
 #------------------------------------------------------------------------A4---------------<
 @lock

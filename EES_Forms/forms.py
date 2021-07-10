@@ -390,6 +390,41 @@ class formA2_form(ModelForm):
             'c_leak_loc1' : forms.Select(attrs={'style':'width:40px;'}),
             'c_leak_zone1' : forms.Select(attrs={'style':'width:40px;'}),
         }
+        
+class formA3_form(ModelForm):
+    class Meta:
+        model = formA3_model
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
+            'crew' : forms.Select(attrs={'style':'width:40px;'}),
+            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
+            'om_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'om_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'l_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'l_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'om_oven1' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'om_loc1' : forms.Select(attrs={'style':'width:40px;'}),
+            'l_oven1' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
+            'l_loc1' : forms.Select(attrs={'style':'width:40px;'}),
+            'om_traverse_time_min' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'om_traverse_time_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'l_traverse_time_min' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'l_traverse_time_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'om_allowed_traverse_time' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'l_allowed_traverse_time' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'om_valid_run' : forms.CheckboxInput(attrs={'style':'width: 50px;'}),
+            'l_valid_run' : forms.CheckboxInput(attrs={'style':'width: 50px;'}),
+            'om_leaks' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'l_leaks' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'om_not_observed' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'l_not_observed' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'om_percent_leaking' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'l_percent_leaking' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px;'}),
+            'notes' : Textarea(attrs={'rows':7, 'cols':125}),
+        }
 class formD_form(ModelForm):
     class Meta:
         model = formD_model
