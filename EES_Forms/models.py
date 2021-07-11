@@ -61,6 +61,15 @@ yes_no_choices = (
     ('Yes', 'Yes'),
     ('No', 'No')
 )
+yes_no_na_choices = (
+    ('N/A', 'N/A'),
+    ('Yes', 'Yes'),
+    ('No', 'No')
+)
+good_bad_choices = (
+    ('good', 'Good'),
+    ('bad', 'Bad')
+)
 truck_id_choices = (
     ('#5', '#5'),
     ('#6', '#6'),
@@ -154,6 +163,21 @@ l_location = (
     ('2', '2'),
     ('3', '3'),
     ('4', '4'),
+)
+weather_choices = (
+    ('clear', 'Clear'),
+    ('cloudy', 'Cloudy'),
+    ('rain', 'Rain'),
+    ('snow', 'Snow'),
+    ('excessive wind', 'Excessive Wind'),
+)
+barrier_choices = (
+    ('none', 'None'),
+    ('0" - 1/4"', '0" - 1/4"'),
+    ('1/4" - 1/2"', '1/4" - 1/2"'),
+    ('1/2" - 3/4"', '1/2" - 3/4"'),
+    ('3/4" - 1"', '3/4" - 1"'),
+    ('1" - 2"', '1" - 2"'),   
 )
 # Create your models here.
 
@@ -263,174 +287,6 @@ class bat_info_model(models.Model):
     
     def __str__(self):
         return self.name
- 
-
-class subA5_model(models.Model):
-    date = models.CharField(max_length=30)   
-    estab = models.CharField(max_length=30)
-    county = models.CharField(max_length=30)
-    estab_no = models.CharField(max_length=30)
-    equip_loc = models.CharField(max_length=30)
-    district = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
-    observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
-    process_equip1 = models.CharField(max_length=50)
-    process_equip2 = models.CharField(max_length=50)
-    op_mode1 = models.CharField(max_length=30)
-    op_mode2 = models.CharField(max_length=30)
-    background_color_start = models.CharField(max_length=30)
-    background_color_stop = models.CharField(max_length=30)
-    sky_conditions = models.CharField(max_length=30)
-    wind_speed_start = models.CharField(max_length=2)
-    wind_speed_stop = models.CharField(max_length=4)
-    wind_direction =models.CharField(max_length=3)
-    emission_point_start = models.CharField(max_length=50)
-    emission_point_stop = models.CharField(max_length=50)
-    ambient_temp_start = models.CharField(max_length=3)
-    ambient_temp_stop = models.CharField(max_length=4)
-    humidity = models.CharField(max_length=3)
-    height_above_ground = models.CharField(max_length=30)
-    height_rel_observer = models.CharField(max_length=30)
-    distance_from = models.CharField(max_length=30)
-    direction_from = models.CharField(max_length=30)
-    describe_emissions_start = models.CharField(max_length=30)
-    describe_emissions_stop = models.CharField(max_length=30)
-    emission_color_start = models.CharField(max_length=30)
-    emission_color_stop = models.CharField(max_length=30)
-    plume_type = models.CharField(max_length=30, choices= plume_type_choices)
-    water_drolet_present = models.CharField(max_length=30, choices= water_present_choices)
-    water_droplet_plume = models.CharField(max_length=30, choices= droplet_plume_choices)
-    plume_opacity_determined_start = models.CharField(max_length=50)
-    plume_opacity_determined_stop = models.CharField(max_length=50)
-    describe_background_start = models.CharField(max_length=30)
-    describe_background_stop = models.CharField(max_length=30)
-    
-    def __str__(self):
-        return self.date
-    
-#----------------------------------------------------------------------FORM A5 - DATA---------------<
-class subA5_readings_model(models.Model):
-    form = models.OneToOneField(
-        subA5_model, 
-        on_delete=models.CASCADE, 
-        primary_key=True,
-        related_name='foobar',
-    )
-    o1 = models.CharField(max_length=2)
-    o1_start = models.CharField(max_length=30)
-    o1_stop = models.CharField(max_length=30)
-    o1_highest_opacity = models.CharField(max_length=30)
-    o1_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o1_average_6 = models.CharField(max_length=30)
-    o1_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
-    o2 = models.CharField(max_length=2)
-    o2_start = models.CharField(max_length=30)
-    o2_stop = models.CharField(max_length=30)
-    o2_highest_opacity = models.CharField(max_length=30)
-    o2_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o2_average_6 = models.CharField(max_length=30)
-    o2_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
-    o3 = models.CharField(max_length=2)
-    o3_start = models.CharField(max_length=30)
-    o3_stop = models.CharField(max_length=30)
-    o3_highest_opacity = models.CharField(max_length=30)
-    o3_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o3_average_6 = models.CharField(max_length=30)
-    o3_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
-    o4 = models.CharField(max_length=2)
-    o4_start = models.CharField(max_length=30)
-    o4_stop = models.CharField(max_length=30)
-    o4_highest_opacity = models.CharField(max_length=30)
-    o4_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o4_average_6 = models.CharField(max_length=30)
-    o4_average_6_over_35 = models.CharField(max_length=30, choices= average_over_35_choices)
-    o1_1_reads = models.CharField(max_length=3)
-    o1_2_reads = models.CharField(max_length=3)
-    o1_3_reads = models.CharField(max_length=3)
-    o1_4_reads = models.CharField(max_length=3)
-    o1_5_reads = models.CharField(max_length=3)
-    o1_6_reads = models.CharField(max_length=3)
-    o1_7_reads = models.CharField(max_length=3)
-    o1_8_reads = models.CharField(max_length=3)
-    o1_9_reads = models.CharField(max_length=3)
-    o1_10_reads = models.CharField(max_length=3)
-    o1_11_reads = models.CharField(max_length=3)
-    o1_12_reads = models.CharField(max_length=3)
-    o1_13_reads = models.CharField(max_length=3)
-    o1_14_reads = models.CharField(max_length=3)
-    o1_15_reads = models.CharField(max_length=3)
-    o1_16_reads = models.CharField(max_length=3)
-    o2_1_reads = models.CharField(max_length=3)
-    o2_2_reads = models.CharField(max_length=3)
-    o2_3_reads = models.CharField(max_length=3)
-    o2_4_reads = models.CharField(max_length=3)
-    o2_5_reads = models.CharField(max_length=3)
-    o2_6_reads = models.CharField(max_length=3)
-    o2_7_reads = models.CharField(max_length=3)
-    o2_8_reads = models.CharField(max_length=3)
-    o2_9_reads = models.CharField(max_length=3)
-    o2_10_reads = models.CharField(max_length=3)
-    o2_11_reads = models.CharField(max_length=3)
-    o2_12_reads = models.CharField(max_length=3)
-    o2_13_reads = models.CharField(max_length=3)
-    o2_14_reads = models.CharField(max_length=3)
-    o2_15_reads = models.CharField(max_length=3)
-    o2_16_reads = models.CharField(max_length=3)
-    o3_1_reads = models.CharField(max_length=3)
-    o3_2_reads = models.CharField(max_length=3)
-    o3_3_reads = models.CharField(max_length=3)
-    o3_4_reads = models.CharField(max_length=3)
-    o3_5_reads = models.CharField(max_length=3)
-    o3_6_reads = models.CharField(max_length=3)
-    o3_7_reads = models.CharField(max_length=3)
-    o3_8_reads = models.CharField(max_length=3)
-    o3_9_reads = models.CharField(max_length=3)
-    o3_10_reads = models.CharField(max_length=3)
-    o3_11_reads = models.CharField(max_length=3)
-    o3_12_reads = models.CharField(max_length=3)
-    o3_13_reads = models.CharField(max_length=3)
-    o3_14_reads = models.CharField(max_length=3)
-    o3_15_reads = models.CharField(max_length=3)
-    o3_16_reads = models.CharField(max_length=3)
-    o4_1_reads = models.CharField(max_length=3)
-    o4_2_reads = models.CharField(max_length=3)
-    o4_3_reads = models.CharField(max_length=3)
-    o4_4_reads = models.CharField(max_length=3)
-    o4_5_reads = models.CharField(max_length=3)
-    o4_6_reads = models.CharField(max_length=3)
-    o4_7_reads = models.CharField(max_length=3)
-    o4_8_reads = models.CharField(max_length=3)
-    o4_9_reads = models.CharField(max_length=3)
-    o4_10_reads = models.CharField(max_length=3)
-    o4_11_reads = models.CharField(max_length=3)
-    o4_12_reads = models.CharField(max_length=3)
-    o4_13_reads = models.CharField(max_length=3)
-    o4_14_reads = models.CharField(max_length=3)
-    o4_15_reads = models.CharField(max_length=3)
-    o4_16_reads = models.CharField(max_length=3)
-    
-    def __str__(self):
-        return str(self.form)
-    
-class pt_admin1_model(models.Model):
-    form = models.OneToOneField(
-        subA5_readings_model, 
-        on_delete=models.CASCADE, 
-        primary_key=True,
-    )
-    add_days = models.DateTimeField(default=datetime.datetime.now()+timedelta(days=90))
-    days_left = models.DateTimeField(default=datetime.datetime.now()+timedelta(days=10))
-    #date = models.CharField(max_length=30)
-    #oven1 = models.CharField(max_length=30)
-    #oven2 = models.CharField(max_length=30)
-    #oven3 = models.CharField(max_length=30)
-    #oven4 = models.CharField(max_length=30)
-    
-    
-    def __str__(self):
-        return self.date
-
     
 class user_profile_model(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
@@ -858,6 +714,275 @@ class formA4_model(models.Model):
     
     def __str__(self):
         return str(self.date)
+    
+class subA5_model(models.Model):
+    date = models.CharField(max_length=30)   
+    estab = models.CharField(max_length=30)
+    county = models.CharField(max_length=30)
+    estab_no = models.CharField(max_length=30)
+    equip_loc = models.CharField(max_length=30)
+    district = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    observer = models.CharField(max_length=30)
+    cert_date = models.CharField(max_length=30)
+    process_equip1 = models.CharField(max_length=50)
+    process_equip2 = models.CharField(max_length=50)
+    op_mode1 = models.CharField(max_length=30)
+    op_mode2 = models.CharField(max_length=30)
+    background_color_start = models.CharField(max_length=30)
+    background_color_stop = models.CharField(max_length=30)
+    sky_conditions = models.CharField(max_length=30)
+    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_stop = models.CharField(max_length=4)
+    wind_direction =models.CharField(max_length=3)
+    emission_point_start = models.CharField(max_length=50)
+    emission_point_stop = models.CharField(max_length=50)
+    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_stop = models.CharField(max_length=4)
+    humidity = models.CharField(max_length=3)
+    height_above_ground = models.CharField(max_length=30)
+    height_rel_observer = models.CharField(max_length=30)
+    distance_from = models.CharField(max_length=30)
+    direction_from = models.CharField(max_length=30)
+    describe_emissions_start = models.CharField(max_length=30)
+    describe_emissions_stop = models.CharField(max_length=30)
+    emission_color_start = models.CharField(max_length=30)
+    emission_color_stop = models.CharField(max_length=30)
+    plume_type = models.CharField(max_length=30, choices= plume_type_choices)
+    water_drolet_present = models.CharField(max_length=30, choices= water_present_choices)
+    water_droplet_plume = models.CharField(max_length=30, choices= droplet_plume_choices)
+    plume_opacity_determined_start = models.CharField(max_length=50)
+    plume_opacity_determined_stop = models.CharField(max_length=50)
+    describe_background_start = models.CharField(max_length=30)
+    describe_background_stop = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return self.date
+    
+#----------------------------------------------------------------------FORM A5 - DATA---------------<
+class subA5_readings_model(models.Model):
+    form = models.OneToOneField(
+        subA5_model, 
+        on_delete=models.CASCADE, 
+        primary_key=True,
+        related_name='foobar',
+    )
+    o1 = models.CharField(max_length=2)
+    o1_start = models.CharField(max_length=30)
+    o1_stop = models.CharField(max_length=30)
+    o1_highest_opacity = models.CharField(max_length=30)
+    o1_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
+    o1_average_6 = models.CharField(max_length=30)
+    o1_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
+    o2 = models.CharField(max_length=2)
+    o2_start = models.CharField(max_length=30)
+    o2_stop = models.CharField(max_length=30)
+    o2_highest_opacity = models.CharField(max_length=30)
+    o2_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
+    o2_average_6 = models.CharField(max_length=30)
+    o2_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
+    o3 = models.CharField(max_length=2)
+    o3_start = models.CharField(max_length=30)
+    o3_stop = models.CharField(max_length=30)
+    o3_highest_opacity = models.CharField(max_length=30)
+    o3_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
+    o3_average_6 = models.CharField(max_length=30)
+    o3_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
+    o4 = models.CharField(max_length=2)
+    o4_start = models.CharField(max_length=30)
+    o4_stop = models.CharField(max_length=30)
+    o4_highest_opacity = models.CharField(max_length=30)
+    o4_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
+    o4_average_6 = models.CharField(max_length=30)
+    o4_average_6_over_35 = models.CharField(max_length=30, choices= average_over_35_choices)
+    o1_1_reads = models.CharField(max_length=3)
+    o1_2_reads = models.CharField(max_length=3)
+    o1_3_reads = models.CharField(max_length=3)
+    o1_4_reads = models.CharField(max_length=3)
+    o1_5_reads = models.CharField(max_length=3)
+    o1_6_reads = models.CharField(max_length=3)
+    o1_7_reads = models.CharField(max_length=3)
+    o1_8_reads = models.CharField(max_length=3)
+    o1_9_reads = models.CharField(max_length=3)
+    o1_10_reads = models.CharField(max_length=3)
+    o1_11_reads = models.CharField(max_length=3)
+    o1_12_reads = models.CharField(max_length=3)
+    o1_13_reads = models.CharField(max_length=3)
+    o1_14_reads = models.CharField(max_length=3)
+    o1_15_reads = models.CharField(max_length=3)
+    o1_16_reads = models.CharField(max_length=3)
+    o2_1_reads = models.CharField(max_length=3)
+    o2_2_reads = models.CharField(max_length=3)
+    o2_3_reads = models.CharField(max_length=3)
+    o2_4_reads = models.CharField(max_length=3)
+    o2_5_reads = models.CharField(max_length=3)
+    o2_6_reads = models.CharField(max_length=3)
+    o2_7_reads = models.CharField(max_length=3)
+    o2_8_reads = models.CharField(max_length=3)
+    o2_9_reads = models.CharField(max_length=3)
+    o2_10_reads = models.CharField(max_length=3)
+    o2_11_reads = models.CharField(max_length=3)
+    o2_12_reads = models.CharField(max_length=3)
+    o2_13_reads = models.CharField(max_length=3)
+    o2_14_reads = models.CharField(max_length=3)
+    o2_15_reads = models.CharField(max_length=3)
+    o2_16_reads = models.CharField(max_length=3)
+    o3_1_reads = models.CharField(max_length=3)
+    o3_2_reads = models.CharField(max_length=3)
+    o3_3_reads = models.CharField(max_length=3)
+    o3_4_reads = models.CharField(max_length=3)
+    o3_5_reads = models.CharField(max_length=3)
+    o3_6_reads = models.CharField(max_length=3)
+    o3_7_reads = models.CharField(max_length=3)
+    o3_8_reads = models.CharField(max_length=3)
+    o3_9_reads = models.CharField(max_length=3)
+    o3_10_reads = models.CharField(max_length=3)
+    o3_11_reads = models.CharField(max_length=3)
+    o3_12_reads = models.CharField(max_length=3)
+    o3_13_reads = models.CharField(max_length=3)
+    o3_14_reads = models.CharField(max_length=3)
+    o3_15_reads = models.CharField(max_length=3)
+    o3_16_reads = models.CharField(max_length=3)
+    o4_1_reads = models.CharField(max_length=3)
+    o4_2_reads = models.CharField(max_length=3)
+    o4_3_reads = models.CharField(max_length=3)
+    o4_4_reads = models.CharField(max_length=3)
+    o4_5_reads = models.CharField(max_length=3)
+    o4_6_reads = models.CharField(max_length=3)
+    o4_7_reads = models.CharField(max_length=3)
+    o4_8_reads = models.CharField(max_length=3)
+    o4_9_reads = models.CharField(max_length=3)
+    o4_10_reads = models.CharField(max_length=3)
+    o4_11_reads = models.CharField(max_length=3)
+    o4_12_reads = models.CharField(max_length=3)
+    o4_13_reads = models.CharField(max_length=3)
+    o4_14_reads = models.CharField(max_length=3)
+    o4_15_reads = models.CharField(max_length=3)
+    o4_16_reads = models.CharField(max_length=3)
+    
+    def __str__(self):
+        return str(self.form)
+    
+    
+class pt_admin1_model(models.Model):
+    form = models.OneToOneField(
+        subA5_readings_model, 
+        on_delete=models.CASCADE, 
+        primary_key=True,
+    )
+    add_days = models.DateTimeField(default=datetime.datetime.now()+timedelta(days=90))
+    days_left = models.DateTimeField(default=datetime.datetime.now()+timedelta(days=10))
+    #date = models.CharField(max_length=30)
+    #oven1 = models.CharField(max_length=30)
+    #oven2 = models.CharField(max_length=30)
+    #oven3 = models.CharField(max_length=30)
+    #oven4 = models.CharField(max_length=30)
+    
+    
+    def __str__(self):
+        return self.date
+
+    
+class formB_model(models.Model):
+    week_start = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    week_end = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    observer_0 = models.CharField(
+        max_length=30
+    )
+    time_0 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    weather_0 = models.CharField(
+        max_length=30,
+        choices = weather_choices
+    )
+    wind_speed_0 = models.CharField(
+        max_length=3
+    )
+    fugitive_dust_observed_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    supressant_applied_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    supressant_active_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    working_face_exceed_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    spills_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    pushed_back_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices
+    )
+    coal_vessel_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    water_sprays_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices
+    )
+    loader_lowered_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices
+    )
+    working_water_sprays_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices
+    )
+    barrier_thickness_0 = models.CharField(
+        max_length=30,
+        choices = barrier_choices
+    )
+    surface_quality_0 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices
+    )
+    surpressant_crust_0 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices
+    )
+    additional_surpressant_0 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    comments_0 = models.CharField(
+        max_length=30,
+        blank = True,
+    )
+    wharf_0 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices
+    )
+    breeze_0 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices
+    )
+    
+    def __str__(self):
+        return str(self.week_start)
     
 class formD_model(models.Model):
     today = datetime.date.today()

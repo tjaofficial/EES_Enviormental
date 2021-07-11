@@ -23,7 +23,8 @@
     </style>
 
     <a href="{% url 'IncompleteForms' %}">Back</a>
-    <from>
+    <form action="" method=POST>
+        {% csrf_token %}
         <table style="border-collapse: collapse">
             <tr>
                 <th id="boxTitle" style="min-width: 525px">Fugitive Dust Inspection - Form (B) </th>
@@ -42,7 +43,10 @@
                 <th></th>
             </tr>
             <tr>
-                <th style="min-width: 525px;">Week of: <input type="date"></th>
+                <th style="min-width: 525px;">
+                    Week Of:    
+                            {{ data.week_start }} - {{ data.week_end }}
+                </th>
                 <th id="box2">Monday</th>
                 <th id="box2">Tuesday</th>
                 <th id="box2">Wednesday</th>
@@ -51,7 +55,7 @@
             </tr>
             <tr>
                 <td id="box">Inspectors Initials</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.observer_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -59,7 +63,7 @@
             </tr>
             <tr>
                 <td id="box">Time</td>
-                <td id="box3"><input type="time"></td>
+                <td id="box3">{{ data.time_0 }}</td>
                 <td id="box3"><input type="time"></td>
                 <td id="box3"><input type="time"></td>
                 <td id="box3"><input type="time"></td>
@@ -67,7 +71,7 @@
             </tr>
             <tr>
                 <td id="box">Weather Conditions</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.weather_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -75,7 +79,7 @@
             </tr>
             <tr>
                 <td id="box">Wind Speeds</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.wind_speed_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -86,7 +90,7 @@
             </tr>
             <tr>
                 <td id="box">Was fugitive dust observed in the raw material storage and transportation area?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.fugitive_dust_observed_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -94,7 +98,7 @@
             </tr>
             <tr>
                 <td id="box">Has chemical dust supressant been applied to temporary roadways?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.supressant_applied_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -102,7 +106,7 @@
             </tr>
             <tr>
                 <td id="box">Is surpressant being used in the active area of loading and unloading?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.supressant_active_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -110,7 +114,7 @@
             </tr>
             <tr>
                 <td id="box">Does the working face of a pile where equipment in removing material exceed 120 linear or horizontal feet across the mouth of the opening?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.working_face_exceed_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -118,7 +122,7 @@
             </tr>
             <tr>
                 <td id="box">Were any spills near piles or on roadways observed?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.spills_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -126,7 +130,7 @@
             </tr>
             <tr>
                 <td id="box">If <strong>YES</strong>was the material pushed back into pile or removed by vaccum sweeper?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.pushed_back_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -137,7 +141,7 @@
             </tr>
             <tr>
                 <td id="box">Was there a coal vessel unloding at the time of the inspection?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.coal_vessel_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -145,7 +149,7 @@
             </tr>
             <tr>
                 <td id="box">If <strong>YES</strong>, was the coal vessel equipped with water sprays over the entire width of the boom?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.water_sprays_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -153,7 +157,7 @@
             </tr>
             <tr>
                 <td id="box">Is the loader bucket lowered to within 12 inches of the pile before being tilted?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.loader_lowered_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -161,7 +165,7 @@
             </tr>
             <tr>
                 <td id="box">Are water sprays at the end of the stacker boom operating if necessary?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.working_water_sprays_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -172,7 +176,7 @@
             </tr>
             <tr>
                 <td id="box">Average barrier thickness on storage piles surfaces:</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.barrier_thickness_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -181,10 +185,7 @@
             <tr>
                 <td id="box">Supressant surface quality:</td>
                 <td id="box3"> 
-                    <select name="condition" id="condition">
-                        <option value="good">Good</option>
-                        <option value="bad">Bad</option>
-                    </select>
+                    {{ data.surface_quality_0 }}
                 </td>
                 <td id="box3"> 
                     <select name="condition" id="condition">
@@ -213,7 +214,7 @@
             </tr>
             <tr>
                 <td id="box">Does supressant on piles have a crust to prevent visible emissions?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.surpressant_crust_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -221,7 +222,7 @@
             </tr>
             <tr>
                 <td id="box">If no, when was the additional supressant compund applied?</td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.additional_surpressant_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -229,7 +230,7 @@
             </tr>
             <tr>
                 <td id="box"><strong>Comments regarding any of the above inspections:</strong></td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3">{{ data.comments_0 }}</td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
                 <td id="box3"><input type="text"></td>
@@ -241,10 +242,7 @@
             <tr>
                 <td id="box">Wharf - General Housekeeping of Area (Good or Needs Housekeeping)? Any Spills?</td>
                 <td id="box3"> 
-                    <select name="condition" id="condition">
-                        <option value="good">Good</option>
-                        <option value="bad">Bad</option>
-                    </select>
+                    {{ data.wharf_0 }}
                 </td>
                 <td id="box3"> 
                     <select name="condition" id="condition">
@@ -274,10 +272,7 @@
             <tr>
                 <td id="box">Breeze - General Housekeeping of Area (Good or Needs Housekeeping)? Any Spills?</td>
                 <td id="box3"> 
-                    <select name="condition" id="condition">
-                        <option value="good">Good</option>
-                        <option value="bad">Bad</option>
-                    </select>
+                    {{ data.breeze_0 }}
                 </td>
                 <td id="box3"> 
                     <select name="condition" id="condition">
@@ -306,11 +301,11 @@
             </tr>
             <tr>
                 <td id="box"><strong>If any of the Outdoor Conveyances need housekeeping, inform Battery Personnel; Record name of person informed, date, and time</strong></td>
-                <td id="box3"><input type="text"></td>
-                <td id="box3"><input type="text"></td>
-                <td id="box3"><input type="text"></td>
-                <td id="box3"><input type="text"></td>
-                <td id="box3"><input type="text"></td>
+                <td id="box3"></td>
+                <td id="box3"></td>
+                <td id="box3"></td>
+                <td id="box3"></td>
+                <td id="box3"></td>
             </tr>
             <tr>
                 <td colspan="6">Clear, Cloudy, Rain, Snow, and/or Excessive Wind.</td>
@@ -334,7 +329,7 @@
         <input type="submit" value="Save" style="font-size: 40px">
         <br><br><br>
         <input type="submit" value="Submit Form" style="font-size: 40px">
-    </from>
+    </form>
 
 
 
