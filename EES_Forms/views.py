@@ -135,7 +135,6 @@ def pt_admin1_view(request):
     data = subA5_model.objects.all()
     #add_days = datetime.timedelta(days=91)
     
-    
     def all_ovens(reads):
         A = []
         for items in reads:
@@ -174,21 +173,25 @@ def pt_admin1_view(request):
                 oven4 = items.o4
             A.append((oven4, items.form.date, added_date.date, due_date.days))      
 
-        return A      
+        return A   
+    
     hello = all_ovens(reads)
     func = lambda x: (x[0], x[1])
     sort = sorted(hello, key = func, reverse=True)
+   # print (sort)
     
     def final(sort):
         B = []
         i = 1
         for new in sort:
             B.append(new)
+        
         for x in sort:
             for y in range(i, len(sort)):
                 tree = sort[y]
                 if tree[0] == x[0]:
-                    B.remove(tree)
+                    if tree in B:
+                        B.remove(tree)
             i+=1
         return B
     cool = final(sort)
