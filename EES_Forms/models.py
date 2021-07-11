@@ -307,7 +307,7 @@ class subA5_model(models.Model):
     describe_background_stop = models.CharField(max_length=30)
     
     def __str__(self):
-        return str(self.date)
+        return self.date
     
 #----------------------------------------------------------------------FORM A5 - DATA---------------<
 class subA5_readings_model(models.Model):
