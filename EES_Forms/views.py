@@ -128,6 +128,9 @@ def IncompleteForms(request):
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
 def pt_admin1_view(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
     reads = subA5_readings_model.objects.all()
     data = subA5_model.objects.all()
     #add_days = datetime.timedelta(days=91)
@@ -189,12 +192,51 @@ def pt_admin1_view(request):
             i+=1
         return B
     cool = final(sort)
+    
+    def overdue_30(cool):
+        C = []
+        for x in cool:
+            if x[3] <= 30 :
+                C.append(x)
+        return C
+    
+    def overdue_10(cool):
+        D = []
+        for x in cool:
+            if x[3] <= 10 :
+                C.append(x)
+        return D
+    
+    def overdue_5(cool):
+        E = []
+        for x in cool:
+            if x[3] <= 5 :
+                C.append(x)
+        return E
+    
+    def overdue_closest(cool):
+        F = []
         
+        func2 = lambda R: (R[3])  
+        sort2 = sorted(cool, key = func2)
+        most_recent = sort2[0][3]
         
+        for x in sort2:
+            if x[3] == most_recent:
+                F.append(x)
+        return F
+    
+    od_30 = overdue_30(cool)
+    od_10 = overdue_10(cool)
+    od_5 = overdue_5(cool)
+    od_recent = overdue_closest(cool)
+    
+    
+       
     
    
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 @lock
