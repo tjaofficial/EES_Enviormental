@@ -32,6 +32,12 @@
             max-width: 300px;
             height: 35px;
         }
+        #formA5_box1{
+            text-align: center; 
+            border: 1px solid black; 
+            width: 150px;
+            height: 55px;
+        }
     </style>
 
 <body>
@@ -40,7 +46,8 @@
             <a href="{% url 'IncompleteForms' %}">Back</a>
         </div>
         <div style="padding-top: 75px;">
-            <form>
+            <form action="" method="POST">
+                {% csrf_token %}
                 <table style="border-collapse: collapse; margin: auto;">
                     <tr>
                         <th id="boxTitle" colspan="5" style="text-align: left;">Method 303 Collection Main - Form (A-4)</th>
@@ -57,7 +64,7 @@
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
-                        <th colspan="7">Inspectors Name: &nbsp; &nbsp;{{ request.user.first_name }} {{ request.user.last_name }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp;{{ todays_log.date_save }}</th>
+                        <th colspan="7">Inspectors Name: &nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp;{{ data.date }}</th>
                     </tr>
                     <tr>
                         <td style="height: 25px" > </td>
@@ -66,17 +73,17 @@
                         <th colspan="7">
                             Battery No. 5 &nbsp; &nbsp; &nbsp; 
                             Crew:
-                            &nbsp; &nbsp;{{ todays_log.crew }}
+                            &nbsp; &nbsp;{{ data.crew }}
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
                             Battery Foreman:
-                            &nbsp; &nbsp;{{ todays_log.foreman }}
+                            &nbsp; &nbsp;{{ data.foreman }}
                         </th>
                     </tr>
                     <tr>
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
-                        <th colspan="7">Start Time:<input type="time"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:<input type="time"></th>
+                        <th colspan="7">Start Time:{{ data.main_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ data.main_stop }}</th>
                     </tr>
                     <tr>
                         <td style="height: 25px" > </td>
@@ -89,7 +96,7 @@
                             Colletions Main #1
                         </th>
                         <th colspan="1" style="text-align: center;">
-                            <input type="text">
+                            {{ data.main_1 }}
                         </th>
                         <th colspan="2" style="text-align: left;">
                             INWC
@@ -100,7 +107,7 @@
                             Colletions Main #2
                         </th>
                         <th colspan="1" style="text-align: center;">
-                            <input type="text">
+                            {{ data.main_2 }}
                         </th>
                         <th colspan="2" style="text-align: left;">
                             INWC
@@ -111,7 +118,7 @@
                             Colletions Main #3
                         </th>
                         <th colspan="1" style="text-align: center;">
-                            <input type="text">
+                            {{ data.main_3 }}
                         </th>
                         <th colspan="2" style="text-align: left;">
                             INWC
@@ -122,7 +129,7 @@
                             Colletions Main #4
                         </th>
                         <th colspan="1" style="text-align: center;">
-                            <input type="text">
+                            {{ data.main_4 }}
                         </th>
                         <th colspan="2" style="text-align: left;">
                             INWC
@@ -133,7 +140,7 @@
                             Suction Main Pressure
                         </th>
                         <th colspan="1" style="text-align: center;">
-                            <input type="text">
+                            {{ data.suction_main }}
                         </th>
                         <th colspan="2" style="text-align: left;">
                             INWC(note: should be a negative value)
@@ -182,95 +189,98 @@
                         </th>
                     </tr>
                     <tr>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="number">
+                        <th id="formA5_box1">
+                            {{ data.oven_leak_1 }}
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time">
+                        <th id="formA5_box1">
+                            {{ data.time_leak_1 }}
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            {{ data.date_temp_seal_leak_1 }}<br> 
+                            {{ data.time_temp_seal_leak_1 }}
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
+                        <th id="formA5_box1">
+                            {{ data.temp_seal_by_leak_1 }}
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            {{ data.date_init_repair_leak_1 }}<br>
+                            {{ data.time_init_repair_leak_1 }}
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            {{ data.date_comp_repair_leak_1 }}<br>
+                            {{ data.time_comp_repair_leak_1 }}
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
-                        </th>
-                    </tr>
-                    <tr>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="number">
-                        </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time">
-                        </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
-                        </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
-                        </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
-                        </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
-                        </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
+                        <th id="formA5_box1">
+                            {{ data.comp_by_leak_1 }}
                         </th>
                     </tr>
                     <tr>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="number">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
+                        <th id="formA5_box1">
+                            
                         </th>
                     </tr>
                     <tr>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="number">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            <br>
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
+                        <th id="formA5_box1">
+                            
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            <br>
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="time"><br><input type="date">
+                        <th id="formA5_box1">
+                            <br>
                         </th>
-                        <th style="text-align: center; border: 1px solid black; width: 150px;">
-                            <input type="text">
+                        <th id="formA5_box1">
+                            
+                        </th>
+                    </tr>
+                    <tr>
+                        <th id="formA5_box1">
+                            
+                        </th>
+                        <th id="formA5_box1">
+                            
+                        </th>
+                        <th id="formA5_box1">
+                            <br>
+                        </th>
+                        <th id="formA5_box1">
+                            
+                        </th>
+                        <th id="formA5_box1">
+                            <br>
+                        </th>
+                        <th id="formA5_box1">
+                            <br>
+                        </th>
+                        <th id="formA5_box1">
+                            
                         </th>
                     </tr>
                     
@@ -295,7 +305,9 @@
                         <td>Notes:</td>
                     </tr>
                     <tr style="font-size: 20px;text-align: center;">
-                        <td colspan="7"><textarea name="comments" rows="6" cols="90" style="font-size: 20px;">LC #</textarea></td>
+                        <td colspan="7">
+                            {{ data.notes }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="height: 40px" > </td>
