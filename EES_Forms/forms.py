@@ -319,24 +319,25 @@ class subA1_readings_form(ModelForm):
             'c4_comments',
             'c5_comments',
             'comments',
-            'larry_car'
+            'larry_car',
+            'total_seconds'
         )
         
         widgets = {
             'c1_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c1_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c1_sec' : forms.TextInput(attrs={'id':'c1_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c1_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
             'c2_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c2_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c2_sec' : forms.TextInput(attrs={'id':'c2_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c2_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
             'c3_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c3_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c3_sec' : forms.TextInput(attrs={'id':'c3_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c3_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
             'c4_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c4_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c4_sec' : forms.TextInput(attrs={'id':'c4_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c4_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
             'c5_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c5_sec' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c5_sec' : forms.TextInput(attrs={'id':'c5_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c5_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
             'comments' : Textarea(attrs={'rows':7, 'cols':125}),
             'c1_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
@@ -350,6 +351,7 @@ class subA1_readings_form(ModelForm):
             'c4_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'c5_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'larry_car' : forms.Select(attrs={'style':'width: 60px;'}),
+            'total_seconds' : forms.TextInput(attrs={'id':'total_seconds','type':'number','step':'0.1', 'style':'width: 60px; text-align: center;'}),
         }
     
     

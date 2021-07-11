@@ -94,7 +94,7 @@ def daily_battery_profile_view(request):
             form.save()
             return redirect('IncompleteForms')
     
-    return render (request, "ees_forms/Bat_info.html",{
+    return render (request, "ees_forms/Bat_Info.html",{
         'form': form
     })
 #----------------------------------------------------------------------------------LOGOUT---------<

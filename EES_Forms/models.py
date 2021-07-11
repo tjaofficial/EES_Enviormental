@@ -542,19 +542,19 @@ class subA1_readings_model(models.Model):
         auto_now = False,
         blank = True,
     )
-    c1_sec = models.CharField(
+    c1_sec = models.FloatField(
         max_length=5
     )
-    c2_sec = models.CharField(
+    c2_sec = models.FloatField(
         max_length=5
     )
-    c3_sec = models.CharField(
+    c3_sec = models.FloatField(
         max_length=5
     )
-    c4_sec = models.CharField(
+    c4_sec = models.FloatField(
         max_length=5
     )
-    c5_sec = models.CharField(
+    c5_sec = models.FloatField(
         max_length=5
     )
     c1_comments = models.CharField(
@@ -578,6 +578,9 @@ class subA1_readings_model(models.Model):
     )
     comments = models.CharField(
         max_length=300
+    )
+    total_seconds = models.FloatField(
+        max_length=30
     )
     
     def __str__(self):
