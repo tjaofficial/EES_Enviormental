@@ -1,3 +1,6 @@
+{% load static %}
+
+
 <html>
     <style>
         #paperSize{
@@ -59,8 +62,9 @@
             width: 1100px;
         }
     </style>
-
+    <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
 <body>
+    {{ BASE_DIR }}
     <div id="paperSize">
         <div>
             <a href="{% url 'IncompleteForms' %}">Back</a>
@@ -111,9 +115,15 @@
                         <td style="height: 25px" > </td>
                     </tr> 
                     <tr>
+<<<<<<< HEAD
+                        <th id="boxa4" colspan="5">Start Time:<input id="pushSide_startTime" oninput="updateCalcs()" type="time" step="1"> <br> End Time:<input id="pushSide_endTime" oninput="updateCalcs()" type="time" step="1"></th>
+                        <th id="boxa4" colspan="1"></th>
+                        <th id="boxa4" colspan="5">Start Time:<input id="cokeSide_startTime" oninput="updateCalcs()" type="time" step="1"> <br> End Time:<input id="cokeSide_endTime" oninput="updateCalcs()" type="time" step="1"></th>
+=======
                         <th id="boxa4" colspan="5">Start Time:{{ data.p_start }} <br> End Time:{{ data.p_stop }}</th>
                         <th id="boxa4" colspan="1"></th>
                         <th id="boxa4" colspan="5">Start Time:{{ data.c_start }} <br> End Time:{{ data.c_stop }}</th>
+>>>>>>> 878f9539ffe26ed0acc2201642f1e247be04f7f1
                         <th id="boxa4" colspan="1"></th>
                     </tr>
                     <tr>
@@ -166,7 +176,18 @@
                         <td id="boxa6"></td>
                         <td colspan="3" id="boxa6"></td>
                         <td id="boxa6"></td>
+<<<<<<< HEAD
+                        <td id="boxa6"></td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="pushSide_tempBlocked_min" style="width: 40px;" type="text">&nbsp;to&nbsp;<input id="pushSide_tempBlocked_max" style="width: 40px;" type="text"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td id="boxa6"></td>
+                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input style="width: 40px;" type="text">&nbsp;to&nbsp;<input style="width: 40px;" type="text"></td>
+=======
                         <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.c_temp_block_from }}&nbsp;to&nbsp;{{ data.c_temp_block_to }}</td>
+>>>>>>> 878f9539ffe26ed0acc2201642f1e247be04f7f1
                     </tr>
                     <tr>
                         <td id="boxa6"></td>
@@ -249,8 +270,13 @@
                         <td></td>
                     </tr>
                     <tr>
+<<<<<<< HEAD
+                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Push Side Traverse Time: &nbsp; &nbsp; <input id="pushSide_traverseTime_min" style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input id="pushSide_traverseTime_second" style="width: 40px;" type="text">sec</td>
+                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Coke Side Traverse Time: &nbsp; &nbsp; <input id="cokeSide_traverseTime_min" style="width: 40px;" type="text">min &nbsp; &nbsp; &nbsp; <input id="cokeSide_traverseTime_second" style="width: 40px;" type="text">sec</td>
+=======
                         <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Push Side Traverse Time: &nbsp; &nbsp; {{ data.p_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.p_traverse_time_sec }}sec</td>
                         <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Coke Side Traverse Time: &nbsp; &nbsp; {{ data.c_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec</td>
+>>>>>>> 878f9539ffe26ed0acc2201642f1e247be04f7f1
                     </tr>
                 </table>
                 <br><br><br>
@@ -260,7 +286,11 @@
                             D = Door
                         </td>
                         <td style="width: 400px; text-align: center;">
+<<<<<<< HEAD
+                            Total Traverse Time <input id="total_traverseTime" style="width: 40px;" type="text">sec
+=======
                             Total Traverse Time {{ data.total_traverse_time }}sec
+>>>>>>> 878f9539ffe26ed0acc2201642f1e247be04f7f1
                         </td>
                         <td></td>
                     </tr>    

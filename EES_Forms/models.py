@@ -256,8 +256,8 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
     
-class daily_battery_profile_model(models.Model):
     
+class daily_battery_profile_model(models.Model):
     foreman = models.CharField(max_length=10, choices=foreman_choices)
     crew = models.CharField(max_length=1, choices=crew_choices)
     inop_ovens = models.CharField(max_length=2)
@@ -398,19 +398,19 @@ class subA1_readings_model(models.Model):
         auto_now = False,
         blank = True,
     )
-    c1_sec = models.CharField(
+    c1_sec = models.FloatField(
         max_length=5
     )
-    c2_sec = models.CharField(
+    c2_sec = models.FloatField(
         max_length=5
     )
-    c3_sec = models.CharField(
+    c3_sec = models.FloatField(
         max_length=5
     )
-    c4_sec = models.CharField(
+    c4_sec = models.FloatField(
         max_length=5
     )
-    c5_sec = models.CharField(
+    c5_sec = models.FloatField(
         max_length=5
     )
     c1_comments = models.CharField(
@@ -434,6 +434,9 @@ class subA1_readings_model(models.Model):
     )
     comments = models.CharField(
         max_length=300
+    )
+    total_seconds = models.FloatField(
+        max_length=30
     )
     
     def __str__(self):

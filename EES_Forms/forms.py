@@ -45,7 +45,7 @@ class daily_battery_profile_form(ModelForm):
         
         widgets = {
             'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px;'})
-        }
+       }
        
 
     
@@ -456,6 +456,91 @@ class subA5_readings_form(ModelForm):
         }
         
     
+class subA1_form(ModelForm):
+    class Meta:
+        model = subA1_model
+        fields = (
+            'observer',
+            'date',
+            'crew',
+            'foreman',
+            'start',
+            'stop'
+        )
+        
+        widgets = {
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'crew' : forms.Select(attrs={'style':'width:40px;'}),
+            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
+            'start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+        }
+        
+class subA1_readings_form(ModelForm):
+    class Meta:
+        model = subA1_readings_model
+        fields = (
+            'c1_no',
+            'c2_no',
+            'c3_no',
+            'c4_no',
+            'c5_no',
+            'c1_start',
+            'c2_start',
+            'c3_start',
+            'c4_start',
+            'c5_start',
+            'c1_stop',
+            'c2_stop',
+            'c3_stop',
+            'c4_stop',
+            'c5_stop',
+            'c1_sec',
+            'c2_sec',
+            'c3_sec',
+            'c4_sec',
+            'c5_sec',
+            'c1_comments',
+            'c2_comments',
+            'c3_comments',
+            'c4_comments',
+            'c5_comments',
+            'comments',
+            'larry_car',
+            'total_seconds'
+        )
+        
+        widgets = {
+            'c1_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c1_sec' : forms.TextInput(attrs={'id':'c1_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
+            'c1_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
+            'c2_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c2_sec' : forms.TextInput(attrs={'id':'c2_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
+            'c2_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
+            'c3_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c3_sec' : forms.TextInput(attrs={'id':'c3_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
+            'c3_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
+            'c4_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c4_sec' : forms.TextInput(attrs={'id':'c4_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
+            'c4_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
+            'c5_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c5_sec' : forms.TextInput(attrs={'id':'c5_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
+            'c5_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
+            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
+            'c1_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c2_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c3_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c4_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c5_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c1_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c2_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c3_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c4_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'c5_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'larry_car' : forms.Select(attrs={'style':'width: 60px;'}),
+            'total_seconds' : forms.TextInput(attrs={'id':'total_seconds','type':'number','step':'0.1', 'style':'width: 60px; text-align: center;'}),
+        }
     
 class formB_form(ModelForm):
     class Meta:

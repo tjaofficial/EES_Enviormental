@@ -1,3 +1,4 @@
+{% load static %}
 <html>
     <style>
         #paperSize{
@@ -41,8 +42,8 @@
             height: 35px;
         }
     </style>
-    
-    
+    <script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
+
 <body>
     <div id="paperSize">
         <div>
@@ -202,7 +203,7 @@
                         <td></td>
                         <td></td>
                         <td id="boxa1">Total(Seconds):</td>
-                        <td id="boxa13">put the total here</td>
+                        <td id="boxa1">{{readings.total_seconds}}</td>
                         <td></td>
                     </tr>
                     <tr>

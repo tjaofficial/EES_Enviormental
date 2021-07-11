@@ -8,6 +8,7 @@ from operator import itemgetter
 import datetime
 from .models import *
 from .forms import *
+from .utils import DBEmpty
 
 
 daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -93,7 +94,7 @@ def daily_battery_profile_view(request):
             form.save()
             return redirect('IncompleteForms')
     
-    return render (request, "ees_forms/Bat_info.html",{
+    return render (request, "ees_forms/Bat_Info.html",{
         'form': form
     })
 #----------------------------------------------------------------------------------LOGOUT---------<
@@ -1024,61 +1025,69 @@ def formD(request):
     
     
     week_start_dates = formD_model.objects.all().order_by('-week_start')
-    week_almost = week_start_dates[0]
-    #last submitted saturday
-    week = week_almost.week_start
-    week_fri = week_almost.week_end
-    print (week_fri)
-    print (today.weekday())
+    print(len(week_start_dates))
+    print(DBEmpty(week_start_dates))
+    if not DBEmpty(week_start_dates):
+     
+
     
-    sunday = today - datetime.timedelta(days=1)
-    
-    if today.weekday() not in {5, 6}:
-        if week == last_friday:
-            data = week_almost
-            initial_data = {
-                'week_start' : data.week_start,
-                'week_end' : data.week_end,
-                'truck_id1' : data.truck_id1, 
-                'date1' : data.date1,
-                'time1' : data.time1,
-                'contents1' : data.contents1,
-                'freeboard1' : data.freeboard1,
-                'wetted1' : data.wetted1,
-                'comments1' : data.comments1,
-                'truck_id2' : data.truck_id2,
-                'date2' : data.date2,
-                'time2' : data.time2,
-                'contents2' : data.contents2,
-                'freeboard2' : data.freeboard2,
-                'wetted2' : data.wetted2,
-                'comments2' : data.comments2,
-                'truck_id3' : data.truck_id3,
-                'date3' : data.date3,
-                'time3' : data.time3,
-                'contents3' : data.contents3,
-                'freeboard3' : data.freeboard3,
-                'wetted3' : data.wetted3,
-                'comments3' : data.comments3,
-                'truck_id4' : data.truck_id4,
-                'date4' : data.date4,
-                'time4' : data.time4,
-                'contents4' : data.contents4,
-                'freeboard4' : data.freeboard4,
-                'wetted4' : data.wetted4,
-                'comments4' : data.comments4,
-                'truck_id5' : data.truck_id5,
-                'date5' : data.date5,
-                'time5' : data.time5,
-                'contents5' : data.contents5,
-                'freeboard5' : data.freeboard5,
-                'wetted5' : data.wetted5,
-                'comments5' : data.comments5,
-                'observer1' : data.observer1,
-                'observer2' : data.observer2,
-                'observer3' : data.observer3,
-                'observer4' : data.observer4,
-                'observer5' : data.observer5,
+
+        
+        week_almost = week_start_dates[0]
+        #last submitted saturday
+        week = week_almost.week_start
+        week_fri = week_almost.week_end
+        print (week_fri)
+        print (today.weekday())
+        
+        sunday = today - datetime.timedelta(days=1)
+        
+        if today.weekday() not in {5, 6}:
+            if week == last_friday:
+                data = week_almost
+                initial_data = {
+                    'week_start' : data.week_start,
+                    'week_end' : data.week_end,
+                    'truck_id1' : data.truck_id1, 
+                    'date1' : data.date1,
+                    'time1' : data.time1,
+                    'contents1' : data.contents1,
+                    'freeboard1' : data.freeboard1,
+                    'wetted1' : data.wetted1,
+                    'comments1' : data.comments1,
+                    'truck_id2' : data.truck_id2,
+                    'date2' : data.date2,
+                    'time2' : data.time2,
+                    'contents2' : data.contents2,
+                    'freeboard2' : data.freeboard2,
+                    'wetted2' : data.wetted2,
+                    'comments2' : data.comments2,
+                    'truck_id3' : data.truck_id3,
+                    'date3' : data.date3,
+                    'time3' : data.time3,
+                    'contents3' : data.contents3,
+                    'freeboard3' : data.freeboard3,
+                    'wetted3' : data.wetted3,
+                    'comments3' : data.comments3,
+                    'truck_id4' : data.truck_id4,
+                    'date4' : data.date4,
+                    'time4' : data.time4,
+                    'contents4' : data.contents4,
+                    'freeboard4' : data.freeboard4,
+                    'wetted4' : data.wetted4,
+                    'comments4' : data.comments4,
+                    'truck_id5' : data.truck_id5,
+                    'date5' : data.date5,
+                    'time5' : data.time5,
+                    'contents5' : data.contents5,
+                    'freeboard5' : data.freeboard5,
+                    'wetted5' : data.wetted5,
+                    'comments5' : data.comments5,
+                    'observer1' : data.observer1,
+                    'observer2' : data.observer2,
+                    'observer3' : data.observer3,
+                    'observer4' : data.observer4,
+                    'observer5' : data.observer5,
 
             }
             empty_form = formD_form(initial=initial_data)
@@ -1094,7 +1103,7 @@ def formD(request):
                         if items == None:
                             filled_out = False
                             break
-
+                    
                     if filled_out:
                         done.submitted = True
                         done.save()
@@ -1116,7 +1125,7 @@ def formD(request):
                 A_valid = form.is_valid()
                 if A_valid:
                     form.save()
-
+                    
                     filled_out = True
                     for items in week_almost.whatever().values():
                         if items == None:
@@ -1246,7 +1255,7 @@ def formD(request):
                 A_valid = form.is_valid()
                 if A_valid:
                     form.save()
-
+                    week_almost = week_start_dates[0]
                     filled_out = True
                     for items in week_almost.whatever().values():
                         if items == None:
@@ -1262,7 +1271,7 @@ def formD(request):
                 return redirect('IncompleteForms')
         
     return render (request, "Daily/formD.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'last_friday': last_friday, 'end_week': end_week
     })
 #----------------------------------------------------------------------FORM E---------------<
 @lock
