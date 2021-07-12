@@ -616,6 +616,55 @@ class formE_form(ModelForm):
         }
         
         
+class formF_form(ModelForm):
+    class Meta:
+        model = formF_model
+        fields = ('__all__')
+        
+        widgets = {
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px;'}),
+            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'retain_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'status_1' : forms.Select(attrs={'style':'width: 80px;'}),
+            'status_2' : forms.Select(attrs={'style':'width: 80px;'}),
+            'status_3' : forms.Select(attrs={'style':'width: 80px;'}),
+            'status_4' : forms.Select(attrs={'style':'width: 80px;'}),
+            'status_5' : forms.Select(attrs={'style':'width: 80px;'}),
+            'status_6' : forms.Select(attrs={'style':'width: 80px;'}),
+            'status_7' : forms.Select(attrs={'style':'width: 80px;'}),
+            'comments_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'comments_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'comments_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'comments_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'comments_5' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'comments_6' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'comments_7' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_5' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_6' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'action_7' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'waste_des_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'waste_des_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'waste_des_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'waste_des_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px; text-align: center;'}),
+            'containers_1' : forms.NumberInput(attrs={'type': 'number', 'style':'width:50px;'}),
+            'containers_2' : forms.NumberInput(attrs={'type': 'number', 'style':'width:50px;'}),
+            'containers_3' : forms.NumberInput(attrs={'type': 'number', 'style':'width:50px;'}),
+            'containers_4' : forms.NumberInput(attrs={'type': 'number', 'style':'width:50px;'}),
+            'waste_codes_1' : forms.Select(attrs={'style':'width: 80px;'}),
+            'waste_codes_2' : forms.Select(attrs={'style':'width: 80px;'}),
+            'waste_codes_3' : forms.Select(attrs={'style':'width: 80px;'}),
+            'waste_codes_4' : forms.Select(attrs={'style':'width: 80px;'}),
+            'dates_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'dates_2' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'dates_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+        }
+        
 class formG1_form(ModelForm):
     class Meta:
         model = formG1_model
