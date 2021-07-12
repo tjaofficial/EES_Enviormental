@@ -104,7 +104,7 @@ def logout_view(request):
 #------------------------------------------------------------------------INCOMPLETE FORMS---------<
 @lock
 def IncompleteForms(request):
-    today = datetime.date.today()
+  #  today = datetime.date.today()
  #   todays_num = today.weekday()
  #   sub_forms = Forms.objects.all()
     
@@ -141,7 +141,7 @@ def IncompleteForms(request):
     
     
     return render(request, "ees_forms/index.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
+        "pull": pull, "pullNot":pullNot, #"today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
@@ -316,6 +316,7 @@ def formA1(request):
             'c5_comments' : database_form2.c5_comments,
             'larry_car' : database_form2.larry_car,
             'comments' : database_form2.comments,
+            'total_seconds' : database_form2.total_seconds,
         }
         data = subA1_form(initial=initial_data)
         readings = subA1_readings_form(initial=initial_data)
@@ -324,7 +325,7 @@ def formA1(request):
         
         if request.method == "POST":
             form = subA1_form(request.POST, instance=database_form)
-            reads = subA1_readings_form(request.POST, instance=database_form)
+            reads = subA1_readings_form(request.POST, instance=database_form2)
             
             A_valid = form.is_valid()
             B_valid = form.is_valid()

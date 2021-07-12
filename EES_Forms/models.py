@@ -196,8 +196,8 @@ class Forms(models.Model):
     form = models.CharField(max_length=30)
     link = models.CharField(max_length=30)
     title = models.CharField(max_length=80)
-    due_date = models.DateField(auto_now_add=False, auto_now=False)
-    date_submitted = models.DateField(auto_now_add=False, auto_now=False)
+    due_date = models.DateField(auto_now_add=False, auto_now=False, blank = True)
+    date_submitted = models.DateField(auto_now_add=False, auto_now=False, blank = True)
     submitted = models.BooleanField(default=False)
     
     def __str__(self):
