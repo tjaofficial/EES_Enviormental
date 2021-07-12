@@ -129,10 +129,12 @@ def IncompleteForms(request):
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
 def pt_admin1_view(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
     reads = subA5_readings_model.objects.all()
     data = subA5_model.objects.all()
     #add_days = datetime.timedelta(days=91)
-    
     
     def all_ovens(reads):
         A = []
@@ -172,30 +174,73 @@ def pt_admin1_view(request):
                 oven4 = items.o4
             A.append((oven4, items.form.date, added_date.date, due_date.days))      
 
-        return A      
+        return A   
+    
     hello = all_ovens(reads)
     func = lambda x: (x[0], x[1])
     sort = sorted(hello, key = func, reverse=True)
+   # print (sort)
     
     def final(sort):
         B = []
         i = 1
         for new in sort:
             B.append(new)
+        
         for x in sort:
             for y in range(i, len(sort)):
                 tree = sort[y]
                 if tree[0] == x[0]:
-                    B.remove(tree)
+                    if tree in B:
+                        B.remove(tree)
             i+=1
         return B
     cool = final(sort)
+    
+    def overdue_30(cool):
+        C = []
+        for x in cool:
+            if x[3] <= 30 :
+                C.append(x)
+        return C
+    
+    def overdue_10(cool):
+        D = []
+        for x in cool:
+            if x[3] <= 10 :
+                C.append(x)
+        return D
+    
+    def overdue_5(cool):
+        E = []
+        for x in cool:
+            if x[3] <= 5 :
+                C.append(x)
+        return E
+    
+    def overdue_closest(cool):
+        F = []
         
+        func2 = lambda R: (R[3])  
+        sort2 = sorted(cool, key = func2)
+        most_recent = sort2[0][3]
         
+        for x in sort2:
+            if x[3] == most_recent:
+                F.append(x)
+        return F
+    
+    od_30 = overdue_30(cool)
+    od_10 = overdue_10(cool)
+    od_5 = overdue_5(cool)
+    od_recent = overdue_closest(cool)
+    
+    
+       
     
    
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 @lock
@@ -258,6 +303,9 @@ def formA1(request):
         data = subA1_form(initial=initial_data)
         readings = subA1_readings_form(initial=initial_data)
         #ptadmin = pt_admin1_form()
+        
+      #  hello =  float(database_form2.c1_sec) + float(database_form2.c2_sec) + float(database_form2.c3_sec) + float(database_form2.c4_sec) + float(database_form2.c5_sec)
+        
         if request.method == "POST":
             form = subA1_form(request.POST, instance=database_form)
             reads = subA1_readings_form(request.POST, instance=database_form)
@@ -790,9 +838,156 @@ def formA5(request):
 #------------------------------------------------------------------------FORM B---------------<
 @lock
 def formB(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    last_monday = today - datetime.timedelta(days=today.weekday())
+    one_week = datetime.timedelta(days=4)
+    end_week = last_monday + one_week
+    print(last_monday)
+    
+    
+    week_start_dates = formB_model.objects.all().order_by('-week_start')
+    week_almost = week_start_dates[0]
+    #last submitted monday
+    week = week_almost.week_start
+    week_fri = week_almost.week_end
+    print (week)
+    print (today.weekday())
+    
+    sunday = today - datetime.timedelta(days=1)
+    
+    if today.weekday() not in {5, 6}:
+        if week == last_monday:
+            database_form = week_almost
+            initial_data = {
+                'week_start' : database_form.week_start,
+                'week_end' : database_form.week_end,
+                'observer_0' : database_form.observer_0,
+                'time_0' : database_form.time_0,
+                'weather_0' : database_form.weather_0,
+                'wind_speed_0' : database_form.wind_speed_0,
+                'fugitive_dust_observed_0' : database_form.fugitive_dust_observed_0,
+                'supressant_applied_0' : database_form.supressant_applied_0,
+                'supressant_active_0' : database_form.supressant_active_0,
+                'working_face_exceed_0' : database_form.working_face_exceed_0,
+                'spills_0' : database_form.spills_0,
+                'pushed_back_0' : database_form.pushed_back_0,
+                'coal_vessel_0' : database_form.coal_vessel_0,
+                'water_sprays_0' : database_form.water_sprays_0,
+                'loader_lowered_0' : database_form.loader_lowered_0,
+                'working_water_sprays_0' : database_form.working_water_sprays_0,
+                'barrier_thickness_0' : database_form.barrier_thickness_0,
+                'surface_quality_0' : database_form.surface_quality_0,
+                'surpressant_crust_0' : database_form.surpressant_crust_0,
+                'additional_surpressant_0' : database_form.additional_surpressant_0,
+                'comments_0' : database_form.comments_0,
+                'wharf_0' : database_form.wharf_0,
+                'breeze_0' : database_form.breeze_0,
+            }
+            data = formB_form(initial=initial_data)
+            done = Forms.objects.filter(form='B')[0]
+            if request.method == "POST":
+                form = formB_form(request.POST, instance=week_almost)
+                A_valid = form.is_valid()
+                if A_valid:
+                    form.save()
+
+                    filled_out = True
+                    for items in week_almost.whatever().values():
+                        if items == None:
+                            filled_out = False
+                            break
+
+                    if filled_out:
+                        done.submitted = True
+                        done.save()
+                    else:
+                        done.submitted = False
+                        done.save()
+
+                return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'week_start' : last_monday,
+                'week_end' : end_week,
+            }
+            data = formB_form(initial= initial_data)
+            if request.method == "POST":
+                form = formB_form(request.POST)
+                A_valid = form.is_valid()
+                if A_valid:
+                    form.save()
+
+                    done = Forms.objects.filter(form='B')[0]
+                    filled_out = True
+                    for items in week_almost.whatever().values():
+                        if items == None:
+                            filled_out = False
+                            break
+                    if filled_out: 
+                        done.submitted = True
+                        done.save()
+                    else:
+                        done.submitted = False
+                        done.save()
+
+                return redirect('IncompleteForms')
+    else:
+        database_form = week_almost
+        initial_data = {
+            'week_start' : database_form.week_start,
+            'week_end' : database_form.week_end,
+            'observer_0' : database_form.observer_0,
+            'time_0' : database_form.time_0,
+            'weather_0' : database_form.weather_0,
+            'wind_speed_0' : database_form.wind_speed_0,
+            'fugitive_dust_observed_0' : database_form.fugitive_dust_observed_0,
+            'supressant_applied_0' : database_form.supressant_applied_0,
+            'supressant_active_0' : database_form.supressant_active_0,
+            'working_face_exceed_0' : database_form.working_face_exceed_0,
+            'spills_0' : database_form.spills_0,
+            'pushed_back_0' : database_form.pushed_back_0,
+            'coal_vessel_0' : database_form.coal_vessel_0,
+            'water_sprays_0' : database_form.water_sprays_0,
+            'loader_lowered_0' : database_form.loader_lowered_0,
+            'working_water_sprays_0' : database_form.working_water_sprays_0,
+            'barrier_thickness_0' : database_form.barrier_thickness_0,
+            'surface_quality_0' : database_form.surface_quality_0,
+            'surpressant_crust_0' : database_form.surpressant_crust_0,
+            'additional_surpressant_0' : database_form.additional_surpressant_0,
+            'comments_0' : database_form.comments_0,
+            'wharf_0' : database_form.wharf_0,
+            'breeze_0' : database_form.breeze_0,
+        }
+        data = formB_form(initial=initial_data)
+        done = Forms.objects.filter(form='B')[0]
+        if request.method == "POST":
+            form = formB_form(request.POST, instance=week_almost)
+            A_valid = form.is_valid()
+            if A_valid:
+                form.save()
+
+                filled_out = True
+                for items in week_almost.whatever().values():
+                    if items == None:
+                        filled_out = False
+                        break
+
+                if filled_out:
+                    done.submitted = True
+                    done.save()
+                else:
+                    done.submitted = False
+                    done.save()
+
+            return redirect('IncompleteForms')
+        
     return render (request, "Daily/formB.html", {
-        "back": back
+        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data,
     })
+
 #------------------------------------------------------------------------FORM C---------------<
 @lock
 def formC(request):
