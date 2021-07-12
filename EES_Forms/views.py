@@ -104,43 +104,44 @@ def logout_view(request):
 #------------------------------------------------------------------------INCOMPLETE FORMS---------<
 @lock
 def IncompleteForms(request):
-    now = datetime.datetime.now()
-    today = datetime.datetime.today()
-    todays_num = today.weekday()
+    today = datetime.date.today()
+ #   todays_num = today.weekday()
+ #   sub_forms = Forms.objects.all()
     
-    weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
-    weekend_fri = weekday_fri + datetime.timedelta(days=7)
+ #  weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
+ #   weekend_fri = weekday_fri + datetime.timedelta(days=7)
    
- 
-    
-    
-    for forms in sub_forms:
-        if todays_num in {0, 1, 2, 3 , 4}:
-            forms.due_date = weekday_fri
-            
-            A = forms.date_submitted
-            if now.date() != A :
-                forms.submitted = False
-                forms.save()
-        else:
-            forms.due_date = weekend_fri
-            
-            A = forms.date_submitted
-            if now.date() != A :
-                forms.submitted = False
-                forms.save()
+    #for forms in sub_forms:
+    #    A = forms.date_submitted
+    #    if today != A :
+    #        forms.submitted = False
+    #        forms.save()
+    #    else:
+    #        forms.submitted = True
+    #        forms.date_submitted = today
+    #        forms.save()
+    #    if todays_num in {0, 1, 2, 3 , 4}:
+    #        forms.due_date = weekday_fri
+    #        
+    #        A = forms.date_submitted
+    #        if now.date() != A :
+    #            forms.submitted = False
+     #           forms.save()
+    #    else:
+   #         forms.due_date = weekend_fri
+   #         
+   #         A = forms.date_submitted
+    ##        if now.date() != A :
+    #            forms.submitted = False
+     #           forms.save()
             
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
     
     
-    
-    
-    
-    
     return render(request, "ees_forms/index.html", {
-        "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
+        "pull": pull, "pullNot":pullNot, "today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
@@ -318,18 +319,17 @@ def formA1(request):
         }
         data = subA1_form(initial=initial_data)
         readings = subA1_readings_form(initial=initial_data)
-        #ptadmin = pt_admin1_form()
         
       #  hello =  float(database_form2.c1_sec) + float(database_form2.c2_sec) + float(database_form2.c3_sec) + float(database_form2.c4_sec) + float(database_form2.c5_sec)
         
         if request.method == "POST":
             form = subA1_form(request.POST, instance=database_form)
             reads = subA1_readings_form(request.POST, instance=database_form)
-            #admin = pt_admin1_form(request)
+            
             A_valid = form.is_valid()
             B_valid = form.is_valid()
-            #c_valid = admin.is_valid()
-            if A_valid and B_valid:# and C_valid:
+            
+            if A_valid and B_valid:
                 A = form.save()
                 B = reads.save(commit=False)
                 B.form = A
@@ -339,9 +339,7 @@ def formA1(request):
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
-               # D = admin.save(commit=False)
-               # D.form = C
-                #D.save()
+              
                 return redirect('IncompleteForms')
 
     else:
@@ -353,32 +351,25 @@ def formA1(request):
         }
         data = subA1_form(initial=initial_data)
         readings = subA1_readings_form()
-        #ptadmin = pt_admin1_form()
         if request.method == "POST":
             form = subA1_form(request.POST)
             reads = subA1_readings_form(request.POST)
-            #admin = pt_admin1_form(request)
             A_valid = form.is_valid()
             B_valid = form.is_valid()
-            #c_valid = admin.is_valid()
-            if A_valid and B_valid:# and C_valid:
+            
+            if A_valid and B_valid:
                 A = form.save()
                 B = reads.save(commit=False)
                 B.form = A
                 B.save()
-
+                
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
-               # D = admin.save(commit=False)
-               # D.form = C
-                #D.save()
+               
                 return redirect('IncompleteForms')
-        else:
-            form = subA1_form(initial=initial_data)
-            readings = subA1_readings_form()
-            ptadmin = pt_admin1_form()
+        
     return render (request, "Daily/Method303/formA1.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName
     })
@@ -1536,59 +1527,6 @@ def formF(request):
     })
 
 @lock
-def formG1(request):    
-    full_name = request.user.get_full_name()
-    cert_date = request.user.user_profile_model.cert_date
-    initial_data = {
-        'date' : todays_log.date_save,
-        'estab' : "EES COKE BATTERY",
-        'county' : "Wayne",
-        'estab_no' : "P0408",
-        'equip_loc' : "Zug Island",
-        'district' : "Detroit",
-        'city' : "River Rouge",
-        'observer' : full_name,
-        'cert_date' : cert_date,
-        'process_equip1' : "-",
-        'process_equip2' : "-",
-        'op_mode1' : "normal",
-        'op_mode2' : "normal",
-        'emission_point_start' : "Above Stack",
-        'emission_point_stop' : "Same",
-        'height_above_ground' : "150",
-        'height_rel_observer' : "150",
-        'water_drolet_present' : "No",
-        'water_droplet_plume' : "N/A",
-        'describe_background_start' : "Skies",
-        'describe_background_stop' : "Same"
-    }
-    data = formG1_form(initial=initial_data)
-    profile_form = user_profile_form()
-    readings_form = subA5_readings_form()
-    
-    if request.method == "POST":
-        form = formG1_form(request.POST)
-        #readings = subA5_readings_form(request.POST)
-        A_valid = form.is_valid()
-        #B_valid = readings.is_valid()
-        if A_valid:# and B_valid:
-            A = form.save()
-            #B = readings.save(commit=False)
-
-            #B.form = A
-            #B.save()
-            done = Forms.objects.filter(form='G-1')[0]
-            done.submitted = True
-            done.save()
-            
-            return redirect('IncompleteForms')
-    else:
-        form = formG1_form(initial=initial_data)
-        #readings_form = subA5_readings_form()
-    return render (request, "Daily/formG1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
-    })
-
 def formF2(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -1789,6 +1727,60 @@ def formF2(request):
     
     return render (request, "Weekly/formF2.html", {
         "back": back, 'todays_log': todays_log, 'data': data
+    })
+
+@lock
+def formG1(request):    
+    full_name = request.user.get_full_name()
+    cert_date = request.user.user_profile_model.cert_date
+    initial_data = {
+        'date' : todays_log.date_save,
+        'estab' : "EES COKE BATTERY",
+        'county' : "Wayne",
+        'estab_no' : "P0408",
+        'equip_loc' : "Zug Island",
+        'district' : "Detroit",
+        'city' : "River Rouge",
+        'observer' : full_name,
+        'cert_date' : cert_date,
+        'process_equip1' : "-",
+        'process_equip2' : "-",
+        'op_mode1' : "normal",
+        'op_mode2' : "normal",
+        'emission_point_start' : "Above Stack",
+        'emission_point_stop' : "Same",
+        'height_above_ground' : "150",
+        'height_rel_observer' : "150",
+        'water_drolet_present' : "No",
+        'water_droplet_plume' : "N/A",
+        'describe_background_start' : "Skies",
+        'describe_background_stop' : "Same"
+    }
+    data = formG1_form(initial=initial_data)
+    profile_form = user_profile_form()
+    readings_form = subA5_readings_form()
+    
+    if request.method == "POST":
+        form = formG1_form(request.POST)
+        #readings = subA5_readings_form(request.POST)
+        A_valid = form.is_valid()
+        #B_valid = readings.is_valid()
+        if A_valid:# and B_valid:
+            A = form.save()
+            #B = readings.save(commit=False)
+
+            #B.form = A
+            #B.save()
+            done = Forms.objects.filter(form='G-1')[0]
+            done.submitted = True
+            done.save()
+            
+            return redirect('IncompleteForms')
+    else:
+        form = formG1_form(initial=initial_data)
+        #readings_form = subA5_readings_form()
+    return render (request, "Daily/formG1.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
     })
 
 @lock
