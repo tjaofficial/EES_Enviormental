@@ -1,0 +1,331 @@
+<html>
+    <style>
+        #formD_box1{
+            border: 2px solid black;
+            font-size: 60px;
+        }
+        #formD_box2{
+            border: 1px solid black;
+            text-align: center;
+        }
+        #formD_box3{
+            border: 1px solid black;
+            vertical-align: top;
+            text-align: center;
+        }
+        #formD_box4{
+            border: 1px solid black;
+            text-align: left;
+        }
+        #formF_main_box{
+            margin: auto; 
+            text-align: center;
+        }
+    </style>
+    <a href="{% url 'IncompleteForms' %}">Back</a>
+    
+    
+    <body>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div style="padding-top: 100px">
+                <table id="formF_main_box" style="border-collapse: collapse; border: 2px solid black;">
+                    <tr>
+                        <th colspan="3" rowspan="2" id="formD_box1">
+                            EES Coke Battery L.L.C.
+                        </th>
+                        <th style="text-align: center; vertical-align: bottom; border: 2px solid black; font-size: 30px;">
+                            Waste Weekly Inspection - (F)
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="border: 2px solid black; background-color: lightgray;">
+                            #1 Shop (satellite Accumulation)
+                        </th>
+                    </tr>
+                    <tr>
+                        <th id="formD_box2" style="text-align: left; font-size: 20px; width: 380px;">
+                            General Inspection Information:
+                        </th>
+                        <th colspan="1" id="formD_box2"></th>
+                        <td id="formD_box2">
+                            (Retain for 5 years)
+                        </td>
+                        <th id="formD_box2"></th>
+                    </tr>
+                    <tr>
+                        <td id="formD_box2" style="text-align: right;">
+                            Inspection Date: 
+                        </td>
+                        <th colspan="1" id="formD_box2">
+                            {{ data.date }}
+                        </th>
+                        <td id="formD_box2" style="text-align: right;">
+                            Retain Until Date:
+                        </td>
+                        <th id="formD_box2" style="text-align: left;">
+                            {{ data.retain_date }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td id="formD_box2" style="text-align: right;">
+                            Inspection Time: 
+                        </td>
+                        <th colspan="1" id="formD_box2">
+                            {{ data.time }}
+                        </th>
+                        <td id="formD_box2" style="text-align: right;">
+                            Inspector Name:
+                        </td>
+                        <th id="formD_box2" style="text-align: left;">
+                            {{ data.observer }}
+                        </th>
+                    </tr>
+                    <tr style="border: 2px solid black;">
+                        <th colspan="2" style="text-align: left; border-right: 1px solid black;">
+                            Report and Items with "Not OK" status to appropriate supervisor.
+                        </th>
+                        <td style="text-align: right;">
+                            Inspector Signature:
+                        </td>
+                        <th style="text-align: left;">
+
+                        </th>
+                    </tr>
+                    <tr>
+                        <th id="formD_box3">
+                            Item
+                        </th>
+                        <th colspan="1" id="formD_box3">
+                            Status<br>
+                            (OK means in compliance)
+                        </th>
+                        <th id="formD_box3">
+                            Comments<br>
+                            (Describe any probems or conditions found during <br>
+                            inspection)
+                        </th>
+                        <th id="formD_box3">
+                            Action Taken<br>
+                            (Include name of supervisor contacted, how they were contacted,<br> 
+                            and time of contact)
+                        </th>
+                    </tr>
+                    <tr style="border: 2px solid black;">
+                        <th colspan="2" id="formD_box2" style="background-color: lightgray;">
+                            #1 Shop (satellite Accumulation)
+                        </th>
+                        <td id="formD_box2" style="background-color: lightgray;"></td>
+                        <th id="formD_box2" style="background-color: lightgray;"></th>
+                    </tr>
+                    <tr>
+                        <td id="formD_box4">
+                            Containers are properly closed and in good <br>
+                            condition. (No dents or corrosion)
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.status_1 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.comments_1 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.action_1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box4">
+                            Containers are 55 gallons or smaller and <br>
+                            compatible with waste stored.
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.status_2 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.comments_2 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.action_2 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box4">
+                            Labels are on containers inlcuding accumulation <br>
+                            dates, waste description, and codes.
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.status_3 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.comments_3 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.action_3 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box4">
+                            No spills, leaks, or staining on containers or around <br>
+                            the secondary containment area.
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.status_4 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.comments_4 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.action_4 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box4">
+                            No water or other liquids in the containment area <br>
+                            and no visible sheen.
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.status_5 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.comments_5 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.action_5 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box4">
+                            Identify that full containers of HAZARDOUS waste <br>
+                            are moved to the 90 day storage area within 3 days. 
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.status_6 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.comments_6 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.action_6 }}
+                        </td>
+                    </tr>
+                    <tr style="border: 2px solid black;">
+                        <th colspan="1" style="background-color: lightgray;">
+                            Container Log:
+                        </th>
+                        <th style="background-color: lightgray;"></th>
+                        <th style="background-color: lightgray;"></th>
+                        <th style="background-color: lightgray;"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="1" id="formD_box2">
+                            Waste Description
+                        </th>
+                        <th id="formD_box2">
+                            # of Containers
+                        </th>
+                        <th id="formD_box2">
+                            Waste Codes
+                        </th>
+                        <th id="formD_box2">
+                            Dates
+                        </th>
+                    </tr>
+                    <tr>
+                        <td id="formD_box2">
+                            {{ data.waste_des_1 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.containers_1 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.waste_codes_1 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.dates_1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box2">
+                            {{ data.waste_des_2 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.containers_2 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.waste_codes_2 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.dates_2 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box2">
+                            {{ data.waste_des_3 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.containers_3 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.waste_codes_3 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.dates_3 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="formD_box2">
+                            {{ data.waste_des_4 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.containers_4 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.waste_codes_4 }}
+                        </td>
+                        <td id="formD_box2">
+                            {{ data.dates_4 }}
+                        </td>
+                    </tr>
+                    <tr style="border: 2px solid black; background-color: lightgray;">
+                        <th colspan="2" id="formD_box2" style="text-align: left;">
+                            Follow up inspection date and time:
+                        </th>
+                        <th id="formD_box2">
+                            Were problem(s) mitigated?
+                        </th>
+                        <th id="formD_box2">
+                            Action Taken<br>
+                            (If problem not mitigated)
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" id="formD_box2" style="text-align: left;">
+                            Inspector's Name: input
+                        </td>
+                        <td id="formD_box2">
+                            input
+                        </td>
+                        <td id="formD_box2">
+                            input
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" id="formD_box2" style="text-align: left;">
+                            Inspector's Signature: input
+                        </td>
+                        <td id="formD_box2">
+                            input
+                        </td>
+                        <td id="formD_box2">
+                            input
+                        </td>
+                    </tr>
+                </table>
+                <div style="margin: auto; text-align: center;">
+                    Page 2 of 7
+                </div>
+            </div>
+            <input type="submit" value="Submit Form" style="font-size: 40px">
+        </form>
+    </body>
+</html>

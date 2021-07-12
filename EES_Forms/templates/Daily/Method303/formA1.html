@@ -46,7 +46,7 @@
     <script defer src="{% static 'ees_forms/script/utils.js' %}"></script>
 
 <body>
-    <div id="formName" style="display: hidden;" data-form="{{formName}}">
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div>
             <a href="{% url 'IncompleteForms' %}">Back</a>
@@ -225,8 +225,6 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                 </table>
-                <br><br>
-                <input type="submit" value="Save" style="font-size: 40px">
                 <br><br><br>
                 <input type="submit" value="Submit Form" style="font-size: 40px">
             </form> 

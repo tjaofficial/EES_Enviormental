@@ -12,11 +12,11 @@
             
    <ul>                 
     {% for item in pull %}
-        <a href="{{ item.link }}">
+        
             <li>
-                {{ item.form }}
+                <a href="{{ item.link }}">{{ item.form }}</a> - {{ item.title }} - {{ item.due_date }}
             </li>
-        </a>
+        
     {% endfor %}
 <hr id="breakLine">
 Forms Completed Toady

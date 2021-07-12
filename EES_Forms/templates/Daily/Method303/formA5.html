@@ -1,3 +1,4 @@
+{% load static %}
 <html>
     <style>
         #boxTitle{
@@ -61,7 +62,7 @@
             display: inline-flex;
         }
     </style>
-    
+    <script defer src="{% static 'ees_forms/script/utils.js' %}"></script>
     
     
     
@@ -72,6 +73,7 @@
     
     
 <body>
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <form action="" method="POST">
         {% csrf_token %}
         <div id="ptInfo">
