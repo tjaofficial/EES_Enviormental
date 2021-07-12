@@ -251,6 +251,9 @@ def admin_data_view(request):
 #------------------------------------------------------------------------A1---------------<
 @lock
 def formA1(request):
+    formName = "A1"
+
+
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -361,7 +364,7 @@ def formA1(request):
             readings = subA1_readings_form()
             ptadmin = pt_admin1_form()
     return render (request, "Daily/Method303/formA1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings
+        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName
     })
 #------------------------------------------------------------------------A2---------------<
 @lock
