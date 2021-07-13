@@ -104,36 +104,28 @@ def logout_view(request):
 #------------------------------------------------------------------------INCOMPLETE FORMS---------<
 @lock
 def IncompleteForms(request):
-  #  today = datetime.date.today()
- #   todays_num = today.weekday()
- #   sub_forms = Forms.objects.all()
+    today = datetime.date.today()
+    todays_num = today.weekday()
+    sub_forms = Forms.objects.all()
     
- #  weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
- #   weekend_fri = weekday_fri + datetime.timedelta(days=7)
+    weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
+    weekend_fri = weekday_fri + datetime.timedelta(days=7)
    
-    #for forms in sub_forms:
-    #    A = forms.date_submitted
-    #    if today != A :
-    #        forms.submitted = False
-    #        forms.save()
-    #    else:
-    #        forms.submitted = True
-    #        forms.date_submitted = today
-    #        forms.save()
-    #    if todays_num in {0, 1, 2, 3 , 4}:
-    #        forms.due_date = weekday_fri
-    #        
-    #        A = forms.date_submitted
-    #        if now.date() != A :
-    #            forms.submitted = False
-     #           forms.save()
-    #    else:
-   #         forms.due_date = weekend_fri
-   #         
-   #         A = forms.date_submitted
-    ##        if now.date() != A :
-    #            forms.submitted = False
-     #           forms.save()
+    for forms in sub_forms:
+        if todays_num in {0, 1, 2, 3 , 4}:
+            forms.due_date = weekday_fri
+        
+            A = forms.date_submitted
+            if today != A :
+                forms.submitted = False
+                forms.save()
+        else:
+            forms.due_date = weekend_fri
+            
+            A = forms.date_submitted
+            if today != A :
+                forms.submitted = False
+                forms.save()
             
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
@@ -141,7 +133,7 @@ def IncompleteForms(request):
     
     
     return render(request, "ees_forms/index.html", {
-        "pull": pull, "pullNot":pullNot, #"today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
+        "pull": pull, "pullNot":pullNot, "today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
 #------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<

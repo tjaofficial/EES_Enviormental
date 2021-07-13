@@ -5,11 +5,13 @@
     display: inline-flex;
 }
 #timeTabs{
+    margin-top: 56px;
     background-color: antiquewhite;
     width: auto;
     height: auto;
 }
 #uncompleted{
+    margin-top: 56px;
     width: 100%;
     height: auto;
     background-color: lightgray;
@@ -54,3 +56,65 @@
 #pt_admin_box2{
     
 }
+#user_bar{
+    height: 36px;
+    width: -webkit-fill-available;
+    position: fixed;
+    background-color: teal;
+    padding: 10px;
+    vertical-align: middle;
+    display: flex;
+}
+#greeting{
+    margin-left: 15px;
+    font-size: 30px;
+    
+}
+body{
+    margin: 0px;
+}
+#prof_pic_container{
+    width: 86ps;
+}
+.dropbtn {
+  
+}
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+}
+.dropdown {
+    display: inline-block;
+    width: 161px;
+    margin-top: 46px;
+}
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+#profile_pic{
+    width: 69px;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translate(0%, -50%);
+    clip: rect(0px, 68px, 54px, 13px);
+    -webkit-clip-path: circle(39% at 50% 50%);
+}
+#currentDate{
+    width: auto;
+    margin: auto;
+    font-size: 30px;
+}
+.dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      overflow: auto;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+}
+.show {display: block;}
+.dropdown a:hover {background-color: #ddd;}

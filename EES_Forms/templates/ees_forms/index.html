@@ -3,9 +3,6 @@
 {% block list%}
 <div id="uncompleted">
                 Incomplete Forms  
-    <div id="currentDate">
-        {{ today.month }}/{{ today.day }}/{{ today.year }}
-    </div>
                 <hr id="breakLine">
                 
                 
@@ -16,6 +13,7 @@
             <a href="{{ item.link }}">
                 {{ item.form }} 
             </a>
+            - {{ item.title }} -{{ item.due_date }}
         </li> 
     {% endfor %}
 <hr id="breakLine">
@@ -25,6 +23,7 @@ Forms Completed Toady
             <a href="{{ item.link }}">
                 {{ item.form }}
             </a>
+            - {{ item.title }} -{{ item.due_date }}
         </li>
        
     {% endfor %}
