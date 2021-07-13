@@ -1339,7 +1339,7 @@ class formE_model(models.Model):
     
 #----------------------------------------------------------------------FORM G1---------------<
 
-class formF_model(models.Model):
+class formF1_model(models.Model):
     observer = models.CharField(
         max_length=30
     )
@@ -1504,6 +1504,159 @@ class formF_model(models.Model):
         return str(self.date)
 
 class formF2_model(models.Model):
+    observer = models.CharField(
+        max_length=30
+    )
+    time = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True
+    )
+    retain_date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True
+    )
+    status_1 = models.CharField(
+        max_length=30,
+        choices = ok_not_ok_choices
+    )
+    status_2 = models.CharField(
+        max_length=30,
+        choices = ok_not_ok_choices
+    )
+    status_3 = models.CharField(
+        max_length=30,
+        choices = ok_not_ok_choices
+    )
+    status_4 = models.CharField(
+        max_length=30,
+        choices = ok_not_ok_choices
+    )
+    status_5 = models.CharField(
+        max_length=30,
+        choices = ok_not_ok_choices
+    )
+    status_6 = models.CharField(
+        max_length=30,
+        choices = ok_not_ok_choices
+    )
+    comments_1 = models.CharField(
+        max_length=30
+    )
+    comments_2 = models.CharField(
+        max_length=30
+    )
+    comments_3 = models.CharField(
+        max_length=30
+    )
+    comments_4 = models.CharField(
+        max_length=30
+    )
+    comments_5 = models.CharField(
+        max_length=30
+    )
+    comments_6 = models.CharField(
+        max_length=30
+    )
+    action_1 = models.CharField(
+        max_length=30
+    )
+    action_2 = models.CharField(
+        max_length=30
+    )
+    action_3 = models.CharField(
+        max_length=30
+    )
+    action_4 = models.CharField(
+        max_length=30
+    )
+    action_5 = models.CharField(
+        max_length=30
+    )
+    action_6 = models.CharField(
+        max_length=30
+    )
+    waste_des_1 = models.CharField(
+        max_length=30
+    )
+    waste_des_2 = models.CharField(
+        max_length=30
+    )
+    waste_des_3 = models.CharField(
+        max_length=30
+    )
+    waste_des_4 = models.CharField(
+        max_length=30
+    )
+    containers_1 = models.IntegerField(
+    )
+    containers_2 = models.IntegerField(
+        blank = True,
+        null = True
+    )
+    containers_3 = models.IntegerField(
+        blank = True,
+        null = True
+    )
+    containers_4 = models.IntegerField(
+        blank = True,
+        null = True
+    )
+    waste_codes_1 = models.CharField(
+        max_length=30,
+        choices = waste_code_choices
+    )
+    waste_codes_2 = models.CharField(
+        max_length=30,
+        choices = waste_code_choices,
+        blank = True,
+        null = True
+    )
+    waste_codes_3 = models.CharField(
+        max_length=30,
+        choices = waste_code_choices,
+        blank = True,
+        null = True
+    )
+    waste_codes_4 = models.CharField(
+        max_length=30,
+        choices = waste_code_choices,
+        blank = True,
+        null = True
+    )
+    dates_1 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True
+    )
+    dates_2 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null = True
+    )
+    dates_3 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null = True
+    )
+    dates_4 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null = True
+    )
+    
+    def __str__(self):
+        return str(self.date)
+class formF3_model(models.Model):
     observer = models.CharField(
         max_length=30
     )

@@ -25,32 +25,30 @@
     <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
     
     <body>
-        <div id="page">
-            <div id="user_bar">
-                <div style="width: fit-content; margin: 0px;">
-                    <img src="{% static 'images/menu_bar.png' %}" style="width: 36px; height: 36px;">
-                </div>
-                <div id="greeting">
-                    Hello, {{ request.user.first_name }}!
-                </div>
-                <div id="currentDate">
-                    {{ today.month }}/{{ today.day }}/{{ today.year }}
-                </div>
-                <div id="prof_pic_container" class="dropdown">
-                    <img onclick="myFunction()" src="{% static 'images/profile_pics/TJA.jpg' %}" id="profile_pic" class="dropbtn">
-                    <div id="myDropdown" class="dropdown-content">
-                        <a href="#home">Profile</a>
-                        <a href="#About">About</a>
-                        <a href="#Safety">Safety Information</a>
-                        <a href="{% url 'Logout' %}">Logout</a>
-                      </div>
-                </div>
-                
+        <div id="user_bar">
+            <div style="width: fit-content; margin: 0px;">
+                <img src="{% static 'images/menu_bar.png' %}" style="width: 36px; height: 36px;">
             </div>
+            <div id="greeting">
+                Hello, {{ request.user.first_name }}!
+            </div>
+            <div id="currentDate">
+                {{ today.month }}/{{ today.day }}/{{ today.year }}
+            </div>
+            <div id="prof_pic_container" class="dropdown">
+                <img onclick="myFunction()" src="{% static 'images/profile_pics/TJA.jpg' %}" id="profile_pic" class="dropbtn">
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#home">Profile</a>
+                    <a href="#About">About</a>
+                    <a href="#Safety">Safety Information</a>
+                    <a href="{% url 'Logout' %}">Logout</a>
+                  </div>
+            </div>
+        </div>
+        <div id="page" class="mainScreenContainer">
             <div id="timeTabs">
-                
                     <div id="formTabsSelected">
-                        <a href="{% url 'IncompleteForms' %}">Dashboard<br><br></a>
+                        <a href="{% url 'IncompleteForms' %}">Dashboard</a>
                     </div>
                 <a href="dailyForms.html">
                     <div id="formTabsUnselected">

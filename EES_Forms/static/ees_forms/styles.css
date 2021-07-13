@@ -1,20 +1,16 @@
 #page{
-    background-color: aqua;
     height: 100%;
     width: 100%;
     display: inline-flex;
 }
 #timeTabs{
-    margin-top: 56px;
     background-color: antiquewhite;
     width: auto;
     height: auto;
 }
 #uncompleted{
-    margin-top: 56px;
     width: 100%;
     height: auto;
-    background-color: lightgray;
     font-size: 23px;
     color: black;
     padding-top: 19px;
@@ -22,6 +18,10 @@
     padding-left: 19px;
     padding-right: 19px;
     border: 2px black solid;
+}
+.mainScreenContainer{
+    margin-top: 56px;
+    background-color: lightgray;
 }
 #formTabsSelected{
     width: 300px;
