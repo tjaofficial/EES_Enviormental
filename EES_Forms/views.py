@@ -1926,6 +1926,815 @@ def formF3(request):
     })
 
 @lock
+def formF4(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    form_all = formF4_model.objects.count()
+    
+    full_name = request.user.get_full_name()
+    
+    
+    if form_all == 0 :
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name
+        }
+        data = formF4_form(initial=initial_data)
+        if request.method == "POST":
+            form = formF4_form(request.POST)
+            if form.is_valid():
+                
+                form.save()
+
+                done = Forms.objects.filter(form='F')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+            
+                return redirect('IncompleteForms')
+            
+    else:
+        if today.weekday() not in {0, 1, 5, 6}:
+            org = formF4_model.objects.all().order_by('-date')
+            database_form = org[0]
+            if today.weekday() == 2 :
+                if todays_log.date_save == database_form.date:
+                    initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'status_7' : database_form.status_7,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'comments_7' : database_form.comments_7,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'action_7' : database_form.action_7,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                    }
+                    data = formF4_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF4_form(request.POST, instance= database_form)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'date' : todays_log.date_save,
+                        'observer' : full_name
+                    }
+                    data = formF4_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF4_form(request.POST)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                if today.weekday() in {3, 4}:
+                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    if last_wed == database_form.date:
+                        initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                        }
+                        data = formF4_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF4_form(request.POST, instance= database_form)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'date' : todays_log.date_save,
+                            'observer' : full_name
+                        }
+                        data = formF4_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF4_form(request.POST)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date' : todays_log.date_save,
+                'observer' : full_name
+            }
+            data = formF4_form(initial=initial_data)
+            if request.method == "POST":
+                form = formF4_form(request.POST)
+                if form.is_valid():
+                    form.save()
+
+                    done = Forms.objects.filter(form='F')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+
+                    return redirect('IncompleteForms')
+    
+    return render (request, "Weekly/formF4.html", {
+        "back": back, 'todays_log': todays_log, 'data': data
+    })
+@lock
+def formF5(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    form_all = formF5_model.objects.count()
+    
+    full_name = request.user.get_full_name()
+    
+    
+    if form_all == 0 :
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name
+        }
+        data = formF5_form(initial=initial_data)
+        if request.method == "POST":
+            form = formF5_form(request.POST)
+            if form.is_valid():
+                
+                form.save()
+
+                done = Forms.objects.filter(form='F')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+            
+                return redirect('IncompleteForms')
+            
+    else:
+        if today.weekday() not in {0, 1, 5, 6}:
+            org = formF5_model.objects.all().order_by('-date')
+            database_form = org[0]
+            if today.weekday() == 2 :
+                if todays_log.date_save == database_form.date:
+                    initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'status_7' : database_form.status_7,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'comments_7' : database_form.comments_7,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'action_7' : database_form.action_7,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                    }
+                    data = formF5_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF5_form(request.POST, instance= database_form)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'date' : todays_log.date_save,
+                        'observer' : full_name
+                    }
+                    data = formF5_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF5_form(request.POST)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                if today.weekday() in {3, 4}:
+                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    if last_wed == database_form.date:
+                        initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                        }
+                        data = formF5_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF5_form(request.POST, instance= database_form)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'date' : todays_log.date_save,
+                            'observer' : full_name
+                        }
+                        data = formF5_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF5_form(request.POST)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date' : todays_log.date_save,
+                'observer' : full_name
+            }
+            data = formF5_form(initial=initial_data)
+            if request.method == "POST":
+                form = formF5_form(request.POST)
+                if form.is_valid():
+                    form.save()
+
+                    done = Forms.objects.filter(form='F')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+
+                    return redirect('IncompleteForms')
+    
+    return render (request, "Weekly/formF5.html", {
+        "back": back, 'todays_log': todays_log, 'data': data
+    })
+@lock
+def formF6(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    form_all = formF6_model.objects.count()
+    
+    full_name = request.user.get_full_name()
+    
+    
+    if form_all == 0 :
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name
+        }
+        data = formF6_form(initial=initial_data)
+        if request.method == "POST":
+            form = formF6_form(request.POST)
+            if form.is_valid():
+                
+                form.save()
+
+                done = Forms.objects.filter(form='F')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+            
+                return redirect('IncompleteForms')
+            
+    else:
+        if today.weekday() not in {0, 1, 5, 6}:
+            org = formF6_model.objects.all().order_by('-date')
+            database_form = org[0]
+            if today.weekday() == 2 :
+                if todays_log.date_save == database_form.date:
+                    initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'status_7' : database_form.status_7,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'comments_7' : database_form.comments_7,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'action_7' : database_form.action_7,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                    }
+                    data = formF6_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF6_form(request.POST, instance= database_form)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'date' : todays_log.date_save,
+                        'observer' : full_name
+                    }
+                    data = formF6_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF6_form(request.POST)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                if today.weekday() in {3, 4}:
+                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    if last_wed == database_form.date:
+                        initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                        }
+                        data = formF6_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF6_form(request.POST, instance= database_form)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'date' : todays_log.date_save,
+                            'observer' : full_name
+                        }
+                        data = formF6_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF6_form(request.POST)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date' : todays_log.date_save,
+                'observer' : full_name
+            }
+            data = formF6_form(initial=initial_data)
+            if request.method == "POST":
+                form = formF6_form(request.POST)
+                if form.is_valid():
+                    form.save()
+
+                    done = Forms.objects.filter(form='F')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+
+                    return redirect('IncompleteForms')
+    
+    return render (request, "Weekly/formF6.html", {
+        "back": back, 'todays_log': todays_log, 'data': data
+    })
+@lock
+def formF7(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    form_all = formF7_model.objects.count()
+    
+    full_name = request.user.get_full_name()
+    
+    
+    if form_all == 0 :
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name
+        }
+        data = formF7_form(initial=initial_data)
+        if request.method == "POST":
+            form = formF7_form(request.POST)
+            if form.is_valid():
+                
+                form.save()
+
+                done = Forms.objects.filter(form='F')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+            
+                return redirect('IncompleteForms')
+            
+    else:
+        if today.weekday() not in {0, 1, 5, 6}:
+            org = formF7_model.objects.all().order_by('-date')
+            database_form = org[0]
+            if today.weekday() == 2 :
+                if todays_log.date_save == database_form.date:
+                    initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'status_7' : database_form.status_7,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'comments_7' : database_form.comments_7,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'action_7' : database_form.action_7,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                    }
+                    data = formF7_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF7_form(request.POST, instance= database_form)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'date' : todays_log.date_save,
+                        'observer' : full_name
+                    }
+                    data = formF7_form(initial=initial_data)
+                    if request.method == "POST":
+                        form = formF7_form(request.POST)
+                        if form.is_valid():
+                            form.save()
+
+                            done = Forms.objects.filter(form='F')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                if today.weekday() in {3, 4}:
+                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    if last_wed == database_form.date:
+                        initial_data = {
+                        'observer' : database_form.observer,
+                        'time' : database_form.time,
+                        'date' : database_form.date,
+                        'retain_date' : database_form.retain_date,
+                        'status_1' : database_form.status_1,
+                        'status_2' : database_form.status_2,
+                        'status_3' : database_form.status_3,
+                        'status_4' : database_form.status_4,
+                        'status_5' : database_form.status_5,
+                        'status_6' : database_form.status_6,
+                        'comments_1' : database_form.comments_1,
+                        'comments_2' : database_form.comments_2,
+                        'comments_3' : database_form.comments_3,
+                        'comments_4' : database_form.comments_4,
+                        'comments_5' : database_form.comments_5,
+                        'comments_6' : database_form.comments_6,
+                        'action_1' : database_form.action_1,
+                        'action_2' : database_form.action_2,
+                        'action_3' : database_form.action_3,
+                        'action_4' : database_form.action_4,
+                        'action_5' : database_form.action_5,
+                        'action_6' : database_form.action_6,
+                        'waste_des_1' : database_form.waste_des_1,
+                        'waste_des_2' : database_form.waste_des_2,
+                        'waste_des_3' : database_form.waste_des_3,
+                        'waste_des_4' : database_form.waste_des_4,
+                        'containers_1' : database_form.containers_1,
+                        'containers_2' : database_form.containers_2,
+                        'containers_3' : database_form.containers_3,
+                        'containers_4' : database_form.containers_4,
+                        'waste_codes_1' : database_form.waste_codes_1,
+                        'waste_codes_2' : database_form.waste_codes_2,
+                        'waste_codes_3' : database_form.waste_codes_3,
+                        'waste_codes_4' : database_form.waste_codes_4,
+                        'dates_1' : database_form.dates_1,
+                        'dates_2' : database_form.dates_2,
+                        'dates_3' : database_form.dates_3,
+                        'dates_4' : database_form.dates_4,
+                        }
+                        data = formF7_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF7_form(request.POST, instance= database_form)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'date' : todays_log.date_save,
+                            'observer' : full_name
+                        }
+                        data = formF7_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formF7_form(request.POST)
+                            if form.is_valid():
+                                form.save()
+
+                                done = Forms.objects.filter(form='F')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date' : todays_log.date_save,
+                'observer' : full_name
+            }
+            data = formF7_form(initial=initial_data)
+            if request.method == "POST":
+                form = formF7_form(request.POST)
+                if form.is_valid():
+                    form.save()
+
+                    done = Forms.objects.filter(form='F')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+
+                    return redirect('IncompleteForms')
+    
+    return render (request, "Weekly/formF7.html", {
+        "back": back, 'todays_log': todays_log, 'data': data
+    })
+
+@lock
 def formG1(request):    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
