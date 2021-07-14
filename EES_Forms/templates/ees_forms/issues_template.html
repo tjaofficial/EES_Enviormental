@@ -1,0 +1,29 @@
+{% load static %}
+<html>
+    <link href="{% static 'ees_forms/formA1_style.css' %}" rel="stylesheet">
+    
+    <div style="padding-top: 100px;">
+        <h1 style="text-align: center;">Please Fill Out a Corrective Action Form</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr>
+                    <td style="height: 40px" > {{ form.form }}</td>
+                </tr> 
+                <tr>
+                    <td colspan="6" id="issues" class="issue_boxes">Any Issues? Describe{{ form.issues }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" id="person_notified" class="issue_boxes">EES Person Notified of Issue{{ form.notified }}</td>
+                    <td colspan="1" id="datetime" class="issue_boxes">{{ form.date }}</td>
+                    <td colspan="1" id="datetime" class="issue_boxes">{{ form.time }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="issue_boxes">Corrective Action Taken{{ form.cor_action }}</td>
+                </tr>
+            </table>
+            <br><br><br>
+            <input type="submit" value="Submit Form" style="font-size: 40px">
+        </form>
+    </div>
+</html>

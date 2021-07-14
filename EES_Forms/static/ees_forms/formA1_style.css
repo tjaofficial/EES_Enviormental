@@ -1,0 +1,61 @@
+#paperSize{
+    width: 1400px;
+    margin: auto;
+    padding-top: 50px;
+}
+#boxTitle{
+    font-size: 30px;
+}
+#boxa1{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 150px;
+    max-width: 150px;
+    height: 35px;
+}
+#boxa2{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 80px;
+    max-width: 80px;
+    height: 35px;
+}
+#boxa3{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 300px;
+    max-width: 300px;
+    height: 35px;
+}
+#boxa13{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 150px;
+    max-width: 150px;
+    height: 35px;
+}
+
+
+
+
+
+
+
+
+
+
+.issue_boxes{ border: 1px solid black; 
+    font-size: 20px;
+}
+#issues{
+    width: 1000px;  
+}
+#person_notified{
+}
+#datetime {
+    width: 203px;
+}
