@@ -113,21 +113,21 @@ def IncompleteForms(request):
     weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
     weekend_fri = weekday_fri + datetime.timedelta(days=7)
    
- #   for forms in sub_forms:
-   #     if todays_num in {0, 1, 2, 3 , 4}:
-   #         forms.due_date = weekday_fri
+    for forms in sub_forms:
+        if todays_num in {0, 1, 2, 3 , 4}:
+            forms.due_date = weekday_fri
         
-   #         A = forms.date_submitted
-   #         if today != A :
-    #            forms.submitted = False
-    #            forms.save()
-    #    else:
-    #        forms.due_date = weekend_fri
+            A = forms.date_submitted
+            if today != A :
+                forms.submitted = False
+                forms.save()
+        else:
+            forms.due_date = weekend_fri
             
-   #         A = forms.date_submitted
-    #        if today != A :
-    #            forms.submitted = False
-     #           forms.save()
+            A = forms.date_submitted
+            if today != A :
+                forms.submitted = False
+                forms.save()
             
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
