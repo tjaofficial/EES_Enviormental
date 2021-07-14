@@ -38,7 +38,7 @@
             <div id="prof_pic_container" class="dropdown">
                 <img onclick="myFunction()" src="{% static 'images/profile_pics/TJA.jpg' %}" id="profile_pic" class="dropbtn">
                 <div id="myDropdown" class="dropdown-content">
-                    <a href="#home">Profile</a>
+                    <a href="{% url 'profile' %}">Profile</a>
                     <a href="#About">About</a>
                     <a href="#Safety">Safety Information</a>
                     <a href="{% url 'Logout' %}">Logout</a>

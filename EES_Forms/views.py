@@ -252,6 +252,12 @@ def pt_admin1_view(request):
         "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
+
+def profile(request):
+    
+    return render (request, "ees_forms/profile.html", {
+        "back": back, 'todays_log': todays_log 
+    })
 @lock
 def admin_data_view(request):
     return render (request, "ees_forms/admin_data.html", {
@@ -369,6 +375,7 @@ def formA1(request):
 #------------------------------------------------------------------------A2---------------<
 @lock
 def formA2(request):
+    formName = "A2"
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -446,11 +453,12 @@ def formA2(request):
                 return redirect('IncompleteForms')
 
     return render (request, "Daily/Method303/formA2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
     })
 #------------------------------------------------------------------------A3---------------<
 @lock
 def formA3(request):
+    formName = "A3"
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -488,11 +496,11 @@ def formA3(request):
             'l_not_observed' : database_form.l_not_observed,
             'om_percent_leaking' : database_form.om_percent_leaking,
             'l_percent_leaking' : database_form.l_percent_leaking,
-            'notes' : 'N/A',
+            'notes' : database_form.notes,
         }
         data = formA3_form(initial=initial_data)
         if request.method == "POST":
-            form = formA3_form(request.POST, instance=database_form)
+            form = formA3_form(request.POST, instance= database_form)
             if form.is_valid():
                 form.save()
 
@@ -526,11 +534,12 @@ def formA3(request):
                 return redirect('IncompleteForms')
 
     return render (request, "Daily/Method303/formA3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
     })
 #------------------------------------------------------------------------A4---------------<
 @lock
 def formA4(request):
+    formName = "A4"
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -604,7 +613,7 @@ def formA4(request):
                 print(form.errors)
     
     return render (request, "Daily/Method303/formA4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
     })
 #------------------------------------------------------------------------A5---------------<
 @lock
@@ -760,8 +769,6 @@ def formA5(request):
         data = subA5_form(initial=initial_data)
         readings_form = subA5_readings_form(initial=initial_data)
         profile_form = user_profile_form()
-        
-        print( 'austin is gay')
         
         if request.method == "POST":
             form = subA5_form(request.POST, instance=database_form)

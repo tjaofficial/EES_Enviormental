@@ -63,8 +63,10 @@
         }
     </style>
     <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/utils.js' %}"></script>
 <body>
     {{ BASE_DIR }}
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div>
             <a href="{% url 'IncompleteForms' %}">Back</a>
@@ -395,8 +397,6 @@
                         </td>
                     </tr>
                 </table>
-                <br><br>
-                <input type="submit" value="Save" style="font-size: 40px">
                 <br><br><br>
                 <input type="submit" value="Submit Form" style="font-size: 40px">
             </form> 
