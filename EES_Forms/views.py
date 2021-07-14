@@ -16,10 +16,11 @@ todays_log = daily_prof[0]
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 sub_forms = Forms.objects.all()
+today = datetime.date.today()
     
     
 
-#------------------------------------------------------------------------REGISTER---------<
+#--------------------------------------------------------------------------REGISTER---------<
 # Create your views here.
 def register_view(request):
     if request.user.is_authenticated:
@@ -136,7 +137,25 @@ def IncompleteForms(request):
         "pull": pull, "pullNot":pullNot, "today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
-#------------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
+def weekly_forms(request):
+    pull = Forms.objects.filter(submitted__exact=False).order_by('form')
+    pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
+    
+    form_incomplete = []
+    for x in pull:
+        if x.form in {"D", "G-1", "H"}:
+            form_incomplete.append(x)
+            
+    form_complete = []
+    for s in pullNot:
+        if s.form in {"D", "G-1", "H"}:
+            form_complete.append(s)
+    
+    
+    return render(request, "ees_forms/sort_weekly.html", {
+        "pull": pull, "pullNot":pullNot, "today": today, 'form_incomplete': form_incomplete, 'form_complete': form_complete #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
+    })
+#------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
 def pt_admin1_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -249,19 +268,33 @@ def pt_admin1_view(request):
     
    
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 
 def profile(request):
+    profile = user_profile_model.objects.all()
+    current_user = request.user
+    
+    for x in profile:
+        if x.user == current_user:
+            user_select = x
+            print(user_select)
+    
+    
+
+    
+                
+    
+    
     
     return render (request, "ees_forms/profile.html", {
-        "back": back, 'todays_log': todays_log 
+        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today
     })
 @lock
 def admin_data_view(request):
     return render (request, "ees_forms/admin_data.html", {
-        "back": back, 'todays_log': todays_log 
+        "back": back, 'todays_log': todays_log, "today": today
     })
 #------------------------------------------------------------------------A1---------------<
 @lock

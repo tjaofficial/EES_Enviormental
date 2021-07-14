@@ -1,5 +1,8 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+
+
 
 urlpatterns = [
     #path("", views.index, name="index"),
@@ -9,6 +12,7 @@ urlpatterns = [
     path("Logout", views.logout_view, name="Logout"),
     path("daily_battery_profile", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("IncompleteForms", views.IncompleteForms, name="IncompleteForms"),
+    path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),
     path("profile", views.profile, name="profile"),
     path("admin_data", views.admin_data_view, name="admin_data"),

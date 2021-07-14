@@ -52,10 +52,14 @@ class daily_battery_profile_form(ModelForm):
 class user_profile_form(forms.ModelForm):
     class Meta:
         model = user_profile_model
-        fields = ('cert_date',)
+        fields = (
+            'cert_date',
+            'profile_picture',
+        )
         
         widgets ={
-            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'})
+            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'profile_picture' : forms.FileInput()
         }
         
         

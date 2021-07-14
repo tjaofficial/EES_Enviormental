@@ -304,6 +304,7 @@ class user_profile_model(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     
     cert_date = models.DateField(auto_now_add=False, auto_now=False, blank= True)
+    profile_picture = models.ImageField(blank = True, null = True)
     
     def __str__(self):
         return self.user.username
