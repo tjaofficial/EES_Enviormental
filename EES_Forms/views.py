@@ -1102,7 +1102,7 @@ def formD(request):
         week_fri = week_almost.week_end
         print (week_fri)
         print (today.weekday())
-        
+
         sunday = today - datetime.timedelta(days=1)
         
         if today.weekday() not in {5, 6}:
@@ -1150,8 +1150,7 @@ def formD(request):
                     'observer2' : data.observer2,
                     'observer3' : data.observer3,
                     'observer4' : data.observer4,
-                    'observer5' : data.observer5,
-
+                    'observer5' : data.observer5
             }
             empty_form = formD_form(initial=initial_data)
             done = Forms.objects.filter(form='D')[0]
@@ -1166,10 +1165,11 @@ def formD(request):
                         if items == None:
                             filled_out = False
                             break
-                    
+                    print(filled_out)
                     if filled_out:
                         done.submitted = True
                         done.save()
+                        print(done.submitted)
                     else:
                         done.submitted = False
                         done.save()
