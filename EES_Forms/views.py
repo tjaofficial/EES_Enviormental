@@ -17,6 +17,7 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 sub_forms = Forms.objects.all()
 today = datetime.date.today()
+now = datetime.datetime.now()
     
     
 
