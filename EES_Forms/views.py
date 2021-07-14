@@ -113,21 +113,21 @@ def IncompleteForms(request):
     weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
     weekend_fri = weekday_fri + datetime.timedelta(days=7)
    
-    for forms in sub_forms:
-        if todays_num in {0, 1, 2, 3 , 4}:
-            forms.due_date = weekday_fri
+ #   for forms in sub_forms:
+   #     if todays_num in {0, 1, 2, 3 , 4}:
+   #         forms.due_date = weekday_fri
         
-            A = forms.date_submitted
-            if today != A :
-                forms.submitted = False
-                forms.save()
-        else:
-            forms.due_date = weekend_fri
+   #         A = forms.date_submitted
+   #         if today != A :
+    #            forms.submitted = False
+    #            forms.save()
+    #    else:
+    #        forms.due_date = weekend_fri
             
-            A = forms.date_submitted
-            if today != A :
-                forms.submitted = False
-                forms.save()
+   #         A = forms.date_submitted
+    #        if today != A :
+    #            forms.submitted = False
+     #           forms.save()
             
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
@@ -1091,11 +1091,6 @@ def formD(request):
     print(len(week_start_dates))
     print(DBEmpty(week_start_dates))
     if not DBEmpty(week_start_dates):
-     
-
-    
-
-        
         week_almost = week_start_dates[0]
         #last submitted saturday
         week = week_almost.week_start
@@ -1153,26 +1148,35 @@ def formD(request):
                     'observer5' : data.observer5
             }
             empty_form = formD_form(initial=initial_data)
-            done = Forms.objects.filter(form='D')[0]
+            
             if request.method == "POST":
                 form = formD_form(request.POST, instance=week_almost)
                 A_valid = form.is_valid()
                 if A_valid:
                     form.save()
+                    
+                    done = Forms.objects.filter(form='A-4')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+          #      print(form.errors)
 
-                    filled_out = True
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
-                    print(filled_out)
-                    if filled_out:
-                        done.submitted = True
-                        done.save()
-                        print(done.submitted)
-                    else:
-                        done.submitted = False
-                        done.save()
+          #          filled_out = True
+                    
+           #         for items in week_almost.whatever().values():
+           #             if items == None:
+           #                 filled_out = False
+           #                 break
+           #         print(filled_out)
+           #         if filled_out:
+           #             done = Forms.objects.filter(form='D')[0]
+            #            done.submitted = True
+           #             done.save()
+            #            print(done.submitted)
+            #        else:
+            #            done.submitted = False
+            #            done.save()
+            #            print('monkey')
 
                 return redirect('IncompleteForms')
         else:
@@ -1180,7 +1184,6 @@ def formD(request):
                 'week_start' : last_friday,
                 'week_end' : end_week
             }
-            data = formD_form()
             empty_form = formD_form(initial= initial_data)
             done = Forms.objects.filter(form='D')[0]
             if request.method == "POST":
@@ -1188,23 +1191,28 @@ def formD(request):
                 A_valid = form.is_valid()
                 if A_valid:
                     form.save()
+                  
+                    done = Forms.objects.filter(form='A-4')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+                print(form.error)
                     
-                    filled_out = True
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
-                    if filled_out: 
-                        done.submitted = True
-                        done.save()
-                    else:
-                        done.submitted = False
-                        done.save()
+             #       filled_out = True
+              #      for items in week_almost.whatever().values():
+             #           if items == None:
+             #               filled_out = False
+             #               break
+             #       if filled_out: 
+            #            done.submitted = True
+             #           done.save()
+             #       else:
+             #           done.submitted = False
+             #           done.save()
 
                 return redirect('IncompleteForms')
     else:
         if today.weekday() == 5 :
-#--------------------
             if week == today:
                 print (week)
                 print (today)
@@ -1281,7 +1289,6 @@ def formD(request):
                     'week_start' : last_friday,
                     'week_end' : end_week
                 }
-                data = formD_form()
                 empty_form = formD_form(initial= initial_data)
                 done = Forms.objects.filter(form='D')[0]
                 if request.method == "POST":
@@ -1310,7 +1317,6 @@ def formD(request):
                 'week_start' : sunday,
                 'week_end' : sunday + one_week,
             }
-            data = formD_form()
             empty_form = formD_form(initial= initial_data)
             done = Forms.objects.filter(form='D')[0]
             if request.method == "POST":
@@ -1334,7 +1340,7 @@ def formD(request):
                 return redirect('IncompleteForms')
         
     return render (request, "Daily/formD.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'last_friday': last_friday, 'end_week': end_week
+        "back": back, 'todays_log': todays_log, 'empty': empty_form
     })
 #----------------------------------------------------------------------FORM E---------------<
 @lock
@@ -1395,7 +1401,7 @@ def formF1(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-1')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -1457,7 +1463,7 @@ def formF1(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-1')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -1474,7 +1480,7 @@ def formF1(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-1')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -1533,7 +1539,7 @@ def formF1(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-1')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -1550,7 +1556,7 @@ def formF1(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-1')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -1567,7 +1573,7 @@ def formF1(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-1')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -1601,7 +1607,7 @@ def formF2(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-2')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -1663,7 +1669,7 @@ def formF2(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-2')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -1680,7 +1686,7 @@ def formF2(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-2')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -1736,7 +1742,7 @@ def formF2(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-2')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -1753,7 +1759,7 @@ def formF2(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-2')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -1770,7 +1776,7 @@ def formF2(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-2')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -1804,7 +1810,7 @@ def formF3(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-3')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -1866,7 +1872,7 @@ def formF3(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-3')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -1883,7 +1889,7 @@ def formF3(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-3')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -1939,7 +1945,7 @@ def formF3(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-3')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -1956,7 +1962,7 @@ def formF3(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-3')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -1973,7 +1979,7 @@ def formF3(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-3')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -2007,7 +2013,7 @@ def formF4(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-4')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -2069,7 +2075,7 @@ def formF4(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-4')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2086,7 +2092,7 @@ def formF4(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-4')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2142,7 +2148,7 @@ def formF4(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-4')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2159,7 +2165,7 @@ def formF4(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-4')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2176,7 +2182,7 @@ def formF4(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-4')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -2209,7 +2215,7 @@ def formF5(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-5')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -2271,7 +2277,7 @@ def formF5(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-5')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2288,7 +2294,7 @@ def formF5(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-5')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2344,7 +2350,7 @@ def formF5(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-5')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2361,7 +2367,7 @@ def formF5(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-5')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2378,7 +2384,7 @@ def formF5(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-5')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -2411,7 +2417,7 @@ def formF6(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-6')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -2473,7 +2479,7 @@ def formF6(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-6')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2490,7 +2496,7 @@ def formF6(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-6')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2546,7 +2552,7 @@ def formF6(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-6')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2563,7 +2569,7 @@ def formF6(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-6')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2580,7 +2586,7 @@ def formF6(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-6')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -2613,7 +2619,7 @@ def formF7(request):
                 
                 form.save()
 
-                done = Forms.objects.filter(form='F')[0]
+                done = Forms.objects.filter(form='F-7')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -2675,7 +2681,7 @@ def formF7(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-7')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2692,7 +2698,7 @@ def formF7(request):
                         if form.is_valid():
                             form.save()
 
-                            done = Forms.objects.filter(form='F')[0]
+                            done = Forms.objects.filter(form='F-7')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
@@ -2748,7 +2754,7 @@ def formF7(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-7')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2765,7 +2771,7 @@ def formF7(request):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F')[0]
+                                done = Forms.objects.filter(form='F-7')[0]
                                 done.submitted = True
                                 done.date_submitted = todays_log.date_save
                                 done.save()
@@ -2782,7 +2788,7 @@ def formF7(request):
                 if form.is_valid():
                     form.save()
 
-                    done = Forms.objects.filter(form='F')[0]
+                    done = Forms.objects.filter(form='F-7')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
@@ -3088,60 +3094,6 @@ def formM(request):
         'now': todays_log, 'form': form,# 'read': read, 'submitted': submitted, "back": back
     })
 
-def issues_view(request):
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    todays_log = daily_prof[0]
-    
-    if issues_model.objects.count() != 0:
-        org = issues_model.objects.all().order_by('-date')
-        database_form = org[0]
-
-        if todays_log.date_save == database_form.date:
-            initial_data = {
-                'form' : database_form.form,
-                'issues' : database_form.issues,
-                'notified' : database_form.notified,
-                'time' : database_form.time,
-                'date' : database_form.date,
-                'cor_action' : database_form.cor_action
-            }
-
-            form = issues_form(initial=initial_data)
-
-            if request.method == "POST":
-                data = issues_form(request.POST, instance= database_form)
-                if data.is_valid():
-                    data.save()
-
-                    return redirect('IncompleteForms')
-        else:
-            initial_data = {
-                'date' : todays_log.date_save,
-            }
-            form = issues_form(initial=initial_data)
-
-            if request.method == "POST":
-                data = issues_form(request.POST)
-                if data.is_valid():
-                    data.save()
-
-                    return redirect('IncompleteForms')
-    else:
-        initial_data = {
-            'date' : todays_log.date_save,
-        }
-        form = issues_form(initial=initial_data)
-
-        if request.method == "POST":
-            data = issues_form(request.POST)
-            if data.is_valid():
-                data.save()
-
-                return redirect('IncompleteForms')
-            
-    return render (request, "ees_forms/issues_template.html", {
-        'form': form,#'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
-    })
 
 
 

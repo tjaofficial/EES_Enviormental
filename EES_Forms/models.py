@@ -2861,25 +2861,7 @@ class formM_model(models.Model):
     def __str__(self):
         return str(self.date)
     
-class issues_model(models.Model):
-    form = models.CharField(max_length=30)
-    issues = models.CharField(max_length=30)
-    notified = models.CharField(max_length=30)
-    time = models.TimeField(
-        auto_now_add=False, 
-        auto_now=False,
-        blank=True
-    )
-    date = models.DateField(
-        auto_now_add=False, 
-        auto_now=False, 
-        blank=True,
-    )
-    cor_action = models.CharField(max_length=30)
-    
-    def __str__(self):
-        return str(self.date)
-    
+
     
     
     

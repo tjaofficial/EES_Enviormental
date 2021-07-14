@@ -1039,18 +1039,7 @@ class formM_form(ModelForm):
             
         }
 
-class issues_form(ModelForm):
-    class Meta:
-        model = issues_model
-        fields = ('__all__')
-        widgets = {
-            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'issues' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'cor_action' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-        }
+
         
         
         

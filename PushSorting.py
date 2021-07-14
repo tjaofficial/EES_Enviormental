@@ -118,3 +118,108 @@ class subA5_form(ModelForm):
     #MostRec = SpecOven.first
     #MostRecDate = MostRec.date
         
+        
+       class issues_form(ModelForm):
+    class Meta:
+        model = issues_model
+        fields = ('__all__')
+        widgets = {
+            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'issues' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'cor_action' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+        }
+        
+        
+        class issues_model(models.Model):
+    form = models.CharField(max_length=30)
+    issues = models.CharField(max_length=30)
+    notified = models.CharField(max_length=30)
+    time = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    cor_action = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.date)
+    
+    path("issues_view", views.issues_view, name="issues_view")
+        
+        admin.site.register(issues_model)
+        
+        
+        
+        
+        
+        def issues_view(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    if issues_model.objects.count() != 0:
+        org = issues_model.objects.all().order_by('-date')
+        database_form = org[0]
+
+        if todays_log.date_save == database_form.date:
+            initial_data = {
+                'form' : database_form.form,
+                'issues' : database_form.issues,
+                'notified' : database_form.notified,
+                'time' : database_form.time,
+                'date' : database_form.date,
+                'cor_action' : database_form.cor_action
+            }
+
+            form = issues_form(initial=initial_data)
+
+            if request.method == "POST":
+                data = issues_form(request.POST, instance= database_form)
+                if data.is_valid():
+                    data.save()
+
+                    return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date' : todays_log.date_save,
+            }
+            form = issues_form(initial=initial_data)
+
+            if request.method == "POST":
+                data = issues_form(request.POST)
+                if data.is_valid():
+                    data.save()
+
+                    return redirect('IncompleteForms')
+    else:
+        initial_data = {
+            'date' : todays_log.date_save,
+        }
+        form = issues_form(initial=initial_data)
+
+        if request.method == "POST":
+            data = issues_form(request.POST)
+            if data.is_valid():
+                data.save()
+
+                return redirect('IncompleteForms')
+            
+    return render (request, "ees_forms/issues_template.html", {
+        'form': form,#'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
+    })
+
+        
+        
+        
+        
+        
+        
+        
+        

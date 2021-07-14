@@ -61,36 +61,36 @@
     <form action="" method="POST">
         {% csrf_token %}
         <table style="border-collapse: collapse; margin: auto;">
-        <tr>
-            <th id="boxTitle" colspan="5" style="text-align: center;">
-                Fugiative Dust Inspections - <br>Weekly Random Truck Inspection - Form (D)
-            </th>
-            <th></th>
-        </tr>
-        <tr>
-            <th colspan="3" style="text-align: center;">
-                Facility Name: EES Coke Battery LLC
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <th colspan="3" style="text-align: center;">
-            Week Of:    
-                            {{ empty.week_start }} - {{ empty.week_end }}
-                        
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <td style="height: 25px;" ></td>
-        </tr>
-    </table>
+            <tr>
+                <th id="boxTitle" colspan="5" style="text-align: center;">
+                    Fugiative Dust Inspections - <br>Weekly Random Truck Inspection - Form (D)
+                </th>
+                <th></th>
+            </tr>
+            <tr>
+                <th colspan="3" style="text-align: center;">
+                    Facility Name: EES Coke Battery LLC
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th colspan="3" style="text-align: center;">
+                Week Of:    
+                                {{ empty.week_start }} - {{ empty.week_end }}
+
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td style="height: 25px;" ></td>
+            </tr>
+        </table>
         <div id="alltrucks">
             <div id="formCspace">
                 <table style="border-collapse: collapse;">
@@ -550,24 +550,6 @@
             </table>
             </div>
         </div>
-       <!-- <table style="border-collapse: collapse; margin: auto;">
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr>
-                <td colspan="6" style="width: 1218px;  border: 1px solid black; font-size: 20px;">Any Issues? Describe{{ form.issues }}</td>
-            </tr>
-            <tr>
-                <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue{{ form.notified }}</td>
-                <td colspan="1" style="width: 203px; border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
-                <td colspan="1" style="width: 203px; border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
-            </tr>
-            <tr>
-                <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken{{ form.cor_action }}</td>
-            </tr>
-        </table>--->
-        <br><br>
-        <input type="submit" value="Save" style="font-size: 40px">
         <br><br><br>
         <input type="submit" value="Submit Form" style="font-size: 40px">
     </form>
