@@ -463,7 +463,8 @@ class formA2_model(models.Model):
         auto_now=False, 
         blank=True,
     )
-    inop_ovens = models.CharField(max_length=2)
+    inop_ovens = models.IntegerField(
+    )
     crew = models.CharField(
         max_length=1, 
         choices = crew_choices
@@ -540,9 +541,12 @@ class formA2_model(models.Model):
     total_traverse_time = models.CharField(max_length=30)
     allowed_traverse_time = models.CharField(max_length=30)
     valid_run = models.BooleanField(default=None)
-    leaking_doors = models.CharField(max_length=30)
-    doors_not_observed = models.CharField(max_length=30)
-    inop_doors = models.CharField(max_length=30)
+    leaking_doors = models.IntegerField(
+    )
+    doors_not_observed = models.IntegerField(
+    )
+    inop_doors = models.IntegerField(
+    )
     percent_leaking = models.CharField(max_length=30)
     notes = models.CharField(max_length=30)
     
@@ -784,29 +788,61 @@ class subA5_readings_model(models.Model):
         related_name='foobar',
     )
     o1 = models.CharField(max_length=2)
-    o1_start = models.CharField(max_length=30)
-    o1_stop = models.CharField(max_length=30)
+    o1_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    o1_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
     o1_highest_opacity = models.CharField(max_length=30)
     o1_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
     o1_average_6 = models.CharField(max_length=30)
     o1_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o2 = models.CharField(max_length=2)
-    o2_start = models.CharField(max_length=30)
-    o2_stop = models.CharField(max_length=30)
+    o2_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    o2_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
     o2_highest_opacity = models.CharField(max_length=30)
     o2_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
     o2_average_6 = models.CharField(max_length=30)
     o2_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o3 = models.CharField(max_length=2)
-    o3_start = models.CharField(max_length=30)
-    o3_stop = models.CharField(max_length=30)
+    o3_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    o3_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
     o3_highest_opacity = models.CharField(max_length=30)
     o3_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
     o3_average_6 = models.CharField(max_length=30)
     o3_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o4 = models.CharField(max_length=2)
-    o4_start = models.CharField(max_length=30)
-    o4_stop = models.CharField(max_length=30)
+    o4_start = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    o4_stop = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
     o4_highest_opacity = models.CharField(max_length=30)
     o4_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
     o4_average_6 = models.CharField(max_length=30)
@@ -2861,7 +2897,24 @@ class formM_model(models.Model):
     def __str__(self):
         return str(self.date)
     
-
+class issues_model(models.Model):
+    form = models.CharField(max_length=30)
+    issues = models.CharField(max_length=30)
+    notified = models.CharField(max_length=30)
+    time = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    cor_action = models.CharField(max_length=30)
+    
+    def __str__(self):
+        return str(self.date)
     
     
     

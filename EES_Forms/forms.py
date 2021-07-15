@@ -391,6 +391,27 @@ class subA5_readings_form(ModelForm):
         
         
         widgets = {
+            'o1_highest_opacity' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o1_average_6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o2_highest_opacity' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o2_average_6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o3_highest_opacity' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o3_average_6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o4_highest_opacity' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o4_average_6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
+            'o1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'o2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'o3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'o4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'o5' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'o1_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o1_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o2_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o2_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o3_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o3_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o4_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'o4_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'o1_1_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
             'o1_2_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
             'o1_3_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px;'}),
@@ -1038,7 +1059,18 @@ class formM_form(ModelForm):
         widgets = {
             
         }
-
+class issues_form(ModelForm):
+    class Meta:
+        model = issues_model
+        fields = ('__all__')
+        widgets = {
+            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'issues' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'cor_action' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+        }
 
         
         

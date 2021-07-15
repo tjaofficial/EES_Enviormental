@@ -352,8 +352,6 @@ def formA1(request):
         data = subA1_form(initial=initial_data)
         readings = subA1_readings_form(initial=initial_data)
         
-      #  hello =  float(database_form2.c1_sec) + float(database_form2.c2_sec) + float(database_form2.c3_sec) + float(database_form2.c4_sec) + float(database_form2.c5_sec)
-        
         if request.method == "POST":
             form = subA1_form(request.POST, instance=database_form)
             reads = subA1_readings_form(request.POST, instance=database_form2)
@@ -473,14 +471,20 @@ def formA2(request):
         if request.method == "POST":
             form = formA2_form(request.POST, instance=database_form)
             if form.is_valid():
-                form.save()
+                A = form.save()
 
-                done = Forms.objects.filter(form='A-2')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                if A.notes not in {'-', 'n/a', 'N/A'}:
+                    return redirect ('issues_view')
+                
+                if A.leaking_doors == 0:
+                    done = Forms.objects.filter(form='A-2')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
 
-                return redirect('IncompleteForms')
+                    return redirect('IncompleteForms')
+                else:
+                    return redirect ('issues_view')
     else:
         initial_data = {
             'date' : todays_log.date_save,
@@ -494,14 +498,20 @@ def formA2(request):
         if request.method == "POST":
             form = formA2_form(request.POST)
             if form.is_valid():
-                form.save()
+                A = form.save()
+                
+                if A.notes not in {'-', 'n/a', 'N/A'}:
+                    return redirect ('issues_view')
+                
+                if A.leaking_doors == 0:
+                    done = Forms.objects.filter(form='A-2')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
 
-                done = Forms.objects.filter(form='A-2')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
-
-                return redirect('IncompleteForms')
+                    return redirect('IncompleteForms')
+                else:
+                    return redirect ('issues_view')
 
     return render (request, "Daily/Method303/formA2.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -823,7 +833,7 @@ def formA5(request):
         
         if request.method == "POST":
             form = subA5_form(request.POST, instance=database_form)
-            readings = subA5_readings_form(request.POST, instance=database_form)
+            readings = subA5_readings_form(request.POST, instance=database_form2)
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
             if A_valid and B_valid:
@@ -3080,7 +3090,60 @@ def formM(request):
     return render (request, "Daily/formM.html", {
         'now': todays_log, 'form': form,# 'read': read, 'submitted': submitted, "back": back
     })
+def issues_view(request):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    if issues_model.objects.count() != 0:
+        org = issues_model.objects.all().order_by('-date')
+        database_form = org[0]
 
+        if todays_log.date_save == database_form.date:
+            initial_data = {
+                'form' : database_form.form,
+                'issues' : database_form.issues,
+                'notified' : database_form.notified,
+                'time' : database_form.time,
+                'date' : database_form.date,
+                'cor_action' : database_form.cor_action
+            }
+
+            form = issues_form(initial=initial_data)
+
+            if request.method == "POST":
+                data = issues_form(request.POST, instance= database_form)
+                if data.is_valid():
+                    data.save()
+
+                    return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date' : todays_log.date_save,
+            }
+            form = issues_form(initial=initial_data)
+
+            if request.method == "POST":
+                data = issues_form(request.POST)
+                if data.is_valid():
+                    data.save()
+
+                    return redirect('IncompleteForms')
+    else:
+        initial_data = {
+            'date' : todays_log.date_save,
+        }
+        form = issues_form(initial=initial_data)
+
+        if request.method == "POST":
+            data = issues_form(request.POST)
+            if data.is_valid():
+                data.save()
+
+                return redirect('IncompleteForms')
+            
+    return render (request, "ees_forms/issues_template.html", {
+        'form': form,#'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
+    })
 
 
 
