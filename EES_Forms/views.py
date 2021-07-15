@@ -123,7 +123,7 @@ def IncompleteForms(request):
     
     
     
-    return render(request, "ees_forms/index.html", {
+    return render(request, "ees_forms/dashboard.html", {
         "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 
