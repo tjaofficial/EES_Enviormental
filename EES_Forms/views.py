@@ -123,7 +123,6 @@ def IncompleteForms(request):
                 forms.save()
         else:
             forms.due_date = weekend_fri
-            
             A = forms.date_submitted
             if today != A :
                 forms.submitted = False
@@ -1084,19 +1083,14 @@ def formD(request):
     last_friday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
     end_week = last_friday + one_week
-    print(today)
     
     
     week_start_dates = formD_model.objects.all().order_by('-week_start')
-    print(len(week_start_dates))
-    print(DBEmpty(week_start_dates))
     if not DBEmpty(week_start_dates):
         week_almost = week_start_dates[0]
         #last submitted saturday
         week = week_almost.week_start
         week_fri = week_almost.week_end
-        print (week_fri)
-        print (today.weekday())
 
         sunday = today - datetime.timedelta(days=1)
         
@@ -1154,29 +1148,22 @@ def formD(request):
                 A_valid = form.is_valid()
                 if A_valid:
                     form.save()
-                    
-                    done = Forms.objects.filter(form='A-4')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-          #      print(form.errors)
 
-          #          filled_out = True
+                    filled_out = True
                     
-           #         for items in week_almost.whatever().values():
-           #             if items == None:
-           #                 filled_out = False
-           #                 break
-           #         print(filled_out)
-           #         if filled_out:
-           #             done = Forms.objects.filter(form='D')[0]
-            #            done.submitted = True
-           #             done.save()
-            #            print(done.submitted)
-            #        else:
-            #            done.submitted = False
-            #            done.save()
-            #            print('monkey')
+                    for items in week_almost.whatever().values():
+                        if items == None:
+                            filled_out = False
+                            break
+
+                    if filled_out:
+                        done = Forms.objects.filter(form='D')[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+                    else:
+                        done.submitted = False
+                        done.save()
 
                 return redirect('IncompleteForms')
         else:
@@ -1191,24 +1178,24 @@ def formD(request):
                 A_valid = form.is_valid()
                 if A_valid:
                     form.save()
-                  
-                    done = Forms.objects.filter(form='A-4')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-                print(form.error)
                     
-             #       filled_out = True
-              #      for items in week_almost.whatever().values():
-             #           if items == None:
-             #               filled_out = False
-             #               break
-             #       if filled_out: 
-            #            done.submitted = True
-             #           done.save()
-             #       else:
-             #           done.submitted = False
-             #           done.save()
+                    filled_out = True
+                    
+                    for items in week_almost.whatever().values():
+                        if items == None:
+                            filled_out = False
+                            break
+
+                    if filled_out:
+                        done = Forms.objects.filter(form='D')[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+                    else:
+                        done.submitted = False
+                        done.save()
+                   
+                
 
                 return redirect('IncompleteForms')
     else:
