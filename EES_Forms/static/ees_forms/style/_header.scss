@@ -42,3 +42,21 @@
 
     }
 }
+
+.profileDropdown{
+    position: fixed;
+    right: 10px;
+    top:2.5rem;
+    height:20rem;
+    width:15rem;
+    background-color: red;
+    border-radius: 1rem;
+
+    &_shown{
+        display: block;
+    }
+    &_hidden{
+        display: none;
+    }
+}
+

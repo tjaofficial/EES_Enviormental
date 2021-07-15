@@ -9,7 +9,7 @@ function inputEventListener(array, tempSaveKey, currentDate){
     for(let elem in array) {  
         item = array[elem];
         if(item.id){
-            console.log("test")
+            //console.log("test")
             document.getElementById(item.id).addEventListener("input", () => {saveToLocal(array, tempSaveKey, currentDate)});
         }
     }
