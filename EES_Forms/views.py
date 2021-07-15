@@ -464,7 +464,7 @@ def formA2(request):
             'valid_run' : database_form.valid_run,
             'leaking_doors' : database_form.leaking_doors,
             'doors_not_observed' : database_form.doors_not_observed,
-            'inop_doors' : database_form.inop_doors,
+            'inop_doors_eq' : database_form.inop_doors_eq,
             'percent_leaking' : database_form.percent_leaking,
         }
         data = formA2_form(initial=initial_data)
@@ -563,7 +563,10 @@ def formA3(request):
         if request.method == "POST":
             form = formA3_form(request.POST, instance= database_form)
             if form.is_valid():
-                form.save()
+                A = form.save()
+                
+                if A.notes not in {'-', 'n/a', 'N/A'}:
+                    return redirect ('issues_view')
 
                 done = Forms.objects.filter(form='A-3')[0]
                 done.submitted = True
@@ -585,8 +588,11 @@ def formA3(request):
         if request.method == "POST":
             form = formA3_form(request.POST)
             if form.is_valid():
-                form.save()
+                A = form.save()
 
+                if A.notes not in {'-', 'n/a', 'N/A'}:
+                    return redirect ('issues_view')
+                
                 done = Forms.objects.filter(form='A-3')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -639,7 +645,12 @@ def formA4(request):
         if request.method == "POST":
             form = formA4_form(request.POST, instance=database_form)
             if form.is_valid():
-                form.save()
+                A = form.save()
+                
+                if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
+                    return redirect ('issues_view')
+                if A.oven_leak_1:
+                    return redirect ('issues_view')
 
                 done = Forms.objects.filter(form='A-4')[0]
                 done.submitted = True
@@ -662,16 +673,19 @@ def formA4(request):
         if request.method == "POST":
             form = formA4_form(request.POST)
             if form.is_valid():
-                form.save()
-                print('dick')
+                A = form.save()
+
+                if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
+                    return redirect ('issues_view')
+                if A.oven_leak_1:
+                    return redirect ('issues_view')
+                
                 done = Forms.objects.filter(form='A-4')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
 
                 return redirect('IncompleteForms')
-            else:
-                print(form.errors)
     
     return render (request, "Daily/Method303/formA4.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -843,6 +857,24 @@ def formA5(request):
                 B.form = A
                 B.save()
                 
+                if B.o1_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o1_average_6 >= 35 :
+                    return redirect ('issues_view')
+                if B.o2_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o2_average_6 >= 35 :
+                    return redirect ('issues_view')
+                if B.o3_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o3_average_6 >= 35 :
+                    return redirect ('issues_view')
+                if B.o4_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o4_average_6 >= 35 :
+                    return redirect ('issues_view')
+                
+                
                 done = Forms.objects.filter(form='A-5')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -892,6 +924,24 @@ def formA5(request):
 
                 B.form = A
                 B.save()
+                
+                if B.o1_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o1_average_6 >= 35 :
+                    return redirect ('issues_view')
+                if B.o2_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o2_average_6 >= 35 :
+                    return redirect ('issues_view')
+                if B.o3_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o3_average_6 >= 35 :
+                    return redirect ('issues_view')
+                if B.o4_highest_opacity >= 10:
+                    return redirect ('issues_view')
+                if B.o4_average_6 >= 35 :
+                    return redirect ('issues_view')
+                
                 done = Forms.objects.filter(form='A-5')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save

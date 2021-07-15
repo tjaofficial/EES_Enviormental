@@ -545,7 +545,7 @@ class formA2_model(models.Model):
     )
     doors_not_observed = models.IntegerField(
     )
-    inop_doors = models.IntegerField(
+    inop_doors_eq = models.IntegerField(
     )
     percent_leaking = models.CharField(max_length=30)
     notes = models.CharField(max_length=30)
@@ -561,8 +561,7 @@ class formA3_model(models.Model):
         auto_now=False, 
         blank=True,
     )
-    inop_ovens = models.CharField(
-        max_length=2
+    inop_ovens = models.IntegerField(
     )
     crew = models.CharField(
         max_length=1, 
@@ -736,15 +735,23 @@ class formA4_model(models.Model):
         return str(self.date)
     
 class subA5_model(models.Model):
-    date = models.CharField(max_length=30)   
-    estab = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    estab = models.CharField(max_length=5)
     county = models.CharField(max_length=30)
     estab_no = models.CharField(max_length=30)
     equip_loc = models.CharField(max_length=30)
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
     observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
+    cert_date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
     process_equip1 = models.CharField(max_length=50)
     process_equip2 = models.CharField(max_length=50)
     op_mode1 = models.CharField(max_length=30)
@@ -763,7 +770,7 @@ class subA5_model(models.Model):
     height_above_ground = models.CharField(max_length=30)
     height_rel_observer = models.CharField(max_length=30)
     distance_from = models.CharField(max_length=30)
-    direction_from = models.CharField(max_length=30)
+    direction_from = models.CharField(max_length=3)
     describe_emissions_start = models.CharField(max_length=30)
     describe_emissions_stop = models.CharField(max_length=30)
     emission_color_start = models.CharField(max_length=30)
@@ -798,9 +805,11 @@ class subA5_readings_model(models.Model):
         auto_now=False,
         blank=True
     )
-    o1_highest_opacity = models.CharField(max_length=30)
+    o1_highest_opacity = models.IntegerField(
+    )
     o1_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o1_average_6 = models.CharField(max_length=30)
+    o1_average_6 = models.IntegerField(
+    )
     o1_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o2 = models.CharField(max_length=2)
     o2_start = models.TimeField(
@@ -813,9 +822,11 @@ class subA5_readings_model(models.Model):
         auto_now=False,
         blank=True
     )
-    o2_highest_opacity = models.CharField(max_length=30)
+    o2_highest_opacity = models.IntegerField(
+    )
     o2_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o2_average_6 = models.CharField(max_length=30)
+    o2_average_6 = models.IntegerField(
+    )
     o2_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o3 = models.CharField(max_length=2)
     o3_start = models.TimeField(
@@ -828,9 +839,11 @@ class subA5_readings_model(models.Model):
         auto_now=False,
         blank=True
     )
-    o3_highest_opacity = models.CharField(max_length=30)
+    o3_highest_opacity = models.IntegerField(
+    )
     o3_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o3_average_6 = models.CharField(max_length=30)
+    o3_average_6 = models.IntegerField(
+    )
     o3_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o4 = models.CharField(max_length=2)
     o4_start = models.TimeField(
@@ -843,9 +856,11 @@ class subA5_readings_model(models.Model):
         auto_now=False,
         blank=True
     )
-    o4_highest_opacity = models.CharField(max_length=30)
+    o4_highest_opacity = models.IntegerField(
+    )
     o4_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o4_average_6 = models.CharField(max_length=30)
+    o4_average_6 = models.IntegerField(
+    )
     o4_average_6_over_35 = models.CharField(max_length=30, choices= average_over_35_choices)
     o1_1_reads = models.CharField(max_length=3)
     o1_2_reads = models.CharField(max_length=3)
