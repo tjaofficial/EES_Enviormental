@@ -168,11 +168,11 @@ def pt_admin1_view(request):
         A = []
         for items in reads:
             date = items.form.date
-            date_array = date.split("-")
+          #  date_array = date.split("-")
             
-            year = int(date_array[0])
-            month = int(date_array[1])
-            day = int(date_array[2])
+            year = date.year
+            month = date.month
+            day = date.day
             
             form_date = datetime.datetime(year, month, day)
             added_date = form_date + datetime.timedelta(days=91)
@@ -271,6 +271,131 @@ def pt_admin1_view(request):
         "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
+
+
+def pt_mth_input(request):
+    submitted_ordered = subA5_readings_model.objects.all()
+    
+    def pt_sort(submitted_ordered):
+        A = []
+        for x in submitted_ordered:
+            date = x.form.date
+            i = 1
+            h = i+1
+            j = i+2
+            k = i+4
+            A.append((
+                date,
+                x.o1,
+                x.o1_start, 
+                x.o1_1_reads,
+                x.o1_2_reads,
+                x.o1_3_reads,
+                x.o1_4_reads,
+                x.o1_5_reads,
+                x.o1_6_reads,
+                x.o1_7_reads,
+                x.o1_8_reads,
+                x.o1_9_reads,
+                x.o1_10_reads,
+                x.o1_11_reads,
+                x.o1_12_reads,
+                x.o1_13_reads,
+                x.o1_14_reads,
+                x.o1_15_reads,
+                x.o1_16_reads,
+                'lightblue',
+                i
+            ))
+            A.append((
+                date, 
+                x.o2,
+                x.o2_start, 
+                x.o2_1_reads,
+                x.o2_2_reads,
+                x.o2_3_reads,
+                x.o2_4_reads,
+                x.o2_5_reads,
+                x.o2_6_reads,
+                x.o2_7_reads,
+                x.o2_8_reads,
+                x.o2_9_reads,
+                x.o2_10_reads,
+                x.o2_11_reads,
+                x.o2_12_reads,
+                x.o2_13_reads,
+                x.o2_14_reads,
+                x.o2_15_reads,
+                x.o2_16_reads,
+                'skyblue',
+                h
+            ))
+            A.append((
+                date, 
+                x.o3,
+                x.o3_start, 
+                x.o3_1_reads,
+                x.o3_2_reads,
+                x.o3_3_reads,
+                x.o3_4_reads,
+                x.o3_5_reads,
+                x.o3_6_reads,
+                x.o3_7_reads,
+                x.o3_8_reads,
+                x.o3_9_reads,
+                x.o3_10_reads,
+                x.o3_11_reads,
+                x.o3_12_reads,
+                x.o3_13_reads,
+                x.o3_14_reads,
+                x.o3_15_reads,
+                x.o3_16_reads,
+                'lightblue',
+                j
+            ))
+            A.append((
+                date, 
+                x.o4,
+                x.o4_start, 
+                x.o4_1_reads,
+                x.o4_2_reads,
+                x.o4_3_reads,
+                x.o4_4_reads,
+                x.o4_5_reads,
+                x.o4_6_reads,
+                x.o4_7_reads,
+                x.o4_8_reads,
+                x.o4_9_reads,
+                x.o4_10_reads,
+                x.o4_11_reads,
+                x.o4_12_reads,
+                x.o4_13_reads,
+                x.o4_14_reads,
+                x.o4_15_reads,
+                x.o4_16_reads,
+                'skyblue',
+                k
+            ))
+            i+=4
+        return A
+    
+    new_A5_list = pt_sort(submitted_ordered)
+     
+    
+    func = lambda x: (x[0])
+    sort = sorted(new_A5_list, key = func, reverse=True)
+    
+    return render(request, "ees_forms/pt_mth_input.html", {
+        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort' : sort
+    })
+
+def method303_rolling_avg(request):
+    submitted_ordered = subA5_readings_model.objects.all()
+
+
+    return render(request, "ees_forms/method303_rolling_avg.html", {
+        "now": now, 'todays_log': todays_log, "back": back, "today": today
+    })
 
 def profile(request):
     profile = user_profile_model.objects.all()
@@ -964,16 +1089,12 @@ def formB(request):
     last_monday = today - datetime.timedelta(days=today.weekday())
     one_week = datetime.timedelta(days=4)
     end_week = last_monday + one_week
-    print(last_monday)
-    
     
     week_start_dates = formB_model.objects.all().order_by('-week_start')
     week_almost = week_start_dates[0]
     #last submitted monday
     week = week_almost.week_start
     week_fri = week_almost.week_end
-    print (week)
-    print (today.weekday())
     
     sunday = today - datetime.timedelta(days=1)
     
@@ -1004,6 +1125,95 @@ def formB(request):
                 'comments_0' : database_form.comments_0,
                 'wharf_0' : database_form.wharf_0,
                 'breeze_0' : database_form.breeze_0,
+                
+                'observer_1' : database_form.observer_1,
+                'time_1' : database_form.time_1,
+                'weather_1' : database_form.weather_1,
+                'wind_speed_1' : database_form.wind_speed_1,
+                'fugitive_dust_observed_1' : database_form.fugitive_dust_observed_1,
+                'supressant_applied_1' : database_form.supressant_applied_1,
+                'supressant_active_1' : database_form.supressant_active_1,
+                'working_face_exceed_1' : database_form.working_face_exceed_1,
+                'spills_1' : database_form.spills_1,
+                'pushed_back_1' : database_form.pushed_back_1,
+                'coal_vessel_1' : database_form.coal_vessel_1,
+                'water_sprays_1' : database_form.water_sprays_1,
+                'loader_lowered_1' : database_form.loader_lowered_1,
+                'working_water_sprays_1' : database_form.working_water_sprays_1,
+                'barrier_thickness_1' : database_form.barrier_thickness_1,
+                'surface_quality_1' : database_form.surface_quality_1,
+                'surpressant_crust_1' : database_form.surpressant_crust_1,
+                'additional_surpressant_1' : database_form.additional_surpressant_1,
+                'comments_1' : database_form.comments_1,
+                'wharf_1' : database_form.wharf_1,
+                'breeze_1' : database_form.breeze_1,
+                
+                'observer_2' : database_form.observer_2,
+                'time_2' : database_form.time_2,
+                'weather_2' : database_form.weather_2,
+                'wind_speed_2' : database_form.wind_speed_2,
+                'fugitive_dust_observed_2' : database_form.fugitive_dust_observed_2,
+                'supressant_applied_2' : database_form.supressant_applied_2,
+                'supressant_active_2' : database_form.supressant_active_2,
+                'working_face_exceed_2' : database_form.working_face_exceed_2,
+                'spills_2' : database_form.spills_2,
+                'pushed_back_2' : database_form.pushed_back_2,
+                'coal_vessel_2' : database_form.coal_vessel_2,
+                'water_sprays_2' : database_form.water_sprays_2,
+                'loader_lowered_2' : database_form.loader_lowered_2,
+                'working_water_sprays_2' : database_form.working_water_sprays_2,
+                'barrier_thickness_2' : database_form.barrier_thickness_2,
+                'surface_quality_2' : database_form.surface_quality_2,
+                'surpressant_crust_2' : database_form.surpressant_crust_2,
+                'additional_surpressant_2' : database_form.additional_surpressant_2,
+                'comments_2' : database_form.comments_2,
+                'wharf_2' : database_form.wharf_2,
+                'breeze_2' : database_form.breeze_2,
+                
+                'observer_3' : database_form.observer_3,
+                'time_3' : database_form.time_3,
+                'weather_3' : database_form.weather_3,
+                'wind_speed_3' : database_form.wind_speed_3,
+                'fugitive_dust_observed_3' : database_form.fugitive_dust_observed_3,
+                'supressant_applied_3' : database_form.supressant_applied_3,
+                'supressant_active_3' : database_form.supressant_active_3,
+                'working_face_exceed_3' : database_form.working_face_exceed_3,
+                'spills_3' : database_form.spills_3,
+                'pushed_back_3' : database_form.pushed_back_3,
+                'coal_vessel_3' : database_form.coal_vessel_3,
+                'water_sprays_3' : database_form.water_sprays_3,
+                'loader_lowered_3' : database_form.loader_lowered_3,
+                'working_water_sprays_3' : database_form.working_water_sprays_3,
+                'barrier_thickness_3' : database_form.barrier_thickness_3,
+                'surface_quality_3' : database_form.surface_quality_3,
+                'surpressant_crust_3' : database_form.surpressant_crust_3,
+                'additional_surpressant_3' : database_form.additional_surpressant_3,
+                'comments_3' : database_form.comments_3,
+                'wharf_3' : database_form.wharf_3,
+                'breeze_3' : database_form.breeze_3,
+                
+                'observer_4' : database_form.observer_4,
+                'time_4' : database_form.time_4,
+                'weather_4' : database_form.weather_4,
+                'wind_speed_4' : database_form.wind_speed_4,
+                'fugitive_dust_observed_4' : database_form.fugitive_dust_observed_4,
+                'supressant_applied_4' : database_form.supressant_applied_4,
+                'supressant_active_4' : database_form.supressant_active_4,
+                'working_face_exceed_4' : database_form.working_face_exceed_4,
+                'spills_4' : database_form.spills_4,
+                'pushed_back_4' : database_form.pushed_back_4,
+                'coal_vessel_4' : database_form.coal_vessel_4,
+                'water_sprays_4' : database_form.water_sprays_4,
+                'loader_lowered_4' : database_form.loader_lowered_4,
+                'working_water_sprays_4' : database_form.working_water_sprays_4,
+                'barrier_thickness_4' : database_form.barrier_thickness_4,
+                'surface_quality_4' : database_form.surface_quality_4,
+                'surpressant_crust_4' : database_form.surpressant_crust_4,
+                'additional_surpressant_4' : database_form.additional_surpressant_4,
+                'comments_4' : database_form.comments_4,
+                'wharf_4' : database_form.wharf_4,
+                'breeze_4' : database_form.breeze_4,
+                
             }
             data = formB_form(initial=initial_data)
             done = Forms.objects.filter(form='B')[0]
@@ -1020,7 +1230,9 @@ def formB(request):
                             break
 
                     if filled_out:
+                        done = Forms.objects.filter(form='B')[0]
                         done.submitted = True
+                        done.date_submitted = todays_log.date_save
                         done.save()
                     else:
                         done.submitted = False
@@ -1046,7 +1258,9 @@ def formB(request):
                             filled_out = False
                             break
                     if filled_out: 
+                        done = Forms.objects.filter(form='B')[0]
                         done.submitted = True
+                        done.date_submitted = todays_log.date_save
                         done.save()
                     else:
                         done.submitted = False
@@ -1079,6 +1293,95 @@ def formB(request):
             'comments_0' : database_form.comments_0,
             'wharf_0' : database_form.wharf_0,
             'breeze_0' : database_form.breeze_0,
+
+            'observer_1' : database_form.observer_1,
+            'time_1' : database_form.time_1,
+            'weather_1' : database_form.weather_1,
+            'wind_speed_1' : database_form.wind_speed_1,
+            'fugitive_dust_observed_1' : database_form.fugitive_dust_observed_1,
+            'supressant_applied_1' : database_form.supressant_applied_1,
+            'supressant_active_1' : database_form.supressant_active_1,
+            'working_face_exceed_1' : database_form.working_face_exceed_1,
+            'spills_1' : database_form.spills_1,
+            'pushed_back_1' : database_form.pushed_back_1,
+            'coal_vessel_1' : database_form.coal_vessel_1,
+            'water_sprays_1' : database_form.water_sprays_1,
+            'loader_lowered_1' : database_form.loader_lowered_1,
+            'working_water_sprays_1' : database_form.working_water_sprays_1,
+            'barrier_thickness_1' : database_form.barrier_thickness_1,
+            'surface_quality_1' : database_form.surface_quality_1,
+            'surpressant_crust_1' : database_form.surpressant_crust_1,
+            'additional_surpressant_1' : database_form.additional_surpressant_1,
+            'comments_1' : database_form.comments_1,
+            'wharf_1' : database_form.wharf_1,
+            'breeze_1' : database_form.breeze_1,
+
+            'observer_2' : database_form.observer_2,
+            'time_2' : database_form.time_2,
+            'weather_2' : database_form.weather_2,
+            'wind_speed_2' : database_form.wind_speed_2,
+            'fugitive_dust_observed_2' : database_form.fugitive_dust_observed_2,
+            'supressant_applied_2' : database_form.supressant_applied_2,
+            'supressant_active_2' : database_form.supressant_active_2,
+            'working_face_exceed_2' : database_form.working_face_exceed_2,
+            'spills_2' : database_form.spills_2,
+            'pushed_back_2' : database_form.pushed_back_2,
+            'coal_vessel_2' : database_form.coal_vessel_2,
+            'water_sprays_2' : database_form.water_sprays_2,
+            'loader_lowered_2' : database_form.loader_lowered_2,
+            'working_water_sprays_2' : database_form.working_water_sprays_2,
+            'barrier_thickness_2' : database_form.barrier_thickness_2,
+            'surface_quality_2' : database_form.surface_quality_2,
+            'surpressant_crust_2' : database_form.surpressant_crust_2,
+            'additional_surpressant_2' : database_form.additional_surpressant_2,
+            'comments_2' : database_form.comments_2,
+            'wharf_2' : database_form.wharf_2,
+            'breeze_2' : database_form.breeze_2,
+
+            'observer_3' : database_form.observer_3,
+            'time_3' : database_form.time_3,
+            'weather_3' : database_form.weather_3,
+            'wind_speed_3' : database_form.wind_speed_3,
+            'fugitive_dust_observed_3' : database_form.fugitive_dust_observed_3,
+            'supressant_applied_3' : database_form.supressant_applied_3,
+            'supressant_active_3' : database_form.supressant_active_3,
+            'working_face_exceed_3' : database_form.working_face_exceed_3,
+            'spills_3' : database_form.spills_3,
+            'pushed_back_3' : database_form.pushed_back_3,
+            'coal_vessel_3' : database_form.coal_vessel_3,
+            'water_sprays_3' : database_form.water_sprays_3,
+            'loader_lowered_3' : database_form.loader_lowered_3,
+            'working_water_sprays_3' : database_form.working_water_sprays_3,
+            'barrier_thickness_3' : database_form.barrier_thickness_3,
+            'surface_quality_3' : database_form.surface_quality_3,
+            'surpressant_crust_3' : database_form.surpressant_crust_3,
+            'additional_surpressant_3' : database_form.additional_surpressant_3,
+            'comments_3' : database_form.comments_3,
+            'wharf_3' : database_form.wharf_3,
+            'breeze_3' : database_form.breeze_3,
+
+            'observer_4' : database_form.observer_4,
+            'time_4' : database_form.time_4,
+            'weather_4' : database_form.weather_4,
+            'wind_speed_4' : database_form.wind_speed_4,
+            'fugitive_dust_observed_4' : database_form.fugitive_dust_observed_4,
+            'supressant_applied_4' : database_form.supressant_applied_4,
+            'supressant_active_4' : database_form.supressant_active_4,
+            'working_face_exceed_4' : database_form.working_face_exceed_4,
+            'spills_4' : database_form.spills_4,
+            'pushed_back_4' : database_form.pushed_back_4,
+            'coal_vessel_4' : database_form.coal_vessel_4,
+            'water_sprays_4' : database_form.water_sprays_4,
+            'loader_lowered_4' : database_form.loader_lowered_4,
+            'working_water_sprays_4' : database_form.working_water_sprays_4,
+            'barrier_thickness_4' : database_form.barrier_thickness_4,
+            'surface_quality_4' : database_form.surface_quality_4,
+            'surpressant_crust_4' : database_form.surpressant_crust_4,
+            'additional_surpressant_4' : database_form.additional_surpressant_4,
+            'comments_4' : database_form.comments_4,
+            'wharf_4' : database_form.wharf_4,
+            'breeze_4' : database_form.breeze_4,
+                
         }
         data = formB_form(initial=initial_data)
         done = Forms.objects.filter(form='B')[0]
@@ -1095,7 +1398,9 @@ def formB(request):
                         break
 
                 if filled_out:
+                    done = Forms.objects.filter(form='B')[0]
                     done.submitted = True
+                    done.date_submitted = todays_log.date_save
                     done.save()
                 else:
                     done.submitted = False
@@ -1324,7 +1629,9 @@ def formD(request):
                                 break
                                 
                         if filled_out:
+                            done = Forms.objects.filter(form='D')[0]
                             done.submitted = True
+                            done.date_submitted = todays_log.date_save
                             done.save()
                         else:
                             done.submitted = False
@@ -1350,7 +1657,9 @@ def formD(request):
                                 filled_out = False
                                 break
                         if filled_out: 
+                            done = Forms.objects.filter(form='D')[0]
                             done.submitted = True
+                            done.date_submitted = todays_log.date_save
                             done.save()
                         else:
                             done.submitted = False
@@ -1378,7 +1687,9 @@ def formD(request):
                             filled_out = False
                             break
                     if filled_out: 
+                        done = Forms.objects.filter(form='D')[0]
                         done.submitted = True
+                        done.date_submitted = todays_log.date_save
                         done.save()
                     else:
                         done.submitted = False

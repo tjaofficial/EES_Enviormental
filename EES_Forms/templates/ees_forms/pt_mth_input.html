@@ -1,0 +1,133 @@
+{% load static %}
+<html>
+    <link href="{% static 'ees_forms/data_style.css' %}" rel="stylesheet">
+    <body>
+        <table style="border-collapse: collapse;">
+            <tr>
+                <th colspan="2" id="column_name" style="text-align: left;">
+                    <a href="{% url 'admin_data' %}">Back</a>
+                </th>
+                <th colspan="8" id="column_name" style="font-size: 25px;">
+                    Visible Emission Pushing
+                </th>
+                <th colspan="8" id="column_name" style="font-size: 25px;">
+                    Visible Emission Travel
+                </th>
+            </tr>
+            <tr>
+                <th id="first_column_name" style="width: 250px;">
+                    Date and Time
+                </th>
+                <th id="column_name1">
+                    Pushing <br>Oven No.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 0 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 15 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 30 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 45 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 0 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 15 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 30 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 45 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 0 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 15 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 30 secs.
+                </th>
+                <th id="column_name">
+                    0 mins.<br> 45 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 0 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 15 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 30 secs.
+                </th>
+                <th id="column_name">
+                    1 mins.<br> 45 secs.
+                </th>
+            </tr>
+            {% for entry in sort %}
+            <tr class="{% if forloop.counter|divisibleby:'4' %}row_standard2{% else %}row_standard{% endif %}" style="background-color: {{ entry.19 }};">
+                <td id="default_box" style="border-left: 3px black solid;">
+                    {{ entry.0.month }}/{{ entry.0.day }}/{{ entry.0.year }} - {{ entry.2 }}
+                </td>
+                <td id="default_box" style="border-right: 3px black solid;">
+                    {{ entry.1 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.3 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.4 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.5 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.6 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.7 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.8 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.9 }}
+                </td>
+                <td id="default_box" style="border-right: 3px black solid;">
+                    {{ entry.10 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.11 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.12 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.13 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.14 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.15 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.16 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.17 }}
+                </td>
+                <td id="default_box" style="border-right: 3px black solid;">
+                    {{ entry.18 }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

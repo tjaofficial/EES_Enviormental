@@ -1,0 +1,24 @@
+#first_column_name{
+    border: 3px black solid;
+}
+#column_name1{
+    border: 3px black solid;
+    width: 80px;
+}
+#column_name{
+    border: 3px black solid;
+    width: 80px;
+}
+#default_box{
+    border: 1px black solid;
+    text-align: center;
+    font-size: 18px;
+}
+.row_standard{
+    height: 40px;
+    border-bottom: 1px black solid;
+}
+.row_standard2{
+    height: 40px;
+    border-bottom: 3px black solid;
+}

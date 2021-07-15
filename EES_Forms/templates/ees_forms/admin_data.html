@@ -2,8 +2,9 @@
 
 {% block list%}
       <div id="uncompleted">   
-        <li><a href="{% url 'pt_admin1' %}">Push Travels Data</a></li><br>
-        <li></li>
+        <li><a href="{% url 'pt_admin1' %}">Push Travels - 90 day Evaluation</a></li><br>
+        <li><a href="{% url 'pt_mth_input' %}">Push Travel - Monthly Input</a></li><br>
+        <li><a href="{% url 'rolling_avg' %}">Method 303 - Rolling Average</a></li>
     </div>
 
 {% endblock %}

@@ -784,7 +784,7 @@ class subA5_model(models.Model):
     describe_background_stop = models.CharField(max_length=30)
     
     def __str__(self):
-        return self.date
+        return str(self.date)
     
 #----------------------------------------------------------------------FORM A5 - DATA---------------<
 class subA5_readings_model(models.Model):
@@ -964,92 +964,741 @@ class formB_model(models.Model):
         null=True
     )
     observer_0 = models.CharField(
-        max_length=30
+        max_length=30, 
+        blank=True,
+        null=True
     )
     time_0 = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True
+        blank=True,
+        null = True
     )
     weather_0 = models.CharField(
         max_length=30,
-        choices = weather_choices
+        choices = weather_choices, 
+        blank=True,
+        null=True
     )
     wind_speed_0 = models.CharField(
-        max_length=3
+        max_length=3, 
+        blank=True,
+        null=True
     )
     fugitive_dust_observed_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     supressant_applied_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     supressant_active_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     working_face_exceed_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     spills_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     pushed_back_0 = models.CharField(
         max_length=30,
-        choices = yes_no_na_choices
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
     )
     coal_vessel_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     water_sprays_0 = models.CharField(
         max_length=30,
-        choices = yes_no_na_choices
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
     )
     loader_lowered_0 = models.CharField(
         max_length=30,
-        choices = yes_no_na_choices
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
     )
     working_water_sprays_0 = models.CharField(
         max_length=30,
-        choices = yes_no_na_choices
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
     )
     barrier_thickness_0 = models.CharField(
         max_length=30,
-        choices = barrier_choices
+        choices = barrier_choices, 
+        blank=True,
+        null=True
     )
     surface_quality_0 = models.CharField(
         max_length=30,
-        choices = good_bad_choices
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
     )
     surpressant_crust_0 = models.CharField(
         max_length=30,
-        choices = yes_no_choices
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
     )
     additional_surpressant_0 = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
         blank=True,
+        null=True
     )
     comments_0 = models.CharField(
         max_length=30,
         blank = True,
+        null=True
     )
     wharf_0 = models.CharField(
         max_length=30,
-        choices = good_bad_choices
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
     )
     breeze_0 = models.CharField(
         max_length=30,
-        choices = good_bad_choices
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    
+    
+    observer_1 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
+    time_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    weather_1 = models.CharField(
+        max_length=30,
+        choices = weather_choices, 
+        blank=True,
+        null=True
+    )
+    wind_speed_1 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    fugitive_dust_observed_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_applied_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_active_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    working_face_exceed_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    spills_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    pushed_back_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    coal_vessel_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    water_sprays_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    loader_lowered_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    working_water_sprays_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    barrier_thickness_1 = models.CharField(
+        max_length=30,
+        choices = barrier_choices, 
+        blank=True,
+        null=True
+    )
+    surface_quality_1 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    surpressant_crust_1 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    additional_surpressant_1 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    comments_1 = models.CharField(
+        max_length=30,
+        blank = True,
+        null=True
+    )
+    wharf_1 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    breeze_1 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    
+    observer_2 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
+    time_2 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    weather_2 = models.CharField(
+        max_length=30,
+        choices = weather_choices, 
+        blank=True,
+        null=True
+    )
+    wind_speed_2 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    fugitive_dust_observed_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_applied_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_active_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    working_face_exceed_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    spills_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    pushed_back_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    coal_vessel_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    water_sprays_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    loader_lowered_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    working_water_sprays_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    barrier_thickness_2 = models.CharField(
+        max_length=30,
+        choices = barrier_choices, 
+        blank=True,
+        null=True
+    )
+    surface_quality_2 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    surpressant_crust_2 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    additional_surpressant_2 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    comments_2 = models.CharField(
+        max_length=30,
+        blank = True,
+        null=True
+    )
+    wharf_2 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    breeze_2 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    
+    observer_3 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
+    time_3 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    weather_3 = models.CharField(
+        max_length=30,
+        choices = weather_choices, 
+        blank=True,
+        null=True
+    )
+    wind_speed_3 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    fugitive_dust_observed_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_applied_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_active_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    working_face_exceed_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    spills_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    pushed_back_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    coal_vessel_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    water_sprays_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    loader_lowered_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    working_water_sprays_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    barrier_thickness_3 = models.CharField(
+        max_length=30,
+        choices = barrier_choices, 
+        blank=True,
+        null=True
+    )
+    surface_quality_3 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    surpressant_crust_3 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    additional_surpressant_3 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    comments_3 = models.CharField(
+        max_length=30,
+        blank = True,
+        null=True
+    )
+    wharf_3 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    breeze_3 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    
+    observer_4 = models.CharField(
+        max_length=30, 
+        blank=True,
+        null=True
+    )
+    time_4 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    weather_4 = models.CharField(
+        max_length=30,
+        choices = weather_choices, 
+        blank=True,
+        null=True
+    )
+    wind_speed_4 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    fugitive_dust_observed_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_applied_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    supressant_active_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    working_face_exceed_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    spills_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    pushed_back_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    coal_vessel_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    water_sprays_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    loader_lowered_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    working_water_sprays_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_na_choices, 
+        blank=True,
+        null=True
+    )
+    barrier_thickness_4 = models.CharField(
+        max_length=30,
+        choices = barrier_choices, 
+        blank=True,
+        null=True
+    )
+    surface_quality_4 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    surpressant_crust_4 = models.CharField(
+        max_length=30,
+        choices = yes_no_choices, 
+        blank=True,
+        null=True
+    )
+    additional_surpressant_4 = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+        null=True
+    )
+    comments_4 = models.CharField(
+        max_length=30,
+        blank = True,
+        null=True
+    )
+    wharf_4 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
+    )
+    breeze_4 = models.CharField(
+        max_length=30,
+        choices = good_bad_choices, 
+        blank=True,
+        null=True
     )
     
     def __str__(self):
         return str(self.week_start)
+    
+    def whatever(self):
+        return{
+            'observer_0' : self.observer_0,
+            'time_0' : self.time_0,
+            'weather_0' : self.weather_0,
+            'wind_speed_0' : self.wind_speed_0,
+            'fugitive_dust_observed_0' : self.fugitive_dust_observed_0,
+            'supressant_applied_0' : self.supressant_applied_0,
+            'supressant_active_0' : self.supressant_active_0,
+            'working_face_exceed_0' : self.working_face_exceed_0,
+            'spills_0' : self.spills_0,
+            'pushed_back_0' : self.pushed_back_0,
+            'coal_vessel_0' : self.coal_vessel_0,
+            'water_sprays_0' : self.water_sprays_0,
+            'loader_lowered_0' : self.loader_lowered_0,
+            'working_water_sprays_0' : self.working_water_sprays_0,
+            'barrier_thickness_0' : self.barrier_thickness_0,
+            'surface_quality_0' : self.surface_quality_0,
+            'surpressant_crust_0' : self.surpressant_crust_0,
+            'additional_surpressant_0' : self.additional_surpressant_0,
+            'comments_0' : self.comments_0,
+            'wharf_0' : self.wharf_0,
+            'breeze_0' : self.breeze_0,
+            
+            'observer_1' : self.observer_1,
+            'time_1' : self.time_1,
+            'weather_1' : self.weather_1,
+            'wind_speed_1' : self.wind_speed_1,
+            'fugitive_dust_observed_1' : self.fugitive_dust_observed_1,
+            'supressant_applied_1' : self.supressant_applied_1,
+            'supressant_active_1' : self.supressant_active_1,
+            'working_face_exceed_1' : self.working_face_exceed_1,
+            'spills_1' : self.spills_1,
+            'pushed_back_1' : self.pushed_back_1,
+            'coal_vessel_1' : self.coal_vessel_1,
+            'water_sprays_1' : self.water_sprays_1,
+            'loader_lowered_1' : self.loader_lowered_1,
+            'working_water_sprays_1' : self.working_water_sprays_1,
+            'barrier_thickness_1' : self.barrier_thickness_1,
+            'surface_quality_1' : self.surface_quality_1,
+            'surpressant_crust_1' : self.surpressant_crust_1,
+            'additional_surpressant_1' : self.additional_surpressant_1,
+            'comments_1' : self.comments_1,
+            'wharf_1' : self.wharf_1,
+            'breeze_1' : self.breeze_1,
+            
+            'observer_2' : self.observer_2,
+            'time_2' : self.time_2,
+            'weather_2' : self.weather_2,
+            'wind_speed_2' : self.wind_speed_2,
+            'fugitive_dust_observed_2' : self.fugitive_dust_observed_2,
+            'supressant_applied_2' : self.supressant_applied_2,
+            'supressant_active_2' : self.supressant_active_2,
+            'working_face_exceed_2' : self.working_face_exceed_2,
+            'spills_2' : self.spills_2,
+            'pushed_back_2' : self.pushed_back_2,
+            'coal_vessel_2' : self.coal_vessel_2,
+            'water_sprays_2' : self.water_sprays_2,
+            'loader_lowered_2' : self.loader_lowered_2,
+            'working_water_sprays_2' : self.working_water_sprays_2,
+            'barrier_thickness_2' : self.barrier_thickness_2,
+            'surface_quality_2' : self.surface_quality_2,
+            'surpressant_crust_2' : self.surpressant_crust_2,
+            'additional_surpressant_2' : self.additional_surpressant_2,
+            'comments_2' : self.comments_2,
+            'wharf_2' : self.wharf_2,
+            'breeze_2' : self.breeze_2,
+            
+            'observer_3' : self.observer_3,
+            'time_3' : self.time_3,
+            'weather_3' : self.weather_3,
+            'wind_speed_3' : self.wind_speed_3,
+            'fugitive_dust_observed_3' : self.fugitive_dust_observed_3,
+            'supressant_applied_3' : self.supressant_applied_3,
+            'supressant_active_3' : self.supressant_active_3,
+            'working_face_exceed_3' : self.working_face_exceed_3,
+            'spills_3' : self.spills_3,
+            'pushed_back_3' : self.pushed_back_3,
+            'coal_vessel_3' : self.coal_vessel_3,
+            'water_sprays_3' : self.water_sprays_3,
+            'loader_lowered_3' : self.loader_lowered_3,
+            'working_water_sprays_3' : self.working_water_sprays_3,
+            'barrier_thickness_3' : self.barrier_thickness_3,
+            'surface_quality_3' : self.surface_quality_3,
+            'surpressant_crust_3' : self.surpressant_crust_3,
+            'additional_surpressant_3' : self.additional_surpressant_3,
+            'comments_3' : self.comments_3,
+            'wharf_3' : self.wharf_3,
+            'breeze_3' : self.breeze_3,
+            
+            'observer_4' : self.observer_4,
+            'time_4' : self.time_4,
+            'weather_4' : self.weather_4,
+            'wind_speed_4' : self.wind_speed_4,
+            'fugitive_dust_observed_4' : self.fugitive_dust_observed_4,
+            'supressant_applied_4' : self.supressant_applied_4,
+            'supressant_active_4' : self.supressant_active_4,
+            'working_face_exceed_4' : self.working_face_exceed_4,
+            'spills_4' : self.spills_4,
+            'pushed_back_4' : self.pushed_back_4,
+            'coal_vessel_4' : self.coal_vessel_4,
+            'water_sprays_4' : self.water_sprays_4,
+            'loader_lowered_4' : self.loader_lowered_4,
+            'working_water_sprays_4' : self.working_water_sprays_4,
+            'barrier_thickness_4' : self.barrier_thickness_4,
+            'surface_quality_4' : self.surface_quality_4,
+            'surpressant_crust_4' : self.surpressant_crust_4,
+            'additional_surpressant_4' : self.additional_surpressant_4,
+            'comments_4' : self.comments_4,
+            'wharf_4' : self.wharf_4,
+            'breeze_4' : self.breeze_4,
+        }
     
 class formD_model(models.Model):
     today = datetime.date.today()
