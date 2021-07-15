@@ -53,6 +53,11 @@
   display: none;
 }
 
+.headerSpace {
+  height: 3rem;
+  width: 100%;
+}
+
 .sidebar {
   position: fixed;
   width: 20rem;
