@@ -40,5 +40,6 @@ urlpatterns = [
     path("Daily/formL", views.formL, name="formL"),
     path("Daily/formM", views.formM, name="formM"),
     
-    path("issues_view/<str:form_name>", views.issues_view, name="issues_view"),
+    path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
+    path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
 ]
