@@ -14,10 +14,10 @@
                 <div class="card_Form">
                     <h3 class="card_Form_letter">{{ item.form }}</h3>
                     <div class="card_Form_title">
-                        <h3>Method 303</h3>
+                        <h3>{{ item.title }}</h3>
                         <h4>Daily</h4>
                     </div>
-                    <h4 class="card_Form_date">2021-6-12</h4>
+                    <h4 class="card_Form_date">{{item.due_date}}</h4>
                     <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
                 </div>
             </a>
@@ -39,14 +39,14 @@
         </select></div>
 
             {% for item in pullNot %}
-            <a href="{{ item.link }}">test
+            <a href="{{ item.link }}">
                 <div class="card_Form">
                     <h3 class="card_Form_letter">{{ item.form }}</h3>
                     <div class="card_Form_title">
-                        <h3>Method 303</h3>
+                        <h3>{{ item.title }}</h3>
                         <h4>Daily</h4>
                     </div>
-                    <h4 class="card_Form_date">2021-6-12</h4>
+                    <h4 class="card_Form_date">{{item.date_submitted}}</h4>
                     <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
                 </div>
             </a>

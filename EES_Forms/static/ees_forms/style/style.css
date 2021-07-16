@@ -39,12 +39,14 @@
 
 .profileDropdown {
   position: fixed;
-  right: 10px;
+  right: 0px;
   top: 2.5rem;
-  height: 20rem;
   width: 15rem;
-  background-color: red;
+  background-color: #E4F2E7;
   border-radius: 1rem;
+}
+.profileDropdown a:hover {
+  text-decoration: underline;
 }
 .profileDropdown_shown {
   display: block;
@@ -118,7 +120,7 @@
 .card_header {
   padding: 0 1rem;
   display: grid;
-  grid-template-columns: 1fr 6rem;
+  grid-template-columns: 1fr 8rem;
   align-items: center;
   height: 4rem;
 }
@@ -196,6 +198,7 @@ body {
 
 a {
   text-decoration: none;
+  color: #001011;
 }
 
 /*# sourceMappingURL=style.css.map */

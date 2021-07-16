@@ -45,12 +45,17 @@
 
 .profileDropdown{
     position: fixed;
-    right: 10px;
+    right: 0px;
     top:2.5rem;
-    height:20rem;
     width:15rem;
-    background-color: red;
+    background-color: #E4F2E7;
     border-radius: 1rem;
+    
+    a{
+        &:hover{
+            text-decoration: underline;
+        }
+    }
 
     &_shown{
         display: block;
