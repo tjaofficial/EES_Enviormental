@@ -221,19 +221,20 @@ class Forms(models.Model):
     
 class subC(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.PROTECT)
-    date = models.DateField(auto_now_add=False, auto_now=False)
+    date = models.DateField(auto_now_add=True, auto_now=False)
     truck_sel = models.CharField(max_length=30, choices=truck_choices)
     area_sel = models.CharField(max_length=30, choices=area_choices)
     truck_start_time = models.TimeField(max_length=30)
     truck_stop_time = models.TimeField(max_length=30)
     area_start_time = models.TimeField(max_length=30)
     area_stop_time = models.TimeField(max_length=30)
-    observer = models.CharField(
-        max_length=30,
-        choices = all_user_choices_0,
-    )
-    cert_date = models.DateField(auto_now_add=False, auto_now=False)
+    observer = models.CharField(max_length=30)
+    cert_date = models.CharField(max_length=30)
     comments = models.CharField(max_length=30)
+    issues = models.CharField(max_length=30)
+    cor_action = models.CharField(max_length=30)
+    notified = models.CharField(max_length=30)
+    time_date = models.CharField(max_length=30)
     
     def __str__(self):
         return str(self.date)
@@ -3592,7 +3593,7 @@ class formM_model(models.Model):
     
 class issues_model(models.Model):
     form = models.CharField(max_length=30)
-    issues = models.CharField(max_length=200)
+    issues = models.CharField(max_length=30)
     notified = models.CharField(max_length=30)
     time = models.TimeField(
         auto_now_add=False, 
@@ -3604,7 +3605,7 @@ class issues_model(models.Model):
         auto_now=False, 
         blank=True,
     )
-    cor_action = models.CharField(max_length=200)
+    cor_action = models.CharField(max_length=30)
     
     def __str__(self):
         return str(self.date)
