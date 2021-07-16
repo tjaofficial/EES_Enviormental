@@ -3,45 +3,61 @@
 {% block list%}
 <section class="forms">
     <div class="card">
-        <h2 class="card_header">Form Progress</h2>
-        <select name="cars" id="cars">
+        <div class="card_header" ><h2 class="card_title">Form Progress</h2>
+        <select name="cardOrder" id="cardDropdown">
             <option value="volvo">Due Date</option>
             <option value="saab">Form Name</option>
             <option value="mercedes">Form Duration</option>
-        </select>
-    
-        {% for item in pull %}
-        <a href="{{ item.link }}">
-            <div class="card_Form">
-                {{ item.form }}
-            </div>
-        </a>
-        {% endfor %}
+        </select></div>
+            {% for item in pull %}
+            <a href="{{ item.link }}">
+                <div class="card_Form">
+                    <h3 class="card_Form_letter">{{ item.form }}</h3>
+                    <div class="card_Form_title">
+                        <h3>Method 303</h3>
+                        <h4>Daily</h4>
+                    </div>
+                    <h4 class="card_Form_date">2021-6-12</h4>
+                    <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+                </div>
+            </a>
+            {% empty %}
+            <h2 class="card_empty"> No Forms </h2>
+            {% endfor %}
+
+        
     
     </div>
-
-
 
 
     <div class="card">
-        <h2 class="card_header">Complete Forms</h2>
-        <select name="cars" id="cars">
+        <div class="card_header" ><h2 class="card_title">Form Progress</h2>
+        <select name="cardOrder" id="cardDropdown">
             <option value="volvo">Date Completed</option>
             <option value="saab">Form Name</option>
             <option value="mercedes">Form Duration</option>
-        </select>
+        </select></div>
 
+            {% for item in pullNot %}
+            <a href="{{ item.link }}">test
+                <div class="card_Form">
+                    <h3 class="card_Form_letter">{{ item.form }}</h3>
+                    <div class="card_Form_title">
+                        <h3>Method 303</h3>
+                        <h4>Daily</h4>
+                    </div>
+                    <h4 class="card_Form_date">2021-6-12</h4>
+                    <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+                </div>
+            </a>
+            {% empty %}
+            <h2 class="card_empty"> No Forms </h2>
+            {% endfor %}
 
-        {% for item in pullNot %}
-        
-        <a href="{{ item.link }}">
-            <div class="card_Form">
-                {{ item.form }}
-            </div>
-        </a>
-               
-        {% endfor %}    
+    
     </div>
+
+
 
 </section>
 

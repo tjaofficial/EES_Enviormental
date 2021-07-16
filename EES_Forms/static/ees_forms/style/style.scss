@@ -2,6 +2,7 @@
 $primaryDark: #001011;
 $primaryLight: #F5F4F5;
 $primaryColor:#98C9A3;
+$primaryColorLight:hsl(133, 31%, 86%);
 $secondaryColor:#70798C;
 $accentColor:#4D7EA8;
 
@@ -15,6 +16,7 @@ $baseFont: Arial, Helvetica, sans-serif;
 @import "header";
 @import "layout";
 @import "sidebar";
+@import "dashboard";
 
 *{
     margin: 0px;
@@ -25,4 +27,9 @@ $baseFont: Arial, Helvetica, sans-serif;
 
 body{
     background-color: $primaryLight;
+}
+
+a{
+    text-decoration: none;
+
 }
