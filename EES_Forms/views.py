@@ -490,14 +490,17 @@ def formA1(request):
                 B.save()
 
                 if B.comments not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('../../issues_view/A-1')
+                    check = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                    return redirect (check)
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
-                        return redirect ('../../issues_view/A-1')
+                        check = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                        return redirect (check)
                     else:
                         if B.total_seconds >= 55:
-                            return redirect ('issues_view/A-1')
+                            check = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                            return redirect (check)
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -527,14 +530,17 @@ def formA1(request):
                 B.save()
                 
                 if B.comments not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('../../issues_view/A-1')
+                    check = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+                    return redirect (check)
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
-                        return redirect ('../../issues_view/A-1')
+                        check = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+                        return redirect (check)
                     else:
                         if B.total_seconds >= 55:
-                            return redirect ('../../issues_view/A-1')
+                            check = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+                        return redirect (check)
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -591,6 +597,7 @@ def formA2(request):
             'inop_doors_eq' : database_form.inop_doors_eq,
             'percent_leaking' : database_form.percent_leaking,
         }
+        print(database_form.date)
         data = formA2_form(initial=initial_data)
         if request.method == "POST":
             form = formA2_form(request.POST, instance=database_form)
@@ -598,7 +605,8 @@ def formA2(request):
                 A = form.save()
 
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('../../issues_view/A-2')
+                    check = '../../issues_view/A-2/' + str(database_form.date) + '/form'
+                    return redirect (check)
                 
                 if A.leaking_doors == 0:
                     done = Forms.objects.filter(form='A-2')[0]
@@ -608,7 +616,8 @@ def formA2(request):
 
                     return redirect('IncompleteForms')
                 else:
-                    return redirect ('../../issues_view/A-2')
+                    check = '../../issues_view/A-2/' + str(database_form.date) + '/form'
+                    return redirect (check)
     else:
         initial_data = {
             'date' : todays_log.date_save,
@@ -625,7 +634,8 @@ def formA2(request):
                 A = form.save()
                 
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('../../issues_view/A-2')
+                    check = '../../issues_view/A-2/' + str(todays_log.date_save) + '/form'
+                    return redirect (check)
                 
                 if A.leaking_doors == 0:
                     done = Forms.objects.filter(form='A-2')[0]
@@ -635,7 +645,8 @@ def formA2(request):
 
                     return redirect('IncompleteForms')
                 else:
-                    return redirect ('../../issues_view/A-2')
+                    check = '../../issues_view/A-2/' + str(todays_log.date_save) + '/form'
+                    return redirect (check)
 
     return render (request, "Daily/Method303/formA2.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -3478,6 +3489,7 @@ def issues_view(request, form_name, form_date, access_page):
                     form = issues_form()
                     
     else:
+        picker = "n/a"
         if issues_model.objects.count() != 0:
             org = issues_model.objects.all().order_by('-date')
             database_form = org[0]
@@ -3569,7 +3581,7 @@ def corrective_action_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
-    ca_forms = issues_model.objects.all()
+    ca_forms = issues_model.objects.all().order_by('-id')
     
     return render (request, "ees_forms/corrective_actions.html", {
         'ca_forms': ca_forms, #'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
