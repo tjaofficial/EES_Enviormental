@@ -65,12 +65,11 @@
             display: inline-flex;
         }
     </style>
-    
+    <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
     
     <a href="{% url 'IncompleteForms' %}">Back</a>
-    
-    
-    
+
+   
 
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <form action="" method="POST">
@@ -189,6 +188,7 @@
                             HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                          </td>
                          <td id="boxa4" colspan="3" rowspan="7">
+                             <img src="{% static 'ees_forms/images/A-5scetchBlank.png' %}"/>
                          </td>
                     </tr>
                       <tr>
