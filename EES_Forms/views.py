@@ -966,6 +966,7 @@ def formA5(request):
             'o4_15_reads' : database_form2.o4_15_reads,
             'o4_16_reads' : database_form2.o4_16_reads,
         }
+        print('tuna')
         data = subA5_form(initial=initial_data)
         readings_form = subA5_readings_form(initial=initial_data)
         profile_form = user_profile_form()
@@ -975,6 +976,9 @@ def formA5(request):
             readings = subA5_readings_form(request.POST, instance=database_form2)
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
+            
+            print(form.errors)
+            print(readings.errors)
             if A_valid and B_valid:
                 A = form.save()
                 B = readings.save(commit=False)
@@ -1006,7 +1010,6 @@ def formA5(request):
                 done.save()
 
                 return redirect('IncompleteForms')
-    
     else:
         initial_data = {
             'date' : todays_log.date_save,
@@ -1043,6 +1046,9 @@ def formA5(request):
             readings = subA5_readings_form(request.POST)
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
+            
+            print(form.errors)
+            print(readings.errors)
             if A_valid and B_valid:
                 A = form.save()
                 B = readings.save(commit=False)

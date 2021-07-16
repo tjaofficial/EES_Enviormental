@@ -740,9 +740,9 @@ class subA5_model(models.Model):
         auto_now=False, 
         blank=True,
     )
-    estab = models.CharField(max_length=5)
+    estab = models.CharField(max_length=30)
     county = models.CharField(max_length=30)
-    estab_no = models.CharField(max_length=30)
+    estab_no = models.CharField(max_length=5)
     equip_loc = models.CharField(max_length=30)
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
@@ -808,7 +808,7 @@ class subA5_readings_model(models.Model):
     o1_highest_opacity = models.IntegerField(
     )
     o1_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o1_average_6 = models.IntegerField(
+    o1_average_6 = models.FloatField(
     )
     o1_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o2 = models.CharField(max_length=2)
@@ -825,7 +825,7 @@ class subA5_readings_model(models.Model):
     o2_highest_opacity = models.IntegerField(
     )
     o2_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o2_average_6 = models.IntegerField(
+    o2_average_6 = models.FloatField(
     )
     o2_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o3 = models.CharField(max_length=2)
@@ -842,7 +842,7 @@ class subA5_readings_model(models.Model):
     o3_highest_opacity = models.IntegerField(
     )
     o3_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o3_average_6 = models.IntegerField(
+    o3_average_6 = models.FloatField(
     )
     o3_average_6_over_35 =models.CharField(max_length=30, choices= average_over_35_choices)
     o4 = models.CharField(max_length=2)
@@ -859,7 +859,7 @@ class subA5_readings_model(models.Model):
     o4_highest_opacity = models.IntegerField(
     )
     o4_instant_over_20 = models.CharField(max_length=30, choices= instant_over_20_choices)
-    o4_average_6 = models.IntegerField(
+    o4_average_6 = models.FloatField(
     )
     o4_average_6_over_35 = models.CharField(max_length=30, choices= average_over_35_choices)
     o1_1_reads = models.CharField(max_length=3)
