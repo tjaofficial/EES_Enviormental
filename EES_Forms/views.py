@@ -152,14 +152,8 @@ def weekly_forms(request):
             form_complete.append(s)
     
     
-<<<<<<< HEAD
-    return render(request, "ees_forms/sort_weekly.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'form_incomplete': form_incomplete, 'form_complete': form_complete #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
-=======
-    
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "now": now, 'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
->>>>>>> ui_update
+        "pull": pull, "pullNot":pullNot, "today": today, 'form_incomplete': form_incomplete, 'form_complete': form_complete #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
     })
 #------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
 def pt_admin1_view(request):
