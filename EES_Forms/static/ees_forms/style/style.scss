@@ -1,0 +1,35 @@
+//Color Palletee
+$primaryDark: #001011;
+$primaryLight: #F5F4F5;
+$primaryColor:#98C9A3;
+$primaryColorLight:hsl(133, 31%, 86%);
+$secondaryColor:#70798C;
+$accentColor:#4D7EA8;
+
+//Fonts
+$fontLight: $primaryLight;
+$fontDark: $primaryDark;
+$baseFont: Arial, Helvetica, sans-serif;
+
+
+
+@import "header";
+@import "layout";
+@import "sidebar";
+@import "dashboard";
+
+*{
+    margin: 0px;
+    padding:0px;
+    box-sizing: border-box;
+
+}
+
+body{
+    background-color: $primaryLight;
+}
+
+a{
+    text-decoration: none;
+
+}

@@ -1,0 +1,201 @@
+.header {
+  z-index: 10;
+  height: 3rem;
+  width: 100%;
+  position: fixed;
+  background-color: #98C9A3;
+  display: grid;
+  grid-template-columns: 3rem 1fr 10rem;
+}
+.header_hamburger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header_hamburger svg {
+  height: 2rem;
+  color: #001011;
+}
+.header_Name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bolder;
+}
+.header_profile {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.5rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-right: 10px;
+}
+.header_profile svg {
+  height: 1.5rem;
+  color: #001011;
+  margin: 5px;
+}
+
+.profileDropdown {
+  position: fixed;
+  right: 10px;
+  top: 2.5rem;
+  height: 20rem;
+  width: 15rem;
+  background-color: red;
+  border-radius: 1rem;
+}
+.profileDropdown_shown {
+  display: block;
+}
+.profileDropdown_hidden {
+  display: none;
+}
+
+.headerSpace {
+  height: 3rem;
+  width: 100%;
+}
+
+.sidebar {
+  position: fixed;
+  width: 20rem;
+  height: 100%;
+  background-color: #E4F2E7;
+  display: grid;
+  grid-template-rows: 3rem 1fr;
+  transition: left 0.5s;
+}
+.sidebar_item {
+  font-weight: bolder;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0px 10px 0px 10px;
+  font-size: 1rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.sidebar_svg {
+  height: 2em;
+  width: 2em;
+  background-color: #d0e6d5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5em;
+}
+.sidebar_svg svg {
+  height: 50%;
+}
+.sidebar_shown {
+  left: 0;
+}
+.sidebar_hidden {
+  left: -20rem;
+}
+
+.forms {
+  max-width: 1536px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 700px;
+  background-color: white;
+  box-shadow: #00000014 1px 5px 10px 0px;
+  margin: 2rem;
+  padding: 0 1rem;
+  border-radius: 1rem;
+}
+.card_header {
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr 6rem;
+  align-items: center;
+  height: 4rem;
+}
+.card_header select {
+  height: 1.5rem;
+}
+.card_title {
+  font-size: 1rem;
+}
+.card_empty {
+  color: rgba(0, 0, 0, 0.404);
+}
+.card_Form {
+  padding: 0 1rem;
+  height: 4rem;
+  color: #001011;
+  display: grid;
+  grid-template-columns: 2rem 1fr 6rem 6rem;
+  align-items: center;
+  border-bottom: 1px solid #70798C24;
+}
+.card_Form_letter {
+  display: flex;
+  height: 2em;
+  width: 2em;
+  color: #67886F;
+  border-radius: 50%;
+  background-color: #d0e6d570;
+  align-items: center;
+  justify-content: center;
+}
+.card_Form_title {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.card_Form_title h3 {
+  font-weight: unset;
+}
+.card_Form_title h3:hover {
+  text-decoration: underline;
+}
+.card_Form_title h4 {
+  font-size: 0.75rem;
+  font-weight: unset;
+}
+.card_Form_date {
+  font-size: 0.75rem;
+  font-weight: unset;
+  text-align: right;
+  padding-right: 1rem;
+}
+.card_Form_progress {
+  width: 4rem;
+  height: 0.25rem;
+  border-radius: 0.125rem;
+  background-color: #ff8282;
+  overflow: hidden;
+}
+.card_Form_bar {
+  height: 100%;
+  width: 50%;
+  background-color: #98C9A3;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #F5F4F5;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=style.css.map */

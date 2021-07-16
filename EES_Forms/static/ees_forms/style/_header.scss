@@ -1,0 +1,62 @@
+.header{
+    z-index:10;
+    height:3rem;
+    width:100%;
+    position: fixed;
+    background-color: $primaryColor;
+    display:grid;
+    grid-template-columns: 3rem 1fr 10rem;
+    
+
+    &_hamburger{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg{
+            height:2rem;
+            color:$primaryDark;
+        }
+
+    }
+
+    &_Name{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: $baseFont;
+        font-weight: bolder;
+    }
+
+    &_profile{
+        font-family: $baseFont;
+        font-size: 0.5rem;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        margin-right:10px;
+        svg{
+            height:1.5rem;
+            color:$primaryDark;
+            margin:5px;
+        }
+
+    }
+}
+
+.profileDropdown{
+    position: fixed;
+    right: 10px;
+    top:2.5rem;
+    height:20rem;
+    width:15rem;
+    background-color: red;
+    border-radius: 1rem;
+
+    &_shown{
+        display: block;
+    }
+    &_hidden{
+        display: none;
+    }
+}
+
