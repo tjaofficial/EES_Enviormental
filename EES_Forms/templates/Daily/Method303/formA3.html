@@ -1,5 +1,8 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
 {% load static %}
-<html>
+
     <style>
         #paperSize{
             width: 1400px;
@@ -61,9 +64,9 @@
             width: 1100px;
         }
     </style>
-    <script defer src="{% static 'ees_forms/script/utils.js' %}"></script>
+    
 
-<body>
+
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div>
@@ -557,38 +560,4 @@
             </form> 
         </div>    
     </div>
-</body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-</html>
+{% endblock %}

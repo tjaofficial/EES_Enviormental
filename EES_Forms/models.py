@@ -189,11 +189,27 @@ waste_code_choices = (
     ('non-hazardous ', 'NON-HAZ'),
     ('hazardous', 'HAZ'),
 )
+frequent_choices = (
+    ('Daily', 'Daily'),
+    ('Weekly', 'Weekly'),
+    ('Monthly', 'Monthly'),
+    ('Quaterly', 'Quaterly '),
+    ('Semi-Annual', 'Semi-Annual'),
+    ('Annual', 'Annual')
+)
+all_users = User.objects.all()
+all_user_choices_0 = ((x.username, x.get_full_name()) for x in all_users)
+all_user_choices_1 = ((h.username, h.get_full_name()) for h in all_users)
+all_user_choices_2 = ((a.username, a.get_full_name()) for a in all_users)
+all_user_choices_3 = ((b.username, b.get_full_name()) for b in all_users)
+all_user_choices_4 = ((c.username, c.get_full_name()) for c in all_users)
+
 # Create your models here.
 
 
 class Forms(models.Model):
     form = models.CharField(max_length=30)
+    frequency = models.CharField(max_length=30, choices = frequent_choices)
     link = models.CharField(max_length=30)
     title = models.CharField(max_length=80)
     due_date = models.DateField(auto_now_add=False, auto_now=False, blank = True)
@@ -951,6 +967,9 @@ class pt_admin1_model(models.Model):
 
     
 class formB_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.username, x.get_full_name()) for x in all_users)
+    
     week_start = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -964,9 +983,10 @@ class formB_model(models.Model):
         null=True
     )
     observer_0 = models.CharField(
-        max_length=30, 
+        max_length=100, 
         blank=True,
-        null=True
+        choices=all_user_choices_0,
+        null = True
     )
     time_0 = models.TimeField(
         auto_now_add=False, 
@@ -1089,9 +1109,10 @@ class formB_model(models.Model):
     
     
     observer_1 = models.CharField(
-        max_length=30, 
+        max_length=100, 
         blank=True,
-        null=True
+        choices=all_user_choices_1,
+        null = True
     )
     time_1 = models.TimeField(
         auto_now_add=False, 
@@ -1212,10 +1233,13 @@ class formB_model(models.Model):
         null=True
     )
     
+    
+    
     observer_2 = models.CharField(
-        max_length=30, 
+        max_length=100, 
         blank=True,
-        null=True
+        choices=all_user_choices_2,
+        null = True
     )
     time_2 = models.TimeField(
         auto_now_add=False, 
@@ -1336,10 +1360,13 @@ class formB_model(models.Model):
         null=True
     )
     
+    
+    
     observer_3 = models.CharField(
-        max_length=30, 
+        max_length=100, 
         blank=True,
-        null=True
+        choices=all_user_choices_3,
+        null = True
     )
     time_3 = models.TimeField(
         auto_now_add=False, 
@@ -1460,10 +1487,13 @@ class formB_model(models.Model):
         null=True
     )
     
+    
+    
     observer_4 = models.CharField(
-        max_length=30, 
+        max_length=100, 
         blank=True,
-        null=True
+        choices=all_user_choices_4,
+        null = True
     )
     time_4 = models.TimeField(
         auto_now_add=False, 

@@ -1,5 +1,8 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
 {% load static %}
-<html>
+
     <link href="{% static 'ees_forms/formA1_style.css' %}" rel="stylesheet">
     
     <div style="padding-top: 100px;">
@@ -26,4 +29,4 @@
             <input type="submit" value="Submit Form" style="font-size: 40px">
         </form>
     </div>
-</html>
+{% endblock %}

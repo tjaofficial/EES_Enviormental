@@ -1,4 +1,6 @@
-<html>
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
     <style>
         #paperSize{
             width: 1400px;
@@ -45,7 +47,7 @@
         }
     </style>
 
-<body>
+
     <div id="paperSize">
         <div>
             <a href="{% url 'IncompleteForms' %}">Back</a>
@@ -299,38 +301,4 @@
             </form> 
         </div>    
     </div>
-</body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-</html>
+{% endblock %}

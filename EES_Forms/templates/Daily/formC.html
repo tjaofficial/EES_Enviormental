@@ -1,4 +1,6 @@
-<html>
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
 
     <style>
         #boxc1{
@@ -268,33 +270,8 @@
                 <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken{{ form.cor_action }}</td>
             </tr>
         </table>
-        <br><br>
-        <input type="submit" value="Save" style="font-size: 40px">
         <br><br><br>
         <input type="submit" value="Submit Form" style="font-size: 40px">
     </form>  
     {% endif %}
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-</html>
+{% endblock %}
