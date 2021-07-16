@@ -36,10 +36,9 @@ function clearStorage(currentDate, tempSaveKey){
     const formattedcurrentDate = new Date(currentDate);
     const formTempData = localStorage.getItem(tempSaveKey);
     if(formTempData){
-        const expDate = new Date(JSON.parse(formTempData).Experation);
-        console.log(formattedcurrentDate);
-        console.log(expDate);
-        if (formattedcurrentDate.getMonth() != expDate.getMonth() && formattedcurrentDate.getDate() != expDate.getDate() && formattedcurrentDate.getFullYear() != expDate.getFullYear() ){
+        const parsedExperation = JSON.parse(formTempData).Experation
+        const expDate = new Date(parsedExperation);
+        if (formattedcurrentDate.getMonth() != expDate.getMonth() || formattedcurrentDate.getDate() != expDate.getDate() || formattedcurrentDate.getFullYear() != expDate.getFullYear() ){
             localStorage.removeItem(tempSaveKey);
         }  
     } 
@@ -63,3 +62,19 @@ clearStorage(currentDate, tempSaveKey);
 inputEventListener(arrayOfInputs, tempSaveKey, currentDate);
 fillForm(tempSaveKey);
 
+//for testing set exporation
+// function setExperation(tempSaveKey){
+//     const datevalue = document.getElementsByClassName('dateChanger')[0].value;
+//     const dateArray = datevalue.split('-');
+//     console.log(dateArray[0]+" "+dateArray[1]+" "+dateArray[2])
+//     const date = new Date(parseInt(dateArray[0]), parseInt(dateArray[1])-1, parseInt(dateArray[2]));
+//     const formTempData = localStorage.getItem(tempSaveKey);
+//     if(formTempData){
+//         const object = JSON.parse(formTempData);
+//         console.log(date);
+//         object.Experation = date;
+//         localStorage.setItem(tempSaveKey, JSON.stringify(object));
+//     }
+// }
+
+// document.getElementsByClassName('dateChanger')[0].addEventListener('change', ()=>{ setExperation(tempSaveKey)});
