@@ -3,11 +3,14 @@
 {% block list%}
 <section class="forms">
     <div class="card">
-        <div class="card_header" ><h2 class="card_title">Form Progress</h2>
+        <div class="card_header" ><h2 class="card_title">Incomplete Forms</h2>
         <select name="cardOrder" id="cardDropdown">
-            <option value="volvo">Due Date</option>
-            <option value="saab">Form Name</option>
-            <option value="mercedes">Form Duration</option>
+            <option value="volvo">All Forms</option>
+            <option value="saab">Daily Forms</option>
+            <option value="saab">Weekly Forms</option>
+            <option value="saab">Monthly Forms</option>
+            <option value="saab">Semi-Annual Forms</option>
+            <option value="saab">Annual Forms</option>
         </select></div>
             {% for item in pull %}
             <a href="{{ item.link }}">
@@ -15,7 +18,7 @@
                     <h3 class="card_Form_letter">{{ item.form }}</h3>
                     <div class="card_Form_title">
                         <h3>{{ item.title }}</h3>
-                        <h4>Daily</h4>
+                        <h4>{{ item.frequency }}</h4>
                     </div>
                     <h4 class="card_Form_date">{{item.due_date}}</h4>
                     <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
@@ -31,7 +34,7 @@
 
 
     <div class="card">
-        <div class="card_header" ><h2 class="card_title">Form Progress</h2>
+        <div class="card_header" ><h2 class="card_title">Complete Forms</h2>
         <select name="cardOrder" id="cardDropdown">
             <option value="volvo">Date Completed</option>
             <option value="saab">Form Name</option>
@@ -44,7 +47,7 @@
                     <h3 class="card_Form_letter">{{ item.form }}</h3>
                     <div class="card_Form_title">
                         <h3>{{ item.title }}</h3>
-                        <h4>Daily</h4>
+                        <h4>{{ item.frequeny }}</h4>
                     </div>
                     <h4 class="card_Form_date">{{item.date_submitted}}</h4>
                     <div class="card_Form_progress"><div class="card_Form_bar"></div></div>

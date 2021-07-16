@@ -1,5 +1,8 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
 {% load static %}
-<html>
+
     <style>
         #boxTitle{
             font-size: 30px;
@@ -62,13 +65,13 @@
             display: inline-flex;
         }
     </style>
-    <script defer src="{% static 'ees_forms/script/utils.js' %}"></script>
+    
     
     <a href="{% url 'IncompleteForms' %}">Back</a>
     
     
     
-<body>
+
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <form action="" method="POST">
         {% csrf_token %}
@@ -695,58 +698,4 @@
             </div>    
         </div>
     </form>   
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    </body>    
-</html>
+{% endblock %}

@@ -70,10 +70,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
-                
-                
                 login(request, user)
-                #return redirect('daily_battery_profile')
                 
                 if now.month == todays_log.date_save.month:
                     if now.day == todays_log.date_save.day:
@@ -82,6 +79,8 @@ def login_view(request):
                         return redirect('daily_battery_profile')
                 else:
                         return redirect('daily_battery_profile')
+                    
+                    
     return render(request, "ees_forms/ees_login.html", {
          "now": now
     })
@@ -491,14 +490,14 @@ def formA1(request):
                 B.save()
 
                 if B.comments not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-1')
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
-                        return redirect ('issues_view')
+                        return redirect ('../../issues_view/A-1')
                     else:
                         if B.total_seconds >= 55:
-                            return redirect ('issues_view')
+                            return redirect ('issues_view/A-1')
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -528,14 +527,14 @@ def formA1(request):
                 B.save()
                 
                 if B.comments not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-1')
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
-                        return redirect ('issues_view')
+                        return redirect ('../../issues_view/A-1')
                     else:
                         if B.total_seconds >= 55:
-                            return redirect ('issues_view')
+                            return redirect ('../../issues_view/A-1')
                 done = Forms.objects.filter(form='A-1')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -599,7 +598,7 @@ def formA2(request):
                 A = form.save()
 
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-2')
                 
                 if A.leaking_doors == 0:
                     done = Forms.objects.filter(form='A-2')[0]
@@ -609,7 +608,7 @@ def formA2(request):
 
                     return redirect('IncompleteForms')
                 else:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-2')
     else:
         initial_data = {
             'date' : todays_log.date_save,
@@ -626,7 +625,7 @@ def formA2(request):
                 A = form.save()
                 
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-2')
                 
                 if A.leaking_doors == 0:
                     done = Forms.objects.filter(form='A-2')[0]
@@ -636,7 +635,7 @@ def formA2(request):
 
                     return redirect('IncompleteForms')
                 else:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-2')
 
     return render (request, "Daily/Method303/formA2.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -691,8 +690,12 @@ def formA3(request):
                 A = form.save()
                 
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('issues_view')
-
+                    return redirect ('../../issues_view/A-3')
+                if int(A.om_leaks) > 0:
+                    return redirect ('../../issues_view/A-3')
+                if int(A.l_leaks) > 0:
+                    return redirect ('../../issues_view/A-3')
+                
                 done = Forms.objects.filter(form='A-3')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -716,7 +719,7 @@ def formA3(request):
                 A = form.save()
 
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-3')
                 
                 done = Forms.objects.filter(form='A-3')[0]
                 done.submitted = True
@@ -773,9 +776,9 @@ def formA4(request):
                 A = form.save()
                 
                 if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-4')
                 if A.oven_leak_1:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-4')
 
                 done = Forms.objects.filter(form='A-4')[0]
                 done.submitted = True
@@ -801,9 +804,9 @@ def formA4(request):
                 A = form.save()
 
                 if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-4')
                 if A.oven_leak_1:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-4')
                 
                 done = Forms.objects.filter(form='A-4')[0]
                 done.submitted = True
@@ -822,6 +825,7 @@ def formA5(request):
     this_from = 'A-5'
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
+    
     
     
     org = subA5_model.objects.all().order_by('-date')
@@ -987,21 +991,21 @@ def formA5(request):
                 B.save()
                 
                 if B.o1_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o1_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o2_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o2_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o3_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o3_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o4_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o4_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 
                 
                 done = Forms.objects.filter(form='A-5')[0]
@@ -1057,21 +1061,21 @@ def formA5(request):
                 B.save()
                 
                 if B.o1_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o1_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o2_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o2_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o3_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o3_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o4_highest_opacity >= 10:
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 if B.o4_average_6 >= 35 :
-                    return redirect ('issues_view')
+                    return redirect ('../../issues_view/A-5')
                 
                 done = Forms.objects.filter(form='A-5')[0]
                 done.submitted = True
@@ -1533,6 +1537,7 @@ def formD(request):
                         done.date_submitted = todays_log.date_save
                         done.save()
                     else:
+                        done = Forms.objects.filter(form='D')[0]
                         done.submitted = False
                         done.save()
 
@@ -1563,6 +1568,7 @@ def formD(request):
                         done.date_submitted = todays_log.date_save
                         done.save()
                     else:
+                        done = Forms.objects.filter(form='D')[0]
                         done.submitted = False
                         done.save()
                    
@@ -3457,7 +3463,7 @@ def formM(request):
     return render (request, "Daily/formM.html", {
         'now': todays_log, 'form': form,# 'read': read, 'submitted': submitted, "back": back
     })
-def issues_view(request):
+def issues_view(request, form_name):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -3466,26 +3472,51 @@ def issues_view(request):
         database_form = org[0]
 
         if todays_log.date_save == database_form.date:
-            initial_data = {
-                'form' : database_form.form,
-                'issues' : database_form.issues,
-                'notified' : database_form.notified,
-                'time' : database_form.time,
-                'date' : database_form.date,
-                'cor_action' : database_form.cor_action
-            }
+            if database_form.form == form_name:
+                initial_data = {
+                    'form' : database_form.form,
+                    'issues' : database_form.issues,
+                    'notified' : database_form.notified,
+                    'time' : database_form.time,
+                    'date' : database_form.date,
+                    'cor_action' : database_form.cor_action
+                }
 
-            form = issues_form(initial=initial_data)
+                form = issues_form(initial=initial_data)
 
-            if request.method == "POST":
-                data = issues_form(request.POST, instance= database_form)
-                if data.is_valid():
-                    data.save()
+                if request.method == "POST":
+                    data = issues_form(request.POST, instance= database_form)
+                    if data.is_valid():
+                        data.save()
 
-                    return redirect('IncompleteForms')
+                        done = Forms.objects.filter(form=form_name)[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+
+                        return redirect('IncompleteForms')
+            else:
+                initial_data = {
+                    'date' : todays_log.date_save,
+                    'form' : form_name
+                }
+                form = issues_form(initial=initial_data)
+
+                if request.method == "POST":
+                    data = issues_form(request.POST)
+                    if data.is_valid():
+                        data.save()
+
+                        done = Forms.objects.filter(form=form_name)[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+
+                        return redirect('IncompleteForms')
         else:
             initial_data = {
                 'date' : todays_log.date_save,
+                'form' : form_name
             }
             form = issues_form(initial=initial_data)
 
@@ -3493,11 +3524,17 @@ def issues_view(request):
                 data = issues_form(request.POST)
                 if data.is_valid():
                     data.save()
+                    
+                    done = Forms.objects.filter(form=form_name)[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
 
                     return redirect('IncompleteForms')
     else:
         initial_data = {
             'date' : todays_log.date_save,
+            'form' : form_name
         }
         form = issues_form(initial=initial_data)
 
@@ -3505,11 +3542,16 @@ def issues_view(request):
             data = issues_form(request.POST)
             if data.is_valid():
                 data.save()
+                
+                done = Forms.objects.filter(form=form_name)[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
 
                 return redirect('IncompleteForms')
             
     return render (request, "ees_forms/issues_template.html", {
-        'form': form,#'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
+        'form': form, #'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
     })
 
 

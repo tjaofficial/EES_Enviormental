@@ -1,4 +1,6 @@
-<html>
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
     <style>
         #boxTitle{
             font-size: 30px;
@@ -81,7 +83,7 @@
     
     
     
-<body>
+
     <form action="" method="POST">
         {% csrf_token %}
         <div id="ptInfo">
@@ -475,58 +477,4 @@
             </div>    
         </div>
     </form>   
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    </body>    
-</html>
+   {% endblock %}

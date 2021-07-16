@@ -503,7 +503,7 @@ class formB_form(ModelForm):
         widgets = {
             'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'observer_0' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'observer_0' : forms.Select(attrs={'style':'width: 80px;'}),
             'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_0' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_0' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -525,7 +525,7 @@ class formB_form(ModelForm):
             'wharf_0' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_0' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'observer_1' : forms.Select(attrs={'style':'width: 80px;'}),
             'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_1' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -547,7 +547,7 @@ class formB_form(ModelForm):
             'wharf_1' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_1' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'observer_2' : forms.Select(attrs={'style':'width: 80px;'}),
             'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_2' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -569,7 +569,7 @@ class formB_form(ModelForm):
             'wharf_2' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_2' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'observer_3' : forms.Select(attrs={'style':'width: 80px;'}),
             'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_3' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -591,7 +591,7 @@ class formB_form(ModelForm):
             'wharf_3' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_3' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'observer_4' : forms.Select(attrs={'style':'width: 80px;'}),
             'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_4' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
