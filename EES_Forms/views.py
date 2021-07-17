@@ -3549,7 +3549,7 @@ def formG1(request):
     })
 
 @lock
-def formG1(request):    
+def formG2(request):    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
     initial_data = {
@@ -3575,12 +3575,12 @@ def formG1(request):
         'describe_background_start' : "Skies",
         'describe_background_stop' : "Same"
     }
-    data = formG1_form(initial=initial_data)
+    data = formG2_form(initial=initial_data)
     profile_form = user_profile_form()
     readings_form = subA5_readings_form()
     
     if request.method == "POST":
-        form = formG1_form(request.POST)
+        form = formG2_form(request.POST)
         #readings = subA5_readings_form(request.POST)
         A_valid = form.is_valid()
         #B_valid = readings.is_valid()
@@ -3596,7 +3596,7 @@ def formG1(request):
             
             return redirect('IncompleteForms')
     else:
-        form = formG1_form(initial=initial_data)
+        form = formG2_form(initial=initial_data)
         #readings_form = subA5_readings_form()
     return render (request, "Daily/formG1.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form

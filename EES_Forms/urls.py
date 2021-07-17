@@ -35,6 +35,7 @@ urlpatterns = [
     path("Weekly/formF6", views.formF6, name="formF6"),
     path("Weekly/formF7", views.formF7, name="formF7"),
     path("Daily/formG1", views.formG1, name="formG1"),
+    path("Daily/formG2", views.formG2, name="formG2"),
     path("Daily/formH", views.formH, name="formH"),
     path("Daily/formI", views.formI, name="formI"),
     path("Daily/formL", views.formL, name="formL"),
