@@ -12,7 +12,7 @@ now = datetime.datetime.now()
 class SubFormC1(ModelForm):
     class Meta:
         model = subC
-        fields = ('truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments', 'issues', 'cor_action', 'notified', 'time_date')
+        fields = ('date', 'truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments')
         
         widgets = {
             'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
@@ -20,16 +20,43 @@ class SubFormC1(ModelForm):
             'truck_stop_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
             'area_start_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
             'area_stop_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
+            'truck_sel' : forms.Select(attrs={'style':'width: 100px;'}),
+            'area_sel' : forms.Select(attrs={'style':'width: 130px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
+            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
         }
-        
-        #date = forms.DateField()
-       # date.widget.attrs.update({'class': 'input'})
-    
     
 class FormCReadForm(ModelForm):
     class Meta:
         model = FormCReadings
         fields = ('TRead1', 'TRead2','TRead3', 'TRead4', 'TRead5', 'TRead6', 'TRead7', 'TRead8', 'TRead9', 'TRead10',  'TRead11', 'TRead12', 'ARead1', 'ARead2', 'ARead3', 'ARead4', 'ARead5', 'ARead6', 'ARead7', 'ARead8', 'ARead9', 'ARead10', 'ARead11', 'ARead12')
+        widgets = {
+            'TRead1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),    
+            'TRead3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead5' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead7' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead8' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead9' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead10' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead11' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead12' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead5' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead7' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead8' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead9' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead10' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead11' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead12' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+        }
               
         
 class CreateUserForm(UserCreationForm):

@@ -425,7 +425,6 @@ def admin_data_view(request):
 def formA1(request):
     formName = "A1"
 
-
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -1425,27 +1424,154 @@ def formB(request):
 #------------------------------------------------------------------------FORM C---------------<
 @lock
 def formC(request):
-    submitted = False
-    if request.method == "POST":
-        CReadings = FormCReadForm(request.POST)
-        CData = SubFormC1(request.POST)
-        A_valid = CReadings.is_valid()
-        B_valid = CData.is_valid()
-        #form.save()
-        #return HttpResponseRedirect('./formC?submitted=True')
-        if A_valid and B_valid:
-            A = CData.save()
-            B = CReadings.save(commit=False)
-            B.form = A
-            B.save()
-            return HttpResponseRedirect('./formC?submitted=True')
+    formName = "C"
+
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    full_name = request.user.get_full_name()
+    profile_user = user_profile_model.objects.all()
+    
+    for x in profile_user:
+        print(x.user)
+        if str(x.user) == str(request.user):
+            print('poop')
+            certification = x.cert_date
+           
+    count1 = subC.objects.count()
+    count2 = FormCReadings.objects.count()
+    
+    if count1 and count2 != 0:
+        org = subC.objects.all().order_by('-date')
+        database_form = org[0]
+        org2 = FormCReadings.objects.all().order_by('-form')
+        database_form2 = org2[0]
+        
+        if todays_log.date_save == database_form.date:
+            initial_data = {
+                'date' : database_form.date,
+                'truck_sel' : database_form.truck_sel,
+                'area_sel' : database_form.area_sel,
+                'truck_start_time' : database_form.truck_start_time,
+                'truck_stop_time' : database_form.truck_stop_time,
+                'area_start_time' : database_form.area_start_time,
+                'area_stop_time' : database_form.area_stop_time,
+                'observer' : database_form.observer,
+                'cert_date' : database_form.cert_date,
+                'comments' : database_form.comments,
+
+                'TRead1' : database_form2.TRead1,
+                'TRead2' : database_form2.TRead2,
+                'TRead3' : database_form2.TRead3,
+                'TRead4' : database_form2.TRead4,
+                'TRead5' : database_form2.TRead5,
+                'TRead6' : database_form2.TRead6,
+                'TRead7' : database_form2.TRead7,
+                'TRead8' : database_form2.TRead8,
+                'TRead9' : database_form2.TRead9,
+                'TRead10' : database_form2.TRead10,
+                'TRead11' : database_form2.TRead11,
+                'TRead12' : database_form2.TRead12,
+                'ARead1' : database_form2.ARead1,
+                'ARead2' : database_form2.ARead2,
+                'ARead3' : database_form2.ARead3,
+                'ARead4' : database_form2.ARead4,
+                'ARead5' : database_form2.ARead5,
+                'ARead6' : database_form2.ARead6,
+                'ARead7' : database_form2.ARead7,
+                'ARead8' : database_form2.ARead8,
+                'ARead9' : database_form2.ARead9,
+                'ARead10' : database_form2.ARead10,
+                'ARead11' : database_form2.ARead11,
+                'ARead12' : database_form2.ARead12,
+            }
+            form = SubFormC1(initial=initial_data)
+            read = FormCReadForm(initial=initial_data)
+
+            if request.method == "POST":
+                CReadings = FormCReadForm(request.POST)
+                CData = SubFormC1(request.POST)
+                A_valid = CReadings.is_valid()
+                B_valid = CData.is_valid()
+
+                if A_valid and B_valid:
+                    A = CData.save()
+                    B = CReadings.save(commit=False)
+                    B.form = A
+                    B.save()
+                    
+                    done = Forms.objects.filter(form='C')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+
+                    return redirect('IncompleteForms')
+        else:
+            for x in profile_user:
+                if x.user == User:
+                    certification = x.cert_date
+                    
+            initial_data = {
+                'date' : todays_log.date_save,
+                'observer' : full_name,
+                'cert_date' : certification,
+            }
+
+            form = SubFormC1(initial=initial_data)
+            read = FormCReadForm()
+            if request.method == "POST":
+                CReadings = FormCReadForm(request.POST)
+                CData = SubFormC1(request.POST)
+                A_valid = CReadings.is_valid()
+                B_valid = CData.is_valid()
+
+                if A_valid and B_valid:
+                    A = CData.save()
+                    B = CReadings.save(commit=False)
+                    B.form = A
+                    B.save()
+                    
+                    done = Forms.objects.filter(form='C')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+                
+                    return redirect('IncompleteForms')
     else:
-        form = SubFormC1
-        read = FormCReadForm
-        if 'submitted' in request.GET:
-            submitted = True
+        for x in profile_user:
+                if x.user == User:
+                    certification = x.cert_date
+                    
+        initial_data = {
+            'date' : todays_log.date_save,
+            'observer' : full_name,
+            'cert_date' : certification,
+        }
+
+        form = SubFormC1(initial=initial_data)
+        read = FormCReadForm()
+        
+        if request.method == "POST":
+            CReadings = FormCReadForm(request.POST)
+            CData = SubFormC1(request.POST)
+            A_valid = CReadings.is_valid()
+            B_valid = CData.is_valid()
+
+            if A_valid and B_valid:
+                A = CData.save()
+                B = CReadings.save(commit=False)
+                B.form = A
+                B.save()
+                
+                done = Forms.objects.filter(form='C')[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+                
+                return redirect('IncompleteForms')
+                
     return render (request, "Daily/formC.html", {
-        'form': form, 'read': read, 'submitted': submitted, "back": back, 'now': now
+        'form': form, 'read': read, "back": back
     })
 
 #------------------------------------------------------------------------FORM D---------------<

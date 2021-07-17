@@ -220,21 +220,24 @@ class Forms(models.Model):
         return self.form
     
 class subC(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.PROTECT)
-    date = models.DateField(auto_now_add=True, auto_now=False)
+    date = models.DateField(auto_now_add=False, auto_now=False)
     truck_sel = models.CharField(max_length=30, choices=truck_choices)
     area_sel = models.CharField(max_length=30, choices=area_choices)
     truck_start_time = models.TimeField(max_length=30)
     truck_stop_time = models.TimeField(max_length=30)
     area_start_time = models.TimeField(max_length=30)
     area_stop_time = models.TimeField(max_length=30)
-    observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
-    comments = models.CharField(max_length=30)
-    issues = models.CharField(max_length=30)
-    cor_action = models.CharField(max_length=30)
-    notified = models.CharField(max_length=30)
-    time_date = models.CharField(max_length=30)
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices_0
+    )
+    cert_date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False
+    )
+    comments = models.CharField(
+        max_length=300
+    )
     
     def __str__(self):
         return str(self.date)
@@ -244,7 +247,6 @@ class FormCReadings(models.Model):
     form = models.OneToOneField(
         subC,
         on_delete=models.CASCADE,
-        primary_key=True,
     )
     TRead1 = models.CharField(max_length=3)
     TRead2 = models.CharField(max_length=3)
