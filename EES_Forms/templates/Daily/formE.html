@@ -76,7 +76,7 @@
                     </tr> 
                     <tr>
                         <th colspan="6">
-                            Inspectors Name: &nbsp; &nbsp;{{ model.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; model: &nbsp; &nbsp;{{ model.date }}
+                            Inspectors Name: &nbsp; &nbsp;{{ form.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; model: &nbsp; &nbsp;{{ form.date }}
                         </th>
                     </tr>
                     <tr>
@@ -86,10 +86,10 @@
                         <th colspan="6">
                             Battery No. 5 &nbsp; &nbsp; &nbsp; 
                             Crew:
-                            &nbsp; &nbsp;{{ model.crew }}
+                            &nbsp; &nbsp;{{ form.crew }}
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
                             Battery Foreman:
-                            &nbsp; &nbsp;{{ model.foreman }}
+                            &nbsp; &nbsp;{{ form.foreman }}
                         </th>
                     </tr>
                     <tr>
@@ -97,7 +97,7 @@
                     </tr> 
                     <tr>
                         <th colspan="6">
-                            Start Time:{{ model.start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ model.end_time }}
+                            Start Time:{{ form.start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.end_time }}
                         </th>
                     </tr>
                     <tr>
@@ -105,7 +105,7 @@
                     </tr> 
                     <tr>
                         <td colspan="6" style="text-align: center;"> 
-                            Leaks? {{ model.leaks }}
+                            Leaks? {{ form.leaks }}
                         </td>
                     </tr> 
                     <tr>
@@ -134,16 +134,16 @@
                     </tr>
                     <tr>
                         <th colspan="1" id="formE_box2">
-                            {{ model.oven1}}
+                            {{ form.oven1}}
                         </th>
                         <th colspan="1" id="formE_box2">
-                            {{ model.time1}}
+                            {{ form.time1}}
                         </th>
                         <th colspan="1" id="formE_box2">
-                            {{ model.source1}}
+                            {{ form.source1}}
                         </th>
                         <th colspan="1" id="formE_comments">
-                            {{ model.comments1}}
+                            {{ form.comments1}}
                         </th>
                     </tr>
                     <tr>

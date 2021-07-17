@@ -2028,7 +2028,7 @@ class formD_model(models.Model):
     
 class formE_model(models.Model):
     observer = models.CharField(
-        max_length=30
+        max_length=30,
     )
     date = models.DateField(
         auto_now_add=False, 
