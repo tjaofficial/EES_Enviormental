@@ -238,6 +238,8 @@ class subC(models.Model):
     comments = models.CharField(
         max_length=300
     )
+    average_t = models.IntegerField(blank=True)
+    average_p = models.IntegerField(blank=True)
     
     def __str__(self):
         return str(self.date)

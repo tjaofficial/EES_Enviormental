@@ -12,7 +12,7 @@ now = datetime.datetime.now()
 class SubFormC1(ModelForm):
     class Meta:
         model = subC
-        fields = ('date', 'truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments')
+        fields = ('date', 'truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments', 'average_t', 'average_p')
         
         widgets = {
             'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
@@ -25,6 +25,8 @@ class SubFormC1(ModelForm):
             'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'comments' : Textarea(attrs={'rows':7, 'cols':125}),
+            'average_t' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
+            'average_p' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
         }
     
 class FormCReadForm(ModelForm):

@@ -1459,6 +1459,8 @@ def formC(request):
                 'observer' : database_form.observer,
                 'cert_date' : database_form.cert_date,
                 'comments' : database_form.comments,
+                'average_t' : database_form.average_t,
+                'average_p' : database_form.average_p,
 
                 'TRead1' : database_form2.TRead1,
                 'TRead2' : database_form2.TRead2,
@@ -1500,6 +1502,20 @@ def formC(request):
                     B.form = A
                     B.save()
                     
+                    if B.form.average_t > 5:
+                        issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
+                        
+                        return redirect (issue_page)
+                    if B.form.average_p > 5:
+                        issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
+                        
+                        return redirect (issue_page)
+                    
+                    if B.comments not in {'-', 'n/a', 'N/A'}:
+                        issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
+                        
+                        return redirect (issue_page)
+                    
                     done = Forms.objects.filter(form='C')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
@@ -1530,6 +1546,20 @@ def formC(request):
                     B = CReadings.save(commit=False)
                     B.form = A
                     B.save()
+                    
+                    if B.form.average_t > 5:
+                        issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+                        
+                        return redirect (issue_page)
+                    if B.form.average_p > 5:
+                        issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+                        
+                        return redirect (issue_page)
+                    
+                    if B.comments not in {'-', 'n/a', 'N/A'}:
+                        issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+                        
+                        return redirect (issue_page)
                     
                     done = Forms.objects.filter(form='C')[0]
                     done.submitted = True
@@ -1563,6 +1593,20 @@ def formC(request):
                 B.form = A
                 B.save()
                 
+                if B.form.average_t > 5:
+                    issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+
+                    return redirect (issue_page)
+                if B.form.average_p > 5:
+                    issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+
+                    return redirect (issue_page)
+
+                if B.comments not in {'-', 'n/a', 'N/A'}:
+                    issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+
+                    return redirect (issue_page)
+                    
                 done = Forms.objects.filter(form='C')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
@@ -3604,6 +3648,7 @@ def issues_view(request, form_name, form_date, access_page):
                     form = issues_form()
                     
     else:
+        picker = 'n/a'
         if issues_model.objects.count() != 0:
             org = issues_model.objects.all().order_by('-date')
             database_form = org[0]
