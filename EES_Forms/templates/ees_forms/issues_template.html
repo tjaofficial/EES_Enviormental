@@ -7,13 +7,13 @@
     
     <div style="padding-top: 30px;">
         <div style="padding-top: 25px; margin: auto;" class="card">
-            {% if access_page != 'issue' %}
+            {% if access_page == 'form' %}
             <h1 style="text-align: center;">Please Fill Out a Corrective Action Form</h1>
             {% else %}
             <h1 style="text-align: center;">Corrective Action LogID - #{{ picker.id }}</h1>
             {% endif %}
             
-            {% if access_page != 'issue' %}
+            {% if access_page == 'form' %}
             <form action="" method="POST">
                 {% csrf_token %}
                 <table style="border-collapse: collapse; margin: auto;">
@@ -38,7 +38,7 @@
             
                 <input type="submit" value="Submit Form" style="font-size: 40px">
             </form>
-            {% else %}
+            {% elif access_page == 'issue' %}
             <div style="">
                 Form: {{picker.form}}<br>
                 Date: {{picker.date}}<br>
@@ -49,13 +49,37 @@
                 
                 Corrective Action Taken: {{ picker.cor_action }}<br>
                 <div style="text-align: right;">
-                    <a href="{% url 'Corrective-Action' %}">
+                    <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/edit">
                         Back
                     </a>
                 </div>
                 <br>
             </div>
+            {% elif access_page == 'edit' %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <td style="height: 40px" > 
+                            {{ form.form }}YO DIS THE EDIT FORM
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td colspan="6" id="issues" class="issue_boxes">Any Issues? Describe{{ form.issues }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" id="person_notified" class="issue_boxes">EES Person Notified of Issue{{ form.notified }}</td>
+                        <td colspan="1" id="datetime" class="issue_boxes">{{ form.date }}</td>
+                        <td colspan="1" id="datetime" class="issue_boxes">{{ form.time }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="issue_boxes">Corrective Action Taken{{ form.cor_action }}</td>
+                    </tr>
+                </table>
+                <br><br><br>
             
+                <input type="submit" value="Submit Form" style="font-size: 40px">
+            </form>
             {% endif %}
         </div>
     </div>

@@ -3801,7 +3801,33 @@ def issues_view(request, form_name, form_date, access_page):
                 if form_name == entry.form:
                     picker = entry
                     form = issues_form()
+
+    elif access_page == 'edit':
+        org = issues_model.objects.all().order_by('-date')
+        database_form = org[0]
+        
+        for entry in org:
+            if str(form_date) == str(entry.date):
+                if form_name == entry.form:
+                    picker = entry
                     
+        initial_data = {
+            'form' : picker.form,
+            'issues' : picker.issues,
+            'notified' : picker.notified,
+            'time' : picker.time,
+            'date' : picker.date,
+            'cor_action' : picker.cor_action
+        }
+
+        form = issues_form(initial=initial_data)
+
+        if request.method == "POST":
+            data = issues_form(request.POST, instance= picker)
+            if data.is_valid():
+                data.save()
+
+                return redirect('IncompleteForms')
     else:
         picker = 'n/a'
         if issues_model.objects.count() != 0:
@@ -3888,7 +3914,7 @@ def issues_view(request, form_name, form_date, access_page):
                     return redirect('IncompleteForms')
             
     return render (request, "ees_forms/issues_template.html", {
-        'form': form, 'access_page': access_page, 'picker': picker, #'submitted': submitted, "back": back
+        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date
     })
 
 def corrective_action_view(request):
