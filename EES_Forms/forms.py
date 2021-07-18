@@ -309,10 +309,10 @@ class subA5_form(ModelForm):
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px; text-align: center;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px; text-align: center;'}),
             'wind_speed_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'wind_speed_stop' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px; text-align: center;'}),
             'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'ambient_temp_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'ambient_temp_stop' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px; text-align: center;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'humidity' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
             'wind_direction' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px; text-align: center;'}),
@@ -324,6 +324,7 @@ class subA5_form(ModelForm):
             'height_rel_observer' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
             'distance_from' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
             'direction_from' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'notes' : Textarea(attrs={'rows':7, 'cols':125}),
             
         }
         

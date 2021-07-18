@@ -488,10 +488,10 @@ def formA1(request):
                 B.form = A
                 B.save()
 
-                if B.comments not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
-                        
-                    return redirect (issue_page)
+           #     if B.comments not in {'-', 'n/a', 'N/A'}:
+           #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+            #            
+           #         return redirect (issue_page)
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
@@ -531,10 +531,10 @@ def formA1(request):
                 B.form = A
                 B.save()
                 
-                if B.comments not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
-                        
-                    return redirect (issue_page)
+        #        if B.comments not in {'-', 'n/a', 'N/A'}:
+        #            issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+        #                
+        #            return redirect (issue_page)
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
@@ -1012,8 +1012,8 @@ def formA5(request):
             'o4_14_reads' : database_form2.o4_14_reads,
             'o4_15_reads' : database_form2.o4_15_reads,
             'o4_16_reads' : database_form2.o4_16_reads,
+            'notes' : database_form.notes,
         }
-        print('tuna')
         data = subA5_form(initial=initial_data)
         readings_form = subA5_readings_form(initial=initial_data)
         profile_form = user_profile_form()
@@ -3827,13 +3827,13 @@ def issues_view(request, form_name, form_date, access_page):
             if data.is_valid():
                 data.save()
 
-                return redirect('IncompleteForms')
+                return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
     else:
         picker = 'n/a'
         if issues_model.objects.count() != 0:
             org = issues_model.objects.all().order_by('-date')
             database_form = org[0]
-
+            
             if todays_log.date_save == database_form.date:
                 if database_form.form == form_name:
                     initial_data = {

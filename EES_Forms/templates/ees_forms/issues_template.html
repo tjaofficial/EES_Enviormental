@@ -9,8 +9,10 @@
         <div style="padding-top: 25px; margin: auto;" class="card">
             {% if access_page == 'form' %}
             <h1 style="text-align: center;">Please Fill Out a Corrective Action Form</h1>
-            {% else %}
+            {% elif access_page == 'issue' %}
             <h1 style="text-align: center;">Corrective Action LogID - #{{ picker.id }}</h1>
+            {% elif access_page == 'edit' %}
+            <h1 style="text-align: center;">EDIT - Corrective Action LogID - #{{ picker.id }}</h1>
             {% endif %}
             
             {% if access_page == 'form' %}
@@ -50,7 +52,7 @@
                 Corrective Action Taken: {{ picker.cor_action }}<br>
                 <div style="text-align: right;">
                     <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/edit">
-                        Back
+                        Edit
                     </a>
                 </div>
                 <br>
@@ -79,6 +81,11 @@
                 <br><br><br>
             
                 <input type="submit" value="Submit Form" style="font-size: 40px">
+                <div style="text-align: right;">
+                    <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/issue">
+                        Back
+                    </a>
+                </div>
             </form>
             {% endif %}
         </div>

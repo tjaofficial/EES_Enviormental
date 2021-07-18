@@ -802,6 +802,7 @@ class subA5_model(models.Model):
     plume_opacity_determined_stop = models.CharField(max_length=50)
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
+    notes = models.CharField(max_length=300)
     
     def __str__(self):
         return str(self.date)
