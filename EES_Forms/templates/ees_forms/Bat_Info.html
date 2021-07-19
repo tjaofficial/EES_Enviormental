@@ -3,26 +3,32 @@
 {% block list%}
 {% load static %}
 
+<link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
 
-    <head>
-       <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
-    </head>
-    <body>
-        <div id="page">
+<body>
+    <div class="forms">
+        <div class="card" style="padding-top: 2rem; padding-bottom: 2rem;">
             <div id="login">
-                <h1>Battery Information</h1>
+                <h1>Battery Information</h1><br>
                 <form method="POST" action="">
                     {% csrf_token %}
                     Foreman: {{ form.foreman }}<br>
                     Crew: {{ form.crew }}<br>
-                    Inoperable Ovens: {{ form.inop_ovens }}<br>
+                    Inoperable Ovens: {{ form.inop_ovens }}<br><br>
                     <input type="submit" name="submit_bat_info">
                 </form>
-
+                <br>
+                {% if access_page == 'login' %}
                 <p>
                     Don't have this information yet? <a href="{% url 'IncompleteForms'  %}">Skip To Forms</a>
                 </p>
+                {% elif access_page == 'edit' %}
+                <p>
+                    Don't have this information yet? <a href="{% url 'IncompleteForms'  %}">Skip To Forms</a>
+                </p>
+                {% endif %}
             </div>
         </div>
-    </body>
+    </div>
+</body>
 {% endblock %}

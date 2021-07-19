@@ -53,14 +53,19 @@ def register_view(request):
 def login_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
+    
     if request.user.is_authenticated:
         if now.month == todays_log.date_save.month:
             if now.day == todays_log.date_save.day:
                 return redirect('IncompleteForms')  
             else:
-                return redirect('daily_battery_profile')
+                batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+                return redirect(batt_prof)
         else:
-                return redirect('daily_battery_profile')
+            batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+            return redirect(batt_prof)
         
     else:
         if request.method =='POST':
@@ -76,9 +81,13 @@ def login_view(request):
                     if now.day == todays_log.date_save.day:
                         return redirect('IncompleteForms')  
                     else:
-                        return redirect('daily_battery_profile')
+                        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+                        return redirect(batt_prof)
                 else:
-                        return redirect('daily_battery_profile')
+                    batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+                    return redirect(batt_prof)
                     
                     
     return render(request, "ees_forms/ees_login.html", {
@@ -86,17 +95,43 @@ def login_view(request):
     })
 #-------------------------------------------------------------------------BATTERY PROFILE---------<
 @lock
-def daily_battery_profile_view(request):
-    
+def daily_battery_profile_view(request, access_page, date):
     form = daily_battery_profile_form
-    if request.method =='POST':
-        form = daily_battery_profile_form(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('IncompleteForms')
+    
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    if now.month == todays_log.date_save.month:
+        if now.day == todays_log.date_save.day:
+            initial_data = {
+                'foreman' : todays_log.foreman,
+                'crew' : todays_log.crew,
+                'inop_ovens' : todays_log.inop_ovens,
+                'date_save' : todays_log.date_save,
+            }
+            form = daily_battery_profile_form(initial=initial_data)
+            
+            if request.method =='POST':
+                form = daily_battery_profile_form(request.POST, instance= todays_log)
+                if form.is_valid():
+                    form.save()
+                    
+                    return redirect('IncompleteForms')
+        else:
+            if request.method =='POST':
+                form = daily_battery_profile_form(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('IncompleteForms')
+    else:
+        if request.method =='POST':
+            form = daily_battery_profile_form(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('IncompleteForms')
     
     return render (request, "ees_forms/Bat_Info.html",{
-        'form': form
+        'form': form, 'now': now, 'todays_log': todays_log
     })
 #----------------------------------------------------------------------------------LOGOUT---------<
 def logout_view(request):
@@ -108,10 +143,101 @@ def IncompleteForms(request):
     today = datetime.date.today()
     todays_num = today.weekday()
     sub_forms = Forms.objects.all()
+    reads = subA5_readings_model.objects.all()
     
     weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
     weekend_fri = weekday_fri + datetime.timedelta(days=7)
-   
+#--------------------------------------------Closest Oven Due-----------------    
+#--------------------------------------------Closest Oven Due-----------------       
+#--------------------------------------------Closest Oven Due-----------------    
+    def all_ovens(reads):
+        A = []
+        for items in reads:
+            date = items.form.date
+          #  date_array = date.split("-")
+            
+            year = date.year
+            month = date.month
+            day = date.day
+            
+            form_date = datetime.datetime(year, month, day)
+            added_date = form_date + datetime.timedelta(days=91)
+            due_date = added_date - datetime.datetime.now() 
+            
+            if len(str(items.o1)) == 1 :
+                oven1 = "0" + str(items.o1)
+            else:
+                oven1 = items.o1
+            A.append((oven1, items.form.date, added_date.date, due_date.days)) 
+            
+            if len(str(items.o2)) == 1 :
+                oven2 = "0" + str(items.o2)
+            else:
+                oven2 = items.o2
+            A.append((oven2, items.form.date, added_date.date, due_date.days))
+                
+            if len(str(items.o3)) == 1 :
+                oven3 = "0" + str(items.o3)
+            else:
+                oven3 = items.o3
+            A.append((oven3, items.form.date, added_date.date, due_date.days))    
+                
+            if len(str(items.o4)) == 1 :
+                oven4 = "0" + str(items.o4)
+            else:
+                oven4 = items.o4
+            A.append((oven4, items.form.date, added_date.date, due_date.days))      
+
+        return A   
+    
+    hello = all_ovens(reads)
+    func = lambda x: (x[0], x[1])
+    sort = sorted(hello, key = func, reverse=True)
+   # print (sort)
+    
+    def final(sort):
+        B = []
+        i = 1
+        for new in sort:
+            B.append(new)
+        
+        for x in sort:
+            for y in range(i, len(sort)):
+                tree = sort[y]
+                if tree[0] == x[0]:
+                    if tree in B:
+                        B.remove(tree)
+            i+=1
+        return B
+    cool = final(sort)
+    
+    def overdue_closest(cool):
+        F = []
+        
+        func2 = lambda R: (R[3])  
+        sort2 = sorted(cool, key = func2)
+        most_recent = sort2[0][3]
+        
+        for x in sort2:
+            if x[3] == most_recent:
+                F.append(x)
+        return F
+    
+    od_recent = overdue_closest(cool)
+#--------------------------------------------Battery Profile Data------------    
+#--------------------------------------------Battery Profile Data------------    
+#--------------------------------------------Battery Profile Data------------    
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    profile_entered = False
+    if now.month == todays_log.date_save.month:
+        if now.day == todays_log.date_save.day:
+            profile_entered = True
+    
+#------------------------------------------------------Form Data-------------    
+#------------------------------------------------------Form Data-------------    
+#------------------------------------------------------Form Data-------------    
     for forms in sub_forms:
         if todays_num in {0, 1, 2, 3 , 4}:
             forms.due_date = weekday_fri
@@ -133,7 +259,7 @@ def IncompleteForms(request):
     
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, #'todays_log': todays_log, "back": back, 'sub_forms':sub_forms
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered
     })
 
 def weekly_forms(request):
@@ -262,10 +388,6 @@ def pt_admin1_view(request):
     od_5 = overdue_5(cool)
     od_recent = overdue_closest(cool)
     
-    
-       
-    
-   
     return render(request, "ees_forms/PushTravels.html", {
         "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today
     })
