@@ -260,8 +260,10 @@ def IncompleteForms(request):
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
     
     
+    
+    
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered,
     })
 
 def weekly_forms(request):
@@ -4120,22 +4122,53 @@ def corrective_action_view(request):
         'ca_forms': ca_forms, #'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
     })
 
-def schedule_view(request, year, month):
+def calendar_view(request, year, month):
     month = month.title()
     month_number = list(calendar.month_name).index(month)
     month_number = int(month_number)
     
+    prev_month = str(calendar.month_name[month_number - 1])
+    next_month = str(calendar.month_name[month_number + 1])
+    
+    
     cal = HTMLCalendar().formatmonth(year, month_number)
-    print(cal)
-    
-    
-    
     
     
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'month_number': month_number, 'cal': cal, 
+        'year': year, 'month': month, 'prev_month': prev_month, 'cal': cal, 'next_month': next_month,
     })
 
+
+def schedule_view(request):
+    today_year = int(today.year)
+    today_month = str(calendar.month_name[today.month])
+    print(today_year)
+    
+    
+    return render (request, "ees_forms/scheduling.html", {
+        'today_year': today_year, 'today_month': today_month, #'prev_month': prev_month, 'cal': cal, 'next_month': next_month,
+    })
+
+
+def event_add_view(request):
+    today_year = int(today.year)
+    today_month = str(calendar.month_name[today.month])
+    
+    form = events_form()
+    
+    if request.method == "POST":
+        request = events_form(request.POST)
+        if request.is_valid():
+            request.save()
+            
+            cal_link = 'schedule/' + str(today_year) + '/' + today_month
+            
+            return redirect(cal_link)
+    
+    
+    return render (request, "ees_forms/event_add.html", {
+        'today_year': today_year, 'today_month': today_month, 'form': form, #'cal': cal, 'next_month': next_month,
+    })
 
 
 

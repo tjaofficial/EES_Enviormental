@@ -1201,6 +1201,17 @@ class issues_form(ModelForm):
             'cor_action' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
         }
 
+class events_form(ModelForm):
+    class Meta:
+        model = events
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'title' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+        }
+
         
         
         

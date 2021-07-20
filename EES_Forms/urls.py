@@ -43,6 +43,7 @@ urlpatterns = [
     
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
-    path("schedule/<int:year>/<str:month>", views.schedule_view, name="Schedule"),
-    
+    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
+    path("schedule_view", views.schedule_view, name="Schedule"),
+    path("add_event", views.event_add_view, name="Add Event"),
 ]

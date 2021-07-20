@@ -1,93 +1,29 @@
+{% extends "ees_forms/layout.html" %}
 
+{% block list%}
 {% load static %}
-<style>
-    .calendar {
-        width: 98%;
-        margin: auto;
-        font-size: 13px;
-      }
-
-      .calendar tr, .calendar td {
-        border: 1px solid black;
-          text-align: right;
-          vertical-align: top;
-      }
-
-      .calendar th {
-        padding: 10px;
-        text-align: center;
-        font-size: 18px;
-          border: 1px solid black;
-
-      }
-
-      .calendar td {
-        width: 200px;
-        height: 150px;
-        padding: 5px 8px 0px 0px;
-      }
-
-      .month {
-        font-size: 25px;
-      }
-
-      .date {
-        font-size: 16px;
-
-      }
-
-      ul {
-        height: 100%;
-        padding: 0px 5px 0px 20px;
-      }
-
-      a {
-        color: #17a2b8;
-      }
-
-      .left {
-        float: left;
-      }
-
-      .right {
-        float: right;
-      }
-
-      .btn {
-        outline: none;
-        color: black;
-        background-color: transparent;
-        box-shadow: 0 0 0 0;
-      }
-
-      .clearfix {
-        margin: 15px;
-      }
-
-      .form {
-        margin: auto;
-      }
-
-      .form input, .form select, .form textarea {
-        border-radius: 5px;
-        border: 1px solid #17a2b8;
-        outline: none;
-        background: none;
-        padding: 5px;
-        width: 100%;
-      }
-
-</style>
+<link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
 <div>
-    Hey {{ user.first_name }}, Schedule for {{ month }} - {{ year }}
+    Hey {{ user.first_name }}, Schedule for {{ month }} - {{ year }}<br>
+    <a href="{% url 'Add Event' %}"> Hell Yeah</a>
 </div>
 <br><br>
-<div class="clearfix">
-    <div class="">
-        {{ cal|safe }}
+<div class="container">
+    <div style="display: flex; margin-left: 25px;">
+        <div style="width: 150px; text-align: left;">
+            <a href="../../schedule/{{ year }}/{{ prev_month }}"> Previous Month</a>
+        </div>
+        <div style="width: 100%; text-align: right; margin-right: 25px;">
+            <a href="../../schedule/{{ year }}/{{ next_month }}"> Next Month</a>
+        </div>
     </div>
-</div>  
-    
+    <div class="clearfix">
+        <div class="calendar">
+            {{ cal|safe }}
+        </div>
+    </div>  
+</div>
+{% endblock %}
 
 
 

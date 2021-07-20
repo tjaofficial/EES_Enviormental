@@ -1,0 +1,15 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
+{% load static %}
+<link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
+
+<a href="schedule/{{today_year}}/{{today_month}}"> Calendar</a>
+
+
+
+
+
+
+
+{% endblock %}

@@ -3615,6 +3615,18 @@ class issues_model(models.Model):
     def __str__(self):
         return str(self.date)
     
+class events(models.Model):
+    observer = models.CharField(max_length=30)
+    title = models.CharField(max_length=30)
+    description = models.CharField(max_length=300)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    
+    def __str__(self):
+        return self.title
     
     
     
