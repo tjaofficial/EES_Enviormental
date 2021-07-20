@@ -1,19 +1,10 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list %}
 {% load static %}
-<html>
     <link href="{% static 'ees_forms/data_style.css' %}" rel="stylesheet">
-    <body>
-        <table style="border-collapse: collapse;">
-            <tr>
-                <th colspan="2" id="column_name" style="text-align: left;">
-                    <a href="{% url 'admin_data' %}">Back</a>
-                </th>
-                <th colspan="8" id="column_name" style="font-size: 25px;">
-                    Visible Emission Pushing
-                </th>
-                <th colspan="8" id="column_name" style="font-size: 25px;">
-                    Visible Emission Travel
-                </th>
-            </tr>
+
+        <table style="border-collapse: collapse; overflow: scroll;">
             <tr>
                 <th id="first_column_name" style="width: 250px;">
                     Record<br>
@@ -22,7 +13,7 @@
                 <th id="column_name1">
                     No. of<br>Ovens
                 </th>
-                <th id="column_name">
+                <th id="column_name" style="width: 100px">
                     No. of Lids<br>Per Oven
                 </th>
                 <th id="column_name">
@@ -56,52 +47,67 @@
                     No. of Lids<br>Not Observed
                 </th>
                 <th id="column_name">
-                    No. of Lids<br>Leaks
+                    No. of Lid<br>Leaks
                 </th>
                 <th id="column_name">
                     No. of Offtakes<br>Not Observed
                 </th>
                 <th id="column_name">
-                    1 mins.<br> 15 secs.
+                    No. of Offtakes<br>Leaks
                 </th>
                 <th id="column_name">
-                    1 mins.<br> 30 secs.
+                    Charge 1
                 </th>
                 <th id="column_name">
-                    1 mins.<br> 45 secs.
+                    Charge 2
+                </th>
+                <th id="column_name">
+                    Charge 3
+                </th>
+                <th id="column_name">
+                    Charge 4
+                </th>
+                <th id="column_name">
+                    Charge 5
                 </th>
             </tr>
-            {% for entry in sort %}
-            <tr class="{% if forloop.counter|divisibleby:'4' %}row_standard2{% else %}row_standard{% endif %}" style="background-color: {{ entry.19 }};">
+            {% for entry in list_of_records %}
+            <tr class="{% if forloop.counter|divisibleby:'7' %}row_standard2{% else %}row_standard{% endif %}" style="background-color: {{ entry.19 }};">
                 <td id="default_box" style="border-left: 3px black solid;">
-                    {{ entry.0.month }}/{{ entry.0.day }}/{{ entry.0.year }} - {{ entry.2 }}
+                    {{ entry.0 }}
                 </td>
                 <td id="default_box" style="border-right: 3px black solid;">
-                    {{ entry.1 }}
+                    0
                 </td>
                 <td id="default_box">
-                    {{ entry.3 }}
+                    0
                 </td>
                 <td id="default_box">
-                    {{ entry.4 }}
+                    0
                 </td>
                 <td id="default_box">
-                    {{ entry.5 }}
+                    0
                 </td>
                 <td id="default_box">
-                    {{ entry.6 }}
+                    0
+                </td>
+                <td id="default_box">
+                    {{ entry.1.month }}/{{ entry.1.day }}/{{ entry.1.year }}
+                </td>
+                <td id="default_box">
+                    
                 </td>
                 <td id="default_box">
                     {{ entry.7 }}
                 </td>
-                <td id="default_box">
+                <td id="default_box" style="border-right: 3px black solid;">
                     {{ entry.8 }}
                 </td>
                 <td id="default_box">
                     {{ entry.9 }}
                 </td>
-                <td id="default_box" style="border-right: 3px black solid;">
-                    {{ entry.10 }}
+                <td id="default_box">
+                    
                 </td>
                 <td id="default_box">
                     {{ entry.11 }}
@@ -112,23 +118,88 @@
                 <td id="default_box">
                     {{ entry.13 }}
                 </td>
-                <td id="default_box">
+                <td id="default_box" style="border-right: 3px black solid;">
                     {{ entry.14 }}
                 </td>
                 <td id="default_box">
-                    {{ entry.15 }}
+                    {{ entry.2 }}
                 </td>
                 <td id="default_box">
-                    {{ entry.16 }}
+                    {{ entry.3 }}
                 </td>
                 <td id="default_box">
-                    {{ entry.17 }}
+                    {{ entry.4 }}
+                </td>
+                <td id="default_box">
+                    {{ entry.5 }}
                 </td>
                 <td id="default_box" style="border-right: 3px black solid;">
-                    {{ entry.18 }}
+                    {{ entry.6 }}
                 </td>
             </tr>
             {% endfor %}
         </table>
-    </body>
-</html>
+        <br>
+        <br>
+        <br>
+        
+        <div style="text-align: center;">
+            <h1>DTE - EES Coke Battery</h1><br>
+            <h2>Record #5376&nbsp;&nbsp; - &nbsp;&nbsp;07/19/2021</h2><br>
+            <h3>Standard Battery Info.</h3>
+            No. of Ovens: 85, No. of Lids per Oven: 4<br>
+            No. of Offtakes per Oven: 2, No. of Stationary Jumper Pipes: 4<br>
+            <br>
+            <h3>Charges</h3>
+            <table style="margin: auto; border-collapse: collapse;">
+                <tr>
+                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                        #1
+                    </th>
+                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                        #2
+                    </th>
+                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                        #3
+                    </th>
+                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                        #4
+                    </th>
+                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                        #5
+                    </th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                        6.0
+                    </td>
+                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                        3.5
+                    </td>
+                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                        2.5
+                    </td>
+                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                        0.5
+                    </td>
+                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                        2.0
+                    </td>
+                </tr>
+            </table>
+            
+            Sum of Charges:<br>
+            No. of Charges: <br>
+            Log Average of Charges: <br>
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+        
+
+{% endblock %}

@@ -67,7 +67,10 @@
                         </td>
                     </tr> 
                     <tr>
-                        <td colspan="6" id="issues" class="issue_boxes">Any Issues? Describe{{ form.issues }}</td>
+                        <td colspan="6" id="issues" class="issue_boxes">
+                            Any Issues? Describe:<br>
+                            {{ form.issues }}
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="4" id="person_notified" class="issue_boxes">EES Person Notified of Issue{{ form.notified }}</td>

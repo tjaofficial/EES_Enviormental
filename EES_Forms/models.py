@@ -297,7 +297,7 @@ class daily_battery_profile_model(models.Model):
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
     
     def __str__(self):
-        return self.foreman
+        return str(self.date_save)
 
     
     
@@ -3598,7 +3598,7 @@ class formM_model(models.Model):
     
 class issues_model(models.Model):
     form = models.CharField(max_length=30)
-    issues = models.CharField(max_length=30)
+    issues = models.CharField(max_length=300)
     notified = models.CharField(max_length=30)
     time = models.TimeField(
         auto_now_add=False, 
@@ -3610,7 +3610,7 @@ class issues_model(models.Model):
         auto_now=False, 
         blank=True,
     )
-    cor_action = models.CharField(max_length=30)
+    cor_action = models.CharField(max_length=150)
     
     def __str__(self):
         return str(self.date)

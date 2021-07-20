@@ -1194,7 +1194,7 @@ class issues_form(ModelForm):
         fields = ('__all__')
         widgets = {
             'form' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'issues' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'issues' : forms.TextInput(attrs={'type':'text', 'style':'width:650px;'}),
             'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
             'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
