@@ -43,4 +43,6 @@ urlpatterns = [
     
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
+    path("schedule/<int:year>/<str:month>", views.schedule_view, name="Schedule"),
+    
 ]

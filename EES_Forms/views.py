@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from operator import itemgetter
 import datetime
+import calendar
+from calendar import HTMLCalendar
 from .models import *
 from .forms import *
 from .utils import DBEmpty
@@ -4118,6 +4120,21 @@ def corrective_action_view(request):
         'ca_forms': ca_forms, #'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
     })
 
+def schedule_view(request, year, month):
+    month = month.title()
+    month_number = list(calendar.month_name).index(month)
+    month_number = int(month_number)
+    
+    cal = HTMLCalendar().formatmonth(year, month_number)
+    print(cal)
+    
+    
+    
+    
+    
+    return render (request, "ees_forms/schedule.html", {
+        'year': year, 'month': month, 'month_number': month_number, 'cal': cal, 
+    })
 
 
 
