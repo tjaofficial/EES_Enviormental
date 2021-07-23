@@ -1203,7 +1203,7 @@ class issues_form(ModelForm):
 
 class events_form(ModelForm):
     class Meta:
-        model = events
+        model = Event
         fields = ('__all__')
         widgets = {
             'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),

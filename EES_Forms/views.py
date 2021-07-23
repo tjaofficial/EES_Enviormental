@@ -10,7 +10,7 @@ import calendar
 from calendar import HTMLCalendar
 from .models import *
 from .forms import *
-from .utils import DBEmpty
+from .utils import DBEmpty, EventCalendar
 
 
 daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -365,14 +365,14 @@ def pt_admin1_view(request):
         D = []
         for x in cool:
             if x[3] <= 10 :
-                C.append(x)
+                D.append(x)
         return D
     
     def overdue_5(cool):
         E = []
         for x in cool:
             if x[3] <= 5 :
-                C.append(x)
+                E.append(x)
         return E
     
     def overdue_closest(cool):
@@ -1223,7 +1223,7 @@ def formA5(request):
                         B.form = A
                         B.save()
 
-                        if B.o1_highest_opacity >= 10:
+                        if B.o1_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1231,7 +1231,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
-                        if B.o2_highest_opacity >= 10:
+                        if B.o2_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1239,7 +1239,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
-                        if B.o3_highest_opacity >= 10:
+                        if B.o3_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1247,7 +1247,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
-                        if B.o4_highest_opacity >= 10:
+                        if B.o4_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1309,7 +1309,7 @@ def formA5(request):
                         B.form = A
                         B.save()
 
-                        if B.o1_highest_opacity >= 10:
+                        if B.o1_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1317,7 +1317,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
-                        if B.o2_highest_opacity >= 10:
+                        if B.o2_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1325,7 +1325,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
-                        if B.o3_highest_opacity >= 10:
+                        if B.o3_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1333,7 +1333,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
-                        if B.o4_highest_opacity >= 10:
+                        if B.o4_highest_opacity >= 20:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1956,33 +1956,66 @@ def formD(request):
                     'observer3' : data.observer3,
                     'observer4' : data.observer4,
                     'observer5' : data.observer5
-            }
-            empty_form = formD_form(initial=initial_data)
+                }
+                empty_form = formD_form(initial=initial_data)
             
-            if request.method == "POST":
-                form = formD_form(request.POST, instance=week_almost)
-                A_valid = form.is_valid()
-                if A_valid:
-                    form.save()
+                if request.method == "POST":
+                    form = formD_form(request.POST, instance=week_almost)
+                    A_valid = form.is_valid()
+                    if A_valid:
+                        form.save()
 
-                    filled_out = True
-                    
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
+                        filled_out = True
 
-                    if filled_out:
-                        done = Forms.objects.filter(form='D')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-                    else:
-                        done = Forms.objects.filter(form='D')[0]
-                        done.submitted = False
-                        done.save()
+                        for items in week_almost.whatever().values():
+                            if items == None:
+                                filled_out = False
+                                break
 
-                return redirect('IncompleteForms')
+                        if filled_out:
+                            done = Forms.objects.filter(form='D')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+                        else:
+                            done = Forms.objects.filter(form='D')[0]
+                            done.submitted = False
+                            done.save()
+
+                    return redirect('IncompleteForms')
+            else:
+                initial_data = {
+                    'week_start' : last_friday,
+                    'week_end' : end_week
+                }
+                empty_form = formD_form(initial= initial_data)
+                done = Forms.objects.filter(form='D')[0]
+                if request.method == "POST":
+                    form = formD_form(request.POST)
+                    A_valid = form.is_valid()
+                    if A_valid:
+                        form.save()
+
+                        filled_out = True
+
+                        for items in week_almost.whatever().values():
+                            if items == None:
+                                filled_out = False
+                                break
+
+                        if filled_out:
+                            done = Forms.objects.filter(form='D')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+                        else:
+                            done = Forms.objects.filter(form='D')[0]
+                            done.submitted = False
+                            done.save()
+
+
+
+                    return redirect('IncompleteForms')
         else:
             initial_data = {
                 'week_start' : last_friday,
@@ -4130,12 +4163,11 @@ def calendar_view(request, year, month):
     prev_month = str(calendar.month_name[month_number - 1])
     next_month = str(calendar.month_name[month_number + 1])
     
-    
     cal = HTMLCalendar().formatmonth(year, month_number)
     
     
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'cal': cal, 'next_month': next_month,
+        'year': year, 'month': month, 'prev_month': prev_month, 'cal': cal, 'next_month': next_month, 
     })
 
 
@@ -4169,19 +4201,6 @@ def event_add_view(request):
     return render (request, "ees_forms/event_add.html", {
         'today_year': today_year, 'today_month': today_month, 'form': form, #'cal': cal, 'next_month': next_month,
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
