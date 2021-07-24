@@ -200,11 +200,7 @@ frequent_choices = (
     ('Annual', 'Annual')
 )
 all_users = User.objects.all()
-all_user_choices_0 = ((x.username, x.get_full_name()) for x in all_users)
-all_user_choices_1 = ((h.username, h.get_full_name()) for h in all_users)
-all_user_choices_2 = ((a.username, a.get_full_name()) for a in all_users)
-all_user_choices_3 = ((b.username, b.get_full_name()) for b in all_users)
-all_user_choices_4 = ((c.username, c.get_full_name()) for c in all_users)
+all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
 # Create your models here.
 
@@ -223,6 +219,9 @@ class Forms(models.Model):
         return self.form
     
 class subC(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
     date = models.DateField(auto_now_add=False, auto_now=False)
     truck_sel = models.CharField(max_length=30, choices=truck_choices)
     area_sel = models.CharField(max_length=30, choices=area_choices)
@@ -232,7 +231,7 @@ class subC(models.Model):
     area_stop_time = models.TimeField(max_length=30)
     observer = models.CharField(
         max_length=30,
-        choices = all_user_choices_0
+        choices = all_user_choices
     )
     cert_date = models.DateField(
         auto_now_add=False, 
@@ -334,7 +333,13 @@ class user_profile_model(models.Model):
     
     
 class subA1_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+
+    observer = models.CharField(
+        max_length=30,
+        choices= all_user_choices,
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -480,7 +485,13 @@ class subA1_readings_model(models.Model):
  #----------------------------------------------------------------------FORM D---------------<   
     
 class formA2_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -578,7 +589,13 @@ class formA2_model(models.Model):
     
     
 class formA3_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -656,7 +673,13 @@ class formA3_model(models.Model):
         return str(self.date)
     
 class formA4_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -758,6 +781,9 @@ class formA4_model(models.Model):
         return str(self.date)
     
 class subA5_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -769,7 +795,10 @@ class subA5_model(models.Model):
     equip_loc = models.CharField(max_length=30)
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
-    observer = models.CharField(max_length=30)
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     cert_date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -976,7 +1005,11 @@ class pt_admin1_model(models.Model):
     
 class formB_model(models.Model):
     all_users = User.objects.all()
-    all_user_choices = ((x.username, x.get_full_name()) for x in all_users)
+    all_user_choices_0 = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    all_user_choices_1 = ((h.get_full_name(), h.get_full_name()) for h in all_users)
+    all_user_choices_2 = ((a.get_full_name(), a.get_full_name()) for a in all_users)
+    all_user_choices_3 = ((b.get_full_name(), b.get_full_name()) for b in all_users)
+    all_user_choices_4 = ((c.get_full_name(), c.get_full_name()) for c in all_users)
     
     week_start = models.DateField(
         auto_now_add=False, 
@@ -2031,8 +2064,12 @@ class formD_model(models.Model):
 #----------------------------------------------------------------------FORM E---------------<
     
 class formE_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
     observer = models.CharField(
         max_length=30,
+        choices = all_user_choices
     )
     date = models.DateField(
         auto_now_add=False, 

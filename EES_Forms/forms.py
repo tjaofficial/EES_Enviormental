@@ -124,7 +124,7 @@ class subA1_form(ModelForm):
         )
         
         widgets = {
-            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'crew' : forms.Select(attrs={'style':'width:40px;'}),
             'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
@@ -202,7 +202,7 @@ class formA2_form(ModelForm):
         model = formA2_model
         fields = ('__all__')
         widgets = {
-            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'crew' : forms.Select(attrs={'style':'width:40px;'}),
@@ -240,7 +240,7 @@ class formA3_form(ModelForm):
         model = formA3_model
         fields = ('__all__')
         widgets = {
-            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'crew' : forms.Select(attrs={'style':'width:40px;'}),
@@ -275,7 +275,7 @@ class formA4_form(ModelForm):
         model = formA4_model
         fields = ('__all__')
         widgets = {
-            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'crew' : forms.Select(attrs={'style':'width:40px;'}),
             'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
@@ -325,6 +325,7 @@ class subA5_form(ModelForm):
             'distance_from' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
             'direction_from' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
             'notes' : Textarea(attrs={'rows':7, 'cols':125}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             
         }
         
@@ -533,7 +534,7 @@ class formB_form(ModelForm):
         widgets = {
             'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'observer_0' : forms.Select(attrs={'style':'width: 80px;'}),
+            'observer_0' : forms.Select(attrs={'style':'width: 150px;'}),
             'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_0' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_0' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -555,7 +556,7 @@ class formB_form(ModelForm):
             'wharf_0' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_0' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_1' : forms.Select(attrs={'style':'width: 80px;'}),
+            'observer_1' : forms.Select(attrs={'style':'width: 150px;'}),
             'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_1' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -577,7 +578,7 @@ class formB_form(ModelForm):
             'wharf_1' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_1' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_2' : forms.Select(attrs={'style':'width: 80px;'}),
+            'observer_2' : forms.Select(attrs={'style':'width: 150px;'}),
             'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_2' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -599,7 +600,7 @@ class formB_form(ModelForm):
             'wharf_2' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_2' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_3' : forms.Select(attrs={'style':'width: 80px;'}),
+            'observer_3' : forms.Select(attrs={'style':'width: 150px;'}),
             'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_3' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -621,7 +622,7 @@ class formB_form(ModelForm):
             'wharf_3' : forms.Select(attrs={'style':'width: 80px;'}),
             'breeze_3' : forms.Select(attrs={'style':'width: 80px;'}),
             
-            'observer_4' : forms.Select(attrs={'style':'width: 80px;'}),
+            'observer_4' : forms.Select(attrs={'style':'width: 150px;'}),
             'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'weather_4' : forms.Select(attrs={'style':'width: 80px;'}),
             'wind_speed_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
@@ -756,7 +757,7 @@ class formE_form(ModelForm):
             'comments1'
         )
         widgets ={
-            'observer' : forms.TextInput(attrs={'type':'text', 'style':'width: 150px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'crew' : forms.Select(attrs={'style':'width: 40px;'}),
             'foreman' : forms.Select(attrs={'style':'width: 80px;'}),

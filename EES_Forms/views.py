@@ -260,19 +260,8 @@ def IncompleteForms(request):
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
             
-    
-    
     form_check1 = ["",]
     form_check2 = ["",]
-   # for item in pull:
-  # if item.form[0] not in form_check:
-#append_it = form_check.append()
-   #         print('folder')
-    #        print('1st')
-   #     else:
-   #         print('other')
-            
-    
     
     return render(request, "ees_forms/dashboard.html", {
         "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2,
