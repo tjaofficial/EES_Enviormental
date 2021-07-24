@@ -213,6 +213,7 @@ class Forms(models.Model):
     form = models.CharField(max_length=30)
     frequency = models.CharField(max_length=30, choices = frequent_choices)
     link = models.CharField(max_length=30)
+    header = models.CharField(max_length=80)
     title = models.CharField(max_length=80)
     due_date = models.DateField(auto_now_add=False, auto_now=False, blank = True)
     date_submitted = models.DateField(auto_now_add=False, auto_now=False, blank = True)

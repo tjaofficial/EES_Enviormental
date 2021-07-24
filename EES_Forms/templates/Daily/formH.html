@@ -1,4 +1,6 @@
-<html>
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
     <style>
         #boxTitle{
             font-size: 30px;
@@ -79,9 +81,6 @@
     
     <a href="{% url 'IncompleteForms' %}">Back</a>
     
-    
-    
-<body>
     <form action="" method="POST">
         {% csrf_token %}
         <div id="ptInfo">
@@ -89,11 +88,19 @@
                 <div id="newName">
                 <table style="border-collapse: collapse;">
                     <tr>
+                        {% if access_page == 'form' %}
                         <th id="boxTitle" colspan="15" style="text-align: center;">
                             Visible Emission Observation Form - (H)<br>
                             Method 9<br>
                             Combustion Stack
                         </th>
+                        {% else %}
+                        <th id="boxTitle" colspan="15" style="text-align: center;">
+                            Visible Emission Observation Form - (H)<br>
+                            Method 9<br>
+                            Form L - Visual Emissions
+                        </th>
+                        {% endif %}
                         <th></th>
                     </tr>
                     <tr>
@@ -264,16 +271,22 @@
                             <td style="height: 25px;" > </td>
                         </tr> 
                         <tr>
+                            {% if access_page == 'form' %}
                             <td colspan="7" style="text-align: left;">
                                Read for 6 minutes at 15 second intervals DURING PUSHING
                             </td>
+                            {% else %}
+                            <td colspan="7" style="text-align: left;">
+                               Read for 15 minutes MINIMUM at 15 second intervals
+                            </td>
+                            {% endif %}
                         </tr>
                         <tr>
                             <td style="height: 25px;" > </td>
                         </tr> 
                         <tr>
                             <th colspan="3" style="text-align: left;">
-                               Pushing - Oven #'s / Times
+                               
                             </th>
                             <th colspan="3" style="text-align: left;">
                                input
@@ -281,25 +294,25 @@
                         </tr>
                         <tr>
                             <th colspan="3" style="text-align: left;">
-                               blank
+                               
                             </th>
                             <th colspan="3" style="text-align: left;">
-                               input
+                               
                             </th>
                         </tr><tr>
                             <th colspan="3" style="text-align: left;">
-                               blank
+                               
                             </th>
                             <th colspan="3" style="text-align: left;">
-                               input
+                               
                             </th>
                         </tr>
                         <tr>
                             <th colspan="3" style="text-align: left;">
-                               blank
+                               
                             </th>
                             <th colspan="3" style="text-align: left;">
-                               input
+                               
                             </th>
                         </tr>
                         <tr>
@@ -336,6 +349,7 @@
                                45
                             </td>
                         </tr>
+                        {% if access_page == 'form' %}
                         <tr>
                             <td colspan="1" id="formG1_box2">
                                0
@@ -455,6 +469,264 @@
                                
                             </td>
                         </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               0
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               1
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               2
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               3
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               4
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               5
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               6
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               7
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               8
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               9
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               10
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               11
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               12
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               13
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" id="formG1_box2">
+                               14
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                            <td colspan="1" id="formG1_box1">
+                               
+                            </td>
+                        </tr>
+                        {% endif %}
+                        
                     </table>
                 </div>    
                 <br>
@@ -476,57 +748,4 @@
         </div>
     </form>   
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    </body>    
-</html>
+{% endblock %}

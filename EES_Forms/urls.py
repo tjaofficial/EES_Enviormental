@@ -36,9 +36,9 @@ urlpatterns = [
     path("Weekly/formF7", views.formF7, name="formF7"),
     path("Daily/formG1", views.formG1, name="formG1"),
     path("Daily/formG2", views.formG2, name="formG2"),
-    path("Daily/formH", views.formH, name="formH"),
+    path("Daily/formH/<str:access_page>", views.formH, name="formH"),
     path("Daily/formI", views.formI, name="formI"),
-    path("Daily/formL", views.formL, name="formL"),
+    path("Daily/formL/<str:access_page>", views.formL, name="formL"),
     path("Daily/formM", views.formM, name="formM"),
     
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),

@@ -1154,6 +1154,8 @@ class formL_form(ModelForm):
         fields = ('__all__')
         
         widgets = {
+            'week_start' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'week_end' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
             'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
             'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),

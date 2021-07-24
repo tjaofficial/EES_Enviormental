@@ -11,6 +11,7 @@ from calendar import HTMLCalendar
 from .models import *
 from .forms import *
 from .utils import DBEmpty, EventCalendar
+from dateutil.relativedelta import relativedelta
 
 
 daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -258,12 +259,23 @@ def IncompleteForms(request):
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
+            
     
     
+    form_check1 = ["",]
+    form_check2 = ["",]
+   # for item in pull:
+  # if item.form[0] not in form_check:
+#append_it = form_check.append()
+   #         print('folder')
+    #        print('1st')
+   #     else:
+   #         print('other')
+            
     
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered,
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2,
     })
 
 def weekly_forms(request):
@@ -2315,7 +2327,8 @@ def formF1(request):
     if form_all == 0 :
         initial_data = {
             'date' : todays_log.date_save,
-            'observer' : full_name
+            'observer' : full_name,
+            'retain_date' : todays_log.date_save + relativedelta(years=5)
         }
         data = formF1_form(initial=initial_data)
         if request.method == "POST":
@@ -2395,7 +2408,8 @@ def formF1(request):
                 else:
                     initial_data = {
                         'date' : todays_log.date_save,
-                        'observer' : full_name
+                        'observer' : full_name,
+                        'retain_date' : todays_log.date_save + relativedelta(years=5)
                     }
                     data = formF1_form(initial=initial_data)
                     if request.method == "POST":
@@ -2411,7 +2425,7 @@ def formF1(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -2471,7 +2485,8 @@ def formF1(request):
                     else:
                         initial_data = {
                             'date' : todays_log.date_save,
-                            'observer' : full_name
+                            'observer' : full_name,
+                            'retain_date' : todays_log.date_save + relativedelta(years=5)
                         }
                         data = formF1_form(initial=initial_data)
                         if request.method == "POST":
@@ -2488,7 +2503,8 @@ def formF1(request):
         else:
             initial_data = {
                 'date' : todays_log.date_save,
-                'observer' : full_name
+                'observer' : full_name,
+                'retain_date' : todays_log.date_save + relativedelta(years=5)
             }
             data = formF1_form(initial=initial_data)
             if request.method == "POST":
@@ -2617,7 +2633,7 @@ def formF2(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -2820,7 +2836,7 @@ def formF3(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -3023,7 +3039,7 @@ def formF4(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -3225,7 +3241,7 @@ def formF5(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -3427,7 +3443,7 @@ def formF6(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -3629,7 +3645,7 @@ def formF7(request):
                             return redirect('IncompleteForms')
             else:
                 if today.weekday() in {3, 4}:
-                    last_wed = todays_log.date_save - datetime.timedelta(day=today.weekday() - 2)
+                    last_wed = todays_log.date_save - datetime.timedelta(days=today.weekday() - 2)
                     if last_wed == database_form.date:
                         initial_data = {
                         'observer' : database_form.observer,
@@ -3833,7 +3849,7 @@ def formG2(request):
 
 #----------------------------------------------------------------------FORM H---------------<
 @lock
-def formH(request):    
+def formH(request, access_page):    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
     initial_data = {
@@ -3933,51 +3949,746 @@ def formI(request):
 
 #----------------------------------------------------------------------FORM L---------------<
 @lock
-def formL(request):
+def formL(request, access_page):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
     today = datetime.date.today()
-    last_friday = today - datetime.timedelta(days=today.weekday() + 2)
+    last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
-    end_week = last_friday + one_week
+    end_week = last_saturday + one_week
+    today_number = today.weekday()
     
     week_start_dates = formL_model.objects.all().order_by('-week_start')
     week_almost = week_start_dates[0]
-    week = week_almost.week_start
+    this_week_saturday = week_almost.week_start
+    database = week_almost
     
-    if week == last_friday:
-        data = week_almost
+    home = []
+    filled_in = False
+    for x in formL_model.objects.all():
+        if x.week_start == last_saturday:
+            home.append((x.time_4, 4))
+            home.append((x.time_3, 3))
+            home.append((x.time_2, 2))
+            home.append((x.time_1, 1))
+            home.append((x.time_0, 0))
+            home.append((x.time_6, 6))
+            home.append((x.time_5, 5))
+    
+    for days in home:
+        if days[0]:
+            if days[1] == today_number:
+                filled_in = True
+    
+    if formL_model.objects.count() == 0 :
         empty_form = formL_form()
         if request.method == "POST":
             form = formL_form(request.POST)
             A_valid = form.is_valid()
             if A_valid:
-                A = request.POST
+                A = form.save()
                 
-                return redirect('IncompleteForms')
-
-    else:
-        initial_data = {
-            'week_start' : last_friday,
-            'week_end' : end_week
-        }
-        data = formL_form()
-        empty_form = formL_form(initial= initial_data)
-        if request.method == "POST":
-            form = formL_form(request.POST)
-            A_valid = form.is_valid()
-            if A_valid:
-                form.save()
+                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                    return redirect('../formH/formL')
+                
                 
                 done = Forms.objects.filter(form='L')[0]
                 done.submitted = True
+                done.date_submitted = todays_log.date_save
                 done.save()
 
                 return redirect('IncompleteForms')
-        
+    else:
+        if access_page == 'form':
+            if today_number in {0, 1, 2, 3, 4}:
+                if this_week_saturday == last_saturday:
+                    if filled_in:
+                        empty_form = database
+                    else:
+                        initial_data = {
+                            'week_start' : database.week_start,
+                            'week_end' : database.week_end,
+                            'time_0' : database.time_0,
+                            'obser_0' : database.obser_0,
+                            'vents_0' : database.vents_0,
+                            'mixer_0' : database.mixer_0,
+                            'v_comments_0' : database.v_comments_0,
+                            'm_comments_0' : database.m_comments_0,
+                            'time_1' : database.time_1,
+                            'obser_1' : database.obser_1,
+                            'vents_1' : database.vents_1,
+                            'mixer_1' : database.mixer_1,
+                            'v_comments_1' : database.v_comments_1,
+                            'm_comments_1' : database.m_comments_1,
+                            'time_2' : database.time_2,
+                            'obser_2' : database.obser_2,
+                            'vents_2' : database.vents_2,
+                            'mixer_2' : database.mixer_2,
+                            'v_comments_2' : database.v_comments_2,
+                            'm_comments_2' : database.m_comments_2,
+                            'time_3' : database.time_3,
+                            'obser_3' : database.obser_3,
+                            'vents_3' : database.vents_3,
+                            'mixer_3' : database.mixer_3,
+                            'v_comments_3' : database.v_comments_3,
+                            'm_comments_3' : database.m_comments_3,
+                            'time_4' : database.time_4,
+                            'obser_4' : database.obser_4,
+                            'vents_4' : database.vents_4,
+                            'mixer_4' : database.mixer_4,
+                            'v_comments_4' : database.v_comments_4,
+                            'm_comments_4' : database.m_comments_4,
+                            'time_5' : database.time_5,
+                            'obser_5' : database.obser_5,
+                            'vents_5' : database.vents_5,
+                            'mixer_5' : database.mixer_5,
+                            'v_comments_5' : database.v_comments_5,
+                            'm_comments_5' : database.m_comments_5,
+                            'time_6' : database.time_6,
+                            'obser_6' : database.obser_6,
+                            'vents_6' : database.vents_6,
+                            'mixer_6' : database.mixer_6,
+                            'v_comments_6' : database.v_comments_6,
+                            'm_comments_6' : database.m_comments_6,
+                        }
+
+                        empty_form = formL_form(initial= initial_data)
+
+                        if request.method == "POST":
+                            form = formL_form(request.POST, instance= database)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+                                    
+                                B = []
+                                for x in formL_model.objects.all():
+                                    if x.week_start == last_saturday:
+                                        B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
+                                        B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
+                                        B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2 ))
+                                        B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1 ))
+                                        B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0 ))
+                                        B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
+                                        B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
+                                for days in B:
+                                    if days[0] == today_number:
+                                        if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
+                                            filled_in = True
+                                        else:
+                                            filled_in = False
+                                if filled_in:
+                                    print('beef')
+                                    done = Forms.objects.filter(form='L')[0]
+                                    done.submitted = True
+                                    done.date_submitted = todays_log.date_save
+                                    done.save()
+
+                                    return redirect('IncompleteForms')
+                                else:
+                                    done = Forms.objects.filter(form='L')[0]
+                                    done.submitted = False
+                                    done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
+                                    done.save()
+                                    
+                                    return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'week_start' : last_saturday,
+                        'week_end' : end_week
+                    }
+                    empty_form = formL_form(initial= initial_data)
+                    if request.method == "POST":
+                        form = formL_form(request.POST)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            A = form.save()
+
+                            if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                return redirect('../formH/formL')
+
+                            done = Forms.objects.filter(form='L')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                if today_number == 5:
+                    if this_week_saturday == today:
+                        if  filled_in:
+                            empty_form = database
+                        else:
+                            initial_data = {
+                                'week_start' : database.week_start,
+                                'week_end' : database.week_end,
+                                'time_0' : database.time_0,
+                                'obser_0' : database.obser_0,
+                                'vents_0' : database.vents_0,
+                                'mixer_0' : database.mixer_0,
+                                'v_comments_0' : database.v_comments_0,
+                                'm_comments_0' : database.m_comments_0,
+                                'time_1' : database.time_1,
+                                'obser_1' : database.obser_1,
+                                'vents_1' : database.vents_1,
+                                'mixer_1' : database.mixer_1,
+                                'v_comments_1' : database.v_comments_1,
+                                'm_comments_1' : database.m_comments_1,
+                                'time_2' : database.time_2,
+                                'obser_2' : database.obser_2,
+                                'vents_2' : database.vents_2,
+                                'mixer_2' : database.mixer_2,
+                                'v_comments_2' : database.v_comments_2,
+                                'm_comments_2' : database.m_comments_2,
+                                'time_3' : database.time_3,
+                                'obser_3' : database.obser_3,
+                                'vents_3' : database.vents_3,
+                                'mixer_3' : database.mixer_3,
+                                'v_comments_3' : database.v_comments_3,
+                                'm_comments_3' : database.m_comments_3,
+                                'time_4' : database.time_4,
+                                'obser_4' : database.obser_4,
+                                'vents_4' : database.vents_4,
+                                'mixer_4' : database.mixer_4,
+                                'v_comments_4' : database.v_comments_4,
+                                'm_comments_4' : database.m_comments_4,
+                                'time_5' : database.time_5,
+                                'obser_5' : database.obser_5,
+                                'vents_5' : database.vents_5,
+                                'mixer_5' : database.mixer_5,
+                                'v_comments_5' : database.v_comments_5,
+                                'm_comments_5' : database.m_comments_5,
+                                'time_6' : database.time_6,
+                                'obser_6' : database.obser_6,
+                                'vents_6' : database.vents_6,
+                                'mixer_6' : database.mixer_6,
+                                'v_comments_6' : database.v_comments_6,
+                                'm_comments_6' : database.m_comments_6,
+                            }
+
+                            empty_form = formL_form(initial= initial_data)
+                            if request.method == "POST":
+                                form = formL_form(request.POST, instance= database)
+                                A_valid = form.is_valid()
+                                if A_valid:
+                                    A = form.save()
+
+                                    if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                        return redirect('../formH/formL')
+
+                                    B = []
+                                    for x in formL_model.objects.all():
+                                        if x.week_start == last_saturday:
+                                            B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
+                                            B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
+                                            B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2 ))
+                                            B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1 ))
+                                            B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0 ))
+                                            B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
+                                            B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
+                                    for days in B:
+                                        if days[0] == today_number:
+                                            if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
+                                                filled_in = True
+                                            else:
+                                                filled_in = False
+                                    if filled_in:
+                                        done = Forms.objects.filter(form='L')[0]
+                                        done.submitted = True
+                                        done.date_submitted = todays_log.date_save
+                                        done.save()
+
+                                        return redirect('IncompleteForms')
+                                    else:
+                                        done = Forms.objects.filter(form='L')[0]
+                                        done.submitted = False
+                                        done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
+                                        done.save()
+
+                                        return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'week_start' : last_saturday,
+                            'week_end' : end_week
+                        }
+                        empty_form = formL_form(initial= initial_data)
+                        if request.method == "POST":
+                            form = formL_form(request.POST)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+
+                                done = Forms.objects.filter(form='L')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')    
+                else:
+                    sunday_last_sat = today - datetime.timedelta(days=1)
+                    if this_week_saturday == sunday_last_sat:
+                        if  filled_in:
+                            empty_form = database
+                        else:
+                            initial_data = {
+                                'week_start' : database.week_start,
+                                'week_end' : database.week_end,
+                                'time_0' : database.time_0,
+                                'obser_0' : database.obser_0,
+                                'vents_0' : database.vents_0,
+                                'mixer_0' : database.mixer_0,
+                                'v_comments_0' : database.v_comments_0,
+                                'm_comments_0' : database.m_comments_0,
+                                'time_1' : database.time_1,
+                                'obser_1' : database.obser_1,
+                                'vents_1' : database.vents_1,
+                                'mixer_1' : database.mixer_1,
+                                'v_comments_1' : database.v_comments_1,
+                                'm_comments_1' : database.m_comments_1,
+                                'time_2' : database.time_2,
+                                'obser_2' : database.obser_2,
+                                'vents_2' : database.vents_2,
+                                'mixer_2' : database.mixer_2,
+                                'v_comments_2' : database.v_comments_2,
+                                'm_comments_2' : database.m_comments_2,
+                                'time_3' : database.time_3,
+                                'obser_3' : database.obser_3,
+                                'vents_3' : database.vents_3,
+                                'mixer_3' : database.mixer_3,
+                                'v_comments_3' : database.v_comments_3,
+                                'm_comments_3' : database.m_comments_3,
+                                'time_4' : database.time_4,
+                                'obser_4' : database.obser_4,
+                                'vents_4' : database.vents_4,
+                                'mixer_4' : database.mixer_4,
+                                'v_comments_4' : database.v_comments_4,
+                                'm_comments_4' : database.m_comments_4,
+                                'time_5' : database.time_5,
+                                'obser_5' : database.obser_5,
+                                'vents_5' : database.vents_5,
+                                'mixer_5' : database.mixer_5,
+                                'v_comments_5' : database.v_comments_5,
+                                'm_comments_5' : database.m_comments_5,
+                                'time_6' : database.time_6,
+                                'obser_6' : database.obser_6,
+                                'vents_6' : database.vents_6,
+                                'mixer_6' : database.mixer_6,
+                                'v_comments_6' : database.v_comments_6,
+                                'm_comments_6' : database.m_comments_6,
+                            }
+
+                            empty_form = formL_form(initial= initial_data)
+                            if request.method == "POST":
+                                form = formL_form(request.POST, instance= database)
+                                A_valid = form.is_valid()
+                                if A_valid:
+                                    A = form.save()
+
+                                    if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                        return redirect('../formH/formL')
+
+                                    B = []
+                                    for x in formL_model.objects.all():
+                                        if x.week_start == last_saturday:
+                                            B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
+                                            B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
+                                            B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2 ))
+                                            B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1 ))
+                                            B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0 ))
+                                            B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
+                                            B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
+                                    for days in B:
+                                        if days[0] == today_number:
+                                            if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
+                                                filled_in = True
+                                            else:
+                                                filled_in = False
+                                    if filled_in:
+                                        done = Forms.objects.filter(form='L')[0]
+                                        done.submitted = True
+                                        done.date_submitted = todays_log.date_save
+                                        done.save()
+
+                                        return redirect('IncompleteForms')
+                                    else:
+                                        done = Forms.objects.filter(form='L')[0]
+                                        done.submitted = False
+                                        done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
+                                        done.save()
+
+                                        return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'week_start' : last_saturday,
+                            'week_end' : end_week
+                        }
+                        empty_form = formL_form(initial= initial_data)
+                        if request.method == "POST":
+                            form = formL_form(request.POST)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+
+                                done = Forms.objects.filter(form='L')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')  
+   #----------------EDIT-------------EDIT---------EDIT---------------  
+#----------------EDIT-------------EDIT---------EDIT---------------
+#----------------EDIT-------------EDIT---------EDIT---------------
+#----------------EDIT-------------EDIT---------EDIT---------------
+#----------------EDIT-------------EDIT---------EDIT---------------
+#----------------EDIT-------------EDIT---------EDIT---------------
+        if access_page == "edit":
+            filled_in = False
+            if today_number in {0, 1, 2, 3, 4}:
+                if this_week_saturday == last_saturday:
+                    initial_data = {
+                        'week_start' : database.week_start,
+                        'week_end' : database.week_end,
+                        'time_0' : database.time_0,
+                        'obser_0' : database.obser_0,
+                        'vents_0' : database.vents_0,
+                        'mixer_0' : database.mixer_0,
+                        'v_comments_0' : database.v_comments_0,
+                        'm_comments_0' : database.m_comments_0,
+                        'time_1' : database.time_1,
+                        'obser_1' : database.obser_1,
+                        'vents_1' : database.vents_1,
+                        'mixer_1' : database.mixer_1,
+                        'v_comments_1' : database.v_comments_1,
+                        'm_comments_1' : database.m_comments_1,
+                        'time_2' : database.time_2,
+                        'obser_2' : database.obser_2,
+                        'vents_2' : database.vents_2,
+                        'mixer_2' : database.mixer_2,
+                        'v_comments_2' : database.v_comments_2,
+                        'm_comments_2' : database.m_comments_2,
+                        'time_3' : database.time_3,
+                        'obser_3' : database.obser_3,
+                        'vents_3' : database.vents_3,
+                        'mixer_3' : database.mixer_3,
+                        'v_comments_3' : database.v_comments_3,
+                        'm_comments_3' : database.m_comments_3,
+                        'time_4' : database.time_4,
+                        'obser_4' : database.obser_4,
+                        'vents_4' : database.vents_4,
+                        'mixer_4' : database.mixer_4,
+                        'v_comments_4' : database.v_comments_4,
+                        'm_comments_4' : database.m_comments_4,
+                        'time_5' : database.time_5,
+                        'obser_5' : database.obser_5,
+                        'vents_5' : database.vents_5,
+                        'mixer_5' : database.mixer_5,
+                        'v_comments_5' : database.v_comments_5,
+                        'm_comments_5' : database.m_comments_5,
+                        'time_6' : database.time_6,
+                        'obser_6' : database.obser_6,
+                        'vents_6' : database.vents_6,
+                        'mixer_6' : database.mixer_6,
+                        'v_comments_6' : database.v_comments_6,
+                        'm_comments_6' : database.m_comments_6,
+                    }
+
+                    empty_form = formL_form(initial= initial_data)
+
+                    if request.method == "POST":
+                        form = formL_form(request.POST, instance= database)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            A = form.save()
+
+                            if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                return redirect('../formH/formL')
+
+                            B = []
+                            for x in formL_model.objects.all():
+                                if x.week_start == last_saturday:
+                                    B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
+                                    B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
+                                    B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2 ))
+                                    B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1 ))
+                                    B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0 ))
+                                    B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
+                                    B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
+                            for days in B:
+                                if days[0] == today_number:
+                                    if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
+                                        filled_in = True
+                                    else:
+                                        filled_in = False
+                            if filled_in:
+                                print('chicken')
+                                done = Forms.objects.filter(form='L')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
+                            else:
+                                done = Forms.objects.filter(form='L')[0]
+                                done.submitted = False
+                                done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
+                                done.save()
+
+                                return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'week_start' : last_saturday,
+                        'week_end' : end_week
+                    }
+                    empty_form = formL_form(initial= initial_data)
+                    if request.method == "POST":
+                        form = formL_form(request.POST)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            A = form.save()
+
+                            if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                return redirect('../formH/formL')
+
+                            done = Forms.objects.filter(form='L')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                if today_number == 5:
+                    if this_week_saturday == today:
+                        initial_data = {
+                            'week_start' : database.week_start,
+                            'week_end' : database.week_end,
+                            'time_0' : database.time_0,
+                            'obser_0' : database.obser_0,
+                            'vents_0' : database.vents_0,
+                            'mixer_0' : database.mixer_0,
+                            'v_comments_0' : database.v_comments_0,
+                            'm_comments_0' : database.m_comments_0,
+                            'time_1' : database.time_1,
+                            'obser_1' : database.obser_1,
+                            'vents_1' : database.vents_1,
+                            'mixer_1' : database.mixer_1,
+                            'v_comments_1' : database.v_comments_1,
+                            'm_comments_1' : database.m_comments_1,
+                            'time_2' : database.time_2,
+                            'obser_2' : database.obser_2,
+                            'vents_2' : database.vents_2,
+                            'mixer_2' : database.mixer_2,
+                            'v_comments_2' : database.v_comments_2,
+                            'm_comments_2' : database.m_comments_2,
+                            'time_3' : database.time_3,
+                            'obser_3' : database.obser_3,
+                            'vents_3' : database.vents_3,
+                            'mixer_3' : database.mixer_3,
+                            'v_comments_3' : database.v_comments_3,
+                            'm_comments_3' : database.m_comments_3,
+                            'time_4' : database.time_4,
+                            'obser_4' : database.obser_4,
+                            'vents_4' : database.vents_4,
+                            'mixer_4' : database.mixer_4,
+                            'v_comments_4' : database.v_comments_4,
+                            'm_comments_4' : database.m_comments_4,
+                            'time_5' : database.time_5,
+                            'obser_5' : database.obser_5,
+                            'vents_5' : database.vents_5,
+                            'mixer_5' : database.mixer_5,
+                            'v_comments_5' : database.v_comments_5,
+                            'm_comments_5' : database.m_comments_5,
+                            'time_6' : database.time_6,
+                            'obser_6' : database.obser_6,
+                            'vents_6' : database.vents_6,
+                            'mixer_6' : database.mixer_6,
+                            'v_comments_6' : database.v_comments_6,
+                            'm_comments_6' : database.m_comments_6,
+                        }
+
+                        empty_form = formL_form(initial= initial_data)
+                        if request.method == "POST":
+                            form = formL_form(request.POST, instance= database)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+
+                                B = []
+                                for x in formL_model.objects.all():
+                                    if x.week_start == last_saturday:
+                                        B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
+                                        B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
+                                        B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2 ))
+                                        B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1 ))
+                                        B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0 ))
+                                        B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
+                                        B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
+                                for days in B:
+                                    if days[0] == today_number:
+                                        if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
+                                            filled_in = True
+                                        else:
+                                            filled_in = False
+                                if filled_in:
+                                    done = Forms.objects.filter(form='L')[0]
+                                    done.submitted = True
+                                    done.date_submitted = todays_log.date_save
+                                    done.save()
+
+                                    return redirect('IncompleteForms')
+                                else:
+                                    done = Forms.objects.filter(form='L')[0]
+                                    done.submitted = False
+                                    done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
+                                    done.save()
+                                    
+                                    return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'week_start' : last_saturday,
+                            'week_end' : end_week
+                        }
+                        empty_form = formL_form(initial= initial_data)
+                        if request.method == "POST":
+                            form = formL_form(request.POST)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+
+                                done = Forms.objects.filter(form='L')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')    
+                else:
+                    sunday_last_sat = today - datetime.timedelta(days=1)
+                    if this_week_saturday == sunday_last_sat:
+                        initial_data = {
+                            'week_start' : database.week_start,
+                            'week_end' : database.week_end,
+                            'time_0' : database.time_0,
+                            'obser_0' : database.obser_0,
+                            'vents_0' : database.vents_0,
+                            'mixer_0' : database.mixer_0,
+                            'v_comments_0' : database.v_comments_0,
+                            'm_comments_0' : database.m_comments_0,
+                            'time_1' : database.time_1,
+                            'obser_1' : database.obser_1,
+                            'vents_1' : database.vents_1,
+                            'mixer_1' : database.mixer_1,
+                            'v_comments_1' : database.v_comments_1,
+                            'm_comments_1' : database.m_comments_1,
+                            'time_2' : database.time_2,
+                            'obser_2' : database.obser_2,
+                            'vents_2' : database.vents_2,
+                            'mixer_2' : database.mixer_2,
+                            'v_comments_2' : database.v_comments_2,
+                            'm_comments_2' : database.m_comments_2,
+                            'time_3' : database.time_3,
+                            'obser_3' : database.obser_3,
+                            'vents_3' : database.vents_3,
+                            'mixer_3' : database.mixer_3,
+                            'v_comments_3' : database.v_comments_3,
+                            'm_comments_3' : database.m_comments_3,
+                            'time_4' : database.time_4,
+                            'obser_4' : database.obser_4,
+                            'vents_4' : database.vents_4,
+                            'mixer_4' : database.mixer_4,
+                            'v_comments_4' : database.v_comments_4,
+                            'm_comments_4' : database.m_comments_4,
+                            'time_5' : database.time_5,
+                            'obser_5' : database.obser_5,
+                            'vents_5' : database.vents_5,
+                            'mixer_5' : database.mixer_5,
+                            'v_comments_5' : database.v_comments_5,
+                            'm_comments_5' : database.m_comments_5,
+                            'time_6' : database.time_6,
+                            'obser_6' : database.obser_6,
+                            'vents_6' : database.vents_6,
+                            'mixer_6' : database.mixer_6,
+                            'v_comments_6' : database.v_comments_6,
+                            'm_comments_6' : database.m_comments_6,
+                        }
+
+                        empty_form = formL_form(initial= initial_data)
+                        if request.method == "POST":
+                            form = formL_form(request.POST, instance= database)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+
+                                B = []
+                                for x in formL_model.objects.all():
+                                    if x.week_start == last_saturday:
+                                        B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
+                                        B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
+                                        B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2 ))
+                                        B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1 ))
+                                        B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0 ))
+                                        B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
+                                        B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
+                                for days in B:
+                                    if days[0] == today_number:
+                                        if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
+                                            filled_in = True
+                                        else:
+                                            filled_in = False
+                                if filled_in:
+                                    done = Forms.objects.filter(form='L')[0]
+                                    done.submitted = True
+                                    done.date_submitted = todays_log.date_save
+                                    done.save()
+
+                                    return redirect('IncompleteForms')
+                                else:
+                                    done = Forms.objects.filter(form='L')[0]
+                                    done.submitted = False
+                                    done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
+                                    done.save()
+                                    
+                                    return redirect('IncompleteForms')
+                    else:
+                        initial_data = {
+                            'week_start' : last_saturday,
+                            'week_end' : end_week
+                        }
+                        empty_form = formL_form(initial= initial_data)
+                        if request.method == "POST":
+                            form = formL_form(request.POST)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                A = form.save()
+
+                                if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
+                                    return redirect('../formH/formL')
+
+                                done = Forms.objects.filter(form='L')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+
+                                return redirect('IncompleteForms')
     return render (request, "Daily/formL.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'empty': empty_form, 'week': week, 'last_friday': last_friday, 'week_almost': week_almost, 'end_week': end_week
+        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'week_almost': week_almost, 'end_week': end_week, 'filled_in': filled_in
     })
 
 #------------------------------------------------------------------------FORM M---------------<
