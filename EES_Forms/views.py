@@ -10,7 +10,7 @@ import calendar
 from calendar import HTMLCalendar
 from .models import *
 from .forms import *
-from .utils import DBEmpty, EventCalendar
+from .utils import DBEmpty, EventCalendar, Calendar
 from dateutil.relativedelta import relativedelta
 
 
@@ -1224,7 +1224,7 @@ def formA5(request):
                         B.form = A
                         B.save()
 
-                        if B.o1_highest_opacity >= 20:
+                        if B.o1_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1232,7 +1232,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
-                        if B.o2_highest_opacity >= 20:
+                        if B.o2_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1240,7 +1240,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
-                        if B.o3_highest_opacity >= 20:
+                        if B.o3_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1248,7 +1248,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
-                        if B.o4_highest_opacity >= 20:
+                        if B.o4_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                             return redirect (issue_page)
@@ -1310,7 +1310,7 @@ def formA5(request):
                         B.form = A
                         B.save()
 
-                        if B.o1_highest_opacity >= 20:
+                        if B.o1_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1318,7 +1318,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
-                        if B.o2_highest_opacity >= 20:
+                        if B.o2_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1326,7 +1326,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
-                        if B.o3_highest_opacity >= 20:
+                        if B.o3_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1334,7 +1334,7 @@ def formA5(request):
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
-                        if B.o4_highest_opacity >= 20:
+                        if B.o4_highest_opacity >= 10:
                             issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
 
                             return redirect (issue_page)
@@ -1353,9 +1353,13 @@ def formA5(request):
                     form = subA5_form(initial=initial_data)
                     readings_form = subA5_readings_form()
         else:
-            return redirect('daily_battery_profile')
+            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+            return redirect(batt_prof)
     else:
-        return redirect('daily_battery_profile')
+        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+        return redirect(batt_prof)
                     
     return render (request, "Daily/Method303/formA5.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName
@@ -4863,11 +4867,15 @@ def calendar_view(request, year, month):
     prev_month = str(calendar.month_name[month_number - 1])
     next_month = str(calendar.month_name[month_number + 1])
     
-    cal = HTMLCalendar().formatmonth(year, month_number)
+    events = Event.objects.all()
+    
+    calend = Calendar()
+
+    html_cal = calend.formatmonth(year, month_number, withyear=True)
     
     
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'cal': cal, 'next_month': next_month, 
+        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal
     })
 
 
@@ -4882,28 +4890,44 @@ def schedule_view(request):
     })
 
 
+
+
+
+
 def event_add_view(request):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     
-    form = events_form()
     
+    form = events_form()
+    #my_event = Event.objects.get(pk=event_id)
+    
+        
     if request.method == "POST":
         request = events_form(request.POST)
         if request.is_valid():
             request.save()
-            
+
             cal_link = 'schedule/' + str(today_year) + '/' + today_month
-            
+
             return redirect(cal_link)
     
     
     return render (request, "ees_forms/event_add.html", {
-        'today_year': today_year, 'today_month': today_month, 'form': form, #'cal': cal, 'next_month': next_month,
+        'today_year': today_year, 'today_month': today_month, 'form': form, 
     })
 
-
-
+def event_detail_view(request, event_id):
+    today_year = int(today.year)
+    today_month = str(calendar.month_name[today.month])
+    
+    
+    form = events_form()
+    my_event = Event.objects.get(pk=event_id)
+    
+    return render (request, "ees_forms/event_detail.html", {
+        'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id
+    })
 
 
 

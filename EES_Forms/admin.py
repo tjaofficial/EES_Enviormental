@@ -43,7 +43,7 @@ admin.site.register(formM_model)
 admin.site.register(issues_model)
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['observer', 'day', 'start_time', 'end_time', 'notes']
+    list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']
     change_list_template = 'admin/events/change_list.html'
  
     def changelist_view(self, request, extra_context=None):

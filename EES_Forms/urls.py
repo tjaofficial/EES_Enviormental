@@ -46,5 +46,6 @@ urlpatterns = [
     path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
     path("schedule_view", views.schedule_view, name="Schedule"),
     path("add_event", views.event_add_view, name="Add Event"),
+    path("event_detail/<int:event_id>", views.event_detail_view, name="Event Details"),
    # path("calendar", views.CalendarView.as_view(), name='calendar'),
 ]

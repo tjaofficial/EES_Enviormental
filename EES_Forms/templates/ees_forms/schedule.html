@@ -5,7 +5,7 @@
 <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
 <div>
     Hey {{ user.first_name }}, Schedule for {{ month }} - {{ year }}<br>
-    <a href="{% url 'Add Event' %}"> Hell Yeah</a>
+    <a href="../../add_event"> Hell Yeah</a>
 </div>
 <br><br>
 <div class="container">
@@ -19,10 +19,22 @@
     </div>
     <div class="clearfix">
         <div class="calendar">
-            {{ cal|safe }}
+            {{ html_cal|safe }}
         </div>
     </div>  
 </div>
+<main id="body-main">
+    <h1> Your Event Calendar </h1>
+    <ul>
+        {% for e in events %}
+        <li>
+            <a href="../../event_detail/{{ e.id }}">
+                {{ e.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</main>
         
 {% endblock %}
 

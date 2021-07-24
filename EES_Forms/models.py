@@ -3657,7 +3657,12 @@ class issues_model(models.Model):
     
 class Event(models.Model):
     observer = models.CharField(max_length=30)
-    day = models.DateField(u'Day of the event', help_text=u'Day of the event')
+    title = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
     start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
     end_time = models.TimeField(u'Final time', help_text=u'Final time')
     notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
@@ -3678,20 +3683,14 @@ class Event(models.Model):
         return overlap
  
     def get_absolute_url(self):
-        url = reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name), args=[self.id])
-        return u'<a href="%s">%s</a>' % (url, str(self.start_time))
+        url = '../../event_detail/' + str(self.id)
+        return u'<a href="%s">%s</a>' % (url, str(self.title))
  
     def clean(self):
         if self.end_time <= self.start_time:
             raise ValidationError('Ending times must after starting times')
  
-        events = Event.objects.filter(day=self.day)
-        if events.exists():
-            for event in events:
-                if self.check_overlap(event.start_time, event.end_time, self.start_time, self.end_time):
-                    raise ValidationError(
-                        'There is an overlap with another event: ' + str(event.day) + ', ' + str(
-                            event.start_time) + '-' + str(event.end_time))
+        
     
     
     
