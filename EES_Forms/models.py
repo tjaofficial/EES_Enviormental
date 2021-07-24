@@ -3656,8 +3656,27 @@ class issues_model(models.Model):
         return str(self.date)
     
 class Event(models.Model):
-    observer = models.CharField(max_length=30)
-    title = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    cal_title_choices = (
+        ('P', 'Primary'),
+        ('BU', 'Back Up'),
+        ('Off', 'Off'),
+        ('Office', 'Office '),
+        ('BH', 'BagHouses'),
+        ('QT', 'Quarterly Trucks'),
+        ('BH2-S', 'Boilerhouse Stacks'),
+    )
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
+    title = models.CharField(
+        max_length=30,
+        choices = cal_title_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -3682,6 +3701,10 @@ class Event(models.Model):
  
         return overlap
  
+    def get_absolute_url2(self):
+        url = reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name), args=[self.id])
+        return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
+    
     def get_absolute_url(self):
         url = '../../event_detail/' + str(self.id)
         return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))

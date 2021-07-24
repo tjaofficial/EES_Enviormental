@@ -2,21 +2,18 @@
 
 {% block list%}
 {% load static %}
-<a href="../schedule/{{today_year}}/{{today_month}}"> Calendar</a>
+<a href="../schedule/{{today_year}}/{{today_month}}">Back To Calendar</a>
 <center>
-    <div>
-        <h3>View Event Details</h3>
-        <form action="" method="POST">
-            {% csrf_token %}
+    <div style="padding-top: 30px;">
+        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="card">
+            <h3>View Event Details</h3><br>
+            
             Observer: {{ my_event.observer }}<br>
             Title: {{ my_event.title }}<br>
-            Date: {{ my_event.day }}<br>
-            Starting Time: {{ my_event.start_time }}<br>
-            Final Time: {{ my_event.end_time }}<br>
+            Date: {{ my_event.date }}<br>
             Description: {{ my_event.notes }}<br>
-            <input type="submit" value="Request"><br>
-            
-        </form>
+                
+        </div>
     </div>
 </center>
 

@@ -3,11 +3,7 @@
 {% block list%}
 {% load static %}
 <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
-<div>
-    Hey {{ user.first_name }}, Schedule for {{ month }} - {{ year }}<br>
-    <a href="../../add_event"> Hell Yeah</a>
-</div>
-<br><br>
+<br>
 <div class="container">
     <div style="display: flex; margin-left: 25px;">
         <div style="width: 150px; text-align: left;">
@@ -23,18 +19,9 @@
         </div>
     </div>  
 </div>
-<main id="body-main">
-    <h1> Your Event Calendar </h1>
-    <ul>
-        {% for e in events %}
-        <li>
-            <a href="../../event_detail/{{ e.id }}">
-                {{ e.title }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-</main>
+<div style="padding-right: 25px; text-align: right;">
+    <a href="../../add_event"> Add Event</a>
+</div>
         
 {% endblock %}
 

@@ -4897,8 +4897,8 @@ def calendar_view(request, year, month):
 def schedule_view(request):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-    print(today_year)
     
+    return redirect ('schedule/' + str(today_year) + '/' + str(today_month))
     
     return render (request, "ees_forms/scheduling.html", {
         'today_year': today_year, 'today_month': today_month, #'prev_month': prev_month, 'cal': cal, 'next_month': next_month,
