@@ -75,6 +75,7 @@ class EventAdmin(admin.ModelAdmin):
         extra_context['next_month'] = reverse('admin:EES_Forms_event_changelist') + '?day__gte=' + str(next_month)
  
         cal = EventCalendar()
+        cal.setfirstweekday(6)
         html_calendar = cal.formatmonth(d.year, d.month, withyear=True)
         html_calendar = html_calendar.replace('<td ', '<td  width="150" height="150"')
         extra_context['calendar'] = mark_safe(html_calendar)

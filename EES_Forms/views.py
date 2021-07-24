@@ -831,9 +831,13 @@ def formA2(request):
 
                             return redirect (issue_page)
         else:
-            return redirect('daily_battery_profile')
+            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+            return redirect(batt_prof)
     else:
-        return redirect('daily_battery_profile')
+        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+        return redirect(batt_prof)
 
     return render (request, "Daily/Method303/formA2.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -944,9 +948,13 @@ def formA3(request):
 
                         return redirect('IncompleteForms')
         else:
-            return redirect('daily_battery_profile')
+            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+            return redirect(batt_prof)
     else:
-        return redirect('daily_battery_profile')
+        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+        return redirect(batt_prof)
 
     return render (request, "Daily/Method303/formA3.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -1045,9 +1053,13 @@ def formA4(request):
 
                         return redirect('IncompleteForms')
         else:
-            return redirect('daily_battery_profile')
+            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+            return redirect(batt_prof)
     else:
-        return redirect('daily_battery_profile')
+        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                
+        return redirect(batt_prof)
     
     return render (request, "Daily/Method303/formA4.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
@@ -4869,13 +4881,16 @@ def calendar_view(request, year, month):
     
     events = Event.objects.all()
     
+    
+ 
     calend = Calendar()
-
+    calend.setfirstweekday(6)
     html_cal = calend.formatmonth(year, month_number, withyear=True)
     
     
+    
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal
+        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal,
     })
 
 

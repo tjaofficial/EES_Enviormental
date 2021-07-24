@@ -75,7 +75,6 @@ class Calendar(HTMLCalendar):
         events_html = "<ul>"
         for event in events_from_day:
             events_html += event.get_absolute_url() + "<br>"
-            print(events_html)
         events_html += "</ul>"
  
         if day == 0:
@@ -89,6 +88,8 @@ class Calendar(HTMLCalendar):
         """
         s = ''.join(self.formatday(d, wd, events) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
+        
+        
  
     def formatmonth(self, theyear, themonth, withyear=True):
         """

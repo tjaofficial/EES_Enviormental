@@ -3684,7 +3684,7 @@ class Event(models.Model):
  
     def get_absolute_url(self):
         url = '../../event_detail/' + str(self.id)
-        return u'<a href="%s">%s</a>' % (url, str(self.title))
+        return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
  
     def clean(self):
         if self.end_time <= self.start_time:
