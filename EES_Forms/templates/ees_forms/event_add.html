@@ -1,0 +1,26 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
+{% load static %}
+<a href="schedule/{{today_year}}/{{today_month}}"> Calendar</a>
+
+<center>
+    <div>
+        <h3>Create New Event</h3>
+        <form action="" method="POST">
+            {% csrf_token %}
+            Observer: {{ form.observer }}<br>
+            Date: {{ form.date }}<br>
+            Title: {{ form.title }}<br>
+            Starting Time: {{ form.start_time }}<br>
+            Final Time: {{ form.end_time }}<br>
+            Description: {{ form.notes }}<br>
+            <input type="submit" value="Request">
+        </form>
+    </div>
+</center>
+
+
+
+
+{% endblock %}

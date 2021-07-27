@@ -66,6 +66,7 @@
         }
     </style>
     <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     
     <a href="{% url 'IncompleteForms' %}">Back</a>
 
@@ -692,10 +693,21 @@
                         </tr>
                     </table>
                     
-                <br><br><br>
-                <input type="submit" value="Submit Form" style="font-size: 40px">
+                
                 </div> 
+                
             </div>    
         </div>
+        <br><br>
+        <div style="font-size: 20px;text-align: center;">
+            <div style="text-align: left;">
+            Notes:
+            </div>
+            <br>
+            {{ data.notes }}
+        </div>
+        
+        <br><br><br>
+        <input type="submit" value="Submit Form" style="font-size: 40px">
     </form>   
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "ees_forms/layout.html" %}
 
 {% block list%}
+{% load static %}
 
     <style>
         #boxc1{
@@ -16,7 +17,7 @@
         }
     
     </style>
-
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 
 
     <a href="{% url 'IncompleteForms' %}">Back</a>
@@ -26,14 +27,10 @@
     {% else %}
     
     
-    
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <form action="" method=POST>
         {% csrf_token %}
         <table style="border-collapse: collapse; margin: auto;">
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <!------Header Information------_________________________---------______________________---------------------------_________-------------->
             <tr>
@@ -53,7 +50,7 @@
             </tr> 
             <tr>
                 <th>
-                    Date: {{ now.month }}/{{ now.day }}/{{ now.year }}
+                    Date: {{ form.date }}
                 </th>
             </tr>
             <tr>
@@ -151,7 +148,7 @@
             </tr>
             <tr>
                 <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                <td id="boxc1">=all values divided by 12</td>
+                <td id="boxc1">{{ form.average_t }}</td>
             </tr>
             <tr>
                 <td style="height: 35px" > </td>
@@ -223,7 +220,7 @@
             </tr>
             <tr>
                 <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                <td id="boxc1">=all values divided by 12</td>
+                <td id="boxc1">{{ form.average_p }}</td>
             </tr>
             <tr>
                 <td style="height: 40px" > </td>
@@ -245,29 +242,6 @@
             </tr>
             <tr style="font-size: 20px;text-align: center;">
                 <td colspan="6">{{ form.comments }}</td>
-            </tr>
-            
-            
-<!------- ANY ISSUES ----------------------------------->      
-            <!------- ANY ISSUES -----------------------------------> 
-            <!------- ANY ISSUES -----------------------------------> 
-            <!------- ANY ISSUES -----------------------------------> 
-            <!------- ANY ISSUES -----------------------------------> 
-            
-            
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr>
-                <td colspan="6" style="border: 1px solid black; font-size: 20px;">Any Issues? Describe{{ form.issues }}</td>
-            </tr>
-            <tr>
-                <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue{{ form.notified }}</td>
-                <td colspan="1" style="border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
-                <td colspan="1" style="border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
-            </tr>
-            <tr>
-                <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken{{ form.cor_action }}</td>
             </tr>
         </table>
         <br><br><br>

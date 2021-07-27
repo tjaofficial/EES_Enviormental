@@ -7,7 +7,7 @@
         <div id="form_holder">
             <h1 class="profile_header">Profile Information<br> <input type="submit" value="Edit"></h1><br>
             Username: {{ request.user }}<br>
-            Password: <a href="">Change Password</a><br>
+            Password: <a href="{% url 'PasswordChange' %}">Change Password</a><br>
             <br>
             Certification Date: {{ user_select.cert_date }}<br>
             Profile Picture: <a href="">Change Profile Picture</a><br>

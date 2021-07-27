@@ -219,4 +219,65 @@ a {
   color: #001011;
 }
 
+
+
+
+.card2 {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 220px;
+  background-color: white;
+  box-shadow: #00000014 1px 5px 10px 0px;
+  margin: 2rem;
+  height: fit-content;
+  border-radius: 1rem;
+}
+.card2_header {
+  padding: 0 1rem;
+  display: grid;
+  align-items: center;
+  height: 3rem;
+  text-align: center;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+    background-color: #98C9A3;
+    width: 100%;
+}
+.card2_header select {
+  height: 1.5rem;
+}
+.card2_title {
+  font-size: 1rem;
+}
+.card2_empty {
+  color: rgba(0, 0, 0, 0.404);
+}
+.card2_Form {
+  padding: 0 1rem;
+  color: #001011;
+  align-items: center;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.card3_Form {
+  padding: 0 1rem;
+  color: #001011;
+  align-items: center;
+    text-align: left;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.card2_Form h4 {
+  font-size: 0.75rem;
+  font-weight: unset;
+color: darkgray;
+    text-align: center;
+}
+.card3_Form h4 {
+  font-size: 0.75rem;
+  font-weight: unset;
+color: darkgray;
+    text-align: center;
+}
+
 /*# sourceMappingURL=style.css.map */

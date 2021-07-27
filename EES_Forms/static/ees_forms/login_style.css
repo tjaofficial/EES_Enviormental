@@ -1,11 +1,19 @@
 #page{
-    background-color: aqua;
+    background-color: white;
     height: 100%;
     width: 100%;
 }
 #login{
     margin: auto;
-    width: 310px;
     text-align: center;
-    padding-top: 200px;
+}
+#change_password{
+    margin: auto;
+    text-align: center;
+    height: auto;
+    margin-top: 100px;
+}
+
+#change_password ul{
+    height: auto;
 }

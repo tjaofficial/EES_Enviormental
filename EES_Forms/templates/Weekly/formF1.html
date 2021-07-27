@@ -1,4 +1,6 @@
-<html>
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
     <style>
         #formD_box1{
             border: 2px solid black;
@@ -25,7 +27,6 @@
     <a href="{% url 'IncompleteForms' %}">Back</a>
     
     
-    <body>
         <form action="" method="POST">
             {% csrf_token %}
             <div style="padding-top: 100px">
@@ -342,5 +343,4 @@
             </div>
             <input type="submit" value="Submit Form" style="font-size: 40px">
         </form>
-    </body>
-</html>
+{% endblock %}

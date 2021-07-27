@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
+from django.core.exceptions import ValidationError
+from django.urls import reverse
 import datetime
 
 
@@ -198,11 +200,7 @@ frequent_choices = (
     ('Annual', 'Annual')
 )
 all_users = User.objects.all()
-all_user_choices_0 = ((x.username, x.get_full_name()) for x in all_users)
-all_user_choices_1 = ((h.username, h.get_full_name()) for h in all_users)
-all_user_choices_2 = ((a.username, a.get_full_name()) for a in all_users)
-all_user_choices_3 = ((b.username, b.get_full_name()) for b in all_users)
-all_user_choices_4 = ((c.username, c.get_full_name()) for c in all_users)
+all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
 # Create your models here.
 
@@ -211,6 +209,7 @@ class Forms(models.Model):
     form = models.CharField(max_length=30)
     frequency = models.CharField(max_length=30, choices = frequent_choices)
     link = models.CharField(max_length=30)
+    header = models.CharField(max_length=80)
     title = models.CharField(max_length=80)
     due_date = models.DateField(auto_now_add=False, auto_now=False, blank = True)
     date_submitted = models.DateField(auto_now_add=False, auto_now=False, blank = True)
@@ -220,21 +219,29 @@ class Forms(models.Model):
         return self.form
     
 class subC(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.PROTECT)
-    date = models.DateField(auto_now_add=True, auto_now=False)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    date = models.DateField(auto_now_add=False, auto_now=False)
     truck_sel = models.CharField(max_length=30, choices=truck_choices)
     area_sel = models.CharField(max_length=30, choices=area_choices)
     truck_start_time = models.TimeField(max_length=30)
     truck_stop_time = models.TimeField(max_length=30)
     area_start_time = models.TimeField(max_length=30)
     area_stop_time = models.TimeField(max_length=30)
-    observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
-    comments = models.CharField(max_length=30)
-    issues = models.CharField(max_length=30)
-    cor_action = models.CharField(max_length=30)
-    notified = models.CharField(max_length=30)
-    time_date = models.CharField(max_length=30)
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
+    cert_date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False
+    )
+    comments = models.CharField(
+        max_length=300
+    )
+    average_t = models.IntegerField(blank=True)
+    average_p = models.IntegerField(blank=True)
     
     def __str__(self):
         return str(self.date)
@@ -244,7 +251,6 @@ class FormCReadings(models.Model):
     form = models.OneToOneField(
         subC,
         on_delete=models.CASCADE,
-        primary_key=True,
     )
     TRead1 = models.CharField(max_length=3)
     TRead2 = models.CharField(max_length=3)
@@ -293,7 +299,7 @@ class daily_battery_profile_model(models.Model):
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
     
     def __str__(self):
-        return self.foreman
+        return str(self.date_save)
 
     
     
@@ -327,7 +333,13 @@ class user_profile_model(models.Model):
     
     
 class subA1_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+
+    observer = models.CharField(
+        max_length=30,
+        choices= all_user_choices,
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -473,7 +485,13 @@ class subA1_readings_model(models.Model):
  #----------------------------------------------------------------------FORM D---------------<   
     
 class formA2_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -571,7 +589,13 @@ class formA2_model(models.Model):
     
     
 class formA3_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -649,7 +673,13 @@ class formA3_model(models.Model):
         return str(self.date)
     
 class formA4_model(models.Model):
-    observer = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -751,6 +781,9 @@ class formA4_model(models.Model):
         return str(self.date)
     
 class subA5_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -762,7 +795,10 @@ class subA5_model(models.Model):
     equip_loc = models.CharField(max_length=30)
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
-    observer = models.CharField(max_length=30)
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
     cert_date = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -798,6 +834,7 @@ class subA5_model(models.Model):
     plume_opacity_determined_stop = models.CharField(max_length=50)
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
+    notes = models.CharField(max_length=300)
     
     def __str__(self):
         return str(self.date)
@@ -968,7 +1005,11 @@ class pt_admin1_model(models.Model):
     
 class formB_model(models.Model):
     all_users = User.objects.all()
-    all_user_choices = ((x.username, x.get_full_name()) for x in all_users)
+    all_user_choices_0 = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    all_user_choices_1 = ((h.get_full_name(), h.get_full_name()) for h in all_users)
+    all_user_choices_2 = ((a.get_full_name(), a.get_full_name()) for a in all_users)
+    all_user_choices_3 = ((b.get_full_name(), b.get_full_name()) for b in all_users)
+    all_user_choices_4 = ((c.get_full_name(), c.get_full_name()) for c in all_users)
     
     week_start = models.DateField(
         auto_now_add=False, 
@@ -2023,8 +2064,12 @@ class formD_model(models.Model):
 #----------------------------------------------------------------------FORM E---------------<
     
 class formE_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
     observer = models.CharField(
-        max_length=30
+        max_length=30,
+        choices = all_user_choices
     )
     date = models.DateField(
         auto_now_add=False, 
@@ -3593,7 +3638,7 @@ class formM_model(models.Model):
     
 class issues_model(models.Model):
     form = models.CharField(max_length=30)
-    issues = models.CharField(max_length=30)
+    issues = models.CharField(max_length=300)
     notified = models.CharField(max_length=30)
     time = models.TimeField(
         auto_now_add=False, 
@@ -3605,10 +3650,70 @@ class issues_model(models.Model):
         auto_now=False, 
         blank=True,
     )
-    cor_action = models.CharField(max_length=30)
+    cor_action = models.CharField(max_length=150)
     
     def __str__(self):
         return str(self.date)
+    
+class Event(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    cal_title_choices = (
+        ('P', 'Primary'),
+        ('BU', 'Back Up'),
+        ('Off', 'Off'),
+        ('Office', 'Office '),
+        ('BH', 'BagHouses'),
+        ('QT', 'Quarterly Trucks'),
+        ('BH2-S', 'Boilerhouse Stacks'),
+    )
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
+    title = models.CharField(
+        max_length=30,
+        choices = cal_title_choices
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
+    start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
+    end_time = models.TimeField(u'Final time', help_text=u'Final time')
+    notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
+    
+    class Meta:
+        verbose_name = u'Scheduling'
+        verbose_name_plural = u'Scheduling'
+ 
+    def check_overlap(self, fixed_start, fixed_end, new_start, new_end):
+        overlap = False
+        if new_start == fixed_end or new_end == fixed_start:    #edge case
+            overlap = False
+        elif (new_start >= fixed_start and new_start <= fixed_end) or (new_end >= fixed_start and new_end <= fixed_end): #innner limits
+            overlap = True
+        elif new_start <= fixed_start and new_end >= fixed_end: #outter limits
+            overlap = True
+ 
+        return overlap
+ 
+    def get_absolute_url2(self):
+        url = reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name), args=[self.id])
+        return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
+    
+    def get_absolute_url(self):
+        url = '../../event_detail/' + str(self.id) + '/view'
+        return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
+ 
+    def clean(self):
+        if self.end_time <= self.start_time:
+            raise ValidationError('Ending times must after starting times')
+ 
+        
     
     
     

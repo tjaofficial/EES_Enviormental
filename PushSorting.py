@@ -123,15 +123,23 @@ class subA5_form(ModelForm):
         
         
         
+    cal = f'<table border="0" cellpadding="0" cellspacing="0" class="calendar">\n'
     
-    
         
         
         
         
         
         
-        
+        lass EmployeeScheduleCalendar(HTMLCalendar):
+    def formatday(self, day, weekday):
+        """
+          Return a day as a table cell.
+        """
+        if day == 0:
+            return '<td class="noday">&nbsp;</td>' # day outside month
+        else:
+            return '<td class="%s"><a href="%s">%d</a></td>' % (self.cssclasses[weekday], weekday, day)
         
 
         

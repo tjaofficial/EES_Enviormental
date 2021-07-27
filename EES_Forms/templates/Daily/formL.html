@@ -1,5 +1,6 @@
-<html>
+{% extends "ees_forms/layout.html" %}
 
+{% block list%}
     <style>
         #boxc1{
             align-content: center;
@@ -58,26 +59,34 @@
             border: 1px solid black;
             width: 250px;
             text-align: left;
+            padding-left: 5px;
         }
         #formL_Day{
             border: 1px solid black;
             width: 220px;
-            text-align: left;
+            text-align: center;
             height: 50px;
         }
         #formL_Title{
             border: 3px solid black;
-            text-align: left;
+            text-align: center;
         }
         #formL_Emissions{
             border: 1px solid black;
             width: 80px;
-            text-align: left;
+            text-align: center;
         }
         #formL_Comments{
             border: 1px solid black;
             width: 200px;
             text-align: left;
+            padding-left: 5px;
+        }
+        #formL_obser{
+            border: 1px solid black;
+            width: 220px;
+            text-align: center;
+            height: 50px;
         }
     </style>
 
@@ -89,7 +98,7 @@
         <table style="border-collapse: collapse; margin: auto;">
         <tr>
             <th id="boxTitle" colspan="5" style="text-align: center;">
-                Fugiative Dust Inspections - <br>Weekly Random Truck Inspection - Form (D)
+                Visual Emissions Observations - Form (L)
             </th>
             <th></th>
         </tr>
@@ -103,12 +112,12 @@
             <th></th>
         </tr>
         <tr>
+            <td style="height: 25px;" ></td>
+        </tr>
+        <tr>
             <th colspan="3" style="text-align: center;">
-            Week Of:    {% if week == last_friday %}
-                            {{ week }} - {{ week_almost.week_end }}
-                        {% else %}
-                            {{ empty.week_start }} - {{ empty.week_end }}
-                        {% endif %}
+            Week Of:  
+                    {{ empty.week_start }} - {{ empty.week_end }}
             </th>
             <th></th>
             <th></th>
@@ -124,6 +133,9 @@
                 <table style="border-collapse: collapse;">
                     <tr>
                         <th id="formL_Title">
+                            Observer
+                        </th>
+                        <th id="formL_Title">
                             Day/Time
                         </th>
                         <th id="formL_Title">
@@ -137,29 +149,25 @@
                         </th>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_5 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Saturday/ {% if data.time_5 == NULL %}
-                                {{ empty.time_5 }}
-                            {% else %}
-                                {{ data.time_5 }}
-                            {% endif %}
+                            Saturday/ {{ empty.time_5 }}
+                    
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_5 == NULL %}
+                            
                                 {{ empty.vents_5 }}
-                            {% else %}
-                                {{ data.vents_5 }}
-                            {% endif %}
+                     
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_5 == NULL %}
+                           
                                 {{ empty.v_comments_5 }}
-                            {% else %}
-                                {{ data.v_comments_5 }}
-                            {% endif %}
+                      
                         </td>
                     </tr>
                     <tr>
@@ -167,44 +175,37 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_5 == NULL %}
+                            
                                 {{ empty.mixer_5 }}
-                            {% else %}
-                                {{ data.mixer_5 }}
-                            {% endif %}
+                  
                         </td>
                         <td id="formL_Comments">
-                            {% if data.m_comments_5 == NULL %}
+                     
                                 {{ empty.m_comments_5 }}
-                            {% else %}
-                                {{ data.m_comments_5 }}
-                            {% endif %}
+                       
                         </td>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_6 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Sunday/ {% if data.time_6 == NULL %}
+                            Sunday/ 
                                 {{ empty.time_6 }}
-                            {% else %}
-                                {{ data.time_6 }}
-                            {% endif %}
+                          
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_6 == NULL %}
+                           
                                 {{ empty.vents_6 }}
-                            {% else %}
-                                {{ data.vents_6 }}
-                            {% endif %}
+                      
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_6 == NULL %}
+                          
                                 {{ empty.v_comments_6 }}
-                            {% else %}
-                                {{ data.v_comments_6 }}
-                            {% endif %}
+                         
                         </td>
                     </tr>
                     <tr>
@@ -212,44 +213,37 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_6 == NULL %}
+                            
                                 {{ empty.mixer_6 }}
-                            {% else %}
-                                {{ data.mixer_6 }}
-                            {% endif %}
+                          
                         </td>
                         <td id="formL_Comments">
-                            {% if data.m_comments_6 == NULL %}
+                      
                                 {{ empty.m_comments_6 }}
-                            {% else %}
-                                {{ data.m_comments_6 }}
-                            {% endif %}
+                   
                         </td>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_0 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Monday/ {% if data.time_0 == NULL %}
+                            Monday/ 
                                 {{ empty.time_0 }}
-                            {% else %}
-                                {{ data.time_0 }}
-                            {% endif %}
+                   
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_0 == NULL %}
+                         
                                 {{ empty.vents_0 }}
-                            {% else %}
-                                {{ data.vents_0 }}
-                            {% endif %}
+                      
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_0 == NULL %}
+                          
                                 {{ empty.v_comments_0 }}
-                            {% else %}
-                                {{ data.v_comments_0 }}
-                            {% endif %}
+                       
                         </td>
                     </tr>
                     <tr>
@@ -257,44 +251,37 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_0 == NULL %}
+                          
                                 {{ empty.mixer_0 }}
-                            {% else %}
-                                {{ data.mixer_0 }}
-                            {% endif %}
+                       
                         </td>
                         <td id="formL_Comments">
-                            {% if data.m_comments_0 == NULL %}
+                        
                                 {{ empty.m_comments_0 }}
-                            {% else %}
-                                {{ data.m_comments_0 }}
-                            {% endif %}
+                         
                         </td>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_1 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Tuesday/ {% if data.time_1 == NULL %}
+                            Tuesday/ 
                                 {{ empty.time_1 }}
-                            {% else %}
-                                {{ data.time_1 }}
-                            {% endif %}
+                        
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_1 == NULL %}
+                      
                                 {{ empty.vents_1 }}
-                            {% else %}
-                                {{ data.vents_1 }}
-                            {% endif %}
+                        
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_1 == NULL %}
+                          
                                 {{ empty.v_comments_1 }}
-                            {% else %}
-                                {{ data.v_comments_1 }}
-                            {% endif %}
+                          
                         </td>
                     </tr>
                     <tr>
@@ -302,44 +289,37 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_1 == NULL %}
+                     
                                 {{ empty.mixer_1 }}
-                            {% else %}
-                                {{ data.mixer_1 }}
-                            {% endif %}
+                    
                         </td>
                         <td id="formL_Comments">
-                            {% if data.m_comments_1 == NULL %}
+                           
                                 {{ empty.m_comments_1 }}
-                            {% else %}
-                                {{ data.m_comments_1 }}
-                            {% endif %}
+                         
                         </td>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_2 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Wednesday/ {% if data.time_2 == NULL %}
+                            Wednesday/ 
                                 {{ empty.time_2 }}
-                            {% else %}
-                                {{ data.time_2 }}
-                            {% endif %}
+                     
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_2 == NULL %}
+                           
                                 {{ empty.vents_2 }}
-                            {% else %}
-                                {{ data.vents_2 }}
-                            {% endif %}
+                           
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_2 == NULL %}
+                            
                                 {{ empty.v_comments_2 }}
-                            {% else %}
-                                {{ data.v_comments_2 }}
-                            {% endif %}
+                        
                         </td>
                     </tr>
                     <tr>
@@ -347,44 +327,37 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_2 == NULL %}
+                           
                                 {{ empty.mixer_2 }}
-                            {% else %}
-                                {{ data.mixer_2 }}
-                            {% endif %}
+                      
                         </td>
                         <td id="formL_Comments">
-                            {% if data.m_comments_2 == NULL %}
+                           
                                 {{ empty.m_comments_2 }}
-                            {% else %}
-                                {{ data.m_comments_2 }}
-                            {% endif %}
+                        
                         </td>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_3 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Thursday/ {% if data.time_3 == NULL %}
+                            Thursday/ 
                                 {{ empty.time_3 }}
-                            {% else %}
-                                {{ data.time_3 }}
-                            {% endif %}
+                        
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_3 == NULL %}
+                           
                                 {{ empty.vents_3 }}
-                            {% else %}
-                                {{ data.vents_3 }}
-                            {% endif %}
+                         
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_3 == NULL %}
+                        
                                 {{ empty.v_comments_3 }}
-                            {% else %}
-                                {{ data.v_comments_3 }}
-                            {% endif %}
+                    
                         </td>
                     </tr>
                     <tr>
@@ -392,44 +365,37 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_3 == NULL %}
+                           
                                 {{ empty.mixer_3 }}
-                            {% else %}
-                                {{ data.mixer_3 }}
-                            {% endif %}
+                           
                         </td>
                         <td id="formL_Comments">
-                            {% if data.m_comments_3 == NULL %}
+                          
                                 {{ empty.m_comments_3 }}
-                            {% else %}
-                                {{ data.m_comments_3 }}
-                            {% endif %}
+                         
                         </td>
                     </tr>
                     <tr>
+                        <td id="formL_obser" rowspan='2'>
+                            {{ empty.obser_4 }}
+                        </td>
                         <th rowspan='2' id="formL_Day">
-                            Friday/ {% if data.time_4 == NULL %}
+                            Friday/ 
                                 {{ empty.time_4 }}
-                            {% else %}
-                                {{ data.time_4 }}
-                            {% endif %}
+                          
                         </th>
                         <td id="formL_Location">
                             Coal Bin Vents
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.vents_4 == NULL %}
+                           
                                 {{ empty.vents_4 }}
-                            {% else %}
-                                {{ data.vents_4 }}
-                            {% endif %}
+                           
                         </td>
                         <td id="formL_Comments">
-                            {% if data.v_comments_4 == NULL %}
+                           
                                 {{ empty.v_comments_4 }}
-                            {% else %}
-                                {{ data.v_comments_4 }}
-                            {% endif %}
+                            
                         </td>
                     </tr>
                     <tr>
@@ -437,24 +403,24 @@
                             Mixer Building Bag House
                         </td>
                         <td id="formL_Emissions">
-                            {% if data.mixer_4 == NULL %}
+                        
                                 {{ empty.mixer_4 }}
-                            {% else %}
-                                {{ data.mixer_4 }}
-                            {% endif %}
-                        </td>
+                     
                         <td id="formL_Comments">
-                            {% if data.m_comments_4 == NULL %}
+                          
                                 {{ empty.m_comments_4 }}
-                            {% else %}
-                                {{ data.m_comments_4 }}
-                            {% endif %}
+                        
                         </td>
                     </tr>
                     
                     
                     <tr>
-                        <td style="height: 25px;" ></td>
+                        <td colspan="4" style="height: 25px;" ></td>
+                        <td style="text-align: right;">
+                            <a href="../../Daily/formL/edit">
+                                Edit
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td style="height: 25px;" ></td>
@@ -471,26 +437,12 @@
                 </table>
             </div>
         </div>
-       <!-- <table style="border-collapse: collapse; margin: auto;">
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr>
-                <td colspan="6" style="width: 1218px;  border: 1px solid black; font-size: 20px;">Any Issues? Describe{{ form.issues }}</td>
-            </tr>
-            <tr>
-                <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue{{ form.notified }}</td>
-                <td colspan="1" style="width: 203px; border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
-                <td colspan="1" style="width: 203px; border: 1px solid black; font-size: 20px;">{{ form.time_date }}</td>
-            </tr>
-            <tr>
-                <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken{{ form.cor_action }}</td>
-            </tr>
-        </table>--->
-        <br><br>
-        <input type="submit" value="Save" style="font-size: 40px">
+        {% if filled_in == True %}
+        
+        {% else %}
         <br><br><br>
         <input type="submit" value="Submit Form" style="font-size: 40px">
+        {% endif %}
     </form>
     
-</html>
+{% endblock %}

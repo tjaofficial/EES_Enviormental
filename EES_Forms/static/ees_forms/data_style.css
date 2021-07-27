@@ -21,4 +21,5 @@
 .row_standard2{
     height: 40px;
     border-bottom: 3px black solid;
-}
+    width: 200px;
+} 

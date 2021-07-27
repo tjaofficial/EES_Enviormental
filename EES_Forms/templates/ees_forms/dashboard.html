@@ -1,58 +1,260 @@
 {% extends "ees_forms/layout.html" %}
-
+{% load dashboard_tags %}
 {% block list%}
+<div class="forms">
+    <div class="card2">
+        <div class="card2_header" >
+            <h2 class="card2_title">
+                Closest Oven Due
+            </h2>
+        </div>
+        <div class="card2_Form">
+            {% for x in od_recent %}
+                Oven #{{ x.0 }}<br>
+                Due:&nbsp;&nbsp;{{ x.2 }}
+            {% endfor %}
+            <br>
+            <a href="{% url 'pt_admin1' %}">
+                <h4>View All</h4>
+            </a>
+        </div>
+    </div>
+    <div class="card2">
+        <div class="card2_header" >
+            <h2 class="card2_title">
+                Battery Profile {{ todays_log.date }}
+            </h2>
+        </div>
+        {% if profile_entered %}
+        <div class="card3_Form">
+            Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
+            Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
+            Inoperable Ovens:&nbsp;&nbsp;
+            {{ todays_log.inop_ovens }}
+            <br>
+            
+            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% endif %}-{{now.day}}">
+                <h4>Edit</h4>
+            </a>
+        </div>
+        {% else %}
+        <div class="card3_Form">
+            None
+            <br>
+            
+            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% endif %}-{{now.day}}">
+                <h4>Add</h4>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card2">
+        <div class="card2_header" >
+            <h2 class="card2_title">
+                Title
+            </h2>
+        </div>
+        <div class="card2_Form">
+            Data
+        </div>
+    </div>
+</div>
+
 <section class="forms">
     <div class="card">
-        <div class="card_header" ><h2 class="card_title">Incomplete Forms</h2>
-        <select name="cardOrder" id="cardDropdown">
-            <option value="volvo">All Forms</option>
-            <option value="saab">Daily Forms</option>
-            <option value="saab">Weekly Forms</option>
-            <option value="saab">Monthly Forms</option>
-            <option value="saab">Semi-Annual Forms</option>
-            <option value="saab">Annual Forms</option>
-        </select></div>
-            {% for item in pull %}
-            <a href="{{ item.link }}">
-                <div class="card_Form">
-                    <h3 class="card_Form_letter">{{ item.form }}</h3>
-                    <div class="card_Form_title">
-                        <h3>{{ item.title }}</h3>
-                        <h4>{{ item.frequency }}</h4>
-                    </div>
-                    <h4 class="card_Form_date">{{item.due_date}}</h4>
-                    <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+        <div class="card_header" >
+            <h2 class="card_title">
+                Incomplete Forms
+            </h2>
+            <select name="cardOrder" id="cardDropdown">
+                <option value="volvo">All Forms</option>
+                <option value="saab">Daily Forms</option>
+                <option value="saab">Weekly Forms</option>
+                <option value="saab">Monthly Forms</option>
+                <option value="saab">Semi-Annual Forms</option>
+                <option value="saab">Annual Forms</option>
+            </select>
+        </div> 
+       
+{% for item in pull %}
+    {% if item.form|length >= 2 %}
+        {% if item.form.0 not in form_check1 %}
+        <div style="display: none;">
+        {{ form_check1|append_list:item.form.0 }}
+        </div>
+        <div class="card_Form">
+            <h3 class="card_Form_letter">
+                {{ item.form.0 }}
+            </h3>
+            <div class="card_Form_title">
+                <h3>{{ item.header }}</h3>
+                <h4></h4>
+            </div>
+            <h4 class="card_Form_date">
+                {{item.due_date}}
+            </h4>
+            <div class="card_Form_progress">
+                <div class="card_Form_bar">
                 </div>
-            </a>
-            {% empty %}
-            <h2 class="card_empty"> No Forms </h2>
-            {% endfor %}
-
-        
-    
-    </div>
-
-
+            </div>
+        </div>
+        <a href="{{ item.link }}">
+            <div class="card_Form" style="margin-left: 50px;">
+                <h3 class="card_Form_letter">
+                    {{ item.form.2 }}
+                </h3>
+                <div class="card_Form_title">
+                    <h3>
+                        {{ item.title }}
+                    </h3>
+                    <h4>
+                        {{ item.frequency }}
+                    </h4>
+                </div>
+                <h4 class="card_Form_date">
+                    {{item.due_date}}
+                </h4>
+                <div class="card_Form_progress">
+                    <div class="card_Form_bar">
+                    </div>    
+                </div>            
+            </div>      
+        </a>
+        {% else %}
+        <a href="{{ item.link }}">
+            <div class="card_Form" style="margin-left: 50px;">
+                <h3 class="card_Form_letter">
+                    {{ item.form.2 }}
+                </h3>
+                <div class="card_Form_title">
+                    <h3>
+                        {{ item.title }}
+                    </h3>
+                    <h4>
+                        {{ item.frequency }}
+                    </h4>
+                </div>
+                <h4 class="card_Form_date">
+                    {{item.due_date}}
+                </h4>
+                <div class="card_Form_progress">
+                    <div class="card_Form_bar">
+                    </div>    
+                </div>            
+            </div>      
+        </a>
+        {% endif %}
+    {% else %}
+        <a href="{{ item.link }}">
+            <div class="card_Form">
+                <h3 class="card_Form_letter">{{ item.form }}</h3>
+                <div class="card_Form_title">
+                    <h3>{{ item.title }}</h3>
+                    <h4>{{ item.frequency }}</h4>
+                </div>
+                <h4 class="card_Form_date">{{item.due_date}}</h4>
+                <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+            </div>
+        </a>
+    {% endif %}
+    {% empty %}
+    <h2 class="card_empty"> No Forms </h2>
+{% endfor %}     
+    </div>            
+              
     <div class="card">
-        <div class="card_header" ><h2 class="card_title">Complete Forms</h2>
-        <select name="cardOrder" id="cardDropdown">
-            <option value="volvo">Date Completed</option>
-            <option value="saab">Form Name</option>
-            <option value="mercedes">Form Duration</option>
-        </select></div>
+        <div class="card_header" >
+            <h2 class="card_title">
+                Complete Forms
+            </h2>
+            <select name="cardOrder" id="cardDropdown">
+                <option value="volvo">Date Completed</option>
+                <option value="saab">Form Name</option>
+                <option value="mercedes">Form Duration</option>
+            </select>
+        </div>
 
-            {% for item in pullNot %}
-            <a href="{{ item.link }}">
-                <div class="card_Form">
-                    <h3 class="card_Form_letter">{{ item.form }}</h3>
-                    <div class="card_Form_title">
-                        <h3>{{ item.title }}</h3>
-                        <h4>{{ item.frequeny }}</h4>
-                    </div>
-                    <h4 class="card_Form_date">{{item.date_submitted}}</h4>
-                    <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+{% for item in pullNot %}
+    {% if item.form|length >= 2 %}
+        {% if item.form.0 not in form_check2 %}
+            <div style="display: none;">
+            {{ form_check2|append_list:item.form.0 }}
+            </div>
+            <div class="card_Form">
+                <h3 class="card_Form_letter">
+                    {{ item.form.0 }}
+                </h3>
+                <div class="card_Form_title">
+                    <h3>{{ item.header }}</h3>
+                    <h4></h4>
                 </div>
+                <h4 class="card_Form_date">
+                    {{item.due_date}}
+                </h4>
+                <div class="card_Form_progress">
+                    <div class="card_Form_bar">
+                    </div>
+                </div>
+            </div>
+            <a href="{{ item.link }}">
+                <div class="card_Form" style="margin-left: 50px;">
+                    <h3 class="card_Form_letter">
+                        {{ item.form.2 }}
+                    </h3>
+                    <div class="card_Form_title">
+                        <h3>
+                            {{ item.title }}
+                        </h3>
+                        <h4>
+                            {{ item.frequency }}
+                        </h4>
+                    </div>
+                    <h4 class="card_Form_date">
+                        {{item.due_date}}
+                    </h4>
+                    <div class="card_Form_progress">
+                        <div class="card_Form_bar">
+                        </div>    
+                    </div>            
+                </div>      
             </a>
+        {% else %}
+        <a href="{{ item.link }}">
+            <div class="card_Form" style="margin-left: 50px;">
+                <h3 class="card_Form_letter">
+                    {{ item.form.2 }}
+                </h3>
+                <div class="card_Form_title">
+                    <h3>
+                        {{ item.title }}
+                    </h3>
+                    <h4>
+                        {{ item.frequency }}
+                    </h4>
+                </div>
+                <h4 class="card_Form_date">
+                    {{item.due_date}}
+                </h4>
+                <div class="card_Form_progress">
+                    <div class="card_Form_bar">
+                    </div>    
+                </div>            
+            </div>      
+        </a>
+        {% endif %}
+    {% else %}
+        <a href="{{ item.link }}">
+            <div class="card_Form">
+                <h3 class="card_Form_letter">{{ item.form }}</h3>
+                <div class="card_Form_title">
+                    <h3>{{ item.title }}</h3>
+                    <h4>{{ item.frequency }}</h4>
+                </div>
+                <h4 class="card_Form_date">{{item.due_date}}</h4>
+                <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+            </div>
+        </a>
+    {% endif %}
             {% empty %}
             <h2 class="card_empty"> No Forms </h2>
             {% endfor %}
