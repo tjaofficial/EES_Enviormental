@@ -3576,7 +3576,9 @@ def issues_view(request, form_name):
 
 
 
+def testView(request):
 
+    return render(request, "ees_forms/testFile.html")
 
 
 
