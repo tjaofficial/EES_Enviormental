@@ -2,8 +2,9 @@
 
 {% block list%}
 {% load static %}
-<a href="../schedule/{{today_year}}/{{today_month}}">Back To Calendar</a>
+<a href="../../schedule/{{today_year}}/{{today_month}}">Back To Calendar</a>
 <center>
+    {% if access_page == 'view' %}
     <div style="padding-top: 30px;">
         <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="card">
             <h3>View Event Details</h3><br>
@@ -12,9 +13,28 @@
             Title: {{ my_event.title }}<br>
             Date: {{ my_event.date }}<br>
             Description: {{ my_event.notes }}<br>
-                
+            <br>
+            <div>
+                <a href="../../event_detail/{{ event_id }}/edit">Edit</a>
+            </div>
         </div>
     </div>
+    {% elif access_page == 'edit' %}
+    <div style="padding-top: 30px;">
+        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="card">
+            <h3>Edit Event Details</h3><br>
+            
+            Observer: {{ my_event.observer }}<br>
+            Title: {{ my_event.title }}<br>
+            Date: {{ my_event.date }}<br>
+            Description: {{ my_event.notes }}<br>
+            <br>
+            <div>
+                <a href="../../event_detail/{{ event_id }}/view">Back</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </center>
 
 

@@ -3706,7 +3706,7 @@ class Event(models.Model):
         return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
     
     def get_absolute_url(self):
-        url = '../../event_detail/' + str(self.id)
+        url = '../../event_detail/' + str(self.id) + '/view'
         return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
  
     def clean(self):

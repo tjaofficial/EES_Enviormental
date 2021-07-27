@@ -1,6 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -11,7 +13,7 @@ from calendar import HTMLCalendar
 from .models import *
 from .forms import *
 from .utils import DBEmpty, EventCalendar, Calendar
-from dateutil.relativedelta import relativedelta
+#from dateutil.relativedelta import relativedelta
 
 
 daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -559,7 +561,7 @@ def method303_rolling_avg(request):
         "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records':list_of_records
     })
 
-def profile(request):
+def profile(request, access_page):
     profile = user_profile_model.objects.all()
     current_user = request.user
     
@@ -567,13 +569,6 @@ def profile(request):
         if x.user == current_user:
             user_select = x
             print(user_select)
-    
-    
-
-    
-                
-    
-    
     
     return render (request, "ees_forms/profile.html", {
         "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today
@@ -4913,11 +4908,8 @@ def event_add_view(request):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     
-    
     form = events_form()
-    #my_event = Event.objects.get(pk=event_id)
-    
-        
+       
     if request.method == "POST":
         request = events_form(request.POST)
         if request.is_valid():
@@ -4932,21 +4924,33 @@ def event_add_view(request):
         'today_year': today_year, 'today_month': today_month, 'form': form, 
     })
 
-def event_detail_view(request, event_id):
+def event_detail_view(request, access_page, event_id):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-    
     
     form = events_form()
     my_event = Event.objects.get(pk=event_id)
     
     return render (request, "ees_forms/event_detail.html", {
-        'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id
+        'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })
 
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name='ees_forms/ees_password.html'
+    
+    def get_success_url(self):
+        return reverse('profile', kwargs={'access_page': 'success'})
+    
+    #success_url = reverse_lazy('profile')
+    
 
-
-
+def profile_redirect(request):
+    return redirect ('profile/main')
+    
+    return render(request, 'profile.hmtl', {
+        
+    })
 
 
 
