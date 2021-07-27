@@ -4899,11 +4899,6 @@ def schedule_view(request):
         'today_year': today_year, 'today_month': today_month, #'prev_month': prev_month, 'cal': cal, 'next_month': next_month,
     })
 
-
-
-
-
-
 def event_add_view(request):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
