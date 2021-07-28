@@ -152,6 +152,155 @@ def IncompleteForms(request):
     
     weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
     weekend_fri = weekday_fri + datetime.timedelta(days=7)
+    
+    if Forms.objects.count() <= 5:
+        A1 = Forms(
+            form="A-1", 
+            frequency="Daily", 
+            link="Daily/Method303/formA1", 
+            header="Method 303/ Method 9B",
+            title="Charging", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        A2 = Forms(
+            form="A-2", 
+            frequency="Daily", 
+            link="Daily/Method303/formA2", 
+            header="Method 303/ Method 9B",
+            title="Doors", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        A3 = Forms(
+            form="A-3", 
+            frequency="Daily", 
+            link="Daily/Method303/formA3", 
+            header="Method 303/ Method 9B",
+            title="Lids and Offtakes", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        A4 = Forms(
+            form="A-4", 
+            frequency="Daily", 
+            link="Daily/Method303/formA4", 
+            header="Method 303/ Method 9B",
+            title="Collection Main", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        A5 = Forms(
+            form="A-5", 
+            frequency="Daily", 
+            link="Daily/Method303/formA5", 
+            header="Method 303/ Method 9B",
+            title="Push Travels", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        B = Forms(
+            form="B", 
+            frequency="Daily", 
+            link="Daily/formB", 
+            header="",
+            title="Fugitive Dust Inspection", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        C = Forms(
+            form="C", 
+            frequency="Daily", 
+            link="Daily/formC", 
+            header="",
+            title="Method 9D - Coal Field", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        D = Forms(
+            form="D", 
+            frequency="Daily", 
+            link="Daily/formD", 
+            header="",
+            title="Random Truck Inspection", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        E = Forms(
+            form="E", 
+            frequency="Daily", 
+            link="Daily/formE", 
+            header="",
+            title="Gooseneck Inspection", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F1 = Forms(
+            form="F-1", 
+            frequency="Weekly", 
+            link="Weekly/formF1", 
+            header="Waste Weekly Inspections",
+            title="SIF / K087 Process Area (Satellite)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F2 = Forms(
+            form="F-2", 
+            frequency="Weekly", 
+            link="Weekly/formF2", 
+            header="Waste Weekly Inspections",
+            title="#1 Shop (Satellite Accumulation)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F3 = Forms(
+            form="F-3", 
+            frequency="Weekly", 
+            link="Weekly/formF3", 
+            header="Waste Weekly Inspections",
+            title="#2 Shop (Satellite Accumulation)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F4 = Forms(
+            form="F-4", 
+            frequency="Weekly", 
+            link="Weekly/formF4", 
+            header="Waste Weekly Inspections",
+            title="Battery (Satellite Accumulation)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F5 = Forms(
+            form="F-5", 
+            frequency="Weekly", 
+            link="Weekly/formF5", 
+            header="Waste Weekly Inspections",
+            title="Bio Plant (Satellite Accumulation)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F6 = Forms(
+            form="F-6", 
+            frequency="Weekly", 
+            link="Weekly/formF6", 
+            header="Waste Weekly Inspections",
+            title="No. 8 Tank Area (Satellite Accumulation)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        F7 = Forms(
+            form="F-7", 
+            frequency="Weekly", 
+            link="Weekly/formF7", 
+            header="Waste Weekly Inspections",
+            title="Booster Pad (90-Day Accumulation)", 
+            due_date=today, 
+            date_submitted= today - datetime.timedelta(days=1), 
+            submitted= False,)
+        
+    
+    
 #--------------------------------------------Closest Oven Due-----------------    
 #--------------------------------------------Closest Oven Due-----------------       
 #--------------------------------------------Closest Oven Due-----------------    
@@ -4731,6 +4880,12 @@ def issues_view(request, form_name, form_date, access_page):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
+    if access_page == 'form':
+        data = Forms.objects.all()
+        for x in data:
+            if x.form == form_name:
+                link = x.link
+    
     if access_page == 'issue':
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
@@ -4740,6 +4895,7 @@ def issues_view(request, form_name, form_date, access_page):
                 if form_name == entry.form:
                     picker = entry
                     form = issues_form()
+                    link = ''
 
     elif access_page == 'edit':
         org = issues_model.objects.all().order_by('-date')
@@ -4749,6 +4905,7 @@ def issues_view(request, form_name, form_date, access_page):
             if str(form_date) == str(entry.date):
                 if form_name == entry.form:
                     picker = entry
+                    link = ''
                     
         initial_data = {
             'form' : picker.form,
@@ -4853,7 +5010,7 @@ def issues_view(request, form_name, form_date, access_page):
                     return redirect('IncompleteForms')
             
     return render (request, "ees_forms/issues_template.html", {
-        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date
+        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link':link
     })
 
 def corrective_action_view(request):

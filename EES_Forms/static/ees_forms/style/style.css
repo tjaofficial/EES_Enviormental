@@ -266,6 +266,14 @@ color: darkgray;
     padding-left: 5rem;
     color: #cacaca;
 }
+#exit{
+    height: 2rem;
+    color: #cacaca;
+}
+.exit{
+    text-align: right;
+    padding-right: 1rem;
+}
 #paperSize{
     width: 1400px;
     margin: auto;
@@ -330,5 +338,18 @@ span.sideWord{
 #newName{
     width: auto;
     display: inline-flex;
+}
+.issue_box{
+    border: 1px solid black;
+    width: 100%;
+    border-radius: 18px;
+    padding: .5rem;
+    background-color: lightgray;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.issue_headers{
+    color: darkgray;
+    font-size: .8rem;
 }
 /*# sourceMappingURL=style.css.map */

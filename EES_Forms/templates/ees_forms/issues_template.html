@@ -8,48 +8,89 @@
     <div style="padding-top: 30px;">
         <div style="padding-top: 25px; margin: auto;" class="card">
             {% if access_page == 'form' %}
-            <h1 style="text-align: center;">Please Fill Out a Corrective Action Form</h1>
+            <div class="exit">
+                
+                <a href="../../../{{ link }}"><svg id="exit" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></a>
+            </div>
+            <h1 style="text-align: center; margin-top: -20px;">
+                Fill Out a Corrective Action Form
+            </h1>
             {% elif access_page == 'issue' %}
-            <h1 style="text-align: center;">Corrective Action LogID - #{{ picker.id }}</h1>
+            <div class="exit">
+                <a href="{% url 'Corrective-Action' %}"><svg id="exit" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></a>
+            </div>
+            <h1 style="text-align: center; margin-top: -20px;">
+                Corrective Action LogID - #{{ picker.id }}
+            </h1>
+            
             {% elif access_page == 'edit' %}
-            <h1 style="text-align: center;">EDIT - Corrective Action LogID - #{{ picker.id }}</h1>
+            <div class="exit">
+                <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/issue"><svg id="exit" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></a>
+            </div>
+            <h1 style="text-align: center; margin-top: -15px;">EDIT - Corrective Action LogID - #{{ picker.id }}</h1>
             {% endif %}
             
             {% if access_page == 'form' %}
-            <form action="" method="POST">
+            <form action="" method="POST" style="padding-bottom: 25px;">
                 {% csrf_token %}
-                <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <td style="height: 40px" > 
-                            {{ form.form }}
-                        </td>
-                    </tr> 
-                    <tr>
-                        <td colspan="6" id="issues" class="issue_boxes">Any Issues? Describe{{ form.issues }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" id="person_notified" class="issue_boxes">EES Person Notified of Issue{{ form.notified }}</td>
-                        <td colspan="1" id="datetime" class="issue_boxes">{{ form.date }}</td>
-                        <td colspan="1" id="datetime" class="issue_boxes">{{ form.time }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" class="issue_boxes">Corrective Action Taken{{ form.cor_action }}</td>
-                    </tr>
-                </table>
-                <br><br><br>
-            
-                <input type="submit" value="Submit Form" style="font-size: 40px">
+                <br>
+                <center>
+                    Form: {{ form.form }} 
+                    Date: {{ form.date }}
+                    Time: {{ form.time }}
+                </center>
+                <br>
+                 
+                Describe Issue:<br>
+                {{ form.issues }}<br><br>
+                Corrective Action Taken:<br>
+                {{ form.cor_action }}<br><br>
+                EES Personnel Notified: {{ form.notified }}<br>
+                
+                    
+                <br><br>
+                <div style="text-align: center;">
+                    <input type="submit" value="Submit Issue" style="font-size: 1.5rem;">
+                </div>
             </form>
             {% elif access_page == 'issue' %}
             <div style="">
-                Form: {{picker.form}}<br>
-                Date: {{picker.date}}<br>
-                Time: {{picker.time}}<br><br>
+                <br>
                 
-                Any Issues? Describe: {{ picker.issues }}<br>
-                EES Person Notified of Issue: {{ picker.notified }}<br><br>
+                <div style="display: flex; margin: auto; width: fit-content;">
+                    <h4 class="issue_headers">Form:</h4> 
+                    
+                        &nbsp;&nbsp;{{ picker.form }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    
+                    <h4 class="issue_headers">Date:</h4> 
+                    
+                        &nbsp;&nbsp;{{ picker.date }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <h4 class="issue_headers">Time:</h4> 
+                    
+                        &nbsp;&nbsp;{{ picker.time }}
+                   
+                </div>
+                <br>
                 
-                Corrective Action Taken: {{ picker.cor_action }}<br>
+                <h4 class="issue_headers">Describe Issues:</h4>
+                <div class="issue_box">
+                    "{{ picker.issues }}"
+                </div>
+                <br><br>
+                <h4 class="issue_headers">Corrective Action Taken:</h4>
+                <div class="issue_box">
+                    "{{ picker.cor_action }}"
+                </div>
+                <br><br>
+                <div style="display: flex;">
+                    <h4 class="issue_headers">
+                        EES Personnel Notified:
+                    </h4>&nbsp; {{ picker.notified }}
+                </div>
+                <br>
+             
                 <div style="text-align: right;">
                     <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/edit">
                         Edit
@@ -57,37 +98,28 @@
                 </div>
                 <br>
             </div>
-            {% elif access_page == 'edit' %}
-            <form action="" method="POST">
-                {% csrf_token %}
-                <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <td style="height: 40px" > 
-                            {{ form.form }}YO DIS THE EDIT FORM
-                        </td>
-                    </tr> 
-                    <tr>
-                        <td colspan="6" id="issues" class="issue_boxes">
-                            Any Issues? Describe:<br>
-                            {{ form.issues }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" id="person_notified" class="issue_boxes">EES Person Notified of Issue{{ form.notified }}</td>
-                        <td colspan="1" id="datetime" class="issue_boxes">{{ form.date }}</td>
-                        <td colspan="1" id="datetime" class="issue_boxes">{{ form.time }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" class="issue_boxes">Corrective Action Taken{{ form.cor_action }}</td>
-                    </tr>
-                </table>
-                <br><br><br>
             
-                <input type="submit" value="Submit Form" style="font-size: 40px">
-                <div style="text-align: right;">
-                    <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/issue">
-                        Back
-                    </a>
+            {% elif access_page == 'edit' %}
+            <form action="" method="POST" style="padding-bottom: 25px;">
+                {% csrf_token %}
+                <br>
+                <center>
+                    Form: {{ form.form }} 
+                    Date: {{ form.date }}
+                    Time: {{ form.time }}
+                </center>
+                <br>
+                 
+                Describe Issue:<br>
+                {{ form.issues }}<br><br>
+                Corrective Action Taken:<br>
+                {{ form.cor_action }}<br><br>
+                EES Personnel Notified: {{ form.notified }}<br>
+                
+                    
+                <br><br>
+                <div style="text-align: center;">
+                    <input type="submit" value="Submit Issue" style="font-size: 1.5rem;">
                 </div>
             </form>
             {% endif %}

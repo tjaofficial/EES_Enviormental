@@ -2,90 +2,97 @@
 
 {% block list %}
 
-<div id="pusht_travels" style="text-align: center; margin: auto; margin-top: 100px;">       
-    <div>
-       Today: {{ todays_log.date_save }}
+<div class="forms">
+    
+    <div id="pusht_travels" style="text-align: center; margin: auto; margin-top: 100px;">    
+        <div class="card">
+            <div>
+               Today: {{ todays_log.date_save }}
+            </div>
+            <br>
+            <div style="">
+                <table style="margin: auto; border-collapse: collapse;">
+                    <tr>
+                        <th colspan="4" style="text-align: center; border: 3px solid black; width: 700px;">
+                            OVERDUE
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Less Than 30 Days Left
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Less Than 10 Days Left
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Less Than 5 Days Left
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Closest Oven Due
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for day in od_30 %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for day in od_10 %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for day in od_5 %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for x in od_recent %}
+                                #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div id="pusht_travels" style="text-align: center; margin: auto; padding-top: 20px;">   
+                <table style="margin: auto; border-collapse: collapse; text-align: center;">
+                    <tr>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Oven No.
+                        </th>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Most Recent Reading
+                        </th>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Next Reading to be Completed By
+                        </th>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Days Left
+                        </th>
+                    </tr>
+                   {% for item in cool %}
+                    <tr>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.0 }}
+                        </td>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.1 }}
+                        </td>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.2 }}
+                        </td>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.3 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div> 
+        </div>
     </div>
-    <br>
-    <div style="">
-        <table style="margin: auto; border-collapse: collapse;">
-            <tr>
-                <th colspan="4" style="text-align: center; border: 3px solid black; width: 700px;">
-                    OVERDUE
-                </th>
-            </tr>
-            <tr>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Less Than 30 Days Left
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Less Than 10 Days Left
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Less Than 5 Days Left
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Closest Oven Due
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for day in od_30 %}
-                        #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                    {% endfor %}
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for day in od_10 %}
-                        #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                    {% endfor %}
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for day in od_5 %}
-                        #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                    {% endfor %}
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for x in od_recent %}
-                        #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
-    </div>
-    <br><br>
-    <div id="pusht_travels" style="text-align: center; margin: auto;">   
-        <table style="margin: auto; border-collapse: collapse; text-align: center;">
-            <tr>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Oven No.
-                </th>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Most Recent Reading
-                </th>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Next Reading to be Completed By
-                </th>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Days Left
-                </th>
-            </tr>
-           {% for item in cool %}
-            <tr>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.0 }}
-                </td>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.1 }}
-                </td>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.2 }}
-                </td>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.3 }}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>  
 </div>
 {% endblock %}
