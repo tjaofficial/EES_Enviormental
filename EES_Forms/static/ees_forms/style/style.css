@@ -379,4 +379,10 @@ span.sideWord{
     padding: 8px;
     padding-left: 0px;
 }
+#prof_form_holder{
+    margin: auto;
+    width: 45%;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+}
 /*# sourceMappingURL=style.css.map */
