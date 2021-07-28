@@ -7,12 +7,14 @@
     <style>
         #box{
             border: 1px solid black;
-            padding: 15px;
+            padding: 10px;
             font-size: 18px;
+            width: 350px;
         }
         #box2{
             border: 3px solid black;
             padding: 5px;
+            width: 170px;
         }
         #box3{
             border: 1px solid black;
@@ -22,34 +24,40 @@
         }
         #boxTitle{
             font-size: 30px;
+            width: 525px;
         }
     </style>
-
-    <a href="{% url 'IncompleteForms' %}">Back</a>
-    <form action="" method=POST>
+<div id="paperSize">
+    <div>
+        <a href="{% url 'IncompleteForms' %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+    </div>
+    <form action="" method=POST style="margin: auto; width: fit-content; margin-bottom: 100px;">
         {% csrf_token %}
         <table style="border-collapse: collapse">
             <tr>
-                <th id="boxTitle" style="min-width: 525px">Fugitive Dust Inspection - Form (B) </th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th id="boxTitle" colspan="6">
+                    Fugitive Dust Inspection - Form (B)
+                </th>
             </tr>
             <tr>
-                <th style="min-width: 525px">Facility Name: EES Coke Battery LLC</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th colspan="6">
+                    Facility Name: EES Coke Battery LLC
+                </th>
             </tr>
             <tr>
-                <th style="min-width: 525px;">
+                <td style="height: 20px" > </td>
+            </tr> 
+            <tr>
+                <th colspan="6">
                     Week Of:    
                             {{ data.week_start }} - {{ data.week_end }}
                 </th>
+            </tr>
+            <tr>
+                <td style="height: 40px" ></td>
+            </tr> 
+            <tr>
+                <th></th>
                 <th id="box2">Monday</th>
                 <th id="box2">Tuesday</th>
                 <th id="box2">Wednesday</th>
@@ -277,24 +285,9 @@
             <tr>
                 <td colspan="6">Clear, Cloudy, Rain, Snow, and/or Excessive Wind.</td>
             </tr>
-            <tr>
-            <td style="height: 40px" > </td>
-        </tr> 
-        <tr>
-            <td colspan="6" style="border: 1px solid black; font-size: 20px;">Any Issues? Describe<input type="text" style="font-size: 20px; width: 900px;"></td>
-        </tr>
-        <tr>
-            <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue<input type="text" style="font-size: 20px; width: 500px;"></td>
-            <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="date" style="font-size: 20px;"></td>
-            <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="time" style="font-size: 20px;"></td>
-        </tr>
-        <tr>
-            <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken<input type="text" style="font-size: 20px; width: 900px;"></td>
-        </tr>
-        </table>
-        <br><br>
-        <input type="submit" value="Save" style="font-size: 40px">
-        <br><br><br>
-        <input type="submit" value="Submit Form" style="font-size: 40px">
-    </form>
+            </table>
+            <br><br><br>
+            <input type="submit" value="Submit Form" style="font-size: 2rem;">
+        </form>
+    </div>
 {% endblock %}

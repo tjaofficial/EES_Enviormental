@@ -60,8 +60,22 @@
         }
         #noteBox{
             border-collapse: collapse; 
+            width: fit-content; 
             margin: auto;
-            width: 1100px;
+        }
+        #boxa3_1{
+            align-content: center;
+            text-align: left;
+            min-width: 250px;
+            max-width: 250px;
+            height: 35px;
+        }
+        #boxa3_2{
+            align-content: center;
+            text-align: left;
+            min-width: 50px;
+            max-width: 250px;
+            height: 35px;
         }
     </style>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
@@ -70,10 +84,10 @@
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div>
-            <a href="{% url 'IncompleteForms' %}">Back</a>
+            <a href="{% url 'IncompleteForms' %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
         </div>
-        <div style="padding-top: 75px;">
-            <form action="" method="POST">
+        <div>
+            <form action="" method="POST" style="width: fit-content; margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
                 <table style="border-collapse: collapse; margin: auto;">
                     <tr>
@@ -113,15 +127,15 @@
                 
                 
                 
-                <table style="border-collapse: collapse; margin: auto; margin-left: 250px;">
+                <table style="border-collapse: collapse; width: fit-content; margin: auto;">
                     <tr>
-                        <td style="height: 25px" > </td>
+                        <td style="height: 25px" ></td>
                     </tr> 
                     <tr>
-                        <th id="boxa4" colspan="5">Start Time:{{ data.om_start }} <br> End Time:{{ data.om_stop }}</th>
-                        <th id="boxa4" colspan="5"></th>
-                        <th id="boxa4" colspan="6">Start Time:{{ data.l_start }} <br> End Time:{{ data.l_stop }}</th>
-                        <th id="boxa4" colspan="1"></th>
+                        <th id="boxa3_1" colspan="5">Start Time:{{ data.om_start }} <br> End Time:{{ data.om_stop }}</th>
+                        <th id="boxa3_1" colspan="5"></th>
+                        <th id="boxa3_1" colspan="6">Start Time:{{ data.l_start }} <br> End Time:{{ data.l_stop }}</th>
+                        <th id="boxa3_2" colspan="1"></th>
                     </tr>
                     <tr>
                         <th id="boxa5" style="max-width: 100px;"colspan="9">
@@ -416,11 +430,6 @@
                         <td></td>
                     </tr>
                 </table>    
-                
-                    
-                    
-                    
-                    
                 <table style="border-collapse: collapse; margin: auto;">    
                      <tr>
                         <td style="height: 25px" > </td>
@@ -521,42 +530,8 @@
                     Notes: <br>
                     {{ data.notes }}
                 </div>
-                
-                
-                
-                
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-                 <!--------CORRECTIVE ACTION CODE---------------------------------------------------------------------------------->    
-              <!--  <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <td style="height: 40px" > </td>
-                    </tr> 
-                    <tr>
-                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">Any Issues? Describe<input type="text" style="font-size: 20px; width: 900px;"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="border: 1px solid black; font-size: 20px;">EES Person Notified of Issue<input type="text" style="font-size: 20px; width: 500px;"></td>
-                        <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="date" style="font-size: 20px;"></td>
-                        <td colspan="1" style="border: 1px solid black; font-size: 20px;"><input type="time" style="font-size: 20px;"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">
-                            Signature:<input type="text" style="font-size: 20px; width: 500px;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="6" style="border: 1px solid black; font-size: 20px;">Corrective Action Taken<input type="text" style="font-size: 20px; width: 900px;"></td>
-                    </tr>
-                </table>-->
                 <br><br><br>
-                <input type="submit" value="Submit Form" style="font-size: 40px">
+                <input type="submit" value="Submit Form" style="font-size: 2rem;">
             </form> 
         </div>    
     </div>

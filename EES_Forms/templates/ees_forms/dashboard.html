@@ -11,9 +11,9 @@
         <div class="card2_Form">
             {% for x in od_recent %}
                 Oven #{{ x.0 }}<br>
-                Due:&nbsp;&nbsp;{{ x.2 }}
+                Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
             {% endfor %}
-            <br>
+
             <a href="{% url 'pt_admin1' %}">
                 <h4>View All</h4>
             </a>

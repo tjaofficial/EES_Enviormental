@@ -13,7 +13,7 @@ from calendar import HTMLCalendar
 from .models import *
 from .forms import *
 from .utils import DBEmpty, EventCalendar, Calendar
-#from dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta
 
 
 daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -4871,9 +4871,24 @@ def calendar_view(request, year, month):
     month_number = list(calendar.month_name).index(month)
     month_number = int(month_number)
     
-    prev_month = str(calendar.month_name[month_number - 1])
-    next_month = str(calendar.month_name[month_number + 1])
+    prev_month_num = month_number - 1
+    next_month_num = month_number + 1
     
+    
+    if month_number == 1:
+        prev_month = str(calendar.month_name[12])
+        prev_year = str(year - 1)
+    else:
+        prev_month = str(calendar.month_name[month_number - 1])
+        prev_year = year
+    
+    if month_number == 12:
+        next_month = str(calendar.month_name[1])
+        next_year = str(year + 1)
+    else:
+        next_month = str(calendar.month_name[month_number + 1])
+        next_year = year
+        
     events = Event.objects.all()
     
     
@@ -4885,7 +4900,7 @@ def calendar_view(request, year, month):
     
     
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal,
+        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year
     })
 
 

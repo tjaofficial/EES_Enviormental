@@ -3288,6 +3288,13 @@ class formH_model(models.Model):
     
 #----------------------------------------------------------------------FORM I---------------<
 class formI_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices_0 = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    all_user_choices_1 = ((h.get_full_name(), h.get_full_name()) for h in all_users)
+    all_user_choices_2 = ((a.get_full_name(), a.get_full_name()) for a in all_users)
+    all_user_choices_3 = ((b.get_full_name(), b.get_full_name()) for b in all_users)
+    all_user_choices_4 = ((c.get_full_name(), c.get_full_name()) for c in all_users)
+    
     week_start = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
@@ -3300,16 +3307,66 @@ class formI_model(models.Model):
         blank=True,
         null=True
     )
-    time_0 = models.CharField(max_length=30)
-    time_1 = models.CharField(max_length=30)
-    time_2 = models.CharField(max_length=30)
-    time_3 = models.CharField(max_length=30)
-    time_4 = models.CharField(max_length=30)
-    obser_0 = models.CharField(max_length=30)
-    obser_1 = models.CharField(max_length=30)
-    obser_2 = models.CharField(max_length=30)
-    obser_3 = models.CharField(max_length=30)
-    obser_4 = models.CharField(max_length=30)
+    time_0 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True
+    )
+    time_1 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True
+    )
+    time_2 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True
+    )
+    time_3 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True
+    )
+    time_4 = models.TimeField(
+        auto_now_add=False, 
+        auto_now=False,
+        blank=True,
+        null = True
+    )
+    obser_0 = models.CharField(
+        max_length=30,
+        choices = all_user_choices_0,
+        blank=True,
+        null = True
+    )
+    obser_1 = models.CharField(
+        max_length=30,
+        choices = all_user_choices_1,
+        blank=True,
+        null = True
+    )
+    obser_2 = models.CharField(
+        max_length=30,
+        choices = all_user_choices_2,
+        blank=True,
+        null = True
+    )
+    obser_3 = models.CharField(
+        max_length=30,
+        choices = all_user_choices_3,
+        blank=True,
+        null = True
+    )
+    obser_4 = models.CharField(
+        max_length=30,
+        choices = all_user_choices_4,
+        blank=True,
+        null = True
+    )
     
     def __str__(self):
         return str(self.week_start)

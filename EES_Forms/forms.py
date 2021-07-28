@@ -1136,16 +1136,18 @@ class formI_form(ModelForm):
         fields = ('__all__')
         
         widgets = {
-            'time_0' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'obser_0' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'})
+            'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'obser_0' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_1' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_2' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_3' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_4' : forms.Select(attrs={'style':'width: 150px;'}),
         }
         
         
