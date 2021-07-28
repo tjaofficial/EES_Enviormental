@@ -352,4 +352,31 @@ span.sideWord{
     color: darkgray;
     font-size: .8rem;
 }
+.prof_pic_view{
+    width: 200px;
+    border-radius: 50px;
+}
+#form_holder{
+    margin: auto;
+    font-size: 1.5rem;
+    width: 70%;
+}
+#obj_data{
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+.prof_table_title{
+    width: 225px;
+    padding: 8px;
+    padding-left: 0px;
+}
+.table_font{
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+.prof_table_data{
+    width: 281px;
+    padding: 8px;
+    padding-left: 0px;
+}
 /*# sourceMappingURL=style.css.map */

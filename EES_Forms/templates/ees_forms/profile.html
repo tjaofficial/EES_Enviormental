@@ -4,17 +4,64 @@
 <div class="page_center">
     <form action="" method="POST">
         {% csrf_token %}
-        <div id="form_holder">
-            <h1 class="profile_header">Profile Information<br> <input type="submit" value="Edit"></h1><br>
-            Username: {{ request.user }}<br>
-            Password: <a href="{% url 'PasswordChange' %}">Change Password</a><br>
-            <br>
-            Certification Date: {{ user_select.cert_date }}<br>
-            Profile Picture: <a href="">Change Profile Picture</a><br>
-            <hr/>
-            First Name: {{ request.user.first_name }}<br>
-            Last Name: {{ request.user.last_name }}<br>
-            Email: {{ request.user.email }}<br>
+        <div id="form_holder" style="padding-top: 100px;">
+            <div style="padding: 13px; font-size: 2rem; text-align: center;">
+                            Profile Information
+                        </div>
+            <div style="text-align: center; ">
+                <img class="prof_pic_view" src="../../static/images/profile_pics/{{ user_select.profile_picture }}">
+                <br><br>
+                <a href="">Change ID Photo</a><br><br>
+            </div>
+            <div style="text-align: center;">
+                <table style="border-collapse: collapse; margin: auto;" class="table_font">
+                    <!--<tr>
+                        <th colspan='3' id="obj_data" style="padding: 8px; font-size: 2rem;">
+                            Profile Information
+                        </th>
+                    </tr>-->
+                    <tr>
+                        <td class="prof_table_title" >
+                            Name:
+                        </td>
+                        <td colspan="2" id='obj_data' class="prof_table_data">
+                            {{ request.user.first_name }}{{ request.user.last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title">
+                            Username:
+                        </td>
+                        <td colspan="2" id='obj_data' class="prof_table_data">
+                            {{ request.user }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title">
+                            Password:
+                        </td>
+                        <td colspan="2" id='obj_data'>
+                            <a href="{% url 'PasswordChange' %}">Change Password</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title" style="padding-bottom: 25px;">
+                            Email:
+                        </td>
+                        <td colspan="2" id='obj_data' style="padding-bottom: 25px; padding-top: 8px;">
+                            {{ request.user.email }}
+                        </td>
+                    </tr>
+                    <tr id='obj_data'>
+                        <td class="prof_table_title" style="padding-top: 25px; padding-bottom: 25px;">
+                            Certification Date:
+                        </td>
+                        <td colspan="2" style="padding-top: 25px; padding-bottom: 25px;">
+                            {{ user_select.cert_date }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </form>
 </div>

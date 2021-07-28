@@ -153,6 +153,9 @@ def IncompleteForms(request):
     weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
     weekend_fri = weekday_fri + datetime.timedelta(days=7)
     
+    
+#-ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
+#-ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
     if Forms.objects.count() <= 5:
         A1 = Forms(
             form="A-1", 
@@ -304,6 +307,9 @@ def IncompleteForms(request):
 #--------------------------------------------Closest Oven Due-----------------    
 #--------------------------------------------Closest Oven Due-----------------       
 #--------------------------------------------Closest Oven Due-----------------    
+
+
+
     def all_ovens(reads):
         A = []
         for items in reads:
@@ -718,6 +724,9 @@ def profile(request, access_page):
         if x.user == current_user:
             user_select = x
             print(user_select)
+    
+    if user_select.profile_picture:
+        print(user_select.profile_picture)
     
     return render (request, "ees_forms/profile.html", {
         "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today
