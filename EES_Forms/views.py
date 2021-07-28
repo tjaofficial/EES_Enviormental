@@ -4895,7 +4895,7 @@ def calendar_view(request, year, month):
  
     calend = Calendar()
     calend.setfirstweekday(6)
-    html_cal = calend.formatmonth(year, month_number, withyear=True)
+    html_cal = calend.formatmonth(year, month_number, year, withyear=True)
     
     
     
