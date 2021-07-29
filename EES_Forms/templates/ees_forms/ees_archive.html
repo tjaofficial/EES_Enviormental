@@ -1,0 +1,14 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list %}
+
+<div class="card" style="height: 500px;padding-top: 50px;">
+    <form action="search_forms/search" method="POST">
+        {% csrf_token %}
+        <input type='search' placeholder="Search Froms" name="searched">
+        <button type="submit" >Search</button>
+    </form>
+</div>
+
+
+{% endblock %}

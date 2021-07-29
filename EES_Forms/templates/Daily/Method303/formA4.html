@@ -304,8 +304,12 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                 </table>
+                {% if selector %}
+                *Archived Form*
+                {% else %}
                 <br><br><br>
                 <input type="submit" value="Submit Form" style="font-size: 2rem;">
+                {% endif %}
             </form> 
         </div>    
     </div>

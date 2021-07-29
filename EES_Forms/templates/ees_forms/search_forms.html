@@ -1,0 +1,37 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list %}
+
+search page
+<center>
+{% if searched %}
+    {% if access_page == 'search' %}
+         <h2>You searched for {{ searched }}</h2>
+            <br>
+            {% for form in forms %}
+                <a href="../../ees_forms/search_forms/form{{ form.form.0 }}{{ form.form.2 }}_model">{{ form.form }}</a>
+            {% endfor %}
+    {% else %}
+        nothing
+    {% endif %}
+{% else %}
+    {% if access_page %}
+    <div class="card" style="width: 300px;">
+        <ul>
+        {% for x in database %}
+            <a href="../Daily/Method303/form{{ access_page.4}}{{ access_page.5}}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}">
+                <li style="text-align: left;">
+                    {{ x.date }}
+                </li>
+            </a>
+        {% endfor %}
+        </ul>
+        
+    </div>
+    {% else %}
+        <h2>You forgot to search for a form</h2>
+    
+    {% endif %}
+{% endif %}
+</center>
+{% endblock %}

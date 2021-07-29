@@ -14,6 +14,7 @@ from .models import *
 from .forms import *
 from .utils import DBEmpty, EventCalendar, Calendar
 from dateutil.relativedelta import relativedelta
+from django.apps import apps
 
 
 
@@ -153,6 +154,7 @@ def IncompleteForms(request):
     todays_num = today.weekday()
     sub_forms = Forms.objects.all()
     reads = subA5_readings_model.objects.all()
+    today_str = str(today)
     
     weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
     weekend_fri = weekday_fri + datetime.timedelta(days=7)
@@ -434,7 +436,7 @@ def IncompleteForms(request):
     form_check2 = ["",]
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile,
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str,
     })
 
 def weekly_forms(request):
@@ -1153,7 +1155,7 @@ def formA3(request):
     })
 #------------------------------------------------------------------------A4---------------<
 @lock
-def formA4(request):
+def formA4(request, selector):
     formName = "A4"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -1164,98 +1166,108 @@ def formA4(request):
     
     full_name = request.user.get_full_name()
     
-    if now.month == todays_log.date_save.month:
-        if now.day == todays_log.date_save.day:
-            if todays_log.date_save == database_form.date:
-                initial_data = {
-                'date' : database_form.date,
-                'observer' : database_form.observer,
-                'crew' : database_form.crew,
-                'foreman' : database_form.foreman,
-                'main_start' : database_form.main_start,
-                'main_stop' : database_form.main_stop,
-                'main_1' : database_form.main_1,
-                'main_2' : database_form.main_2,
-                'main_3' : database_form.main_3,
-                'main_4' : database_form.main_4,
-                'suction_main' : database_form.suction_main,
-                'oven_leak_1' : database_form.oven_leak_1,
-                'time_leak_1' : database_form.time_leak_1,
-                'date_temp_seal_leak_1' : database_form.date_temp_seal_leak_1,
-                'time_temp_seal_leak_1' : database_form.time_temp_seal_leak_1,
-                'temp_seal_by_leak_1' : database_form.temp_seal_by_leak_1,
-                'date_init_repair_leak_1' : database_form.date_init_repair_leak_1,
-                'time_init_repair_leak_1' : database_form.time_init_repair_leak_1,
-                'date_comp_repair_leak_1' : database_form.date_comp_repair_leak_1,
-                'time_comp_repair_leak_1' : database_form.time_comp_repair_leak_1,
-                'comp_by_leak_1' : database_form.comp_by_leak_1,
-                'notes' : database_form.notes,
-                }
-                data = formA4_form(initial=initial_data)
+    if selector:
+        for x in org:
+            print(x)
+            print(selector)
+            if str(x.date) == str(selector):
+                database_model = x
+    
+        data = database_model
+  
+    else:
+        if now.month == todays_log.date_save.month:
+            if now.day == todays_log.date_save.day:
+                if todays_log.date_save == database_form.date:
+                    initial_data = {
+                    'date' : database_form.date,
+                    'observer' : database_form.observer,
+                    'crew' : database_form.crew,
+                    'foreman' : database_form.foreman,
+                    'main_start' : database_form.main_start,
+                    'main_stop' : database_form.main_stop,
+                    'main_1' : database_form.main_1,
+                    'main_2' : database_form.main_2,
+                    'main_3' : database_form.main_3,
+                    'main_4' : database_form.main_4,
+                    'suction_main' : database_form.suction_main,
+                    'oven_leak_1' : database_form.oven_leak_1,
+                    'time_leak_1' : database_form.time_leak_1,
+                    'date_temp_seal_leak_1' : database_form.date_temp_seal_leak_1,
+                    'time_temp_seal_leak_1' : database_form.time_temp_seal_leak_1,
+                    'temp_seal_by_leak_1' : database_form.temp_seal_by_leak_1,
+                    'date_init_repair_leak_1' : database_form.date_init_repair_leak_1,
+                    'time_init_repair_leak_1' : database_form.time_init_repair_leak_1,
+                    'date_comp_repair_leak_1' : database_form.date_comp_repair_leak_1,
+                    'time_comp_repair_leak_1' : database_form.time_comp_repair_leak_1,
+                    'comp_by_leak_1' : database_form.comp_by_leak_1,
+                    'notes' : database_form.notes,
+                    }
+                    data = formA4_form(initial=initial_data)
 
-                if request.method == "POST":
-                    form = formA4_form(request.POST, instance=database_form)
-                    if form.is_valid():
-                        A = form.save()
+                    if request.method == "POST":
+                        form = formA4_form(request.POST, instance=database_form)
+                        if form.is_valid():
+                            A = form.save()
 
-                        if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
-                            issue_page = '../../issues_view/A-4/' + str(database_form.date) + '/form'
+                            if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
+                                issue_page = '../../issues_view/A-4/' + str(database_form.date) + '/form'
 
-                            return redirect (issue_page)
-                        if A.oven_leak_1:
-                            issue_page = '../../issues_view/A-4/' + str(database_form.date) + '/form'
+                                return redirect (issue_page)
+                            if A.oven_leak_1:
+                                issue_page = '../../issues_view/A-4/' + str(database_form.date) + '/form'
 
-                            return redirect (issue_page)
+                                return redirect (issue_page)
 
-                        done = Forms.objects.filter(form='A-4')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
+                            done = Forms.objects.filter(form='A-4')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
 
-                        return redirect('IncompleteForms')
-                    else:
-                        print(form.errors)
+                            return redirect('IncompleteForms')
+                        else:
+                            print(form.errors)
 
+                else:
+                    initial_data = {
+                    'date' : todays_log.date_save,
+                    'observer' : full_name,
+                    'crew' : todays_log.crew,
+                    'foreman' : todays_log.foreman,
+                    }
+                    data = formA4_form(initial=initial_data)
+
+                    if request.method == "POST":
+                        form = formA4_form(request.POST)
+                        if form.is_valid():
+                            A = form.save()
+
+                            if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
+                                issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+
+                                return redirect (issue_page)
+                            if A.oven_leak_1:
+                                issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+
+                                return redirect (issue_page)
+
+                            done = Forms.objects.filter(form='A-4')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
             else:
-                initial_data = {
-                'date' : todays_log.date_save,
-                'observer' : full_name,
-                'crew' : todays_log.crew,
-                'foreman' : todays_log.foreman,
-                }
-                data = formA4_form(initial=initial_data)
+                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
-                if request.method == "POST":
-                    form = formA4_form(request.POST)
-                    if form.is_valid():
-                        A = form.save()
-
-                        if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
-                            issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-
-                            return redirect (issue_page)
-                        if A.oven_leak_1:
-                            issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-
-                            return redirect (issue_page)
-
-                        done = Forms.objects.filter(form='A-4')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-
-                        return redirect('IncompleteForms')
+                return redirect(batt_prof)
         else:
             batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                
+
             return redirect(batt_prof)
-    else:
-        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                
-        return redirect(batt_prof)
     
     return render (request, "Daily/Method303/formA4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName,'profile':profile,
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector':selector,
     })
 #------------------------------------------------------------------------A5---------------<
 @lock
@@ -3131,7 +3143,7 @@ def formF3(request):
     })
 
 @lock
-def formF4(request):
+def formF4(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -3330,7 +3342,7 @@ def formF4(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, "today" :today
     })
 @lock
 def formF5(request):
@@ -5171,9 +5183,52 @@ def profile_redirect(request):
         
     })
 def about_view(request):
+    profile = user_profile_model.objects.all()
     
     return render(request, 'ees_forms/ees_about.html', {
+        'profile':profile,
     })
+def safety_view(request):
+    profile = user_profile_model.objects.all()
+    
+    return render(request, 'ees_forms/ees_safety.html', {
+        'profile':profile,
+    })
+def archive_view(request):
+    profile = user_profile_model.objects.all()
+    
+    return render(request, 'ees_forms/ees_archive.html', {
+        'profile':profile,
+    })
+def search_forms_view(request, access_page):
+    profile = user_profile_model.objects.all()
+    if access_page != 'search':
+        Model = apps.get_model('EES_Forms', access_page)
+        database = Model.objects.all().order_by('-date')
+        
+            
+    if request.method == "POST":
+        searched = request.POST['searched']
+        database = ''
+        
+        
+        forms = Forms.objects.filter(form__contains= searched)
+        
+        form_dates_1 = formA4_model.objects.all().order_by('-date')
+        
+        
+        
+        
+        return render(request, 'ees_forms/search_forms.html', {
+        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database,
+        })
+    else:
+        return render(request, 'ees_forms/search_forms.html', {
+        'profile':profile,'access_page': access_page, 'database': database,
+        })
+    
+    
+
 
 
 

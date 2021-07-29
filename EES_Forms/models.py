@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 import datetime
+from django.db.models import Q
 
 
 truck_choices = (
@@ -340,6 +341,11 @@ class user_profile_model(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    
+    
+    
+    
     
     
 class subA1_model(models.Model):

@@ -10,7 +10,7 @@
     <div style="text-align: left; width:700px;margin: auto; font-size: 25px;">
         <ul>
         {% for x in ca_forms %}
-            <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{% endif %}-{{x.date.day}}/issue">
+            <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
                 <div class="card" style="padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
                     <div style="width: 311px;">
                          {{ x.date }} - {{ x.form }}

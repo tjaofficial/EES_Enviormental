@@ -16,6 +16,11 @@ urlpatterns = [
     path("password", PasswordsChangeView.as_view(), name = 'PasswordChange'),
     path('profile_redirect', views.profile_redirect, name='profile_redirect'),
     path('about', views.about_view, name='about'),
+    path('safety', views.safety_view, name='safety'),
+    path('archive', views.archive_view, name='archive'),
+    path('search_forms/<str:access_page>', views.search_forms_view, name='search_forms'),
+    
+    
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("IncompleteForms", views.IncompleteForms, name="IncompleteForms"),
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
@@ -26,7 +31,7 @@ urlpatterns = [
     path("Daily/Method303/formA1", views.formA1, name="formA1"),
     path("Daily/Method303/formA2", views.formA2, name="formA2"),
     path("Daily/Method303/formA3", views.formA3, name="formA3"),
-    path("Daily/Method303/formA4", views.formA4, name="formA4"),
+    path("Daily/Method303/formA4/<str:selector>", views.formA4, name="formA4"),
     path("Daily/Method303/formA5", views.formA5, name="formA5"),
     path("Daily/formB", views.formB, name="formB"),
     path("Daily/formC", views.formC, name="formC"),
