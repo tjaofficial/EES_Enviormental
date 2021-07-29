@@ -24,15 +24,37 @@
 {% else %}
     {% if access_page %}
     <div class="card" style="width: 300px;">
-        <ul>
-        {% for x in database %}
-            <a href="../Daily/Method303/form{{ access_page.4}}{{ access_page.5}}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}">
-                <li style="text-align: left;">
-                    {{ x.date }}
-                </li>
-            </a>
-        {% endfor %}
-        </ul>
+        {% if att_check == 1 %}
+            <ul>
+                {% for x in database %}
+                    <a href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}">
+                        <li style="text-align: left;">
+                            {{ x.date }}
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
+        {% elif att_check == 2 %}
+            <ul>
+                {% for x in database %}
+                    <a href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}">
+                        <li style="text-align: left;">
+                            {{ x.week_start }}
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
+        {% elif att_check == 3 %}
+            <ul>
+                {% for x in database %}
+                    <a href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}">
+                        <li style="text-align: left;">
+                            {{ x.week_start }}
+                        </li>
+                    </a>
+                {% endfor %}
+            </ul>
+        {% endif %}
         
     </div>
     {% else %}

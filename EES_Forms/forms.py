@@ -1119,6 +1119,7 @@ class formH_form(ModelForm):
         fields = ('__all__')
         
         widgets = {
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),

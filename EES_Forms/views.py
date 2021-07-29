@@ -15,6 +15,7 @@ from .forms import *
 from .utils import DBEmpty, EventCalendar, Calendar
 from dateutil.relativedelta import relativedelta
 from django.apps import apps
+from django.core.exceptions import FieldDoesNotExist, FieldError
 
 
 
@@ -929,8 +930,8 @@ def formA1(request, selector):
 
             return redirect(batt_prof)
     
-    return render (request, "Daily/Method303/formA1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName, 'profile':profile,
+    return render (request, "Daily/formA1.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName, 'profile':profile, 'selector': selector,
     })
 #------------------------------------------------------------------------A2---------------<
 @lock
@@ -1050,8 +1051,8 @@ def formA2(request, selector):
 
             return redirect(batt_prof)
 
-    return render (request, "Daily/Method303/formA2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile,
+    return render (request, "Daily/formA2.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector': selector,
     })
 #------------------------------------------------------------------------A3---------------<
 @lock
@@ -1175,8 +1176,8 @@ def formA3(request, selector):
 
             return redirect(batt_prof)
 
-    return render (request, "Daily/Method303/formA3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile,
+    return render (request, "Daily/formA3.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector': selector,
     })
 #------------------------------------------------------------------------A4---------------<
 @lock
@@ -1288,7 +1289,7 @@ def formA4(request, selector):
 
             return redirect(batt_prof)
     
-    return render (request, "Daily/Method303/formA4.html", {
+    return render (request, "Daily/formA4.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector':selector,
     })
 #------------------------------------------------------------------------A5---------------<
@@ -1612,12 +1613,12 @@ def formA5(request, selector):
 
             return redirect(batt_prof)
                     
-    return render (request, "Daily/Method303/formA5.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile':profile,
+    return render (request, "Daily/formA5.html", {
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile':profile, 'selector': selector,
     })
 #------------------------------------------------------------------------FORM B---------------<
 @lock
-def formB(request):
+def formB(request, selector):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -1635,8 +1636,183 @@ def formB(request):
     
     sunday = today - datetime.timedelta(days=1)
     
-    if today.weekday() not in {5, 6}:
-        if week == last_monday:
+    if selector != 'form':
+        for x in week_start_dates:
+            if str(x.week_start) == str(selector):
+                database_model = x
+        data = database_model
+        
+    else:
+        if today.weekday() not in {5, 6}:
+            if week == last_monday:
+                database_form = week_almost
+                initial_data = {
+                    'week_start' : database_form.week_start,
+                    'week_end' : database_form.week_end,
+                    'observer_0' : database_form.observer_0,
+                    'time_0' : database_form.time_0,
+                    'weather_0' : database_form.weather_0,
+                    'wind_speed_0' : database_form.wind_speed_0,
+                    'fugitive_dust_observed_0' : database_form.fugitive_dust_observed_0,
+                    'supressant_applied_0' : database_form.supressant_applied_0,
+                    'supressant_active_0' : database_form.supressant_active_0,
+                    'working_face_exceed_0' : database_form.working_face_exceed_0,
+                    'spills_0' : database_form.spills_0,
+                    'pushed_back_0' : database_form.pushed_back_0,
+                    'coal_vessel_0' : database_form.coal_vessel_0,
+                    'water_sprays_0' : database_form.water_sprays_0,
+                    'loader_lowered_0' : database_form.loader_lowered_0,
+                    'working_water_sprays_0' : database_form.working_water_sprays_0,
+                    'barrier_thickness_0' : database_form.barrier_thickness_0,
+                    'surface_quality_0' : database_form.surface_quality_0,
+                    'surpressant_crust_0' : database_form.surpressant_crust_0,
+                    'additional_surpressant_0' : database_form.additional_surpressant_0,
+                    'comments_0' : database_form.comments_0,
+                    'wharf_0' : database_form.wharf_0,
+                    'breeze_0' : database_form.breeze_0,
+
+                    'observer_1' : database_form.observer_1,
+                    'time_1' : database_form.time_1,
+                    'weather_1' : database_form.weather_1,
+                    'wind_speed_1' : database_form.wind_speed_1,
+                    'fugitive_dust_observed_1' : database_form.fugitive_dust_observed_1,
+                    'supressant_applied_1' : database_form.supressant_applied_1,
+                    'supressant_active_1' : database_form.supressant_active_1,
+                    'working_face_exceed_1' : database_form.working_face_exceed_1,
+                    'spills_1' : database_form.spills_1,
+                    'pushed_back_1' : database_form.pushed_back_1,
+                    'coal_vessel_1' : database_form.coal_vessel_1,
+                    'water_sprays_1' : database_form.water_sprays_1,
+                    'loader_lowered_1' : database_form.loader_lowered_1,
+                    'working_water_sprays_1' : database_form.working_water_sprays_1,
+                    'barrier_thickness_1' : database_form.barrier_thickness_1,
+                    'surface_quality_1' : database_form.surface_quality_1,
+                    'surpressant_crust_1' : database_form.surpressant_crust_1,
+                    'additional_surpressant_1' : database_form.additional_surpressant_1,
+                    'comments_1' : database_form.comments_1,
+                    'wharf_1' : database_form.wharf_1,
+                    'breeze_1' : database_form.breeze_1,
+
+                    'observer_2' : database_form.observer_2,
+                    'time_2' : database_form.time_2,
+                    'weather_2' : database_form.weather_2,
+                    'wind_speed_2' : database_form.wind_speed_2,
+                    'fugitive_dust_observed_2' : database_form.fugitive_dust_observed_2,
+                    'supressant_applied_2' : database_form.supressant_applied_2,
+                    'supressant_active_2' : database_form.supressant_active_2,
+                    'working_face_exceed_2' : database_form.working_face_exceed_2,
+                    'spills_2' : database_form.spills_2,
+                    'pushed_back_2' : database_form.pushed_back_2,
+                    'coal_vessel_2' : database_form.coal_vessel_2,
+                    'water_sprays_2' : database_form.water_sprays_2,
+                    'loader_lowered_2' : database_form.loader_lowered_2,
+                    'working_water_sprays_2' : database_form.working_water_sprays_2,
+                    'barrier_thickness_2' : database_form.barrier_thickness_2,
+                    'surface_quality_2' : database_form.surface_quality_2,
+                    'surpressant_crust_2' : database_form.surpressant_crust_2,
+                    'additional_surpressant_2' : database_form.additional_surpressant_2,
+                    'comments_2' : database_form.comments_2,
+                    'wharf_2' : database_form.wharf_2,
+                    'breeze_2' : database_form.breeze_2,
+
+                    'observer_3' : database_form.observer_3,
+                    'time_3' : database_form.time_3,
+                    'weather_3' : database_form.weather_3,
+                    'wind_speed_3' : database_form.wind_speed_3,
+                    'fugitive_dust_observed_3' : database_form.fugitive_dust_observed_3,
+                    'supressant_applied_3' : database_form.supressant_applied_3,
+                    'supressant_active_3' : database_form.supressant_active_3,
+                    'working_face_exceed_3' : database_form.working_face_exceed_3,
+                    'spills_3' : database_form.spills_3,
+                    'pushed_back_3' : database_form.pushed_back_3,
+                    'coal_vessel_3' : database_form.coal_vessel_3,
+                    'water_sprays_3' : database_form.water_sprays_3,
+                    'loader_lowered_3' : database_form.loader_lowered_3,
+                    'working_water_sprays_3' : database_form.working_water_sprays_3,
+                    'barrier_thickness_3' : database_form.barrier_thickness_3,
+                    'surface_quality_3' : database_form.surface_quality_3,
+                    'surpressant_crust_3' : database_form.surpressant_crust_3,
+                    'additional_surpressant_3' : database_form.additional_surpressant_3,
+                    'comments_3' : database_form.comments_3,
+                    'wharf_3' : database_form.wharf_3,
+                    'breeze_3' : database_form.breeze_3,
+
+                    'observer_4' : database_form.observer_4,
+                    'time_4' : database_form.time_4,
+                    'weather_4' : database_form.weather_4,
+                    'wind_speed_4' : database_form.wind_speed_4,
+                    'fugitive_dust_observed_4' : database_form.fugitive_dust_observed_4,
+                    'supressant_applied_4' : database_form.supressant_applied_4,
+                    'supressant_active_4' : database_form.supressant_active_4,
+                    'working_face_exceed_4' : database_form.working_face_exceed_4,
+                    'spills_4' : database_form.spills_4,
+                    'pushed_back_4' : database_form.pushed_back_4,
+                    'coal_vessel_4' : database_form.coal_vessel_4,
+                    'water_sprays_4' : database_form.water_sprays_4,
+                    'loader_lowered_4' : database_form.loader_lowered_4,
+                    'working_water_sprays_4' : database_form.working_water_sprays_4,
+                    'barrier_thickness_4' : database_form.barrier_thickness_4,
+                    'surface_quality_4' : database_form.surface_quality_4,
+                    'surpressant_crust_4' : database_form.surpressant_crust_4,
+                    'additional_surpressant_4' : database_form.additional_surpressant_4,
+                    'comments_4' : database_form.comments_4,
+                    'wharf_4' : database_form.wharf_4,
+                    'breeze_4' : database_form.breeze_4,
+
+                }
+                data = formB_form(initial=initial_data)
+                done = Forms.objects.filter(form='B')[0]
+                if request.method == "POST":
+                    form = formB_form(request.POST, instance=week_almost)
+                    A_valid = form.is_valid()
+                    if A_valid:
+                        form.save()
+
+                        filled_out = True
+                        for items in week_almost.whatever().values():
+                            if items == None:
+                                filled_out = False
+                                break
+
+                        if filled_out:
+                            done = Forms.objects.filter(form='B')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+                        else:
+                            done.submitted = False
+                            done.save()
+
+                    return redirect('IncompleteForms')
+            else:
+                initial_data = {
+                    'week_start' : last_monday,
+                    'week_end' : end_week,
+                }
+                data = formB_form(initial= initial_data)
+                if request.method == "POST":
+                    form = formB_form(request.POST)
+                    A_valid = form.is_valid()
+                    if A_valid:
+                        form.save()
+
+                        done = Forms.objects.filter(form='B')[0]
+                        filled_out = True
+                        for items in week_almost.whatever().values():
+                            if items == None:
+                                filled_out = False
+                                break
+                        if filled_out: 
+                            done = Forms.objects.filter(form='B')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+                        else:
+                            done.submitted = False
+                            done.save()
+
+                    return redirect('IncompleteForms')
+        else:
             database_form = week_almost
             initial_data = {
                 'week_start' : database_form.week_start,
@@ -1662,7 +1838,7 @@ def formB(request):
                 'comments_0' : database_form.comments_0,
                 'wharf_0' : database_form.wharf_0,
                 'breeze_0' : database_form.breeze_0,
-                
+
                 'observer_1' : database_form.observer_1,
                 'time_1' : database_form.time_1,
                 'weather_1' : database_form.weather_1,
@@ -1684,7 +1860,7 @@ def formB(request):
                 'comments_1' : database_form.comments_1,
                 'wharf_1' : database_form.wharf_1,
                 'breeze_1' : database_form.breeze_1,
-                
+
                 'observer_2' : database_form.observer_2,
                 'time_2' : database_form.time_2,
                 'weather_2' : database_form.weather_2,
@@ -1706,7 +1882,7 @@ def formB(request):
                 'comments_2' : database_form.comments_2,
                 'wharf_2' : database_form.wharf_2,
                 'breeze_2' : database_form.breeze_2,
-                
+
                 'observer_3' : database_form.observer_3,
                 'time_3' : database_form.time_3,
                 'weather_3' : database_form.weather_3,
@@ -1728,7 +1904,7 @@ def formB(request):
                 'comments_3' : database_form.comments_3,
                 'wharf_3' : database_form.wharf_3,
                 'breeze_3' : database_form.breeze_3,
-                
+
                 'observer_4' : database_form.observer_4,
                 'time_4' : database_form.time_4,
                 'weather_4' : database_form.weather_4,
@@ -1750,7 +1926,7 @@ def formB(request):
                 'comments_4' : database_form.comments_4,
                 'wharf_4' : database_form.wharf_4,
                 'breeze_4' : database_form.breeze_4,
-                
+
             }
             data = formB_form(initial=initial_data)
             done = Forms.objects.filter(form='B')[0]
@@ -1776,182 +1952,14 @@ def formB(request):
                         done.save()
 
                 return redirect('IncompleteForms')
-        else:
-            initial_data = {
-                'week_start' : last_monday,
-                'week_end' : end_week,
-            }
-            data = formB_form(initial= initial_data)
-            if request.method == "POST":
-                form = formB_form(request.POST)
-                A_valid = form.is_valid()
-                if A_valid:
-                    form.save()
-
-                    done = Forms.objects.filter(form='B')[0]
-                    filled_out = True
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
-                    if filled_out: 
-                        done = Forms.objects.filter(form='B')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-                    else:
-                        done.submitted = False
-                        done.save()
-
-                return redirect('IncompleteForms')
-    else:
-        database_form = week_almost
-        initial_data = {
-            'week_start' : database_form.week_start,
-            'week_end' : database_form.week_end,
-            'observer_0' : database_form.observer_0,
-            'time_0' : database_form.time_0,
-            'weather_0' : database_form.weather_0,
-            'wind_speed_0' : database_form.wind_speed_0,
-            'fugitive_dust_observed_0' : database_form.fugitive_dust_observed_0,
-            'supressant_applied_0' : database_form.supressant_applied_0,
-            'supressant_active_0' : database_form.supressant_active_0,
-            'working_face_exceed_0' : database_form.working_face_exceed_0,
-            'spills_0' : database_form.spills_0,
-            'pushed_back_0' : database_form.pushed_back_0,
-            'coal_vessel_0' : database_form.coal_vessel_0,
-            'water_sprays_0' : database_form.water_sprays_0,
-            'loader_lowered_0' : database_form.loader_lowered_0,
-            'working_water_sprays_0' : database_form.working_water_sprays_0,
-            'barrier_thickness_0' : database_form.barrier_thickness_0,
-            'surface_quality_0' : database_form.surface_quality_0,
-            'surpressant_crust_0' : database_form.surpressant_crust_0,
-            'additional_surpressant_0' : database_form.additional_surpressant_0,
-            'comments_0' : database_form.comments_0,
-            'wharf_0' : database_form.wharf_0,
-            'breeze_0' : database_form.breeze_0,
-
-            'observer_1' : database_form.observer_1,
-            'time_1' : database_form.time_1,
-            'weather_1' : database_form.weather_1,
-            'wind_speed_1' : database_form.wind_speed_1,
-            'fugitive_dust_observed_1' : database_form.fugitive_dust_observed_1,
-            'supressant_applied_1' : database_form.supressant_applied_1,
-            'supressant_active_1' : database_form.supressant_active_1,
-            'working_face_exceed_1' : database_form.working_face_exceed_1,
-            'spills_1' : database_form.spills_1,
-            'pushed_back_1' : database_form.pushed_back_1,
-            'coal_vessel_1' : database_form.coal_vessel_1,
-            'water_sprays_1' : database_form.water_sprays_1,
-            'loader_lowered_1' : database_form.loader_lowered_1,
-            'working_water_sprays_1' : database_form.working_water_sprays_1,
-            'barrier_thickness_1' : database_form.barrier_thickness_1,
-            'surface_quality_1' : database_form.surface_quality_1,
-            'surpressant_crust_1' : database_form.surpressant_crust_1,
-            'additional_surpressant_1' : database_form.additional_surpressant_1,
-            'comments_1' : database_form.comments_1,
-            'wharf_1' : database_form.wharf_1,
-            'breeze_1' : database_form.breeze_1,
-
-            'observer_2' : database_form.observer_2,
-            'time_2' : database_form.time_2,
-            'weather_2' : database_form.weather_2,
-            'wind_speed_2' : database_form.wind_speed_2,
-            'fugitive_dust_observed_2' : database_form.fugitive_dust_observed_2,
-            'supressant_applied_2' : database_form.supressant_applied_2,
-            'supressant_active_2' : database_form.supressant_active_2,
-            'working_face_exceed_2' : database_form.working_face_exceed_2,
-            'spills_2' : database_form.spills_2,
-            'pushed_back_2' : database_form.pushed_back_2,
-            'coal_vessel_2' : database_form.coal_vessel_2,
-            'water_sprays_2' : database_form.water_sprays_2,
-            'loader_lowered_2' : database_form.loader_lowered_2,
-            'working_water_sprays_2' : database_form.working_water_sprays_2,
-            'barrier_thickness_2' : database_form.barrier_thickness_2,
-            'surface_quality_2' : database_form.surface_quality_2,
-            'surpressant_crust_2' : database_form.surpressant_crust_2,
-            'additional_surpressant_2' : database_form.additional_surpressant_2,
-            'comments_2' : database_form.comments_2,
-            'wharf_2' : database_form.wharf_2,
-            'breeze_2' : database_form.breeze_2,
-
-            'observer_3' : database_form.observer_3,
-            'time_3' : database_form.time_3,
-            'weather_3' : database_form.weather_3,
-            'wind_speed_3' : database_form.wind_speed_3,
-            'fugitive_dust_observed_3' : database_form.fugitive_dust_observed_3,
-            'supressant_applied_3' : database_form.supressant_applied_3,
-            'supressant_active_3' : database_form.supressant_active_3,
-            'working_face_exceed_3' : database_form.working_face_exceed_3,
-            'spills_3' : database_form.spills_3,
-            'pushed_back_3' : database_form.pushed_back_3,
-            'coal_vessel_3' : database_form.coal_vessel_3,
-            'water_sprays_3' : database_form.water_sprays_3,
-            'loader_lowered_3' : database_form.loader_lowered_3,
-            'working_water_sprays_3' : database_form.working_water_sprays_3,
-            'barrier_thickness_3' : database_form.barrier_thickness_3,
-            'surface_quality_3' : database_form.surface_quality_3,
-            'surpressant_crust_3' : database_form.surpressant_crust_3,
-            'additional_surpressant_3' : database_form.additional_surpressant_3,
-            'comments_3' : database_form.comments_3,
-            'wharf_3' : database_form.wharf_3,
-            'breeze_3' : database_form.breeze_3,
-
-            'observer_4' : database_form.observer_4,
-            'time_4' : database_form.time_4,
-            'weather_4' : database_form.weather_4,
-            'wind_speed_4' : database_form.wind_speed_4,
-            'fugitive_dust_observed_4' : database_form.fugitive_dust_observed_4,
-            'supressant_applied_4' : database_form.supressant_applied_4,
-            'supressant_active_4' : database_form.supressant_active_4,
-            'working_face_exceed_4' : database_form.working_face_exceed_4,
-            'spills_4' : database_form.spills_4,
-            'pushed_back_4' : database_form.pushed_back_4,
-            'coal_vessel_4' : database_form.coal_vessel_4,
-            'water_sprays_4' : database_form.water_sprays_4,
-            'loader_lowered_4' : database_form.loader_lowered_4,
-            'working_water_sprays_4' : database_form.working_water_sprays_4,
-            'barrier_thickness_4' : database_form.barrier_thickness_4,
-            'surface_quality_4' : database_form.surface_quality_4,
-            'surpressant_crust_4' : database_form.surpressant_crust_4,
-            'additional_surpressant_4' : database_form.additional_surpressant_4,
-            'comments_4' : database_form.comments_4,
-            'wharf_4' : database_form.wharf_4,
-            'breeze_4' : database_form.breeze_4,
-                
-        }
-        data = formB_form(initial=initial_data)
-        done = Forms.objects.filter(form='B')[0]
-        if request.method == "POST":
-            form = formB_form(request.POST, instance=week_almost)
-            A_valid = form.is_valid()
-            if A_valid:
-                form.save()
-
-                filled_out = True
-                for items in week_almost.whatever().values():
-                    if items == None:
-                        filled_out = False
-                        break
-
-                if filled_out:
-                    done = Forms.objects.filter(form='B')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-                else:
-                    done.submitted = False
-                    done.save()
-
-            return redirect('IncompleteForms')
         
     return render (request, "Daily/formB.html", {
-        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data, 'profile':profile,
+        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data, 'profile':profile, 'selector':selector
     })
 
 #------------------------------------------------------------------------FORM C---------------<
 @lock
-def formC(request):
+def formC(request, selector):
     formName = "C"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -2148,7 +2156,7 @@ def formC(request):
 
 #------------------------------------------------------------------------FORM D---------------<
 @lock
-def formD(request):
+def formD(request, selector):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -2441,12 +2449,12 @@ def formD(request):
 
                 return redirect('IncompleteForms')
         
-    return render (request, "Daily/formD.html", {
+    return render (request, "Weekly/formD.html", {
         "back": back, 'todays_log': todays_log, 'empty': empty_form, 'profile': profile,
     })
 #----------------------------------------------------------------------FORM E---------------<
 @lock
-def formE(request):
+def formE(request, selector):
     formName = "E"
     
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -2560,7 +2568,7 @@ def formE(request):
 
 
 @lock
-def formF1(request):
+def formF1(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -2766,11 +2774,11 @@ def formF1(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'selector':selector
     })
 
 @lock
-def formF2(request):
+def formF2(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -2969,11 +2977,11 @@ def formF2(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'selector':selector
     })
 
 @lock
-def formF3(request):
+def formF3(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -3172,7 +3180,7 @@ def formF3(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'selector':selector
     })
 
 @lock
@@ -3375,10 +3383,10 @@ def formF4(request, selector):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, "today" :today
+        "back": back, 'todays_log': todays_log, 'data': data, "today" :today, 'selector':selector
     })
 @lock
-def formF5(request):
+def formF5(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -3577,10 +3585,10 @@ def formF5(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF5.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'selector':selector
     })
 @lock
-def formF6(request):
+def formF6(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -3779,10 +3787,10 @@ def formF6(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF6.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'selector':selector
     })
 @lock
-def formF7(request):
+def formF7(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -3981,11 +3989,11 @@ def formF7(request):
                     return redirect('IncompleteForms')
     
     return render (request, "Weekly/formF7.html", {
-        "back": back, 'todays_log': todays_log, 'data': data
+        "back": back, 'todays_log': todays_log, 'data': data, 'selector':selector
     })
 
 @lock
-def formG1(request):    
+def formG1(request, selector):    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
     initial_data = {
@@ -4032,11 +4040,11 @@ def formG1(request):
         form = formG1_form(initial=initial_data)
         
     return render (request, "Daily/formG1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form,  'selector':selector,
     })
 
 @lock
-def formG2(request):    
+def formG2(request, selector):    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
     initial_data = {
@@ -4083,7 +4091,7 @@ def formG2(request):
         form = formG2_form(initial=initial_data)
         
     return render (request, "Daily/formG1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form,  'selector':selector,
     })
 
 
@@ -4092,50 +4100,60 @@ def formG2(request):
 def formH(request, access_page):    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
-    initial_data = {
-        'date' : todays_log.date_save,
-        'estab' : "EES COKE BATTERY",
-        'county' : "Wayne",
-        'estab_no' : "P0408",
-        'equip_loc' : "Zug Island",
-        'district' : "Detroit",
-        'city' : "River Rouge",
-        'observer' : full_name,
-        'cert_date' : cert_date,
-        'process_equip1' : "-",
-        'process_equip2' : "-",
-        'op_mode1' : "normal",
-        'op_mode2' : "normal",
-        'emission_point_start' : "Above Stack",
-        'emission_point_stop' : "Same",
-        'height_above_ground' : "300",
-        'height_rel_observer' : "300",
-        'water_drolet_present' : "No",
-        'water_droplet_plume' : "N/A",
-        'describe_background_start' : "Skies",
-        'describe_background_stop' : "Same"
-    }
-    data = formH_form(initial=initial_data)
-    profile_form = user_profile_form()
-    readings_form = formA5_readings_form()
     
-    if request.method == "POST":
-        form = formH_form(request.POST)
-        
-        A_valid = form.is_valid()
-        
-        if A_valid:
-            A = form.save()
-            
-            done = Forms.objects.filter(form='H')[0]
-            done.submitted = True
-            done.save()
-            
-            return redirect('IncompleteForms')
+    org = formH_model.objects.all().order_by('-date')
+    
+    if access_page != 'form':
+        for x in org:
+            if str(x.date) == str(access_page):
+                database_model = x
+        data = database_model
+        profile_form = ''
     else:
-        form = formH_form(initial=initial_data)
+        initial_data = {
+            'date' : todays_log.date_save,
+            'estab' : "EES COKE BATTERY",
+            'county' : "Wayne",
+            'estab_no' : "P0408",
+            'equip_loc' : "Zug Island",
+            'district' : "Detroit",
+            'city' : "River Rouge",
+            'observer' : full_name,
+            'cert_date' : cert_date,
+            'process_equip1' : "-",
+            'process_equip2' : "-",
+            'op_mode1' : "normal",
+            'op_mode2' : "normal",
+            'emission_point_start' : "Above Stack",
+            'emission_point_stop' : "Same",
+            'height_above_ground' : "300",
+            'height_rel_observer' : "300",
+            'water_drolet_present' : "No",
+            'water_droplet_plume' : "N/A",
+            'describe_background_start' : "Skies",
+            'describe_background_stop' : "Same"
+        }
+        data = formH_form(initial=initial_data)
+        profile_form = user_profile_form()
+        readings_form = formA5_readings_form()
+
+        if request.method == "POST":
+            form = formH_form(request.POST)
+
+            A_valid = form.is_valid()
+
+            if A_valid:
+                A = form.save()
+
+                done = Forms.objects.filter(form='H')[0]
+                done.submitted = True
+                done.save()
+
+                return redirect('IncompleteForms')
+        else:
+            form = formH_form(initial=initial_data)
         
-    return render (request, "Daily/formH.html", {
+    return render (request, "Weekly/formH.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
     })
 
@@ -5228,28 +5246,49 @@ def search_forms_view(request, access_page):
     profile = user_profile_model.objects.all()
     if access_page != 'search':
         Model = apps.get_model('EES_Forms', access_page)
-        database = Model.objects.all().order_by('-date')
+        ModelForms = Forms.objects.all()
         
+        try:
+            database = Model.objects.all().order_by('-date')
+            att_check = 1
+            print('chekc 1')
+
+        except FieldError as e:
+            database = Model.objects.all().order_by('-week_start')
+            for x in ModelForms:
+                print(access_page[5])
+                print(x.link)
+                if x.form == access_page[4]:
+                    if x.link[0] == 'D':
+                        att_check = 3
+                        print('chekc 3')
+                    else:
+                        att_check = 2
+                        print('chekc 2')
+                elif x.form == access_page[4] + '-' + access_page[6]:
+                    if x.link[0] == 'D':
+                        att_check = 3
+                        print('chekc 3')
+                    else:
+                        att_check = 2
+                        print('chekc 2')
             
     if request.method == "POST":
         searched = request.POST['searched']
         database = ''
-        
+        att_check = ''
         
         forms_pre = Forms.objects.filter(form__contains= searched)
         forms = forms_pre.order_by('form')
         
-        form_dates_1 = formA4_model.objects.all().order_by('-date')
-        
-        
         
         
         return render(request, 'ees_forms/search_forms.html', {
-        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database,
+        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database, 'att_check':att_check
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-        'profile':profile,'access_page': access_page, 'database': database,
+        'profile':profile,'access_page': access_page, 'database': database, 'att_check':att_check
         })
     
     

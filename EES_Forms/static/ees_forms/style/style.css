@@ -265,6 +265,7 @@ color: darkgray;
     height: 2rem;
     padding-left: 5rem;
     color: #cacaca;
+    margin-top: 1rem;
 }
 #exit{
     height: 2rem;
@@ -384,5 +385,8 @@ span.sideWord{
     width: 45%;
     margin-top: 2rem;
     padding-bottom: 2rem;
+}
+.submit_button{
+    font-size: 2rem;
 }
 /*# sourceMappingURL=style.css.map */

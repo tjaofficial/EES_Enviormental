@@ -1,35 +1,6 @@
-<html>
-    <style>
-        #formD_box1{
-            border: 2px solid black;
-            font-size: 60px;
-        }
-        #formD_box2{
-            border: 1px solid black;
-            text-align: center;
-        }
-        #formD_box3{
-            border: 1px solid black;
-            vertical-align: top;
-            text-align: center;
-        }
-        #formD_box4{
-            border: 1px solid black;
-            text-align: left;
-        }
-        #formF_main_box{
-            margin: auto; 
-            text-align: center;
-        }
-    </style>
-    <a href="{% url 'IncompleteForms' %}">Back</a>
-    
-    
-    <body>
-        <form action="" method="POST">
-            {% csrf_token %}
-            <div style="padding-top: 100px">
-                <table id="formF_main_box" style="border-collapse: collapse; border: 2px solid black;">
+{% extends "Weekly/formF_template.html" %}
+
+{% block table %}
                     <tr>
                         <th colspan="3" rowspan="2" id="formD_box1">
                             EES Coke Battery L.L.C.
@@ -320,12 +291,10 @@
                             input
                         </td>
                     </tr>
-                </table>
-                <div style="margin: auto; text-align: center;">
-                    Page 3 of 7
-                </div>
-            </div>
-            <input type="submit" value="Submit Form" style="font-size: 40px">
-        </form>
-    </body>
-</html>
+<tr >
+        <td colspan="4" style="border: 0px solid white; margin: auto; text-align: center;">
+            Page 3 of 7
+        </td>    
+    </tr>
+            
+{% endblock %}

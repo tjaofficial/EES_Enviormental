@@ -3259,7 +3259,11 @@ class formG1_model(models.Model):
     
 #----------------------------------------------------------------------FORM H---------------<
 class formH_model(models.Model):
-    date = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank=True,
+    )
     estab = models.CharField(max_length=30)
     county = models.CharField(max_length=30)
     estab_no = models.CharField(max_length=30)
