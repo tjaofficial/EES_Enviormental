@@ -15,7 +15,7 @@ urlpatterns = [
     path("profile/<str:access_page>", views.profile, name="profile"),
     path("password", PasswordsChangeView.as_view(), name = 'PasswordChange'),
     path('profile_redirect', views.profile_redirect, name='profile_redirect'),
-   
+    path('about', views.about_view, name='about'),
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("IncompleteForms", views.IncompleteForms, name="IncompleteForms"),
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),

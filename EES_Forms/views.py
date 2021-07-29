@@ -16,6 +16,8 @@ from .utils import DBEmpty, EventCalendar, Calendar
 from dateutil.relativedelta import relativedelta
 
 
+
+
 daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 todays_log = daily_prof[0]
 lock = login_required(login_url='Login')
@@ -23,6 +25,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 sub_forms = Forms.objects.all()
 today = datetime.date.today()
 now = datetime.datetime.now()
+profile = user_profile_model.objects.all()
     
     
 
@@ -145,6 +148,7 @@ def logout_view(request):
 #------------------------------------------------------------------------INCOMPLETE FORMS---------<
 @lock
 def IncompleteForms(request):
+    profile = user_profile_model.objects.all()
     today = datetime.date.today()
     todays_num = today.weekday()
     sub_forms = Forms.objects.all()
@@ -310,6 +314,7 @@ def IncompleteForms(request):
 
 
 
+
     def all_ovens(reads):
         A = []
         for items in reads:
@@ -384,6 +389,14 @@ def IncompleteForms(request):
         return F
     
     od_recent = overdue_closest(cool)
+    
+    
+    
+    
+    
+    
+    
+    
 #--------------------------------------------Battery Profile Data------------    
 #--------------------------------------------Battery Profile Data------------    
 #--------------------------------------------Battery Profile Data------------    
@@ -421,7 +434,7 @@ def IncompleteForms(request):
     form_check2 = ["",]
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2,
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile,
     })
 
 def weekly_forms(request):
@@ -444,6 +457,7 @@ def weekly_forms(request):
     })
 #------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
 def pt_admin1_view(request):
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -551,7 +565,7 @@ def pt_admin1_view(request):
     od_recent = overdue_closest(cool)
     
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile':profile,
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 
@@ -669,7 +683,7 @@ def pt_mth_input(request):
     sort = sorted(new_A5_list, key = func, reverse=True)
     
     return render(request, "ees_forms/pt_mth_input.html", {
-        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort' : sort
+        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort' : sort, 'profile':profile,
     })
 
 def method303_rolling_avg(request):
@@ -713,7 +727,7 @@ def method303_rolling_avg(request):
     
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records':list_of_records
+        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records':list_of_records, 'profile':profile,
     })
 
 def profile(request, access_page):
@@ -752,7 +766,7 @@ def profile(request, access_page):
         
     
     return render (request, "ees_forms/profile.html", {
-        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page
+        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile':profile,
     })
 @lock
 def admin_data_view(request):
@@ -763,7 +777,7 @@ def admin_data_view(request):
 @lock
 def formA1(request):
     formName = "A1"
-
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -903,12 +917,13 @@ def formA1(request):
         return redirect(batt_prof)
     
     return render (request, "Daily/Method303/formA1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName
+        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName, 'profile':profile,
     })
 #------------------------------------------------------------------------A2---------------<
 @lock
 def formA2(request):
     formName = "A2"
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -1016,12 +1031,13 @@ def formA2(request):
         return redirect(batt_prof)
 
     return render (request, "Daily/Method303/formA2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile,
     })
 #------------------------------------------------------------------------A3---------------<
 @lock
 def formA3(request):
     formName = "A3"
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -1133,12 +1149,13 @@ def formA3(request):
         return redirect(batt_prof)
 
     return render (request, "Daily/Method303/formA3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile,
     })
 #------------------------------------------------------------------------A4---------------<
 @lock
 def formA4(request):
     formName = "A4"
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -1238,12 +1255,13 @@ def formA4(request):
         return redirect(batt_prof)
     
     return render (request, "Daily/Method303/formA4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName,'profile':profile,
     })
 #------------------------------------------------------------------------A5---------------<
 @lock
 def formA5(request):
     formName = "A5"
+    profile = user_profile_model.objects.all()
     this_from = 'A-5'
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -1550,11 +1568,12 @@ def formA5(request):
         return redirect(batt_prof)
                     
     return render (request, "Daily/Method303/formA5.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile':profile,
     })
 #------------------------------------------------------------------------FORM B---------------<
 @lock
 def formB(request):
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -1882,14 +1901,14 @@ def formB(request):
             return redirect('IncompleteForms')
         
     return render (request, "Daily/formB.html", {
-        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data,
+        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data, 'profile':profile,
     })
 
 #------------------------------------------------------------------------FORM C---------------<
 @lock
 def formC(request):
     formName = "C"
-
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -2079,12 +2098,13 @@ def formC(request):
                 return redirect('IncompleteForms')
                 
     return render (request, "Daily/formC.html", {
-        'form': form, 'read': read, "back": back
+        'form': form, 'read': read, "back": back,'profile':profile,
     })
 
 #------------------------------------------------------------------------FORM D---------------<
 @lock
 def formD(request):
+    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     
@@ -2377,7 +2397,7 @@ def formD(request):
                 return redirect('IncompleteForms')
         
     return render (request, "Daily/formD.html", {
-        "back": back, 'todays_log': todays_log, 'empty': empty_form
+        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'profile': profile,
     })
 #----------------------------------------------------------------------FORM E---------------<
 @lock
@@ -5052,7 +5072,7 @@ def corrective_action_view(request):
     ca_forms = issues_model.objects.all().order_by('-id')
     
     return render (request, "ees_forms/corrective_actions.html", {
-        'ca_forms': ca_forms, #'now': todays_log, # 'read': read, 'submitted': submitted, "back": back
+        'ca_forms': ca_forms, 'profile': profile, # 'read': read, 'submitted': submitted, "back": back
     })
 
 def calendar_view(request, year, month):
@@ -5149,6 +5169,10 @@ def profile_redirect(request):
     
     return render(request, 'profile.hmtl', {
         
+    })
+def about_view(request):
+    
+    return render(request, 'ees_forms/ees_about.html', {
     })
 
 
