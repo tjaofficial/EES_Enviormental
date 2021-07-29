@@ -112,7 +112,7 @@
   font-family: Arial, Helvetica, sans-serif;
   width: 700px;
   background-color: white;
-  box-shadow: #00000014 1px 5px 10px 0px;
+  box-shadow: #0000007d 4px 7px 12px 3px;
   margin: 2rem;
   padding: 0 1rem;
   border-radius: 1rem;
@@ -193,7 +193,7 @@
 }
 
 body {
-  background-color: #F5F4F5;
+  background-color: darkgrey;
 }
 
 a {
@@ -208,7 +208,7 @@ a {
   font-family: Arial, Helvetica, sans-serif;
   width: 220px;
   background-color: white;
-  box-shadow: #00000014 1px 5px 10px 0px;
+  box-shadow: #0000007d 4px 7px 12px 3px;
   margin: 2rem;
   height: fit-content;
   border-radius: 1rem;
