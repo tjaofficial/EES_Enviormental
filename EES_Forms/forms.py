@@ -85,10 +85,11 @@ class user_profile_form(forms.ModelForm):
             'cert_date',
             'profile_picture',
         )
+        exclude = ['user']
         
         widgets ={
             'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'profile_picture' : forms.FileInput()
+            'profile_picture' : forms.FileInput(attrs={'style': 'width: fit-content;'})
         }
         
         

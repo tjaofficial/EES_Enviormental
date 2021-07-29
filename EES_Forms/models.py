@@ -323,10 +323,20 @@ class bat_info_model(models.Model):
         return self.name
     
 class user_profile_model(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(
+        User, 
+        on_delete=models.PROTECT
+    )
     
-    cert_date = models.DateField(auto_now_add=False, auto_now=False, blank= True)
-    profile_picture = models.ImageField(blank = True, null = True)
+    cert_date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+        blank= True
+    )
+    profile_picture = models.ImageField(
+        blank = True, 
+        null = True, 
+        upload_to='images/profile_pics')
     
     def __str__(self):
         return self.user.username

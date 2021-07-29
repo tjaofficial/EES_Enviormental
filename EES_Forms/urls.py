@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 
 
+
 urlpatterns = [
     #path("", views.index, name="index"),
     #path("tobe", views.tobe, name="tobe"),

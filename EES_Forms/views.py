@@ -725,11 +725,34 @@ def profile(request, access_page):
             user_select = x
             print(user_select)
     
-    if user_select.profile_picture:
-        print(user_select.profile_picture)
+    pic = user_select.profile_picture
+    cert = user_select.cert_date
+    user_sel = user_select.user
+    
+    pic_form = user_profile_form()
+    
+    if request.method == "POST":
+        form = user_profile_form(request.POST, request.FILES, instance = user_select)
+        
+        if form.is_valid():
+            print('chicken')
+            A = form.save(commit = False)
+            A.cert_date = cert
+            print(A.cert_date)
+            form.save()
+            
+            return redirect('../profile/main')
+        
+        
+
+        
+        
+        
+        
+        
     
     return render (request, "ees_forms/profile.html", {
-        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today
+        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page
     })
 @lock
 def admin_data_view(request):
