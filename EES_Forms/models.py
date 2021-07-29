@@ -219,7 +219,7 @@ class Forms(models.Model):
     def __str__(self):
         return self.form
     
-class subC(models.Model):
+class formC_model(models.Model):
     all_users = User.objects.all()
     all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
     
@@ -248,9 +248,9 @@ class subC(models.Model):
         return str(self.date)
     
     
-class FormCReadings(models.Model):
+class formC_readings_model(models.Model):
     form = models.OneToOneField(
-        subC,
+        formC_model,
         on_delete=models.CASCADE,
     )
     TRead1 = models.CharField(max_length=3)
@@ -348,7 +348,7 @@ class user_profile_model(models.Model):
     
     
     
-class subA1_model(models.Model):
+class formA1_model(models.Model):
     all_users = User.objects.all()
     all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
 
@@ -384,9 +384,9 @@ class subA1_model(models.Model):
         return str(self.date)
     
     
-class subA1_readings_model(models.Model):
+class formA1_readings_model(models.Model):
     form = models.OneToOneField(
-        subA1_model, 
+        formA1_model, 
         on_delete=models.CASCADE, 
         primary_key=True,
     )
@@ -796,7 +796,7 @@ class formA4_model(models.Model):
     def __str__(self):
         return str(self.date)
     
-class subA5_model(models.Model):
+class formA5_model(models.Model):
     all_users = User.objects.all()
     all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
     
@@ -856,9 +856,9 @@ class subA5_model(models.Model):
         return str(self.date)
     
 #----------------------------------------------------------------------FORM A5 - DATA---------------<
-class subA5_readings_model(models.Model):
+class formA5_readings_model(models.Model):
     form = models.OneToOneField(
-        subA5_model, 
+        formA5_model, 
         on_delete=models.CASCADE, 
         primary_key=True,
         related_name='foobar',
@@ -1002,7 +1002,7 @@ class subA5_readings_model(models.Model):
     
 class pt_admin1_model(models.Model):
     form = models.OneToOneField(
-        subA5_readings_model, 
+        formA5_readings_model, 
         on_delete=models.CASCADE, 
         primary_key=True,
     )

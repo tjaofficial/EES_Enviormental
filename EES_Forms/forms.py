@@ -11,7 +11,7 @@ now = datetime.datetime.now()
 
 class SubFormC1(ModelForm):
     class Meta:
-        model = subC
+        model = formC_model
         fields = ('date', 'truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments', 'average_t', 'average_p')
         
         widgets = {
@@ -31,7 +31,7 @@ class SubFormC1(ModelForm):
     
 class FormCReadForm(ModelForm):
     class Meta:
-        model = FormCReadings
+        model = formC_readings_model
         fields = ('TRead1', 'TRead2','TRead3', 'TRead4', 'TRead5', 'TRead6', 'TRead7', 'TRead8', 'TRead9', 'TRead10',  'TRead11', 'TRead12', 'ARead1', 'ARead2', 'ARead3', 'ARead4', 'ARead5', 'ARead6', 'ARead7', 'ARead8', 'ARead9', 'ARead10', 'ARead11', 'ARead12')
         widgets = {
             'TRead1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
@@ -112,9 +112,9 @@ class bat_info_form(ModelForm):
         
         
 
-class subA1_form(ModelForm):
+class formA1_form(ModelForm):
     class Meta:
-        model = subA1_model
+        model = formA1_model
         fields = (
             'observer',
             'date',
@@ -133,9 +133,9 @@ class subA1_form(ModelForm):
             'stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
         }
         
-class subA1_readings_form(ModelForm):
+class formA1_readings_form(ModelForm):
     class Meta:
-        model = subA1_readings_model
+        model = formA1_readings_model
         fields = (
             'c1_no',
             'c2_no',
@@ -300,9 +300,9 @@ class formA4_form(ModelForm):
             'notes' : Textarea(attrs={'rows':7, 'cols':125}),
         }
         
-class subA5_form(ModelForm):
+class formA5_form(ModelForm):
     class Meta:
-        model = subA5_model
+        model = formA5_model
         fields = ('__all__')
         
         widgets = {
@@ -330,9 +330,9 @@ class subA5_form(ModelForm):
             
         }
         
-class subA5_readings_form(ModelForm):
+class formA5_readings_form(ModelForm):
     class Meta:
-        model = subA5_readings_model
+        model = formA5_readings_model
         fields = (
             'o1_1_reads',
             'o1_2_reads',
