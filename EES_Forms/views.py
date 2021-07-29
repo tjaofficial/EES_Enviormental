@@ -5212,7 +5212,8 @@ def search_forms_view(request, access_page):
         database = ''
         
         
-        forms = Forms.objects.filter(form__contains= searched)
+        forms_pre = Forms.objects.filter(form__contains= searched)
+        forms = forms_pre.order_by('form')
         
         form_dates_1 = formA4_model.objects.all().order_by('-date')
         

@@ -8,9 +8,17 @@ search page
     {% if access_page == 'search' %}
          <h2>You searched for {{ searched }}</h2>
             <br>
+    <div class="card" style="width: 300px;">
+        <ul>
             {% for form in forms %}
-                <a href="../../ees_forms/search_forms/form{{ form.form.0 }}{{ form.form.2 }}_model">{{ form.form }}</a>
+            <li style="text-align: left;">
+                <a href="../../ees_forms/search_forms/form{{ form.form.0 }}{{ form.form.2 }}_model">
+                    {{ form.form }}
+                </a>
+            </li>
             {% endfor %}
+        </ul>
+    </div>
     {% else %}
         nothing
     {% endif %}
