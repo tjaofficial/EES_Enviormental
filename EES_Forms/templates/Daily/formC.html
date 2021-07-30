@@ -20,224 +20,229 @@
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 
 <div id="paperSize">
-    <a href="{% url 'IncompleteForms' %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
-    
+    <div>
+        <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+    </div>
     <form action="" method=POST style="margin: auto; width: fit-content; margin-bottom: 100px;">
         {% csrf_token %}
-        <table style="border-collapse: collapse; margin: auto;">
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <tr>
-                <th id="boxTitle" colspan="6" style="text-align: center;">
-                    Method 9D Fugitive Dust Inspections - Coal Field - Form (C)
-                </th>
-            </tr>
-            <tr>
-                <th colspan="6" style="text-align: center;">
-                    Facility Name: EES Coke Battery LLC
-                </th>
-            </tr>
-            <tr>
-                <td style="height: 25px" > </td>
-            </tr> 
-            <tr>
-                <th colspan="6" style="text-align: center;">
-                    Date: {{ form.date }}
-                </th>
-            </tr>
-            <tr>
-                <td style="height: 25px" > </td>
-            </tr> 
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-            <tr>
-                    <th style="text-decoration: underline; text-align: left;" colspan="3">Observe one vehicle per day traveling on Coal Field Road or in the coal field</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            <tr>
-                    <th style="text-decoration: underline; text-align: left;" colspan="2">Observe one coal pile per day</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr>
-                <td style="border-left: 1px black solid; border-top: 1px black solid;">
-                    Truck:
-                </td>
-                <td style="border-top: 1px black solid;">
-                    {{ form.truck_sel }}
-                </td>
-                <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
-                    Start Time:{{ form.truck_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.truck_stop_time }}
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td id="boxc1">MIN/SEC</td>
-                <td id="boxc1">0</td>
-                <td id="boxc1">15</td>
-                <td id="boxc1">30</td>
-                <td id="boxc1">45</td>
-            </tr>
-            <tr>
-                <td id="boxc1">0</td>
-                <td id="boxc1">
-                    {{ read.TRead1 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead2 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead3 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead4 }}
-                </td>
-            </tr>
-            <tr>
-                <td id="boxc1">1</td>
-                <td id="boxc1">
-                    {{ read.TRead5 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead6 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead7 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead8 }}
-                </td>
-            </tr>
-            <tr>
-                <td id="boxc1">2</td>
-                <td id="boxc1">
-                    {{ read.TRead9 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead10 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead11 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.TRead12 }}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                <td id="boxc1">{{ form.average_t }}</td>
-            </tr>
-            <tr>
-                <td style="height: 35px" > </td>
-            </tr> 
-            <tr>
-                <td style="border-left: 1px black solid; border-top: 1px black solid;">
-                    Area:
-                </td>
-                <td style="border-top: 1px black solid;">
-                    {{ form.area_sel }}
-                </td>
-                <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
-                    Start Time:{{ form.area_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.area_stop_time }}
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td id="boxc1">MIN/SEC</td>
-                <td id="boxc1">0</td>
-                <td id="boxc1">15</td>
-                <td id="boxc1">30</td>
-                <td id="boxc1">45</td>
-            </tr>
-            <tr>
-                <td id="boxc1">0</td>
-                <td id="boxc1">
-                    {{ read.ARead1 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead2 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead3 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead4 }}
-                </td>
-            </tr>
-            <tr>
-                <td id="boxc1">1</td>
-                <td id="boxc1">
-                    {{ read.ARead5 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead6 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead7 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead8 }}
-                </td>
-            </tr>
-            <tr>
-                <td id="boxc1">2</td>
-                <td id="boxc1">
-                    {{ read.ARead9 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead10 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead11 }}
-                </td>
-                <td id="boxc1">
-                    {{ read.ARead12 }}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                <td id="boxc1">{{ form.average_p }}</td>
-            </tr>
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr style="text-align: center;">
-                <td colspan="6" style="font-size: 25px;">Observer:{{ form.observer }} Certified Date:{{ form.cert_date }}</td>
-            </tr>
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr style="text-align: center; font-size: 20px;">
-                <td colspan="6"><strong>If 3-minute average opacity > 5%,</strong> notify Enviornmental Engineer and contact Fugitive Dust Supplier for Dust Supression</td>
-            </tr>
-            <tr>
-                <td style="height: 40px" > </td>
-            </tr> 
-            <tr style="font-size: 20px;">
-                <td>Comments:</td>
-            </tr>
-            <tr style="font-size: 20px;text-align: center;">
-                <td colspan="6">{{ form.comments }}</td>
-            </tr>
-        </table>
-        <br><br><br>
-        <input type="submit" value="Submit Form" style="font-size: 2rem;">
+        <div class="card" id="card_fitter">
+            <div class="paper_fitter" style="padding: 3rem;">
+                <table style="border-collapse: collapse; margin: auto;">
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <tr>
+                        <th id="boxTitle" colspan="6" style="text-align: center;">
+                            Method 9D Fugitive Dust Inspections - Coal Field - Form (C)
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="6" style="text-align: center;">
+                            Facility Name: EES Coke Battery LLC
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <tr>
+                        <th colspan="6" style="text-align: center;">
+                            Date: {{ form.date }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px" > </td>
+                    </tr> 
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <tr>
+                            <th style="text-decoration: underline; text-align: left;" colspan="3">Observe one vehicle per day traveling on Coal Field Road or in the coal field</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    <tr>
+                            <th style="text-decoration: underline; text-align: left;" colspan="2">Observe one coal pile per day</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                    <tr>
+                        <td style="border-left: 1px black solid; border-top: 1px black solid;">
+                            Truck:
+                        </td>
+                        <td style="border-top: 1px black solid;">
+                            {{ form.truck_sel }}
+                        </td>
+                        <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
+                            Start Time:{{ form.truck_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.truck_stop_time }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">MIN/SEC</td>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">15</td>
+                        <td id="boxc1">30</td>
+                        <td id="boxc1">45</td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">
+                            {{ read.TRead1 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead2 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead3 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead4 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">1</td>
+                        <td id="boxc1">
+                            {{ read.TRead5 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead6 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead7 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead8 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">2</td>
+                        <td id="boxc1">
+                            {{ read.TRead9 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead10 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead11 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.TRead12 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                        <td id="boxc1">{{ form.average_t }}</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 35px" > </td>
+                    </tr> 
+                    <tr>
+                        <td style="border-left: 1px black solid; border-top: 1px black solid;">
+                            Area:
+                        </td>
+                        <td style="border-top: 1px black solid;">
+                            {{ form.area_sel }}
+                        </td>
+                        <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
+                            Start Time:{{ form.area_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.area_stop_time }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">MIN/SEC</td>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">15</td>
+                        <td id="boxc1">30</td>
+                        <td id="boxc1">45</td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">
+                            {{ read.ARead1 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead2 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead3 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead4 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">1</td>
+                        <td id="boxc1">
+                            {{ read.ARead5 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead6 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead7 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead8 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">2</td>
+                        <td id="boxc1">
+                            {{ read.ARead9 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead10 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead11 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.ARead12 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                        <td id="boxc1">{{ form.average_p }}</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                    <tr style="text-align: center;">
+                        <td colspan="6" style="font-size: 25px;">Observer:{{ form.observer }} Certified Date:{{ form.cert_date }}</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                    <tr style="text-align: center; font-size: 20px;">
+                        <td colspan="6"><strong>If 3-minute average opacity > 5%,</strong> notify Enviornmental Engineer and contact Fugitive Dust Supplier for Dust Supression</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                    <tr style="font-size: 20px;">
+                        <td>Comments:</td>
+                    </tr>
+                    <tr style="font-size: 20px;text-align: center;">
+                        <td colspan="6">{{ form.comments }}</td>
+                    </tr>
+                </table>
+                <br><br><br>
+                <input type="submit" value="Submit Form" class="submit_button">
+            </div>
+        </div>
     </form> 
 </div>
 {% endblock %}

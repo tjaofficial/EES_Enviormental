@@ -1968,101 +1968,158 @@ def formC(request, selector):
     full_name = request.user.get_full_name()
     profile_user = user_profile_model.objects.all()
     
-    for x in profile_user:
-        print(x.user)
-        if str(x.user) == str(request.user):
-            print('poop')
-            certification = x.cert_date
-           
-    count1 = formC_model.objects.count()
-    count2 = formC_readings_model.objects.count()
+    org = formC_model.objects.all()
+    org2 = formC_readings_model.objects.all()
     
-    if count1 and count2 != 0:
-        org = formC_model.objects.all().order_by('-date')
-        database_form = org[0]
-        org2 = formC_readings_model.objects.all().order_by('-form')
-        database_form2 = org2[0]
-        
-        if todays_log.date_save == database_form.date:
-            initial_data = {
-                'date' : database_form.date,
-                'truck_sel' : database_form.truck_sel,
-                'area_sel' : database_form.area_sel,
-                'truck_start_time' : database_form.truck_start_time,
-                'truck_stop_time' : database_form.truck_stop_time,
-                'area_start_time' : database_form.area_start_time,
-                'area_stop_time' : database_form.area_stop_time,
-                'observer' : database_form.observer,
-                'cert_date' : database_form.cert_date,
-                'comments' : database_form.comments,
-                'average_t' : database_form.average_t,
-                'average_p' : database_form.average_p,
+    
+    if selector != 'form':
+        for x in org:
+            if str(x.date) == str(selector):
+                database_model = x
+        form = database_model
+        for x in org2:
+            if str(x.form.date) == str(selector):
+                database_model2 = x
+        read = database_model2
+    else:
+        for x in profile_user:
+            if str(x.user) == str(request.user):
+                certification = x.cert_date
 
-                'TRead1' : database_form2.TRead1,
-                'TRead2' : database_form2.TRead2,
-                'TRead3' : database_form2.TRead3,
-                'TRead4' : database_form2.TRead4,
-                'TRead5' : database_form2.TRead5,
-                'TRead6' : database_form2.TRead6,
-                'TRead7' : database_form2.TRead7,
-                'TRead8' : database_form2.TRead8,
-                'TRead9' : database_form2.TRead9,
-                'TRead10' : database_form2.TRead10,
-                'TRead11' : database_form2.TRead11,
-                'TRead12' : database_form2.TRead12,
-                'ARead1' : database_form2.ARead1,
-                'ARead2' : database_form2.ARead2,
-                'ARead3' : database_form2.ARead3,
-                'ARead4' : database_form2.ARead4,
-                'ARead5' : database_form2.ARead5,
-                'ARead6' : database_form2.ARead6,
-                'ARead7' : database_form2.ARead7,
-                'ARead8' : database_form2.ARead8,
-                'ARead9' : database_form2.ARead9,
-                'ARead10' : database_form2.ARead10,
-                'ARead11' : database_form2.ARead11,
-                'ARead12' : database_form2.ARead12,
-            }
-            form = SubFormC1(initial=initial_data)
-            read = FormCReadForm(initial=initial_data)
+        count1 = formC_model.objects.count()
+        count2 = formC_readings_model.objects.count()
 
-            if request.method == "POST":
-                CReadings = FormCReadForm(request.POST)
-                CData = SubFormC1(request.POST)
-                A_valid = CReadings.is_valid()
-                B_valid = CData.is_valid()
+        if count1 and count2 != 0:
+            org = formC_model.objects.all().order_by('-date')
+            database_form = org[0]
+            org2 = formC_readings_model.objects.all().order_by('-form')
+            database_form2 = org2[0]
 
-                if A_valid and B_valid:
-                    A = CData.save()
-                    B = CReadings.save(commit=False)
-                    B.form = A
-                    B.save()
-                    
-                    if B.form.average_t > 5:
-                        issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
-                        
-                        return redirect (issue_page)
-                    if B.form.average_p > 5:
-                        issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
-                        
-                        return redirect (issue_page)
-                    
-                    if A.comments not in {'-', 'n/a', 'N/A'}:
-                        issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
-                        
-                        return redirect (issue_page)
-                    
-                    done = Forms.objects.filter(form='C')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+            if todays_log.date_save == database_form.date:
+                initial_data = {
+                    'date' : database_form.date,
+                    'truck_sel' : database_form.truck_sel,
+                    'area_sel' : database_form.area_sel,
+                    'truck_start_time' : database_form.truck_start_time,
+                    'truck_stop_time' : database_form.truck_stop_time,
+                    'area_start_time' : database_form.area_start_time,
+                    'area_stop_time' : database_form.area_stop_time,
+                    'observer' : database_form.observer,
+                    'cert_date' : database_form.cert_date,
+                    'comments' : database_form.comments,
+                    'average_t' : database_form.average_t,
+                    'average_p' : database_form.average_p,
 
-                    return redirect('IncompleteForms')
+                    'TRead1' : database_form2.TRead1,
+                    'TRead2' : database_form2.TRead2,
+                    'TRead3' : database_form2.TRead3,
+                    'TRead4' : database_form2.TRead4,
+                    'TRead5' : database_form2.TRead5,
+                    'TRead6' : database_form2.TRead6,
+                    'TRead7' : database_form2.TRead7,
+                    'TRead8' : database_form2.TRead8,
+                    'TRead9' : database_form2.TRead9,
+                    'TRead10' : database_form2.TRead10,
+                    'TRead11' : database_form2.TRead11,
+                    'TRead12' : database_form2.TRead12,
+                    'ARead1' : database_form2.ARead1,
+                    'ARead2' : database_form2.ARead2,
+                    'ARead3' : database_form2.ARead3,
+                    'ARead4' : database_form2.ARead4,
+                    'ARead5' : database_form2.ARead5,
+                    'ARead6' : database_form2.ARead6,
+                    'ARead7' : database_form2.ARead7,
+                    'ARead8' : database_form2.ARead8,
+                    'ARead9' : database_form2.ARead9,
+                    'ARead10' : database_form2.ARead10,
+                    'ARead11' : database_form2.ARead11,
+                    'ARead12' : database_form2.ARead12,
+                }
+                form = SubFormC1(initial=initial_data)
+                read = FormCReadForm(initial=initial_data)
+
+                if request.method == "POST":
+                    CReadings = FormCReadForm(request.POST)
+                    CData = SubFormC1(request.POST)
+                    A_valid = CReadings.is_valid()
+                    B_valid = CData.is_valid()
+
+                    if A_valid and B_valid:
+                        A = CData.save()
+                        B = CReadings.save(commit=False)
+                        B.form = A
+                        B.save()
+
+                        if B.form.average_t > 5:
+                            issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
+
+                            return redirect (issue_page)
+                        if B.form.average_p > 5:
+                            issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
+
+                            return redirect (issue_page)
+
+                        if A.comments not in {'-', 'n/a', 'N/A'}:
+                            issue_page = '../issues_view/C/' + str(database_form.date) + '/form'
+
+                            return redirect (issue_page)
+
+                        done = Forms.objects.filter(form='C')[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+
+                        return redirect('IncompleteForms')
+            else:
+                for x in profile_user:
+                    if x.user == User:
+                        certification = x.cert_date
+
+                initial_data = {
+                    'date' : todays_log.date_save,
+                    'observer' : full_name,
+                    'cert_date' : certification,
+                }
+
+                form = SubFormC1(initial=initial_data)
+                read = FormCReadForm()
+                if request.method == "POST":
+                    CReadings = FormCReadForm(request.POST)
+                    CData = SubFormC1(request.POST)
+                    A_valid = CReadings.is_valid()
+                    B_valid = CData.is_valid()
+
+                    if A_valid and B_valid:
+                        A = CData.save()
+                        B = CReadings.save(commit=False)
+                        B.form = A
+                        B.save()
+
+                        if B.form.average_t > 5:
+                            issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+
+                            return redirect (issue_page)
+                        if B.form.average_p > 5:
+                            issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+
+                            return redirect (issue_page)
+
+                        if A.comments not in {'-', 'n/a', 'N/A'}:
+                            issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
+
+                            return redirect (issue_page)
+
+                        done = Forms.objects.filter(form='C')[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+
+                        return redirect('IncompleteForms')
         else:
             for x in profile_user:
-                if x.user == User:
-                    certification = x.cert_date
-                    
+                    if x.user == User:
+                        certification = x.cert_date
+
             initial_data = {
                 'date' : todays_log.date_save,
                 'observer' : full_name,
@@ -2071,6 +2128,7 @@ def formC(request, selector):
 
             form = SubFormC1(initial=initial_data)
             read = FormCReadForm()
+
             if request.method == "POST":
                 CReadings = FormCReadForm(request.POST)
                 CData = SubFormC1(request.POST)
@@ -2082,76 +2140,30 @@ def formC(request, selector):
                     B = CReadings.save(commit=False)
                     B.form = A
                     B.save()
-                    
+
                     if B.form.average_t > 5:
                         issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
-                        
+
                         return redirect (issue_page)
                     if B.form.average_p > 5:
                         issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
-                        
+
                         return redirect (issue_page)
-                    
-                    if A.comments not in {'-', 'n/a', 'N/A'}:
+
+                    if B.comments not in {'-', 'n/a', 'N/A'}:
                         issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
-                        
+
                         return redirect (issue_page)
-                    
+
                     done = Forms.objects.filter(form='C')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
-                
+
                     return redirect('IncompleteForms')
-    else:
-        for x in profile_user:
-                if x.user == User:
-                    certification = x.cert_date
-                    
-        initial_data = {
-            'date' : todays_log.date_save,
-            'observer' : full_name,
-            'cert_date' : certification,
-        }
-
-        form = SubFormC1(initial=initial_data)
-        read = FormCReadForm()
-        
-        if request.method == "POST":
-            CReadings = FormCReadForm(request.POST)
-            CData = SubFormC1(request.POST)
-            A_valid = CReadings.is_valid()
-            B_valid = CData.is_valid()
-
-            if A_valid and B_valid:
-                A = CData.save()
-                B = CReadings.save(commit=False)
-                B.form = A
-                B.save()
-                
-                if B.form.average_t > 5:
-                    issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
-
-                    return redirect (issue_page)
-                if B.form.average_p > 5:
-                    issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
-
-                    return redirect (issue_page)
-
-                if B.comments not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../issues_view/C/' + str(todays_log.date_save) + '/form'
-
-                    return redirect (issue_page)
-                    
-                done = Forms.objects.filter(form='C')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
-                
-                return redirect('IncompleteForms')
                 
     return render (request, "Daily/formC.html", {
-        'form': form, 'read': read, "back": back,'profile':profile,
+        'form': form, 'read': read, "back": back,'profile':profile, 'selector': selector,
     })
 
 #------------------------------------------------------------------------FORM D---------------<
@@ -2561,7 +2573,7 @@ def formE(request, selector):
                 return redirect('IncompleteForms')
             
     return render (request, "Daily/formE.html", {
-        "back": back, 'todays_log': todays_log, 'form': form,
+        "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector,
     })
 
 #----------------------------------------------------------------------FORM G1---------------<
@@ -4070,7 +4082,7 @@ def formG2(request, selector):
         'describe_background_start' : "Skies",
         'describe_background_stop' : "Same"
     }
-    data = formG2_form(initial=initial_data)
+    data = formG2_form
     profile_form = user_profile_form()
     readings_form = formA5_readings_form()
     
@@ -4090,7 +4102,7 @@ def formG2(request, selector):
     else:
         form = formG2_form(initial=initial_data)
         
-    return render (request, "Monthly/formG1.html", {
+    return render (request, "Monthly/formG2.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form,  'selector':selector,
     })
 
@@ -4154,7 +4166,7 @@ def formH(request, access_page):
             form = formH_form(initial=initial_data)
         
     return render (request, "Weekly/formH.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, #'readings_form': readings_form
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'access_page': access_page
     })
 
 #----------------------------------------------------------------------FORM I---------------<
@@ -4960,6 +4972,15 @@ def formM(request, selector):
     todays_log = daily_prof[0]
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
+    org = formM_model.objects.all().order_by('-date')
+    
+    
+    if selector != 'form':
+        for x in org:
+            if str(x.date) == str(selector):
+                database_model = x
+        data = database_model
+    
     
     initial_data = {
             'date' : todays_log.date_save,
@@ -5254,43 +5275,56 @@ def search_forms_view(request, access_page):
     if access_page != 'search':
         Model = apps.get_model('EES_Forms', access_page)
         ModelForms = Forms.objects.all()
+        chk_database = Model.objects.count()
         
-        try:
-            database = Model.objects.all().order_by('-date')
-            for x in ModelForms:
-                if x.form == access_page[4]:
-                    if x.frequency[0] == 'W':
-                        att_check = 4
+        if chk_database == 0:
+            att_check = 5
+        else:
+            try:
+                database = Model.objects.all().order_by('-date')
+                for x in ModelForms:
+                    f = access_page[4] + '-' + access_page[5]
+                    print('')
+                    print(x.form)
+                    print(f)
+                    print('')
+                    if x.form == access_page[4]:
+                        if x.frequency[0] == 'W':
+                            att_check = 4
+                        else:
+                            att_check = 1
+                    elif x.form == access_page[4] + '-' + access_page[5]:
+                        if x.frequency[0] == 'W':
+                            att_check = 4
+                        else:
+                            att_check = 1
                     else:
-                        print('Error - EES_00001')
-                elif x.form == access_page[4] + '-' + access_page[5]:
-                    if x.frequency[0] == 'W':
-                        att_check = 4
-                    else:
-                        print('Error - EES_00002')
-                else:
-                    print('Error - EES_00005')
-        except FieldError as e:
-            database = Model.objects.all().order_by('-week_start')
-            for x in ModelForms:
-                if x.form == access_page[4]:
-                    if x.frequency[0] == 'D':
-                        att_check = 3
-                    else:
-                        print('Error - EES_00003')
-                elif x.form == access_page[4] + '-' + access_page[5]:
-                    if x.frequency[0] == 'D':
-                        att_check = 3
-                    else:
-                        print('Error - EES_00004')
-                print('Error - EES_00006')
+                        print('Error - EES_00005')
+            except FieldError as e:
+                database = Model.objects.all().order_by('-week_start')
+                for x in ModelForms:
+                    if x.form == access_page[4]:
+                        if x.frequency[0] == 'D':
+                            att_check = 3
+                        else:
+                            att_check = 2
+                    elif x.form == access_page[4] + '-' + access_page[5]:
+                        if x.frequency[0] == 'D':
+                            att_check = 3
+                        else:
+                            att_check = 2
+                    print('Error - EES_00006')
     if request.method == "POST":
         searched = request.POST['searched']
         database = ''
         att_check = ''
         
+        
+        form_list = Forms.objects.filter(Q(form__icontains= searched) | Q(frequency__icontains= searched) | Q(title__icontains= searched))
+        
         forms_pre = Forms.objects.filter(form__contains= searched)
-        forms = forms_pre.order_by('form')
+        forms = form_list.order_by('form')
+        
         
         
         

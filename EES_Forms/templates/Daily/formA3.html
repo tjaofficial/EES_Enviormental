@@ -4,11 +4,6 @@
 {% load static %}
 
     <style>
-        #paperSize{
-            width: 1400px;
-            margin: auto;
-            padding-top: 50px;
-        }
         #boxTitle{
             font-size: 30px;
         }
@@ -89,449 +84,453 @@
         <div>
             <form action="" method="POST" style="width: fit-content; margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
-                <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <th id="boxTitle" colspan="5" style="text-align: left;">Method 303 Lids and Offtakes - Form (A-3)</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th colspan="3" style="text-align: left;">Facility Name: EES Coke Battery LLC</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
-                    </tr>
-                    <tr>
-                        <th colspan="6">
-                            Battery No. 5 &nbsp; &nbsp; &nbsp; 
-                            Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
-                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="6">
-                            Crew:
-                            &nbsp; &nbsp;{{ data.crew }}
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                            Battery Foreman:
-                            &nbsp; &nbsp;{{ data.foreman }}
-                        </th>
-                    </tr>
-                </table>
-                
-                
-                
-                <table style="border-collapse: collapse; width: fit-content; margin: auto;">
-                    <tr>
-                        <td style="height: 25px" ></td>
-                    </tr> 
-                    <tr>
-                        <th id="boxa3_1" colspan="5">Start Time:{{ data.om_start }} <br> End Time:{{ data.om_stop }}</th>
-                        <th id="boxa3_1" colspan="5"></th>
-                        <th id="boxa3_1" colspan="6">Start Time:{{ data.l_start }} <br> End Time:{{ data.l_stop }}</th>
-                        <th id="boxa3_2" colspan="1"></th>
-                    </tr>
-                    <tr>
-                        <th id="boxa5" style="max-width: 100px;"colspan="9">
-                            OFFTAKES AND MINI STANDPIPES
-                        </th>
-                        <th></th>
-                        <th id="boxa5" style="max-width: 100px;"colspan="6">
-                            LIDS
-                        </th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td id="boxa6" colspan="1">
-                            Oven
-                        </td>
-                        <td id="boxa6" colspan="8">
-                            Location
-                        </td>
-                        <td></td>
-                        <td id="boxa6" colspan="1">
-                            Oven
-                        </td>
-                        <td id="boxa6" colspan="5">
-                            Location
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6">{{ data.om_oven1 }}</td>
-                        <td colspan="8" id="boxa6">{{ data.om_loc1 }}</td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td id="boxa6">{{ data.l_oven1 }}</td>
-                        <td colspan="5" id="boxa6">{{ data.l_loc1 }}</td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td colspan="10" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; {{ data.om_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.om_traverse_time_sec }}sec</td>
-                        <td colspan="7" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; {{ data.l_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.l_traverse_time_sec }}sec</td>
-                    </tr>
-                </table>
-                <br><br>
-                <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <td style="width: 150px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
-                            D = Dampered off
-                        </td>
-                        <td style="width: 254px; text-align: center;">
-                            Allowed Traverse Time
-                        </td>
-                        <td rowspan="2" style="width: 354px; text-align: left;">
-                            = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
-                        </td>
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
-                            Valid Run?
-                        </td>
-                        <td></td>
-                    </tr>    
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            C = Cap
-                        </td>
-                        <td style="text-align: center;">
-                            (Offtakes)
-                        </td>
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            {{ data.om_valid_run }}
-                        </td>
-                    </tr>
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            F = Flange
-                        </td>
-                        <td style="text-align: center;"></td>
-                        <td></td>
-                    </tr>
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            S = Slip Joint
-                        </td>
-                        <td style="text-align: center;">
-                            Allowed Traverse Time:
-                        </td>
-                        <td rowspan="2" style="width: 354px; text-align: left;">
-                            = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
-                        </td>
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
-                            Valid Run?
-                        </td>
-                    </tr>
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            B = Base
-                        </td>
-                        <td style="text-align: center;">
-                            (Lids)
-                        </td>
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            {{ data.l_valid_run }}
-                        </td>
-                    </tr> 
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            P = Piping
-                        </td>
-                        <td style="text-align: center;"></td>
-                        <td></td>
-                    </tr> 
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            O = Other
-                        </td>
-                        <td colspan="3" style="text-align: center;">
-                            Total Offtake Leaks: {{ data.om_leaks }} Total Leaking Lids: {{ data.l_leaks }}
-                        </td>
-                    </tr>    
-                    <tr>  
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            MS = Mini Standpipe
-                        </td>
-                        <td style="text-align: center;"></td>
-                        <td></td>
-                    </tr>
-                </table>    
-                <table style="border-collapse: collapse; margin: auto;">    
-                     <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <td style="width: 100px;"></td>
-                        <td></td>
-                        <td>
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
-                        </td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
-                        </td>
-                        <td></td>
-                        <td style="width: 75px"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="text-align: center; margin: auto; width: 133px;">
-                            % Leaking Lids = 
-                        </td>
-                        <td>
-                            ---------------------- = 
-                        </td>
-                        <td>
-                            --------------------------------- = 
-                        </td>
-                        <td>
-                            {{ data.l_percent_leaking }}%
-                        </td>
-                        <td></td>
-                    </tr>
-                     <tr>
-                         <td></td>
-                         <td></td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
-                        </td>
-                        <td>
-                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.l_not_observed }}
-                        </td>
-                         <td></td>
-                         <td></td>
-                    </tr>
-                       <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <td style="width: 100px;"></td>
-                        <td></td>
-                        <td>
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
-                        </td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
-                        </td>
-                        <td></td>
-                        <td style="width: 75px"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="text-align: center; margin: auto; width: 133px;">
-                            % Leaking Offtakes = 
-                        </td>
-                        <td>
-                            ---------------------- = 
-                        </td>
-                        <td>
-                            --------------------------------- = 
-                        </td>
-                        <td>
-                            {{ data.om_percent_leaking }}%
-                        </td>
-                        <td></td>
-                    </tr>
-                     <tr>
-                         <td></td>
-                         <td></td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
-                        </td>
-                        <td>
-                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.om_not_observed }}
-                        </td>
-                         <td></td>
-                         <td></td>
-                    </tr>
-                   <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <td style="text-align: center; margin: auto; " colspan="6">
-                            Where: P<sub>ve</sub> = Leaking Lids Obsered, P<sub>ovn</sub> = Lids Per Oven, P<sub>no</sub> = Lids Not Observed, N = Number of Ovens, N<sub>i</sub> = Inoperable Oven,<br> T<sub>ve</sub> = Leaking Offtakes Observed, T<sub>ovn</sub> = Ofttakes Per Oven, J = Permanent Jumper Pipes, T<sub>no</sub> = Offtakes Not Observed
-                        </td>
-                    </tr> 
-                </table>
-                <div id="noteBox">
-                    Notes: <br>
-                    {{ data.notes }}
+                <div class="card" id="card_fitter">
+                    <div class="paper_fitter" style="padding: 3rem;">
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th id="boxTitle" colspan="5" style="text-align: center;">Method 303 Lids and Offtakes - Form (A-3)</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" style="text-align: center;">Facility Name: EES Coke Battery LLC</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
+                            </tr>
+                            <tr>
+                                <th colspan="6">
+                                    Battery No. 5 &nbsp; &nbsp; &nbsp; 
+                                    Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
+                                    Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="6">
+                                    Crew:
+                                    &nbsp; &nbsp;{{ data.crew }}
+                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                    Battery Foreman:
+                                    &nbsp; &nbsp;{{ data.foreman }}
+                                </th>
+                            </tr>
+                        </table>
+
+
+
+                        <table style="border-collapse: collapse; width: fit-content; margin: auto;">
+                            <tr>
+                                <td style="height: 25px" ></td>
+                            </tr> 
+                            <tr>
+                                <th id="boxa3_1" colspan="5">Start Time:{{ data.om_start }} <br> End Time:{{ data.om_stop }}</th>
+                                <th id="boxa3_1" colspan="5"></th>
+                                <th id="boxa3_1" colspan="6">Start Time:{{ data.l_start }} <br> End Time:{{ data.l_stop }}</th>
+                                <th id="boxa3_2" colspan="1"></th>
+                            </tr>
+                            <tr>
+                                <th id="boxa5" style="max-width: 100px;"colspan="9">
+                                    OFFTAKES AND MINI STANDPIPES
+                                </th>
+                                <th></th>
+                                <th id="boxa5" style="max-width: 100px;"colspan="6">
+                                    LIDS
+                                </th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td id="boxa6" colspan="1">
+                                    Oven
+                                </td>
+                                <td id="boxa6" colspan="8">
+                                    Location
+                                </td>
+                                <td></td>
+                                <td id="boxa6" colspan="1">
+                                    Oven
+                                </td>
+                                <td id="boxa6" colspan="5">
+                                    Location
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6">{{ data.om_oven1 }}</td>
+                                <td colspan="8" id="boxa6">{{ data.om_loc1 }}</td>
+                                <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td id="boxa6">{{ data.l_oven1 }}</td>
+                                <td colspan="5" id="boxa6">{{ data.l_loc1 }}</td>
+                                <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td id="boxa6"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="10" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; {{ data.om_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.om_traverse_time_sec }}sec</td>
+                                <td colspan="7" style="align-content: center; text-align: left; height: 25px;"> Traverse Time: &nbsp; &nbsp; {{ data.l_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.l_traverse_time_sec }}sec</td>
+                            </tr>
+                        </table>
+                        <br><br>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <td style="width: 150px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                                    D = Dampered off
+                                </td>
+                                <td style="width: 254px; text-align: center;">
+                                    Allowed Traverse Time
+                                </td>
+                                <td rowspan="2" style="width: 354px; text-align: left;">
+                                    = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                                    Valid Run?
+                                </td>
+                                <td></td>
+                            </tr>    
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    C = Cap
+                                </td>
+                                <td style="text-align: center;">
+                                    (Offtakes)
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                    {{ data.om_valid_run }}
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    F = Flange
+                                </td>
+                                <td style="text-align: center;"></td>
+                                <td></td>
+                            </tr>
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    S = Slip Joint
+                                </td>
+                                <td style="text-align: center;">
+                                    Allowed Traverse Time:
+                                </td>
+                                <td rowspan="2" style="width: 354px; text-align: left;">
+                                    = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                                    Valid Run?
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    B = Base
+                                </td>
+                                <td style="text-align: center;">
+                                    (Lids)
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                    {{ data.l_valid_run }}
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    P = Piping
+                                </td>
+                                <td style="text-align: center;"></td>
+                                <td></td>
+                            </tr> 
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    O = Other
+                                </td>
+                                <td colspan="3" style="text-align: center;">
+                                    Total Offtake Leaks: {{ data.om_leaks }} Total Leaking Lids: {{ data.l_leaks }}
+                                </td>
+                            </tr>    
+                            <tr>  
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                    MS = Mini Standpipe
+                                </td>
+                                <td style="text-align: center;"></td>
+                                <td></td>
+                            </tr>
+                        </table>    
+                        <table style="border-collapse: collapse; margin: auto;">    
+                             <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <td style="width: 100px;"></td>
+                                <td></td>
+                                <td>
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
+                                </td>
+                                <td></td>
+                                <td style="width: 75px"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="text-align: center; margin: auto; width: 133px;">
+                                    % Leaking Lids = 
+                                </td>
+                                <td>
+                                    ---------------------- = 
+                                </td>
+                                <td>
+                                    --------------------------------- = 
+                                </td>
+                                <td>
+                                    {{ data.l_percent_leaking }}%
+                                </td>
+                                <td></td>
+                            </tr>
+                             <tr>
+                                 <td></td>
+                                 <td></td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                                </td>
+                                <td>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.l_not_observed }}
+                                </td>
+                                 <td></td>
+                                 <td></td>
+                            </tr>
+                               <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <td style="width: 100px;"></td>
+                                <td></td>
+                                <td>
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
+                                </td>
+                                <td></td>
+                                <td style="width: 75px"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="text-align: center; margin: auto; width: 133px;">
+                                    % Leaking Offtakes = 
+                                </td>
+                                <td>
+                                    ---------------------- = 
+                                </td>
+                                <td>
+                                    --------------------------------- = 
+                                </td>
+                                <td>
+                                    {{ data.om_percent_leaking }}%
+                                </td>
+                                <td></td>
+                            </tr>
+                             <tr>
+                                 <td></td>
+                                 <td></td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                                </td>
+                                <td>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.om_not_observed }}
+                                </td>
+                                 <td></td>
+                                 <td></td>
+                            </tr>
+                           <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <td style="text-align: center; margin: auto; " colspan="6">
+                                    Where: P<sub>ve</sub> = Leaking Lids Obsered, P<sub>ovn</sub> = Lids Per Oven, P<sub>no</sub> = Lids Not Observed, N = Number of Ovens, N<sub>i</sub> = Inoperable Oven,<br> T<sub>ve</sub> = Leaking Offtakes Observed, T<sub>ovn</sub> = Ofttakes Per Oven, J = Permanent Jumper Pipes, T<sub>no</sub> = Offtakes Not Observed
+                                </td>
+                            </tr> 
+                        </table>
+                        <div id="noteBox">
+                            Notes: <br>
+                            {{ data.notes }}
+                        </div>
+                        <br><br><br>
+                        <input type="submit" value="Submit Form" class="submit_button">
+                    </div>
                 </div>
-                <br><br><br>
-                <input type="submit" value="Submit Form" class="submit_button">
             </form> 
         </div>    
     </div>

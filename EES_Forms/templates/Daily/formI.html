@@ -85,6 +85,9 @@
                     <th></th>
                 </tr>
                 <tr>
+                    <td style="height: 15px;" ></td>
+                </tr>
+                <tr>
                     <th colspan="3" style="text-align: center;">
                     Week Of:    {% if week == last_friday %}
                                     {{ week }} - {{ week_almost.week_end }}
@@ -219,10 +222,10 @@
                         </table>
                     </div>
                 </div>
+                <br><br><br>
+                <input type="submit" value="Submit Form" class="submit_button">
             </div>
         </div>
-        <br><br><br>
-        <input type="submit" value="Submit Form" class="submit_button">
     </form>
     
 {% endblock %}

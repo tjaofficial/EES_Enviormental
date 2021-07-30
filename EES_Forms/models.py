@@ -3258,6 +3258,51 @@ class formG1_model(models.Model):
         return str(self.date)
     
 #----------------------------------------------------------------------FORM H---------------<
+class formG2_model(models.Model):
+    date = models.CharField(max_length=30)
+    estab = models.CharField(max_length=30)
+    county = models.CharField(max_length=30)
+    estab_no = models.CharField(max_length=30)
+    equip_loc = models.CharField(max_length=30)
+    district = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    observer = models.CharField(max_length=30)
+    cert_date = models.CharField(max_length=30)
+    process_equip1 = models.CharField(max_length=50)
+    process_equip2 = models.CharField(max_length=50)
+    op_mode1 = models.CharField(max_length=30)
+    op_mode2 = models.CharField(max_length=30)
+    background_color_start = models.CharField(max_length=30)
+    background_color_stop = models.CharField(max_length=30)
+    sky_conditions = models.CharField(max_length=30)
+    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_stop = models.CharField(max_length=4)
+    wind_direction =models.CharField(max_length=3)
+    emission_point_start = models.CharField(max_length=50)
+    emission_point_stop = models.CharField(max_length=50)
+    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_stop = models.CharField(max_length=4)
+    humidity = models.CharField(max_length=3)
+    height_above_ground = models.CharField(max_length=30)
+    height_rel_observer = models.CharField(max_length=30)
+    distance_from = models.CharField(max_length=30)
+    direction_from = models.CharField(max_length=30)
+    describe_emissions_start = models.CharField(max_length=30)
+    describe_emissions_stop = models.CharField(max_length=30)
+    emission_color_start = models.CharField(max_length=30)
+    emission_color_stop = models.CharField(max_length=30)
+    plume_type = models.CharField(max_length=30, choices= plume_type_choices)
+    water_drolet_present = models.CharField(max_length=30, choices= water_present_choices)
+    water_droplet_plume = models.CharField(max_length=30, choices= droplet_plume_choices)
+    plume_opacity_determined_start = models.CharField(max_length=50)
+    plume_opacity_determined_stop = models.CharField(max_length=50)
+    describe_background_start = models.CharField(max_length=30)
+    describe_background_stop = models.CharField(max_length=30)   
+    
+    def __str__(self):
+        return str(self.date)
+    
+#----------------------------------------------------------------------FORM H---------------<
 class formH_model(models.Model):
     date = models.DateField(
         auto_now_add=False, 

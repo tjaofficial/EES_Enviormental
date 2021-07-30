@@ -227,7 +227,7 @@ class formA2_form(ModelForm):
             'doors_not_observed' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'inop_doors_eq' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'percent_leaking' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
-            'notes' : Textarea(attrs={'rows':7, 'cols':125}),
+            'notes' : Textarea(attrs={'rows':7, 'style': 'width: 805px;'}),
             'p_leak_oven1' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'p_leak_loc1' : forms.Select(attrs={'style':'width:40px;'}),
             'p_leak_zone1' : forms.Select(attrs={'style':'width:40px;'}),
@@ -1099,6 +1099,22 @@ class formF7_form(ModelForm):
 class formG1_form(ModelForm):
     class Meta:
         model = formG1_model
+        fields = ('__all__')
+        
+        widgets = {
+            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'wind_speed_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'ambient_temp_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+        }
+class formG2_form(ModelForm):
+    class Meta:
+        model = formG2_model
         fields = ('__all__')
         
         widgets = {
