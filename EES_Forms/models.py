@@ -3642,7 +3642,13 @@ class formL_model(models.Model):
     
  #-----------------------------------------------------------------FORM M---------------<
 class formM_model(models.Model):
-    date = models.CharField(max_length=30)
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+    )
     paved = models.CharField(
         max_length=30,
         choices = paved_roads
@@ -3650,14 +3656,10 @@ class formM_model(models.Model):
     pav_start = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     pav_stop = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     unpaved = models.CharField(
         max_length=30,
@@ -3666,14 +3668,10 @@ class formM_model(models.Model):
     unp_start = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     unp_stop = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     parking = models.CharField(
         max_length=30,
@@ -3682,14 +3680,10 @@ class formM_model(models.Model):
     par_start = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     par_stop = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     storage = models.CharField(
         max_length=30,
@@ -3698,17 +3692,22 @@ class formM_model(models.Model):
     sto_start = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
     sto_stop = models.TimeField(
         auto_now_add=False, 
         auto_now=False,
-        blank=True,
-        null=True
     )
-    observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
+    cert_date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False, 
+    )
+    comments = models.CharField(
+        max_length=300
+    )
     
     def __str__(self):
         return str(self.date)

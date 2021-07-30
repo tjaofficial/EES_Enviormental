@@ -387,6 +387,23 @@ span.sideWord{
     padding-bottom: 2rem;
 }
 .submit_button{
-    font-size: 2rem;
+    font-size: 1.8rem;
+}
+#landscape_page_button{
+    margin-left: 4rem;
+}
+#card_fitter{
+    width: fit-content; 
+    margin: auto;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+.paper_fitter{
+    padding-top: 1.5rem; 
+    padding-bottom: 1rem;
+}
+.formM_box1{
+    padding: .5rem;
+    text-align: center;
 }
 /*# sourceMappingURL=style.css.map */

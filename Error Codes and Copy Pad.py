@@ -150,3 +150,37 @@ class subA5_form(ModelForm):
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+Error Codes
+
+EES_00001 - search_form_view, "Not sending valid frequency field"
+EES_00002 - search_form_view, "Not sending valid frequency field"
+EES_00003 - search_form_view, "Not sending valid frequency field"
+EES_00004 - search_form_view, "Not sending valid frequency field"
+EES_00005 - search_form_view, "Form-Name and access_page do not equal, not in standard format (form%-%)"
+EES_00006 - search_form_view, "Form-Name and access_page do not equal, not in standard format (form%-%)"
+EES_00007 - search_form_view, "none"
+EES_00008 - search_form_view, "none"
+EES_00009 - search_form_view, "none"
+EES_00010 - search_form_view, "none"
+EES_00011 - search_form_view, "none"
+EES_00012 - search_form_view, "none"
+EES_00013 - search_form_view, "none"
+EES_00014 - search_form_view, "none"
+        
+        
+        

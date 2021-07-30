@@ -1190,10 +1190,26 @@ class formM_form(ModelForm):
             'sto_stop',
             'observer',
             'cert_date',
+            'comments',
         )
         
         widgets = {
-            
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'paved' : forms.Select(attrs={'style':'width: 150px;'}),
+            'pav_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'pav_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'unpaved' : forms.Select(attrs={'style':'width: 150px;'}),
+            'unp_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'unp_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'parking' : forms.Select(attrs={'style':'width: 150px;'}),
+            'par_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'par_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'storage' : forms.Select(attrs={'style':'width: 150px;'}),
+            'sto_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'sto_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
+            'cert_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
         }
 class issues_form(ModelForm):
     class Meta:
