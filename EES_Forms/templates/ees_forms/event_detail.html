@@ -21,14 +21,22 @@
     </div>
     {% elif access_page == 'edit' %}
     <div style="padding-top: 30px;">
-        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="card">
+        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto; text-align: left" class="card">
+            <form action="" method="POST">
+                {% csrf_token %}
+            <center>
             <h3>Edit Event Details</h3><br>
             
             Observer: {{ my_event.observer }}<br>
             Title: {{ my_event.title }}<br>
             Date: {{ my_event.date }}<br>
-            Description: {{ my_event.notes }}<br>
+            Start: {{ my_event.start_time }}<br>
+            End: {{ my_event.end_time }}<br>
+                </center>
+            Description:<br> {{ my_event.notes }}<br>
             <br>
+             <input type="submit" value="Save">  
+                </form>
             <div>
                 <a href="../../event_detail/{{ event_id }}/view">Back</a>
             </div>

@@ -530,6 +530,43 @@ class formA5_readings_form(ModelForm):
     
 class formB_form(ModelForm):
     class Meta:
+        today = datetime.date.today()
+        name_0 = False
+        name_1 = False
+        name_2 = False
+        name_3 = False
+        name_4 = False
+        if today.weekday() == 0:
+            name_0 = True
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 1:
+            name_0 = True
+            name_1 = True
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 2:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 3:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = False
+        if today.weekday() == 4:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = True
+            
         model = formB_model
         fields = ('__all__')
         widgets = {
@@ -1150,22 +1187,59 @@ class formH_form(ModelForm):
         
 class formI_form(ModelForm):
     class Meta:
+        today = datetime.date.today()
+        name_0 = False
+        name_1 = False
+        name_2 = False
+        name_3 = False
+        name_4 = False
+        if today.weekday() == 0:
+            name_0 = True
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 1:
+            name_0 = True
+            name_1 = True
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 2:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 3:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = False
+        if today.weekday() == 4:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = True
+            
         model = formI_model
         fields = ('__all__')
         
         widgets = {
             'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'obser_0' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_1' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_2' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_3' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_4' : forms.Select(attrs={'style':'width: 150px;'}),
+            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_0}),
+            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_1}),
+            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_2}),
+            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_3}),
+            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_4}),
+            'obser_0' : forms.Select(attrs={'style':'width: 150px;', 'required': name_0 }),
+            'obser_1' : forms.Select(attrs={'style':'width: 150px;', 'required': name_1 }),
+            'obser_2' : forms.Select(attrs={'style':'width: 150px;', 'required': name_2 }),
+            'obser_3' : forms.Select(attrs={'style':'width: 150px;', 'required': name_3 }),
+            'obser_4' : forms.Select(attrs={'style':'width: 150px;', 'required': name_4 }),
         }
         
         
@@ -1249,6 +1323,8 @@ class events_form(ModelForm):
             'title' : forms.Select(attrs={'style':'width: 150px;'}),
             'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
         }
 
         

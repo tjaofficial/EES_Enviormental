@@ -200,6 +200,16 @@ frequent_choices = (
     ('Semi-Annual', 'Semi-Annual'),
     ('Annual', 'Annual')
 )
+days_choices = (
+    ('Any', 'Any'),
+    ('0', 'Mondays'),
+    ('1', 'Tuesdays'),
+    ('2', 'Wednesdays'),
+    ('3', 'Thursdays'),
+    ('4', 'Fridays'),
+    ('5', 'Saturdays'),
+    ('6', 'Sundays'),
+)
 all_users = User.objects.all()
 all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
@@ -209,6 +219,8 @@ all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 class Forms(models.Model):
     form = models.CharField(max_length=30)
     frequency = models.CharField(max_length=30, choices = frequent_choices)
+    day_freq = models.CharField(max_length=30, choices = days_choices, null= True)
+    weekdays_only = models.BooleanField(default=False)
     link = models.CharField(max_length=30)
     header = models.CharField(max_length=80)
     title = models.CharField(max_length=80)
@@ -3438,17 +3450,17 @@ class formI_model(models.Model):
     
 #----------------------------------------------------------------------FORM L---------------<
 class formL_model(models.Model):
+    today = datetime.date.today()
+    
     week_start = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
         blank=True,
-        null=True
     )
     week_end = models.DateField(
         auto_now_add=False, 
         auto_now=False, 
         blank=True,
-        null=True
     )
     time_0 = models.TimeField(
         auto_now_add=False, 
@@ -3803,11 +3815,11 @@ class Event(models.Model):
         auto_now=False, 
         blank=True,
     )
-    start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
-    end_time = models.TimeField(u'Final time', help_text=u'Final time')
+    start_time = models.TimeField(u'Starting time', help_text=u'Starting time', null = True, default = '00:00:00')
+    end_time = models.TimeField(u'Final time', help_text=u'Final time', null = True, blank = True, default = '23:59:00')
     notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
     
-    class Meta:
+    class META:
         verbose_name = u'Scheduling'
         verbose_name_plural = u'Scheduling'
  
@@ -3831,7 +3843,7 @@ class Event(models.Model):
         return u'<a href="%s">%s - %s</a>' % (url, str(self.title), str(self.observer))
  
     def clean(self):
-        if self.end_time <= self.start_time:
+        if str(self.end_time) <= str(self.start_time):
             raise ValidationError('Ending times must after starting times')
  
         

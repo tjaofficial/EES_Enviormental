@@ -10,8 +10,8 @@
         <form action="" method="POST">
             {% csrf_token %}
             Observer: {{ form.observer }}<br>
+            Title/Task: {{ form.title }}<br>
             Date: {{ form.date }}<br>
-            Title: {{ form.title }}<br>
             Starting Time: {{ form.start_time }}<br>
             Final Time: {{ form.end_time }}<br>
             Description: {{ form.notes }}<br>

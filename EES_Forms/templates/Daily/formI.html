@@ -89,11 +89,9 @@
                 </tr>
                 <tr>
                     <th colspan="3" style="text-align: center;">
-                    Week Of:    {% if week == last_friday %}
-                                    {{ week }} - {{ week_almost.week_end }}
-                                {% else %}
-                                    {{ empty.week_start }} - {{ empty.week_end }}
-                                {% endif %}
+                    Week Of:    
+                        {{ empty.week_start }} - {{ empty.week_end }}
+                                
                     </th>
                     <th></th>
                     <th></th>
@@ -106,6 +104,7 @@
             </table>
                 <div id="alltrucks" >
                     <div id="formCspace">
+                        {% if opened %}
                         <table style="border-collapse: collapse;">
                             <tr style="height: 50px;">
                                 <th id="formI_box1">
@@ -132,39 +131,29 @@
                                     Sampling Time
                                 </th>
                                 <td id="formI_box1">
-                                    {% if data.time_0 == NULL %}
-                                        {{ data.time_0 }}
-                                    {% else %}
+                                    
                                         {{ empty.time_0 }}
-                                    {% endif %}
+                                    
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.time_1 == NULL %}
-                                        {{ data.time_1 }}
-                                    {% else %}
+                                    
                                         {{ empty.time_1 }}
-                                    {% endif %}
+                                   
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.time_2 == NULL %}
-                                        {{ data.time_2 }}
-                                    {% else %}
+                                    
                                         {{ empty.time_2 }}
-                                    {% endif %}
+                                    
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.time_3 == NULL %}
-                                        {{ data.time_3 }}
-                                    {% else %}
+                                    
                                         {{ empty.time_3 }}
-                                    {% endif %}
+                                
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.time_4 == NULL %}
-                                        {{ data.time_4 }}
-                                    {% else %}
+                                    
                                         {{ empty.time_4 }}
-                                    {% endif %}
+                              
                                 </td>
                             </tr>
                             <tr style="height: 50px;">
@@ -173,39 +162,29 @@
                                     Signature
                                 </th>
                                 <td id="formI_box1">
-                                    {% if data.obser_0 == NULL %}
-                                        {{ data.obser_0 }}
-                                    {% else %}
+                                    
                                         {{ empty.obser_0 }}
-                                    {% endif %}
+                                  
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.obser_1 == NULL %}
-                                        {{ data.obser_1 }}
-                                    {% else %}
+                                    
                                         {{ empty.obser_1 }}
-                                    {% endif %}
+                         
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.obser_2 == NULL %}
-                                        {{ data.obser_2 }}
-                                    {% else %}
+                                    
                                         {{ empty.obser_2 }}
-                                    {% endif %}
+                                   
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.obser_3 == NULL %}
-                                        {{ data.obser_3 }}
-                                    {% else %}
+                                    
                                         {{ empty.obser_3 }}
-                                    {% endif %}
+                                 
                                 </td>
                                 <td id="formI_box1">
-                                    {% if data.obser_4 == NULL %}
-                                        {{ data.obser_4 }}
-                                    {% else %}
+                                    
                                         {{ empty.obser_4 }}
-                                    {% endif %}
+                                   
                                 </td>
                             </tr>
                             <tr>
@@ -220,10 +199,19 @@
                                 </td>
                             </tr>
                         </table>
+                        {% else %}
+                        <div style="font-size: 2rem; padding: 3rem; text-align: center;">
+                            This is a Weekly form. <br>
+                            New form will be generated on Monday.
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
+                {% if submit %}
                 <br><br><br>
                 <input type="submit" value="Submit Form" class="submit_button">
+                {% else %}
+                {% endif %}
             </div>
         </div>
     </form>
