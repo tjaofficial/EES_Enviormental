@@ -221,6 +221,7 @@ class Forms(models.Model):
     frequency = models.CharField(max_length=30, choices = frequent_choices)
     day_freq = models.CharField(max_length=30, choices = days_choices, null= True)
     weekdays_only = models.BooleanField(default=False)
+    weekend_only = models.BooleanField(default=False)
     link = models.CharField(max_length=30)
     header = models.CharField(max_length=80)
     title = models.CharField(max_length=80)
@@ -3768,6 +3769,67 @@ class formM_model(models.Model):
     
     def __str__(self):
         return str(self.date)
+    
+class formO_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
+    month = models.CharField(
+        max_length=30
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False
+    )
+    Q_1 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices, 
+    )
+    Q_2 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices, 
+    )
+    Q_3 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    Q_4 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    Q_5 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    Q_6 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    Q_7 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    Q_8 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    Q_9 = models.CharField(
+        max_length=30, 
+        choices= yes_no_choices,
+    )
+    comments = models.CharField(
+        max_length=300
+    )
+    actions_taken = models.CharField(
+        max_length=150
+    )
+    
+    def __str__(self):
+        return str(self.month)
     
 class issues_model(models.Model):
     form = models.CharField(max_length=30)

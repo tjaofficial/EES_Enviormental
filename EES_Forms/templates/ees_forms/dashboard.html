@@ -80,6 +80,87 @@
     {% if item.day_freq == 'Any' %}
         {% if todays_num == 5 or 6 %}
             {% if item.weekdays_only %}
+            {% elif item.weekend_only %}
+                {% if item.form|length >= 2 %}
+                    {% if item.form.0 not in form_check1 %}
+                    <div style="display: none;">
+                    {{ form_check1|append_list:item.form.0 }}
+                    </div>
+                    <div class="card_Form">
+                        <h3 class="card_Form_letter">
+                            {{ item.form.0 }}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>{{ item.header }}</h3>
+                            <h4></h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.due_date}}
+                        </h4>
+                        <div class="card_Form_progress">
+                            <div class="card_Form_bar">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ item.frequency }}/{{ item.link }}/form{% if saturday %}/saturday{% else %}/sunday{% endif %}">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{ item.form.2 }}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.due_date}}
+                            </h4>
+                            <div class="card_Form_progress">
+                                <div class="card_Form_bar">
+                                </div>    
+                            </div>            
+                        </div>      
+                    </a>
+                    {% else %}
+                    <a href="{{ item.frequency }}/{{ item.link }}/form{% if saturday %}/saturday{% else %}/sunday{% endif %}">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{ item.form.2 }}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.due_date}}
+                            </h4>
+                            <div class="card_Form_progress">
+                                <div class="card_Form_bar">
+                                </div>    
+                            </div>            
+                        </div>      
+                    </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ item.frequency }}/{{ item.link }}/form{% if saturday %}/saturday{% else %}/sunday{% endif %}">
+                        <div class="card_Form">
+                            <h3 class="card_Form_letter">{{ item.form }}</h3>
+                            <div class="card_Form_title">
+                                <h3>{{ item.title }}</h3>
+                                <h4>{{ item.frequency }}</h4>
+                            </div>
+                            <h4 class="card_Form_date">{{item.due_date}}</h4>
+                            <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+                        </div>
+                    </a>
+                {% endif %}
             {% else %}
                 {% if item.form|length >= 2 %}
                     {% if item.form.0 not in form_check1 %}
@@ -147,7 +228,7 @@
                             </div>            
                         </div>      
                     </a>
-            {% endif %}
+                    {% endif %}
                 {% else %}
                     <a href="{{ item.frequency }}/{{ item.link }}/form">
                         <div class="card_Form">
@@ -163,7 +244,8 @@
                 {% endif %}
             {% endif %}
         {% else %}
-            {% if item.form|length >= 2 %}
+            {% if item.weekend_only %}
+            {% elif item.form|length >= 2 %}
                 {% if item.form.0 not in form_check1 %}
                 <div style="display: none;">
                 {{ form_check1|append_list:item.form.0 }}
@@ -266,89 +348,262 @@
         </div>
 
 {% for item in pullNot %}
-    {% if item.form|length >= 2 %}
-        {% if item.form.0 not in form_check2 %}
-            <div style="display: none;">
-            {{ form_check2|append_list:item.form.0 }}
-            </div>
-            <div class="card_Form">
-                <h3 class="card_Form_letter">
-                    {{ item.form.0 }}
-                </h3>
-                <div class="card_Form_title">
-                    <h3>{{ item.header }}</h3>
-                    <h4></h4>
-                </div>
-                <h4 class="card_Form_date">
-                    {{item.due_date}}
-                </h4>
-                <div class="card_Form_progress">
-                    <div class="card_Form_bar">
+    {% if item.day_freq == 'Any' %}
+        {% if todays_num == 5 or 6 %}
+            {% if item.weekdays_only %}
+            {% elif item.weekend_only %}
+                {% if item.form|length >= 2 %}
+                    {% if item.form.0 not in form_check1 %}
+                    <div style="display: none;">
+                    {{ form_check1|append_list:item.form.0 }}
                     </div>
+                    <div class="card_Form">
+                        <h3 class="card_Form_letter">
+                            {{ item.form.0 }}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>{{ item.header }}</h3>
+                            <h4></h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.due_date}}
+                        </h4>
+                        <div class="card_Form_progress">
+                            <div class="card_Form_bar">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ item.frequency }}/{{ item.link }}/form{% if saturday %}/saturday{% else %}/sunday{% endif %}">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{ item.form.2 }}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.due_date}}
+                            </h4>
+                            <div class="card_Form_progress">
+                                <div class="card_Form_bar">
+                                </div>    
+                            </div>            
+                        </div>      
+                    </a>
+                    {% else %}
+                    <a href="{{ item.frequency }}/{{ item.link }}/form{% if saturday %}/saturday{% else %}/sunday{% endif %}">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{ item.form.2 }}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.due_date}}
+                            </h4>
+                            <div class="card_Form_progress">
+                                <div class="card_Form_bar">
+                                </div>    
+                            </div>            
+                        </div>      
+                    </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ item.frequency }}/{{ item.link }}/form{% if saturday %}/saturday{% else %}/sunday{% endif %}">
+                        <div class="card_Form">
+                            <h3 class="card_Form_letter">{{ item.form }}</h3>
+                            <div class="card_Form_title">
+                                <h3>{{ item.title }}</h3>
+                                <h4>{{ item.frequency }}</h4>
+                            </div>
+                            <h4 class="card_Form_date">{{item.due_date}}</h4>
+                            <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% else %}
+                {% if item.form|length >= 2 %}
+                    {% if item.form.0 not in form_check1 %}
+                    <div style="display: none;">
+                    {{ form_check1|append_list:item.form.0 }}
+                    </div>
+                    <div class="card_Form">
+                        <h3 class="card_Form_letter">
+                            {{ item.form.0 }}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>{{ item.header }}</h3>
+                            <h4></h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.due_date}}
+                        </h4>
+                        <div class="card_Form_progress">
+                            <div class="card_Form_bar">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ item.frequency }}/{{ item.link }}/form">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{ item.form.2 }}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.due_date}}
+                            </h4>
+                            <div class="card_Form_progress">
+                                <div class="card_Form_bar">
+                                </div>    
+                            </div>            
+                        </div>      
+                    </a>
+                    {% else %}
+                    <a href="{{ item.frequency }}/{{ item.link }}/form">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{ item.form.2 }}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.due_date}}
+                            </h4>
+                            <div class="card_Form_progress">
+                                <div class="card_Form_bar">
+                                </div>    
+                            </div>            
+                        </div>      
+                    </a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ item.frequency }}/{{ item.link }}/form">
+                        <div class="card_Form">
+                            <h3 class="card_Form_letter">{{ item.form }}</h3>
+                            <div class="card_Form_title">
+                                <h3>{{ item.title }}</h3>
+                                <h4>{{ item.frequency }}</h4>
+                            </div>
+                            <h4 class="card_Form_date">{{item.due_date}}</h4>
+                            <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if item.weekend_only %}
+            {% elif item.form|length >= 2 %}
+                {% if item.form.0 not in form_check1 %}
+                <div style="display: none;">
+                {{ form_check1|append_list:item.form.0 }}
                 </div>
-            </div>
-            <a href="{{ item.frequency }}/{{ item.link }}/form">
-                <div class="card_Form" style="margin-left: 50px;">
+                <div class="card_Form">
                     <h3 class="card_Form_letter">
-                        {{ item.form.2 }}
+                        {{ item.form.0 }}
                     </h3>
                     <div class="card_Form_title">
-                        <h3>
-                            {{ item.title }}
-                        </h3>
-                        <h4>
-                            {{ item.frequency }}
-                        </h4>
+                        <h3>{{ item.header }}</h3>
+                        <h4></h4>
                     </div>
                     <h4 class="card_Form_date">
                         {{item.due_date}}
                     </h4>
                     <div class="card_Form_progress">
                         <div class="card_Form_bar">
-                        </div>    
-                    </div>            
-                </div>      
-            </a>
-        {% else %}
-        <a href="{{ item.frequency }}/{{ item.link }}/form">
-            <div class="card_Form" style="margin-left: 50px;">
-                <h3 class="card_Form_letter">
-                    {{ item.form.2 }}
-                </h3>
-                <div class="card_Form_title">
-                    <h3>
-                        {{ item.title }}
-                    </h3>
-                    <h4>
-                        {{ item.frequency }}
-                    </h4>
+                        </div>
+                    </div>
                 </div>
-                <h4 class="card_Form_date">
-                    {{item.due_date}}
-                </h4>
-                <div class="card_Form_progress">
-                    <div class="card_Form_bar">
-                    </div>    
-                </div>            
-            </div>      
-        </a>
+                <a href="{{ item.frequency }}/{{ item.link }}/form">
+                    <div class="card_Form" style="margin-left: 50px;">
+                        <h3 class="card_Form_letter">
+                            {{ item.form.2 }}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>
+                                {{ item.title }}
+                            </h3>
+                            <h4>
+                                {{ item.frequency }}
+                            </h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.due_date}}
+                        </h4>
+                        <div class="card_Form_progress">
+                            <div class="card_Form_bar">
+                            </div>    
+                        </div>            
+                    </div>      
+                </a>
+                {% else %}
+                <a href="{{ item.frequency }}/{{ item.link }}/form">
+                    <div class="card_Form" style="margin-left: 50px;">
+                        <h3 class="card_Form_letter">
+                            {{ item.form.2 }}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>
+                                {{ item.title }}
+                            </h3>
+                            <h4>
+                                {{ item.frequency }}
+                            </h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.due_date}}
+                        </h4>
+                        <div class="card_Form_progress">
+                            <div class="card_Form_bar">
+                            </div>    
+                        </div>            
+                    </div>      
+                </a>
+                {% endif %}
+            {% else %}
+                <a href="{{ item.frequency }}/{{ item.link }}/form">
+                    <div class="card_Form">
+                        <h3 class="card_Form_letter">{{ item.form }}</h3>
+                        <div class="card_Form_title">
+                            <h3>{{ item.title }}</h3>
+                            <h4>{{ item.frequency }}</h4>
+                        </div>
+                        <h4 class="card_Form_date">{{item.due_date}}</h4>
+                        <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
+                    </div>
+                </a>
+            {% endif %}
         {% endif %}
     {% else %}
-        <a href="{{ item.frequency }}/{{ item.link }}/form">
-            <div class="card_Form">
-                <h3 class="card_Form_letter">{{ item.form }}</h3>
-                <div class="card_Form_title">
-                    <h3>{{ item.title }}</h3>
-                    <h4>{{ item.frequency }}</h4>
-                </div>
-                <h4 class="card_Form_date">{{item.due_date}}</h4>
-                <div class="card_Form_progress"><div class="card_Form_bar"></div></div>
-            </div>
-        </a>
+        {% if todays_num == item.day_freq %}
+        {% endif %}
     {% endif %}
-            {% empty %}
-            <h2 class="card_empty"> No Forms </h2>
-            {% endfor %}
+    {% empty %}
+    <h2 class="card_empty"> No Forms </h2>
+{% endfor %}     
 
     
     </div>

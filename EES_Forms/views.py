@@ -436,12 +436,18 @@ def IncompleteForms(request):
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
-            
+    day_number = today.weekday()
+    
+    if day_number == 6:
+        satruday = False
+    else:
+        saturday = True
+    
     form_check1 = ["",]
     form_check2 = ["",]
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number
     })
 
 def weekly_forms(request):
@@ -5100,6 +5106,100 @@ def formM(request, selector):
    #         submitted = True
     return render (request, "Daily/formM.html", {
         'now': todays_log, 'form': form, 'selector': selector, 'profile': profile,
+    })
+
+def formO(request, selector, weekend_day):
+    profile = user_profile_model.objects.all()
+    today = datetime.date.today()
+    full_name = request.user.get_full_name()
+    
+    month_name = calendar.month_name[today.month]
+
+    org = formO_model.objects.all().order_by('-date')
+    
+    if formO_model.objects.count() != 0:
+        database_form = org[0]
+        database_date = database_form.date
+    else:
+        database_date = ''
+    
+    if now.month == todays_log.date_save.month:
+        if now.day == todays_log.date_save.day:
+            if todays_log.date_save == database_date: 
+                initial_data = {
+                    'observer' : database_form.observer,
+                    'month' : database_form.month,
+                    'date' : database_form.date,
+                    'Q_1' : database_form.Q_1,
+                    'Q_2' : database_form.Q_2,
+                    'Q_3' : database_form.Q_3,
+                    'Q_4' : database_form.Q_4,
+                    'Q_5' : database_form.Q_5,
+                    'Q_6' : database_form.Q_6,
+                    'Q_7' : database_form.Q_7,
+                    'Q_8' : database_form.Q_8,
+                    'Q_9' : database_form.Q_9,
+                    'comments' : database_form.comments,
+                    'actions_taken' : database_form.actions_taken,
+                }
+                data_form = formO_form(initial = initial_data)
+
+                if request.method == 'POST':
+                    data_form = formO_form(request.POST, instance= database_form)
+                    if data_form.is_valid():
+                        A = data_form.save()
+                        
+                        if 'Yes' in {
+                            A.Q_1,
+                            A.Q_2,
+                            A.Q_3,
+                            A.Q_4,
+                            A.Q_5,
+                            A.Q_6,
+                            A.Q_7,
+                            A.Q_8,
+                            A.Q_9,
+                        }:
+                            issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/form'
+
+                            return redirect (issue_page)
+                        
+                        done = Forms.objects.filter(form='O')[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+                        
+                        return redirect('IncompleteForms')
+            else: 
+                initial_data = {
+                    'date' : today,
+                    'observer' : full_name,
+                    'month' : month_name,
+                }
+                data_form = formO_form(initial = initial_data)
+
+                if request.method == 'POST':
+                    data_form = formO_form(request.POST)
+                    if data_form.is_valid():
+                        data_form.save()
+                        
+                        done = Forms.objects.filter(form='O')[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+                        
+                        return redirect('IncompleteForms')
+        else:
+            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+            return redirect(batt_prof)
+    else:
+        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+        return redirect(batt_prof)
+    
+    return render (request, "Weekly/formO.html", {
+        'selector': selector, 'profile': profile, 'data_form': data_form, 'weekend_day': weekend_day
     })
 def issues_view(request, form_name, form_date, access_page):
     profile = user_profile_model.objects.all()
