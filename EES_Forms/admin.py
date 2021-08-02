@@ -42,6 +42,7 @@ admin.site.register(formI_model)
 admin.site.register(formL_model)
 admin.site.register(formM_model)
 admin.site.register(formO_model)
+admin.site.register(formP_model)
 
 
 

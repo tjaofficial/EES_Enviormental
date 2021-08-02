@@ -1321,6 +1321,26 @@ class formO_form(ModelForm):
             'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
             'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
         }
+class formP_form(ModelForm):
+    class Meta:
+        model = formP_model
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
+            'month' : forms.TextInput(attrs={'type':'text', 'style':'width:100px; text-align: center; font-size: 1.2rem;'}),
+            'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'Q_1' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_2' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_3' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_4' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_5' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_6' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_7' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_8' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_9' : forms.Select(attrs={'style':'width: 60px;'}),
+            'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
+            'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
+        }
 class issues_form(ModelForm):
     class Meta:
         model = issues_model
