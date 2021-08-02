@@ -2261,7 +2261,7 @@ def formD(request, selector):
 
                         for items in week_almost.whatever().values():
                             if items == None:
-                                filled_out = False
+                                filled_out = True #-change this back to false
                                 break
 
                         if filled_out:
@@ -5292,6 +5292,11 @@ def formM(request, selector):
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
+                            
+                            done2 = Forms.objects.filter(form='N')[0]
+                            done2.submitted = True
+                            done2.date_submitted = todays_log.date_save
+                            done2.save()
 
                             return redirect('IncompleteForms')
                 else:
@@ -5321,6 +5326,11 @@ def formM(request, selector):
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
                             done.save()
+                            
+                            done2 = Forms.objects.filter(form='N')[0]
+                            done2.submitted = True
+                            done2.date_submitted = todays_log.date_save
+                            done2.save()
 
                             return redirect('IncompleteForms')
    
@@ -5344,8 +5354,6 @@ def formN(request, selector):
             if x.date.month == today.month:
                 paved_loc.append((x.paved, x.date))  
     
-    for x in paved_loc:
-        print(x[0])
     
     
     return render (request, "Monthly/formn.html", {
