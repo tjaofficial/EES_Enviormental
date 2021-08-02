@@ -1801,6 +1801,12 @@ class formB_model(models.Model):
         }
     
 class formD_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices_1 = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    all_user_choices_2 = ((h.get_full_name(), h.get_full_name()) for h in all_users)
+    all_user_choices_3 = ((a.get_full_name(), a.get_full_name()) for a in all_users)
+    all_user_choices_4 = ((b.get_full_name(), b.get_full_name()) for b in all_users)
+    all_user_choices_5 = ((c.get_full_name(), c.get_full_name()) for c in all_users)
     today = datetime.date.today()
     last_friday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
@@ -1820,6 +1826,7 @@ class formD_model(models.Model):
     )
     observer1 = models.CharField(
         max_length=30, 
+        choices = all_user_choices_1,
         blank=True,
         null=True
     )
@@ -1866,6 +1873,7 @@ class formD_model(models.Model):
     )
     observer2 = models.CharField(
         max_length=30, 
+        choices = all_user_choices_2, 
         blank=True,
         null=True
     )
@@ -1911,7 +1919,8 @@ class formD_model(models.Model):
         null=True
     )
     observer3 = models.CharField(
-        max_length=30, 
+        max_length=30,
+        choices = all_user_choices_3,
         blank=True,
         null=True
     )
@@ -1957,7 +1966,8 @@ class formD_model(models.Model):
         null=True
     )
     observer4 = models.CharField(
-        max_length=30, 
+        max_length=30,
+        choices = all_user_choices_4,
         blank=True,
         null=True
     )
@@ -2004,6 +2014,7 @@ class formD_model(models.Model):
     )
     observer5 = models.CharField(
         max_length=30, 
+        choices = all_user_choices_5,
         blank=True,
         null=True
     )

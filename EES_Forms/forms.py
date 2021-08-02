@@ -770,11 +770,11 @@ class formD_form(ModelForm):
             'freeboard5' : forms.Select(attrs={'style':'width: 80px;'}),
             'wetted5' : forms.Select(attrs={'style':'width: 80px;'}),
             'comments5' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'observer1' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer2' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer3' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer4' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer5' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
+            'observer1' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer2' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer3' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer4' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer5' : forms.Select(attrs={'style':'width: 150px;'}),
         }
 
         
