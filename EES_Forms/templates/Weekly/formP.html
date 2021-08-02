@@ -27,11 +27,7 @@
                 </tr>
                 <tr>
                     <th style="text-align: center;">
-                        Outfall 008 - {% if weekend_day == 'saturday' %}
-                        Saturday
-                        {% else %}
-                        Sunday
-                        {% endif %}
+                        Outfall 008 - {{ data_form.weekend_day }}
                     </th>
                 </tr>
                 <tr>
@@ -125,7 +121,11 @@
                 </tr>
             </table>
             <br><br><br>
+            {% if selector == 'form' %}
+            
             <input type="submit" value="Submit Form" class="submit_button">
+            {% else %}
+            {% endif %}
         </div>
     </div>
 </form>

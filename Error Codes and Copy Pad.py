@@ -167,12 +167,12 @@ class subA5_form(ModelForm):
         
 Error Codes
 
-EES_00001 - search_form_view, "Not sending valid frequency field"
-EES_00002 - search_form_view, "Not sending valid frequency field"
-EES_00003 - search_form_view, "Not sending valid frequency field"
-EES_00004 - search_form_view, "Not sending valid frequency field"
-EES_00005 - search_form_view, "Form-Name and access_page do not equal, not in standard format (form%-%)"
-EES_00006 - search_form_view, "Form-Name and access_page do not equal, not in standard format (form%-%)"
+EES_00001 - formM_view, "formM_readings_model is Missing One to One data for formM_model, create data object with the corresponding date in admin"
+EES_00002 - 
+EES_00003 - 
+EES_00004 - 
+EES_00005 - search_forms_view, "Form-Name and access_page do not equal, not in standard format (form%-%)"
+EES_00006 - search_forms_view, "Form-Name and access_page do not equal, not in standard format (form%-%)"
 EES_00007 - search_form_view, "none"
 EES_00008 - search_form_view, "none"
 EES_00009 - search_form_view, "none"

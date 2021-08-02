@@ -50,6 +50,7 @@ urlpatterns = [
     path("Daily/formI/<str:selector>", views.formI, name="formI"),
     path("Daily/formL/<str:access_page>", views.formL, name="formL"),
     path("Daily/formM/<str:selector>", views.formM, name="formM"),
+    path("Monthly/formN/<str:selector>", views.formN, name="formN"),
     path("Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
     

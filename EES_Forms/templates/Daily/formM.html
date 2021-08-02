@@ -41,9 +41,7 @@
                     <!------Header Information------_________________________---------______________________---------------------------_________-------------->
                     <!------Header Information------_________________________---------______________________---------------------------_________-------------->
                     <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+           
                     <tr>
                         <th id="boxTitle" colspan="5">Method 9D Observation - (M)</th>
                         <th></th>
@@ -112,54 +110,56 @@
                     <tr>
                         <td id="boxc1">0</td>
                         <td id="boxc1">
-                            {{ read.TRead1 }}
+                            {{ read.pav_1 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead2 }}
+                            {{ read.pav_2 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead3 }}
+                            {{ read.pav_3 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead4 }}
+                            {{ read.pav_4 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">1</td>
                         <td id="boxc1">
-                            {{ read.TRead5 }}
+                            {{ read.pav_5 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead6 }}
+                            {{ read.pav_6 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead7 }}
+                            {{ read.pav_7 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead8 }}
+                            {{ read.pav_8 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">2</td>
                         <td id="boxc1">
-                            {{ read.TRead9 }}
+                            {{ read.pav_9 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead10 }}
+                            {{ read.pav_10 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead11 }}
+                            {{ read.pav_11 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead12 }}
+                            {{ read.pav_12 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                        <td id="formM_box2">=</td>
+                        <td id="formM_box2">
+                            {{ read.pav_total }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="height: 35px" > </td>
@@ -183,54 +183,56 @@
                     <tr>
                         <td id="boxc1">0</td>
                         <td id="boxc1">
-                            {{ read.ARead1 }}
+                            {{ read.unp_1 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead2 }}
+                            {{ read.unp_2 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead3 }}
+                            {{ read.unp_3 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead4 }}
+                            {{ read.unp_4 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">1</td>
                         <td id="boxc1">
-                            {{ read.ARead5 }}
+                            {{ read.unp_5 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead6 }}
+                            {{ read.unp_6 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead7 }}
+                            {{ read.unp_7 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead8 }}
+                            {{ read.unp_8 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">2</td>
                         <td id="boxc1">
-                            {{ read.ARead9 }}
+                            {{ read.unp_9 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead10 }}
+                            {{ read.unp_10 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead11 }}
+                            {{ read.unp_11 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.ARead12 }}
+                            {{ read.unp_12 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                        <td id="formM_box2">=a</td>
+                        <td id="formM_box2">
+                            {{ read.unp_total}}
+                        </td>
                     </tr>
                     <tr>
                         <td style="height: 40px" > </td>
@@ -254,54 +256,56 @@
                     <tr>
                         <td id="boxc1">0</td>
                         <td id="boxc1">
-                            {{ read.TRead1 }}
+                            {{ read.par_1 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead2 }}
+                            {{ read.par_2 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead3 }}
+                            {{ read.par_3 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead4 }}
+                            {{ read.par_4 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">1</td>
                         <td id="boxc1">
-                            {{ read.TRead5 }}
+                            {{ read.par_5 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead6 }}
+                            {{ read.par_6 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead7 }}
+                            {{ read.par_7 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead8 }}
+                            {{ read.par_8 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">2</td>
                         <td id="boxc1">
-                            {{ read.TRead9 }}
+                            {{ read.par_9 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead10 }}
+                            {{ read.par_10 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead11 }}
+                            {{ read.par_11 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead12 }}
+                            {{ read.par_12 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                        <td id="formM_box2">=</td>
+                        <td id="formM_box2">
+                            {{ read.par_total }}
+                        </td>
                     </tr>
                     <tr>
                         <td style="height: 40px" > </td>
@@ -325,48 +329,48 @@
                     <tr>
                         <td id="boxc1">0</td>
                         <td id="boxc1">
-                            {{ read.TRead1 }}
+                            {{ read.storage_1 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead2 }}
+                            {{ read.storage_2 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead3 }}
+                            {{ read.storage_3 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead4 }}
+                            {{ read.storage_4 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">1</td>
                         <td id="boxc1">
-                            {{ read.TRead5 }}
+                            {{ read.storage_5 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead6 }}
+                            {{ read.storage_6 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead7 }}
+                            {{ read.storage_7 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead8 }}
+                            {{ read.storage_8 }}
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">2</td>
                         <td id="boxc1">
-                            {{ read.TRead9 }}
+                            {{ read.storage_9 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead10 }}
+                            {{ read.storage_10 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead11 }}
+                            {{ read.storage_11 }}
                         </td>
                         <td id="boxc1">
-                            {{ read.TRead12 }}
+                            {{ read.storage_12 }}
                         </td>
                         <td></td>
                     </tr>
@@ -375,7 +379,7 @@
                             3-minute Average Opacity (sum of the 12 readings above/12)
                         </td>
                         <td id="formM_box2">
-                            =
+                            {{ read.storage_total }}
                         </td>
                     </tr>
                     <tr>

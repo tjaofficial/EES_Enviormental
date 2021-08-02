@@ -134,7 +134,6 @@
             </table>
                 <div id="alltrucks">
                     <div id="formCspace">
-                        {% if opened %}
                         <table style="border-collapse: collapse;">
                             <tr>
                                 <th id="formL_Title">
@@ -423,11 +422,11 @@
                                 <td colspan="4" style="height: 25px;" ></td>
                                 <td style="text-align: right;">
                                     {% if filled_in == True %}
-
+                                        <a href="../../Daily/formL/edit">
+                                            Edit
+                                        </a>
                                     {% else %}
-                                    <a href="../../Daily/formL/edit">
-                                        Edit
-                                    </a>
+                                    
                                     {% endif %}
                                 </td>
                             </tr>
@@ -444,12 +443,6 @@
                                 </td>
                             </tr>
                         </table>
-                        {% else %}
-                        <div style="font-size: 2rem; padding: 3rem; text-align: center;">
-                            This is a Weekly form. <br>
-                            New form will be generated on Monday.
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
                 {% if filled_in == True %}

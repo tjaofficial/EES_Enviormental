@@ -27,11 +27,7 @@
                 </tr>
                 <tr>
                     <th style="text-align: center;">
-                        MP 108A - {% if weekend_day == 'saturday' %}
-                        Saturday
-                        {% else %}
-                        Sunday
-                        {% endif %}
+                        MP 108A - {% if selector != 'form'  %}{% if weekend_day == 'saturday' %}Saturday{% elif weekend_day == 'sunday' %}Sunday{% endif %}{% else %}{{ data_form.weekend_day }}{% endif %}
                     </th>
                 </tr>
                 <tr>
@@ -126,7 +122,11 @@
                 </tr>
             </table>
             <br><br><br>
+            {% if selector == 'form' %}
+            
             <input type="submit" value="Submit Form" class="submit_button">
+            {% else %}
+            {% endif %}
         </div>
     </div>
 </form>

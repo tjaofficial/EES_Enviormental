@@ -1257,7 +1257,14 @@ class formL_form(ModelForm):
             'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
             'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
             'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'})
+            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'obser_0' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_1' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_2' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_3' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_4' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_5' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_6' : forms.Select(attrs={'style':'width: 150px;'}),
         }
 
         
@@ -1301,6 +1308,65 @@ class formM_form(ModelForm):
             'cert_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'comments' : Textarea(attrs={'rows':7, 'cols':125}),
         }
+class formM_readings_form(ModelForm):
+    class Meta:
+        model = formM_readings_model
+        fields = ('__all__')
+        exclude = ('form',)
+        widgets = {
+            'pav_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+        }
 class formO_form(ModelForm):
     class Meta:
         model = formO_model
@@ -1309,6 +1375,7 @@ class formO_form(ModelForm):
             'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'month' : forms.TextInput(attrs={'type':'text', 'style':'width:100px; text-align: center; font-size: 1.2rem;'}),
             'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'weekend_day' : forms.Select(attrs={'style':'width: 80px;'}),
             'Q_1' : forms.Select(attrs={'style':'width: 60px;'}),
             'Q_2' : forms.Select(attrs={'style':'width: 60px;'}),
             'Q_3' : forms.Select(attrs={'style':'width: 60px;'}),
@@ -1329,6 +1396,7 @@ class formP_form(ModelForm):
             'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'month' : forms.TextInput(attrs={'type':'text', 'style':'width:100px; text-align: center; font-size: 1.2rem;'}),
             'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'weekend_day' : forms.Select(attrs={'style':'width: 80px;'}),
             'Q_1' : forms.Select(attrs={'style':'width: 60px;'}),
             'Q_2' : forms.Select(attrs={'style':'width: 60px;'}),
             'Q_3' : forms.Select(attrs={'style':'width: 60px;'}),

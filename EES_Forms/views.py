@@ -436,6 +436,7 @@ def IncompleteForms(request):
 
     pull = Forms.objects.filter(submitted__exact=False).order_by('form')
     pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
+    
     day_number = today.weekday()
     
     if day_number == 6:
@@ -443,11 +444,12 @@ def IncompleteForms(request):
     else:
         saturday = True
     
+    weekend_list = [5,6]
     form_check1 = ["",]
     form_check2 = ["",]
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list
     })
 
 def weekly_forms(request):
@@ -861,7 +863,7 @@ def formA1(request, selector):
                         reads = formA1_readings_form(request.POST, instance=database_form2)
 
                         A_valid = form.is_valid()
-                        B_valid = form.is_valid()
+                        B_valid = reads.is_valid()
 
                         if A_valid and B_valid:
                             A = form.save()
@@ -904,7 +906,7 @@ def formA1(request, selector):
                         form = formA1_form(request.POST)
                         reads = formA1_readings_form(request.POST)
                         A_valid = form.is_valid()
-                        B_valid = form.is_valid()
+                        B_valid = reads.is_valid()
 
                         if A_valid and B_valid:
                             A = form.save()
@@ -1783,7 +1785,7 @@ def formB(request, selector):
                         filled_out = True
                         for items in week_almost.whatever().values():
                             if items == None:
-                                filled_out = False
+                                filled_out = True
                                 break
 
                         if filled_out:
@@ -4203,13 +4205,15 @@ def formI(request, selector):
     last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
     end_week = last_saturday + one_week
+    today_number = today.weekday()
     
     week_start_dates = formI_model.objects.all().order_by('-week_start')
     week_almost = week_start_dates[0]
     week = week_almost.week_start
     opened = True
     submit = True
-    if selector != 'form':
+    
+    if selector not in ('form', 'edit'):
         submit = False
         for x in week_start_dates:
             if str(x.week_start) == str(selector):
@@ -4217,7 +4221,98 @@ def formI(request, selector):
         empty_form = database_model
     else:
         if today.weekday() not in {5, 6}:
-            if week == last_saturday:
+            home = []
+            filled_in = False
+            for x in formI_model.objects.all():
+                if x.week_start == last_saturday:
+                    home.append((x.time_4, 4))
+                    home.append((x.time_3, 3))
+                    home.append((x.time_2, 2))
+                    home.append((x.time_1, 1))
+                    home.append((x.time_0, 0))
+
+            for days in home:
+                if days[0]:
+                    if days[1] == today_number:
+                        filled_in = True
+            
+            if selector == 'form':
+                if week == last_saturday:
+                    if filled_in:
+                        empty_form = week_almost
+                        submit = False
+                    else:
+                        initial_data = {
+                            'week_start' : week_almost.week_start,
+                            'week_end' : week_almost.week_end,
+                            'time_0' : week_almost.time_0,
+                            'time_1' : week_almost.time_1,
+                            'time_2' : week_almost.time_2,
+                            'time_3' : week_almost.time_3,
+                            'time_4' : week_almost.time_4,
+                            'obser_0' : week_almost.obser_0,
+                            'obser_1' : week_almost.obser_1,
+                            'obser_2' : week_almost.obser_2,
+                            'obser_3' : week_almost.obser_3,
+                            'obser_4' : week_almost.obser_4,
+                        }
+
+                        empty_form = formI_form(initial=initial_data)
+                        if request.method == "POST":
+                            form = formI_form(request.POST, instance= week_almost)
+                            A_valid = form.is_valid()
+                            if A_valid:
+                                form.save()
+
+                                B = []
+                                for x in formI_model.objects.all():
+                                    if x.week_start == last_saturday:
+                                        B.append((4, x.time_4, x.obser_4))
+                                        B.append((3, x.time_3, x.obser_3))
+                                        B.append((2, x.time_2, x.obser_2))
+                                        B.append((1, x.time_1, x.obser_1))
+                                        B.append((0, x.time_0, x.obser_0))
+
+                                for days in B:
+                                    if days[0] == today_number:
+                                        if days[1] and days[2]:
+                                            filled_in = True
+                                        else:
+                                            filled_in = False
+
+                                if filled_in:
+                                    done = Forms.objects.filter(form='I')[0]
+                                    done.submitted = True
+                                    done.date_submitted = todays_log.date_save
+                                    done.save()
+
+                                    return redirect('IncompleteForms')
+
+                else:
+                    initial_data = {
+                        'week_start' : last_saturday,
+                        'week_end' : end_week
+                    }
+
+                    empty_form = formI_form(initial= initial_data)
+                    if request.method == "POST":
+                        form = formI_form(request.POST)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            form.save()
+
+                            done = Forms.objects.filter(form='I')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                        
+        #-------EDIT--------EDIT -------- EDIT-------                
+        #-------EDIT--------EDIT -------- EDIT-------                
+        #-------EDIT--------EDIT -------- EDIT-------
+            elif selector == 'edit':
+                filled_in = False
                 initial_data = {
                     'week_start' : week_almost.week_start,
                     'week_end' : week_almost.week_end,
@@ -4240,27 +4335,29 @@ def formI(request, selector):
                     if A_valid:
                         form.save()
 
-                        done = Forms.objects.filter(form='I')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
+                        B = []
+                        for x in formI_model.objects.all():
+                            if x.week_start == last_saturday:
+                                B.append((4, x.time_4, x.obser_4))
+                                B.append((3, x.time_3, x.obser_3))
+                                B.append((2, x.time_2, x.obser_2))
+                                B.append((1, x.time_1, x.obser_1))
+                                B.append((0, x.time_0, x.obser_0))
 
-                        return redirect('IncompleteForms')
+                        for days in B:
+                            if days[0] == today_number:
+                                if days[1] and days[2]:
+                                    filled_in = True
+                                else:
+                                    filled_in = False
 
-            else:
-                initial_data = {
-                    'week_start' : last_saturday,
-                    'week_end' : end_week
-                }
+                        if filled_in:
+                            done = Forms.objects.filter(form='I')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
 
-                empty_form = formI_form(initial= initial_data)
-                if request.method == "POST":
-                    form = formI_form(request.POST)
-                    A_valid = form.is_valid()
-                    if A_valid:
-                        form.save()
-
-                        return redirect('IncompleteForms')
+                            return redirect('IncompleteForms')
         elif today.weekday() == 5:
             opened = False
             submit = False
@@ -4283,7 +4380,7 @@ def formI(request, selector):
 
         
     return render (request, "Daily/formI.html", {
-        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'week': week, 'opened': opened, 'week_almost': week_almost, 'end_week': end_week, 'selector':selector, 'profile': profile, 'submit': submit
+        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'week': week, 'opened': opened, 'week_almost': week_almost, 'end_week': end_week, 'selector':selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in
     })
 
 #----------------------------------------------------------------------FORM L---------------<
@@ -4305,7 +4402,7 @@ def formL(request, access_page):
     database = week_almost
     opened = True
     
-    if access_page != 'form':
+    if access_page not in ('form', 'edit'):
         for x in week_start_dates:
             if str(x.week_start) == str(access_page):
                 database_model = x
@@ -4326,6 +4423,7 @@ def formL(request, access_page):
                     home.append((x.time_5, 5))
 
             for days in home:
+               
                 if days[0]:
                     if days[1] == today_number:
                         filled_in = True
@@ -4354,6 +4452,7 @@ def formL(request, access_page):
                         if this_week_saturday == last_saturday:
                             if filled_in:
                                 empty_form = database
+                          
                             else:
                                 initial_data = {
                                     'week_start' : database.week_start,
@@ -4403,19 +4502,20 @@ def formL(request, access_page):
                                 }
 
                                 empty_form = formL_form(initial= initial_data)
-
+                                
                                 if request.method == "POST":
                                     form = formL_form(request.POST, instance= database)
                                     A_valid = form.is_valid()
                                     if A_valid:
 
                                         A = form.save()
-
+                                        
                                         if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6 }:
                                             return redirect('../formH/formL')
 
                                         B = []
                                         for x in formL_model.objects.all():
+                                            
                                             if x.week_start == last_saturday:
                                                 B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4 ))
                                                 B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3 ))
@@ -4425,13 +4525,16 @@ def formL(request, access_page):
                                                 B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6 ))
                                                 B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5 ))
                                         for days in B:
+                                       
                                             if days[0] == today_number:
+                    
                                                 if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
                                                     filled_in = True
+                                   
                                                 else:
                                                     filled_in = False
                                         if filled_in:
-                                            print('beef')
+                                     
                                             done = Forms.objects.filter(form='L')[0]
                                             done.submitted = True
                                             done.date_submitted = todays_log.date_save
@@ -5067,48 +5170,191 @@ def formM(request, selector):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
+    
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
+    
     org = formM_model.objects.all().order_by('-date')
+    database_form = org[0]
+    org2 = formM_readings_model.objects.all().order_by('-form')
+    database_form2 = org2[0]
     
-    
+    today = datetime.date.today()
+    today_number = today.weekday()
+
     if selector != 'form':
         for x in org:
             if str(x.date) == str(selector):
                 database_model = x
-        data = database_model
-    
-    
-    initial_data = {
-            'date' : todays_log.date_save,
-            'observer' : full_name,
-            'cert_date' : cert_date
-    }
-    form = formM_form(initial=initial_data)
-    #submitted = False
-   # if request.method == "POST":
-   #     CReadings = FormCReadForm(request.POST)
-   #     CData = SubFormC1(request.POST)
-   #    A_valid = CReadings.is_valid()
-   #     B_valid = CData.is_valid()
-        #form.save()
-        #return HttpResponseRedirect('./formC?submitted=True')
-   #     if A_valid and B_valid:
-   #         A = CData.save()
-   #         B = CReadings.save(commit=False)
-   #         B.form = A
-   #         B.save()
-   #         return HttpResponseRedirect('./formC?submitted=True')
-   # else:
-   #    form = SubFormC1
-   #     read = FormCReadForm
-   #     if 'submitted' in request.GET:
-   #         submitted = True
+        form = database_model
+    if selector != 'form':
+        for x in org2:
+            if str(x.form) == str(selector):
+                database_model2 = x
+            else:
+                print('Error - EES_00001')
+        form2 = database_model2
+    else:
+        if selector == 'form':
+            if today_number in {0, 1, 2, 3, 4}:
+                if todays_log.date_save == database_form.date:
+                    initial_data = {
+                        'date' : database_form.date,
+                        'paved' : database_form.paved,
+                        'pav_start' : database_form.pav_start,
+                        'pav_stop' : database_form.pav_stop,
+                        'unpaved' : database_form.unpaved,
+                        'unp_start' : database_form.unp_start,
+                        'unp_stop' : database_form.unp_stop,
+                        'parking' : database_form.parking,
+                        'par_start' : database_form.par_start,
+                        'par_stop' : database_form.par_stop,
+                        'storage' : database_form.storage,
+                        'sto_start' : database_form.sto_start,
+                        'sto_stop' : database_form.sto_stop,
+                        'observer' : database_form.observer,
+                        'cert_date' : database_form.cert_date,
+                        'comments' : database_form.comments,
+                        
+                        'pav_1' : database_form2.pav_1,
+                        'pav_2' : database_form2.pav_2,
+                        'pav_3' : database_form2.pav_3,
+                        'pav_4' : database_form2.pav_4,
+                        'pav_5' : database_form2.pav_5,
+                        'pav_6' : database_form2.pav_6,
+                        'pav_7' : database_form2.pav_7,
+                        'pav_8' : database_form2.pav_8,
+                        'pav_9' : database_form2.pav_9,
+                        'pav_10' : database_form2.pav_10,
+                        'pav_11' : database_form2.pav_11,
+                        'pav_12' : database_form2.pav_12,
+                        'unp_1' : database_form2.unp_1,
+                        'unp_2' : database_form2.unp_2,
+                        'unp_3' : database_form2.unp_3,
+                        'unp_4' : database_form2.unp_4,
+                        'unp_5' : database_form2.unp_5,
+                        'unp_6' : database_form2.unp_6,
+                        'unp_7' : database_form2.unp_7,
+                        'unp_8' : database_form2.unp_8,
+                        'unp_9' : database_form2.unp_9,
+                        'unp_10' : database_form2.unp_10,
+                        'unp_11' : database_form2.unp_11,
+                        'unp_12' : database_form2.unp_12,
+                        'par_1' : database_form2.par_1,
+                        'par_2' : database_form2.par_2,
+                        'par_3' : database_form2.par_3,
+                        'par_4' : database_form2.par_4,
+                        'par_5' : database_form2.par_5,
+                        'par_6' : database_form2.par_6,
+                        'par_7' : database_form2.par_7,
+                        'par_8' : database_form2.par_8,
+                        'par_9' : database_form2.par_9,
+                        'par_10' : database_form2.par_10,
+                        'par_11' : database_form2.par_11,
+                        'par_12' : database_form2.par_12,
+                        'storage_1' : database_form2.storage_1,
+                        'storage_2' : database_form2.storage_2,
+                        'storage_3' : database_form2.storage_3,
+                        'storage_4' : database_form2.storage_4,
+                        'storage_5' : database_form2.storage_5,
+                        'storage_6' : database_form2.storage_6,
+                        'storage_7' : database_form2.storage_7,
+                        'storage_8' : database_form2.storage_8,
+                        'storage_9' : database_form2.storage_9,
+                        'storage_10' : database_form2.storage_10,
+                        'storage_11' : database_form2.storage_11,
+                        'storage_12' : database_form2.storage_12,
+                        
+                        'pav_total' : database_form2.pav_total,
+                        'unp_total' : database_form2.unp_total,
+                        'par_total' : database_form2.par_total,
+                        'storage_total' : database_form2.storage_total,
+                    }
+                    
+                    form = formM_form(initial=initial_data)
+                    form2 = formM_readings_form(initial=initial_data)
+                    
+                    if request.method == "POST":
+                        form = formM_form(request.POST, instance=database_form)
+                        reads = formM_readings_form(request.POST, instance=database_form2)
+
+                        A_valid = form.is_valid()
+                        B_valid = reads.is_valid()
+
+                        if A_valid and B_valid:
+                            A = form.save()
+                            B = reads.save(commit=False)
+                            B.form = A
+                            B.save()
+                            
+                            
+                            done = Forms.objects.filter(form='M')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                            'date' : todays_log.date_save,
+                            'observer' : full_name,
+                            'cert_date' : cert_date
+                    }
+                    form = formM_form(initial=initial_data)
+                    form2 = formM_readings_form()
+                    
+                    if request.method == "POST":
+                        form = formM_form(request.POST)
+                        reads = formM_readings_form(request.POST)
+
+                        A_valid = form.is_valid()
+                        B_valid = reads.is_valid()
+
+                        if A_valid and B_valid:
+                            A = form.save()
+                            B = reads.save(commit=False)
+                            B.form = A
+                            B.save()
+                            
+                            
+                            done = Forms.objects.filter(form='M')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+   
+      
     return render (request, "Daily/formM.html", {
-        'now': todays_log, 'form': form, 'selector': selector, 'profile': profile,
+        'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2
     })
 
+def formN(request, selector):
+    profile = user_profile_model.objects.all()
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
+    today = datetime.date.today()
+    month_name = calendar.month_name[today.month]
+    form_pull = formM_model.objects.all()
+    
+    paved_loc = []
+    for x in form_pull:
+        if x.paved:
+            if x.date.month == today.month:
+                paved_loc.append((x.paved, x.date))  
+    
+    for x in paved_loc:
+        print(x[0])
+    
+    
+    return render (request, "Monthly/formn.html", {
+        'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc
+    })
 def formO(request, selector, weekend_day):
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+    
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
     full_name = request.user.get_full_name()
@@ -5122,81 +5368,91 @@ def formO(request, selector, weekend_day):
         database_date = database_form.date
     else:
         database_date = ''
-    
-    if now.month == todays_log.date_save.month:
-        if now.day == todays_log.date_save.day:
-            if todays_log.date_save == database_date: 
-                initial_data = {
-                    'observer' : database_form.observer,
-                    'month' : database_form.month,
-                    'date' : database_form.date,
-                    'Q_1' : database_form.Q_1,
-                    'Q_2' : database_form.Q_2,
-                    'Q_3' : database_form.Q_3,
-                    'Q_4' : database_form.Q_4,
-                    'Q_5' : database_form.Q_5,
-                    'Q_6' : database_form.Q_6,
-                    'Q_7' : database_form.Q_7,
-                    'Q_8' : database_form.Q_8,
-                    'Q_9' : database_form.Q_9,
-                    'comments' : database_form.comments,
-                    'actions_taken' : database_form.actions_taken,
-                }
-                data_form = formO_form(initial = initial_data)
+        
+        
+    if selector != 'form':
+        for x in org:
+            if str(x.date) == str(selector):
+                database_model = x
+        data_form = database_model
+      
+    else:           
+        if now.month == todays_log.date_save.month:
+            if now.day == todays_log.date_save.day:
+                if todays_log.date_save == database_date: 
+                    initial_data = {
+                        'observer' : database_form.observer,
+                        'month' : database_form.month,
+                        'date' : database_form.date,
+                        'weekend_day' : database_form.weekend_day,
+                        'Q_1' : database_form.Q_1,
+                        'Q_2' : database_form.Q_2,
+                        'Q_3' : database_form.Q_3,
+                        'Q_4' : database_form.Q_4,
+                        'Q_5' : database_form.Q_5,
+                        'Q_6' : database_form.Q_6,
+                        'Q_7' : database_form.Q_7,
+                        'Q_8' : database_form.Q_8,
+                        'Q_9' : database_form.Q_9,
+                        'comments' : database_form.comments,
+                        'actions_taken' : database_form.actions_taken,
+                    }
+                    data_form = formO_form(initial = initial_data)
 
-                if request.method == 'POST':
-                    data_form = formO_form(request.POST, instance= database_form)
-                    if data_form.is_valid():
-                        A = data_form.save()
-                        
-                        if 'Yes' in {
-                            A.Q_1,
-                            A.Q_2,
-                            A.Q_3,
-                            A.Q_4,
-                            A.Q_5,
-                            A.Q_6,
-                            A.Q_7,
-                            A.Q_8,
-                            A.Q_9,
-                        }:
-                            issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/form'
+                    if request.method == 'POST':
+                        data_form = formO_form(request.POST, instance= database_form)
+                        if data_form.is_valid():
+                            A = data_form.save()
 
-                            return redirect (issue_page)
-                        
-                        done = Forms.objects.filter(form='O')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-                        
-                        return redirect('IncompleteForms')
-            else: 
-                initial_data = {
-                    'date' : today,
-                    'observer' : full_name,
-                    'month' : month_name,
-                }
-                data_form = formO_form(initial = initial_data)
+                            if 'Yes' in {
+                                A.Q_1,
+                                A.Q_2,
+                                A.Q_3,
+                                A.Q_4,
+                                A.Q_5,
+                                A.Q_6,
+                                A.Q_7,
+                                A.Q_8,
+                                A.Q_9,
+                            }:
+                                issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/form'
 
-                if request.method == 'POST':
-                    data_form = formO_form(request.POST)
-                    if data_form.is_valid():
-                        data_form.save()
-                        
-                        done = Forms.objects.filter(form='O')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-                        
-                        return redirect('IncompleteForms')
+                                return redirect (issue_page)
+
+                            done = Forms.objects.filter(form='O')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else: 
+                    initial_data = {
+                        'date' : today,
+                        'observer' : full_name,
+                        'month' : month_name,
+                        'weekend_day' : weekend_day,
+                    }
+                    data_form = formO_form(initial = initial_data)
+
+                    if request.method == 'POST':
+                        data_form = formO_form(request.POST)
+                        if data_form.is_valid():
+                            data_form.save()
+
+                            done = Forms.objects.filter(form='O')[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                batt_prof = '../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+                return redirect(batt_prof)
         else:
-            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            batt_prof = '../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
             return redirect(batt_prof)
-    else:
-        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
     
     return render (request, "Weekly/formO.html", {
         'selector': selector, 'profile': profile, 'data_form': data_form, 'weekend_day': weekend_day
@@ -5223,6 +5479,7 @@ def formP(request, selector, weekend_day):
                     'observer' : database_form.observer,
                     'month' : database_form.month,
                     'date' : database_form.date,
+                    'weekend_day' : database_form.weekend_day,
                     'Q_1' : database_form.Q_1,
                     'Q_2' : database_form.Q_2,
                     'Q_3' : database_form.Q_3,
@@ -5268,6 +5525,7 @@ def formP(request, selector, weekend_day):
                     'date' : today,
                     'observer' : full_name,
                     'month' : month_name,
+                    'weekend_day' : weekend_day,
                 }
                 data_form = formP_form(initial = initial_data)
 
@@ -5593,15 +5851,17 @@ def search_forms_view(request, access_page):
                 database = Model.objects.all().order_by('-date')
                 for x in ModelForms:
                     f = access_page[4] + '-' + access_page[5]
-                    print('')
-                    print(x.form)
-                    print(f)
-                    print('')
+
                     if x.form == access_page[4]:
                         if x.frequency[0] == 'W':
                             att_check = 4
+                            if x.weekend_only:
+                                weekend = True
+                            else:
+                                weekend = False
                         else:
                             att_check = 1
+                            print('no')
                     elif x.form == access_page[4] + '-' + access_page[5]:
                         if x.frequency[0] == 'W':
                             att_check = 4
@@ -5638,11 +5898,11 @@ def search_forms_view(request, access_page):
         
         
         return render(request, 'ees_forms/search_forms.html', {
-        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database, 'att_check':att_check
+        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-        'profile':profile,'access_page': access_page, 'database': database, 'att_check':att_check
+        'profile':profile,'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend,
         })
     
     

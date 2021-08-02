@@ -429,5 +429,14 @@ span.sideWord{
 .data_rows_water select{
     font-size: 1.2rem;
 }
-
+.roads_headers{
+    border: 3px solid black;
+}
+.roads_format{
+    border: 1px solid black;
+    padding: .4rem;
+}
+.date_format{
+    border: 1px solid black;
+}
 /*# sourceMappingURL=style.css.map */

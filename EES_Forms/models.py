@@ -99,20 +99,20 @@ source_choices = (
     ('Expansion Joint', 'Expansion Joint')
 )
 paved_roads = (
-    ('#4 Booster Station', '#4 Booster Station'),
-    ('#5 Battery Road', '#5 Battery Road'),
-    ('Coal Dump Horseshoe', 'Coal Dump Horseshoe'),
-    ('Coal Handling Road (Partial)', 'Coal Handling Road (Partial)'),
-    ('Coke Plant Road', 'Coke Plant Road'),
-    ('Coke Plant Mech Road', 'Coke Plant Mech Road'),
-    ('North Gate Area', 'North Gate Area'),
-    ('Compund Road', 'Compund Road'),
-    ('D-4 Blast Furnace Road', 'D-4 Blast Furnace Road'),
-    ('Gap Gate Road', 'Gap Gate Road'),
-    ('#3 Ore Dock Road', '#3 Ore Dock Road'),
-    ('River Road', 'River Road'),
-    ('Weigh Station Road', 'Weigh Station Road'),
-    ('Zug Island Road', 'Zug Island Road')
+    ('p1', '#4 Booster Station'),
+    ('p2', '#5 Battery Road'),
+    ('p3', 'Coal Dump Horseshoe'),
+    ('p4', 'Coal Handling Road (Partial)'),
+    ('p5', 'Coke Plant Road'),
+    ('p6', 'Coke Plant Mech Road'),
+    ('p7', 'North Gate Area'),
+    ('p8', 'Compund Road'),
+    ('p9', 'D-4 Blast Furnace Road'),
+    ('p10', 'Gap Gate Road'),
+    ('p11', '#3 Ore Dock Road'),
+    ('p12', 'River Road'),
+    ('p13', 'Weigh Station Road'),
+    ('p14', 'Zug Island Road')
 )
 unpaved_roads = (
     ('North Gate Truck Turn', 'North Gate Truck Turn'),
@@ -209,6 +209,10 @@ days_choices = (
     ('4', 'Fridays'),
     ('5', 'Saturdays'),
     ('6', 'Sundays'),
+)
+weekend_choices = (
+    ('5', 'Saturday'),
+    ('6', 'Sunday'),
 )
 all_users = User.objects.all()
 all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
@@ -3462,6 +3466,15 @@ class formI_model(models.Model):
     
 #----------------------------------------------------------------------FORM L---------------<
 class formL_model(models.Model):
+    all_users = User.objects.all()
+    all_user_choices_0 = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    all_user_choices_1 = ((h.get_full_name(), h.get_full_name()) for h in all_users)
+    all_user_choices_2 = ((a.get_full_name(), a.get_full_name()) for a in all_users)
+    all_user_choices_3 = ((b.get_full_name(), b.get_full_name()) for b in all_users)
+    all_user_choices_4 = ((c.get_full_name(), c.get_full_name()) for c in all_users)
+    all_user_choices_5 = ((d.get_full_name(), d.get_full_name()) for d in all_users)
+    all_user_choices_6 = ((e.get_full_name(), e.get_full_name()) for e in all_users)
+    
     today = datetime.date.today()
     
     week_start = models.DateField(
@@ -3518,36 +3531,43 @@ class formL_model(models.Model):
     )
     obser_0 = models.CharField(
         max_length=30,
+        choices = all_user_choices_0,
         blank=True,
         null=True
     )
     obser_1 = models.CharField(
         max_length=30,
+        choices = all_user_choices_1,
         blank=True,
         null=True
     )
     obser_2 = models.CharField(
         max_length=30,
+        choices = all_user_choices_2,
         blank=True,
         null=True
     )
     obser_3 = models.CharField(
         max_length=30,
+        choices = all_user_choices_3,
         blank=True,
         null=True
     )
     obser_4 = models.CharField(
         max_length=30,
+        choices = all_user_choices_4,
         blank=True,
         null=True
     )
     obser_5 = models.CharField(
         max_length=30,
+        choices = all_user_choices_5,
         blank=True,
         null=True
     )
     obser_6 = models.CharField(
         max_length=30,
+        choices = all_user_choices_6,
         blank=True,
         null=True
     )
@@ -3781,6 +3801,175 @@ class formM_model(models.Model):
     def __str__(self):
         return str(self.date)
     
+class formM_readings_model(models.Model):
+    form = models.OneToOneField(
+        formM_model, 
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    pav_1 = models.CharField(
+        max_length=30,
+    )
+    pav_2 = models.CharField(
+        max_length=30,
+    )
+    pav_3 = models.CharField(
+        max_length=30,
+    )
+    pav_4 = models.CharField(
+        max_length=30,
+    )
+    pav_5 = models.CharField(
+        max_length=30,
+    )
+    pav_6 = models.CharField(
+        max_length=30,
+    )
+    pav_7 = models.CharField(
+        max_length=30,
+    )
+    pav_8 = models.CharField(
+        max_length=30,
+    )
+    pav_9 = models.CharField(
+        max_length=30,
+    )
+    pav_10 = models.CharField(
+        max_length=30,
+    )
+    pav_11 = models.CharField(
+        max_length=30,
+    )
+    pav_12 = models.CharField(
+        max_length=30,
+    )
+    
+    unp_1 = models.CharField(
+        max_length=30,
+    )
+    unp_2 = models.CharField(
+        max_length=30,
+    )
+    unp_3 = models.CharField(
+        max_length=30,
+    )
+    unp_4 = models.CharField(
+        max_length=30,
+    )
+    unp_5 = models.CharField(
+        max_length=30,
+    )
+    unp_6 = models.CharField(
+        max_length=30,
+    )
+    unp_7 = models.CharField(
+        max_length=30,
+    )
+    unp_8 = models.CharField(
+        max_length=30,
+    )
+    unp_9 = models.CharField(
+        max_length=30,
+    )
+    unp_10 = models.CharField(
+        max_length=30,
+    )
+    unp_11 = models.CharField(
+        max_length=30,
+    )
+    unp_12 = models.CharField(
+        max_length=30,
+    )
+    
+    par_1 = models.CharField(
+        max_length=30,
+    )
+    par_2 = models.CharField(
+        max_length=30,
+    )
+    par_3 = models.CharField(
+        max_length=30,
+    )
+    par_4 = models.CharField(
+        max_length=30,
+    )
+    par_5 = models.CharField(
+        max_length=30,
+    )
+    par_6 = models.CharField(
+        max_length=30,
+    )
+    par_7 = models.CharField(
+        max_length=30,
+    )
+    par_8 = models.CharField(
+        max_length=30,
+    )
+    par_9 = models.CharField(
+        max_length=30,
+    )
+    par_10 = models.CharField(
+        max_length=30,
+    )
+    par_11 = models.CharField(
+        max_length=30,
+    )
+    par_12 = models.CharField(
+        max_length=30,
+    )
+    
+    storage_1 = models.CharField(
+        max_length=30,
+    )
+    storage_2 = models.CharField(
+        max_length=30,
+    )
+    storage_3 = models.CharField(
+        max_length=30,
+    )
+    storage_4 = models.CharField(
+        max_length=30,
+    )
+    storage_5 = models.CharField(
+        max_length=30,
+    )
+    storage_6 = models.CharField(
+        max_length=30,
+    )
+    storage_7 = models.CharField(
+        max_length=30,
+    )
+    storage_8 = models.CharField(
+        max_length=30,
+    )
+    storage_9 = models.CharField(
+        max_length=30,
+    )
+    storage_10 = models.CharField(
+        max_length=30,
+    )
+    storage_11 = models.CharField(
+        max_length=30,
+    )
+    storage_12 = models.CharField(
+        max_length=30,
+    )
+    pav_total = models.CharField(
+        max_length=30,
+    )
+    unp_total = models.CharField(
+        max_length=30,
+    )
+    par_total = models.CharField(
+        max_length=30,
+    )
+    storage_total = models.CharField(
+        max_length=30,
+    )
+    
+    def __str__(self):
+        return str(self.form)
+    
 class formO_model(models.Model):
     all_users = User.objects.all()
     all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
@@ -3795,6 +3984,10 @@ class formO_model(models.Model):
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False
+    )
+    weekend_day = models.CharField(
+        max_length=30,
+        choices = weekend_choices
     )
     Q_1 = models.CharField(
         max_length=30, 
@@ -3856,6 +4049,10 @@ class formP_model(models.Model):
     date = models.DateField(
         auto_now_add=False, 
         auto_now=False
+    )
+    weekend_day = models.CharField(
+        max_length=30,
+        choices = weekend_choices
     )
     Q_1 = models.CharField(
         max_length=30, 
