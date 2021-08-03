@@ -1,0 +1,179 @@
+.tileGroup{
+    display: inline-flex;
+    margin-right: 0;
+    margin-left: 0;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+.c_tiles{
+    padding-right: 0;
+    padding-left: 0;
+    margin-bottom: 1rem!important;
+    flex: 0 0 21%;
+    max-width: 25%;
+    background-color: #0e1c2f;
+    box-shadow: #0000007d 4px 7px 12px 3px;
+    margin: .5rem;
+    border-radius: 1rem;
+}
+.c_univ_header {
+    padding: 1rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #0e1c2f;
+    border-bottom: 0 solid #061325;
+    padding-bottom: 0;
+    border-radius: calc(.375rem - 0px) calc(.375rem - 0px) 0 0;
+}
+.c_univ_header h6{
+    margin-bottom: 0;
+    font-family: Poppins,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: white;
+    font-size: .9rem;
+}
+
+
+.inner_tiny_box_left{
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+}
+.inner_tiny_box_left h6{
+    font-size: 1.5rem;
+    font-family: sans-serif;
+    background-color: #193050;
+    border-radius: .6rem;
+    color: white;
+}
+
+.inner_tiny_box_right{
+    flex: 0 0 auto;
+    width: 50%;
+    max-width: 100%;
+    position: relative;
+    padding-right: 15px;
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+}
+.inner_tiny_box_right h6{
+    font-size: 1.5rem;
+    font-family: sans-serif;
+    background-color: #193050;
+    border-radius: .6rem;
+    color: white;
+}
+.tile_body{
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-end;
+    border-bottom-left-radius: .375rem;
+    border-bottom-right-radius: .375rem;
+    background-color: #0e1c2f;
+}
+.content_holder{
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    box-sizing: border-box;
+}
+.tiny_box_div{
+    position: relative;
+    width: 100%;
+    height: 61px;
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+    cursor: default;
+}
+.inner_tiny_box_single{
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+}
+.inner_tiny_box_single table{
+    font-size: 1rem;
+    font-family: sans-serif;
+    background-color: #193050;
+    border-radius: .6rem;
+    color: white;
+    padding: .3rem;
+    margin: auto;
+}
+#table_left{
+    padding-left: .2rem;
+}
+#table_right{
+    padding-left: 2.6rem; 
+    padding-right: 1rem;
+    text-align: center;
+    width: fit-content;
+}
+.c_card{
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #0e1c2f;
+    background-clip: border-box;
+    border: 0 solid #061325;
+    border-radius: .375rem;
+    box-sizing: border-box;
+}
+.c_card_header h6{
+    margin-bottom: 0;
+    font-family: Poppins,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: white;
+    font-size: .9rem;
+    margin-top: 0;
+}
+.c_card_header{
+    border-radius: calc(.375rem - 0px) calc(.375rem - 0px) 0 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0;
+    background-color: #0e1c2f;
+    border-bottom: 0 solid #061325;
+    box-sizing: border-box;
+    display: block;
+}
+.c_card_body{
+    padding-bottom: 0;
+    padding-top: 0;
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    display: block;
+}
+.c_row_design{
+    border-color: #061325;
+    border-bottom: 1px solid rgba(163,203,255,.16);
+    padding-bottom: .5rem;
+    padding-top: .5rem;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    box-sizing: border-box;
+}

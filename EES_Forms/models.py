@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 import datetime
-from django.db.models import Q
+from django.db.models import Q, F
 
 
 truck_choices = (
@@ -243,10 +243,10 @@ class formC_model(models.Model):
     date = models.DateField(auto_now_add=False, auto_now=False)
     truck_sel = models.CharField(max_length=30, choices=truck_choices)
     area_sel = models.CharField(max_length=30, choices=area_choices)
-    truck_start_time = models.TimeField(max_length=30)
-    truck_stop_time = models.TimeField(max_length=30)
-    area_start_time = models.TimeField(max_length=30)
-    area_stop_time = models.TimeField(max_length=30)
+    truck_start_time = models.TimeField()
+    truck_stop_time = models.TimeField()
+    area_start_time = models.TimeField()
+    area_stop_time = models.TimeField()
     observer = models.CharField(
         max_length=30,
         choices = all_user_choices
@@ -260,6 +260,18 @@ class formC_model(models.Model):
     )
     average_t = models.IntegerField(blank=True)
     average_p = models.IntegerField(blank=True)
+    
+    def clean_t(self):
+        if self.truck_start_time > self.truck_stop_time:
+            raise ValidationError('Start should be before end')
+        return super().clean()
+    
+    def clean_a(self):
+        if self.area_start_time > self.area_stop_time:
+            raise ValidationError('Start should be before end')
+        return super().clean()
+    
+    
     
     def __str__(self):
         return str(self.date)

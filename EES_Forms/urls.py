@@ -61,4 +61,12 @@ urlpatterns = [
     path("add_event", views.event_add_view, name="Add Event"),
     path("event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
    # path("calendar", views.CalendarView.as_view(), name='calendar'),
+    
+    
+    
+    
+    
+    
+    
+    path("c_dashboard", views.c_dashboard_view, name="c_dashboard"),
 ]

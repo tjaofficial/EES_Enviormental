@@ -28,6 +28,14 @@ class SubFormC1(ModelForm):
             'average_t' : forms.NumberInput(attrs={'id':'average_t', 'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
             'average_p' : forms.NumberInput(attrs={'id':'average_p', 'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
         }
+        
+        def clean(self):
+            cleaned_data = super().clean()
+            start_time = cleaned_data.get("truck_start_time")
+            end_time = cleaned_data.get("truck_stop_time")
+            print('chciken')
+            if end_time < start_time:
+                raise forms.ValidationError("End time should be later than start time.")
     
 class FormCReadForm(ModelForm):
     class Meta:

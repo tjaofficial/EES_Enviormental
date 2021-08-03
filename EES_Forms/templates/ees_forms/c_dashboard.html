@@ -1,0 +1,126 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list %}
+{% load static %}
+<link href="{% static 'ees_forms/style/client_dashboard.css' %}" rel="stylesheet">
+<div class="tileGroup">
+    <div class="c_tiles">
+        <div class="c_univ_header">
+            <h6>Highest Push Travel Reads</h6>  
+        </div>
+        <div class="tile_body">
+            <div class="content_holder">
+                <div class="inner_tiny_box_left">
+                    <h6>PUSH<br>
+                    {{ high_push }}</h6>
+                </div>
+                <div class="inner_tiny_box_right">
+                    <div class="tiny_box_div">
+                        <h6>TRAVEL<br>
+                        {{ high_travel }}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="c_tiles">
+        <a href="{% url 'Schedule' %}">
+            <div class="c_univ_header">
+                <h6>Battery Profile</h6>  
+            </div>
+            <div class="tile_body">
+                <div class="content_holder">
+                    <div class="inner_tiny_box_single">
+                        <table>
+                            <tr>
+                                <td id="table_left">
+                                    Observer:
+                                </td>
+                                <td id="table_right">
+                                    {{ todays_obser }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="table_left">
+                                    Foreman:
+                                </td>
+                                <td id="table_right">
+                                    {{ todays_log.foreman }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="table_left">
+                                    Crew:
+                                </td>
+                                <td id="table_right">
+                                    {{ todays_log.crew }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         </a>
+    </div>
+   
+    <div class="c_tiles">
+        <div class="c_univ_header">
+            <h6>Monthly Inspections</h6>  
+        </div>
+        <div class="tile_body">
+            <div class="content_holder">
+                <div class="inner_tiny_box_left">
+                    <h6>PUSH<br>
+                    {{ high_push }}</h6>
+                </div>
+                <div class="inner_tiny_box_right">
+                    <div class="tiny_box_div">
+                        <h6>TRAVEL<br>
+                        {{ high_travel }}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="c_tiles">
+        <div class="c_univ_header">
+            <h6>Highest Push Travel Reads</h6>  
+        </div>
+        <div class="tile_body">
+            <div class="content_holder">
+                <div class="inner_tiny_box_left">
+                    <h6>PUSH<br>
+                    {{ high_push }}</h6>
+                </div>
+                <div class="inner_tiny_box_right">
+                    <div class="tiny_box_div">
+                        <h6>TRAVEL<br>
+                        {{ high_travel }}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tileGroup">
+    <div class="c_card">
+        <div class="c_card_header">
+            <h6>90 Day Push Travel Evaluation</h6>
+        </div>
+        <div class="c_card_body">
+            <div class="c_card_row">
+                <ul>
+                    {% for x in od_30 %}
+                    <div class="c_row_design">
+                        <li>
+                            #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
+                        </li>
+                    </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

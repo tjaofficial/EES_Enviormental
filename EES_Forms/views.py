@@ -2055,8 +2055,8 @@ def formC(request, selector):
                         read = FormCReadForm(initial=initial_data)
 
                         if request.method == "POST":
-                            CReadings = FormCReadForm(request.POST)
-                            CData = SubFormC1(request.POST)
+                            CData = SubFormC1(request.POST,instance = database_form )
+                            CReadings = FormCReadForm(request.POST, instance = database_form2 )
                             A_valid = CReadings.is_valid()
                             B_valid = CData.is_valid()
 
@@ -5862,6 +5862,7 @@ def search_forms_view(request, access_page):
         Model = apps.get_model('EES_Forms', access_page)
         ModelForms = Forms.objects.all()
         chk_database = Model.objects.count()
+        weekend = False
         
         if chk_database == 0:
             att_check = 5
@@ -5906,6 +5907,7 @@ def search_forms_view(request, access_page):
         searched = request.POST['searched']
         database = ''
         att_check = ''
+        weekend = False
         
         
         form_list = Forms.objects.filter(Q(form__icontains= searched) | Q(frequency__icontains= searched) | Q(title__icontains= searched))
@@ -5923,6 +5925,139 @@ def search_forms_view(request, access_page):
         return render(request, 'ees_forms/search_forms.html', {
         'profile':profile,'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend,
         })
+    
+    
+def c_dashboard_view(request):
+    profile = user_profile_model.objects.all()
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+#-----PUSH TRAVELS--------------
+
+    org = formA5_model.objects.all().order_by('-date')
+    database_form = org[0]
+    org2 = formA5_readings_model.objects.all().order_by('-form')
+    database_form2 = org2[0]
+    
+    if str(todays_log.date_save) == str(database_form.date):
+        high_push = '27%'
+        high_travel = '5%'
+#----USER ON SCHEDULE----------
+
+    event_cal = Event.objects.all()
+    today = datetime.date.today()
+    
+    for x in event_cal:
+        if x.date == today:
+            todays_obser = x.observer
+#---90 DAY PUSH-------
+
+    reads = formA5_readings_model.objects.all()
+    data = formA5_model.objects.all()
+    
+    def all_ovens(reads):
+        A = []
+        for items in reads:
+            date = items.form.date
+          #  date_array = date.split("-")
+            
+            year = date.year
+            month = date.month
+            day = date.day
+            
+            form_date = datetime.datetime(year, month, day)
+            added_date = form_date + datetime.timedelta(days=91)
+            due_date = added_date - datetime.datetime.now() 
+            
+            if len(str(items.o1)) == 1 :
+                oven1 = "0" + str(items.o1)
+            else:
+                oven1 = items.o1
+            A.append((oven1, items.form.date, added_date.date, due_date.days)) 
+            
+            if len(str(items.o2)) == 1 :
+                oven2 = "0" + str(items.o2)
+            else:
+                oven2 = items.o2
+            A.append((oven2, items.form.date, added_date.date, due_date.days))
+                
+            if len(str(items.o3)) == 1 :
+                oven3 = "0" + str(items.o3)
+            else:
+                oven3 = items.o3
+            A.append((oven3, items.form.date, added_date.date, due_date.days))    
+                
+            if len(str(items.o4)) == 1 :
+                oven4 = "0" + str(items.o4)
+            else:
+                oven4 = items.o4
+            A.append((oven4, items.form.date, added_date.date, due_date.days))      
+
+        return A   
+    
+    hello = all_ovens(reads)
+    func = lambda x: (x[0], x[1])
+    sort = sorted(hello, key = func, reverse=True)
+   # print (sort)
+    
+    def final(sort):
+        B = []
+        i = 1
+        for new in sort:
+            B.append(new)
+        
+        for x in sort:
+            for y in range(i, len(sort)):
+                tree = sort[y]
+                if tree[0] == x[0]:
+                    if tree in B:
+                        B.remove(tree)
+            i+=1
+        return B
+    cool = final(sort)
+    
+    def overdue_30(cool):
+        C = []
+        for x in cool:
+            if x[3] <= 30 :
+                C.append(x)
+        return C
+    
+    def overdue_10(cool):
+        D = []
+        for x in cool:
+            if x[3] <= 10 :
+                D.append(x)
+        return D
+    
+    def overdue_5(cool):
+        E = []
+        for x in cool:
+            if x[3] <= 5 :
+                E.append(x)
+        return E
+    
+    def overdue_closest(cool):
+        F = []
+        
+        func2 = lambda R: (R[3])  
+        sort2 = sorted(cool, key = func2)
+        most_recent = sort2[0][3]
+        
+        for x in sort2:
+            if x[3] == most_recent:
+                F.append(x)
+        return F
+    
+    od_30 = overdue_30(cool)
+    od_10 = overdue_10(cool)
+    od_5 = overdue_5(cool)
+    od_recent = overdue_closest(cool)
+    
+    
+    
+    return render(request, 'ees_forms/c_dashboard.html',{
+        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 
+    })
     
     
 
