@@ -90,12 +90,14 @@
                     </h4>&nbsp; {{ picker.notified }}
                 </div>
                 <br>
-             
+                {% if unlock %}
                 <div style="text-align: right;">
                     <a href="../../../issues_view/{{picker.form}}/{{picker.date.year}}-{% if picker.date.month < 10 %}0{{picker.date.month}}{% endif %}-{{picker.date.day}}/edit">
                         Edit
                     </a>
                 </div>
+                {% else %}
+                {% endif %}
                 <br>
             </div>
             

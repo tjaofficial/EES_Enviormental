@@ -3,124 +3,285 @@
 {% block list %}
 {% load static %}
 <link href="{% static 'ees_forms/style/client_dashboard.css' %}" rel="stylesheet">
-<div class="tileGroup">
-    <div class="c_tiles">
-        <div class="c_univ_header">
-            <h6>Highest Push Travel Reads</h6>  
-        </div>
-        <div class="tile_body">
-            <div class="content_holder">
-                <div class="inner_tiny_box_left">
-                    <h6>PUSH<br>
-                    {{ high_push }}</h6>
-                </div>
-                <div class="inner_tiny_box_right">
-                    <div class="tiny_box_div">
-                        <h6>TRAVEL<br>
-                        {{ high_travel }}</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="c_tiles">
-        <a href="{% url 'Schedule' %}">
-            <div class="c_univ_header">
-                <h6>Battery Profile</h6>  
+<div class="c_center_dash">
+    <div class="tileGroup">
+        <div class="c_tiles main_background">
+            <div class="c_univ_header c_header_font_color">
+                <h6>Highest Push Travel Reads</h6>  
             </div>
             <div class="tile_body">
                 <div class="content_holder">
-                    <div class="inner_tiny_box_single">
-                        <table>
-                            <tr>
-                                <td id="table_left">
-                                    Observer:
-                                </td>
-                                <td id="table_right">
-                                    {{ todays_obser }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="table_left">
-                                    Foreman:
-                                </td>
-                                <td id="table_right">
-                                    {{ todays_log.foreman }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td id="table_left">
-                                    Crew:
-                                </td>
-                                <td id="table_right">
-                                    {{ todays_log.crew }}
-                                </td>
-                            </tr>
-                        </table>
+                    <div class="inner_tiny_box_left">
+                        <h6 class="c_client_card_background c_font_color">PUSH<br>
+                        {{ high_push }}</h6>
+                    </div>
+                    <div class="inner_tiny_box_right">
+                        <div class="tiny_box_div">
+                            <h6 class="c_client_card_background c_font_color">TRAVEL<br>
+                            {{ high_travel }}</h6>
+                        </div>
                     </div>
                 </div>
             </div>
-         </a>
+        </div>
+        <div class="c_tiles main_background">
+            <a href="{% url 'Schedule' %}">
+                <div class="c_univ_header c_header_font_color">
+                    <h6>Battery Profile</h6>  
+                </div>
+                <div class="tile_body">
+                    <div class="content_holder">
+                        <div class="inner_tiny_box_single">
+                            <table class="c_client_card_background c_font_color">
+                                <tr>
+                                    <td id="table_left">
+                                        Observer:
+                                    </td>
+                                    <td id="table_right">
+                                        {{ todays_obser }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="table_left">
+                                        Foreman:
+                                    </td>
+                                    <td id="table_right">
+                                        {{ todays_log.foreman }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="table_left">
+                                        Crew:
+                                    </td>
+                                    <td id="table_right">
+                                        {{ todays_log.crew }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+             </a>
+        </div>
+        <div class="c_tiles main_background">
+            <div class="c_univ_header c_header_font_color">
+                <h6>Monthly Inspections</h6>  
+            </div>
+            <div class="tile_body">
+                <div class="content_holder">
+                    <div class="inner_tiny_box_left">
+                        <h6 class="c_client_card_background c_font_color">PUSH<br>
+                        {{ high_push }}</h6>
+                    </div>
+                    <div class="inner_tiny_box_right">
+                        <div class="tiny_box_div">
+                            <h6 class="c_client_card_background c_font_color">TRAVEL<br>
+                            {{ high_travel }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="c_tiles main_background">
+            <div class="c_univ_header c_header_font_color">
+                <h6>Highest Push Travel Reads</h6>  
+            </div>
+            <div class="tile_body">
+                <div class="content_holder">
+                    <div class="inner_tiny_box_left">
+                        <h6 class="c_client_card_background c_font_color">PUSH<br>
+                        {{ high_push }}</h6>
+                    </div>
+                    <div class="inner_tiny_box_right">
+                        <div class="tiny_box_div">
+                            <h6 class="c_client_card_background c_font_color">TRAVEL<br>
+                            {{ high_travel }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-   
-    <div class="c_tiles">
-        <div class="c_univ_header">
-            <h6>Monthly Inspections</h6>  
+    <div class="tileGroup">
+    <div class="c_card">
+        <div class="c_card_header main_background c_header_font_color">
+            <h6>90 Day Push Travel Evaluation (Top 5)</h6>
         </div>
-        <div class="tile_body">
-            <div class="content_holder">
-                <div class="inner_tiny_box_left">
-                    <h6>PUSH<br>
-                    {{ high_push }}</h6>
+        <div class="c_card_body c_client_card_background c_font_color">
+            <div class="c_card_row">
+                <div class="c_row_design">
+                    <div class="c_hold_both">
+                        <div class="c_card_circle_container">
+                            <div class="c_card_cirle c_circle_background_color">
+                                <span class="c_card_circle_oven c_circle_font_color">
+                                    #{{ od_30.0.0 }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder">
+                            <div class="c_card_data1">
+                                <h4><sup>LAST:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.0.1 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>DUE:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.0.2 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</h4>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder2">
+                            <div class="c_card_data2">
+                                <div class="c_card_data2_days">
+                                    {{ od_30.0.3 }} Days Left
+                                </div>
+                                <div class="c_bar_holder">
+                                    <div class="c_bar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="inner_tiny_box_right">
-                    <div class="tiny_box_div">
-                        <h6>TRAVEL<br>
-                        {{ high_travel }}</h6>
+                <div class="c_row_design">
+                    <div class="c_hold_both">
+                        <div class="c_card_circle_container">
+                            <div class="c_card_cirle c_circle_background_color">
+                                <span class="c_card_circle_oven c_circle_font_color">
+                                    #{{ od_30.1.0 }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder">
+                            <div class="c_card_data1">
+                                <h4><sup>LAST:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.1.1 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>DUE:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.1.2 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</h4>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder2">
+                            <div class="c_card_data2">
+                                <div class="c_card_data2_days">
+                                    {{ od_30.1.3 }} Days Left
+                                </div>
+                                <div class="c_bar_holder">
+                                    <div class="c_bar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="c_row_design">
+                    <div class="c_hold_both">
+                        <div class="c_card_circle_container">
+                            <div class="c_card_cirle c_circle_background_color">
+                                <span class="c_card_circle_oven c_circle_font_color">
+                                    #{{ od_30.2.0 }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder">
+                            <div class="c_card_data1">
+                                <h4><sup>LAST:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.2.1 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>DUE:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.2.2 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</h4>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder2">
+                            <div class="c_card_data2">
+                                <div class="c_card_data2_days">
+                                    {{ od_30.2.3 }} Days Left
+                                </div>
+                                <div class="c_bar_holder">
+                                    <div class="c_bar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="c_row_design">
+                    <div class="c_hold_both">
+                        <div class="c_card_circle_container">
+                            <div class="c_card_cirle c_circle_background_color">
+                                <span class="c_card_circle_oven c_circle_font_color">
+                                    #{{ od_30.3.0 }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder">
+                            <div class="c_card_data1">
+                                <h4><sup>LAST:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.3.1 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>DUE:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.3.2 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</h4>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder2">
+                            <div class="c_card_data2">
+                                <div class="c_card_data2_days">
+                                    {{ od_30.3.3 }} Days Left
+                                </div>
+                                <div class="c_bar_holder">
+                                    <div class="c_bar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="c_row_design_end">
+                    <div class="c_hold_both">
+                        <div class="c_card_circle_container">
+                            <div class="c_card_cirle c_circle_background_color">
+                                <span class="c_card_circle_oven c_circle_font_color">
+                                    #{{ od_30.4.0 }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder">
+                            <div class="c_card_data1">
+                                <h4><sup>LAST:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.4.1 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sup>DUE:</sup>&nbsp;&nbsp;&nbsp;{{ od_30.4.2 }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</h4>
+                            </div>
+                        </div>
+                        <div class="c_card_data_holder2">
+                            <div class="c_card_data2">
+                                <div class="c_card_data2_days">
+                                    {{ od_30.4.3 }} Days Left
+                                </div>
+                                <div class="c_bar_holder">
+                                    <div class="c_bar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="c_card_footer main_background">
+            <a href="{% url 'pt_admin1' %}">
+                Show all ovens
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="link_arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>
+            </a>
         </div>
     </div>
-    <div class="c_tiles">
-        <div class="c_univ_header">
-            <h6>Highest Push Travel Reads</h6>  
+     <div class="c_card">
+        <div class="c_card_header main_background c_header_font_color">
+            <h6>90 Day Push Travel Evaluation</h6>
         </div>
-        <div class="tile_body">
-            <div class="content_holder">
-                <div class="inner_tiny_box_left">
-                    <h6>PUSH<br>
-                    {{ high_push }}</h6>
-                </div>
-                <div class="inner_tiny_box_right">
-                    <div class="tiny_box_div">
-                        <h6>TRAVEL<br>
-                        {{ high_travel }}</h6>
+        <div class="c_card_body c_client_card_background c_font_color">
+            <div class="c_card_row">
+                    {% for x in od_30 %}
+                    <div class="c_row_design">
+                        <div class="c_card_circle_container">
+                            <div class="c_card_cirle c_circle_background_color">
+                                <span class="c_card_circle_oven c_circle_font_color">
+                                    #{{ x.0 }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="c_card_data">
+                            &nbsp;{{ x.2 }}<br>{{ x.3 }}
+                        </div>
                     </div>
-                </div>
+                    {% endfor %}
             </div>
+        </div>
+        <div class="c_card_footer main_background">
+            <a href="">
+                Show all ovens
+                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="link_arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>
+            </a>
         </div>
     </div>
 </div>
-<div class="tileGroup">
-    <div class="c_card">
-        <div class="c_card_header">
-            <h6>90 Day Push Travel Evaluation</h6>
-        </div>
-        <div class="c_card_body">
-            <div class="c_card_row">
-                <ul>
-                    {% for x in od_30 %}
-                    <div class="c_row_design">
-                        <li>
-                            #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
-                        </li>
-                    </div>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}

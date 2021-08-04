@@ -2,14 +2,14 @@
 {% load static %}
 <script defer src="{% static 'ees_forms/script/header.js' %}"></script>
 
-    <div class="header">
-        <div id="button_hamburger" class="header_hamburger" data-controls="sidebar">
+    <div class="header main_background">
+        <div id="button_hamburger" class="header_hamburger header_text_color" data-controls="sidebar">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg>
         </div>
-        <div class="header_Name">
+        <div class="header_Name header_text_color">
             ENVIORMENTAL PROGRAM
         </div>
-        <div id="button_profile" class="header_profile" data-controls="profileDropdown">
+        <div id="button_profile" class="header_profile header_text_color" data-controls="profileDropdown">
             {% for x in profile %}
                 {% if x.user == request.user %}
                     {% if x.profile_picture %}

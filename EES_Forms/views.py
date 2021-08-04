@@ -16,6 +16,8 @@ from .utils import DBEmpty, EventCalendar, Calendar
 from dateutil.relativedelta import relativedelta
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist, FieldError
+import requests
+from django.contrib.auth.models import User, Group
 
 
 
@@ -28,7 +30,7 @@ sub_forms = Forms.objects.all()
 today = datetime.date.today()
 now = datetime.datetime.now()
 profile = user_profile_model.objects.all()
-    
+
     
 
 #--------------------------------------------------------------------------REGISTER---------<
@@ -151,170 +153,172 @@ def logout_view(request):
 #------------------------------------------------------------------------INCOMPLETE FORMS---------<
 @lock
 def IncompleteForms(request):
-    profile = user_profile_model.objects.all()
-    today = datetime.date.today()
-    todays_num = today.weekday()
-    sub_forms = Forms.objects.all()
-    reads = formA5_readings_model.objects.all()
-    today_str = str(today)
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
     
-    weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
-    weekend_fri = weekday_fri + datetime.timedelta(days=7)
-    
-    
-#-ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
-#-ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
-    if Forms.objects.count() <= 5:
-        A1 = Forms(
-            form="A-1", 
-            frequency="Daily", 
-            link="Daily/Method303/formA1", 
-            header="Method 303/ Method 9B",
-            title="Charging", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        A2 = Forms(
-            form="A-2", 
-            frequency="Daily", 
-            link="Daily/Method303/formA2", 
-            header="Method 303/ Method 9B",
-            title="Doors", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        A3 = Forms(
-            form="A-3", 
-            frequency="Daily", 
-            link="Daily/Method303/formA3", 
-            header="Method 303/ Method 9B",
-            title="Lids and Offtakes", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        A4 = Forms(
-            form="A-4", 
-            frequency="Daily", 
-            link="Daily/Method303/formA4", 
-            header="Method 303/ Method 9B",
-            title="Collection Main", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        A5 = Forms(
-            form="A-5", 
-            frequency="Daily", 
-            link="Daily/Method303/formA5", 
-            header="Method 303/ Method 9B",
-            title="Push Travels", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        B = Forms(
-            form="B", 
-            frequency="Daily", 
-            link="Daily/formB", 
-            header="",
-            title="Fugitive Dust Inspection", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        C = Forms(
-            form="C", 
-            frequency="Daily", 
-            link="Daily/formC", 
-            header="",
-            title="Method 9D - Coal Field", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        D = Forms(
-            form="D", 
-            frequency="Daily", 
-            link="Daily/formD", 
-            header="",
-            title="Random Truck Inspection", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        E = Forms(
-            form="E", 
-            frequency="Daily", 
-            link="Daily/formE", 
-            header="",
-            title="Gooseneck Inspection", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F1 = Forms(
-            form="F-1", 
-            frequency="Weekly", 
-            link="Weekly/formF1", 
-            header="Waste Weekly Inspections",
-            title="SIF / K087 Process Area (Satellite)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F2 = Forms(
-            form="F-2", 
-            frequency="Weekly", 
-            link="Weekly/formF2", 
-            header="Waste Weekly Inspections",
-            title="#1 Shop (Satellite Accumulation)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F3 = Forms(
-            form="F-3", 
-            frequency="Weekly", 
-            link="Weekly/formF3", 
-            header="Waste Weekly Inspections",
-            title="#2 Shop (Satellite Accumulation)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F4 = Forms(
-            form="F-4", 
-            frequency="Weekly", 
-            link="Weekly/formF4", 
-            header="Waste Weekly Inspections",
-            title="Battery (Satellite Accumulation)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F5 = Forms(
-            form="F-5", 
-            frequency="Weekly", 
-            link="Weekly/formF5", 
-            header="Waste Weekly Inspections",
-            title="Bio Plant (Satellite Accumulation)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F6 = Forms(
-            form="F-6", 
-            frequency="Weekly", 
-            link="Weekly/formF6", 
-            header="Waste Weekly Inspections",
-            title="No. 8 Tank Area (Satellite Accumulation)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        F7 = Forms(
-            form="F-7", 
-            frequency="Weekly", 
-            link="Weekly/formF7", 
-            header="Waste Weekly Inspections",
-            title="Booster Pad (90-Day Accumulation)", 
-            due_date=today, 
-            date_submitted= today - datetime.timedelta(days=1), 
-            submitted= False,)
-        
-    
-    
-#--------------------------------------------Closest Oven Due-----------------    
-#--------------------------------------------Closest Oven Due-----------------       
-#--------------------------------------------Closest Oven Due-----------------    
+        profile = user_profile_model.objects.all()
+        today = datetime.date.today()
+        todays_num = today.weekday()
+        sub_forms = Forms.objects.all()
+        reads = formA5_readings_model.objects.all()
+        today_str = str(today)
+
+        weekday_fri = today + datetime.timedelta(days= 4 - todays_num)
+        weekend_fri = weekday_fri + datetime.timedelta(days=7)
+
+
+    #-ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
+    #-ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
+        if Forms.objects.count() <= 5:
+            A1 = Forms(
+                form="A-1", 
+                frequency="Daily", 
+                link="Daily/Method303/formA1", 
+                header="Method 303/ Method 9B",
+                title="Charging", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            A2 = Forms(
+                form="A-2", 
+                frequency="Daily", 
+                link="Daily/Method303/formA2", 
+                header="Method 303/ Method 9B",
+                title="Doors", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            A3 = Forms(
+                form="A-3", 
+                frequency="Daily", 
+                link="Daily/Method303/formA3", 
+                header="Method 303/ Method 9B",
+                title="Lids and Offtakes", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            A4 = Forms(
+                form="A-4", 
+                frequency="Daily", 
+                link="Daily/Method303/formA4", 
+                header="Method 303/ Method 9B",
+                title="Collection Main", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            A5 = Forms(
+                form="A-5", 
+                frequency="Daily", 
+                link="Daily/Method303/formA5", 
+                header="Method 303/ Method 9B",
+                title="Push Travels", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            B = Forms(
+                form="B", 
+                frequency="Daily", 
+                link="Daily/formB", 
+                header="",
+                title="Fugitive Dust Inspection", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            C = Forms(
+                form="C", 
+                frequency="Daily", 
+                link="Daily/formC", 
+                header="",
+                title="Method 9D - Coal Field", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            D = Forms(
+                form="D", 
+                frequency="Daily", 
+                link="Daily/formD", 
+                header="",
+                title="Random Truck Inspection", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            E = Forms(
+                form="E", 
+                frequency="Daily", 
+                link="Daily/formE", 
+                header="",
+                title="Gooseneck Inspection", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F1 = Forms(
+                form="F-1", 
+                frequency="Weekly", 
+                link="Weekly/formF1", 
+                header="Waste Weekly Inspections",
+                title="SIF / K087 Process Area (Satellite)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F2 = Forms(
+                form="F-2", 
+                frequency="Weekly", 
+                link="Weekly/formF2", 
+                header="Waste Weekly Inspections",
+                title="#1 Shop (Satellite Accumulation)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F3 = Forms(
+                form="F-3", 
+                frequency="Weekly", 
+                link="Weekly/formF3", 
+                header="Waste Weekly Inspections",
+                title="#2 Shop (Satellite Accumulation)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F4 = Forms(
+                form="F-4", 
+                frequency="Weekly", 
+                link="Weekly/formF4", 
+                header="Waste Weekly Inspections",
+                title="Battery (Satellite Accumulation)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F5 = Forms(
+                form="F-5", 
+                frequency="Weekly", 
+                link="Weekly/formF5", 
+                header="Waste Weekly Inspections",
+                title="Bio Plant (Satellite Accumulation)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F6 = Forms(
+                form="F-6", 
+                frequency="Weekly", 
+                link="Weekly/formF6", 
+                header="Waste Weekly Inspections",
+                title="No. 8 Tank Area (Satellite Accumulation)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            F7 = Forms(
+                form="F-7", 
+                frequency="Weekly", 
+                link="Weekly/formF7", 
+                header="Waste Weekly Inspections",
+                title="Booster Pad (90-Day Accumulation)", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+
+
+
+    #--------------------------------------------Closest Oven Due-----------------    
+    #--------------------------------------------Closest Oven Due-----------------       
+    #--------------------------------------------Closest Oven Due-----------------    
 
 
 
@@ -322,134 +326,200 @@ def IncompleteForms(request):
 
 
 
-    def all_ovens(reads):
-        A = []
-        for items in reads:
-            date = items.form.date
-          #  date_array = date.split("-")
-            
-            year = date.year
-            month = date.month
-            day = date.day
-            
-            form_date = datetime.datetime(year, month, day)
-            added_date = form_date + datetime.timedelta(days=91)
-            due_date = added_date - datetime.datetime.now() 
-            
-            if len(str(items.o1)) == 1 :
-                oven1 = "0" + str(items.o1)
+        def all_ovens(reads):
+            A = []
+            for items in reads:
+                date = items.form.date
+              #  date_array = date.split("-")
+
+                year = date.year
+                month = date.month
+                day = date.day
+
+                form_date = datetime.datetime(year, month, day)
+                added_date = form_date + datetime.timedelta(days=91)
+                due_date = added_date - datetime.datetime.now() 
+
+                if len(str(items.o1)) == 1 :
+                    oven1 = "0" + str(items.o1)
+                else:
+                    oven1 = items.o1
+                A.append((oven1, items.form.date, added_date.date, due_date.days)) 
+
+                if len(str(items.o2)) == 1 :
+                    oven2 = "0" + str(items.o2)
+                else:
+                    oven2 = items.o2
+                A.append((oven2, items.form.date, added_date.date, due_date.days))
+
+                if len(str(items.o3)) == 1 :
+                    oven3 = "0" + str(items.o3)
+                else:
+                    oven3 = items.o3
+                A.append((oven3, items.form.date, added_date.date, due_date.days))    
+
+                if len(str(items.o4)) == 1 :
+                    oven4 = "0" + str(items.o4)
+                else:
+                    oven4 = items.o4
+                A.append((oven4, items.form.date, added_date.date, due_date.days))      
+
+            return A   
+
+        hello = all_ovens(reads)
+        func = lambda x: (x[0], x[1])
+        sort = sorted(hello, key = func, reverse=True)
+       # print (sort)
+
+        def final(sort):
+            B = []
+            i = 1
+            for new in sort:
+                B.append(new)
+
+            for x in sort:
+                for y in range(i, len(sort)):
+                    tree = sort[y]
+                    if tree[0] == x[0]:
+                        if tree in B:
+                            B.remove(tree)
+                i+=1
+            return B
+        cool = final(sort)
+
+        def overdue_closest(cool):
+            F = []
+
+            func2 = lambda R: (R[3])  
+            sort2 = sorted(cool, key = func2)
+            most_recent = sort2[0][3]
+
+            for x in sort2:
+                if x[3] == most_recent:
+                    F.append(x)
+            return F
+
+        od_recent = overdue_closest(cool)
+
+
+
+
+
+
+
+
+    #--------------------------------------------Battery Profile Data------------    
+    #--------------------------------------------Battery Profile Data------------    
+    #--------------------------------------------Battery Profile Data------------    
+        daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+        todays_log = daily_prof[0]
+
+        profile_entered = False
+        if now.month == todays_log.date_save.month:
+            if now.day == todays_log.date_save.day:
+                profile_entered = True
+
+     #------------------------------------------------------Weather-------------    
+    #------------------------------------------------------Weather-------------    
+    #------------------------------------------------------Weather-------------       
+
+
+        url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
+
+        city = 'Dearborn'
+
+        city_weather = requests.get(url.format(city)).json() #request the API data and convert the JSON to Python data types
+
+        weather = {
+            'city' : city,
+            'temperature' : city_weather['main']['temp'],
+            'description' : city_weather['weather'][0]['description'],
+            'icon' : city_weather['weather'][0]['icon'],
+            'wind_speed' : city_weather['wind']['speed'],
+            'wind_direction' : city_weather['wind']['deg'],
+            'humidity' : city_weather['main']['humidity'],
+        }
+
+        degree = weather['wind_direction']
+
+
+        def toTextualDescription(degree):
+            if degree > 337.5:
+                return 'N'
+            if degree > 292.5:
+                return 'NW'
+            if degree > 247.5:
+                return 'W'
+            if degree > 202.5:
+                return 'SW'
+            if degree > 157.5:
+                return 'S'
+            if degree > 122.5:
+                return 'SE'
+            if degree > 67.5:
+                return 'E'
+            if degree > 22.5:
+                return 'NE'
+            return 'N'
+
+        wind_direction = toTextualDescription(degree)
+
+
+
+
+
+
+    #------------------------------------------------------Form Data-------------    
+    #------------------------------------------------------Form Data-------------    
+    #------------------------------------------------------Form Data-------------    
+        for forms in sub_forms:
+            if todays_num in {0, 1, 2, 3 , 4}:
+                forms.due_date = weekday_fri
+
+                A = forms.date_submitted
+                if today != A :
+                    forms.submitted = False
+                    forms.save()
             else:
-                oven1 = items.o1
-            A.append((oven1, items.form.date, added_date.date, due_date.days)) 
-            
-            if len(str(items.o2)) == 1 :
-                oven2 = "0" + str(items.o2)
-            else:
-                oven2 = items.o2
-            A.append((oven2, items.form.date, added_date.date, due_date.days))
-                
-            if len(str(items.o3)) == 1 :
-                oven3 = "0" + str(items.o3)
-            else:
-                oven3 = items.o3
-            A.append((oven3, items.form.date, added_date.date, due_date.days))    
-                
-            if len(str(items.o4)) == 1 :
-                oven4 = "0" + str(items.o4)
-            else:
-                oven4 = items.o4
-            A.append((oven4, items.form.date, added_date.date, due_date.days))      
+                forms.due_date = weekend_fri
+                A = forms.date_submitted
+                if today != A :
+                    forms.submitted = False
+                    forms.save()
 
-        return A   
-    
-    hello = all_ovens(reads)
-    func = lambda x: (x[0], x[1])
-    sort = sorted(hello, key = func, reverse=True)
-   # print (sort)
-    
-    def final(sort):
-        B = []
-        i = 1
-        for new in sort:
-            B.append(new)
-        
-        for x in sort:
-            for y in range(i, len(sort)):
-                tree = sort[y]
-                if tree[0] == x[0]:
-                    if tree in B:
-                        B.remove(tree)
-            i+=1
-        return B
-    cool = final(sort)
-    
-    def overdue_closest(cool):
-        F = []
-        
-        func2 = lambda R: (R[3])  
-        sort2 = sorted(cool, key = func2)
-        most_recent = sort2[0][3]
-        
-        for x in sort2:
-            if x[3] == most_recent:
-                F.append(x)
-        return F
-    
-    od_recent = overdue_closest(cool)
-    
-    
-    
-    
-    
-    
-    
-    
-#--------------------------------------------Battery Profile Data------------    
-#--------------------------------------------Battery Profile Data------------    
-#--------------------------------------------Battery Profile Data------------    
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    todays_log = daily_prof[0]
-    
-    profile_entered = False
-    if now.month == todays_log.date_save.month:
-        if now.day == todays_log.date_save.day:
-            profile_entered = True
-    
-#------------------------------------------------------Form Data-------------    
-#------------------------------------------------------Form Data-------------    
-#------------------------------------------------------Form Data-------------    
-    for forms in sub_forms:
-        if todays_num in {0, 1, 2, 3 , 4}:
-            forms.due_date = weekday_fri
-        
-            A = forms.date_submitted
-            if today != A :
-                forms.submitted = False
-                forms.save()
+
+        pull = Forms.objects.filter(submitted__exact=False).order_by('form')
+        pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
+
+        day_number = str(today.weekday())
+
+
+        if day_number == 6:
+            satruday = False
         else:
-            forms.due_date = weekend_fri
-            A = forms.date_submitted
-            if today != A :
-                forms.submitted = False
-                forms.save()
-            
+            saturday = True
 
-    pull = Forms.objects.filter(submitted__exact=False).order_by('form')
-    pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
+        weekend_list = [5,6]
+        form_check1 = ["",]
+        form_check2 = ["",]
     
-    day_number = today.weekday()
-    
-    if day_number == 6:
-        satruday = False
     else:
-        saturday = True
-    
-    weekend_list = [5,6]
-    form_check1 = ["",]
-    form_check2 = ["",]
+        poop = User.objects.all().order_by('id')
+        print(poop[1].groups.all())
+        for a in poop:
+            print(a)
+            print(a.groups.all())
+            print('')
+            q_group = a.groups.all()
+            for x in q_group:
+                print(x)
+                if str(x) == 'EES Coke Employees':
+                    print(a)
+                    print(x)
+                    return redirect ('c_dashboard')
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction,
     })
 
 def weekly_forms(request):
@@ -1323,6 +1393,49 @@ def formA5(request, selector):
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
     
+    
+    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
+
+    city = 'Dearborn'
+
+    city_weather = requests.get(url.format(city)).json() #request the API data and convert the JSON to Python data types
+    
+    weather = {
+        'city' : city,
+        'temperature' : round(city_weather['main']['temp'],0),
+        'description' : city_weather['weather'][0]['description'],
+        'icon' : city_weather['weather'][0]['icon'],
+        'wind_speed' : round(city_weather['wind']['speed'],0),
+        'wind_direction' : city_weather['wind']['deg'],
+        'humidity' : city_weather['main']['humidity'],
+    }
+    
+    degree = weather['wind_direction']
+    
+    
+    def toTextualDescription(degree):
+        if degree > 337.5:
+            return 'N'
+        if degree > 292.5:
+            return 'NW'
+        if degree > 247.5:
+            return 'W'
+        if degree > 202.5:
+            return 'SW'
+        if degree > 157.5:
+            return 'S'
+        if degree > 122.5:
+            return 'SE'
+        if degree > 67.5:
+            return 'E'
+        if degree > 22.5:
+            return 'NE'
+        return 'N'
+    
+    wind_direction = toTextualDescription(degree)
+    
+    
+    
     if selector != 'form':
         for x in org:
             if str(x.date) == str(selector):
@@ -1555,7 +1668,12 @@ def formA5(request, selector):
                         'plume_opacity_determined_start' : "Above hot car",
                         'plume_opacity_determined_stop' : "Above door machine hood",
                         'describe_background_start' : "Skies",
-                        'describe_background_stop' : "Same"
+                        'describe_background_stop' : "Same",
+                        'sky_conditions' : weather['description'],
+                        'wind_speed_start' : weather['wind_speed'],
+                        'wind_direction' : wind_direction,
+                        'ambient_temp_start' : weather['temperature'],
+                        'humidity' : weather['humidity'],
                     }
                     data = formA5_form(initial=initial_data)
                     profile_form = user_profile_form()
@@ -5572,6 +5690,10 @@ def formP(request, selector, weekend_day):
         'selector': selector, 'profile': profile, 'data_form': data_form, 'weekend_day': weekend_day
     })
 def issues_view(request, form_name, form_date, access_page):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+    
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -5706,7 +5828,7 @@ def issues_view(request, form_name, form_date, access_page):
                     return redirect('IncompleteForms')
             
     return render (request, "ees_forms/issues_template.html", {
-        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link':link, 'profile': profile
+        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link':link, 'profile': profile, "unlock": unlock
     })
 
 def corrective_action_view(request):
@@ -5721,6 +5843,10 @@ def corrective_action_view(request):
     })
 
 def calendar_view(request, year, month):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+    
     profile = user_profile_model.objects.all()
     month = month.title()
     month_number = list(calendar.month_name).index(month)
@@ -5755,7 +5881,7 @@ def calendar_view(request, year, month):
     
     
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile,
+        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock,
     })
 
 
@@ -5928,135 +6054,153 @@ def search_forms_view(request, access_page):
     
     
 def c_dashboard_view(request):
-    profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    todays_log = daily_prof[0]
-#-----PUSH TRAVELS--------------
+    if request.user.groups.filter(name='EES Coke Employees') or request.user.is_superuser:
+    
+        profile = user_profile_model.objects.all()
+        daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+        todays_log = daily_prof[0]
+    #-----PUSH TRAVELS--------------
 
-    org = formA5_model.objects.all().order_by('-date')
-    database_form = org[0]
-    org2 = formA5_readings_model.objects.all().order_by('-form')
-    database_form2 = org2[0]
-    
-    if str(todays_log.date_save) == str(database_form.date):
-        high_push = '27%'
-        high_travel = '5%'
-#----USER ON SCHEDULE----------
+        org = formA5_model.objects.all().order_by('-date')
+        database_form = org[0]
+        org2 = formA5_readings_model.objects.all().order_by('-form')
+        database_form2 = org2[0]
 
-    event_cal = Event.objects.all()
-    today = datetime.date.today()
-    
-    for x in event_cal:
-        if x.date == today:
-            todays_obser = x.observer
-#---90 DAY PUSH-------
+        if str(todays_log.date_save) == str(database_form.date):
+            high_push = '27%'
+            high_travel = '5%'
+        else:
+            high_push = 'none'
+            high_travel = 'none'
+    #----USER ON SCHEDULE----------
 
-    reads = formA5_readings_model.objects.all()
-    data = formA5_model.objects.all()
-    
-    def all_ovens(reads):
-        A = []
-        for items in reads:
-            date = items.form.date
-          #  date_array = date.split("-")
-            
-            year = date.year
-            month = date.month
-            day = date.day
-            
-            form_date = datetime.datetime(year, month, day)
-            added_date = form_date + datetime.timedelta(days=91)
-            due_date = added_date - datetime.datetime.now() 
-            
-            if len(str(items.o1)) == 1 :
-                oven1 = "0" + str(items.o1)
-            else:
-                oven1 = items.o1
-            A.append((oven1, items.form.date, added_date.date, due_date.days)) 
-            
-            if len(str(items.o2)) == 1 :
-                oven2 = "0" + str(items.o2)
-            else:
-                oven2 = items.o2
-            A.append((oven2, items.form.date, added_date.date, due_date.days))
-                
-            if len(str(items.o3)) == 1 :
-                oven3 = "0" + str(items.o3)
-            else:
-                oven3 = items.o3
-            A.append((oven3, items.form.date, added_date.date, due_date.days))    
-                
-            if len(str(items.o4)) == 1 :
-                oven4 = "0" + str(items.o4)
-            else:
-                oven4 = items.o4
-            A.append((oven4, items.form.date, added_date.date, due_date.days))      
+        event_cal = Event.objects.all()
+        today = datetime.date.today()
 
-        return A   
-    
-    hello = all_ovens(reads)
-    func = lambda x: (x[0], x[1])
-    sort = sorted(hello, key = func, reverse=True)
-   # print (sort)
-    
-    def final(sort):
-        B = []
-        i = 1
-        for new in sort:
-            B.append(new)
-        
-        for x in sort:
-            for y in range(i, len(sort)):
-                tree = sort[y]
-                if tree[0] == x[0]:
-                    if tree in B:
-                        B.remove(tree)
-            i+=1
-        return B
-    cool = final(sort)
-    
-    def overdue_30(cool):
-        C = []
-        for x in cool:
-            if x[3] <= 30 :
-                C.append(x)
-        return C
-    
-    def overdue_10(cool):
-        D = []
-        for x in cool:
-            if x[3] <= 10 :
-                D.append(x)
-        return D
-    
-    def overdue_5(cool):
-        E = []
-        for x in cool:
-            if x[3] <= 5 :
-                E.append(x)
-        return E
-    
-    def overdue_closest(cool):
-        F = []
-        
-        func2 = lambda R: (R[3])  
-        sort2 = sorted(cool, key = func2)
-        most_recent = sort2[0][3]
-        
-        for x in sort2:
-            if x[3] == most_recent:
-                F.append(x)
-        return F
-    
-    od_30 = overdue_30(cool)
-    od_10 = overdue_10(cool)
-    od_5 = overdue_5(cool)
-    od_recent = overdue_closest(cool)
-    
-    
+        for x in event_cal:
+            if x.date == today:
+                todays_obser = x.observer
+    #---90 DAY PUSH-------
+
+        reads = formA5_readings_model.objects.all()
+        data = formA5_model.objects.all()
+
+        def all_ovens(reads):
+            A = []
+            for items in reads:
+                date = items.form.date
+              #  date_array = date.split("-")
+
+                year = date.year
+                month = date.month
+                day = date.day
+
+                form_date = datetime.datetime(year, month, day)
+                added_date = form_date + datetime.timedelta(days=91)
+                due_date = added_date - datetime.datetime.now() 
+
+                if len(str(items.o1)) == 1 :
+                    oven1 = "0" + str(items.o1)
+                else:
+                    oven1 = items.o1
+                A.append((oven1, items.form.date, added_date.date, due_date.days)) 
+
+                if len(str(items.o2)) == 1 :
+                    oven2 = "0" + str(items.o2)
+                else:
+                    oven2 = items.o2
+                A.append((oven2, items.form.date, added_date.date, due_date.days))
+
+                if len(str(items.o3)) == 1 :
+                    oven3 = "0" + str(items.o3)
+                else:
+                    oven3 = items.o3
+                A.append((oven3, items.form.date, added_date.date, due_date.days))    
+
+                if len(str(items.o4)) == 1 :
+                    oven4 = "0" + str(items.o4)
+                else:
+                    oven4 = items.o4
+                A.append((oven4, items.form.date, added_date.date, due_date.days))      
+
+            return A   
+
+        hello = all_ovens(reads)
+        func = lambda x: (x[0], x[1])
+        sort = sorted(hello, key = func, reverse=True)
+       # print (sort)
+
+        def final(sort):
+            B = []
+            i = 1
+            for new in sort:
+                B.append(new)
+
+            for x in sort:
+                for y in range(i, len(sort)):
+                    tree = sort[y]
+                    if tree[0] == x[0]:
+                        if tree in B:
+                            B.remove(tree)
+                i+=1
+            return B
+        cool = final(sort)
+
+        def overdue_30(cool):
+            C = []
+            for x in cool:
+                if x[3] <= 30 :
+                    C.append(x)
+            return C
+
+        def overdue_10(cool):
+            D = []
+            for x in cool:
+                if x[3] <= 10 :
+                    D.append(x)
+            return D
+
+        def overdue_5(cool):
+            E = []
+            for x in cool:
+                if x[3] <= 5 :
+                    E.append(x)
+            return E
+
+        def overdue_closest(cool):
+            F = []
+
+            func2 = lambda R: (R[3])  
+            sort2 = sorted(cool, key = func2)
+            most_recent = sort2[0][3]
+
+            for x in sort2:
+                if x[3] == most_recent:
+                    F.append(x)
+            return F
+
+        od_30 = overdue_30(cool)
+        od_10 = overdue_10(cool)
+        od_5 = overdue_5(cool)
+        od_recent = overdue_closest(cool)
+    #----WEATHER TAB-----------
+        url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
+
+        city = 'Dearborn'
+
+        city_weather = requests.get(url.format(city)).json() #request the API data and convert the JSON to Python data types
+
+        weather = {
+            'city' : city,
+            'temperature' : city_weather['main']['temp'],
+            'description' : city_weather['weather'][0]['description'],
+            'icon' : city_weather['weather'][0]['icon']
+        }
+    else:
+        return redirect('IncompleteForms')
     
     return render(request, 'ees_forms/c_dashboard.html',{
-        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 
+        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 'weather': weather,
     })
     
     
