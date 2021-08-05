@@ -153,7 +153,7 @@ def logout_view(request):
 #------------------------------------------------------------------------INCOMPLETE FORMS---------<
 @lock
 def IncompleteForms(request):
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser or request.user.groups.filter(name='SGI Quality Control'):
     
         profile = user_profile_model.objects.all()
         today = datetime.date.today()
@@ -542,6 +542,10 @@ def weekly_forms(request):
     })
 #------------------------------------------------------------ADMIN PUSH TRAVELS-------------<
 def pt_admin1_view(request):
+    client = False
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+        
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -650,7 +654,7 @@ def pt_admin1_view(request):
     od_recent = overdue_closest(cool)
     
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile':profile,
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile':profile, 'client': client,
     })
 #------------------------------------------------------------------------ADMIN DATA-------------<
 
@@ -828,7 +832,15 @@ def profile(request, access_page):
     cert = user_select.cert_date
     user_sel = user_select.user
     
-    pic_form = user_profile_form()
+    
+    initial_data = {
+        'cert_date': user_select.cert_date,
+        'profile_picture': user_select.profile_picture,
+        'phone': user_select.phone,
+        'position': user_select.position,
+    }
+    
+    pic_form = user_profile_form(initial= initial_data)
     
     if request.method == "POST":
         form = user_profile_form(request.POST, request.FILES, instance = user_select)
@@ -837,13 +849,13 @@ def profile(request, access_page):
             print('chicken')
             A = form.save(commit = False)
             A.cert_date = cert
-            print(A.cert_date)
+            
             form.save()
             
             return redirect('../profile/main')
         
         
-
+        print(form.errors)
         
         
         
@@ -851,7 +863,7 @@ def profile(request, access_page):
         
     
     return render (request, "ees_forms/profile.html", {
-        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile':profile,
+        "back": back, 'todays_log': todays_log, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile':profile, 
     })
 @lock
 def admin_data_view(request):
@@ -863,6 +875,11 @@ def admin_data_view(request):
 #------------------------------------------------------------------------A1---------------<
 @lock
 def formA1(request, selector):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+        
+    
     formName = "A1"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -1020,6 +1037,11 @@ def formA1(request, selector):
 #------------------------------------------------------------------------A2---------------<
 @lock
 def formA2(request, selector):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+        
+        
     formName = "A2"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -1141,6 +1163,11 @@ def formA2(request, selector):
 #------------------------------------------------------------------------A3---------------<
 @lock
 def formA3(request, selector):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+        
+        
     formName = "A3"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -1266,6 +1293,11 @@ def formA3(request, selector):
 #------------------------------------------------------------------------A4---------------<
 @lock
 def formA4(request, selector):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+        
+    
     formName = "A4"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -1379,6 +1411,13 @@ def formA4(request, selector):
 #------------------------------------------------------------------------A5---------------<
 @lock
 def formA5(request, selector):
+    unlock = False
+    client = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock == True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+         
     formName = "A5"
     profile = user_profile_model.objects.all()
     this_from = 'A-5'
@@ -1746,7 +1785,7 @@ def formA5(request, selector):
             return redirect(batt_prof)
                     
     return render (request, "Daily/formA5.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile':profile, 'selector': selector,
+        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile':profile, 'selector': selector, 'client':client, 'unlock':unlock,
     })
 #------------------------------------------------------------------------FORM B---------------<
 @lock
@@ -2676,7 +2715,7 @@ def formE(request, selector):
                     A = check.save()
 
                     if A.leaks == "Yes":
-                        issue_page = '../issues_view/E/' + str(todays_log.date_save) + '/form'
+                        issue_page = '../../issues_view/E/' + str(todays_log.date_save) + '/form'
 
                         return redirect (issue_page)
 
@@ -2704,7 +2743,7 @@ def formE(request, selector):
                 A = check.save()
 
                 if A.leaks == "Yes":
-                    issue_page = '../issues_view/E/' + str(todays_log.date_save) + '/form'
+                    issue_page = '../../issues_view/E/' + str(todays_log.date_save) + '/form'
 
                     return redirect (issue_page)
                 
@@ -5832,6 +5871,11 @@ def issues_view(request, form_name, form_date, access_page):
     })
 
 def corrective_action_view(request):
+    client = False
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+        
+        
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -5839,13 +5883,16 @@ def corrective_action_view(request):
     ca_forms = issues_model.objects.all().order_by('-id')
     
     return render (request, "ees_forms/corrective_actions.html", {
-        'ca_forms': ca_forms, 'profile': profile, # 'read': read, 'submitted': submitted, "back": back
+        'ca_forms': ca_forms, 'profile': profile, 'client': client, ##'submitted': submitted, "back": back
     })
 
 def calendar_view(request, year, month):
     unlock = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
-        unlock == True
+    client = False
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
     
     profile = user_profile_model.objects.all()
     month = month.title()
@@ -5881,7 +5928,7 @@ def calendar_view(request, year, month):
     
     
     return render (request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock,
+        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client':client,
     })
 
 
@@ -5977,12 +6024,20 @@ def safety_view(request):
         'profile':profile,
     })
 def archive_view(request):
+    client = False
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+        
     profile = user_profile_model.objects.all()
     
     return render(request, 'ees_forms/ees_archive.html', {
-        'profile':profile,
+        'profile':profile, 'client': client
     })
 def search_forms_view(request, access_page):
+    client = False
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+        
     profile = user_profile_model.objects.all()
     if access_page != 'search':
         Model = apps.get_model('EES_Forms', access_page)
@@ -6045,33 +6100,155 @@ def search_forms_view(request, access_page):
         
         
         return render(request, 'ees_forms/search_forms.html', {
-        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend
+        'profile':profile, 'searched':searched, 'forms':forms, 'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-        'profile':profile,'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend,
+        'profile':profile,'access_page': access_page, 'database': database, 'att_check':att_check, 'weekend': weekend, 'client': client,
         })
     
     
 def c_dashboard_view(request):
-    if request.user.groups.filter(name='EES Coke Employees') or request.user.is_superuser:
-    
+    if request.user.groups.filter(name='EES Coke Employees') or request.user.is_superuser or request.user.groups.filter(name='SGI Admin'):
+        if request.user.groups.filter(name='EES Coke Employees'):
+            client = True
+            
+            
+        today = datetime.date.today()
         profile = user_profile_model.objects.all()
         daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
         todays_log = daily_prof[0]
     #-----PUSH TRAVELS--------------
-
+        if len(str(today.month)) == 1:
+            month = '0' + str(today.month)
+        else:
+            month = str(today.month)
+            
+        if len(str(today.day)) == 1:
+            day = '0' + str(today.day)
+        else:
+            day = str(today.day)
+            
+        date_trans = str(today.year) + '-' + month + '-' + day
+    
         org = formA5_model.objects.all().order_by('-date')
         database_form = org[0]
         org2 = formA5_readings_model.objects.all().order_by('-form')
-        database_form2 = org2[0]
+        reads = org2[0]
+        
+        def double_digit(x):
+            if len(x) == 1:
+                double = '0' + x
+                return double
+            else:
+                return x
+                
 
         if str(todays_log.date_save) == str(database_form.date):
-            high_push = '27%'
-            high_travel = '5%'
-        else:
+            ovens_reads = [
+                {(reads.o1, 'p') : (
+                    double_digit(reads.o1_1_reads), 
+                    double_digit(reads.o1_2_reads), 
+                    double_digit(reads.o1_3_reads), 
+                    double_digit(reads.o1_4_reads), 
+                    double_digit(reads.o1_5_reads), 
+                    double_digit(reads.o1_6_reads), 
+                    double_digit(reads.o1_7_reads), 
+                    double_digit(reads.o1_8_reads)
+                ),
+                 (reads.o1, 't') : (
+                     double_digit(reads.o1_9_reads), 
+                     double_digit(reads.o1_10_reads), 
+                     double_digit(reads.o1_11_reads), 
+                     double_digit(reads.o1_12_reads), 
+                     double_digit(reads.o1_13_reads), 
+                     double_digit(reads.o1_14_reads), 
+                     double_digit(reads.o1_15_reads), 
+                     double_digit(reads.o1_16_reads)
+                 )
+                },
+                {(reads.o2, 'p') : (
+                    double_digit(reads.o2_1_reads), 
+                    double_digit(reads.o2_2_reads), 
+                    double_digit(reads.o2_3_reads), 
+                    double_digit(reads.o2_4_reads), 
+                    double_digit(reads.o2_5_reads), 
+                    double_digit(reads.o2_6_reads), 
+                    double_digit(reads.o2_7_reads), 
+                    double_digit(reads.o2_8_reads)),
+                 (reads.o2, 't') : (
+                     double_digit(reads.o2_9_reads), 
+                     double_digit(reads.o2_10_reads), 
+                     double_digit(reads.o2_11_reads), 
+                     double_digit(reads.o2_12_reads), 
+                     double_digit(reads.o2_13_reads), 
+                     double_digit(reads.o2_14_reads), 
+                     double_digit(reads.o2_15_reads), 
+                     double_digit(reads.o2_16_reads))
+                },
+                {(reads.o3, 'p') : (
+                    double_digit(reads.o3_1_reads), 
+                    double_digit(reads.o3_2_reads), 
+                    double_digit(reads.o3_3_reads), 
+                    double_digit(reads.o3_4_reads), 
+                    double_digit(reads.o3_5_reads), 
+                    double_digit(reads.o3_6_reads), 
+                    double_digit(reads.o3_7_reads), 
+                    double_digit(reads.o3_8_reads)),
+                 (reads.o3, 't') : (
+                     double_digit(reads.o3_9_reads), 
+                     double_digit(reads.o3_10_reads), 
+                     double_digit(reads.o3_11_reads), 
+                     double_digit(reads.o3_12_reads), 
+                     double_digit(reads.o3_13_reads), 
+                     double_digit(reads.o3_14_reads), 
+                     double_digit(reads.o3_15_reads), 
+                     double_digit(reads.o3_16_reads))
+                },
+                {(reads.o4, 'p') : (
+                    double_digit(reads.o4_1_reads), 
+                    double_digit(reads.o4_2_reads), 
+                    double_digit(reads.o4_3_reads), 
+                    double_digit(reads.o4_4_reads), 
+                    double_digit(reads.o4_5_reads), 
+                    double_digit(reads.o4_6_reads), 
+                    double_digit(reads.o4_7_reads), 
+                    double_digit(reads.o4_8_reads)),
+                 (reads.o4, 't') : (
+                     double_digit(reads.o4_9_reads), 
+                     double_digit(reads.o4_10_reads), 
+                     double_digit(reads.o4_11_reads), 
+                     double_digit(reads.o4_12_reads), 
+                     double_digit(reads.o4_13_reads), 
+                     double_digit(reads.o4_14_reads), 
+                     double_digit(reads.o4_15_reads), 
+                     double_digit(reads.o4_16_reads))
+                },
+            ]
+            highest_p_list = [
+                {'o1' : max(ovens_reads[0][reads.o1, 'p'])},
+                {'o2' : max(ovens_reads[1][reads.o2, 'p'])},
+                {'o3' : max(ovens_reads[2][reads.o3, 'p'])},
+                {'o4' : max(ovens_reads[3][reads.o4, 'p'])},
+            ]
+            
+            highest_t_list = [
+                {'o1' : max(ovens_reads[0][reads.o1, 't'])},
+                {'o2' : max(ovens_reads[1][reads.o2, 't'])},
+                {'o3' : max(ovens_reads[2][reads.o3, 't'])},
+                {'o4' : max(ovens_reads[3][reads.o4, 't'])},
+            ]
+ 
+            highest_push = highest_p_list[0]['o1']
+            highest_travel = highest_t_list[0]['o1']
+            
+            high_push = highest_push + "%"
+            high_travel = highest_travel + '%'
+        else: 
             high_push = 'none'
             high_travel = 'none'
+            
+            
     #----USER ON SCHEDULE----------
 
         event_cal = Event.objects.all()
@@ -6194,13 +6371,52 @@ def c_dashboard_view(request):
             'city' : city,
             'temperature' : city_weather['main']['temp'],
             'description' : city_weather['weather'][0]['description'],
-            'icon' : city_weather['weather'][0]['icon']
+            'icon' : city_weather['weather'][0]['icon'],
+            'wind_speed' : city_weather['wind']['speed'],
+            'wind_direction' : city_weather['wind']['deg'],
+            'humidity' : city_weather['main']['humidity'],
         }
+
+        degree = weather['wind_direction']
+
+
+        def toTextualDescription(degree):
+            if degree > 337.5:
+                return 'N'
+            if degree > 292.5:
+                return 'NW'
+            if degree > 247.5:
+                return 'W'
+            if degree > 202.5:
+                return 'SW'
+            if degree > 157.5:
+                return 'S'
+            if degree > 122.5:
+                return 'SE'
+            if degree > 67.5:
+                return 'E'
+            if degree > 22.5:
+                return 'NE'
+            return 'N'
+
+        wind_direction = toTextualDescription(degree)
+        
+      #----ISSUES/CORRECTIVE ACTIONS----------  
+        
+        ca_forms = issues_model.objects.all().order_by('-id')
+        
+    #------USERS-------------------
+    
+        Users = User.objects.all()
+        profile = user_profile_model.objects.all()
+        
+        
+        
     else:
         return redirect('IncompleteForms')
     
     return render(request, 'ees_forms/c_dashboard.html',{
-        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 'weather': weather,
+        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 'weather': weather, "today":date_trans, 'ca_forms': ca_forms, 'wind_direction': wind_direction, 'Users': Users
     })
     
     

@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import datetime
 from .models import *
+from phonenumber_field.formfields import PhoneNumberField
 
 now = datetime.datetime.now()
 
@@ -92,12 +93,16 @@ class user_profile_form(forms.ModelForm):
         fields = (
             'cert_date',
             'profile_picture',
+           # 'phone',
+           # 'position'
         )
         exclude = ['user']
         
         widgets ={
             'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'profile_picture' : forms.FileInput(attrs={'style': 'width: fit-content;'})
+            'profile_picture' : forms.FileInput(attrs={'style': 'width: fit-content;'}),
+          #  'phone' : forms.TextInput(attrs={'type':'tel', 'style':'width: 60px;'}),
+          #  'position' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
         }
         
         

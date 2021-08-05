@@ -55,15 +55,48 @@
             </h2>
         </div>
         <div class="card2_Form">
-            <p>
-                <span class="title">City:&nbsp;&nbsp;{{ weather.city }}</span>
-                <br>
-                <span class="subtitle">Temp:&nbsp;&nbsp;{{ weather.temperature|floatformat:"0" }}° F</span>
-                <br>Description:&nbsp;&nbsp;{{ weather.description }} <br>
-                <span class="subtitle">Wind:&nbsp;&nbsp;{{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}</span>
-                <br> 
-                <span class="subtitle">Humidity:&nbsp;&nbsp;{{ weather.humidity|floatformat:"0" }}%</span>
-            </p>
+            <table class="c_client_card_background c_font_color">
+                <tr>
+                    <td id="table_left">
+                        City:
+                    </td>
+                    <td id="table_right">
+                        {{ weather.city }}
+                    </td>
+                </tr>
+                <tr>
+                    <td id="table_left">
+                        Temp:
+                    </td>
+                    <td id="table_right">
+                        {{ weather.temperature|floatformat:"0" }}° F
+                    </td>
+                </tr>
+                <tr>
+                    <td id="table_left">
+                        Description:
+                    </td>
+                    <td id="table_right">
+                        {{ weather.description }}
+                    </td>
+                </tr>
+                <tr>
+                    <td id="table_left">
+                        Wind:
+                    </td>
+                    <td id="table_right">
+                        {{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}
+                    </td>
+                </tr>
+                <tr>
+                    <td id="table_left">
+                        Humidity:
+                    </td>
+                    <td id="table_right">
+                        {{ weather.humidity|floatformat:"0" }}%
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

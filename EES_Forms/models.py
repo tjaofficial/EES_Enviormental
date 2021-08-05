@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 import datetime
 from django.db.models import Q, F
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 truck_choices = (
@@ -367,6 +368,15 @@ class user_profile_model(models.Model):
         blank = True, 
         null = True, 
         upload_to='images/profile_pics')
+    phone = PhoneNumberField(
+        null=False, 
+        blank=False,
+    )
+    position = models.CharField(
+        max_length=30,
+        null=False, 
+        blank=False,
+    )
     
     def __str__(self):
         return self.user.username
