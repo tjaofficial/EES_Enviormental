@@ -824,6 +824,7 @@ def profile(request, access_page):
     current_user = request.user
     
     for x in profile:
+        print(x.user)
         if x.user == current_user:
             user_select = x
             print(user_select)
@@ -876,8 +877,11 @@ def admin_data_view(request):
 @lock
 def formA1(request, selector):
     unlock = False
+    client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
-        unlock == True
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
         
     
     formName = "A1"
@@ -1032,14 +1036,17 @@ def formA1(request, selector):
             return redirect(batt_prof)
     
     return render (request, "Daily/formA1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName, 'profile':profile, 'selector': selector,
+        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName':formName, 'profile':profile, 'selector': selector, "client": client, 'unlock': unlock
     })
 #------------------------------------------------------------------------A2---------------<
 @lock
 def formA2(request, selector):
     unlock = False
+    client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
-        unlock == True
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
         
         
     formName = "A2"
@@ -1158,14 +1165,17 @@ def formA2(request, selector):
             return redirect(batt_prof)
 
     return render (request, "Daily/formA2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector': selector,
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector': selector, 'client':client,
     })
 #------------------------------------------------------------------------A3---------------<
 @lock
 def formA3(request, selector):
     unlock = False
+    client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
-        unlock == True
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
         
         
     formName = "A3"
@@ -1288,14 +1298,17 @@ def formA3(request, selector):
             return redirect(batt_prof)
 
     return render (request, "Daily/formA3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector': selector,
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector': selector, 'client':client,
     })
 #------------------------------------------------------------------------A4---------------<
 @lock
 def formA4(request, selector):
     unlock = False
+    client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
-        unlock == True
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
         
     
     formName = "A4"
@@ -1406,7 +1419,7 @@ def formA4(request, selector):
             return redirect(batt_prof)
     
     return render (request, "Daily/formA4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector':selector,
+        "back": back, 'todays_log': todays_log, 'data': data, 'formName':formName, 'profile':profile, 'selector':selector, 'client':client,
     })
 #------------------------------------------------------------------------A5---------------<
 @lock
@@ -1414,7 +1427,7 @@ def formA5(request, selector):
     unlock = False
     client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
-        unlock == True
+        unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
          
@@ -1431,6 +1444,7 @@ def formA5(request, selector):
     
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date
+    
     
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
@@ -6110,6 +6124,7 @@ def search_forms_view(request, access_page):
     
 def c_dashboard_view(request):
     if request.user.groups.filter(name='EES Coke Employees') or request.user.is_superuser or request.user.groups.filter(name='SGI Admin'):
+        client = False
         if request.user.groups.filter(name='EES Coke Employees'):
             client = True
             
@@ -6118,137 +6133,7 @@ def c_dashboard_view(request):
         profile = user_profile_model.objects.all()
         daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
         todays_log = daily_prof[0]
-    #-----PUSH TRAVELS--------------
-        if len(str(today.month)) == 1:
-            month = '0' + str(today.month)
-        else:
-            month = str(today.month)
-            
-        if len(str(today.day)) == 1:
-            day = '0' + str(today.day)
-        else:
-            day = str(today.day)
-            
-        date_trans = str(today.year) + '-' + month + '-' + day
     
-        org = formA5_model.objects.all().order_by('-date')
-        database_form = org[0]
-        org2 = formA5_readings_model.objects.all().order_by('-form')
-        reads = org2[0]
-        
-        def double_digit(x):
-            if len(x) == 1:
-                double = '0' + x
-                return double
-            else:
-                return x
-                
-
-        if str(todays_log.date_save) == str(database_form.date):
-            ovens_reads = [
-                {(reads.o1, 'p') : (
-                    double_digit(reads.o1_1_reads), 
-                    double_digit(reads.o1_2_reads), 
-                    double_digit(reads.o1_3_reads), 
-                    double_digit(reads.o1_4_reads), 
-                    double_digit(reads.o1_5_reads), 
-                    double_digit(reads.o1_6_reads), 
-                    double_digit(reads.o1_7_reads), 
-                    double_digit(reads.o1_8_reads)
-                ),
-                 (reads.o1, 't') : (
-                     double_digit(reads.o1_9_reads), 
-                     double_digit(reads.o1_10_reads), 
-                     double_digit(reads.o1_11_reads), 
-                     double_digit(reads.o1_12_reads), 
-                     double_digit(reads.o1_13_reads), 
-                     double_digit(reads.o1_14_reads), 
-                     double_digit(reads.o1_15_reads), 
-                     double_digit(reads.o1_16_reads)
-                 )
-                },
-                {(reads.o2, 'p') : (
-                    double_digit(reads.o2_1_reads), 
-                    double_digit(reads.o2_2_reads), 
-                    double_digit(reads.o2_3_reads), 
-                    double_digit(reads.o2_4_reads), 
-                    double_digit(reads.o2_5_reads), 
-                    double_digit(reads.o2_6_reads), 
-                    double_digit(reads.o2_7_reads), 
-                    double_digit(reads.o2_8_reads)),
-                 (reads.o2, 't') : (
-                     double_digit(reads.o2_9_reads), 
-                     double_digit(reads.o2_10_reads), 
-                     double_digit(reads.o2_11_reads), 
-                     double_digit(reads.o2_12_reads), 
-                     double_digit(reads.o2_13_reads), 
-                     double_digit(reads.o2_14_reads), 
-                     double_digit(reads.o2_15_reads), 
-                     double_digit(reads.o2_16_reads))
-                },
-                {(reads.o3, 'p') : (
-                    double_digit(reads.o3_1_reads), 
-                    double_digit(reads.o3_2_reads), 
-                    double_digit(reads.o3_3_reads), 
-                    double_digit(reads.o3_4_reads), 
-                    double_digit(reads.o3_5_reads), 
-                    double_digit(reads.o3_6_reads), 
-                    double_digit(reads.o3_7_reads), 
-                    double_digit(reads.o3_8_reads)),
-                 (reads.o3, 't') : (
-                     double_digit(reads.o3_9_reads), 
-                     double_digit(reads.o3_10_reads), 
-                     double_digit(reads.o3_11_reads), 
-                     double_digit(reads.o3_12_reads), 
-                     double_digit(reads.o3_13_reads), 
-                     double_digit(reads.o3_14_reads), 
-                     double_digit(reads.o3_15_reads), 
-                     double_digit(reads.o3_16_reads))
-                },
-                {(reads.o4, 'p') : (
-                    double_digit(reads.o4_1_reads), 
-                    double_digit(reads.o4_2_reads), 
-                    double_digit(reads.o4_3_reads), 
-                    double_digit(reads.o4_4_reads), 
-                    double_digit(reads.o4_5_reads), 
-                    double_digit(reads.o4_6_reads), 
-                    double_digit(reads.o4_7_reads), 
-                    double_digit(reads.o4_8_reads)),
-                 (reads.o4, 't') : (
-                     double_digit(reads.o4_9_reads), 
-                     double_digit(reads.o4_10_reads), 
-                     double_digit(reads.o4_11_reads), 
-                     double_digit(reads.o4_12_reads), 
-                     double_digit(reads.o4_13_reads), 
-                     double_digit(reads.o4_14_reads), 
-                     double_digit(reads.o4_15_reads), 
-                     double_digit(reads.o4_16_reads))
-                },
-            ]
-            highest_p_list = [
-                {'o1' : max(ovens_reads[0][reads.o1, 'p'])},
-                {'o2' : max(ovens_reads[1][reads.o2, 'p'])},
-                {'o3' : max(ovens_reads[2][reads.o3, 'p'])},
-                {'o4' : max(ovens_reads[3][reads.o4, 'p'])},
-            ]
-            
-            highest_t_list = [
-                {'o1' : max(ovens_reads[0][reads.o1, 't'])},
-                {'o2' : max(ovens_reads[1][reads.o2, 't'])},
-                {'o3' : max(ovens_reads[2][reads.o3, 't'])},
-                {'o4' : max(ovens_reads[3][reads.o4, 't'])},
-            ]
- 
-            highest_push = highest_p_list[0]['o1']
-            highest_travel = highest_t_list[0]['o1']
-            
-            high_push = highest_push + "%"
-            high_travel = highest_travel + '%'
-        else: 
-            high_push = 'none'
-            high_travel = 'none'
-            
-            
     #----USER ON SCHEDULE----------
 
         event_cal = Event.objects.all()
@@ -6401,22 +6286,179 @@ def c_dashboard_view(request):
 
         wind_direction = toTextualDescription(degree)
         
-      #----ISSUES/CORRECTIVE ACTIONS----------  
+    #----ISSUES/CORRECTIVE ACTIONS----------  
         
         ca_forms = issues_model.objects.all().order_by('-id')
         
-    #------USERS-------------------
+    #------------USERS-------------------
     
         Users = User.objects.all()
         profile = user_profile_model.objects.all()
         
+    #------FORM A-1 COLLECTION MAIN PRESURES---------
+    
+        formA1 = formA1_readings_model.objects.all().order_by('-form')
+        recent_A1 = formA1[0]
+        if str(today) == str(recent_A1):
+            none_A1 = False
+            charges = [('Charge #1', str(recent_A1.c1_sec) + ' sec'), ('Charge #2', str(recent_A1.c2_sec) + ' sec'), ('Charge #3', str(recent_A1.c3_sec) + ' sec'), ('Charge #4', str(recent_A1.c4_sec) + ' sec'), ('Charge #5', str(recent_A1.c5_sec) + ' sec'), ('Total Seconds', str(recent_A1.total_seconds) + ' sec')]
+        else:
+            none_A1 = True
+            charges = [('Charge #1', 'N/A'), ('Charge #2', 'N/A'), ('Charge #3', 'N/A'), ('Charge #4', 'N/A'), ('Charge #5', 'N/A'), ('Total Seconds', 'N/A')]
+            
+    #------FORM A-4 COLLECTION MAIN PRESURES---------
+    
+        formA4 = formA4_model.objects.all().order_by('-date')
+        recent_A4 = formA4[0]
+        if str(today) == str(recent_A4):
+            none_A4 = False
+            pressures = [('Main #1', recent_A4.main_1), ('Main #2', recent_A4.main_2), ('Main #3', recent_A4.main_3), ('Main #4', recent_A4.main_4), ('Suction Main', recent_A4.suction_main)]
+        else:
+            none_A4 = True
+            pressures = [('Main #1', 'N/A'), ('Main #2', 'N/A'), ('Main #3', 'N/A'), ('Main #4', 'N/A'), ('Suction Main', 'N/A')]
+            
+    #-----PUSH TRAVELS--------------
+    
+        if len(str(today.month)) == 1:
+            month = '0' + str(today.month)
+        else:
+            month = str(today.month)
+            
+        if len(str(today.day)) == 1:
+            day = '0' + str(today.day)
+        else:
+            day = str(today.day)
+            
+        date_trans = str(today.year) + '-' + month + '-' + day
+    
+        org = formA5_model.objects.all().order_by('-date')
+        database_form = org[0]
+        org2 = formA5_readings_model.objects.all().order_by('-form')
+        reads = org2[0]
         
+        def double_digit(x):
+            if len(x) == 1:
+                double = '0' + x
+                return double
+            else:
+                return x
+             
+        if str(todays_log.date_save) == str(database_form.date):
+            ovens_reads = [
+                {(reads.o1, 'p') : (
+                    double_digit(reads.o1_1_reads), 
+                    double_digit(reads.o1_2_reads), 
+                    double_digit(reads.o1_3_reads), 
+                    double_digit(reads.o1_4_reads), 
+                    double_digit(reads.o1_5_reads), 
+                    double_digit(reads.o1_6_reads), 
+                    double_digit(reads.o1_7_reads), 
+                    double_digit(reads.o1_8_reads)
+                ),
+                 (reads.o1, 't') : (
+                     double_digit(reads.o1_9_reads), 
+                     double_digit(reads.o1_10_reads), 
+                     double_digit(reads.o1_11_reads), 
+                     double_digit(reads.o1_12_reads), 
+                     double_digit(reads.o1_13_reads), 
+                     double_digit(reads.o1_14_reads), 
+                     double_digit(reads.o1_15_reads), 
+                     double_digit(reads.o1_16_reads)
+                 )
+                },
+                {(reads.o2, 'p') : (
+                    double_digit(reads.o2_1_reads), 
+                    double_digit(reads.o2_2_reads), 
+                    double_digit(reads.o2_3_reads), 
+                    double_digit(reads.o2_4_reads), 
+                    double_digit(reads.o2_5_reads), 
+                    double_digit(reads.o2_6_reads), 
+                    double_digit(reads.o2_7_reads), 
+                    double_digit(reads.o2_8_reads)),
+                 (reads.o2, 't') : (
+                     double_digit(reads.o2_9_reads), 
+                     double_digit(reads.o2_10_reads), 
+                     double_digit(reads.o2_11_reads), 
+                     double_digit(reads.o2_12_reads), 
+                     double_digit(reads.o2_13_reads), 
+                     double_digit(reads.o2_14_reads), 
+                     double_digit(reads.o2_15_reads), 
+                     double_digit(reads.o2_16_reads))
+                },
+                {(reads.o3, 'p') : (
+                    double_digit(reads.o3_1_reads), 
+                    double_digit(reads.o3_2_reads), 
+                    double_digit(reads.o3_3_reads), 
+                    double_digit(reads.o3_4_reads), 
+                    double_digit(reads.o3_5_reads), 
+                    double_digit(reads.o3_6_reads), 
+                    double_digit(reads.o3_7_reads), 
+                    double_digit(reads.o3_8_reads)),
+                 (reads.o3, 't') : (
+                     double_digit(reads.o3_9_reads), 
+                     double_digit(reads.o3_10_reads), 
+                     double_digit(reads.o3_11_reads), 
+                     double_digit(reads.o3_12_reads), 
+                     double_digit(reads.o3_13_reads), 
+                     double_digit(reads.o3_14_reads), 
+                     double_digit(reads.o3_15_reads), 
+                     double_digit(reads.o3_16_reads))
+                },
+                {(reads.o4, 'p') : (
+                    double_digit(reads.o4_1_reads), 
+                    double_digit(reads.o4_2_reads), 
+                    double_digit(reads.o4_3_reads), 
+                    double_digit(reads.o4_4_reads), 
+                    double_digit(reads.o4_5_reads), 
+                    double_digit(reads.o4_6_reads), 
+                    double_digit(reads.o4_7_reads), 
+                    double_digit(reads.o4_8_reads)),
+                 (reads.o4, 't') : (
+                     double_digit(reads.o4_9_reads), 
+                     double_digit(reads.o4_10_reads), 
+                     double_digit(reads.o4_11_reads), 
+                     double_digit(reads.o4_12_reads), 
+                     double_digit(reads.o4_13_reads), 
+                     double_digit(reads.o4_14_reads), 
+                     double_digit(reads.o4_15_reads), 
+                     double_digit(reads.o4_16_reads))
+                },
+            ]
+            highest_p_list = [
+                {'o1' : max(ovens_reads[0][reads.o1, 'p'])},
+                {'o2' : max(ovens_reads[1][reads.o2, 'p'])},
+                {'o3' : max(ovens_reads[2][reads.o3, 'p'])},
+                {'o4' : max(ovens_reads[3][reads.o4, 'p'])},
+            ]
+            
+            highest_t_list = [
+                {'o1' : max(ovens_reads[0][reads.o1, 't'])},
+                {'o2' : max(ovens_reads[1][reads.o2, 't'])},
+                {'o3' : max(ovens_reads[2][reads.o3, 't'])},
+                {'o4' : max(ovens_reads[3][reads.o4, 't'])},
+            ]
+ 
+            highest_push = highest_p_list[0]['o1']
+            highest_travel = highest_t_list[0]['o1']
+            
+            high_push = highest_push + "%"
+            high_travel = highest_travel + '%'
+            
+            none_A5 = False
+        else: 
+            none_A5 = True
+            high_push = 'N/A'
+            high_travel = 'N/A'
+            
         
+    
+            
+            
     else:
         return redirect('IncompleteForms')
     
     return render(request, 'ees_forms/c_dashboard.html',{
-        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 'weather': weather, "today":date_trans, 'ca_forms': ca_forms, 'wind_direction': wind_direction, 'Users': Users
+        'profile':profile, 'high_push': high_push, 'high_travel': high_travel, 'todays_log':todays_log, 'todays_obser':todays_obser, 'od_30':od_30, 'weather': weather, "today":date_trans, 'ca_forms': ca_forms, 'wind_direction': wind_direction, 'Users': Users, 'client': client, 'pressures':pressures, 'charges':charges, 'none_A1':none_A1, "none_A4":none_A1, 'none_A5':none_A5
     })
     
     

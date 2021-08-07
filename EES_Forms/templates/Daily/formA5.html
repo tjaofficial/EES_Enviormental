@@ -1,8 +1,9 @@
 {% extends "ees_forms/layout.html" %}
- 
+  
 {% block list%}
 {% load static %}
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">    
         <div>
@@ -87,7 +88,7 @@
                                     <td id="boxa4" colspan="2" >
                                         OPERATING MODE<br>{{ data.op_mode1 }}</td>
                                     <td id="boxa4" colspan="2" >
-                                        BACKGROUND COLOR<br>Start:{{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.background_color_stop }}
+                                        BACKGROUND COLOR<br>Start: {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.background_color_stop }}
                                       </td>
                                     <td id="boxa4" colspan="1" >
                                         SKY CONDITION<br>{{ data.sky_conditions }}
@@ -101,7 +102,7 @@
                                         OPERATING MODE<br>{{ data.op_mode2 }}
                                      </td>
                                     <td id="boxa4" colspan="2" >
-                                        WIND SPEED<br>Start:{{ data.wind_speed_start }}mph &nbsp; Stop:{{ data.wind_speed_stop }}mph
+                                        WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }} mph
                                     </td>
                                     <td id="boxa4" colspan="1">
                                         WIND DIRECTION<br>{{ data.wind_direction }}
@@ -109,10 +110,10 @@
                                 </tr>
                                  <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSION POINT<br>Start:{{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_point_stop }}
+                                        DESCRIBE EMISSION POINT<br>Start: {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_point_stop }}
                                      </td>
                                     <td id="boxa4" colspan="2" >
-                                        AMBIENT TEMP<br>Start:{{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop:{{ data.ambient_temp_stop }}<sup>o</sup>
+                                        AMBIENT TEMP<br>Start: {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop: {{ data.ambient_temp_stop }}<sup>o</sup>
                                      </td>
                                     <td id="boxa4" colspan="1" >
                                         HUMIDITY<br>{{ data.humidity }}%
@@ -138,12 +139,12 @@
                                 </tr>
                                   <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSIONS<br>Start:{{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_emissions_stop }}
+                                        DESCRIBE EMISSIONS<br>Start: {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_emissions_stop }}
                                     </td>
                                 </tr>
                                   <tr>
                                     <td id="boxa4" colspan="3" >
-                                        EMISSIONS COLOR<br>Start:{{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_color_stop }}
+                                        EMISSIONS COLOR<br>Start: {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_color_stop }}
                                     </td>
                                     <td id="boxa4" colspan="3" >
                                         PLUME TYPE:
@@ -162,12 +163,12 @@
                                 </tr>
                                  <tr>
                                     <td id="boxa4" colspan="6" >
-                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start:{{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.plume_opacity_determined_stop }}
+                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start: {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.plume_opacity_determined_stop }}
                                     </td>
                                 </tr>
                                  <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE BACKGROUND<br>Start:{{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_background_stop }}
+                                        DESCRIBE BACKGROUND<br>Start: {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_background_stop }}
                                     </td>
                                 </tr>
                             </table>
@@ -184,12 +185,12 @@
                               <table style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            Oven No.{{ readings_form.o1 }}
+                                            Oven No: {{ readings_form.o1 }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time:{{ readings_form.o1_start }} Stop Time:{{ readings_form.o1_stop }}
+                                            Start Time: {{ readings_form.o1_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o1_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -255,7 +256,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity{{ readings_form.o1_highest_opacity }}%
+                                            Highest Instantaneous Opacity&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_highest_opacity }}%
                                         </td>
                                     </tr>
                                     <tr>
@@ -265,7 +266,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Instantaneous Over 20%?
+                                            Instantaneous Over 20%?&nbsp; &nbsp;&nbsp; &nbsp;
                                             {{ readings_form.o1_instant_over_20 }}
                                         </td>
                                     </tr>  
@@ -276,7 +277,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings{{ readings_form.o1_average_6 }}%
+                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6 }}%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -287,7 +288,7 @@
                                         <td></td>
                                         <td colspan="5">
                                             Average Opacity of 6 Highest Readings Over 35%
-                                            {{ readings_form.o1_average_6_over_35 }}
+                                            &nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6_over_35 }}
                                         </td>
                                     </tr>
                                 </table>
@@ -297,12 +298,12 @@
                                 <table style="border-collapse: collapse;">
                                      <tr>
                                         <td colspan="6">
-                                            Oven No.{{ readings_form.o2 }}
+                                            Oven No: {{ readings_form.o2 }}
                                          </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time:{{ readings_form.o2_start }} Stop Time:{{ readings_form.o2_stop }}
+                                            Start Time: {{ readings_form.o2_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o2_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -368,7 +369,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity{{ readings_form.o2_highest_opacity }}%
+                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o2_highest_opacity }}%
                                         </td>
                                     </tr>
                                     <tr>
@@ -378,7 +379,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Instantaneous Over 20%?
+                                            Instantaneous Over 20%?&nbsp; &nbsp;
                                             {{ readings_form.o2_instant_over_20 }}
                                         </td>
                                     </tr>  
@@ -389,7 +390,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings{{ readings_form.o2_average_6 }}%
+                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o2_average_6 }}%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -399,7 +400,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
+                                            Average Opacity of 6 Highest Readings Over 35%&nbsp; &nbsp;
                                             {{ readings_form.o2_average_6_over_35 }}
                                         </td>
                                     </tr>
@@ -412,12 +413,12 @@
                                 <table style="border-collapse: collapse;">
                                      <tr>
                                         <td colspan="6">
-                                            Oven No.{{ readings_form.o3 }}
+                                            Oven No: {{ readings_form.o3 }}
                                          </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time:{{ readings_form.o3_start }} Stop Time:{{ readings_form.o3_stop }}
+                                            Start Time: {{ readings_form.o3_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o3_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -483,7 +484,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity{{ readings_form.o3_highest_opacity }}%
+                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o3_highest_opacity }}%
                                         </td>
                                     </tr>
                                     <tr>
@@ -494,7 +495,7 @@
                                         <td></td>
                                         <td colspan="5">
                                             Instantaneous Over 20%?
-                                            {{ readings_form.o3_instant_over_20 }}
+                                            &nbsp; &nbsp;{{ readings_form.o3_instant_over_20 }}
                                         </td>
                                     </tr>  
                                     <tr>
@@ -504,7 +505,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings{{ readings_form.o3_average_6 }}%
+                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o3_average_6 }}%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -515,7 +516,7 @@
                                         <td></td>
                                         <td colspan="5">
                                             Average Opacity of 6 Highest Readings Over 35%
-                                            {{ readings_form.o3_average_6_over_35 }}
+                                            &nbsp; &nbsp;{{ readings_form.o3_average_6_over_35 }}
                                         </td>
                                     </tr>
                                 </table>
@@ -524,10 +525,10 @@
                             <div id="ptTable"> 
                                 <table style="border-collapse: collapse;">
                                      <tr>
-                                        <td colspan="6">Oven No.{{ readings_form.o4 }}</td>
+                                        <td colspan="6">Oven No: {{ readings_form.o4 }}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7">Start Time:{{ readings_form.o4_start }} Stop Time:{{ readings_form.o4_stop }}</td>
+                                        <td colspan="7">Start Time: {{ readings_form.o4_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o4_stop }}</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 5px" > </td>
@@ -592,7 +593,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity{{ readings_form.o4_highest_opacity }}%
+                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o4_highest_opacity }}%
                                         </td>
                                     </tr>
                                     <tr>
@@ -603,7 +604,7 @@
                                         <td></td>
                                         <td colspan="5">
                                             Instantaneous Over 20%?
-                                            {{ readings_form.o4_instant_over_20 }}
+                                            &nbsp; &nbsp;{{ readings_form.o4_instant_over_20 }}
                                         </td>
                                     </tr>  
                                     <tr>
@@ -613,7 +614,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings{{ readings_form.o4_average_6 }}%
+                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o4_average_6 }}%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -624,7 +625,7 @@
                                         <td></td>
                                         <td colspan="5">
                                             Average Opacity of 6 Highest Readings Over 35%
-                                            {{ readings_form.o4_average_6_over_35 }}
+                                            &nbsp; &nbsp;{{ readings_form.o4_average_6_over_35 }}
                                         </td>
                                     </tr>
                                 </table>

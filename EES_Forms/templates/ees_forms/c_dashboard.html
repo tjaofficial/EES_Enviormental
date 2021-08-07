@@ -5,31 +5,65 @@
 <link href="{% static 'ees_forms/style/client_dashboard.css' %}" rel="stylesheet">
 <div class="c_center_dash">
     <div name="row_1" class="tileGroup">
-        <div name='push_travels' class="c_tiles main_background">
-            {% if client %}
-            <a href="Daily/formA5/{{ today }}">
+        <div name='Form A-1 Charges' class="c_tiles main_background" style="flex: 1 0 16%;">
+            
+            <a href="{% if not none_A1 %}Daily/formA1/{{ today }}{% else %}{% endif %}">
                 <div class="c_univ_header c_header_font_color">
-                    <h6>Todays Highest Push Travel Reads</h6>  
+                    <h6>Form A-1 <br>
+                        Charges</h6>  
                 </div>
                 <div class="tile_body">
                     <div class="content_holder">
-                        <div class="inner_tiny_box_left">
-                            <h6 class="c_client_card_background c_font_color">PUSH:<br>
-                            {{ high_push }}</h6>
-                        </div>
-                        <div class="inner_tiny_box_right">
-                            <div class="tiny_box_div">
-                                <h6 class="c_client_card_background c_font_color">TRAVEL:<br>
-                                {{ high_travel }}</h6>
+                        <div class="inner_tiny_box_single">
+                            <div class="c_client_card_background c_font_color" style="border-radius: .6rem; padding: 0.4rem; padding-top: 1rem; padding-bottom: 1rem;">
+                                {{ charges.0.0 }} - {{ charges.0.1 }}<br><br>
+                                {{ charges.1.0 }} - {{ charges.1.1 }}<br><br>
+                                {{ charges.2.0 }} - {{ charges.2.1 }}<br><br>
+                                {{ charges.3.0 }} - {{ charges.3.1 }}<br><br>
+                                {{ charges.4.0 }} - {{ charges.4.1 }}<br><br>
+                                {{ charges.5.0 }}: {{ charges.5.1 }}
                             </div>
                         </div>
                     </div>
                 </div>
+             </a>
+        </div>
+        <div name='Form A-4 pressure_main' class="c_tiles main_background" style="flex: 1 0 13%;">
+            {% if client %}
+            <a href="{% if not none_A4 %}Daily/formA4/{{ today }}{% else %}{% endif %}">
+                <div class="c_univ_header c_header_font_color">
+                    <h6>Form A-4 Collection Main</h6>  
+                </div>
+                <div class="tile_body">
+                    <div class="content_holder" style="display: block;">
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                            {{ pressures.0.0 }}:
+                            {{ pressures.0.1 }}
+                        </div>
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                            {{ pressures.1.0 }}:
+                            {{ pressures.1.1 }}
+                        </div>
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                            {{ pressures.2.0 }}:
+                            {{ pressures.2.1 }}
+                        </div>
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                            {{ pressures.3.0 }}:
+                            {{ pressures.3.1 }}
+                        </div>
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 80%; margin: auto; margin-bottom: .2rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                            {{ pressures.4.0 }}:<br>
+                            {{ pressures.4.1 }}
+                        </div>
+                    </div>
+                </div>
             </a>
+            
             {% else %}
             <a href="{% url 'Schedule' %}">
                 <div class="c_univ_header c_header_font_color">
-                    <h6>Schedule</h6>
+                    <h6>Schedule{{ client }}</h6>
                 </div>
                 <div style="text-align: center;">
                     <svg style="height: 8rem; color: white;" aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar-alt" class="svg-inline--fa fa-calendar-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"></path></svg>
@@ -37,45 +71,41 @@
             </a>
             {% endif %}
         </div>
-        <div name='battery' class="c_tiles main_background">
-            <a href="{% url 'Schedule' %}">
+        <div name='Form A-5 push_travels' class="c_tiles main_background" style="flex: 1 0 13%;">
+            {% if client %}
+            <a href="{% if not none_A5 %}Daily/formA5/{{ today }}{% else %}{% endif %}">
                 <div class="c_univ_header c_header_font_color">
-                    <h6>Battery Profile</h6>  
+                    <h6>Form A-5<br>Highest Readings</h6>  
                 </div>
                 <div class="tile_body">
-                    <div class="content_holder">
-                        <div class="inner_tiny_box_single">
-                            <table class="c_client_card_background c_font_color">
-                                <tr>
-                                    <td id="table_left">
-                                        Observer:
-                                    </td>
-                                    <td id="table_right">
-                                        {{ todays_obser }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="table_left">
-                                        Foreman:
-                                    </td>
-                                    <td id="table_right">
-                                        {{ todays_log.foreman }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="table_left">
-                                        Crew:
-                                    </td>
-                                    <td id="table_right">
-                                        {{ todays_log.crew }}
-                                    </td>
-                                </tr>
-                            </table>
+                    <div class="content_holder" style="display: block;">
+                        <div class="inner_tiny_box_left" style="width: 66%; margin: auto; margin-bottom: 1rem; height: auto;">
+                            <h6 class="c_client_card_background c_font_color" style="font-size: .7rem; height: 3rem; padding-top: 1rem; padding-bottom: 3rem;">PUSH:<br>
+                            <span style="font-size: 1.2rem;">{{ high_push }}</span></h6>
+                        </div>
+                        <div class="inner_tiny_box_right" style="margin: auto; padding-right: 0px; height: auto; width: 45%;">
+                            <div class="tiny_box_div">
+                                <h6 class="c_client_card_background c_font_color" style="font-size: .7rem; height: 3rem; padding-top: 1rem; padding-bottom: 3rem;">TRAVEL:<br>
+                                <span style="font-size: 1.2rem;">{{ high_travel }}</span></h6>
+                            </div>
                         </div>
                     </div>
                 </div>
-             </a>
+            </a>
+            
+            {% else %}
+            <a href="{% url 'Schedule' %}">
+                <div class="c_univ_header c_header_font_color">
+                    <h6>Schedule{{ client }}</h6>
+                </div>
+                <div style="text-align: center;">
+                    <svg style="height: 8rem; color: white;" aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar-alt" class="svg-inline--fa fa-calendar-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"></path></svg>
+                </div>
+            </a>
+            {% endif %}
         </div>
+        
+        
         <div name="monthly_progress" class="c_tiles main_background">
             <div class="c_univ_header c_header_font_color">
                 <h6>Monthly Inspections</h6>  
@@ -95,11 +125,48 @@
                 </div>
             </div>
         </div>
-        <div name="weather" class="c_tiles main_background">
+        
+        
+        <div name="battery_prof_weather" class="c_tiles main_background">
             <div class="c_univ_header c_header_font_color">
+                <h6>Battery Profile</h6>  
+            </div>
+            <div class="tile_body" style="padding-bottom: 0rem;">
+                <div class="content_holder">
+                    <div class="inner_tiny_box_single">
+                        <table class="c_client_card_background c_font_color">
+                            <tr>
+                                <td id="table_left">
+                                    Observer:
+                                </td>
+                                <td id="table_right">
+                                    {{ todays_obser }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="table_left">
+                                    Foreman:
+                                </td>
+                                <td id="table_right">
+                                    {{ todays_log.foreman }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="table_left">
+                                    Crew:
+                                </td>
+                                <td id="table_right">
+                                    {{ todays_log.crew }}
+                                </td>
+                            </tr>
+                        </table><br>
+                    </div>
+                </div>
+            </div>
+            <div class="c_univ_header c_header_font_color" style="padding-top: 0rem;">
                 <h6>Weather</h6>  
             </div>
-            <div class="tile_body">
+            <div class="tile_body" style="">
                 <div class="content_holder">
                     <div class="inner_tiny_box_single">
                         <table class="c_client_card_background c_font_color">
@@ -107,7 +174,7 @@
                                 <td id="table_left">
                                     City:
                                 </td>
-                                <td id="table_right">
+                                <td id="table_right" style="padding-left: 1.2rem;">
                                     {{ weather.city }}
                                 </td>
                             </tr>
@@ -115,7 +182,7 @@
                                 <td id="table_left">
                                     Temp:
                                 </td>
-                                <td id="table_right">
+                                <td id="table_right" style="padding-left: 1.2rem;">
                                     {{ weather.temperature|floatformat:"0" }}° F
                                 </td>
                             </tr>
@@ -123,7 +190,7 @@
                                 <td id="table_left">
                                     Description:
                                 </td>
-                                <td id="table_right">
+                                <td id="table_right" style="padding-left: 1.2rem;">
                                     {{ weather.description }}
                                 </td>
                             </tr>
@@ -131,7 +198,7 @@
                                 <td id="table_left">
                                     Wind:
                                 </td>
-                                <td id="table_right">
+                                <td id="table_right" style="padding-left: 1.2rem;">
                                     {{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}
                                 </td>
                             </tr>
@@ -139,7 +206,7 @@
                                 <td id="table_left">
                                     Humidity:
                                 </td>
-                                <td id="table_right">
+                                <td id="table_right" style="padding-left: 1.2rem;">
                                     {{ weather.humidity|floatformat:"0" }}%
                                 </td>
                             </tr>
@@ -393,9 +460,9 @@
                 </a>
             </div>
         </div>
-        <div class="c_card" style="min-width: 26rem; flex: 1 0 45%;">
+        <div name="90_day_push_travel" class="c_card">
             <div class="c_card_header main_background c_header_font_color">
-                <h6>I have no clue!</h6>
+                <h6>90 Day Push Travel Evaluation (Top 5)</h6>
             </div>
             <div class="c_card_body c_client_card_background c_font_color">
                 <div class="c_card_row">
