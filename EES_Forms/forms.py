@@ -17,10 +17,10 @@ class SubFormC1(ModelForm):
         
         widgets = {
             'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'truck_start_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
-            'truck_stop_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
-            'area_start_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
-            'area_stop_time' : forms.TimeInput(attrs={'class': 'input', 'type': 'time'}),
+            'truck_start_time' : forms.TimeInput(attrs={'id': 'truck_start_time', 'oninput': 'timecheck_1()', 'class': 'input', 'type': 'time'}),
+            'truck_stop_time' : forms.TimeInput(attrs={'id': 'truck_stop_time', 'oninput': 'timecheck_1()', 'class': 'input', 'type': 'time'}),
+            'area_start_time' : forms.TimeInput(attrs={'id': 'area_start_time', 'oninput': 'timecheck_2()', 'class': 'input', 'type': 'time'}),
+            'area_stop_time' : forms.TimeInput(attrs={'id': 'area_stop_time', 'oninput': 'timecheck_2()', 'class': 'input', 'type': 'time'}),
             'truck_sel' : forms.Select(attrs={'style':'width: 100px;'}),
             'area_sel' : forms.Select(attrs={'style':'width: 130px;'}),
             'observer' : forms.Select(attrs={'style':'width: 150px;'}),

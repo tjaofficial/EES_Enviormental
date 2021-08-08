@@ -152,9 +152,7 @@ class subA5_form(ModelForm):
             document.getElementById("myPopup2_oven").style.visibility = 'visible';
             document.getElementById("o2").style.backgroundColor = "#ffffff";
     }
-    else if (parseInt(oven2) == parseInt(oven1) + 2) {
-            
-    }  
+    
     else if (oven2 != oven1 + 2) {
         document.getElementById("myPopup_skip_oven").style.visibility = 'visible';
         document.getElementById("o2").style.backgroundColor = "#ffffff";

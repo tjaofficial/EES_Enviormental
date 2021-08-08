@@ -227,10 +227,10 @@ function pt2_averages() {
         highest_avg.push(avg)
     }
     
-    let ha1 = highest_avg.toFixed(2);
+    let ha1 = highest_avg;
     
     if(highest_avg) {
-        document.getElementById("o2_average_6").value = ha1;
+        document.getElementById("o2_average_6").value = parseFloat(ha1).toFixed(2);
     }
     else{
         document.getElementById("o2_average_6").value = '-';
@@ -363,10 +363,10 @@ function pt3_averages() {
         highest_avg.push(avg)
     }
     
-    let ha1 = highest_avg.toFixed(2);
+    let ha1 = highest_avg;
     
     if(highest_avg) {
-        document.getElementById("o3_average_6").value = ha1;
+        document.getElementById("o3_average_6").value = parseFloat(ha1).toFixed(2);
     }
     else{
         document.getElementById("o3_average_6").value = '-';
@@ -499,10 +499,10 @@ function pt4_averages() {
         highest_avg.push(avg)
     }
     
-    let ha1 = highest_avg.toFixed(2);
+    let ha1 = highest_avg;
     
     if(highest_avg) {
-        document.getElementById("o4_average_6").value = ha1;
+        document.getElementById("o4_average_6").value = parseFloat(ha1).toFixed(2);
     }
     else{
         document.getElementById("o4_average_6").value = '-';

@@ -482,6 +482,7 @@ def IncompleteForms(request):
                     forms.save()
             else:
                 forms.due_date = weekend_fri
+                
                 A = forms.date_submitted
                 if today != A :
                     forms.submitted = False
@@ -491,15 +492,13 @@ def IncompleteForms(request):
         pull = Forms.objects.filter(submitted__exact=False).order_by('form')
         pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
 
-        day_number = str(today.weekday())
+        day_number = today.weekday()
 
         if day_number == 6:
-            satruday = False
+            saturday = False
         else:
             saturday = True
 
-            
-        print(saturday)
         weekend_list = [5,6]
         form_check1 = ["",]
         form_check2 = ["",]
@@ -2482,6 +2481,7 @@ def formC(request, selector):
 #------------------------------------------------------------------------FORM D---------------<
 @lock
 def formD(request, selector):
+    formName = "D"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -2493,6 +2493,7 @@ def formD(request, selector):
     
     
     week_start_dates = formD_model.objects.all().order_by('-week_start')
+    
     if not DBEmpty(week_start_dates):
         week_almost = week_start_dates[0]
         #last submitted saturday
@@ -2502,6 +2503,7 @@ def formD(request, selector):
         sunday = today - datetime.timedelta(days=1)
         
         if today.weekday() not in {5, 6}:
+            
             if week == last_friday:
                 data = week_almost
                 initial_data = {
@@ -2551,7 +2553,7 @@ def formD(request, selector):
                 empty_form = formD_form(initial=initial_data)
             
                 if request.method == "POST":
-                    form = formD_form(request.POST, instance=week_almost)
+                    form = formD_form(request.POST, instance=data)
                     A_valid = form.is_valid()
                     if A_valid:
                         form.save()
@@ -2607,172 +2609,214 @@ def formD(request, selector):
 
 
                     return redirect('IncompleteForms')
+        
         else:
-            initial_data = {
-                'week_start' : last_friday,
-                'week_end' : end_week
-            }
-            empty_form = formD_form(initial= initial_data)
-            done = Forms.objects.filter(form='D')[0]
-            if request.method == "POST":
-                form = formD_form(request.POST)
-                A_valid = form.is_valid()
-                if A_valid:
-                    form.save()
-                    
-                    filled_out = True
-                    
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
+            if today.weekday() == 5 :
+                if week == today:
+                    print (week)
+                    print (today)
+                    data = week_almost
+                    initial_data = {
+                        'week_start' : data.week_start,
+                        'week_end' : data.week_end,
+                        'truck_id1' : data.truck_id1, 
+                        'date1' : data.date1,
+                        'time1' : data.time1,
+                        'contents1' : data.contents1,
+                        'freeboard1' : data.freeboard1,
+                        'wetted1' : data.wetted1,
+                        'comments1' : data.comments1,
+                        'truck_id2' : data.truck_id2,
+                        'date2' : data.date2,
+                        'time2' : data.time2,
+                        'contents2' : data.contents2,
+                        'freeboard2' : data.freeboard2,
+                        'wetted2' : data.wetted2,
+                        'comments2' : data.comments2,
+                        'truck_id3' : data.truck_id3,
+                        'date3' : data.date3,
+                        'time3' : data.time3,
+                        'contents3' : data.contents3,
+                        'freeboard3' : data.freeboard3,
+                        'wetted3' : data.wetted3,
+                        'comments3' : data.comments3,
+                        'truck_id4' : data.truck_id4,
+                        'date4' : data.date4,
+                        'time4' : data.time4,
+                        'contents4' : data.contents4,
+                        'freeboard4' : data.freeboard4,
+                        'wetted4' : data.wetted4,
+                        'comments4' : data.comments4,
+                        'truck_id5' : data.truck_id5,
+                        'date5' : data.date5,
+                        'time5' : data.time5,
+                        'contents5' : data.contents5,
+                        'freeboard5' : data.freeboard5,
+                        'wetted5' : data.wetted5,
+                        'comments5' : data.comments5,
+                        'observer1' : data.observer1,
+                        'observer2' : data.observer2,
+                        'observer3' : data.observer3,
+                        'observer4' : data.observer4,
+                        'observer5' : data.observer5,
 
-                    if filled_out:
-                        done = Forms.objects.filter(form='D')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-                    else:
-                        done = Forms.objects.filter(form='D')[0]
-                        done.submitted = False
-                        done.save()
-                   
-                
+                    }
+                    empty_form = formD_form(initial=initial_data)
+                    done = Forms.objects.filter(form='D')[0]
+                    if request.method == "POST":
+                        form = formD_form(request.POST, instance=week_almost)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            form.save()
+                            print('hello')
+                            print('')
+                            filled_out = True
+                            for items in week_almost.whatever().values():
+                                if items == None:
+                                    filled_out = False
+                                    break
 
-                return redirect('IncompleteForms')
-    else:
-        if today.weekday() == 5 :
-            if week == today:
-                print (week)
-                print (today)
-                data = week_almost
-                initial_data = {
-                    'week_start' : data.week_start,
-                    'week_end' : data.week_end,
-                    'truck_id1' : data.truck_id1, 
-                    'date1' : data.date1,
-                    'time1' : data.time1,
-                    'contents1' : data.contents1,
-                    'freeboard1' : data.freeboard1,
-                    'wetted1' : data.wetted1,
-                    'comments1' : data.comments1,
-                    'truck_id2' : data.truck_id2,
-                    'date2' : data.date2,
-                    'time2' : data.time2,
-                    'contents2' : data.contents2,
-                    'freeboard2' : data.freeboard2,
-                    'wetted2' : data.wetted2,
-                    'comments2' : data.comments2,
-                    'truck_id3' : data.truck_id3,
-                    'date3' : data.date3,
-                    'time3' : data.time3,
-                    'contents3' : data.contents3,
-                    'freeboard3' : data.freeboard3,
-                    'wetted3' : data.wetted3,
-                    'comments3' : data.comments3,
-                    'truck_id4' : data.truck_id4,
-                    'date4' : data.date4,
-                    'time4' : data.time4,
-                    'contents4' : data.contents4,
-                    'freeboard4' : data.freeboard4,
-                    'wetted4' : data.wetted4,
-                    'comments4' : data.comments4,
-                    'truck_id5' : data.truck_id5,
-                    'date5' : data.date5,
-                    'time5' : data.time5,
-                    'contents5' : data.contents5,
-                    'freeboard5' : data.freeboard5,
-                    'wetted5' : data.wetted5,
-                    'comments5' : data.comments5,
-                    'observer1' : data.observer1,
-                    'observer2' : data.observer2,
-                    'observer3' : data.observer3,
-                    'observer4' : data.observer4,
-                    'observer5' : data.observer5,
+                            if filled_out:
+                                done = Forms.objects.filter(form='D')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+                            else:
+                                done.submitted = False
+                                done.save()
 
-                }
-                empty_form = formD_form(initial=initial_data)
-                done = Forms.objects.filter(form='D')[0]
-                if request.method == "POST":
-                    form = formD_form(request.POST, instance=week_almost)
-                    A_valid = form.is_valid()
-                    if A_valid:
-                        form.save()
+                        return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'week_start' : last_friday,
+                        'week_end' : end_week
+                    }
+                    empty_form = formD_form(initial= initial_data)
+                    done = Forms.objects.filter(form='D')[0]
+                    if request.method == "POST":
+                        form = formD_form(request.POST)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            form.save()
 
-                        filled_out = True
-                        for items in week_almost.whatever().values():
-                            if items == None:
-                                filled_out = False
-                                break
-                                
-                        if filled_out:
-                            done = Forms.objects.filter(form='D')[0]
-                            done.submitted = True
-                            done.date_submitted = todays_log.date_save
-                            done.save()
-                        else:
-                            done.submitted = False
-                            done.save()
+                            filled_out = True
+                            for items in week_almost.whatever().values():
+                                if items == None:
+                                    filled_out = False
+                                    break
+                            if filled_out: 
+                                done = Forms.objects.filter(form='D')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+                            else:
+                                done.submitted = False
+                                done.save()
 
-                    return redirect('IncompleteForms')
+                        return redirect('IncompleteForms')
+
             else:
-                initial_data = {
-                    'week_start' : last_friday,
-                    'week_end' : end_week
-                }
-                empty_form = formD_form(initial= initial_data)
-                done = Forms.objects.filter(form='D')[0]
-                if request.method == "POST":
-                    form = formD_form(request.POST)
-                    A_valid = form.is_valid()
-                    if A_valid:
-                        form.save()
+                sunday = today - datetime.timedelta(days=1)
+                if week == sunday:
+                    data = week_almost
+                    initial_data = {
+                        'week_start' : data.week_start,
+                        'week_end' : data.week_end,
+                        'truck_id1' : data.truck_id1, 
+                        'date1' : data.date1,
+                        'time1' : data.time1,
+                        'contents1' : data.contents1,
+                        'freeboard1' : data.freeboard1,
+                        'wetted1' : data.wetted1,
+                        'comments1' : data.comments1,
+                        'truck_id2' : data.truck_id2,
+                        'date2' : data.date2,
+                        'time2' : data.time2,
+                        'contents2' : data.contents2,
+                        'freeboard2' : data.freeboard2,
+                        'wetted2' : data.wetted2,
+                        'comments2' : data.comments2,
+                        'truck_id3' : data.truck_id3,
+                        'date3' : data.date3,
+                        'time3' : data.time3,
+                        'contents3' : data.contents3,
+                        'freeboard3' : data.freeboard3,
+                        'wetted3' : data.wetted3,
+                        'comments3' : data.comments3,
+                        'truck_id4' : data.truck_id4,
+                        'date4' : data.date4,
+                        'time4' : data.time4,
+                        'contents4' : data.contents4,
+                        'freeboard4' : data.freeboard4,
+                        'wetted4' : data.wetted4,
+                        'comments4' : data.comments4,
+                        'truck_id5' : data.truck_id5,
+                        'date5' : data.date5,
+                        'time5' : data.time5,
+                        'contents5' : data.contents5,
+                        'freeboard5' : data.freeboard5,
+                        'wetted5' : data.wetted5,
+                        'comments5' : data.comments5,
+                        'observer1' : data.observer1,
+                        'observer2' : data.observer2,
+                        'observer3' : data.observer3,
+                        'observer4' : data.observer4,
+                        'observer5' : data.observer5,
 
-                        filled_out = True
-                        for items in week_almost.whatever().values():
-                            if items == None:
-                                filled_out = False
-                                break
-                        if filled_out: 
-                            done = Forms.objects.filter(form='D')[0]
-                            done.submitted = True
-                            done.date_submitted = todays_log.date_save
-                            done.save()
-                        else:
-                            done.submitted = False
-                            done.save()
+                    }
+                    empty_form = formD_form(initial=initial_data)
+                    done = Forms.objects.filter(form='D')[0]
+                    if request.method == "POST":
+                        form = formD_form(request.POST, instance=data)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            form.save()
+                            
+                            filled_out = True
+                            for items in week_almost.whatever().values():
+                                if items == None:
+                                    filled_out = True #-change this back to false
+                                    break
 
-                    return redirect('IncompleteForms')
-          
-        else:
-            sunday = today - datetime.timedelta(days=1)
-            initial_data = {
-                'week_start' : sunday,
-                'week_end' : sunday + one_week,
-            }
-            empty_form = formD_form(initial= initial_data)
-            done = Forms.objects.filter(form='D')[0]
-            if request.method == "POST":
-                form = formD_form(request.POST)
-                A_valid = form.is_valid()
-                if A_valid:
-                    form.save()
-                    week_almost = week_start_dates[0]
-                    filled_out = True
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
-                    if filled_out: 
-                        done = Forms.objects.filter(form='D')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-                    else:
-                        done.submitted = False
-                        done.save()
+                            if filled_out:
+                                done = Forms.objects.filter(form='D')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+                            else:
+                                done.submitted = False
+                                done.save()
 
-                return redirect('IncompleteForms')
+                        return redirect('IncompleteForms')
+                else:
+                    
+                    initial_data = {
+                        'week_start' : sunday,
+                        'week_end' : sunday + one_week,
+                    }
+                    empty_form = formD_form(initial= initial_data)
+                    done = Forms.objects.filter(form='D')[0]
+                    if request.method == "POST":
+                        form = formD_form(request.POST)
+                        A_valid = form.is_valid()
+                        if A_valid:
+                            form.save()
+                            week_almost = week_start_dates[0]
+                            filled_out = True
+                            for items in week_almost.whatever().values():
+                                if items == None:
+                                    filled_out = False
+                                    break
+                            if filled_out: 
+                                done = Forms.objects.filter(form='D')[0]
+                                done.submitted = True
+                                done.date_submitted = todays_log.date_save
+                                done.save()
+                            else:
+                                done.submitted = False
+                                done.save()
+
+                        return redirect('IncompleteForms')
         
     return render (request, "Weekly/formD.html", {
         "back": back, 'todays_log': todays_log, 'empty': empty_form, 'profile': profile, 'selector': selector,
@@ -5675,6 +5719,7 @@ def formO(request, selector, weekend_day):
     elif weekend_day == 'sunday':
         ss_filler = 6
     
+    print(ss_filler)
     if formO_model.objects.count() != 0:
         database_form = org[0]
         database_date = database_form.date
@@ -5717,7 +5762,6 @@ def formO(request, selector, weekend_day):
                             A = data_form.save()
 
                             if 'Yes' in {
-                                A.Q_1,
                                 A.Q_2,
                                 A.Q_3,
                                 A.Q_4,
@@ -5752,7 +5796,6 @@ def formO(request, selector, weekend_day):
                             A = data_form.save()
 
                             if 'Yes' in {
-                                A.Q_1,
                                 A.Q_2,
                                 A.Q_3,
                                 A.Q_4,
@@ -5832,7 +5875,6 @@ def formP(request, selector, weekend_day):
                         A = data_form.save()
                         
                         if 'Yes' in {
-                            A.Q_1,
                             A.Q_2,
                             A.Q_3,
                             A.Q_4,
@@ -5867,7 +5909,6 @@ def formP(request, selector, weekend_day):
                         A = data_form.save()
                         
                         if 'Yes' in {
-                            A.Q_1,
                             A.Q_2,
                             A.Q_3,
                             A.Q_4,
@@ -5918,7 +5959,10 @@ def issues_view(request, form_name, form_date, access_page):
             
         for x in data:
             if x.form == form_name:
-                link = x.link + '/' + access_page + '/' + day
+                if x.form in {'O','P'}:
+                    link = x.frequency + '/' + x.link + '/' + access_page + '/' + day
+                else:
+                    link = x.frequency + '/' + x.link + '/' + access_page
     
     if access_page == 'issue':
         org = issues_model.objects.all().order_by('-date')

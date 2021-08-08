@@ -47,7 +47,7 @@ function c2_check() {
     };
     function comment_skipped() {
         for (let x = parseInt(oven1)+2; x < parseInt(oven2); x+=2) {
-            document.getElementById("comments").innerHTML += ' Oven #' + x + ' was skipped.'
+            document.getElementById("comments").value += ' Oven #' + x + ' was skipped.'
         }
         document.getElementById("comment_skip_id").style.visibility = 'hidden';
     }  
