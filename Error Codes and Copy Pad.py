@@ -143,7 +143,27 @@ class subA5_form(ModelForm):
         
 
         
-        
+        }
+    else if (oven1 >= oven2) {
+        document.getElementById("myPopup2_oven").style.visibility = 'visible';
+        document.getElementById("o2").style.backgroundColor = "#ffffff";
+    }
+    else if (parseInt(oven2) == parseInt(oven1) + 1) {
+            document.getElementById("myPopup2_oven").style.visibility = 'visible';
+            document.getElementById("o2").style.backgroundColor = "#ffffff";
+    }
+    else if (parseInt(oven2) == parseInt(oven1) + 2) {
+            
+    }  
+    else if (oven2 != oven1 + 2) {
+        document.getElementById("myPopup_skip_oven").style.visibility = 'visible';
+        document.getElementById("o2").style.backgroundColor = "#ffffff";
+        document.getElementById("myPopup_skip_oven").style.marginTop = '-80px';
+    }
+    else {
+        document.getElementById("myPopup2_oven").style.visibility = 'hidden';
+        document.getElementById("myPopup_skip_oven").style.visibility = 'hidden';
+    }
         
         
         

@@ -6,7 +6,6 @@
 <div class="c_center_dash">
     <div name="row_1" class="tileGroup">
         <div name='Form A-1 Charges' class="c_tiles main_background" style="flex: 1 0 16%;">
-            
             <a href="{% if not none_A1 %}Daily/formA1/{{ today }}{% else %}{% endif %}">
                 <div class="c_univ_header c_header_font_color">
                     <h6>Form A-1 <br>
@@ -15,7 +14,7 @@
                 <div class="tile_body">
                     <div class="content_holder">
                         <div class="inner_tiny_box_single">
-                            <div class="c_client_card_background c_font_color" style="border-radius: .6rem; padding: 0.4rem; padding-top: 1rem; padding-bottom: 1rem;">
+                            <div class="c_client_card_background c_font_color" style="border-radius: .6rem; padding: 0.4rem; padding-top: 1rem; padding-bottom: 1rem; box-shadow: inset 0px 0px 8px 0px;">
                                 {{ charges.0.0 }} - {{ charges.0.1 }}<br><br>
                                 {{ charges.1.0 }} - {{ charges.1.1 }}<br><br>
                                 {{ charges.2.0 }} - {{ charges.2.1 }}<br><br>
@@ -36,23 +35,23 @@
                 </div>
                 <div class="tile_body">
                     <div class="content_holder" style="display: block;">
-                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 71%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center; box-shadow: inset 0px 0px 8px 0px;">
                             {{ pressures.0.0 }}:
                             {{ pressures.0.1 }}
                         </div>
-                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 71%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center; box-shadow: inset 0px 0px 8px 0px;">
                             {{ pressures.1.0 }}:
                             {{ pressures.1.1 }}
                         </div>
-                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 71%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center; box-shadow: inset 0px 0px 8px 0px;">
                             {{ pressures.2.0 }}:
                             {{ pressures.2.1 }}
                         </div>
-                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 66%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 71%; margin: auto; margin-bottom: 0.5rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center; box-shadow: inset 0px 0px 8px 0px;">
                             {{ pressures.3.0 }}:
                             {{ pressures.3.1 }}
                         </div>
-                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 80%; margin: auto; margin-bottom: .2rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center;">
+                        <div class="inner_tiny_box_left c_client_card_background c_font_color" style="width: 80%; margin: auto; margin-bottom: .2rem; height: auto; border-radius: .6rem; padding: .5rem; font-size: 1rem; display: flex; justify-content: center; box-shadow: inset 0px 0px 8px 0px;">
                             {{ pressures.4.0 }}:<br>
                             {{ pressures.4.1 }}
                         </div>
@@ -77,16 +76,16 @@
                 <div class="c_univ_header c_header_font_color">
                     <h6>Form A-5<br>Highest Readings</h6>  
                 </div>
-                <div class="tile_body">
-                    <div class="content_holder" style="display: block;">
-                        <div class="inner_tiny_box_left" style="width: 66%; margin: auto; margin-bottom: 1rem; height: auto;">
-                            <h6 class="c_client_card_background c_font_color" style="font-size: .7rem; height: 3rem; padding-top: 1rem; padding-bottom: 3rem;">PUSH:<br>
-                            <span style="font-size: 1.2rem;">{{ high_push }}</span></h6>
+                <div class="tile_body" style="height: 78%; display: block;">
+                    <div class="content_holder" style="display: block; margin-bottom: 0;">
+                        <div class="inner_tiny_box_left" style="width: 100%; margin: auto; margin-bottom: 1rem; height: 47%;">
+                            <h6 class="c_client_card_background c_font_color" style="font-size: .7rem; height: 6.5rem; padding-top: 1.7rem; padding-bottom: 2rem; box-shadow: inset 0px 0px 8px 0px;">PUSH:<br>
+                            <span style="font-size: 2.2rem;">{{ high_push }}</span></h6>
                         </div>
-                        <div class="inner_tiny_box_right" style="margin: auto; padding-right: 0px; height: auto; width: 45%;">
-                            <div class="tiny_box_div">
-                                <h6 class="c_client_card_background c_font_color" style="font-size: .7rem; height: 3rem; padding-top: 1rem; padding-bottom: 3rem;">TRAVEL:<br>
-                                <span style="font-size: 1.2rem;">{{ high_travel }}</span></h6>
+                        <div class="inner_tiny_box_right" style="margin: auto; padding-left: 15px; height: auto; width: 100%;">
+                            <div class="tiny_box_div" style="height: auto;">
+                                <h6 class="c_client_card_background c_font_color" style="font-size: .7rem; height: 6.5rem; padding-top: 1.7rem; padding-bottom: 2rem; box-shadow: inset 0px 0px 8px 0px;">TRAVEL:<br>
+                                <span style="font-size: 2.2rem;">{{ high_travel }}</span></h6>
                             </div>
                         </div>
                     </div>

@@ -493,12 +493,13 @@ def IncompleteForms(request):
 
         day_number = str(today.weekday())
 
-
         if day_number == 6:
             satruday = False
         else:
             saturday = True
 
+            
+        print(saturday)
         weekend_list = [5,6]
         form_check1 = ["",]
         form_check2 = ["",]
@@ -519,7 +520,7 @@ def IncompleteForms(request):
                     return redirect ('c_dashboard')
     
     return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction,
+        "pull": pull, "pullNot":pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now':now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile':profile, 'today_str':today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday,
     })
 
 def weekly_forms(request):
@@ -1660,33 +1661,91 @@ def formA5(request, selector):
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o1_average_6 >= 35 :
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
-
+                                
                                 return redirect (issue_page)
+                            
+                            if B.o1_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o1_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            
+                            
+                            
                             if B.o2_highest_opacity >= 10:
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o2_average_6 >= 35 :
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
+                            if B.o2_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o2_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            
+                            
+                            
+                            
                             if B.o3_highest_opacity >= 10:
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o3_average_6 >= 35 :
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
+                            if B.o3_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o3_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            
+                            
+                            
+                            
                             if B.o4_highest_opacity >= 10:
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o4_average_6 >= 35 :
                                 issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
+                                return redirect (issue_page)
+                            
+                            if B.o4_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o4_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
                                 return redirect (issue_page)
 
 
@@ -1748,36 +1807,94 @@ def formA5(request, selector):
                             B.save()
 
                             if B.o1_highest_opacity >= 10:
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o1_average_6 >= 35 :
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
-
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
                                 return redirect (issue_page)
+                            
+                            if B.o1_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o1_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            
+                            
+                            
                             if B.o2_highest_opacity >= 10:
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o2_average_6 >= 35 :
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
+                            if B.o2_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o2_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            
+                            
+                            
+                            
                             if B.o3_highest_opacity >= 10:
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o3_average_6 >= 35 :
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
+                            if B.o3_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o3_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            
+                            
+                            
+                            
                             if B.o4_highest_opacity >= 10:
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
                                 return redirect (issue_page)
+                            
                             if B.o4_average_6 >= 35 :
-                                issue_page = '../../issues_view/A-5/' + str(todays_log.date_save) + '/form'
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
 
+                                return redirect (issue_page)
+                            
+                            if B.o4_instant_over_20 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
+                                return redirect (issue_page)
+                            
+                            if B.o4_average_6_over_35 == 'Yes' :
+                                issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                                
                                 return redirect (issue_page)
 
                             done = Forms.objects.filter(form='A-5')[0]
@@ -5553,6 +5670,11 @@ def formO(request, selector, weekend_day):
 
     org = formO_model.objects.all().order_by('-date')
     
+    if weekend_day == 'saturday':
+        ss_filler = 5
+    elif weekend_day == 'sunday':
+        ss_filler = 6
+    
     if formO_model.objects.count() != 0:
         database_form = org[0]
         database_date = database_form.date
@@ -5620,15 +5742,30 @@ def formO(request, selector, weekend_day):
                         'date' : today,
                         'observer' : full_name,
                         'month' : month_name,
-                        'weekend_day' : weekend_day,
+                        'weekend_day' : ss_filler,
                     }
                     data_form = formO_form(initial = initial_data)
 
                     if request.method == 'POST':
                         data_form = formO_form(request.POST)
                         if data_form.is_valid():
-                            data_form.save()
+                            A = data_form.save()
 
+                            if 'Yes' in {
+                                A.Q_1,
+                                A.Q_2,
+                                A.Q_3,
+                                A.Q_4,
+                                A.Q_5,
+                                A.Q_6,
+                                A.Q_7,
+                                A.Q_8,
+                                A.Q_9,
+                            }:
+                                issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/form'
+
+                                return redirect (issue_page)
+                        
                             done = Forms.objects.filter(form='O')[0]
                             done.submitted = True
                             done.date_submitted = todays_log.date_save
@@ -5655,6 +5792,11 @@ def formP(request, selector, weekend_day):
     month_name = calendar.month_name[today.month]
 
     org = formP_model.objects.all().order_by('-date')
+    
+    if weekend_day == 'saturday':
+        ss_filler = 5
+    elif weekend_day == 'sunday':
+        ss_filler = 6
     
     if formP_model.objects.count() != 0:
         database_form = org[0]
@@ -5715,14 +5857,29 @@ def formP(request, selector, weekend_day):
                     'date' : today,
                     'observer' : full_name,
                     'month' : month_name,
-                    'weekend_day' : weekend_day,
+                    'weekend_day' : ss_filler,
                 }
                 data_form = formP_form(initial = initial_data)
 
                 if request.method == 'POST':
                     data_form = formP_form(request.POST)
                     if data_form.is_valid():
-                        data_form.save()
+                        A = data_form.save()
+                        
+                        if 'Yes' in {
+                            A.Q_1,
+                            A.Q_2,
+                            A.Q_3,
+                            A.Q_4,
+                            A.Q_5,
+                            A.Q_6,
+                            A.Q_7,
+                            A.Q_8,
+                            A.Q_9,
+                        }:
+                            issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/form'
+
+                            return redirect (issue_page)
                         
                         done = Forms.objects.filter(form='P')[0]
                         done.submitted = True
@@ -5753,9 +5910,15 @@ def issues_view(request, form_name, form_date, access_page):
     
     if access_page == 'form':
         data = Forms.objects.all()
+        today = datetime.date.today()
+        if today.weekday() == 5:
+            day = 'saturday'
+        elif today.weekday() == 6:
+            day = 'sunday'
+            
         for x in data:
             if x.form == form_name:
-                link = x.link
+                link = x.link + '/' + access_page + '/' + day
     
     if access_page == 'issue':
         org = issues_model.objects.all().order_by('-date')

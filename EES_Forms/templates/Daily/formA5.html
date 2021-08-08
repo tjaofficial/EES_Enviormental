@@ -182,7 +182,7 @@
 
 
 
-                              <table style="border-collapse: collapse;">
+                              <table name="oven1" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
                                             Oven No: {{ readings_form.o1 }}
@@ -191,6 +191,7 @@
                                     <tr>
                                         <td colspan="7">
                                             Start Time: {{ readings_form.o1_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o1_stop }}
+                                            <span class="popuptext1" id="myPopup1">Please Change Time</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -295,15 +296,17 @@
                             </div>    
                             <br>
                             <div id="ptTable"> 
-                                <table style="border-collapse: collapse;">
+                                <table name="oven2" style="border-collapse: collapse;">
                                      <tr>
                                         <td colspan="6">
                                             Oven No: {{ readings_form.o2 }}
+                                            <span class="oven2_pop_class" id="oven2_pop_id">Please Change Oven No.</span>
                                          </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
                                             Start Time: {{ readings_form.o2_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o2_stop }}
+                                            <span class="popuptext2" id="myPopup2">Please Change Time</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -410,15 +413,17 @@
                         <br><br><br><br>
                         <div id="bothTables">
                             <div>
-                                <table style="border-collapse: collapse;">
+                                <table name="oven3" style="border-collapse: collapse;">
                                      <tr>
                                         <td colspan="6">
                                             Oven No: {{ readings_form.o3 }}
+                                            <span class="oven1_pop_class" id="oven3_pop_id">Please Change Oven No.</span>
                                          </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
                                             Start Time: {{ readings_form.o3_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o3_stop }}
+                                            <span class="popuptext1" id="myPopup3">Please Change Time</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -523,12 +528,18 @@
                             </div>    
                             <br>
                             <div id="ptTable"> 
-                                <table style="border-collapse: collapse;">
+                                <table name="oven4" style="border-collapse: collapse;">
                                      <tr>
-                                        <td colspan="6">Oven No: {{ readings_form.o4 }}</td>
+                                        <td colspan="6">
+                                            Oven No: {{ readings_form.o4 }}
+                                            <span class="oven2_pop_class" id="oven4_pop_id">Please Change Oven No.</span>
+                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7">Start Time: {{ readings_form.o4_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o4_stop }}</td>
+                                        <td colspan="7">
+                                            Start Time: {{ readings_form.o4_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o4_stop }}
+                                            <span class="popuptext2" id="myPopup4">Please Change Time</span>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td style="height: 5px" > </td>
@@ -639,6 +650,12 @@
                         </div>
                         <br>
                         {{ data.notes }}
+                        <span class="comment_skip_class" id="comment_skip_id">
+                            <a id="exit_pop_id" class='exit_pop_class'>
+                                X
+                            </a>
+                            Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
+                        </span>
                         {% if unlock %}
                         <br><br><br>
                         <input type="submit" value="Submit Form" class="submit_button">
