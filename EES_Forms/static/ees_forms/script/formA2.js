@@ -87,5 +87,177 @@ const timeDelta = (startTimeArray,endTimeArray) => {
 }
 
 
+/*****************************************
+Adding Rows to Table
+*****************************************/
 
 
+
+
+
+// {
+//     data:[
+//         {
+//             oven: "1",
+//             location: "D",
+//             zone: "3"
+//         },
+//         {
+//             oven: "3",
+//             location: "C",
+//             zone: "6"
+//         },
+//         {
+//             oven: "2",
+//             location: "M",
+//             zone: "7"
+//         }
+//     ]
+// };
+
+
+
+// Takes array of Objects and builds the string of HTML
+function createHTMLString(dataJSON){
+        
+    let tableHTML = "";
+
+    if(dataJSON.data){
+        const dataArray = dataJSON.data;
+        if(dataArray.length > 0){
+            for(i=0; i<dataArray.length; i++){
+                let data = dataArray[i];
+                tableHTML = tableHTML+htmlLayout(false, data);
+            }
+        }
+    }
+
+    tableHTML = tableHTML+htmlLayout(true, {});
+    document.getElementById('ctableBody').innerHTML = tableHTML;
+    
+
+
+}
+
+
+
+function intiateResultEventListeners(){
+    const resultElement = document.querySelectorAll("[data-resultInput]");
+    for(i=0; i<resultElement.length; i++){
+        resultElement[i].addEventListener('input',(event)=>{
+            let elem = event.target;
+            handle_Table_Input(elem)
+        })
+        
+    }
+}
+
+
+function handle_Table_Input(elem){
+    let resultInputAttr = elem.dataset.resultinput;
+    let resultKeyAttr = elem.dataset.resultkey;
+    let elemValue = elem.value; 
+    if(parseInt(resultInputAttr) === -1){
+        addToResultArray(elemValue, resultKeyAttr);
+    }
+    else{
+        updateResultArray(elemValue, resultKeyAttr, resultInputAttr);
+    }
+}
+
+function addToResultArray(valueInputed, inputKey){
+    const push_Side_Result = document.getElementById('pushSideResults').value;
+    const parsed_Result = JSON.parse(push_Side_Result)
+    
+    let new_Object = {};
+    new_Object[inputKey] = valueInputed;
+    const result_Array = parsed_Result.data ? parsed_Result.data : [];
+
+    result_Array.push(new_Object);
+    parsed_Result.data = result_Array;
+    
+    document.getElementById('pushSideResults').value = JSON.stringify(parsed_Result);
+    createHTMLString(parsed_Result);
+    intiateResultEventListeners();
+
+}
+
+function updateResultArray(valueInputed, inputKey, arrayPos){
+    const push_Side_Result = document.getElementById('pushSideResults').value;
+    const parsed_Result = JSON.parse(push_Side_Result)
+    const result_Array = parsed_Result.data;
+    if(result_Array[arrayPos]){
+        let changed_Object = result_Array[arrayPos];
+        if(valueInputed){
+            changed_Object[inputKey] = valueInputed;
+        }
+        else{
+            delete changed_Object[inputKey];
+        }
+
+        if (Object.keys(changed_Object).length === 0 && changed_Object.constructor === Object){
+            result_Array.splice(arrayPos,1);
+        }
+        else{result_Array[arrayPos] = changed_Object;}
+        
+        parsed_Result.data = result_Array;
+    
+        document.getElementById('pushSideResults').value = JSON.stringify(parsed_Result);
+        createHTMLString(parsed_Result);
+        intiateResultEventListeners();
+    }
+    
+    
+
+    
+
+}
+
+//createHTMLString(pushResultDataJSON);
+
+
+function initate_Result_Table(){
+    const pushResultDataJSON = document.getElementById('pushSideResults').value;
+    let parsedJSON = JSON.parse(pushResultDataJSON)
+    createHTMLString(parsedJSON);
+    intiateResultEventListeners();
+
+}
+
+// Takes objects whether should be empty and data to return string of html
+// Template for Table Rows
+function htmlLayout(empty, data){
+
+    const htmlStr= `<tr>
+                        <td class="boxa6" colspan="1">
+                            <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" />
+                        </td>
+                        <td class="boxa6" colspan="1">
+                            <select data-resultInput="${empty? -1: i}" data-resultKey="location" onchange()>
+                                <option value="" ${empty? 'selected': ''}>--</option>
+                                <option value="D" ${!empty && data.location === "D"? 'selected': ''}>D</option>
+                                <option value="C" ${!empty && data.location === "C"? 'selected': ''}>C</option>
+                                <option value="M" ${!empty && data.location === "M"? 'selected': ''}>M</option>
+                            </select>
+                        </td>
+                        <td class="boxa6" colspan="1">
+                            <select data-resultInput="${empty? -1: i}" data-resultKey="zone">
+                                <option value="" ${empty? 'selected': ''}>--</option>
+                                <option value="1" ${!empty && data.zone === "1"? 'selected': ''}>1</option>
+                                <option value="2" ${!empty && data.zone === "2"? 'selected': ''}>2</option>
+                                <option value="3" ${!empty && data.zone === "3"? 'selected': ''}>3</option>
+                                <option value="4" ${!empty && data.zone === "4"? 'selected': ''}>4</option>
+                                <option value="5" ${!empty && data.zone === "5"? 'selected': ''}>5</option>
+                                <option value="6" ${!empty && data.zone === "6"? 'selected': ''}>6</option>
+                                <option value="7" ${!empty && data.zone === "7"? 'selected': ''}>7</option>
+                                <option value="8" ${!empty && data.zone === "8"? 'selected': ''}>8</option>
+                            </select>
+                        </td>
+                    </tr>`;
+    return htmlStr;
+
+
+
+}
+
+initate_Result_Table()

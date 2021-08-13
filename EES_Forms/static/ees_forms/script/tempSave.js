@@ -2,7 +2,7 @@ const arrayOfInputs = document.getElementsByTagName('input');
 const formName = document.getElementById('formName').dataset.form
 const tempSaveKey = formName+"_tempFormData";
 const currentDate = Date.now();
-
+console.log(arrayOfInputs);
 function inputEventListener(array, tempSaveKey, currentDate){
     
     //console.log(arrayOfInputs)

@@ -3,68 +3,10 @@
 {% block list%}
 {% load static %}
 
-    <style>
-        #paperSize{
-            width: 1400px;
-            margin: auto;
-            padding-top: 50px;
-        }
-        #boxTitle{
-            font-size: 30px;
-        }
-        #boxa1{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 150px;
-            max-width: 150px;
-            height: 35px;
-        }
-        #boxa2{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 80px;
-            max-width: 80px;
-            height: 35px;
-        }
-        #boxa3{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 300px;
-            max-width: 300px;
-            height: 35px;
-        }
-        #boxa4{
-            align-content: center;
-            text-align: left;
-            min-width: 250px;
-            max-width: 250px;
-            height: 35px;
-        }
-        #boxa5{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 100px;
-            max-width: 100px;
-            height: 35px;
-        }
-        #boxa6{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            height: 25px;
-        }
-        #noteBox{
-            border-collapse: collapse; 
-            margin: auto;
-            width: 1100px;
-        }
-    </style>
-    <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
+    <link href="{% static 'ees_forms/style/formA2/formA2.css' %}" rel="stylesheet">
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
+
 
     {{ BASE_DIR }}
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
@@ -77,7 +19,7 @@
                 {% csrf_token %}
                 <table style="border-collapse: collapse; margin: auto;">
                     <tr>
-                        <th id="boxTitle" colspan="5" style="text-align: left;">Method 303 Doors - Form (A-2)</th>
+                        <th class="boxTitle" colspan="5" style="text-align: left;">Method 303 Doors - Form (A-2)</th>
                         <th></th>
                     </tr>
                     <tr>
@@ -110,157 +52,107 @@
                         </th>
                     </tr>
                 </table>
-                
-                
-                
-                <table style="border-collapse: collapse; margin: auto; margin-left: 287px;">
-                    <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <th id="boxa4" colspan="5">Start Time:{{ data.p_start }} <br> End Time:{{ data.p_stop }}</th>
-                        <th id="boxa4" colspan="1"></th>
-                        <th id="boxa4" colspan="5">Start Time:{{ data.c_start }} <br> End Time:{{ data.c_stop }}</th>
-                        <th id="boxa4" colspan="1"></th>
-                    </tr>
-                    <tr>
-                        <th id="boxa5" style="max-width: 100px;"colspan="5">
-                            PUSH SIDE
-                        </th>
-                        <th></th>
-                        <th id="boxa5" style="max-width: 100px;"colspan="5">
-                            COKE SIDE
-                        </th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td id="boxa6" colspan="1">
-                            Oven
-                        </td>
-                        <td id="boxa6" colspan="3">
-                            Location
-                        </td>
-                        <td id="boxa6" colspan="1">
-                            Zone
-                        </td>
-                        <td></td>
-                        <td id="boxa6" colspan="1">
-                            Oven
-                        </td>
-                        <td id="boxa6" colspan="3">
-                            Location
-                        </td>
-                        <td id="boxa6" colspan="1">
-                            Zone
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6">{{ data.p_leak_oven1 }}</td>
-                        <td colspan="3" id="boxa6">{{ data.p_leak_loc1 }}</td>
-                        <td id="boxa6">{{ data.p_leak_zone1 }}</td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temp. Blocked</td>
-                        <td id="boxa6">{{ data.c_leak_oven1 }}</td>
-                        <td colspan="3" id="boxa6">{{ data.c_leak_loc1 }}</td>
-                        <td id="boxa6">{{ data.c_leak_zone1 }}</td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Temp. Blocked</td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.p_temp_block_from }}&nbsp;to&nbsp;{{ data.p_temp_block_to}}</td>
-                       <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td style="align-content: center; text-align: left; height: 25px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.c_temp_block_from }}&nbsp;to&nbsp;{{ data.c_temp_block_to }}</td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                        <td id="boxa6"></td>
-                        <td colspan="3" id="boxa6"></td>
-                        <td id="boxa6"></td>
-                        <td></td>
-                    </tr>
+                <section class="readings_container">
+                    <div class="readings_col">
+                        <div>Start Time:{{ data.p_start }} </div>
+                        <div>End Time:{{ data.p_stop }}</div>
+                        <input id="pushSideResults" type="hidden" value="{}"/>
+                        <table>
+                            <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
+                            <tr>
+                                <td class="boxa6" colspan="1">
+                                    Oven
+                                </td>
+                                <td class="boxa6" colspan="1">
+                                    Location
+                                </td>
+                                <td class="boxa6" colspan="1">
+                                    Zone
+                                </td>
+                            </tr>
+                            <tbody id="ctableBody" data-numRows="1"> 
+                                
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+
+
+                    <div class="readings_col">
+                        <div>Temp. Blocked</div>
+                        <div>{{ data.p_temp_block_from }} to {{ data.p_temp_block_to}}</div>
+                    </div>
+
+
+                    <div class="readings_col">
+                        <div>Start Time:{{ data.c_start }} </div>
+                        <div>End Time:{{ data.c_stop }}</div>
+                        <input id="cokeSideResults" type="hidden" value="{data:[]}"/>
+                        <table>
+                            <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>
+                            <tr>
+                                <td class="boxa6" colspan="1">
+                                    Oven
+                                </td>
+                                <td class="boxa6" colspan="1">
+                                    Location
+                                </td>
+                                <td class="boxa6" colspan="1">
+                                    Zone
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="boxa6" colspan="1">
+                                    <input type="number" />
+                                </td>
+                                <td class="boxa6" colspan="1">
+                                    <select>
+                                        <option value="NULL">--</option>
+                                        <option value="D">D</option>
+                                        <option value="C">C</option>
+                                        <option value="M">M</option>
+                                    </select>
+                                </td>
+                                <td class="boxa6" colspan="1">
+                                    <select>
+                                        <option value="NULL">--</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+
+                        </table>
+                    </div>
+
+
+                    <div class="readings_col">
+                        <div>Temp. Blocked</div>
+                        <div>{{ data.c_temp_block_from }} to {{ data.c_temp_block_to}}</div>
+                    </div>
+                </section>
+ 
+ 
+
+
+
+
+
                     <tr>
                         <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Push Side Traverse Time: &nbsp; &nbsp; {{ data.p_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.p_traverse_time_sec }}sec</td>
                         <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Coke Side Traverse Time: &nbsp; &nbsp; {{ data.c_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec</td>
                     </tr>
-                </table>
-                <br><br><br>
+
                 <table style="border-collapse: collapse; margin: auto;">
                     <tr>
                         <td style="width: 120px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
