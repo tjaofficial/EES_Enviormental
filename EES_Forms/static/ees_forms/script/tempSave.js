@@ -1,37 +1,37 @@
-const arrayOfInputs = document.getElementsByTagName('input');
-const formName = document.getElementById('formName').dataset.form
-const tempSaveKey = formName+"_tempFormData";
-const currentDate = Date.now();
-console.log(arrayOfInputs);
-function inputEventListener(array, tempSaveKey, currentDate){
-    
+
+
+
+
+function inputEventListener(){
+    const array = document.getElementsByTagName('input');
     //console.log(arrayOfInputs)
     for(let elem in array) {  
         item = array[elem];
         if(item.id){
             //console.log("test")
-            document.getElementById(item.id).addEventListener("input", () => {saveToLocal(array, tempSaveKey, currentDate)});
+            document.getElementById(item.id).addEventListener("input", saveToLocal);
         }
     }
 }
 
-function saveToLocal(array, tempSaveKey, currentDate){
-  
-    const saveDateObject = {"Experation":currentDate, data:{}};
-        
-    for(let elem in array) {  
-        item = array[elem];
-        if(item.id){
-            saveDateObject.data[item.id] = item.value;
-        }
-    }
+function saveToLocal(event){
+    const formName = document.getElementById('formName').dataset.form;
+    const tempSaveKey = formName+"_tempFormData";
+    const currentDate = Date.now();
+    
+    const formTempData = localStorage.getItem(tempSaveKey)?JSON.parse(localStorage.getItem(tempSaveKey)): {"Experation":currentDate, data:{}};
+    const elem = event.target;
 
-    localStorage.setItem(tempSaveKey, JSON.stringify(saveDateObject));
+
+    formTempData.data[elem.id] = elem.value;
+
+
+    localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
     
 
 }
 
-function clearStorage(currentDate, tempSaveKey){
+function clearStorage(tempSaveKey, currentDate){
 
     const formattedcurrentDate = new Date(currentDate);
     const formTempData = localStorage.getItem(tempSaveKey);
@@ -45,6 +45,7 @@ function clearStorage(currentDate, tempSaveKey){
 }
 
 function fillForm(tempSaveKey){
+
     const formTempData = localStorage.getItem(tempSaveKey);
     if(formTempData){
         const object = JSON.parse(formTempData);
@@ -58,10 +59,17 @@ function fillForm(tempSaveKey){
     }
 }
 
-clearStorage(currentDate, tempSaveKey);
-inputEventListener(arrayOfInputs, tempSaveKey, currentDate);
-fillForm(tempSaveKey);
+function intiate_TempSave(){
+    const formName = document.getElementById('formName').dataset.form;
+    const tempSaveKey = formName+"_tempFormData";
+    const currentDate = Date.now();
+    
+    clearStorage(tempSaveKey, currentDate);
+    inputEventListener();
+    fillForm(tempSaveKey);
+}
 
+intiate_TempSave()
 //for testing set exporation
 // function setExperation(tempSaveKey){
 //     const datevalue = document.getElementsByClassName('dateChanger')[0].value;

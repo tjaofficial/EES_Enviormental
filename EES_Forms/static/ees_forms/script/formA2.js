@@ -230,10 +230,10 @@ function htmlLayout(empty, data){
 
     const htmlStr= `<tr>
                         <td class="boxa6" colspan="1">
-                            <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" />
+                            <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" onchange="saveToLocal(event)"/>
                         </td>
                         <td class="boxa6" colspan="1">
-                            <select data-resultInput="${empty? -1: i}" data-resultKey="location" onchange()>
+                            <select data-resultInput="${empty? -1: i}" data-resultKey="location" onchange="saveToLocal(event)">
                                 <option value="" ${empty? 'selected': ''}>--</option>
                                 <option value="D" ${!empty && data.location === "D"? 'selected': ''}>D</option>
                                 <option value="C" ${!empty && data.location === "C"? 'selected': ''}>C</option>
@@ -241,7 +241,7 @@ function htmlLayout(empty, data){
                             </select>
                         </td>
                         <td class="boxa6" colspan="1">
-                            <select data-resultInput="${empty? -1: i}" data-resultKey="zone">
+                            <select data-resultInput="${empty? -1: i}" data-resultKey="zone" onchange="saveToLocal(event)">
                                 <option value="" ${empty? 'selected': ''}>--</option>
                                 <option value="1" ${!empty && data.zone === "1"? 'selected': ''}>1</option>
                                 <option value="2" ${!empty && data.zone === "2"? 'selected': ''}>2</option>
