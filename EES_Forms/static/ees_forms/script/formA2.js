@@ -146,7 +146,9 @@ function intiateResultEventListeners(){
     for(i=0; i<resultElement.length; i++){
         resultElement[i].addEventListener('input',(event)=>{
             let elem = event.target;
-            handle_Table_Input(elem)
+            handle_Table_Input(elem);
+            update_Temp_Save();
+            
         })
         
     }
@@ -230,10 +232,10 @@ function htmlLayout(empty, data){
 
     const htmlStr= `<tr>
                         <td class="boxa6" colspan="1">
-                            <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" onchange="saveToLocal(event)"/>
+                            <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" data-targetinput="pushSideResults"/>
                         </td>
                         <td class="boxa6" colspan="1">
-                            <select data-resultInput="${empty? -1: i}" data-resultKey="location" onchange="saveToLocal(event)">
+                            <select data-resultInput="${empty? -1: i}" data-resultKey="location" data-targetinput="pushSideResults">
                                 <option value="" ${empty? 'selected': ''}>--</option>
                                 <option value="D" ${!empty && data.location === "D"? 'selected': ''}>D</option>
                                 <option value="C" ${!empty && data.location === "C"? 'selected': ''}>C</option>
@@ -241,7 +243,7 @@ function htmlLayout(empty, data){
                             </select>
                         </td>
                         <td class="boxa6" colspan="1">
-                            <select data-resultInput="${empty? -1: i}" data-resultKey="zone" onchange="saveToLocal(event)">
+                            <select data-resultInput="${empty? -1: i}" data-resultKey="zone" data-targetinput="pushSideResults">
                                 <option value="" ${empty? 'selected': ''}>--</option>
                                 <option value="1" ${!empty && data.zone === "1"? 'selected': ''}>1</option>
                                 <option value="2" ${!empty && data.zone === "2"? 'selected': ''}>2</option>
@@ -258,6 +260,22 @@ function htmlLayout(empty, data){
 
 
 
+}
+
+function update_Temp_Save(){
+    const formName = document.getElementById('formName').dataset.form;
+    const tempSaveKey = formName+"_tempFormData";
+    const currentDate = Date.now();
+    
+    const formTempData = localStorage.getItem(tempSaveKey)?JSON.parse(localStorage.getItem(tempSaveKey)): {"Experation":currentDate, data:{}};
+    const elem = event.target;
+    target_Input_Field_Id = elem.dataset.targetinput;
+
+
+    formTempData.data[target_Input_Field_Id] = document.getElementById(target_Input_Field_Id).value;
+
+
+    localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
 initate_Result_Table()
