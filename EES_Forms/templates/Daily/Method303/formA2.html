@@ -56,7 +56,7 @@
                     <div class="readings_col">
                         <div>Start Time:{{ data.p_start }} </div>
                         <div>End Time:{{ data.p_stop }}</div>
-                        <input id="pushSideResults" type="hidden" value="{}"/>
+                        <input id="pushSide" type="hidden" value="{}" data-resulttable=""/>
                         <table>
                             <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
                             <tr>
@@ -70,13 +70,14 @@
                                     Zone
                                 </td>
                             </tr>
-                            <tbody id="ctableBody" data-numRows="1"> 
+                            <tbody id="pushSide_ctableBody" data-numRows="1"> 
                                 
 
                             </tbody>
 
 
                         </table>
+                        <div> Push Side Traverse Time: &nbsp; &nbsp; {{ data.p_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.p_traverse_time_sec }}sec </div>
                     </div>
 
 
@@ -89,7 +90,7 @@
                     <div class="readings_col">
                         <div>Start Time:{{ data.c_start }} </div>
                         <div>End Time:{{ data.c_stop }}</div>
-                        <input id="cokeSideResults" type="hidden" value="{data:[]}"/>
+                        <input id="cokeSide" type="hidden" value="{}" data-resulttable=""/>
                         <table>
                             <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>
                             <tr>
@@ -104,35 +105,11 @@
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td class="boxa6" colspan="1">
-                                    <input type="number" />
-                                </td>
-                                <td class="boxa6" colspan="1">
-                                    <select>
-                                        <option value="NULL">--</option>
-                                        <option value="D">D</option>
-                                        <option value="C">C</option>
-                                        <option value="M">M</option>
-                                    </select>
-                                </td>
-                                <td class="boxa6" colspan="1">
-                                    <select>
-                                        <option value="NULL">--</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                    </select>
-                                </td>
-                            </tr>
+                            <tbody id="cokeSide_ctableBody" data-numRows="1"> 
 
 
                         </table>
+                        <div>Coke Side Traverse Time: &nbsp; &nbsp; {{ data.c_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec</div>
                     </div>
 
 
@@ -148,105 +125,103 @@
 
 
 
+                    
+                <section>
+                    <table style="border-collapse: collapse; margin: auto;">
+                        <tr>
+                            <td style="width: 120px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                                D = Door
+                            </td>
+                            <td style="width: 400px; text-align: center;">
+                                Total Traverse Time {{ data.total_traverse_time }}sec
+                            </td>
+                            <td></td>
+                        </tr>    
+                        <tr> 
+                            <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                C = Chuck Door
+                            </td>
+                            <td style="text-align: center;">
+                                Allowed Traverse Time:
+                            </td>
+                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black;">Valid Run?</td>
+                        </tr>    
+                        <tr>  
+                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                M = Masonry
+                            </td>
+                            <td style="text-align: center;">
+                                T = 680 + (10 sec x #leaks) = {{ data.allowed_traverse_time }}
+                            </td>
+                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                {{ data.valid_run }}
+                            </td>
+                        </tr>
+                    </table>    
+                    
+                        
+                        
+                        
+                        
+                    <table style="border-collapse: collapse; margin: auto;">    
+                        <tr>
+                            <td style="height: 25px" > </td>
+                        </tr> 
+                        <tr>
+                            <td style="width: 100px;"></td>
+                            <td></td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L<sub>y</sub> X 100
+                            </td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.leaking_doors }} x 100
+                            </td>
+                            <td></td>
+                            <td style="width: 75px"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align: center; margin: auto; width: 133px;">
+                                % Leaking Doors = 
+                            </td>
+                            <td>
+                                ---------------------- = 
+                            </td>
+                            <td>
+                                --------------------------------- = 
+                            </td>
+                            <td>
+                                {{ data.percent_leaking }}%
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp; D<sub>t</sub> - D<sub>i</sub> - D<sub>no</sub>
+                            </td>
+                            <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;170 - {{ data.inop_doors_eq }} - {{ data.doors_not_observed }}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     <tr>
-                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Push Side Traverse Time: &nbsp; &nbsp; {{ data.p_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.p_traverse_time_sec }}sec</td>
-                        <td colspan="6" style="align-content: center; text-align: left; height: 25px;">Coke Side Traverse Time: &nbsp; &nbsp; {{ data.c_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec</td>
-                    </tr>
-
-                <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <td style="width: 120px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
-                            D = Door
-                        </td>
-                        <td style="width: 400px; text-align: center;">
-                            Total Traverse Time {{ data.total_traverse_time }}sec
-                        </td>
-                        <td></td>
-                    </tr>    
-                    <tr> 
-                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                            C = Chuck Door
-                        </td>
-                        <td style="text-align: center;">
-                            Allowed Traverse Time:
-                        </td>
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black;">Valid Run?</td>
-                    </tr>    
-                    <tr>  
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            M = Masonry
-                        </td>
-                        <td style="text-align: center;">
-                            T = 680 + (10 sec x #leaks) = {{ data.allowed_traverse_time }}
-                        </td>
-                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                            {{ data.valid_run }}
-                        </td>
-                    </tr>
-                </table>    
+                            <td style="height: 25px" > </td>
+                        </tr> 
+                        <tr>
+                            <td style="text-align: center; margin: auto; " colspan="6">
+                                Where: L<sub>y</sub> = Leaking Doors Obsered, D<sub>i</sub> = Inoperable Oven x 2, and D<sub>no</sub> = Door not observed
+                            </td>
+                        </tr> 
+                    </table>
+                    <div id="noteBox">
+                        Notes: <br>
+                        {{ data.notes }}
+                    </div>
+                </section>
                 
-                    
-                    
-                    
-                    
-                <table style="border-collapse: collapse; margin: auto;">    
-                     <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <td style="width: 100px;"></td>
-                        <td></td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L<sub>y</sub> X 100
-                        </td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.leaking_doors }} x 100
-                        </td>
-                        <td></td>
-                        <td style="width: 75px"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="text-align: center; margin: auto; width: 133px;">
-                            % Leaking Doors = 
-                        </td>
-                        <td>
-                            ---------------------- = 
-                        </td>
-                        <td>
-                            --------------------------------- = 
-                        </td>
-                        <td>
-                            {{ data.percent_leaking }}%
-                        </td>
-                        <td></td>
-                    </tr>
-                     <tr>
-                         <td></td>
-                         <td></td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp; D<sub>t</sub> - D<sub>i</sub> - D<sub>no</sub>
-                        </td>
-                        <td>
-                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;170 - {{ data.inop_doors_eq }} - {{ data.doors_not_observed }}
-                        </td>
-                         <td></td>
-                         <td></td>
-                    </tr>
-                   <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <td style="text-align: center; margin: auto; " colspan="6">
-                            Where: L<sub>y</sub> = Leaking Doors Obsered, D<sub>i</sub> = Inoperable Oven x 2, and D<sub>no</sub> = Door not observed
-                        </td>
-                    </tr> 
-                </table>
-                <div id="noteBox">
-                    Notes: <br>
-                    {{ data.notes }}
-                </div>
-                <br><br><br>
                 <input type="submit" value="Submit Form" style="font-size: 40px">
             </form> 
         </div>    
