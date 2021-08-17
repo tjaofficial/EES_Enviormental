@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import datetime
 from .models import *
+from phonenumber_field.formfields import PhoneNumberField
 
 now = datetime.datetime.now()
 
@@ -11,7 +12,7 @@ now = datetime.datetime.now()
 
 class SubFormC1(ModelForm):
     class Meta:
-        model = subC
+        model = formC_model
         fields = ('date', 'truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments', 'average_t', 'average_p')
         
         widgets = {
@@ -25,39 +26,47 @@ class SubFormC1(ModelForm):
             'observer' : forms.Select(attrs={'style':'width: 150px;'}),
             'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'comments' : Textarea(attrs={'rows':7, 'cols':125}),
-            'average_t' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
-            'average_p' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
+            'average_t' : forms.NumberInput(attrs={'id':'average_t', 'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
+            'average_p' : forms.NumberInput(attrs={'id':'average_p', 'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
         }
+        
+        def clean(self):
+            cleaned_data = super().clean()
+            start_time = cleaned_data.get("truck_start_time")
+            end_time = cleaned_data.get("truck_stop_time")
+            print('chciken')
+            if end_time < start_time:
+                raise forms.ValidationError("End time should be later than start time.")
     
 class FormCReadForm(ModelForm):
     class Meta:
-        model = FormCReadings
+        model = formC_readings_model
         fields = ('TRead1', 'TRead2','TRead3', 'TRead4', 'TRead5', 'TRead6', 'TRead7', 'TRead8', 'TRead9', 'TRead10',  'TRead11', 'TRead12', 'ARead1', 'ARead2', 'ARead3', 'ARead4', 'ARead5', 'ARead6', 'ARead7', 'ARead8', 'ARead9', 'ARead10', 'ARead11', 'ARead12')
         widgets = {
-            'TRead1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),    
-            'TRead3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead5' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead7' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead8' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead9' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead10' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead11' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead12' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead5' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead6' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead7' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead8' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead9' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead10' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead11' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead12' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead1' : forms.TextInput(attrs={'id':'TRead1', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead2' : forms.TextInput(attrs={'id':'TRead2', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),    
+            'TRead3' : forms.TextInput(attrs={'id':'TRead3', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead4' : forms.TextInput(attrs={'id':'TRead4', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead5' : forms.TextInput(attrs={'id':'TRead5', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead6' : forms.TextInput(attrs={'id':'TRead6', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead7' : forms.TextInput(attrs={'id':'TRead7', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead8' : forms.TextInput(attrs={'id':'TRead8', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead9' : forms.TextInput(attrs={'id':'TRead9', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead10' : forms.TextInput(attrs={'id':'TRead10', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead11' : forms.TextInput(attrs={'id':'TRead11', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead12' : forms.TextInput(attrs={'id':'TRead12', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead1' : forms.TextInput(attrs={'id':'ARead1', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead2' : forms.TextInput(attrs={'id':'ARead2', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead3' : forms.TextInput(attrs={'id':'ARead3', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead4' : forms.TextInput(attrs={'id':'ARead4', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead5' : forms.TextInput(attrs={'id':'ARead5', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead6' : forms.TextInput(attrs={'id':'ARead6', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead7' : forms.TextInput(attrs={'id':'ARead7', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead8' : forms.TextInput(attrs={'id':'ARead8', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead9' : forms.TextInput(attrs={'id':'ARead9', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead10' : forms.TextInput(attrs={'id':'ARead10', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead11' : forms.TextInput(attrs={'id':'ARead11', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'ARead12' : forms.TextInput(attrs={'id':'ARead12', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
         }
               
         
@@ -84,11 +93,16 @@ class user_profile_form(forms.ModelForm):
         fields = (
             'cert_date',
             'profile_picture',
+           # 'phone',
+           # 'position'
         )
+        exclude = ['user']
         
         widgets ={
             'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'profile_picture' : forms.FileInput()
+            'profile_picture' : forms.FileInput(attrs={'style': 'width: fit-content;'}),
+          #  'phone' : forms.TextInput(attrs={'type':'tel', 'style':'width: 60px;'}),
+          #  'position' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
         }
         
         
@@ -111,9 +125,9 @@ class bat_info_form(ModelForm):
         
         
 
-class subA1_form(ModelForm):
+class formA1_form(ModelForm):
     class Meta:
-        model = subA1_model
+        model = formA1_model
         fields = (
             'observer',
             'date',
@@ -128,13 +142,13 @@ class subA1_form(ModelForm):
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'crew' : forms.Select(attrs={'style':'width:40px;'}),
             'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
-            'start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'start' : forms.TimeInput(attrs={'id': 'main_start', 'oninput': 'equal_start_stop()', 'type':'time', 'style':'width: 120px;'}),
+            'stop' : forms.TimeInput(attrs={'id': 'main_stop', 'type':'time', 'style':'width: 120px;'}),
         }
         
-class subA1_readings_form(ModelForm):
+class formA1_readings_form(ModelForm):
     class Meta:
-        model = subA1_readings_model
+        model = formA1_readings_model
         fields = (
             'c1_no',
             'c2_no',
@@ -167,32 +181,32 @@ class subA1_readings_form(ModelForm):
         )
         
         widgets = {
-            'c1_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c1_no' : forms.TextInput(attrs={'id':'c1_no', 'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c1_sec' : forms.TextInput(attrs={'id':'c1_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c1_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c2_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c2_no' : forms.TextInput(attrs={'id':'c2_no', 'oninput': 'c2_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c2_sec' : forms.TextInput(attrs={'id':'c2_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c2_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c3_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c3_no' : forms.TextInput(attrs={'id':'c3_no', 'oninput': 'c3_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c3_sec' : forms.TextInput(attrs={'id':'c3_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c3_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c4_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c4_no' : forms.TextInput(attrs={'id':'c4_no', 'oninput': 'c4_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c4_sec' : forms.TextInput(attrs={'id':'c4_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c4_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c5_no' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+            'c5_no' : forms.TextInput(attrs={'id':'c5_no', 'oninput': 'c5_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c5_sec' : forms.TextInput(attrs={'id':'c5_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
             'c5_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
-            'c1_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c2_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c3_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c4_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c5_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c1_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c2_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c3_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c4_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'c5_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments' : Textarea(attrs={'id':'comments', 'rows':7, 'cols':125}),
+            'c1_start' : forms.TimeInput(attrs={'id': 'c1_start', 'oninput': 'timecheck_c1()', 'type':'time', 'style':'width: 120px;'}),
+            'c2_start' : forms.TimeInput(attrs={'id': 'c2_start', 'oninput': 'timecheck_c2()', 'type':'time', 'style':'width: 120px;'}),
+            'c3_start' : forms.TimeInput(attrs={'id': 'c3_start', 'oninput': 'timecheck_c3()', 'type':'time', 'style':'width: 120px;'}),
+            'c4_start' : forms.TimeInput(attrs={'id': 'c4_start', 'oninput': 'timecheck_c4()', 'type':'time', 'style':'width: 120px;'}),
+            'c5_start' : forms.TimeInput(attrs={'id': 'c5_start', 'oninput': 'timecheck_c5()', 'type':'time', 'style':'width: 120px;'}),
+            'c1_stop' : forms.TimeInput(attrs={'id': 'c1_stop', 'oninput': 'timecheck_c1()', 'type':'time', 'style':'width: 120px;'}),
+            'c2_stop' : forms.TimeInput(attrs={'id': 'c2_stop', 'oninput': 'timecheck_c2()', 'type':'time', 'style':'width: 120px;'}),
+            'c3_stop' : forms.TimeInput(attrs={'id': 'c3_stop', 'oninput': 'timecheck_c3()', 'type':'time', 'style':'width: 120px;'}),
+            'c4_stop' : forms.TimeInput(attrs={'id': 'c4_stop', 'oninput': 'timecheck_c4()', 'type':'time', 'style':'width: 120px;'}),
+            'c5_stop' : forms.TimeInput(attrs={'id': 'c5_stop', 'oninput': 'timecheck_c5()',  'oninput': 'equal_start_stop()', 'type':'time', 'style':'width: 120px;'}),
             'larry_car' : forms.Select(attrs={'style':'width: 60px;'}),
             'total_seconds' : forms.TextInput(attrs={'id':'total_seconds','type':'number','step':'0.1', 'style':'width: 60px; text-align: center;'}),
         }
@@ -226,7 +240,7 @@ class formA2_form(ModelForm):
             'doors_not_observed' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'inop_doors_eq' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'percent_leaking' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
-            'notes' : Textarea(attrs={'rows':7, 'cols':125}),
+            'notes' : Textarea(attrs={'rows':7, 'style': 'width: 805px;'}),
             'p_leak_oven1' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
             'p_leak_loc1' : forms.Select(attrs={'style':'width:40px;'}),
             'p_leak_zone1' : forms.Select(attrs={'style':'width:40px;'}),
@@ -299,9 +313,9 @@ class formA4_form(ModelForm):
             'notes' : Textarea(attrs={'rows':7, 'cols':125}),
         }
         
-class subA5_form(ModelForm):
+class formA5_form(ModelForm):
     class Meta:
-        model = subA5_model
+        model = formA5_model
         fields = ('__all__')
         
         widgets = {
@@ -329,9 +343,9 @@ class subA5_form(ModelForm):
             
         }
         
-class subA5_readings_form(ModelForm):
+class formA5_readings_form(ModelForm):
     class Meta:
-        model = subA5_readings_model
+        model = formA5_readings_model
         fields = (
             'o1_1_reads',
             'o1_2_reads',
@@ -433,94 +447,101 @@ class subA5_readings_form(ModelForm):
         
         
         widgets = {
-            'o1_highest_opacity' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o1_average_6' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o2_highest_opacity' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o2_average_6' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o3_highest_opacity' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o3_average_6' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o4_highest_opacity' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o4_average_6' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o1' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o2' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o3' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o4' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o5' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o1_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o1_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o2_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o2_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o3_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o3_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o4_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o4_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'o1_1_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_2_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_3_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_4_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_5_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_6_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_7_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_8_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_9_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_10_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_11_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_12_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_13_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_14_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_15_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o1_16_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_instant_over_20' : forms.Select(attrs={'id': 'o1_instant_over_20', 'style': 'width: 60px;'}),
+            'o2_instant_over_20' : forms.Select(attrs={'id': 'o2_instant_over_20', 'style': 'width: 60px;'}),
+            'o3_instant_over_20' : forms.Select(attrs={'id': 'o3_instant_over_20', 'style': 'width: 60px;'}),
+            'o4_instant_over_20' : forms.Select(attrs={'id': 'o4_instant_over_20', 'style': 'width: 60px;'}),
+            'o1_average_6_over_35' : forms.Select(attrs={'id': 'o1_average_6_over_35', 'style': 'width: 60px;'}),
+            'o2_average_6_over_35' : forms.Select(attrs={'id': 'o2_average_6_over_35', 'style': 'width: 60px;'}),
+            'o3_average_6_over_35' : forms.Select(attrs={'id': 'o3_average_6_over_35', 'style': 'width: 60px;'}),
+            'o4_average_6_over_35' : forms.Select(attrs={'id': 'o4_average_6_over_35', 'style': 'width: 60px;'}),
+            'o1_highest_opacity' : forms.NumberInput(attrs={'id': 'o1_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o1_average_6' : forms.NumberInput(attrs={'id': 'o1_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+            'o2_highest_opacity' : forms.NumberInput(attrs={'id': 'o2_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o2_average_6' : forms.NumberInput(attrs={'id': 'o2_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+            'o3_highest_opacity' : forms.NumberInput(attrs={'id': 'o3_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o3_average_6' : forms.NumberInput(attrs={'id': 'o3_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+            'o4_highest_opacity' : forms.NumberInput(attrs={'id': 'o4_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o4_average_6' : forms.NumberInput(attrs={'id': 'o4_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+            'o1' : forms.NumberInput(attrs={'id' : 'o1', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o2' : forms.NumberInput(attrs={'id' : 'o2', 'oninput': 'pt2_check()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o3' : forms.NumberInput(attrs={'id' : 'o3', 'oninput': 'pt3_check()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o4' : forms.NumberInput(attrs={'id' : 'o4', 'oninput': 'pt4_check()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o1_start' : forms.TimeInput(attrs={'id': 'o1_start', 'oninput': 'timecheck_1()', 'type':'time', 'style':'width: 120px;'}),
+            'o1_stop' : forms.TimeInput(attrs={'id': 'o1_stop', 'oninput': 'timecheck_1()', 'type':'time', 'style':'width: 120px;'}),
+            'o2_start' : forms.TimeInput(attrs={'id': 'o2_start', 'oninput': 'timecheck_2()', 'type':'time', 'style':'width: 120px;'}),
+            'o2_stop' : forms.TimeInput(attrs={'id': 'o2_stop', 'oninput': 'timecheck_2()', 'type':'time', 'style':'width: 120px;'}),
+            'o3_start' : forms.TimeInput(attrs={'id': 'o3_start', 'oninput': 'timecheck_3()', 'type':'time', 'style':'width: 120px;'}),
+            'o3_stop' : forms.TimeInput(attrs={'id': 'o3_stop', 'oninput': 'timecheck_3()', 'type':'time', 'style':'width: 120px;'}),
+            'o4_start' : forms.TimeInput(attrs={'id': 'o4_start', 'oninput': 'timecheck_4()', 'type':'time', 'style':'width: 120px;'}),
+            'o4_stop' : forms.TimeInput(attrs={'id': 'o4_stop', 'oninput': 'timecheck_4()', 'type':'time', 'style':'width: 120px;'}),
+            'o1_1_reads' : forms.TextInput(attrs={'id':'o1_1_reads', 'oninput':'pt_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_2_reads' : forms.TextInput(attrs={'id':'o1_2_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_3_reads' : forms.TextInput(attrs={'id':'o1_3_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_4_reads' : forms.TextInput(attrs={'id':'o1_4_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_5_reads' : forms.TextInput(attrs={'id':'o1_5_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_6_reads' : forms.TextInput(attrs={'id':'o1_6_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_7_reads' : forms.TextInput(attrs={'id':'o1_7_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_8_reads' : forms.TextInput(attrs={'id':'o1_8_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_9_reads' : forms.TextInput(attrs={'id':'o1_9_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_10_reads' : forms.TextInput(attrs={'id':'o1_10_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_11_reads' : forms.TextInput(attrs={'id':'o1_11_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_12_reads' : forms.TextInput(attrs={'id':'o1_12_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_13_reads' : forms.TextInput(attrs={'id':'o1_13_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_14_reads' : forms.TextInput(attrs={'id':'o1_14_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_15_reads' : forms.TextInput(attrs={'id':'o1_15_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o1_16_reads' : forms.TextInput(attrs={'id':'o1_16_reads', 'class': 'input', 'oninput':'pt1_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
             
-            'o2_1_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_2_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_3_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_4_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_5_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_6_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_7_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_8_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_9_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_10_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_11_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_12_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_13_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_14_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_15_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o2_16_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_1_reads' : forms.TextInput(attrs={'id':'o2_1_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_2_reads' : forms.TextInput(attrs={'id':'o2_2_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_3_reads' : forms.TextInput(attrs={'id':'o2_3_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_4_reads' : forms.TextInput(attrs={'id':'o2_4_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_5_reads' : forms.TextInput(attrs={'id':'o2_5_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_6_reads' : forms.TextInput(attrs={'id':'o2_6_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_7_reads' : forms.TextInput(attrs={'id':'o2_7_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_8_reads' : forms.TextInput(attrs={'id':'o2_8_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_9_reads' : forms.TextInput(attrs={'id':'o2_9_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_10_reads' : forms.TextInput(attrs={'id':'o2_10_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_11_reads' : forms.TextInput(attrs={'id':'o2_11_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_12_reads' : forms.TextInput(attrs={'id':'o2_12_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_13_reads' : forms.TextInput(attrs={'id':'o2_13_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_14_reads' : forms.TextInput(attrs={'id':'o2_14_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_15_reads' : forms.TextInput(attrs={'id':'o2_15_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o2_16_reads' : forms.TextInput(attrs={'id':'o2_16_reads', 'class': 'input', 'oninput':'pt2_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
             
-            'o3_1_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_2_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_3_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_4_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_5_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_6_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_7_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_8_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_9_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_10_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_11_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_12_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_13_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_14_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_15_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o3_16_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_1_reads' : forms.TextInput(attrs={'id':'o3_1_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_2_reads' : forms.TextInput(attrs={'id':'o3_2_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_3_reads' : forms.TextInput(attrs={'id':'o3_3_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_4_reads' : forms.TextInput(attrs={'id':'o3_4_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_5_reads' : forms.TextInput(attrs={'id':'o3_5_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_6_reads' : forms.TextInput(attrs={'id':'o3_6_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_7_reads' : forms.TextInput(attrs={'id':'o3_7_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_8_reads' : forms.TextInput(attrs={'id':'o3_8_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_9_reads' : forms.TextInput(attrs={'id':'o3_9_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_10_reads' : forms.TextInput(attrs={'id':'o3_10_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_11_reads' : forms.TextInput(attrs={'id':'o3_11_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_12_reads' : forms.TextInput(attrs={'id':'o3_12_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_13_reads' : forms.TextInput(attrs={'id':'o3_13_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_14_reads' : forms.TextInput(attrs={'id':'o3_14_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_15_reads' : forms.TextInput(attrs={'id':'o3_15_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o3_16_reads' : forms.TextInput(attrs={'id':'o3_16_reads', 'class': 'input', 'oninput':'pt3_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
             
-            'o4_1_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_2_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_3_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_4_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_5_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_6_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_7_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_8_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_9_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_10_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_11_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_12_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_13_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_14_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_15_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'o4_16_reads' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_1_reads' : forms.TextInput(attrs={'id':'o4_1_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_2_reads' : forms.TextInput(attrs={'id':'o4_2_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_3_reads' : forms.TextInput(attrs={'id':'o4_3_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_4_reads' : forms.TextInput(attrs={'id':'o4_4_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_5_reads' : forms.TextInput(attrs={'id':'o4_5_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_6_reads' : forms.TextInput(attrs={'id':'o4_6_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_7_reads' : forms.TextInput(attrs={'id':'o4_7_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_8_reads' : forms.TextInput(attrs={'id':'o4_8_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_9_reads' : forms.TextInput(attrs={'id':'o4_9_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_10_reads' : forms.TextInput(attrs={'id':'o4_10_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_11_reads' : forms.TextInput(attrs={'id':'o4_11_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_12_reads' : forms.TextInput(attrs={'id':'o4_12_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_13_reads' : forms.TextInput(attrs={'id':'o4_13_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_14_reads' : forms.TextInput(attrs={'id':'o4_14_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_15_reads' : forms.TextInput(attrs={'id':'o4_15_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'o4_16_reads' : forms.TextInput(attrs={'id':'o4_16_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
         }
         
     
@@ -529,6 +550,43 @@ class subA5_readings_form(ModelForm):
     
 class formB_form(ModelForm):
     class Meta:
+        today = datetime.date.today()
+        name_0 = False
+        name_1 = False
+        name_2 = False
+        name_3 = False
+        name_4 = False
+        if today.weekday() == 0:
+            name_0 = True
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 1:
+            name_0 = True
+            name_1 = True
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 2:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 3:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = False
+        if today.weekday() == 4:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = True
+            
         model = formB_model
         fields = ('__all__')
         widgets = {
@@ -732,11 +790,11 @@ class formD_form(ModelForm):
             'freeboard5' : forms.Select(attrs={'style':'width: 80px;'}),
             'wetted5' : forms.Select(attrs={'style':'width: 80px;'}),
             'comments5' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'observer1' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer2' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer3' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer4' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
-            'observer5' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px;'}),
+            'observer1' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer2' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer3' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer4' : forms.Select(attrs={'style':'width: 150px;'}),
+            'observer5' : forms.Select(attrs={'style':'width: 150px;'}),
         }
 
         
@@ -1111,6 +1169,22 @@ class formG1_form(ModelForm):
             'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
         }
+class formG2_form(ModelForm):
+    class Meta:
+        model = formG2_model
+        fields = ('__all__')
+        
+        widgets = {
+            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
+            'wind_speed_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'ambient_temp_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+        }
         
 class formH_form(ModelForm):
     class Meta:
@@ -1118,6 +1192,7 @@ class formH_form(ModelForm):
         fields = ('__all__')
         
         widgets = {
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
@@ -1132,20 +1207,59 @@ class formH_form(ModelForm):
         
 class formI_form(ModelForm):
     class Meta:
+        today = datetime.date.today()
+        name_0 = False
+        name_1 = False
+        name_2 = False
+        name_3 = False
+        name_4 = False
+        if today.weekday() == 0:
+            name_0 = True
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 1:
+            name_0 = True
+            name_1 = True
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 2:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 3:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = False
+        if today.weekday() == 4:
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = True
+            
         model = formI_model
         fields = ('__all__')
         
         widgets = {
-            'time_0' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'time_4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'obser_0' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_2' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_3' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'}),
-            'obser_4' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 140px;'})
+            'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_0}),
+            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_1}),
+            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_2}),
+            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_3}),
+            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_4}),
+            'obser_0' : forms.Select(attrs={'style':'width: 150px;', 'required': name_0 }),
+            'obser_1' : forms.Select(attrs={'style':'width: 150px;', 'required': name_1 }),
+            'obser_2' : forms.Select(attrs={'style':'width: 150px;', 'required': name_2 }),
+            'obser_3' : forms.Select(attrs={'style':'width: 150px;', 'required': name_3 }),
+            'obser_4' : forms.Select(attrs={'style':'width: 150px;', 'required': name_4 }),
         }
         
         
@@ -1163,7 +1277,14 @@ class formL_form(ModelForm):
             'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
             'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
             'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'})
+            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'obser_0' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_1' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_2' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_3' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_4' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_5' : forms.Select(attrs={'style':'width: 150px;'}),
+            'obser_6' : forms.Select(attrs={'style':'width: 150px;'}),
         }
 
         
@@ -1186,22 +1307,139 @@ class formM_form(ModelForm):
             'sto_stop',
             'observer',
             'cert_date',
+            'comments',
         )
         
         widgets = {
-            
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'paved' : forms.Select(attrs={'style':'width: 150px;'}),
+            'pav_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'pav_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'unpaved' : forms.Select(attrs={'style':'width: 150px;'}),
+            'unp_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'unp_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'parking' : forms.Select(attrs={'style':'width: 150px;'}),
+            'par_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'par_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'storage' : forms.Select(attrs={'style':'width: 150px;'}),
+            'sto_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'sto_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
+            'cert_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
+        }
+class formM_readings_form(ModelForm):
+    class Meta:
+        model = formM_readings_model
+        fields = ('__all__')
+        exclude = ('form',)
+        widgets = {
+            'pav_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+        }
+class formO_form(ModelForm):
+    class Meta:
+        model = formO_model
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
+            'month' : forms.TextInput(attrs={'type':'text', 'style':'width:100px; text-align: center; font-size: 1.2rem;'}),
+            'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'weekend_day' : forms.Select(attrs={'style':'width: 80px;'}),
+            'Q_1' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_2' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_3' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_4' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_5' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_6' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_7' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_8' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_9' : forms.Select(attrs={'style':'width: 60px;'}),
+            'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
+            'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
+        }
+class formP_form(ModelForm):
+    class Meta:
+        model = formP_model
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.Select(attrs={'style':'width: 150px;'}),
+            'month' : forms.TextInput(attrs={'type':'text', 'style':'width:100px; text-align: center; font-size: 1.2rem;'}),
+            'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'weekend_day' : forms.Select(attrs={'style':'width: 80px;'}),
+            'Q_1' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_2' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_3' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_4' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_5' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_6' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_7' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_8' : forms.Select(attrs={'style':'width: 60px;'}),
+            'Q_9' : forms.Select(attrs={'style':'width: 60px;'}),
+            'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
+            'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
         }
 class issues_form(ModelForm):
     class Meta:
         model = issues_model
         fields = ('__all__')
         widgets = {
-            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'issues' : forms.TextInput(attrs={'type':'text', 'style':'width:650px;'}),
-            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'cor_action' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center;'}),
+            'issues' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
+            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px; border-radius: 5px; background-color: white; border: 1px solid black; padding-left: .5rem;'}),
+            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px; border-radius: 5px; background-color: white;'}),
+            'cor_action' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
         }
 
 class events_form(ModelForm):
@@ -1213,6 +1451,8 @@ class events_form(ModelForm):
             'title' : forms.Select(attrs={'style':'width: 150px;'}),
             'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
         }
 
         

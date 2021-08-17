@@ -118,12 +118,7 @@ body{
 }
 .show {display: block;}
 .dropdown a:hover {background-color: #ddd;}
-#form_holder{
-    margin: auto;
-    font-size: 20px;
-    width: 90%;
-    
-}
+
 .profile_header{
     text-align: center;
     font-size: 35px;
@@ -131,7 +126,6 @@ body{
 .page_center{
     width: 100%;
 }
-
 
 
 

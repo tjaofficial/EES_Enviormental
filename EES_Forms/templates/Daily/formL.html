@@ -12,7 +12,6 @@
         }
         #boxTitle{
             font-size: 30px;
-            padding-top: 100px;
         }
         #formDbox1{
             width: 130px; 
@@ -92,357 +91,368 @@
 
 
 
-    <a href="{% url 'IncompleteForms' %}">Back</a>
+    <div>
+        <a href="{% if access_page == 'search' %}{% url 'IncompleteForms' %}{% elif access_page == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+    </div>
     <form action="" method="POST">
         {% csrf_token %}
-        <table style="border-collapse: collapse; margin: auto;">
-        <tr>
-            <th id="boxTitle" colspan="5" style="text-align: center;">
-                Visual Emissions Observations - Form (L)
-            </th>
-            <th></th>
-        </tr>
-        <tr>
-            <th colspan="3" style="text-align: center;">
-                Facility Name: EES Coke Battery LLC
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <td style="height: 25px;" ></td>
-        </tr>
-        <tr>
-            <th colspan="3" style="text-align: center;">
-            Week Of:  
-                    {{ empty.week_start }} - {{ empty.week_end }}
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <td style="height: 25px;" ></td>
-        </tr>
-    </table>
-        <div id="alltrucks">
-            <div id="formCspace">
-                <table style="border-collapse: collapse;">
-                    <tr>
-                        <th id="formL_Title">
-                            Observer
-                        </th>
-                        <th id="formL_Title">
-                            Day/Time
-                        </th>
-                        <th id="formL_Title">
-                            Location
-                        </th>
-                        <th id="formL_Title">
-                            Visible Emissions
-                        </th>
-                        <th id="formL_Title">
-                            Comments
-                        </th>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_5 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Saturday/ {{ empty.time_5 }}
-                    
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                            
-                                {{ empty.vents_5 }}
-                     
-                        </td>
-                        <td id="formL_Comments">
-                           
-                                {{ empty.v_comments_5 }}
-                      
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                            
-                                {{ empty.mixer_5 }}
-                  
-                        </td>
-                        <td id="formL_Comments">
-                     
-                                {{ empty.m_comments_5 }}
-                       
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_6 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Sunday/ 
-                                {{ empty.time_6 }}
-                          
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                           
-                                {{ empty.vents_6 }}
-                      
-                        </td>
-                        <td id="formL_Comments">
-                          
-                                {{ empty.v_comments_6 }}
-                         
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                            
-                                {{ empty.mixer_6 }}
-                          
-                        </td>
-                        <td id="formL_Comments">
-                      
-                                {{ empty.m_comments_6 }}
-                   
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_0 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Monday/ 
-                                {{ empty.time_0 }}
-                   
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                         
-                                {{ empty.vents_0 }}
-                      
-                        </td>
-                        <td id="formL_Comments">
-                          
-                                {{ empty.v_comments_0 }}
-                       
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                          
-                                {{ empty.mixer_0 }}
-                       
-                        </td>
-                        <td id="formL_Comments">
-                        
-                                {{ empty.m_comments_0 }}
-                         
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_1 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Tuesday/ 
-                                {{ empty.time_1 }}
-                        
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                      
-                                {{ empty.vents_1 }}
-                        
-                        </td>
-                        <td id="formL_Comments">
-                          
-                                {{ empty.v_comments_1 }}
-                          
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                     
-                                {{ empty.mixer_1 }}
-                    
-                        </td>
-                        <td id="formL_Comments">
-                           
-                                {{ empty.m_comments_1 }}
-                         
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_2 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Wednesday/ 
-                                {{ empty.time_2 }}
-                     
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                           
-                                {{ empty.vents_2 }}
-                           
-                        </td>
-                        <td id="formL_Comments">
-                            
-                                {{ empty.v_comments_2 }}
-                        
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                           
-                                {{ empty.mixer_2 }}
-                      
-                        </td>
-                        <td id="formL_Comments">
-                           
-                                {{ empty.m_comments_2 }}
-                        
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_3 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Thursday/ 
-                                {{ empty.time_3 }}
-                        
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                           
-                                {{ empty.vents_3 }}
-                         
-                        </td>
-                        <td id="formL_Comments">
-                        
-                                {{ empty.v_comments_3 }}
-                    
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                           
-                                {{ empty.mixer_3 }}
-                           
-                        </td>
-                        <td id="formL_Comments">
-                          
-                                {{ empty.m_comments_3 }}
-                         
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_obser" rowspan='2'>
-                            {{ empty.obser_4 }}
-                        </td>
-                        <th rowspan='2' id="formL_Day">
-                            Friday/ 
-                                {{ empty.time_4 }}
-                          
-                        </th>
-                        <td id="formL_Location">
-                            Coal Bin Vents
-                        </td>
-                        <td id="formL_Emissions">
-                           
-                                {{ empty.vents_4 }}
-                           
-                        </td>
-                        <td id="formL_Comments">
-                           
-                                {{ empty.v_comments_4 }}
-                            
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="formL_Location">
-                            Mixer Building Bag House
-                        </td>
-                        <td id="formL_Emissions">
-                        
-                                {{ empty.mixer_4 }}
-                     
-                        <td id="formL_Comments">
-                          
-                                {{ empty.m_comments_4 }}
-                        
-                        </td>
-                    </tr>
-                    
-                    
-                    <tr>
-                        <td colspan="4" style="height: 25px;" ></td>
-                        <td style="text-align: right;">
-                            <a href="../../Daily/formL/edit">
-                                Edit
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 25px;" ></td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="text-align: left;">
-                            Observe visual emissions areas once per day<br>
-                            <br>
-                            If visual emission are observed perform a Method 9 Observation for 15 minutes MINIMUM<br>
-                            <br>
-                            If average opacity > 10%, Contact and Notify Enviornmental Engineer 
-                        </td>
-                    </tr>
-                </table>
+        <div class="card" id="card_fitter">
+            <div class="paper_fitter">
+           
+                <table style="border-collapse: collapse; margin: auto;">
+                <tr>
+                    <th id="boxTitle" colspan="5" style="text-align: center;">
+                        Visual Emissions Observations - Form (L)
+                    </th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="3" style="text-align: center;">
+                        Facility Name: EES Coke Battery LLC
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td style="height: 25px;" ></td>
+                </tr>
+                <tr>
+                    <th colspan="3" style="text-align: center;">
+                    Week Of:  
+                            {{ empty.week_start }} - {{ empty.week_end }}
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td style="height: 25px;" ></td>
+                </tr>
+            </table>
+                <div id="alltrucks">
+                    <div id="formCspace">
+                        <table style="border-collapse: collapse;">
+                            <tr>
+                                <th id="formL_Title">
+                                    Observer
+                                </th>
+                                <th id="formL_Title">
+                                    Day/Time
+                                </th>
+                                <th id="formL_Title">
+                                    Location
+                                </th>
+                                <th id="formL_Title">
+                                    Visible Emissions
+                                </th>
+                                <th id="formL_Title">
+                                    Comments
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_5 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Saturday/ {{ empty.time_5 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_5 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_5 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_5 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_5 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_6 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Sunday/ 
+                                        {{ empty.time_6 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_6 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_6 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_6 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_6 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_0 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Monday/ 
+                                        {{ empty.time_0 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_0 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_0 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_0 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_0 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_1 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Tuesday/ 
+                                        {{ empty.time_1 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_1 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_1 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_1 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_1 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_2 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Wednesday/ 
+                                        {{ empty.time_2 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_2 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_2 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_2 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_2 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_3 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Thursday/ 
+                                        {{ empty.time_3 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_3 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_3 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_3 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_3 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_obser" rowspan='2'>
+                                    {{ empty.obser_4 }}
+                                </td>
+                                <th rowspan='2' id="formL_Day">
+                                    Friday/ 
+                                        {{ empty.time_4 }}
+
+                                </th>
+                                <td id="formL_Location">
+                                    Coal Bin Vents
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.vents_4 }}
+
+                                </td>
+                                <td id="formL_Comments">
+
+                                        {{ empty.v_comments_4 }}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="formL_Location">
+                                    Mixer Building Bag House
+                                </td>
+                                <td id="formL_Emissions">
+
+                                        {{ empty.mixer_4 }}
+
+                                <td id="formL_Comments">
+
+                                        {{ empty.m_comments_4 }}
+
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="4" style="height: 25px;" ></td>
+                                <td style="text-align: right;">
+                                    {% if filled_in == True %}
+                                        <a href="../../Daily/formL/edit">
+                                            Edit
+                                        </a>
+                                    {% else %}
+                                    
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height: 25px;" ></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="text-align: left;">
+                                    Observe visual emissions areas once per day<br>
+                                    <br>
+                                    If visual emission are observed perform a Method 9 Observation for 15 minutes MINIMUM<br>
+                                    <br>
+                                    If average opacity > 10%, Contact and Notify Enviornmental Engineer 
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                {% if filled_in == True %}
+
+                {% else %}
+                <br><br><br>
+                <input type="submit" value="Submit Form" class="submit_button">
+                {% endif %}
             </div>
         </div>
-        {% if filled_in == True %}
-        
-        {% else %}
-        <br><br><br>
-        <input type="submit" value="Submit Form" style="font-size: 40px">
-        {% endif %}
     </form>
     
 {% endblock %}

@@ -1,0 +1,139 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
+
+
+<div>
+        <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+</div>
+
+<form action="" method='POST'>
+    {% csrf_token %}
+    <div class="card" id="card_fitter">
+        <div class="paper_fitter">
+            <table style="border-collapse: collapse; margin: auto; font-size: 1.3rem;">
+                <tr>
+                    <th style="text-align: center;">
+                        EES Coke Battry L.L.C.
+                    </th>
+                </tr>
+                <tr>
+                    <th style="text-align: right;">
+                        Daily Observation - Form (O)
+                    </th>
+                </tr>
+                <tr>
+                    <th style="height: 15px;"></th>
+                </tr>
+                <tr>
+                    <th style="text-align: center;">
+                        MP 108A - {% if selector != 'form'  %}{% if weekend_day == 'saturday' %}Saturday{% elif weekend_day == 'sunday' %}Sunday{% endif %}{% else %}{{ data_form.weekend_day }}{% endif %}
+                    </th>
+                </tr>
+                <tr>
+                    <th style="height: 15px;"></th>
+                </tr>
+                <tr style="">
+                    <th style="text-align: center;">
+                        Observer: {{ data_form.observer }}
+                    </th>
+                </tr>
+                
+            </table>
+            <br><br>
+            <table style="border-collapse: collapse; margin: auto; font-size: 1.2rem;">
+                <tr>
+                    <td style="border: 1px solid black; width: 100px; text-align: center; font-size: .9rem;">
+                        Month:<br>{{ data_form.month }}
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Flow observed at <br>monitoring location?&nbsp; &nbsp;</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have an <br>unnatural turbidity?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have an <br>unnatural color?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have an oil film?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have floating solids?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have foams?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have settleable <br>solids?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have suspended <br>solids?</span>
+                    </td>
+                    <td class="td_head_style">
+                        <span class="span_head_style">Does the observed <br>flow have deposits?</span>
+                    </td>
+                    <td style="text-align: center; border: 1px solid black; padding-left: .4rem; padding-right: .4rem;">
+                        Comments:
+                        <h4 style="font-size: .9rem; text-align: center;">(Describe any problems<br> or conditions found <br>during inspections)</h4>
+                    </td>
+                    <td style="text-align: center; border: 1px solid black; padding-left: .4rem; padding-right: .4rem;">
+                        Actions Taken:<br>
+                        <h4 style="font-size: .9rem; text-align: center;">(Include date mitigated)</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="data_rows_water">
+                        {{ data_form.date }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_1 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_2 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_3 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_4 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_5 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_6 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_7 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_8 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.Q_9 }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.comments }}
+                    </td>
+                    <td class="data_rows_water">
+                        {{ data_form.actions_taken }}
+                    </td>
+                </tr>
+            </table>
+            <br><br><br>
+            {% if selector == 'form' %}
+            
+            <input type="submit" value="Submit Form" class="submit_button">
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+{% endblock %}

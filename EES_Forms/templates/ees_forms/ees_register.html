@@ -1,6 +1,9 @@
+{% extends "ees_forms/layout.html" %}
+
+{% block list%}
 {% load static %}
 
-<html>
+
     <head>
        <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
     </head>
@@ -32,4 +35,5 @@
             </div>
         </div>
     </body>
-</html>
+
+{% endblock %}

@@ -2,90 +2,100 @@
 
 {% block list %}
 
-<div id="pusht_travels" style="text-align: center; margin: auto; margin-top: 100px;">       
-    <div>
-       Today: {{ todays_log.date_save }}
+<div>
+    <a href="{% if client %}{% url 'c_dashboard' %}{% else %}{% url 'IncompleteForms' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+</div>
+<div class="forms">
+    
+    <div id="pusht_travels" style="text-align: center; margin: auto; margin-top: 100px;">    
+        <div class="card">
+            <div>
+               Today: {{ todays_log.date_save }}
+            </div>
+            <br>
+            <div style="">
+                <table style="margin: auto; border-collapse: collapse;">
+                    <tr>
+                        <th colspan="4" style="text-align: center; border: 3px solid black; width: 700px;">
+                            OVERDUE
+                        </th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Less Than 30 Days Left
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Less Than 10 Days Left
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Less Than 5 Days Left
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            Closest Oven Due
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for day in od_30 %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for day in od_10 %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for day in od_5 %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endfor %}
+                        </td>
+                        <td style="text-align: center; padding: 5px; border: 2px solid black;">
+                            {% for x in od_recent %}
+                                #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div id="pusht_travels" style="text-align: center; margin: auto; padding-top: 20px;">   
+                <table style="margin: auto; border-collapse: collapse; text-align: center;">
+                    <tr>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Oven No.
+                        </th>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Most Recent Reading
+                        </th>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Next Reading to be Completed By
+                        </th>
+                        <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            Days Left
+                        </th>
+                    </tr>
+                   {% for item in cool %}
+                    <tr>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.0 }}
+                        </td>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.1 }}
+                        </td>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.2 }}
+                        </td>
+                        <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
+                            {{ item.3 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div> 
+        </div>
     </div>
-    <br>
-    <div style="">
-        <table style="margin: auto; border-collapse: collapse;">
-            <tr>
-                <th colspan="4" style="text-align: center; border: 3px solid black; width: 700px;">
-                    OVERDUE
-                </th>
-            </tr>
-            <tr>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Less Than 30 Days Left
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Less Than 10 Days Left
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Less Than 5 Days Left
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    Closest Oven Due
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for day in od_30 %}
-                        #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                    {% endfor %}
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for day in od_10 %}
-                        #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                    {% endfor %}
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for day in od_5 %}
-                        #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                    {% endfor %}
-                </td>
-                <td style="text-align: center; padding: 5px; border: 2px solid black;">
-                    {% for x in od_recent %}
-                        #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
-                    {% endfor %}
-                </td>
-            </tr>
-        </table>
-    </div>
-    <br><br>
-    <div id="pusht_travels" style="text-align: center; margin: auto;">   
-        <table style="margin: auto; border-collapse: collapse; text-align: center;">
-            <tr>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Oven No.
-                </th>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Most Recent Reading
-                </th>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Next Reading to be Completed By
-                </th>
-                <th style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    Days Left
-                </th>
-            </tr>
-           {% for item in cool %}
-            <tr>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.0 }}
-                </td>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.1 }}
-                </td>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.2 }}
-                </td>
-                <td style="border: 2px black solid; height: 40px; padding-left: 30px; padding-right: 30px;">
-                    {{ item.3 }}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>  
 </div>
 {% endblock %}

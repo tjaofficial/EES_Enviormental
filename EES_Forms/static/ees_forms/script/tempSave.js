@@ -1,9 +1,29 @@
 
-
-
-
 function inputEventListener(){
-    const array = document.getElementsByTagName('input');
+
+
+const arrayOfInputs = Array.prototype.slice.call(document.getElementsByTagName('input'),0);
+
+const arrayOfSelects = Array.prototype.slice.call(document.getElementsByTagName('select'),0);
+const arrayOfTextareas = Array.prototype.slice.call(document.getElementsByTagName('textarea'),0);
+const input_select_textarea_combined_array = arrayOfInputs.concat(arrayOfSelects, arrayOfTextareas);
+
+
+
+const formName = document.getElementById('formName').dataset.form
+const tempSaveKey = formName+"_tempFormData";
+const currentDate = Date.now();
+
+
+
+clearStorage(currentDate, tempSaveKey);
+inputEventListener(input_select_textarea_combined_array, tempSaveKey, currentDate);
+fillForm(tempSaveKey);
+
+
+function inputEventListener(array, tempSaveKey, currentDate){
+    
+
     //console.log(arrayOfInputs)
     for(let elem in array) {  
         item = array[elem];
