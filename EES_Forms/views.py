@@ -2101,7 +2101,7 @@ def formB(request, selector):
                         filled_out = True
                         for items in week_almost.whatever().values():
                             if items == None:
-                                filled_out = False
+                                filled_out = True
                                 break
                         if filled_out: 
                             done = Forms.objects.filter(form='B')[0]
@@ -5939,6 +5939,13 @@ def formP(request, selector, weekend_day):
     
     return render (request, "Weekly/formP.html", {
         'selector': selector, 'profile': profile, 'data_form': data_form, 'weekend_day': weekend_day
+    })
+def spill_kits(request, access_page):
+    sk_form = spill_kits_form
+    
+    
+    return render(request, 'Monthly/spillkits.html', {
+        'sk_form':sk_form,
     })
 def issues_view(request, form_name, form_date, access_page):
     unlock = False

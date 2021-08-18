@@ -1265,26 +1265,91 @@ class formI_form(ModelForm):
         
 class formL_form(ModelForm):
     class Meta:
+        today = datetime.date.today()
+        name_5 = False
+        name_6 = False
+        name_0 = False
+        name_1 = False
+        name_2 = False
+        name_3 = False
+        name_4 = False
+        if today.weekday() == 5:
+            name_5 = True
+            name_6 = False
+            name_0 = False
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 6:
+            name_5 = True
+            name_6 = True
+            name_0 = False
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 0:
+            name_5 = True
+            name_6 = True
+            name_0 = True
+            name_1 = False
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 1:
+            name_5 = True
+            name_6 = True
+            name_0 = True
+            name_1 = True
+            name_2 = False
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 2:
+            name_5 = True
+            name_6 = True
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = False
+            name_4 = False
+        if today.weekday() == 3:
+            name_5 = True
+            name_6 = True
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = False
+        if today.weekday() == 4:
+            name_5 = True
+            name_6 = True
+            name_0 = True
+            name_1 = True
+            name_2 = True
+            name_3 = True
+            name_4 = True
+        
         model = formL_model
         fields = ('__all__')
         
         widgets = {
             'week_start' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
-            'obser_0' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_1' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_2' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_3' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_4' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_5' : forms.Select(attrs={'style':'width: 150px;'}),
-            'obser_6' : forms.Select(attrs={'style':'width: 150px;'}),
+            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_0}),
+            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_1}),
+            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_2}),
+            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_3}),
+            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_4}),
+            'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_5}),
+            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_6}),
+            'obser_0' : forms.Select(attrs={'style':'width: 150px;', 'required': name_0}),
+            'obser_1' : forms.Select(attrs={'style':'width: 150px;', 'required': name_1}),
+            'obser_2' : forms.Select(attrs={'style':'width: 150px;', 'required': name_2}),
+            'obser_3' : forms.Select(attrs={'style':'width: 150px;', 'required': name_3}),
+            'obser_4' : forms.Select(attrs={'style':'width: 150px;', 'required': name_4}),
+            'obser_5' : forms.Select(attrs={'style':'width: 150px;', 'required': name_5}),
+            'obser_6' : forms.Select(attrs={'style':'width: 150px;', 'required': name_6}),
         }
 
         
@@ -1454,7 +1519,152 @@ class events_form(ModelForm):
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
         }
-
+class spill_kits_form(ModelForm):
+    class Meta:
+        model = spill_kits_model
+        fields = ('__all__')
+        widgets = {
+            'sk1_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk2_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk3_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk4_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk5_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk6_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk7_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk8_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk9_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk10_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk11_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk12_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk13_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk14_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk15_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk16_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk17_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk18_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk19_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk20_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk21_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            
+            'skut23_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut24_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut25_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut26_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut27_tag_on' : forms.Select(attrs={'style':'width: 50px;'}),
+            
+            'sk1_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk2_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk3_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk4_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk5_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk6_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk7_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk8_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk9_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk10_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk11_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk12_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk13_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk14_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk15_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk16_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk17_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk18_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk19_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk20_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'sk21_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            
+            'skut23_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'skut24_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'skut25_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'skut26_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'skut27_serial' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
+            
+            'sk1_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk2_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk3_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk4_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk5_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk6_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk7_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk8_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk9_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk10_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk11_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk12_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk13_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk14_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk15_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk16_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk17_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk18_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk19_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk20_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'sk21_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            
+            'skut23_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut24_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut25_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut26_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            'skut27_complete' : forms.Select(attrs={'style':'width: 50px;'}),
+            
+            'sk1_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk2_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk3_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk4_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk5_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk6_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk7_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk8_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk9_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk10_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk11_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk12_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk13_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk14_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk15_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk16_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk17_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk18_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk19_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk20_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk21_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            
+            'skut23_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut24_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut25_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut26_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut27_report' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            
+            'sk1_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk2_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk3_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk4_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk5_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk6_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk7_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk8_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk9_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk10_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk11_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk12_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk13_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk14_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk15_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk16_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk17_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk18_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk19_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk20_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'sk21_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            
+            'skut23_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut24_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut25_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut26_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'skut27_comment' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;'}),
+            
+        }
         
         
         
