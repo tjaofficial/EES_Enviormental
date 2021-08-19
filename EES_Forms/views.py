@@ -172,8 +172,11 @@ def IncompleteForms(request):
             A1 = Forms(
                 form="A-1", 
                 frequency="Daily", 
-                link="Daily/Method303/formA1", 
-                header="Method 303/ Method 9B",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formA1", 
+                header="Method 303",
                 title="Charging", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -181,8 +184,11 @@ def IncompleteForms(request):
             A2 = Forms(
                 form="A-2", 
                 frequency="Daily", 
-                link="Daily/Method303/formA2", 
-                header="Method 303/ Method 9B",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formA2", 
+                header="Method 303",
                 title="Doors", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -190,8 +196,11 @@ def IncompleteForms(request):
             A3 = Forms(
                 form="A-3", 
                 frequency="Daily", 
-                link="Daily/Method303/formA3", 
-                header="Method 303/ Method 9B",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formA3", 
+                header="Method 303",
                 title="Lids and Offtakes", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -199,8 +208,11 @@ def IncompleteForms(request):
             A4 = Forms(
                 form="A-4", 
                 frequency="Daily", 
-                link="Daily/Method303/formA4", 
-                header="Method 303/ Method 9B",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formA4", 
+                header="Method 303",
                 title="Collection Main", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -208,17 +220,23 @@ def IncompleteForms(request):
             A5 = Forms(
                 form="A-5", 
                 frequency="Daily", 
-                link="Daily/Method303/formA5", 
-                header="Method 303/ Method 9B",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formA5", 
+                header="Method 9B",
                 title="Push Travels", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
                 submitted= False,)
             B = Forms(
                 form="B", 
-                frequency="Daily", 
-                link="Daily/formB", 
-                header="",
+                frequency="Daily",
+                day_freq = 'Any',
+                weekdays_only = True,
+                weekend_only = False,
+                link="formB", 
+                header="Method 9",
                 title="Fugitive Dust Inspection", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -226,17 +244,23 @@ def IncompleteForms(request):
             C = Forms(
                 form="C", 
                 frequency="Daily", 
-                link="Daily/formC", 
-                header="",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formC", 
+                header="Method 9",
                 title="Method 9D - Coal Field", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
                 submitted= False,)
             D = Forms(
                 form="D", 
-                frequency="Daily", 
-                link="Daily/formD", 
-                header="",
+                frequency="Weekly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formD", 
+                header="Method 9",
                 title="Random Truck Inspection", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -244,8 +268,11 @@ def IncompleteForms(request):
             E = Forms(
                 form="E", 
                 frequency="Daily", 
-                link="Daily/formE", 
-                header="",
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formE", 
+                header="Method 9",
                 title="Gooseneck Inspection", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
@@ -253,7 +280,10 @@ def IncompleteForms(request):
             F1 = Forms(
                 form="F-1", 
                 frequency="Weekly", 
-                link="Weekly/formF1", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF1", 
                 header="Waste Weekly Inspections",
                 title="SIF / K087 Process Area (Satellite)", 
                 due_date=today, 
@@ -262,7 +292,10 @@ def IncompleteForms(request):
             F2 = Forms(
                 form="F-2", 
                 frequency="Weekly", 
-                link="Weekly/formF2", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF2", 
                 header="Waste Weekly Inspections",
                 title="#1 Shop (Satellite Accumulation)", 
                 due_date=today, 
@@ -271,7 +304,10 @@ def IncompleteForms(request):
             F3 = Forms(
                 form="F-3", 
                 frequency="Weekly", 
-                link="Weekly/formF3", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF3", 
                 header="Waste Weekly Inspections",
                 title="#2 Shop (Satellite Accumulation)", 
                 due_date=today, 
@@ -280,7 +316,10 @@ def IncompleteForms(request):
             F4 = Forms(
                 form="F-4", 
                 frequency="Weekly", 
-                link="Weekly/formF4", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF4", 
                 header="Waste Weekly Inspections",
                 title="Battery (Satellite Accumulation)", 
                 due_date=today, 
@@ -289,7 +328,10 @@ def IncompleteForms(request):
             F5 = Forms(
                 form="F-5", 
                 frequency="Weekly", 
-                link="Weekly/formF5", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF5", 
                 header="Waste Weekly Inspections",
                 title="Bio Plant (Satellite Accumulation)", 
                 due_date=today, 
@@ -298,7 +340,10 @@ def IncompleteForms(request):
             F6 = Forms(
                 form="F-6", 
                 frequency="Weekly", 
-                link="Weekly/formF6", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF6", 
                 header="Waste Weekly Inspections",
                 title="No. 8 Tank Area (Satellite Accumulation)", 
                 due_date=today, 
@@ -307,12 +352,164 @@ def IncompleteForms(request):
             F7 = Forms(
                 form="F-7", 
                 frequency="Weekly", 
-                link="Weekly/formF7", 
+                day_freq = 'Wednesday',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formF7", 
                 header="Waste Weekly Inspections",
                 title="Booster Pad (90-Day Accumulation)", 
                 due_date=today, 
                 date_submitted= today - datetime.timedelta(days=1), 
                 submitted= False,)
+            G1 = Forms(
+                form="G-1", 
+                frequency="Weekly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formG1", 
+                header="PECS Baghouse Stack",
+                title="Method 9/Non-Certified Observations", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            G2 = Forms(
+                form="G-2", 
+                frequency="Weekly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formG2", 
+                header="PECS Baghouse Stack",
+                title="Method 9B", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            H = Forms(
+                form="H", 
+                frequency="Weekly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formH", 
+                header="Method 9",
+                title="Method 9 - Combustion Stack", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            I = Forms(
+                form="I", 
+                frequency="Daily", 
+                day_freq = 'Any',
+                weekdays_only = True,
+                weekend_only = False,
+                link="formI", 
+                header="Sampling",
+                title="Quench Water Sampling Form", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            L = Forms(
+                form="L", 
+                frequency="Daily", 
+                day_freq = 'Any',
+                weekdays_only = True,
+                weekend_only = False,
+                link="formL", 
+                header="Method 9",
+                title="Visual Emissions Observations", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            M = Forms(
+                form="M", 
+                frequency="Daily", 
+                day_freq = 'Any',
+                weekdays_only = True,
+                weekend_only = False,
+                link="formM", 
+                header="Method 9D",
+                title="Method 9D Observation", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            N = Forms(
+                form="N", 
+                frequency="Monthly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="formN", 
+                header="Fugitive Dust Inspection",
+                title="Method 9D Monthly Checklist", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            O = Forms(
+                form="O", 
+                frequency="Weekly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = True,
+                link="formO", 
+                header="Stormwater Observation Form",
+                title="MP 108A", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            P = Forms(
+                form="P", 
+                frequency="Weekly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = True,
+                link="formP", 
+                header="Outfall Observation Form",
+                title="Outfall 008", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            spill_kits = Forms(
+                form="spill_kits", 
+                frequency="Monthly", 
+                day_freq = 'Any',
+                weekdays_only = False,
+                weekend_only = False,
+                link="spill_kits", 
+                header="Spill Kits Form",
+                title="Inspection Check List", 
+                due_date=today, 
+                date_submitted= today - datetime.timedelta(days=1), 
+                submitted= False,)
+            
+            A1.save()
+            A2.save()
+            A3.save()
+            A4.save()
+            A5.save()
+            B.save()
+            C.save()
+            D.save()
+            E.save()
+            F1.save()
+            F2.save()
+            F3.save()
+            F4.save()
+            F5.save()
+            F6.save()
+            F7.save()
+            G1.save()
+            G2.save()
+            H.save()
+            I.save()
+            L.save()
+            M.save()
+            N.save()
+            O.save()
+            P.save()
+            spill_kits.save()
+            
+            
 
 
 
