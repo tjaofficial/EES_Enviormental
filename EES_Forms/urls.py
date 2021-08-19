@@ -54,6 +54,8 @@ urlpatterns = [
     path("Monthly/formN/<str:selector>", views.formN, name="formN"),
     path("Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
+    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
+    
     
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),

@@ -4197,7 +4197,507 @@ class Event(models.Model):
     def clean(self):
         if str(self.end_time) <= str(self.start_time):
             raise ValidationError('Ending times must after starting times')
- 
+
+class spill_kits_model(models.Model):
+    observer = all_users = User.objects.all()
+    all_user_choices = ((x.get_full_name(), x.get_full_name()) for x in all_users)
+    
+    observer = models.CharField(
+        max_length=30,
+        choices = all_user_choices
+    )
+    date = models.DateField(
+        auto_now_add=False, 
+        auto_now=False
+    )
+    sk1_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk1_serial = models.CharField(
+        max_length=7
+    )
+    sk1_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk1_report = models.CharField(
+        max_length=30
+    )
+    sk1_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk2_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk2_serial = models.CharField(
+        max_length=7
+    )
+    sk2_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk2_report = models.CharField(
+        max_length=30
+    )
+    sk2_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk3_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk3_serial = models.CharField(
+        max_length=7
+    )
+    sk3_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk3_report = models.CharField(
+        max_length=30
+    )
+    sk3_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk4_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk4_serial = models.CharField(
+        max_length=7
+    )
+    sk4_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk4_report = models.CharField(
+        max_length=30
+    )
+    sk4_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk5_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk5_serial = models.CharField(
+        max_length=7
+    )
+    sk5_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk5_report = models.CharField(
+        max_length=30
+    )
+    sk5_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk6_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk6_serial = models.CharField(
+        max_length=7
+    )
+    sk6_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk6_report = models.CharField(
+        max_length=30
+    )
+    sk6_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk6_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk6_serial = models.CharField(
+        max_length=7
+    )
+    sk6_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk6_report = models.CharField(
+        max_length=30
+    )
+    sk6_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk7_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk7_serial = models.CharField(
+        max_length=7
+    )
+    sk7_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk7_report = models.CharField(
+        max_length=30
+    )
+    sk7_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk8_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk8_serial = models.CharField(
+        max_length=7
+    )
+    sk8_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk8_report = models.CharField(
+        max_length=30
+    )
+    sk8_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk9_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk9_serial = models.CharField(
+        max_length=7
+    )
+    sk9_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk9_report = models.CharField(
+        max_length=30
+    )
+    sk9_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk10_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk10_serial = models.CharField(
+        max_length=7
+    )
+    sk10_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk10_report = models.CharField(
+        max_length=30
+    )
+    sk10_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk11_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk11_serial = models.CharField(
+        max_length=7
+    )
+    sk11_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk11_report = models.CharField(
+        max_length=30
+    )
+    sk11_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk12_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk12_serial = models.CharField(
+        max_length=7
+    )
+    sk12_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk12_report = models.CharField(
+        max_length=30
+    )
+    sk12_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk13_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk13_serial = models.CharField(
+        max_length=7
+    )
+    sk13_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk13_report = models.CharField(
+        max_length=30
+    )
+    sk13_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk14_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk14_serial = models.CharField(
+        max_length=7
+    )
+    sk14_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk14_report = models.CharField(
+        max_length=30
+    )
+    sk14_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk15_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk15_serial = models.CharField(
+        max_length=7
+    )
+    sk15_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk15_report = models.CharField(
+        max_length=30
+    )
+    sk15_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk16_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk16_serial = models.CharField(
+        max_length=7
+    )
+    sk16_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk16_report = models.CharField(
+        max_length=30
+    )
+    sk16_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk17_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk17_serial = models.CharField(
+        max_length=7
+    )
+    sk17_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk17_report = models.CharField(
+        max_length=30
+    )
+    sk17_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk18_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk18_serial = models.CharField(
+        max_length=7
+    )
+    sk18_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk18_report = models.CharField(
+        max_length=30
+    )
+    sk18_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk19_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk19_serial = models.CharField(
+        max_length=7
+    )
+    sk19_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk19_report = models.CharField(
+        max_length=30
+    )
+    sk19_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk20_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk20_serial = models.CharField(
+        max_length=7
+    )
+    sk20_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk20_report = models.CharField(
+        max_length=30
+    )
+    sk20_comment = models.CharField(
+        max_length=100
+    )
+    
+    sk21_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk21_serial = models.CharField(
+        max_length=7
+    )
+    sk21_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    sk21_report = models.CharField(
+        max_length=30
+    )
+    sk21_comment = models.CharField(
+        max_length=100
+    )
+    
+    skut23_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut23_serial = models.CharField(
+        max_length=7
+    )
+    skut23_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut23_report = models.CharField(
+        max_length=30
+    )
+    skut23_comment = models.CharField(
+        max_length=100
+    )
+    
+    skut24_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut24_serial = models.CharField(
+        max_length=7
+    )
+    skut24_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut24_report = models.CharField(
+        max_length=30
+    )
+    skut24_comment = models.CharField(
+        max_length=100
+    )
+    
+    skut25_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut25_serial = models.CharField(
+        max_length=7
+    )
+    skut25_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut25_report = models.CharField(
+        max_length=30
+    )
+    skut25_comment = models.CharField(
+        max_length=100
+    )
+    
+    skut26_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut26_serial = models.CharField(
+        max_length=7
+    )
+    skut26_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut26_report = models.CharField(
+        max_length=30
+    )
+    skut26_comment = models.CharField(
+        max_length=100
+    )
+    
+    skut27_tag_on = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut27_serial = models.CharField(
+        max_length=7
+    )
+    skut27_complete = models.CharField(
+        max_length=3,
+        choices = yes_no_choices
+    )
+    skut27_report = models.CharField(
+        max_length=30
+    )
+    skut27_comment = models.CharField(
+        max_length=100
+    )
+    
+    def __str__(self):
+        return str(self.form)
         
     
     

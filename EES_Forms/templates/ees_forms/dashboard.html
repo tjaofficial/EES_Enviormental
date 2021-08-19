@@ -476,9 +476,9 @@
             {% if item.weekdays_only %}
             {% elif item.weekend_only %}
                 {% if item.form|length >= 2 %}
-                    {% if item.form.0 not in form_check1 %}
+                    {% if item.form.0 not in form_check2 %}
                     <div style="display: none;">
-                    {{ form_check1|append_list:item.form.0 }}
+                    {{ form_check2|append_list:item.form.0 }}
                     </div>
                     <div class="card_Form">
                         <h3 class="card_Form_letter">
@@ -558,9 +558,9 @@
                 {% endif %}
             {% else %}
                 {% if item.form|length >= 2 %}
-                    {% if item.form.0 not in form_check1 %}
+                    {% if item.form.0 not in form_check2 %}
                     <div style="display: none;">
-                    {{ form_check1|append_list:item.form.0 }}
+                    {{ form_check2|append_list:item.form.0 }}
                     </div>
                     <div class="card_Form">
                         <h3 class="card_Form_letter">
