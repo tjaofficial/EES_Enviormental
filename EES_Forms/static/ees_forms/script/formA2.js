@@ -91,30 +91,16 @@ const timeDelta = (startTimeArray,endTimeArray) => {
 Adding Rows to Table
 *****************************************/
 
-
-
-
-
-// {
-//     data:[
-//         {
-//             oven: "1",
-//             location: "D",
-//             zone: "3"
-//         },
-//         {
-//             oven: "3",
-//             location: "C",
-//             zone: "6"
-//         },
-//         {
-//             oven: "2",
-//             location: "M",
-//             zone: "7"
-//         }
-//     ]
-// };
-
+function initate_Result_Table(){
+    const query_Tables = document.querySelectorAll("[data-resulttable]");
+    const result_Table_DOM_Array = Array.from(query_Tables)
+    console.log(result_Table_DOM_Array);
+    result_Table_DOM_Array.forEach((elem)=>{
+        let parsedJSON = JSON.parse(elem.value)
+        createHTMLString(parsedJSON, elem.id);
+        intiateResultEventListeners();
+    })
+}
 
 
 // Takes array of Objects and builds the string of HTML
@@ -141,6 +127,13 @@ function createHTMLString(dataJSON, input_ID){
 
 
 
+
+
+
+
+
+
+
 function intiateResultEventListeners(){
     const resultElement = document.querySelectorAll("[data-resultInput]");
     for(i=0; i<resultElement.length; i++){
@@ -148,7 +141,7 @@ function intiateResultEventListeners(){
             let elem = event.target;
             
             handle_Table_Input(elem);
-            update_Temp_Save();
+            //update_Temp_Save();
             
         })
         
@@ -223,18 +216,7 @@ function updateResultArray(target, array_Position, key, value){
 //createHTMLString(pushResultDataJSON);
 
 
-function initate_Result_Table(){
-    const query_Tables = document.querySelectorAll("[data-resulttable]");
-    const result_Table_DOM_Array = Array.from(query_Tables)
-    console.log(result_Table_DOM_Array);
-    result_Table_DOM_Array.forEach((elem)=>{
-        let parsedJSON = JSON.parse(elem.value)
-        createHTMLString(parsedJSON, elem.id);
-        intiateResultEventListeners();
-    })
 
-
-}
 
 // Takes objects whether should be empty and data to return string of html
 // Template for Table Rows
