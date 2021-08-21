@@ -1,5 +1,5 @@
 
-function inputEventListener(){
+
 
 
 const arrayOfInputs = Array.prototype.slice.call(document.getElementsByTagName('input'),0);
@@ -17,14 +17,14 @@ const currentDate = Date.now();
 
 
 clearStorage(currentDate, tempSaveKey);
-inputEventListener(input_select_textarea_combined_array, tempSaveKey, currentDate);
+inputEventListener(input_select_textarea_combined_array);
 fillForm(tempSaveKey);
 
 
-function inputEventListener(array, tempSaveKey, currentDate){
+function inputEventListener(array){
     
 
-    //console.log(arrayOfInputs)
+    
     for(let elem in array) {  
         item = array[elem];
         if(item.id){
@@ -87,6 +87,7 @@ function intiate_TempSave(){
     clearStorage(tempSaveKey, currentDate);
     inputEventListener();
     fillForm(tempSaveKey);
+    
 }
 
 intiate_TempSave()

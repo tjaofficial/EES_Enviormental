@@ -94,7 +94,6 @@ Adding Rows to Table
 function initate_Result_Table(){
     const query_Tables = document.querySelectorAll("[data-resulttable]");
     const result_Table_DOM_Array = Array.from(query_Tables)
-    console.log(result_Table_DOM_Array);
     result_Table_DOM_Array.forEach((elem)=>{
         let parsedJSON = JSON.parse(elem.value)
         createHTMLString(parsedJSON, elem.id);
@@ -105,7 +104,7 @@ function initate_Result_Table(){
 
 // Takes array of Objects and builds the string of HTML
 function createHTMLString(dataJSON, input_ID){
-        
+    //console.log(`${JSON.stringify(dataJSON)} - ${input_ID}`);    
     let tableHTML = "";
 
     if(dataJSON.data){
@@ -117,8 +116,10 @@ function createHTMLString(dataJSON, input_ID){
             }
         }
     }
-    console.log(input_ID);
+
+    //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
+
     document.getElementById(`${input_ID}_ctableBody`).innerHTML = tableHTML;
     
 
@@ -137,19 +138,25 @@ function createHTMLString(dataJSON, input_ID){
 function intiateResultEventListeners(){
     const resultElement = document.querySelectorAll("[data-resultInput]");
     for(i=0; i<resultElement.length; i++){
-        resultElement[i].addEventListener('input',(event)=>{
-            let elem = event.target;
+        resultElement[i].addEventListener('input', handle_Table_Input)
+        resultElement[i].addEventListener('input', update_Temp_Save)
+
+
+
+        // resultElement[i].addEventListener('input',(event)=>{
+        //     let elem = event.target;
             
-            handle_Table_Input(elem);
-            //update_Temp_Save();
+        //     handle_Table_Input(elem);
+        //     //update_Temp_Save();
             
-        })
+        // })
         
     }
 }
 
 
-function handle_Table_Input(elem){
+function handle_Table_Input(event){
+    const elem = event.target;
     let resultInputAttr = elem.dataset.resultinput;
     const resultKeyAttr = elem.dataset.resultkey;
     const elemValue = elem.value; 
