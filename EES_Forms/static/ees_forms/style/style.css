@@ -194,6 +194,24 @@ body {
   background-color: #98C9A3;
 }
 
+.modalContainer {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.247);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modalContainer_hidden {
+  display: none;
+}
+.modalContainer_shown {
+  display: flex;
+}
+
 * {
   margin: 0px;
   padding: 0px;

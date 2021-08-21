@@ -6441,6 +6441,22 @@ class PasswordsChangeView(PasswordChangeView):
     #success_url = reverse_lazy('profile')
     
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def profile_redirect(request):
     return redirect ('profile/main')
     
@@ -6886,6 +6902,8 @@ def c_dashboard_view(request):
     
 
 
+def testView(request):
+    return render(request, "ees_forms/testFile.html")
 
 
 

@@ -1,0 +1,86 @@
+.readings{
+    &_container{
+        display: flex;
+        width:800px;
+        margin: auto;
+    }
+
+    &_col{
+        padding:20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    table{
+        input{
+            width:50px;
+        }
+        select{
+            width:50px;
+        }
+    }
+}
+
+
+//Tobes Original CSS
+
+#paperSize{
+    width: 1400px;
+    margin: auto;
+    padding-top: 50px;
+}
+.boxTitle{
+    font-size: 30px;
+}
+.boxa1{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 150px;
+    max-width: 150px;
+    height: 35px;
+}
+.boxa2{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 80px;
+    max-width: 80px;
+    height: 35px;
+}
+.boxa3{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 300px;
+    max-width: 300px;
+    height: 35px;
+}
+.boxa4{
+    align-content: center;
+    text-align: left;
+    min-width: 250px;
+    max-width: 250px;
+    height: 35px;
+}
+.boxa5{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 100px;
+    max-width: 100px;
+    height: 35px;
+}
+.boxa6{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    height: 25px;
+}
+#noteBox{
+    border-collapse: collapse; 
+    margin: auto;
+    width: 1100px;
+}

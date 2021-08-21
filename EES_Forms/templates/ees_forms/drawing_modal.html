@@ -1,0 +1,20 @@
+
+{% load static %}
+
+<script src="{% static 'ees_forms/script/atrament.min.js' %}"></script>
+
+
+
+
+<div id="modalContainer" class="modalContainer modalContainer_hidden" data-canvis_intiated="False" data-displayed="False">
+    
+    <div class="modalCard card" >
+        <div class="modalCard_title"> SKETCH <div id="exitModal" data-controls="modalContainer">EXIT</div></div>
+        <div class="modalCard_body">
+            <canvas id="sketchpad" style="background-color: blueviolet;" ></canvas>
+            <div data-controls="modalContainer" id="canvas_save">SAVE</div><div id="clearCanvis">clear</div>
+        </div>
+    </div>
+</div>
+
+
