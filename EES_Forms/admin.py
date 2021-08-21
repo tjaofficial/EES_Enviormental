@@ -44,6 +44,8 @@ admin.site.register(formM_model)
 admin.site.register(formM_readings_model)
 admin.site.register(formO_model)
 admin.site.register(formP_model)
+admin.site.register(spill_kits_model)
+
 
 
 

@@ -4210,6 +4210,9 @@ class spill_kits_model(models.Model):
         auto_now_add=False, 
         auto_now=False
     )
+    month = models.CharField(
+        max_length=30
+    )
     sk1_tag_on = models.CharField(
         max_length=3,
         choices = yes_no_choices
@@ -4697,7 +4700,7 @@ class spill_kits_model(models.Model):
     )
     
     def __str__(self):
-        return str(self.form)
+        return str(self.month)
         
     
     

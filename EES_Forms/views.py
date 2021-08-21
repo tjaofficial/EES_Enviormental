@@ -470,7 +470,7 @@ def IncompleteForms(request):
                 date_submitted= today - datetime.timedelta(days=1), 
                 submitted= False,)
             spill_kits = Forms(
-                form="spill_kits", 
+                form="Spill Kits", 
                 frequency="Monthly", 
                 day_freq = 'Any',
                 weekdays_only = False,
@@ -2267,10 +2267,10 @@ def formB(request, selector):
                         form.save()
 
                         filled_out = True
-                        for items in week_almost.whatever().values():
-                            if items == None:
-                                filled_out = True
-                                break
+                       # for items in week_almost.whatever().values():
+                       #     if items == None:
+                       #         filled_out = True
+                       #         break
 
                         if filled_out:
                             done = Forms.objects.filter(form='B')[0]
@@ -2294,12 +2294,12 @@ def formB(request, selector):
                     if A_valid:
                         form.save()
 
-                        done = Forms.objects.filter(form='B')[0]
+                      #  done = Forms.objects.filter(form='B')[0]
                         filled_out = True
-                        for items in week_almost.whatever().values():
-                            if items == None:
-                                filled_out = True
-                                break
+                      #  for items in week_almost.whatever().values():
+                        #    if items == None:
+                         #       filled_out = True
+                         #       break
                         if filled_out: 
                             done = Forms.objects.filter(form='B')[0]
                             done.submitted = True
@@ -2435,10 +2435,10 @@ def formB(request, selector):
                     form.save()
 
                     filled_out = True
-                    for items in week_almost.whatever().values():
-                        if items == None:
-                            filled_out = False
-                            break
+                   # for items in week_almost.whatever().values():
+                    #    if items == None:
+                    #        filled_out = False
+                    #        break
 
                     if filled_out:
                         done = Forms.objects.filter(form='B')[0]
@@ -6140,6 +6140,17 @@ def formP(request, selector, weekend_day):
 def spill_kits(request, access_page):
     sk_form = spill_kits_form
     
+    if request.method == "POST":
+        form = spill_kits_form(request.POST)
+        if form.is_valid():
+            form.save()
+            
+            done = Forms.objects.filter(form='spill_kits')[0]
+            done.submitted = True
+            done.date_submitted = todays_log.date_save
+            done.save()
+            
+            return redirect ('IncompleteForms')
     
     return render(request, 'Monthly/spillkits.html', {
         'sk_form':sk_form,
