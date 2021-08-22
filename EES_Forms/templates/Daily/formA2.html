@@ -10,219 +10,213 @@
 
     {{ BASE_DIR }}
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+
     <div id="paperSize">
         <div>
-            <a href="{% url 'IncompleteForms' %}">Back</a>
+            <a href="{% if client %}{% url 'c_dashboard' %}{% elif selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
         </div>
-        <div style="padding-top: 75px;">
-            <form action="" method="POST">
+        <div>
+            <form action="" method="POST" style="width: fit-content; margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
-                <table style="border-collapse: collapse; margin: auto;">
-                    <tr>
-                        <th class="boxTitle" colspan="5" style="text-align: left;">Method 303 Doors - Form (A-2)</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th colspan="3" style="text-align: left;">Facility Name: EES Coke Battery LLC</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
-                    </tr>
-                    <tr>
-                        <th colspan="6">
-                            Battery No. 5 &nbsp; &nbsp; &nbsp; 
-                            Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
-                            Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th colspan="6">
-                            Crew:
-                            &nbsp; &nbsp;{{ data.crew }}
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                            Battery Foreman:
-                            &nbsp; &nbsp;{{ data.foreman }}
-                        </th>
-                    </tr>
-                </table>
-                <section class="readings_container">
-                    <div class="readings_col">
-                        <div>Start Time:{{ data.p_start }} </div>
-                        <div>End Time:{{ data.p_stop }}</div>
-                        <input id="pushSide" type="hidden" value="{}" data-resulttable=""/>
-                        <table>
-                            <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
+                <div class="card" id="card_fitter">
+                    <div class="paper_fitter" style="padding: 3rem;">
+                        <table style="border-collapse: collapse; margin: auto;">
                             <tr>
-                                <td class="boxa6" colspan="1">
-                                    Oven
-                                </td>
-                                <td class="boxa6" colspan="1">
-                                    Location
-                                </td>
-                                <td class="boxa6" colspan="1">
-                                    Zone
-                                </td>
+                                <th class="boxTitle" colspan="6" style="text-align: center;">Method 303 Doors - Form (A-2)</th>
                             </tr>
-                            <tbody id="pushSide_ctableBody" data-numRows="1"> 
-                                
-
-                            </tbody>
-
-
-                        </table>
-                        <div> Push Side Traverse Time: &nbsp; &nbsp; {{ data.p_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.p_traverse_time_sec }}sec </div>
-                    </div>
-
-
-                    <div class="readings_col">
-                        <div>Temp. Blocked</div>
-                        <div>{{ data.p_temp_block_from }} to {{ data.p_temp_block_to}}</div>
-                    </div>
-
-
-                    <div class="readings_col">
-                        <div>Start Time:{{ data.c_start }} </div>
-                        <div>End Time:{{ data.c_stop }}</div>
-                        <input id="cokeSide" type="hidden" value="{}" data-resulttable=""/>
-                        <table>
-                            <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>
                             <tr>
-                                <td class="boxa6" colspan="1">
-                                    Oven
-                                </td>
-                                <td class="boxa6" colspan="1">
-                                    Location
-                                </td>
-                                <td class="boxa6" colspan="1">
-                                    Zone
-                                </td>
+                                <th colspan="6" style="text-align: center;">Facility Name: EES Coke Battery LLC</th>
                             </tr>
-
-                            <tbody id="cokeSide_ctableBody" data-numRows="1"> 
-
-
+                            <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
+                            </tr>
+                            <tr>
+                                <th colspan="6">
+                                    Battery No. 5 &nbsp; &nbsp; &nbsp; 
+                                    Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
+                                    Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="6">
+                                    Crew:
+                                    &nbsp; &nbsp;{{ data.crew }}
+                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                    Battery Foreman:
+                                    &nbsp; &nbsp;{{ data.foreman }}
+                                </th>
+                            </tr>
                         </table>
-                        <div>Coke Side Traverse Time: &nbsp; &nbsp; {{ data.c_traverse_time_min }}min &nbsp; &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec</div>
-                    </div>
+                        <section class="readings_container">
+                            <div class="readings_col" style="margin-right: 6rem;">
+                                <div>
+                                    Start Time:{{ data.p_start }} 
+                                    <span class="push_popup_class" id="pushTime_popup">
+                                        Please Change End Time
+                                    </span>
+                                </div>
+                                <div>End Time:{{ data.p_stop }}</div>
+                                <input id="pushSide" type="hidden" value="{}" data-resulttable=""/>
+                                <table>
+                                    <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
+                                    <tr>
+                                        <td class="boxa6" colspan="1">
+                                            Oven
+                                        </td>
+                                        <td class="boxa6" colspan="1">
+                                            Location
+                                        </td>
+                                        <td class="boxa6" colspan="1">
+                                            Zone
+                                        </td>
+                                    </tr>
+                                    <tbody id="pushSide_ctableBody" data-numRows="1">
+                                    </tbody>
+                                </table>
+                                <div class="readings_col">
+                                    <div>Temp. Blocked</div>
+                                    <div>{{ data.p_temp_block_from }} to {{ data.p_temp_block_to}}</div>
+                                </div>
+                                <div style="text-align: center;">       Push Side Traverse Time:
+                                    <br>
+                                    {{ data.p_traverse_time_min }}min &nbsp; &nbsp;{{ data.p_traverse_time_sec }}sec 
+                                </div>
+                            </div>
 
+                            <div class="readings_col">
+                                <div>
+                                    Start Time:{{ data.c_start }}
+                                    <span class="push_popup_class" id="cokeTime_popup">
+                                        Please Change End Time
+                                    </span>
+                                </div>
+                                <div>End Time:{{ data.c_stop }}</div>
+                                <input id="cokeSide" type="hidden" value="{}" data-resulttable=""/>
+                                <table>
+                                    <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>
+                                    <tr>
+                                        <td class="boxa6" colspan="1">
+                                            Oven
+                                        </td>
+                                        <td class="boxa6" colspan="1">
+                                            Location
+                                        </td>
+                                        <td class="boxa6" colspan="1">
+                                            Zone
+                                        </td>
+                                    </tr>
+                                    <tbody id="cokeSide_ctableBody" data-numRows="1"> 
+                                </table>
+                                <div class="readings_col">
+                                    <div>Temp. Blocked</div>
+                                    <div>{{ data.c_temp_block_from }} to {{ data.c_temp_block_to}}</div>
+                                </div>
+                                <div style="text-align: center;">
+                                    Coke Side Traverse Time:
+                                    <br>
+                                    {{ data.c_traverse_time_min }}min &nbsp; &nbsp; {{ data.c_traverse_time_sec }}sec
+                                </div>
+                            </div>
+                        </section>
 
-                    <div class="readings_col">
-                        <div>Temp. Blocked</div>
-                        <div>{{ data.c_temp_block_from }} to {{ data.c_temp_block_to}}</div>
-                    </div>
-                </section>
- 
- 
+                        <section>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <td style="width: 120px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                                        D = Door
+                                    </td>
+                                    <td style="width: 400px; text-align: center;">
+                                        Total Traverse Time {{ data.total_traverse_time }}sec
+                                    </td>
+                                    <td></td>
+                                </tr>    
+                                <tr> 
+                                    <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                        C = Chuck Door
+                                    </td>
+                                    <td style="text-align: center;">
+                                        Allowed Traverse Time:
+                                    </td>
+                                    <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black;">Valid Run?</td>
+                                </tr>    
+                                <tr>  
+                                    <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        M = Masonry
+                                    </td>
+                                    <td style="text-align: center;">
+                                        T = 680 + (10 sec x #leaks) = {{ data.allowed_traverse_time }}
+                                    </td>
+                                    <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        {{ data.valid_run }}
+                                    </td>
+                                </tr>
+                            </table>    
 
-
-
-
-
-                    
-                <section>
-                    <table style="border-collapse: collapse; margin: auto;">
-                        <tr>
-                            <td style="width: 120px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
-                                D = Door
-                            </td>
-                            <td style="width: 400px; text-align: center;">
-                                Total Traverse Time {{ data.total_traverse_time }}sec
-                            </td>
-                            <td></td>
-                        </tr>    
-                        <tr> 
-                            <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                C = Chuck Door
-                            </td>
-                            <td style="text-align: center;">
-                                Allowed Traverse Time:
-                            </td>
-                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black;">Valid Run?</td>
-                        </tr>    
-                        <tr>  
-                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                                M = Masonry
-                            </td>
-                            <td style="text-align: center;">
-                                T = 680 + (10 sec x #leaks) = {{ data.allowed_traverse_time }}
-                            </td>
-                            <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                                {{ data.valid_run }}
-                            </td>
-                        </tr>
-                    </table>    
-                    
-                        
-                        
-                        
-                        
-                    <table style="border-collapse: collapse; margin: auto;">    
-                        <tr>
-                            <td style="height: 25px" > </td>
-                        </tr> 
-                        <tr>
-                            <td style="width: 100px;"></td>
-                            <td></td>
-                            <td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L<sub>y</sub> X 100
-                            </td>
-                            <td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.leaking_doors }} x 100
-                            </td>
-                            <td></td>
-                            <td style="width: 75px"></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td style="text-align: center; margin: auto; width: 133px;">
-                                % Leaking Doors = 
-                            </td>
-                            <td>
-                                ---------------------- = 
-                            </td>
-                            <td>
-                                --------------------------------- = 
-                            </td>
-                            <td>
-                                {{ data.percent_leaking }}%
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                &nbsp;&nbsp;&nbsp; D<sub>t</sub> - D<sub>i</sub> - D<sub>no</sub>
-                            </td>
-                            <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;170 - {{ data.inop_doors_eq }} - {{ data.doors_not_observed }}
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    <tr>
-                            <td style="height: 25px" > </td>
-                        </tr> 
-                        <tr>
-                            <td style="text-align: center; margin: auto; " colspan="6">
-                                Where: L<sub>y</sub> = Leaking Doors Obsered, D<sub>i</sub> = Inoperable Oven x 2, and D<sub>no</sub> = Door not observed
-                            </td>
-                        </tr> 
-                    </table>
-                    <div id="noteBox">
-                        Notes: <br>
-                        {{ data.notes }}
-                    </div>
-                </section>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <td style="height: 25px" > </td>
+                                </tr> 
+                                <tr>
+                                    <td style="width: 100px;"></td>
+                                    <td></td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L<sub>y</sub> X 100
+                                    </td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.leaking_doors }} x 100
+                                    </td>
+                                    <td></td>
+                                    <td style="width: 75px"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align: center; margin: auto; width: 133px;">
+                                        % Leaking Doors = 
+                                    </td>
+                                    <td>
+                                        ---------------------- = 
+                                    </td>
+                                    <td>
+                                        --------------------------------- = 
+                                    </td>
+                                    <td>
+                                        {{ data.percent_leaking }}%
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp; D<sub>t</sub> - D<sub>i</sub> - D<sub>no</sub>
+                                    </td>
+                                    <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;170 - {{ data.inop_doors_eq }} - {{ data.doors_not_observed }}
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 25px" > </td>
+                                </tr> 
+                                <tr>
+                                    <td style="text-align: center; margin: auto; " colspan="6">
+                                        Where: L<sub>y</sub> = Leaking Doors Obsered, D<sub>i</sub> = Inoperable Oven x 2, and D<sub>no</sub> = Door not observed
+                                    </td>
+                                </tr> 
+                            </table>
+                            <div id="noteBox">
+                                Notes: <br>
+                                {{ data.notes }}
+                            </div>
+                        </section>
                 
                 <input type="submit" value="Submit Form" style="font-size: 40px">
+                    </div>
+                </div>
             </form> 
         </div>    
     </div>
