@@ -1,0 +1,97 @@
+.resultTables{
+    display: flex;
+    flex-direction: row;
+    margin: 2rem 0 2rem 0;
+
+    &_container{
+        display: flex;
+        flex-direction: column;
+        min-width: 20rem;
+        padding: 0 2rem 0 2rem;
+        width:50%;
+        align-items: center;
+    }
+
+    table{
+        margin: 2rem 0 2rem 0;
+    }
+
+
+
+}
+
+
+
+//-------------------------//
+//Tobes Old CSS            //
+//-------------------------//
+
+#boxTitle{
+    font-size: 30px;
+}
+#boxa1{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 150px;
+    max-width: 150px;
+    height: 35px;
+}
+#boxa2{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 80px;
+    max-width: 80px;
+    height: 35px;
+}
+#boxa3{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 300px;
+    max-width: 300px;
+    height: 35px;
+}
+#boxa4{
+    align-content: center;
+    text-align: left;
+    min-width: 250px;
+    max-width: 250px;
+    height: 35px;
+}
+#boxa5{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 100px;
+    max-width: 100px;
+    height: 35px;
+}
+#boxa6{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    height: 25px;
+    width: 30px;
+}
+#noteBox{
+    border-collapse: collapse; 
+    width: fit-content; 
+    margin: auto;
+}
+#boxa3_1{
+    align-content: center;
+    text-align: left;
+    min-width: 250px;
+    max-width: 250px;
+    height: 35px;
+}
+#boxa3_2{
+    align-content: center;
+    text-align: left;
+    min-width: 50px;
+    max-width: 250px;
+    height: 35px;
+}
+
