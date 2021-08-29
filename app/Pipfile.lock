@@ -65,11 +65,11 @@
         },
         "phonenumbers": {
             "hashes": [
-                "sha256:885b7b4521bb9105b31a8597d3baa6da11155f819f1231434590db2f130a27cd",
-                "sha256:9a396a4d69ed4cf1f8513114869cbed4f12542644374a5d5f11bc7fd66a2098a"
+                "sha256:091ed2b3158567f12c99f719570a1ccace00179f39b44f1e6b895f59d93dadc8",
+                "sha256:3ede2a2fce9b2ed335c0168e8276546d717fceeffe23761877925dff0a8f54f1"
             ],
             "index": "pypi",
-            "version": "==8.12.29"
+            "version": "==8.12.31"
         },
         "pillow": {
             "hashes": [
