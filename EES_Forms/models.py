@@ -583,37 +583,13 @@ class formA2_model(models.Model):
         blank=True
     )
     
-    p_leak_oven1 = models.CharField(
-        max_length=2,
+    p_leak_data = models.CharField(
+        max_length=1000,
         blank=True,
         null = True
     )
-    p_leak_loc1 = models.CharField(
-        max_length=30,
-        choices = door_location,
-        blank=True,
-        null = True
-    )
-    p_leak_zone1 = models.CharField(
-        max_length=30,
-        choices = door_zone,
-        blank=True,
-        null = True
-    )
-    c_leak_oven1 = models.CharField(
-        max_length=2,
-        blank=True,
-        null = True
-    )
-    c_leak_loc1 = models.CharField(
-        max_length=30,
-        choices = door_location,
-        blank=True,
-        null = True
-    )
-    c_leak_zone1 = models.CharField(
-        max_length=30,
-        choices = door_zone,
+    c_leak_data = models.CharField(
+        max_length=1000,
         blank=True,
         null = True
     )

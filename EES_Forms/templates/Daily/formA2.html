@@ -59,7 +59,7 @@
                                     </span>
                                 </div>
                                 <div>End Time:{{ data.p_stop }}</div>
-                                <input id="pushSide" type="hidden" value="{}" data-resulttable=""/>
+                                {{ data.p_leak_data }}
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
                                     <tr>
@@ -94,7 +94,7 @@
                                     </span>
                                 </div>
                                 <div>End Time:{{ data.c_stop }}</div>
-                                <input id="cokeSide" type="hidden" value="{}" data-resulttable=""/>
+                                {{ data.c_leak_data }}
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>
                                     <tr>
@@ -213,8 +213,8 @@
                                 {{ data.notes }}
                             </div>
                         </section>
-                
-                <input type="submit" value="Submit Form" style="font-size: 40px">
+                        <br><br><br>
+                        <input type="submit" value="Submit Form" class="submit_button">
                     </div>
                 </div>
             </form> 

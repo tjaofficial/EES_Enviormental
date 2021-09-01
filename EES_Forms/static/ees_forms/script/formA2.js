@@ -140,6 +140,7 @@ function intiateResultEventListeners(){
         resultElement[i].addEventListener('input', handle_Table_Input)
         resultElement[i].addEventListener('input', update_Temp_Save)
         resultElement[i].addEventListener('input', total_leaking_doors)
+        resultElement[i].addEventListener('input', allowed_time)
 
 
         // resultElement[i].addEventListener('input',(event)=>{
@@ -428,5 +429,14 @@ function equation() {
     
     document.getElementById('id_percent_leaking').value = parseFloat(equate).toFixed(3);
     
+}
+
+function allowed_time() {
+    const leaks = document.getElementById('leaking_doors').value;
+    
+    const equate_time = 680 + (10 * parseInt(leaks));
+    
+    document.getElementById('allowed_traverse_time').value = equate_time;
+          
 }
 
