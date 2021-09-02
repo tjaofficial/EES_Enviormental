@@ -6101,6 +6101,7 @@ def formL(request, access_page):
 #------------------------------------------------------------------------FORM M---------------<
 @lock
 def formM(request, selector):
+    formName = "M"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     
@@ -6277,7 +6278,7 @@ def formM(request, selector):
         return redirect(batt_prof)
       
     return render (request, "Daily/formM.html", {
-        'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2
+        'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName':formName,
     })
 
 def formN(request, selector):

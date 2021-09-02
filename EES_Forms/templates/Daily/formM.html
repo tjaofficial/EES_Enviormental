@@ -1,6 +1,7 @@
 {% extends "ees_forms/layout.html" %}
 
 {% block list%}
+{% load static %}
     <style>
         #boxc1{
             align-content: center;
@@ -27,8 +28,11 @@
     
     </style>
 
+    <script defer src="{% static 'ees_forms/script/formM.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 
 
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div>
         <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
     </div>
@@ -90,13 +94,16 @@
                         <th></th>
                     </tr>
                 </table>
+                
+                
                 <table style="border-collapse: collapse; margin-left: 1rem; margin-right: 1rem;">
                     <tr>
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="6" class="formM_box1">
+                        <td colspan="5" class="formM_box1">
                             PAVED: {{ form.paved }}&nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
+                            <span class="pav_popup_class" id="pav_popup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
@@ -105,7 +112,6 @@
                         <td id="boxc1">15</td>
                         <td id="boxc1">30</td>
                         <td id="boxc1">45</td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">0</td>
@@ -121,7 +127,6 @@
                         <td id="boxc1">
                             {{ read.pav_4 }}
                         </td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">1</td>
@@ -137,7 +142,6 @@
                         <td id="boxc1">
                             {{ read.pav_8 }}
                         </td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td id="boxc1">2</td>
@@ -153,7 +157,6 @@
                         <td id="boxc1">
                             {{ read.pav_12 }}
                         </td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
@@ -165,11 +168,10 @@
                         <td style="height: 35px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="3" class="formM_box1">
-                            UNPAVED: {{ form.unpaved }}
-                        </td>
-                        <td colspan="3" class="formM_time_box">
+                        <td colspan="5" class="formM_box1">
+                            UNPAVED: {{ form.unpaved }} &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
+                            <span class="unp_popup_class" id="unp_popup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
@@ -238,11 +240,10 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="3" class="formM_box1">
-                            PARKING LOT: {{ form.parking }}
-                        </td>
-                        <td colspan="3" class="formM_time_box">
+                        <td colspan="5" class="formM_box1">
+                            PARKING LOT: {{ form.parking }} &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
+                            <span class="par_popup_class" id="par_popup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
@@ -311,11 +312,10 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="3" class="formM_box1">
-                            STORAGE PILE: {{ form.storage }}
-                        </td>
-                        <td colspan="3" class="formM_time_box">
+                        <td colspan="5" class="formM_box1">
+                            STORAGE PILE: {{ form.storage }} &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.sto_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.sto_stop }}
+                            <span class="storage_popup_class" id="storage_popup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
