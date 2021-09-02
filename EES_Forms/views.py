@@ -3441,6 +3441,8 @@ def formF1(request, selector):
     
     full_name = request.user.get_full_name()
     
+    count_bp = daily_battery_profile_model.objects.count()
+    
     if count_bp != 0:
         todays_log = daily_prof[0]
     
