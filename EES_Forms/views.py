@@ -2924,7 +2924,7 @@ def formC(request, selector):
 
                                     return redirect (issue_page)
 
-                                if B.comments not in {'-', 'n/a', 'N/A'}:
+                                if B.form.comments not in {'-', 'n/a', 'N/A'}:
                                     issue_page = '../../issues_view/C/' + str(todays_log.date_save) + '/form'
 
                                     return redirect (issue_page)
@@ -3072,7 +3072,7 @@ def formD(request, selector):
 
                             for items in week_almost.whatever().values():
                                 if items == None:
-                                    filled_out = False
+                                    filled_out = True
                                     break
 
                             if filled_out:

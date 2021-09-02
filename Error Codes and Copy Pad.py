@@ -163,7 +163,15 @@ class subA5_form(ModelForm):
         document.getElementById("myPopup_skip_oven").style.visibility = 'hidden';
     }
         
+    count_bp = daily_battery_profile_model.objects.count()
         
+    if count_bp != 0:
+        todays_log = daily_prof[0]
+    
+    else:
+        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+        return redirect(batt_prof)       
         
         
         
@@ -201,4 +209,16 @@ EES_00013 - search_form_view, "none"
 EES_00014 - search_form_view, "none"
         
         
+        
+        
+        
+        
+        
+        leak = formA2.objects.all()[0]
+        
+        len(leak[p_leak_oven1][data])
+        
+        
+        
+        {"data":[{"oven":"3","location":"D","zone":"2"},{"oven":"55","location":"D","zone":"4"},{"oven":"12","location":"D","zone":"8"}]}
         
