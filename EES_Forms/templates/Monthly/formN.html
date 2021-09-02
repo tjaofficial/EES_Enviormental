@@ -1,5 +1,5 @@
 {% extends "ees_forms/layout.html" %}
-
+ 
 {% block list%}
 <div id="paperSize">
     <div>
@@ -7,6 +7,11 @@
     </div>
     <div class="card" id="card_fitter">
         <div class="paper_fitter" style="padding: 3rem;">
+            <div style="width:100%; text-align: right;">
+                <a href="../../Daily/formM/form">
+                    Form M - List
+                </a>
+            </div>
             <table style="border-collapse: collapse; margin: auto;">
                     <tr>
                         <th id="boxTitle" colspan="5">Fugitive Dust Inspection<br>Method 9D Monthly Checklist - (N)</th>
@@ -247,8 +252,8 @@
                 <tr>
                     <td class="roads_format">North Gate Truck Turn</td>
                     <td class="date_format">
-                        {% for x in locations %}
-                            {% if 'p11' == x.0 %}
+                        {% for x in unpaved_loc %}
+                            {% if 'unp1' == x.0 %}
                                 <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
                                     ({{ x.1.month }}/{{ x.1.day }})
                                 </a>,
@@ -260,23 +265,73 @@
                 </tr>
                 <tr>
                     <td class="roads_format">Screening Station Road</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in unpaved_loc %}
+                            {% if 'unp2' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">Coal Handling Road (Partial)</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in unpaved_loc %}
+                            {% if 'unp3' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">Taj Mahal Road</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in unpaved_loc %}
+                            {% if 'unp4' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">PECS Approach</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in unpaved_loc %}
+                            {% if 'unp5' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">No. 2 Boilerhouse Road</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in unpaved_loc %}
+                            {% if 'unp6' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr class="roads_headers">    
                     <th>
@@ -288,15 +343,45 @@
                 </tr>
                 <tr>
                     <td class="roads_format">Gap Gate Parking</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in parking_loc %}
+                            {% if 'par1' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">Truck Garage Area</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in parking_loc %}
+                            {% if 'par2' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">EES Coke Office Parking</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in parking_loc %}
+                            {% if 'par3' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr class="roads_headers">    
                     <th>
@@ -308,11 +393,31 @@
                 </tr>
                 <tr>
                     <td class="roads_format">Area B Coke Storage Piles</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in storage_loc %}
+                            {% if 'sto1' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 <tr>
                     <td class="roads_format">EES Coke Coal Storage Piles</td>
-                    <td class="date_format"></td>
+                    <td class="date_format">
+                        {% for x in storage_loc %}
+                            {% if 'sto2' == x.0 %}
+                                <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                    ({{ x.1.month }}/{{ x.1.day }})
+                                </a>,
+                            {% else %}
+
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
             </table>  
         </div>
