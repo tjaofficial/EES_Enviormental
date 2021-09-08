@@ -221,4 +221,17 @@ EES_00014 - search_form_view, "none"
         
         
         {"data":[{"oven":"3","location":"D","zone":"2"},{"oven":"55","location":"D","zone":"4"},{"oven":"12","location":"D","zone":"8"}]}
-        
+
+
+
+
+
+
+
+
+#Initial Downloads
+pip install django-phonenumber-field
+pip install phonenumbers
+pip install python-dateutil
+python3 -m pip install requests
+python3 -m pip install --upgrade Pillow
