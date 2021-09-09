@@ -10,3 +10,13 @@ services:
       - 8000:8000
     env_file:
       - ./.env.dev
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+    - POSTGRES_USER=admin
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=ees_forms_db
+volumes:
+  postgres_data:
