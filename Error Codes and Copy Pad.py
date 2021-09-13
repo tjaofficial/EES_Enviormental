@@ -137,7 +137,7 @@ class subA5_form(ModelForm):
           Return a day as a table cell.
         """
         if day == 0:
-            return '<td class="noday">&nbsp;</td>' # day outside month
+            return '<td class="noday">&nbsp;</td>'  # day outside month
         else:
             return '<td class="%s"><a href="%s">%d</a></td>' % (self.cssclasses[weekday], weekday, day)
         
@@ -210,7 +210,8 @@ EES_00014 - search_form_view, "none"
         
         
         
-        
+        python3 -m venv ~/.virtualenvs/djangodev
+farragostudios@Anthonys-Mac-mini EES_Enviormental % source ~/.virtualenvs/djangodev/bin/activate
         
         
         
