@@ -17,6 +17,6 @@ services:
     environment:
     - POSTGRES_USER=admin
     - POSTGRES_PASSWORD=password
-    - POSTGRES_DB=ees_forms_db
+    - POSTGRES_DB=ees_forms_db_dev
 volumes:
   postgres_data:
