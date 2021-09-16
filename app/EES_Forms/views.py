@@ -22,8 +22,10 @@ from django.contrib.auth.models import User, Group
 
 
 
-daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-todays_log = daily_prof[0]
+# daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+
+# todays_log = daily_prof[0]
+
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 sub_forms = Forms.objects.all()
@@ -31,9 +33,7 @@ today = datetime.date.today()
 now = datetime.datetime.now()
 profile = user_profile_model.objects.all()
 
-    
-
-#--------------------------------------------------------------------------REGISTER---------<
+#---------------------------------------------REGISTER---------<
 # Create your views here.
 def register_view(request):
     if request.user.is_authenticated:
@@ -41,18 +41,18 @@ def register_view(request):
     else:
         form = CreateUserForm()
         profile_form = user_profile_form()
-    
+
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             profile_form = user_profile_form(request.POST)
             if form.is_valid() and profile_form.is_valid():
                 user = form.save()
-                
+
                 profile = profile_form.save(commit=False)
                 profile.user = user
-                
+
                 profile.save()
-                
+
                 user = form.cleaned_data.get('username')
                 messages.success(request, 'Account was created for' + user)
                 return redirect('Login')
@@ -65,7 +65,7 @@ def register_view(request):
 def login_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
-    
+
     if request.user.is_authenticated:
         if now.month == todays_log.date_save.month:
             if now.day == todays_log.date_save.day:

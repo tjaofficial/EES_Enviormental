@@ -9,6 +9,8 @@ phonenumbers = "*"
 python-dateutil = "*"
 requests = "*"
 pillow = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 
