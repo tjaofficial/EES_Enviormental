@@ -1,17 +1,21 @@
 .readings_container {
   display: flex;
-  width: 800px;
+  width: fit-content;
   margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 .readings_col {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
-.readings table input {
+.readings_col table input {
   width: 50px;
+}
+.readings_col table {
+  border-collapse: collapse;
 }
 .readings table select {
   width: 50px;
@@ -20,7 +24,7 @@
 #paperSize {
   width: 1400px;
   margin: auto;
-  padding-top: 50px;
+  padding-top: 1rem;
 }
 
 .boxTitle {
@@ -76,12 +80,38 @@
   text-align: center;
   border: 1px solid black;
   height: 25px;
+  padding: 0 7px 0px 7px;
 }
 
 #noteBox {
   border-collapse: collapse;
   margin: auto;
-  width: 1100px;
+  width: fit-content;
 }
 
+.push_popup_class {
+    visibility: hidden;
+    width: 177px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    margin-left: -164px;
+    margin-top: -58px;
+    opacity: 100%;
+    font-size: 1rem;
+}
+.push_popup_class::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
 /*# sourceMappingURL=formA2.css.map */

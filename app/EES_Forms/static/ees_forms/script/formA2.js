@@ -1,8 +1,7 @@
 // Get Required Input Fields
 
-
-function updateCalcs(){
-
+/*
+function updateCalcs() {
     // Push Side
 
     const pushSide_startTime_value  = document.getElementById('pushSide_startTime').value;
@@ -85,7 +84,7 @@ const timeDelta = (startTimeArray,endTimeArray) => {
     return deltaArray;    
     
 }
-
+*/
 
 /*****************************************
 Adding Rows to Table
@@ -140,7 +139,8 @@ function intiateResultEventListeners(){
     for(i=0; i<resultElement.length; i++){
         resultElement[i].addEventListener('input', handle_Table_Input)
         resultElement[i].addEventListener('input', update_Temp_Save)
-
+        resultElement[i].addEventListener('input', total_leaking_doors)
+        resultElement[i].addEventListener('input', allowed_time)
 
 
         // resultElement[i].addEventListener('input',(event)=>{
@@ -278,3 +278,165 @@ function update_Temp_Save(){
 }
 
 initate_Result_Table()
+
+
+
+function timecheck_pushDoors() {
+    "use strict";
+    
+    const start = document.getElementById('p_start').value,
+          end = document.getElementById('p_stop').value;
+
+    if (end == false) {
+        var popup = document.getElementById("pushTime_popup").style.visibility = 'hidden';
+    }
+    else if (start >= end) {
+        document.getElementById("pushTime_popup").style.visibility = 'visible';
+        document.getElementById("p_start").style.backgroundColor = "white";
+        document.getElementById("p_stop").style.backgroundColor = "white";
+    }
+    else{
+        var popup = document.getElementById("pushTime_popup").style.visibility = 'hidden';
+        document.getElementById("p_start").style.backgroundColor = "#3c983c85";
+        document.getElementById("p_stop").style.backgroundColor = "#3c983c85";
+    }
+}
+
+function timecheck_cokeDoors() {
+    "use strict";
+    
+    const start = document.getElementById('c_start').value,
+          end = document.getElementById('c_stop').value;
+
+    if (end == false) {
+        var popup = document.getElementById("cokeTime_popup").style.visibility = 'hidden';
+    }
+    else if (start >= end) {
+        document.getElementById("cokeTime_popup").style.visibility = 'visible';
+        document.getElementById("c_start").style.backgroundColor = "white";
+        document.getElementById("c_stop").style.backgroundColor = "white";
+    }
+    else{
+        var popup = document.getElementById("cokeTime_popup").style.visibility = 'hidden';
+        document.getElementById("c_start").style.backgroundColor = "#3c983c85";
+        document.getElementById("c_stop").style.backgroundColor = "#3c983c85";
+    }
+}
+
+function pc_doors_not_observed() {
+    const push_from = document.getElementById('p_temp_block_from').value,
+          push_to = document.getElementById('p_temp_block_to').value,
+          coke_from = document.getElementById('c_temp_block_from').value,
+          coke_to = document.getElementById('c_temp_block_to').value;
+    
+    
+    if (parseInt(push_from) || parseInt(push_to) >= 0) {
+        var push_block_total = Math.abs(parseInt(push_from) - parseInt(push_to)) +1;
+    }
+    else {
+        var push_block_total = 0;
+    }
+    
+    if (parseInt(coke_from) || parseInt(coke_to) >= 0) {
+        var coke_block_total = Math.abs(parseInt(coke_from) - parseInt(coke_to)) +1;
+    }
+    else {
+        var coke_block_total = 0;
+    }
+    
+    const not_observed = parseInt(push_block_total) + parseInt(coke_block_total);
+    
+    document.getElementById('doors_not_observed').value = not_observed;
+    
+}
+
+function inoperable_ovens() {
+    const inop = document.getElementById('inop_ovens').value;
+    
+    document.getElementById('inop_doors_eq').value = parseInt(inop) * 2;
+}
+
+inoperable_ovens()
+
+function total_leaking_doors() {
+    const p_elem = document.querySelector(['#pushSide']),
+          c_elem = document.querySelector(['#cokeSide']);
+    
+    const p_array = JSON.parse(p_elem.value).data,
+          c_array = JSON.parse(c_elem.value).data;
+    if (typeof p_array === 'undefined') {
+        var p_len = 0;
+    }
+    else {
+        var p_len = p_array.length;
+    }
+    if (typeof c_array === 'undefined') {
+        var c_len = 0;
+    }
+    else {
+        var c_len = c_array.length;
+    }
+    const total_doors = p_len + c_len;
+    
+    document.getElementById('leaking_doors').value = total_doors;
+}
+total_leaking_doors()
+
+function total_traverse() {
+    const push_traverse_min = document.getElementById('id_p_traverse_time_min').value,
+          push_traverse_sec = document.getElementById('id_p_traverse_time_sec').value,
+          coke_traverse_min = document.getElementById('id_c_traverse_time_min').value,
+          coke_traverse_sec = document.getElementById('id_c_traverse_time_sec').value;
+    
+    
+    console.log(push_traverse_sec);
+    if (push_traverse_min == '') {
+        console.log('push minutes are empty');
+        if(push_traverse_sec == '') {
+            var push_secs = 0;
+            console.log('push seconds are empty');
+        }
+    }
+    else {
+        var push_secs = (parseInt(push_traverse_min) * 60) + parseInt(push_traverse_sec);
+    }
+    
+    if (coke_traverse_min == '') {
+        console.log('coke minutes are empty');
+        if(coke_traverse_sec == '') {
+            var coke_secs = 0;
+            console.log('coke seconds are empty');
+        }
+    }
+    else {
+        var coke_secs = (parseInt(coke_traverse_min) * 60) + parseInt(coke_traverse_sec);
+    }
+    
+  //  const push_secs = (parseInt(push_traverse_min) * 60) + parseInt(push_traverse_sec);
+          
+    
+    let total_secs = parseInt(push_secs) + parseInt(coke_secs);
+    
+    document.getElementById('total_traverse_time').value = total_secs;
+}
+
+function equation() {
+    const leaks = document.getElementById('leaking_doors').value,
+          inops = document.getElementById('inop_doors_eq').value,
+          not_obs = document.getElementById('doors_not_observed').value;
+    
+    const equate = (parseInt(leaks) * 100)/(170 - parseInt(inops) - parseInt(not_obs));
+    
+    document.getElementById('id_percent_leaking').value = parseFloat(equate).toFixed(3);
+    
+}
+
+function allowed_time() {
+    const leaks = document.getElementById('leaking_doors').value;
+    
+    const equate_time = 680 + (10 * parseInt(leaks));
+    
+    document.getElementById('allowed_traverse_time').value = equate_time;
+          
+}
+
