@@ -33,7 +33,7 @@ DEBUG = int(os.environ.get("DEBUG", default=1)) #**********CHANGE DEFAULT TO 0 O
 #    else:
 #        return []
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", []) #check_allows_hosts()
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default=[]) #check_allows_hosts()
 
 
 # Application definition
