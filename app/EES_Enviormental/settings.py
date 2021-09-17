@@ -21,19 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "thisisasecretkey") #'django-insecure-kv11wqd&x%b-s9vkea37ow9723aex$-8^v#913=$+i#+2n1ldf'
+SECRET_KEY = os.environ.get("SECRET_KEY", default="thisisasecretkey") #'django-insecure-kv11wqd&x%b-s9vkea37ow9723aex$-8^v#913=$+i#+2n1ldf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1)) #**********CHANGE DEFAULT TO 0 ONCE USING DOCKER BY DEFAULT**********
 
 
-def check_allows_hosts():
-    if(os.environ.get("DJANGO_ALLOWED_HOSTS")):
-        return os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-    else:
-        return []
-print(check_allows_hosts())
-ALLOWED_HOSTS = check_allows_hosts()
+#def check_allows_hosts():
+#    if(os.environ.get("DJANGO_ALLOWED_HOSTS")):
+#        return os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+#    else:
+#        return []
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", []) #check_allows_hosts()
 
 
 # Application definition
