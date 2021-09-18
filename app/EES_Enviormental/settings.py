@@ -27,13 +27,13 @@ SECRET_KEY = os.environ.get("SECRET_KEY", default="thisisasecretkey") #'django-i
 DEBUG = int(os.environ.get("DEBUG", default=1)) #**********CHANGE DEFAULT TO 0 ONCE USING DOCKER BY DEFAULT**********
 
 
-#def check_allows_hosts():
-#    if(os.environ.get("DJANGO_ALLOWED_HOSTS")):
-#        return os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-#    else:
-#        return []
+def check_allows_hosts():
+    if(os.environ.get("DJANGO_ALLOWED_HOSTS")):
+        return os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+    else:
+        return []
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default=[]) #check_allows_hosts()
+ALLOWED_HOSTS = check_allows_hosts()
 
 
 # Application definition
