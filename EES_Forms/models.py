@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
+import datetime
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from phonenumber_field.modelfields import PhoneNumberField
@@ -2695,7 +2696,7 @@ class formF4_model(models.Model):
     waste_codes_4 = models.CharField(
         max_length=30,
         choices=waste_code_choices,
-        blan =True,
+        blank =True,
         null=True
     )
     dates_1 = models.DateField(
