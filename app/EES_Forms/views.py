@@ -1,23 +1,19 @@
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
-from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from operator import itemgetter
 import datetime
 import calendar
-from calendar import HTMLCalendar
 from .models import *
 from .forms import *
-from .utils import DBEmpty, EventCalendar, Calendar
+from .utils import DBEmpty, Calendar
 from dateutil.relativedelta import relativedelta
 from django.apps import apps
-from django.core.exceptions import FieldDoesNotExist, FieldError
+from django.core.exceptions import FieldError
 import requests
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 
 
 
@@ -29,7 +25,7 @@ today = datetime.date.today()
 now = datetime.datetime.now()
 profile = user_profile_model.objects.all()
 
-#---------------------------------------------REGISTER---------<
+# ---------------------------------------------REGISTER---------<
 # Create your views here.
 def register_view(request):
     if request.user.is_authenticated:
