@@ -1,33 +1,31 @@
 from django.urls import path
 from . import views
-from .views import PasswordsChangeView
-from django.conf import settings
-from django.contrib.auth import views as auth_views
-
-
+from .views.login_logout_view import PasswordsChangeView
 
 urlpatterns = [
-    #path("", views.index, name="index"),
-    #path("tobe", views.tobe, name="tobe"),
+    path("", views.IncompleteForms, name="IncompleteForms"),
+
     path("Register", views.register_view, name="Register"),
     path("Login", views.login_view, name="Login"),
     path("Logout", views.logout_view, name="Logout"),
-    path("profile/<str:access_page>", views.profile, name="profile"),
-    path("password", PasswordsChangeView.as_view(), name = 'PasswordChange'),
     path('profile_redirect', views.profile_redirect, name='profile_redirect'),
+    path("password", PasswordsChangeView.as_view(), name='PasswordChange'),
+
+    path("profile/<str:access_page>", views.profile, name="profile"),
     path('about', views.about_view, name='about'),
     path('safety', views.safety_view, name='safety'),
+
+    path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
+
+    path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
+    path("schedule_view", views.schedule_view, name="Schedule"),
+    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
+    path("add_event", views.event_add_view, name="Add Event"),
+    path("event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
     path('archive', views.archive_view, name='archive'),
     path('search_forms/<str:access_page>', views.search_forms_view, name='search_forms'),
-    
-    
-    path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
-    path("IncompleteForms", views.IncompleteForms, name="IncompleteForms"),
-    path("weekly_forms", views.weekly_forms, name="weekly_forms"),
-    path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),
-    path("pt_mth_input", views.pt_mth_input, name="pt_mth_input"),
-    path("method303_rolling_avg", views.method303_rolling_avg, name="rolling_avg"),
-    path("admin_data", views.admin_data_view, name="admin_data"),
+    path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
+
     path("Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("Daily/formA2/<str:selector>", views.formA2, name="formA2"),
     path("Daily/formA3/<str:selector>", views.formA3, name="formA3"),
@@ -49,27 +47,20 @@ urlpatterns = [
     path("Weekly/formH/<str:access_page>", views.formH, name="formH"),
     path("Daily/formI/<str:selector>", views.formI, name="formI"),
     path("Daily/formL/<str:access_page>", views.formL, name="formL"),
-
     path("Daily/formM/<str:selector>", views.formM, name="formM"),
     path("Monthly/formN/<str:selector>", views.formN, name="formN"),
     path("Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
-    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
-    
-    
-    path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
-    path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
-    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
-    path("schedule_view", views.schedule_view, name="Schedule"),
-    path("add_event", views.event_add_view, name="Add Event"),
-    path("event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
-   # path("calendar", views.CalendarView.as_view(), name='calendar'),
-    
-    
-    
-    
-    
-    
-    
+
+    path("weekly_forms", views.weekly_forms, name="weekly_forms"),
+    path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),
+    path("pt_mth_input", views.pt_mth_input, name="pt_mth_input"),
+    path("method303_rolling_avg", views.method303_rolling_avg, name="rolling_avg"),
+    path("admin_data", views.admin_data_view, name="admin_data"),
+
     path("c_dashboard", views.c_dashboard_view, name="c_dashboard"),
+
+    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
+
+    # path("calendar", views.CalendarView.as_view(), name='calendar'),
 ]
