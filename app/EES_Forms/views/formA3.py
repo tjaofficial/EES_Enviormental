@@ -8,6 +8,31 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 now = datetime.datetime.now()
 
+def new_form(request, todays_log):
+    if request.method == "POST":
+        form = formA3_form(request.POST)
+        if form.is_valid():
+            A = form.save()
+
+            if A.notes not in {'-', 'n/a', 'N/A'}:
+                issue_page = '../../issues_view/A-3/' + str(todays_log.date_save) + '/form'
+
+                return redirect(issue_page)
+            if int(A.om_leaks) > 0:
+                issue_page = '../../issues_view/A-3/' + str(todays_log.date_save) + '/form'
+
+                return redirect(issue_page)
+            if int(A.l_leaks) > 0:
+                issue_page = '../../issues_view/A-3/' + str(todays_log.date_save) + '/form'
+
+                return redirect(issue_page)
+
+            done = Forms.objects.filter(form='A-3')[0]
+            done.submitted = True
+            done.date_submitted = todays_log.date_save
+            done.save()
+
+            return redirect('IncompleteForms')
 
 @lock
 def formA3(request, selector):
@@ -23,7 +48,6 @@ def formA3(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
     org = formA3_model.objects.all().order_by('-date')
-    database_form = org[0]
 
     full_name = request.user.get_full_name()
 
@@ -38,7 +62,7 @@ def formA3(request, selector):
                     database_model = x
             data = database_model
 
-        else:
+        elif len(org) > 0:
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
                     if todays_log.date_save == database_form.date:
@@ -108,30 +132,8 @@ def formA3(request, selector):
                             'notes': 'N/A',
                         }
                         data = formA3_form(initial=initial_data)
-                        if request.method == "POST":
-                            form = formA3_form(request.POST)
-                            if form.is_valid():
-                                A = form.save()
 
-                                if A.notes not in {'-', 'n/a', 'N/A'}:
-                                    issue_page = '../../issues_view/A-3/' + str(todays_log.date_save) + '/form'
-
-                                    return redirect(issue_page)
-                                if int(A.om_leaks) > 0:
-                                    issue_page = '../../issues_view/A-3/' + str(todays_log.date_save) + '/form'
-
-                                    return redirect(issue_page)
-                                if int(A.l_leaks) > 0:
-                                    issue_page = '../../issues_view/A-3/' + str(todays_log.date_save) + '/form'
-
-                                    return redirect(issue_page)
-
-                                done = Forms.objects.filter(form='A-3')[0]
-                                done.submitted = True
-                                done.date_submitted = todays_log.date_save
-                                done.save()
-
-                                return redirect('IncompleteForms')
+                        new_form(request, todays_log)
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
@@ -140,6 +142,18 @@ def formA3(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
+        else:
+            initial_data = {
+                'date': todays_log.date_save,
+                'observer': full_name,
+                'crew': todays_log.crew,
+                'foreman': todays_log.foreman,
+                'inop_ovens': todays_log.inop_ovens,
+                'notes': 'N/A',
+            }
+            data = formA3_form(initial=initial_data)
+
+            new_form(request, todays_log)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

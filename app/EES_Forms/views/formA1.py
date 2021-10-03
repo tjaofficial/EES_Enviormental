@@ -9,6 +9,42 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 now = datetime.datetime.now()
 
 
+def new_form(todays_log, request, full_name):
+    if request.method == "POST":
+        form = formA1_form(request.POST)
+        reads = formA1_readings_form(request.POST)
+        A_valid = form.is_valid()
+        B_valid = reads.is_valid()
+
+        if A_valid and B_valid:
+            A = form.save()
+            B = reads.save(commit=False)
+            B.form = A
+            B.save()
+
+            #   if B.comments not in {'-', 'n/a', 'N/A'}:
+            #  issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+
+            #  return redirect (issue_page)
+            sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
+            for x in sec:
+                if 10 <= x:
+                    issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+
+                    return redirect(issue_page)
+                else:
+                    if B.total_seconds >= 55:
+                        issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
+
+                        return redirect(issue_page)
+            done = Forms.objects.filter(form='A-1')[0]
+            done.submitted = True
+            done.date_submitted = todays_log.date_save
+            done.save()
+
+            return redirect('IncompleteForms')
+
+
 @lock
 def formA1(request, selector):
     unlock = False
@@ -23,9 +59,7 @@ def formA1(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
     org = formA1_model.objects.all().order_by('-date')
-    database_form = org[0]
     org2 = formA1_readings_model.objects.all().order_by('-form')
-    database_form2 = org2[0]
 
     full_name = request.user.get_full_name()
 
@@ -43,8 +77,10 @@ def formA1(request, selector):
                 if str(x.form.date) == str(selector):
                     database_model2 = x
             readings = database_model2
+        elif len(org) > 0 | len(org2) > 0:
+            database_form = org[0]
+            database_form2 = org2[0]
 
-        else:
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
                     if todays_log.date_save == database_form.date:
@@ -131,39 +167,8 @@ def formA1(request, selector):
                         }
                         data = formA1_form(initial=initial_data)
                         readings = formA1_readings_form()
-                        if request.method == "POST":
-                            form = formA1_form(request.POST)
-                            reads = formA1_readings_form(request.POST)
-                            A_valid = form.is_valid()
-                            B_valid = reads.is_valid()
 
-                            if A_valid and B_valid:
-                                A = form.save()
-                                B = reads.save(commit=False)
-                                B.form = A
-                                B.save()
-
-                                #   if B.comments not in {'-', 'n/a', 'N/A'}:
-                                #  issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
-
-                                #  return redirect (issue_page)
-                                sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
-                                for x in sec:
-                                    if 10 <= x:
-                                        issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
-
-                                        return redirect(issue_page)
-                                    else:
-                                        if B.total_seconds >= 55:
-                                            issue_page = '../../issues_view/A-1/' + str(todays_log.date_save) + '/form'
-
-                                            return redirect(issue_page)
-                                done = Forms.objects.filter(form='A-1')[0]
-                                done.submitted = True
-                                done.date_submitted = todays_log.date_save
-                                done.save()
-
-                                return redirect('IncompleteForms')
+                        new_form(todays_log, request, full_name)
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
@@ -172,6 +177,17 @@ def formA1(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
+        else:
+            initial_data = {
+                'date': todays_log.date_save,
+                'observer': full_name,
+                'crew': todays_log.crew,
+                'foreman': todays_log.foreman,
+            }
+            data = formA1_form(initial=initial_data)
+            readings = formA1_readings_form()
+
+            new_form(todays_log, request, full_name)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

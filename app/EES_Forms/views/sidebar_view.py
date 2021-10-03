@@ -1,13 +1,19 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model
+from ..forms import issues_form, events_form
 import datetime
 import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
 from ..utils import Calendar
+from django.contrib.auth.decorators import login_required
+
+lock = login_required(login_url='Login')
+today = datetime.date.today()
 
 
+@lock
 def corrective_action_view(request):
     client = False
     if request.user.groups.filter(name='EES Coke Employees'):
@@ -22,6 +28,7 @@ def corrective_action_view(request):
     })
 
 
+@lock
 def calendar_view(request, year, month):
     unlock = False
     client = False
@@ -60,6 +67,7 @@ def calendar_view(request, year, month):
     })
 
 
+@lock
 def schedule_view(request):
     today_year = int(datetime.date.today().year)
     today_month = str(calendar.month_name[datetime.date.today().month])
@@ -71,6 +79,7 @@ def schedule_view(request):
     })
 
 
+@lock
 def archive_view(request):
     client = False
     if request.user.groups.filter(name='EES Coke Employees'):
@@ -83,6 +92,7 @@ def archive_view(request):
     })
 
 
+@lock
 def search_forms_view(request, access_page):
     client = False
     if request.user.groups.filter(name='EES Coke Employees'):
@@ -150,3 +160,210 @@ def search_forms_view(request, access_page):
         return render(request, 'ees_forms/search_forms.html', {
             'profile': profile, 'access_page': access_page, 'database': database, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
+
+
+@lock
+def issues_view(request, form_name, form_date, access_page):
+    unlock = False
+    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+        unlock = True
+
+    profile = user_profile_model.objects.all()
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    todays_log = daily_prof[0]
+
+    if access_page == 'form':
+        data = Forms.objects.all()
+        today = datetime.date.today()
+        if today.weekday() == 5:
+            day = 'saturday'
+        elif today.weekday() == 6:
+            day = 'sunday'
+
+        for x in data:
+            if x.form == form_name:
+                if x.form in {'O', 'P'}:
+                    link = x.frequency + '/' + x.link + '/' + access_page + '/' + day
+                else:
+                    link = x.frequency + '/' + x.link + '/' + access_page
+
+    if access_page == 'issue':
+        org = issues_model.objects.all().order_by('-date')
+        database_form = org[0]
+
+        for entry in org:
+            if str(form_date) == str(entry.date):
+                if form_name == entry.form:
+                    picker = entry
+                    form = issues_form()
+                    link = ''
+
+    elif access_page == 'edit':
+        org = issues_model.objects.all().order_by('-date')
+        database_form = org[0]
+
+        for entry in org:
+            if str(form_date) == str(entry.date):
+                if form_name == entry.form:
+                    picker = entry
+                    link = ''
+
+        initial_data = {
+            'form': picker.form,
+            'issues': picker.issues,
+            'notified': picker.notified,
+            'time': picker.time,
+            'date': picker.date,
+            'cor_action': picker.cor_action
+        }
+
+        form = issues_form(initial=initial_data)
+
+        if request.method == "POST":
+            data = issues_form(request.POST, instance=picker)
+            if data.is_valid():
+                data.save()
+
+                return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
+    else:
+        picker = 'n/a'
+        if issues_model.objects.count() != 0:
+            org = issues_model.objects.all().order_by('-date')
+            database_form = org[0]
+            if todays_log.date_save == database_form.date:
+                if database_form.form == form_name:
+                    initial_data = {
+                        'form': database_form.form,
+                        'issues': database_form.issues,
+                        'notified': database_form.notified,
+                        'time': database_form.time,
+                        'date': database_form.date,
+                        'cor_action': database_form.cor_action
+                    }
+
+                    form = issues_form(initial=initial_data)
+
+                    if request.method == "POST":
+                        data = issues_form(request.POST, instance=database_form)
+                        if data.is_valid():
+                            data.save()
+
+                            done = Forms.objects.filter(form=form_name)[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+                else:
+                    initial_data = {
+                        'date': todays_log.date_save,
+                        'form': form_name
+                    }
+                    form = issues_form(initial=initial_data)
+
+                    if request.method == "POST":
+                        data = issues_form(request.POST)
+                        if data.is_valid():
+                            data.save()
+
+                            done = Forms.objects.filter(form=form_name)[0]
+                            done.submitted = True
+                            done.date_submitted = todays_log.date_save
+                            done.save()
+
+                            return redirect('IncompleteForms')
+            else:
+                initial_data = {
+                    'date': todays_log.date_save,
+                    'form': form_name
+                }
+                form = issues_form(initial=initial_data)
+
+                if request.method == "POST":
+                    data = issues_form(request.POST)
+                    if data.is_valid():
+                        data.save()
+
+                        done = Forms.objects.filter(form=form_name)[0]
+                        done.submitted = True
+                        done.date_submitted = todays_log.date_save
+                        done.save()
+
+                        return redirect('IncompleteForms')
+        else:
+            initial_data = {
+                'date': todays_log.date_save,
+                'form': form_name
+            }
+            form = issues_form(initial=initial_data)
+
+            if request.method == "POST":
+                data = issues_form(request.POST)
+                if data.is_valid():
+                    data.save()
+
+                    done = Forms.objects.filter(form=form_name)[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+
+                    return redirect('IncompleteForms')
+    return render(request, "ees_forms/issues_template.html", {
+        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock
+    })
+
+
+@lock
+def event_add_view(request):
+    profile = user_profile_model.objects.all()
+    today_year = int(today.year)
+    today_month = str(calendar.month_name[today.month])
+
+    form_var = events_form()
+
+    if request.method == "POST":
+        request_form = events_form(request.POST)
+        if request_form.is_valid():
+            request_form.save()
+
+            cal_link = 'schedule/' + str(today_year) + '/' + today_month
+
+            return redirect(cal_link)
+
+    return render(request, "ees_forms/event_add.html", {
+        'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile,
+    })
+
+
+@lock
+def event_detail_view(request, access_page, event_id):
+    today_year = int(today.year)
+    today_month = str(calendar.month_name[today.month])
+
+    form = events_form()
+    if access_page == 'view':
+        my_event = Event.objects.get(pk=event_id)
+    elif access_page == 'edit':
+        data_pull = Event.objects.get(pk=event_id)
+        initial_data = {
+            'observer': data_pull.observer,
+            'title': data_pull.title,
+            'date': data_pull.date,
+            'start_time': data_pull.start_time,
+            'end_time': data_pull.end_time,
+            'notes': data_pull.notes,
+        }
+        my_event = events_form(initial=initial_data)
+
+        if request.method == 'POST':
+            data = events_form(request.POST, instance=data_pull)
+            print('pork')
+            if data.is_valid():
+                print('chicken')
+                data.save()
+
+                return redirect('../../event_detail/' + str(event_id) + '/view')
+
+    return render(request, "ees_forms/event_detail.html", {
+        'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+    })

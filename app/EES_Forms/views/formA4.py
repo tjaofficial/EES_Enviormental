@@ -8,6 +8,28 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 now = datetime.datetime.now()
 
+def new_form(request, todays_log):
+    if request.method == "POST":
+        form = formA4_form(request.POST)
+        if form.is_valid():
+            A = form.save()
+
+            if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
+                issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+
+                return redirect(issue_page)
+            if A.oven_leak_1:
+                issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+
+                return redirect(issue_page)
+
+            done = Forms.objects.filter(form='A-4')[0]
+            done.submitted = True
+            done.date_submitted = todays_log.date_save
+            done.save()
+
+            return redirect('IncompleteForms')
+
 
 @lock
 def formA4(request, selector):
@@ -23,7 +45,6 @@ def formA4(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
     org = formA4_model.objects.all().order_by('-date')
-    database_form = org[0]
 
     full_name = request.user.get_full_name()
 
@@ -38,7 +59,9 @@ def formA4(request, selector):
                     database_model = x
             data = database_model
 
-        else:
+        elif len(org) > 0:
+            database_form = org[0]
+
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
                     if todays_log.date_save == database_form.date:
@@ -100,26 +123,7 @@ def formA4(request, selector):
                         }
                         data = formA4_form(initial=initial_data)
 
-                        if request.method == "POST":
-                            form = formA4_form(request.POST)
-                            if form.is_valid():
-                                A = form.save()
-
-                                if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE'}:
-                                    issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-
-                                    return redirect(issue_page)
-                                if A.oven_leak_1:
-                                    issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-
-                                    return redirect(issue_page)
-
-                                done = Forms.objects.filter(form='A-4')[0]
-                                done.submitted = True
-                                done.date_submitted = todays_log.date_save
-                                done.save()
-
-                                return redirect('IncompleteForms')
+                        new_form(request, todays_log)
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
@@ -128,6 +132,16 @@ def formA4(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
+        else:
+            initial_data = {
+                'date': todays_log.date_save,
+                'observer': full_name,
+                'crew': todays_log.crew,
+                'foreman': todays_log.foreman,
+            }
+            data = formA4_form(initial=initial_data)
+
+            new_form(request, todays_log)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

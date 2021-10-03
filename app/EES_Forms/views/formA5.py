@@ -22,7 +22,6 @@ def formA5(request, selector):
 
     formName = "A5"
     profile = user_profile_model.objects.all()
-    this_from = 'A-5'
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
     org = formA5_model.objects.all().order_by('-date')

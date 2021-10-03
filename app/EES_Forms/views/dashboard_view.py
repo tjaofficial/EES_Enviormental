@@ -269,7 +269,7 @@ def IncompleteForms(request):
                 form="L",
                 frequency="Daily",
                 day_freq='Any',
-                weekdays_only=True,
+                weekdays_only=False,
                 weekend_only=False,
                 link="formL",
                 header="Method 9",
@@ -441,7 +441,11 @@ def IncompleteForms(request):
                     F.append(x)
             return F
 
-        od_recent = overdue_closest(cool)
+        if len(cool) >= 4:
+            od_recent = overdue_closest(cool)
+        else:
+            od_recent = ''
+
 
     # --------------------------------------------Battery Profile Data------------
     # --------------------------------------------Battery Profile Data------------

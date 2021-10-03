@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model
 from ..forms import CreateUserForm, user_profile_form
 from django.contrib.auth import logout
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 
 
 now = datetime.datetime.now()
@@ -103,3 +106,13 @@ def profile_redirect(request):
     return render(request, 'profile.hmtl', {
 
     })
+
+
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = 'ees_forms/ees_password.html'
+
+    def get_success_url(self):
+        return reverse('profile', kwargs={'access_page': 'success'})
+
+    # success_url = reverse_lazy('profile')

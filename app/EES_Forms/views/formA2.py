@@ -23,8 +23,6 @@ def formA2(request, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
     org = formA2_model.objects.all().order_by('-date')
-    if len(org) > 0:
-        database_form = org[0]
 
     full_name = request.user.get_full_name()
 
@@ -40,6 +38,8 @@ def formA2(request, selector):
             data = database_model
 
         elif len(org) > 0:
+            database_form = org[0]
+
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
                     if todays_log.date_save == database_form.date:
