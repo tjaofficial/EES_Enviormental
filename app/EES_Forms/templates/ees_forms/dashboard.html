@@ -33,7 +33,7 @@
             {{ todays_log.inop_ovens }}
             <br>
             
-            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% endif %}-{{now.day}}">
+            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
                 <h4>Edit</h4>
             </a>
         </div>
@@ -42,7 +42,7 @@
             None
             <br>
             
-            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% endif %}-{{now.day}}">
+            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
                 <h4>Add</h4>
             </a>
         </div>

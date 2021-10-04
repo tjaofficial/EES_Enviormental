@@ -446,17 +446,21 @@ def IncompleteForms(request):
         else:
             od_recent = ''
 
-
     # --------------------------------------------Battery Profile Data------------
     # --------------------------------------------Battery Profile Data------------
     # --------------------------------------------Battery Profile Data------------
         daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-        todays_log = daily_prof[0]
 
         profile_entered = False
-        if now.month == todays_log.date_save.month:
-            if now.day == todays_log.date_save.day:
-                profile_entered = True
+
+        if len(daily_prof) > 0:
+            todays_log = daily_prof[0]
+
+            if now.month == todays_log.date_save.month:
+                if now.day == todays_log.date_save.day:
+                    profile_entered = True
+        else:
+            todays_log = ''
 
     # ------------------------------------------------------Weather-------------
     # ------------------------------------------------------Weather-------------

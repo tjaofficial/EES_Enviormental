@@ -9,27 +9,33 @@ today = datetime.date.today()
 
 def profile(request, access_page):
     profile = user_profile_model.objects.all()
-    current_user = request.user
+    existing = False
 
-    for x in profile:
-        if x.user == current_user:
-            user_select = x
-
-    pic = user_select.profile_picture
-    cert = user_select.cert_date
-    # user_sel = user_select.user
-
-    initial_data = {
-        'cert_date': user_select.cert_date,
-        'profile_picture': user_select.profile_picture,
-        'phone': user_select.phone,
-        'position': user_select.position,
-    }
-
-    pic_form = user_profile_form(initial=initial_data)
+    user_select = ''
+    pic = ''
+    if len(profile) > 0:
+        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
+        if same_user:
+            existing = True
+            user_select = same_user.user
+            pic = user_select.profile_picture
+            cert = user_select.cert_date
+    if existing:
+        initial_data = {
+            'cert_date': user_select.cert_date,
+            'profile_picture': user_select.profile_picture,
+            'phone': user_select.phone,
+            'position': user_select.position,
+        }
+        pic_form = user_profile_form(initial=initial_data)
+    else:
+        pic_form = user_profile_form()
 
     if request.method == "POST":
-        form = user_profile_form(request.POST, request.FILES, instance=user_select)
+        if existing:
+            form = user_profile_form(request.POST, request.FILES, instance=user_select)
+        else:
+            form = user_profile_form(request.POST)
 
         if form.is_valid():
             A = form.save(commit=False)
