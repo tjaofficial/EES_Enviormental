@@ -9,8 +9,6 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 
-
-now = datetime.datetime.now()
 profile = user_profile_model.objects.all()
 
 
@@ -44,7 +42,7 @@ def register_view(request):
 
 def login_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:

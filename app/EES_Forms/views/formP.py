@@ -6,14 +6,13 @@ from ..forms import formP_form
 import calendar
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
 def formP(request, selector, weekend_day):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
     full_name = request.user.get_full_name()

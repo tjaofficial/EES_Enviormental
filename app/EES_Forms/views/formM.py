@@ -5,7 +5,6 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formM_form, formM_readings_form
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
@@ -13,6 +12,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formM(request, selector):
     formName = "M"
     existing = False
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     full_name = request.user.get_full_name()

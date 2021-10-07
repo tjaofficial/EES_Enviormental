@@ -5,14 +5,14 @@ from ..models import daily_battery_profile_model, Forms
 import datetime
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
+
 
 
 @lock
 def spill_kits(request, access_page):
     sk_form = spill_kits_form
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:

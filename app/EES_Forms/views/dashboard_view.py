@@ -6,7 +6,6 @@ import requests
 from django.contrib.auth.models import User
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 
 
 @lock
@@ -18,6 +17,7 @@ def IncompleteForms(request):
         sub_forms = Forms.objects.all()
         reads = formA5_readings_model.objects.all()
         today_str = str(today)
+        now = datetime.datetime.now()
 
         weekday_fri = today + datetime.timedelta(days=4 - todays_num)
         weekend_fri = weekday_fri + datetime.timedelta(days=7)

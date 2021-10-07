@@ -10,7 +10,6 @@ from ..utils import Calendar
 from django.contrib.auth.decorators import login_required
 
 lock = login_required(login_url='Login')
-today = datetime.date.today()
 
 
 @lock
@@ -179,29 +178,24 @@ def issues_view(request, form_name, form_date, access_page):
             day = 'saturday'
         elif today.weekday() == 6:
             day = 'sunday'
-
         for x in data:
             if x.form == form_name:
                 if x.form in {'O', 'P'}:
                     link = x.frequency + '/' + x.link + '/' + access_page + '/' + day
                 else:
                     link = x.frequency + '/' + x.link + '/' + access_page
-
-    if access_page == 'issue':
+    elif access_page == 'issue':
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
-
         for entry in org:
             if str(form_date) == str(entry.date):
                 if form_name == entry.form:
                     picker = entry
                     form = issues_form()
                     link = ''
-
     elif access_page == 'edit':
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
-
         for entry in org:
             if str(form_date) == str(entry.date):
                 if form_name == entry.form:
@@ -226,88 +220,44 @@ def issues_view(request, form_name, form_date, access_page):
 
                 return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
     else:
+        existing = False
         picker = 'n/a'
         if issues_model.objects.count() != 0:
             org = issues_model.objects.all().order_by('-date')
             database_form = org[0]
             if todays_log.date_save == database_form.date:
                 if database_form.form == form_name:
-                    initial_data = {
-                        'form': database_form.form,
-                        'issues': database_form.issues,
-                        'notified': database_form.notified,
-                        'time': database_form.time,
-                        'date': database_form.date,
-                        'cor_action': database_form.cor_action
-                    }
-
-                    form = issues_form(initial=initial_data)
-
-                    if request.method == "POST":
-                        data = issues_form(request.POST, instance=database_form)
-                        if data.is_valid():
-                            data.save()
-
-                            done = Forms.objects.filter(form=form_name)[0]
-                            done.submitted = True
-                            done.date_submitted = todays_log.date_save
-                            done.save()
-
-                            return redirect('IncompleteForms')
-                else:
-                    initial_data = {
-                        'date': todays_log.date_save,
-                        'form': form_name
-                    }
-                    form = issues_form(initial=initial_data)
-
-                    if request.method == "POST":
-                        data = issues_form(request.POST)
-                        if data.is_valid():
-                            data.save()
-
-                            done = Forms.objects.filter(form=form_name)[0]
-                            done.submitted = True
-                            done.date_submitted = todays_log.date_save
-                            done.save()
-
-                            return redirect('IncompleteForms')
-            else:
-                initial_data = {
-                    'date': todays_log.date_save,
-                    'form': form_name
-                }
-                form = issues_form(initial=initial_data)
-
-                if request.method == "POST":
-                    data = issues_form(request.POST)
-                    if data.is_valid():
-                        data.save()
-
-                        done = Forms.objects.filter(form=form_name)[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
-
-                        return redirect('IncompleteForms')
+                    existing = True
+        if existing:
+            initial_data = {
+                'form': database_form.form,
+                'issues': database_form.issues,
+                'notified': database_form.notified,
+                'time': database_form.time,
+                'date': database_form.date,
+                'cor_action': database_form.cor_action
+            }
         else:
             initial_data = {
                 'date': todays_log.date_save,
                 'form': form_name
             }
-            form = issues_form(initial=initial_data)
 
-            if request.method == "POST":
+        form = issues_form(initial=initial_data)
+        if request.method == "POST":
+            if existing:
+                data = issues_form(request.POST, instance=database_form)
+            else:
                 data = issues_form(request.POST)
-                if data.is_valid():
-                    data.save()
+            if data.is_valid():
+                data.save()
 
-                    done = Forms.objects.filter(form=form_name)[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                done = Forms.objects.filter(form=form_name)[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
 
-                    return redirect('IncompleteForms')
+                return redirect('IncompleteForms')
     return render(request, "ees_forms/issues_template.html", {
         'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock
     })
@@ -315,6 +265,7 @@ def issues_view(request, form_name, form_date, access_page):
 
 @lock
 def event_add_view(request):
+    today = datetime.date.today()
     profile = user_profile_model.objects.all()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
@@ -337,6 +288,7 @@ def event_add_view(request):
 
 @lock
 def event_detail_view(request, access_page, event_id):
+    today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
 

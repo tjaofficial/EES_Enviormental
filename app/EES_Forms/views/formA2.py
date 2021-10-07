@@ -6,7 +6,6 @@ from ..forms import formA2_form
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-now = datetime.datetime.now()
 
 
 @lock
@@ -20,6 +19,7 @@ def formA2(request, selector):
 
     formName = "A2"
     existing = False
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     full_name = request.user.get_full_name()

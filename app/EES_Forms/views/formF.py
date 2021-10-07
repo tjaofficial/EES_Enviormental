@@ -6,7 +6,6 @@ from ..forms import formF1_form, formF2_form, formF3_form, formF4_form, formF5_f
 from dateutil.relativedelta import relativedelta
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
@@ -15,7 +14,7 @@ def formF1(request, selector):
     formName = "F1"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF1_model.objects.count()
 
@@ -234,7 +233,7 @@ def formF2(request, selector):
     formName = "F2"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF2_model.objects.count()
 
@@ -447,7 +446,7 @@ def formF3(request, selector):
     formName = "F3"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF3_model.objects.count()
 
@@ -659,7 +658,7 @@ def formF4(request, selector):
     formName = "F4"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF4_model.objects.count()
 
@@ -871,7 +870,7 @@ def formF5(request, selector):
     formName = "F5"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF5_model.objects.count()
 
@@ -1083,7 +1082,7 @@ def formF6(request, selector):
     formName = "F6"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF6_model.objects.count()
 
@@ -1295,7 +1294,7 @@ def formF7(request, selector):
     formName = "F7"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     form_all = formF7_model.objects.count()
 

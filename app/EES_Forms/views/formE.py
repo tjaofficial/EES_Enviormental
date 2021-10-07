@@ -5,7 +5,7 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formE_form
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
+
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
@@ -13,6 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formE(request, selector):
     formName = "E"
     existing = False
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     full_name = request.user.get_full_name()
     count_bp = daily_battery_profile_model.objects.count()

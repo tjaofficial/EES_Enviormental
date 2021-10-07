@@ -7,12 +7,12 @@ import requests
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-now = datetime.datetime.now()
-today = datetime.date.today()
 
 
 @lock
 def formA5(request, selector):
+    now = datetime.datetime.now()
+    # today = datetime.date.today()
     unlock = False
     client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
