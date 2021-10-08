@@ -44,51 +44,33 @@ def login_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     count_bp = daily_battery_profile_model.objects.count()
-
-    if count_bp != 0:
-        todays_log = daily_prof[0]
-
-        if request.user.is_authenticated:
+    existing = False
+    if request.user.is_authenticated:
+        if count_bp != 0:
+            todays_log = daily_prof[0]
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
                     return redirect('IncompleteForms')
-                else:
-                    batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
-                    return redirect(batt_prof)
-            else:
-                batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect(batt_prof)
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if count_bp != 0:
+                todays_log = daily_prof[0]
+                if now.month == todays_log.date_save.month:
+                    if now.day == todays_log.date_save.day:
+                        return redirect('IncompleteForms')
+            batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
-                return redirect(batt_prof)
-
-        else:
-            if request.method == 'POST':
-                username = request.POST.get('username')
-                password = request.POST.get('password')
-
-                user = authenticate(request, username=username, password=password)
-
-                if user is not None:
-                    login(request, user)
-
-                    if now.month == todays_log.date_save.month:
-                        if now.day == todays_log.date_save.day:
-                            return redirect('IncompleteForms')
-                        else:
-                            batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                            return redirect(batt_prof)
-                    else:
-                        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                        return redirect(batt_prof)
-    else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
-
+            return redirect(batt_prof)
     return render(request, "ees_forms/ees_login.html", {
-         "now": now
+        "now": now
     })
 
 
