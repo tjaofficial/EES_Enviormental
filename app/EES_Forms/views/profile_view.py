@@ -13,12 +13,12 @@ def profile(request, access_page):
     user_select = ''
     pic = ''
     if len(profile) > 0:
-        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
+        same_user = user_profile_model.objects.filter(user__exact=request.user.id)[0]
         if same_user:
             existing = True
-            user_select = same_user.user
-            pic = user_select.profile_picture
-            cert = user_select.cert_date
+            user_select = same_user
+            pic = same_user.profile_picture
+            cert = same_user.cert_date
     if existing:
         initial_data = {
             'cert_date': user_select.cert_date,

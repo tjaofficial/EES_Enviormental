@@ -3,7 +3,6 @@ from ..models import user_profile_model, formA5_readings_model, Forms, daily_bat
 from django.contrib.auth.decorators import login_required
 import datetime
 import requests
-from django.contrib.auth.models import User
 
 lock = login_required(login_url='Login')
 
@@ -536,21 +535,12 @@ def IncompleteForms(request):
         form_check1 = ["", ]
         form_check2 = ["", ]
 
+        return render(request, "ees_forms/dashboard.html", {
+            "pull": pull, "pullNot": pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday,
+        })
+    elif request.user.groups.filter(name='SGI Admin'):
+        return redirect('admin_dashboard')
+    elif request.user.groups.filter(name='EES Coke Employees'):
+        return redirect('c_dashboard')
     else:
-        poop = User.objects.all().order_by('id')
-        print(poop[1].groups.all())
-        for a in poop:
-            print(a)
-            print(a.groups.all())
-            print('')
-            q_group = a.groups.all()
-            for x in q_group:
-                print(x)
-                if str(x) == 'EES Coke Employees':
-                    print(a)
-                    print(x)
-                    return redirect('c_dashboard')
-
-    return render(request, "ees_forms/dashboard.html", {
-        "pull": pull, "pullNot": pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday,
-    })
+        return redirect('Logout')
