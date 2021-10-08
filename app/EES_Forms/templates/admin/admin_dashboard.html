@@ -1,10 +1,45 @@
-{% extends "ees_forms/layout.html" %}
-{% load dashboard_tags %}
-{% block list%}
-<div>
-<p>
-<a href="{% url 'Register' %}">click here</a>
-</p>
-</div>
+<style>
+.whiteFont{
+    color:white; 
+    padding-left: 1rem;
+}
+.highlight_dark:hover {
+    background-color:#1c2630;
+}
 
-{% endblock %}
+
+
+
+</style>
+
+
+<body style="background-color:#F2F7FB; margin: 0px;display:flex;">
+    <div id="sideBar" style="width:17rem; height:100%; background-color: #263544; ">
+        <div id="companyBox" style="width:100%; height: 4rem; background-color: #263544;">
+            <h2 style="color:white; padding-left: 1rem;">Sidock Group, Inc.</h2>
+        </div>
+        <div>
+            <h4 class="whiteFont">
+                Settings
+            </h4>
+            <div class="whiteFont highlight_dark">
+                Admin
+            </div>
+            <div class="whiteFont highlight_dark">
+                Profile
+            </div>
+        </div>
+        <p>
+        <a href="{% url 'Register' %}">click here</a>
+        </p>
+    </div>
+    <div id="topBar" style="width:100%; height:4rem; background-color:white;">
+        Anthony Ackerman
+    </div>
+    
+</body>
+
+
+
+
+
