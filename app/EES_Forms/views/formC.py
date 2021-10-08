@@ -5,13 +5,13 @@ from ..models import user_profile_model, daily_battery_profile_model, formC_mode
 from ..forms import SubFormC1, FormCReadForm
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
 def formC(request, selector):
     formName = "C"
+    now = datetime.datetime.now()
     existing = False
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')

@@ -4,13 +4,12 @@ from ..forms import user_profile_form
 import datetime
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-today = datetime.date.today()
 
 
 def profile(request, access_page):
     profile = user_profile_model.objects.all()
     existing = False
-
+    today = datetime.date.today()
     user_select = ''
     pic = ''
     if len(profile) > 0:

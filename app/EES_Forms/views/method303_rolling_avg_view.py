@@ -3,12 +3,12 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 import datetime
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-today = datetime.date.today()
-now = datetime.datetime.now()
 profile = user_profile_model.objects.all()
 
 
 def method303_rolling_avg(request):
+    now = datetime.datetime.now()
+    today = datetime.date.today()
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
     todays_log = daily_prof[0]
 

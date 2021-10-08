@@ -6,11 +6,11 @@ from ..forms import formA1_form, formA1_readings_form
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-now = datetime.datetime.now()
 
 
 @lock
 def formA1(request, selector):
+    formName = "A1"
     existing = False
     unlock = False
     client = False
@@ -18,8 +18,7 @@ def formA1(request, selector):
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
-
-    formName = "A1"
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 

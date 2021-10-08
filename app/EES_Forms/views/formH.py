@@ -5,13 +5,13 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formH_form, user_profile_form
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
 def formH(request, access_page):
     formName = "H"
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     full_name = request.user.get_full_name()
     cert_date = request.user.user_profile_model.cert_date

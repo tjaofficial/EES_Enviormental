@@ -5,7 +5,6 @@ from ..models import user_profile_model, daily_battery_profile_model, formB_mode
 from ..forms import Forms, formB_form
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
@@ -14,7 +13,7 @@ def formB(request, selector):
     formName = "B"
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now()
     today = datetime.date.today()
     last_monday = today - datetime.timedelta(days=today.weekday())
     one_week = datetime.timedelta(days=4)

@@ -5,12 +5,12 @@ from ..models import daily_battery_profile_model, user_profile_model
 from ..forms import daily_battery_profile_form
 
 lock = login_required(login_url='Login')
-now = datetime.datetime.now()
-profile = user_profile_model.objects.all()
 
 
 @lock
 def daily_battery_profile_view(request, access_page, date):
+    profile = user_profile_model.objects.all()
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     form = daily_battery_profile_form
 

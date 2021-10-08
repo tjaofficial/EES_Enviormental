@@ -6,11 +6,11 @@ from ..forms import formA4_form
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-now = datetime.datetime.now()
 
 
 @lock
 def formA4(request, selector):
+    now = datetime.datetime.now()
     unlock = False
     client = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:

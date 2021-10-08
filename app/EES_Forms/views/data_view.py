@@ -3,8 +3,6 @@ import datetime
 from ..models import formA3_model, formA2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, formA5_model, Forms
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-now = datetime.datetime.now()
-today = datetime.date.today()
 profile = user_profile_model.objects.all()
 
 
@@ -13,6 +11,8 @@ def pt_admin1_view(request):
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
 
+    today = datetime.date.today()
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -126,6 +126,8 @@ def pt_admin1_view(request):
 
 def pt_mth_input(request):
     submitted_ordered = formA5_readings_model.objects.all()
+    now = datetime.datetime.now()
+    today = datetime.date.today()
 
     def pt_sort(submitted_ordered):
         A = []
@@ -243,7 +245,8 @@ def pt_mth_input(request):
 def method303_rolling_avg(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
     todays_log = daily_prof[0]
-
+    now = datetime.datetime.now()
+    today = datetime.date.today()
     A = []
 
     def form_compile(daily_prof):
