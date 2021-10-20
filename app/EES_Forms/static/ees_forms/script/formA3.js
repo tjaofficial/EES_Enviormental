@@ -9,6 +9,7 @@ function initate_Result_Table(){
         let parsedJSON = JSON.parse(elem.value)
         createHTMLString(parsedJSON, elem.id);
         intiateResultEventListeners();
+        console.log('test');
     })
 }
 
