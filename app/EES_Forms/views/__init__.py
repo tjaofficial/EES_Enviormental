@@ -1,7 +1,8 @@
-from .login_logout_view import login_view, register_view, logout_view, profile_redirect, PasswordsChangeView
+from .login_logout_view import login_view, logout_view, profile_redirect, PasswordsChangeView
 from .header_view import about_view, safety_view
 from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view
 from .dashboard_view import IncompleteForms
+from .admin_view import admin_dashboard_view, register_view
 from .data_view import pt_admin1_view, pt_mth_input
 
 from .daily_battery_profile_view import *

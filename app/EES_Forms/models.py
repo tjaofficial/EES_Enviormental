@@ -6,7 +6,12 @@ from django.urls import reverse
 import datetime
 from phonenumber_field.modelfields import PhoneNumberField
 
-
+position_choices = (
+    ('SGI Technician', 'SGI Technician'),
+    ('SGI Admin', 'SGI Admin'),
+    ('SGI Quality Control', 'SGI Quality Control'),
+    ('EES Coke Personnel', 'EES Coke Personnel')
+)
 truck_choices = (
     ('#5', 'Truck #5'),
     ('#6', 'Truck #6'),
@@ -351,7 +356,6 @@ class user_profile_model(models.Model):
         User,
         on_delete=models.PROTECT
     )
-
     cert_date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -366,7 +370,8 @@ class user_profile_model(models.Model):
         blank=False,
     )
     position = models.CharField(
-        max_length=30,
+        max_length=75,
+        choices=position_choices,
         null=False,
         blank=False,
     )

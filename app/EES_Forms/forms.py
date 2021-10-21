@@ -80,47 +80,46 @@ class daily_battery_profile_form(ModelForm):
     class Meta:
         model = daily_battery_profile_model
         fields = ('foreman', 'crew', 'inop_ovens')
-        
-        widgets = {
-            'inop_ovens' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px;'})
-       }
-       
 
-    
+        widgets = {
+            'inop_ovens': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px;'})
+       }
+
+
 class user_profile_form(forms.ModelForm):
     class Meta:
         model = user_profile_model
         fields = (
             'cert_date',
             'profile_picture',
-           # 'phone',
-           # 'position'
+            'phone',
+            'position'
         )
         exclude = ['user']
-        
-        widgets ={
-            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'profile_picture' : forms.FileInput(attrs={'style': 'width: fit-content;'}),
-          #  'phone' : forms.TextInput(attrs={'type':'tel', 'style':'width: 60px;'}),
-          #  'position' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px; text-align: center;'}),
+
+        widgets = {
+            'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'profile_picture': forms.FileInput(attrs={'style': 'width: fit-content;'}),
+            'phone': forms.TextInput(attrs={'type': 'tel', 'style': 'width: 150px;', 'placeholder': '+10005557777'}),
+            'position': forms.Select(attrs={'style': 'width: 100px;'}),
         }
-        
-        
+
+
 class pt_admin1_form(ModelForm):
     class Meta:
         model = pt_admin1_model
         fields = ('add_days', 'days_left')
-        
-        
+
+
 class bat_info_form(ModelForm):
     class Meta:
         model = bat_info_model
         fields = ('bat_num', 'total_ovens', 'facility_name')
-        
+
         widgets = {
-            'bat_num' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'5'}),
-            'total_ovens' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'85'}),
-            'facility_name' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'EES Coke Battery LLC'}),
+            'bat_num': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'5'}),
+            'total_ovens': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'85'}),
+            'facility_name': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'EES Coke Battery LLC'}),
         }
         
         
