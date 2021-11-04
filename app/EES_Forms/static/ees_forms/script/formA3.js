@@ -1,85 +1,71 @@
-/*****************************************
-Adding Rows to Table
-*****************************************/
+/* Sample data set
 
+{"data": [
+    {
+        oven: number
+        location: [String, String, String]
+    },
+    {
+        oven: number
+        location: [String, String, String]
+    },
+
+]
+
+}
+
+
+{"data":[
+    {"location":"D","oven":"1"},
+    {"location":"C","oven":"1"},
+    {"oven":"1"},
+    {},
+    {}]
+} 
+
+
+/*****************************************
+Initial Page Load Setup
+*****************************************/
+// Run once on js load only
 function initate_Result_Table(){
     const query_Tables = document.querySelectorAll("[data-resulttable]");
     const result_Table_DOM_Array = Array.from(query_Tables)
     result_Table_DOM_Array.forEach((elem)=>{
         let parsedJSON = JSON.parse(elem.value)
         createHTMLString(parsedJSON, elem.id);
-        intiateResultEventListeners();
-        console.log('test');
+        addResultEventListeners();
+        
     })
 }
 
-
-// Takes array of Objects and builds the string of HTML
-function createHTMLString(dataJSON, input_ID){
-    //console.log(`${JSON.stringify(dataJSON)} - ${input_ID}`);    
-    let tableHTML = "";
-
-    if(dataJSON.data){
-        const dataArray = dataJSON.data;
-        if(dataArray.length > 0){
-            for(i=0; i<dataArray.length; i++){
-                let data = dataArray[i];
-                tableHTML = tableHTML+htmlLayout(false, data, input_ID);
-            }
-        }
-    }
-
-    //adds empty row at end of table
-    tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
-
-    document.getElementById(`${input_ID}_tableBody`).innerHTML = tableHTML;
-    
-
-
-}
-
-
-
-
-
-
-
-
-
-
-function intiateResultEventListeners(){
+/*****************************************
+Add event Listeners
+*****************************************/
+//This adds the event listeners every Time the Table is rebuilt
+function addResultEventListeners(){
+    console.log('The Event Listeners should be added once per table rebuild.')
     const resultElement = document.querySelectorAll("[data-resultInput]");
-    const locationElement = document.querySelectorAll("[data-locationindex]");
 
     for(i=0; i<resultElement.length; i++){
-        resultElement[i].addEventListener('input', handle_Table_Input)
-        resultElement[i].addEventListener('input', update_Temp_Save)
+        resultElement[i].addEventListener('change', handle_Table_Input)
+        resultElement[i].addEventListener('change', update_Temp_Save)
         
     }
-    for(i=0; i<locationElement.length; i++){
-        locationElement[i].addEventListener('input', handle_location_Input)
-        
-    }
+
 }
 
-function handle_location_Input(event){
-    const elem = event.target;
-    let resultInputAttr = elem.dataset.resultinput;
-    const resultKeyAttr = elem.dataset.resultkey;
-    const elemValue = elem.value; 
-    const input_Target = elem.dataset.targetinput;
+/*****************************************
+Update JSON Values
+*****************************************/
 
-    if(parseInt(resultInputAttr) === -1){
-        addToResultArray(input_Target, resultKeyAttr, elemValue);
-    }
-}
-
+// Takes the event and Pulls required data-sets from effected Input
 function handle_Table_Input(event){
     const elem = event.target;
-    let resultInputAttr = elem.dataset.resultinput;
-    const resultKeyAttr = elem.dataset.resultkey;
-    const elemValue = elem.value; 
-    const input_Target = elem.dataset.targetinput;
+    let resultInputAttr = elem.dataset.resultinput; //Index 0 - n of row in table (-1 if Data Hasnt been entered in that row)
+    const resultKeyAttr = elem.dataset.resultkey; // Key of Column Effected
+    const elemValue = elem.value; //Value entered into effected Input
+    const input_Target = elem.dataset.targetinput; //Table JSON Data the Input Targets
 
     if(parseInt(resultInputAttr) === -1){
         addToResultArray(input_Target, resultKeyAttr, elemValue);
@@ -93,13 +79,26 @@ function addToResultArray(target, key, value){
 
     const targeted_input_DOM = document.getElementById(target);
     const parsed_Result = JSON.parse(targeted_input_DOM.value);
-    
+    console.log(key)
     let new_Object = {};
     if(key === "oven"){
         new_Object[key] = value;
     }
-    else{
-        new_Object[key] = [value];
+    else if(key === "location"){
+        console.log("test2");
+        //check if array is set
+        let locationSet = new_Object[key] ? true : false
+        console.log(locationSet);
+        if(locationSet){
+            console.log("penis");
+            new_Object[key].push(value);
+            console.log(`this -> ${new_Object[key]}`)
+        }
+        else{
+            new_Object[key] = [value];
+        }
+            
+
     }
     
     const result_Array = parsed_Result.data ? parsed_Result.data : [];
@@ -109,7 +108,7 @@ function addToResultArray(target, key, value){
     console.log(parsed_Result)
     targeted_input_DOM.value = JSON.stringify(parsed_Result);
     createHTMLString(parsed_Result, target);
-    intiateResultEventListeners();
+    addResultEventListeners();
 
 }
 
@@ -136,7 +135,7 @@ function updateResultArray(target, array_Position, key, value){
     
         targeted_input_DOM.value = JSON.stringify(parsed_Result);
         createHTMLString(parsed_Result, target);
-        intiateResultEventListeners();
+        addResultEventListeners();
     }
     
     
@@ -145,24 +144,48 @@ function updateResultArray(target, array_Position, key, value){
 
 }
 
-//createHTMLString(pushResultDataJSON);
+/*****************************************
+Updates the HTML based on the stored JSON
+*****************************************/
 
 
+// Takes array of Objects and builds the string of HTML
+function createHTMLString(dataJSON, input_ID){
+    console.log(`${JSON.stringify(dataJSON)} - ${input_ID}`);    
+    let tableHTML = "";
 
+    if(dataJSON.data){
+        const dataArray = dataJSON.data;
+        if(dataArray.length > 0){
+            for(i=0; i<dataArray.length; i++){
+                let data = dataArray[i];
+                tableHTML = tableHTML+htmlLayout(false, data, input_ID);
+            }
+        }
+    }
+
+    //adds empty row at end of table
+    tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
+
+    document.getElementById(`${input_ID}_tableBody`).innerHTML = tableHTML;
+    
+
+
+}
 
 // Takes objects whether should be empty and data to return string of html
 // Template for Table Rows
 function htmlLayout(empty, data, target){
-
-    const lidArray = data.location;
+    console.log(data.location)
+    const lidArray = data.location?data.location:[];
     let locationhtml=""
     let locationIndex=0;
     lidArray.forEach((elem)=>{
-        locationhtml = locationhtml + `<select data-resultInput="${empty? -1: i}" data-resultKey="location" data-targetinput="${target}" data-locationindex="${locationIndex}">
-                                                <option value="" ${empty? 'selected': ''}>--</option>
-                                                <option value="D" ${!empty && data.location === "D"? 'selected': ''}>D</option>
-                                                <option value="C" ${!empty && data.location === "C"? 'selected': ''}>C</option>
-                                                <option value="M" ${!empty && data.location === "M"? 'selected': ''}>M</option>
+        locationhtml = locationhtml + `<select data-resultInput="${elem? -1: i}" data-resultKey="location" data-targetinput="${target}" data-locationindex="${locationIndex}">
+                                                <option value="" ${elem? 'selected': ''}>--</option>
+                                                <option value="D" ${!elem && data.location === "D"? 'selected': ''}>D</option>
+                                                <option value="C" ${!elem && data.location === "C"? 'selected': ''}>C</option>
+                                                <option value="M" ${!elem && data.location === "M"? 'selected': ''}>M</option>
                                             </select>`;
         locationIndex++
     })
@@ -183,9 +206,16 @@ function htmlLayout(empty, data, target){
                     </tr>`;
     return htmlStr;
 
-
-
 }
+
+
+
+
+/*****************************************
+Saves Entrys into local storage to allow 
+for Temporary Save
+*****************************************/
+
 
 function update_Temp_Save(){
     const formName = document.getElementById('formName').dataset.form;
@@ -203,4 +233,8 @@ function update_Temp_Save(){
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
+
+/*****************************************
+Initiates the Tables on JS load
+*****************************************/
 initate_Result_Table()
