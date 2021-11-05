@@ -85,14 +85,11 @@ function addToResultArray(target, key, value){
         new_Object[key] = value;
     }
     else if(key === "location"){
-        console.log("test2");
         //check if array is set
         let locationSet = new_Object[key] ? true : false
         console.log(locationSet);
         if(locationSet){
-            console.log("penis");
             new_Object[key].push(value);
-            console.log(`this -> ${new_Object[key]}`)
         }
         else{
             new_Object[key] = [value];
@@ -175,32 +172,37 @@ function createHTMLString(dataJSON, input_ID){
 
 // Takes objects whether should be empty and data to return string of html
 // Template for Table Rows
+
+function locationHTMLTemplate(value, target, locationIndex){
+    let htmlTempate = `<select data-resultInput="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-locationindex="${locationIndex}">
+                            <option value="" ${value? 'selected': ''}>--</option>
+                            <option value="D" ${value === "D"? 'selected': ''}>D</option>
+                            <option value="C" ${value === "C"? 'selected': ''}>C</option>
+                            <option value="M" ${value === "M"? 'selected': ''}>M</option>
+                        </select>`;
+
+    return htmlTempate
+}
+
+
 function htmlLayout(empty, data, target){
-    console.log(data.location)
     const lidArray = data.location?data.location:[];
     let locationhtml=""
     let locationIndex=0;
     lidArray.forEach((elem)=>{
-        locationhtml = locationhtml + `<select data-resultInput="${elem? -1: i}" data-resultKey="location" data-targetinput="${target}" data-locationindex="${locationIndex}">
-                                                <option value="" ${elem? 'selected': ''}>--</option>
-                                                <option value="D" ${!elem && data.location === "D"? 'selected': ''}>D</option>
-                                                <option value="C" ${!elem && data.location === "C"? 'selected': ''}>C</option>
-                                                <option value="M" ${!elem && data.location === "M"? 'selected': ''}>M</option>
-                                            </select>`;
+        locationhtml = locationhtml + locationHTMLTemplate(elem, target, locationIndex)
         locationIndex++
     })
+
+    locationhtml = locationhtml + locationHTMLTemplate("", target, -1)
+
+
     const htmlStr= `<tr>
                         <td class="boxa6" colspan="1">
                             <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" data-targetinput="${target}"/>
                         </td>
                         <td class="boxa6" colspan="1">
-                            ${locationIndex}
-                            <select data-resultInput="${empty? -1: i}" data-resultKey="location" data-targetinput="${target}" data-locationindex="-1">
-                                <option value="" ${empty? 'selected': ''}>--</option>
-                                <option value="D" ${!empty && data.location === "D"? 'selected': ''}>D</option>
-                                <option value="C" ${!empty && data.location === "C"? 'selected': ''}>C</option>
-                                <option value="M" ${!empty && data.location === "M"? 'selected': ''}>M</option>
-                            </select>
+                            ${locationhtml}
                         </td>
 
                     </tr>`;
