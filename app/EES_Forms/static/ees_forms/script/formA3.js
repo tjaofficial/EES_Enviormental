@@ -1,28 +1,3 @@
-/* Sample data set
-
-{"data": [
-    {
-        oven: number
-        location: [String, String, String]
-    },
-    {
-        oven: number
-        location: [String, String, String]
-    },
-
-]
-
-}
-
-
-{"data":[
-    {"location":"D","oven":"1"},
-    {"location":"C","oven":"1"},
-    {"oven":"1"},
-    {},
-    {}]
-} 
-
 
 /*****************************************
 Initial Page Load Setup
@@ -44,7 +19,6 @@ Add event Listeners
 *****************************************/
 //This adds the event listeners every Time the Table is rebuilt
 function addResultEventListeners(){
-    console.log('The Event Listeners should be added once per table rebuild.')
     const resultElement = document.querySelectorAll("[data-resultInput]");
 
     for(i=0; i<resultElement.length; i++){
@@ -62,84 +36,123 @@ Update JSON Values
 // Takes the event and Pulls required data-sets from effected Input
 function handle_Table_Input(event){
     const elem = event.target;
-    let resultInputAttr = elem.dataset.resultinput; //Index 0 - n of row in table (-1 if Data Hasnt been entered in that row)
+    
+    //query information from input
+    let resultInputAttr = parseInt(elem.dataset.resultinput); //Index 0 - n of row in table (-1 if Data Hasnt been entered in that row)
+    let locationIndexAttr = parseInt(elem.dataset.locationindex); //Index 0 - n of the location (-1 if Data Hasnt been entered in that row)
     const resultKeyAttr = elem.dataset.resultkey; // Key of Column Effected
     const elemValue = elem.value; //Value entered into effected Input
     const input_Target = elem.dataset.targetinput; //Table JSON Data the Input Targets
 
-    if(parseInt(resultInputAttr) === -1){
-        addToResultArray(input_Target, resultKeyAttr, elemValue);
-    }
-    else{
-        updateResultArray(input_Target, resultInputAttr, resultKeyAttr, elemValue);
-    }
-}
-
-function addToResultArray(target, key, value){
-
-    const targeted_input_DOM = document.getElementById(target);
+    //query data from targeted input dom storing the data and parse the infromation
+    const targeted_input_DOM = document.getElementById(input_Target);
     const parsed_Result = JSON.parse(targeted_input_DOM.value);
-    console.log(key)
-    let new_Object = {};
-    if(key === "oven"){
-        new_Object[key] = value;
-    }
-    else if(key === "location"){
-        //check if array is set
-        let locationSet = new_Object[key] ? true : false
-        console.log(locationSet);
-        if(locationSet){
-            new_Object[key].push(value);
-        }
-        else{
-            new_Object[key] = [value];
-        }
-            
-
-    }
-    
     const result_Array = parsed_Result.data ? parsed_Result.data : [];
 
-    result_Array.push(new_Object);
+
+    if(resultInputAttr === -1){
+        let new_Object = {};
+        if(resultKeyAttr === "oven"){
+            new_Object[resultKeyAttr] = elemValue;
+        }
+        else if(resultKeyAttr === "location"){
+            new_Object[resultKeyAttr] = [elemValue];
+        }
+        
+        
+        result_Array.push(new_Object);
+
+    }
+    else{
+        if(result_Array[resultInputAttr]){
+            let rowData = result_Array[resultInputAttr];
+            
+            if(resultKeyAttr === "oven"){
+                
+                // 1. update the data
+                
+                rowData[resultKeyAttr] = elemValue;
+            }
+
+            else if(resultKeyAttr === "location"){
+                // 1. add the data
+                // 2. change the data
+                
+                if(locationIndexAttr === -1){
+                    if(rowData[resultKeyAttr]){
+                        rowData[resultKeyAttr].push(elemValue);
+                    }
+                    else{
+                        rowData[resultKeyAttr] = [elemValue];
+                    }
+                    
+                    
+                }
+                else{
+                    let locationUnsetCheck = !elemValue ? true : false;
+                    let objectData = rowData[resultKeyAttr];
+
+                    if(locationUnsetCheck){
+                        objectData.splice(locationIndexAttr, 1)
+                        
+                    }
+                    else{
+                        objectData[locationIndexAttr] = elemValue;
+                    }
+                }
+            }
+            else{
+                console.log("error: Inproper key")
+            }
+
+
+            //delete row if both objects are empty
+            let checkLocationHasData = false;
+            let checkOvenHasData = false;
+            const checkOvenSet = rowData.oven ? true : false;
+            const checkLocationSet = rowData.location ? true : false;
+            
+            
+            if(checkLocationSet){
+                console.log(`${rowData.location.length}`);
+                checkLocationHasData = rowData.location.length > 0 ? true : false;
+            }
+
+            if(checkOvenSet){
+                console.log(`${rowData.oven}`);
+                checkOvenHasData = rowData.oven != "" ? true : false;
+            }
+
+            if(!checkLocationHasData && !checkOvenHasData){
+                result_Array.splice(resultInputAttr, 1);
+            }
+
+
+            
+
+            console.log(`${checkLocationHasData} ${checkOvenHasData} -- this is a test i just enter`);
+
+            
+
+            
+            //targeted_input_DOM.value = JSON.stringify(parsed_Result);
+            //createHTMLString(parsed_Result, target);
+            //addResultEventListeners();
+        }
+        else {console.log('this needs to read out')}
+    }
+
     parsed_Result.data = result_Array;
-    console.log(parsed_Result)
     targeted_input_DOM.value = JSON.stringify(parsed_Result);
-    createHTMLString(parsed_Result, target);
+
+    
+    createHTMLString(parsed_Result, input_Target);
     addResultEventListeners();
 
 }
 
-function updateResultArray(target, array_Position, key, value){
 
-    const targeted_input_DOM = document.getElementById(target);
-    const parsed_Result = JSON.parse(targeted_input_DOM.value);
-    const result_Array = parsed_Result.data;
-    if(result_Array[array_Position]){
-        let changed_Object = result_Array[array_Position];
-        if(value){
-            changed_Object[key] = value;
-        }
-        else{
-            delete changed_Object[key];
-        }
 
-        if (Object.keys(changed_Object).length === 0 && changed_Object.constructor === Object){
-            result_Array.splice(array_Position,1);
-        }
-        else{result_Array[array_Position] = changed_Object;}
-        
-        parsed_Result.data = result_Array;
-    
-        targeted_input_DOM.value = JSON.stringify(parsed_Result);
-        createHTMLString(parsed_Result, target);
-        addResultEventListeners();
-    }
-    
-    
-
-    
-
-}
 
 /*****************************************
 Updates the HTML based on the stored JSON
@@ -148,6 +161,8 @@ Updates the HTML based on the stored JSON
 
 // Takes array of Objects and builds the string of HTML
 function createHTMLString(dataJSON, input_ID){
+    console.log('test');
+
     console.log(`${JSON.stringify(dataJSON)} - ${input_ID}`);    
     let tableHTML = "";
 
@@ -163,18 +178,17 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
-
     document.getElementById(`${input_ID}_tableBody`).innerHTML = tableHTML;
     
 
 
 }
 
-// Takes objects whether should be empty and data to return string of html
+// Takes objects determines whether should be empty and data to return string of html
 // Template for Table Rows
 
-function locationHTMLTemplate(value, target, locationIndex){
-    let htmlTempate = `<select data-resultInput="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-locationindex="${locationIndex}">
+function locationHTMLTemplate(value, target, locationIndex, resultInput){
+    let htmlTempate = `<select data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}">
                             <option value="" ${value? 'selected': ''}>--</option>
                             <option value="D" ${value === "D"? 'selected': ''}>D</option>
                             <option value="C" ${value === "C"? 'selected': ''}>C</option>
@@ -189,12 +203,13 @@ function htmlLayout(empty, data, target){
     const lidArray = data.location?data.location:[];
     let locationhtml=""
     let locationIndex=0;
+    let locationResultInput=empty? -1: i;
     lidArray.forEach((elem)=>{
-        locationhtml = locationhtml + locationHTMLTemplate(elem, target, locationIndex)
-        locationIndex++
+        locationhtml = locationhtml + locationHTMLTemplate(elem, target, locationIndex, locationResultInput);
+        locationIndex++;
     })
 
-    locationhtml = locationhtml + locationHTMLTemplate("", target, -1)
+    locationhtml = locationhtml + locationHTMLTemplate("", target, -1, locationResultInput);
 
 
     const htmlStr= `<tr>
@@ -219,7 +234,7 @@ for Temporary Save
 *****************************************/
 
 
-function update_Temp_Save(){
+function update_Temp_Save(event){
     const formName = document.getElementById('formName').dataset.form;
     const tempSaveKey = formName+"_tempFormData";
     const currentDate = Date.now();

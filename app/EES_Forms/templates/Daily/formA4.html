@@ -39,6 +39,7 @@
         }
     </style>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formA4.js' %}"></script>
 
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
@@ -88,7 +89,10 @@
                             </tr> 
                             <tr>
                                 <td style="height: 25px" > </td>
-                            </tr> 
+                            </tr>
+                        </table>
+
+                        <table>
                             <tr>
                                 <th colspan="2" style="text-align: right;">
                                     Colletions Main #1
@@ -149,14 +153,11 @@
                             </tr> 
                             <tr>
                                 <td style="height: 25px" > </td>
-                            </tr> 
-
-
-
-
-
-
-
+                            </tr>
+                        </table>
+                        
+                        <input id="pushSide" type="hidden" value="{}" data-resulttable=""/>
+                        <table>
 
                             <tr>
                                 <th colspan="7" style="text-align: center; border: 2px solid black">
@@ -186,101 +187,10 @@
                                     By
                                 </th>
                             </tr>
-                            <tr>
-                                <th id="formA5_box1">
-                                    {{ data.oven_leak_1 }}
-                                </th>
-                                <th id="formA5_box1">
-                                    {{ data.time_leak_1 }}
-                                </th>
-                                <th id="formA5_box1">
-                                    {{ data.date_temp_seal_leak_1 }}<br> 
-                                    {{ data.time_temp_seal_leak_1 }}
-                                </th>
-                                <th id="formA5_box1">
-                                    {{ data.temp_seal_by_leak_1 }}
-                                </th>
-                                <th id="formA5_box1">
-                                    {{ data.date_init_repair_leak_1 }}<br>
-                                    {{ data.time_init_repair_leak_1 }}
-                                </th>
-                                <th id="formA5_box1">
-                                    {{ data.date_comp_repair_leak_1 }}<br>
-                                    {{ data.time_comp_repair_leak_1 }}
-                                </th>
-                                <th id="formA5_box1">
-                                    {{ data.comp_by_leak_1 }}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th id="formA5_box1">
+                            <tbody id="pushSide_tableBody">
 
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-                                    <br>
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-                                    <br>
-                                </th>
-                                <th id="formA5_box1">
-                                    <br>
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-                                    <br>
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                                <th id="formA5_box1">
-                                    <br>
-                                </th>
-                                <th id="formA5_box1">
-                                    <br>
-                                </th>
-                                <th id="formA5_box1">
-
-                                </th>
-                            </tr>
+                            </tbody>
+                            
                             <tr>
                                 <td style="height: 40px" > </td>
                             </tr> 
