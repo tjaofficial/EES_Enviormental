@@ -2,8 +2,10 @@
 
 {% block list%}
 {% load static %}
+{% include "ees_forms/drawing_modal.html" %}
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formA5_sketch.js' %}"></script>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">    
         <div>
@@ -127,7 +129,8 @@
                                         HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                                      </td>
                                      <td id="boxa4" colspan="3" rowspan="7">
-                                        this is a test
+                                         <input id="sketchPng" type="file" src="#" style="display: none;"/>
+                                        <img src="{% static 'ees_forms/images/A-5sketchBlank.png' %}" id="formA5sketch" data-controls="modalContainer" style="width:100%" data-base_img="{% static 'ees_forms/images/A-5sketchBlank.png' %}"/>
                                      </td>
                                 </tr>
                                   <tr>

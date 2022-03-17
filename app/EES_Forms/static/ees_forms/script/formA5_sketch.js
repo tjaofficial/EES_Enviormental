@@ -27,22 +27,25 @@ function sketchPopup(elemClicked){
     console.log(canvas);
     const sketchpad = new Atrament(canvas, {
         color: 'black',
+
         
     });
     sketchpad.smoothing = 0.2;
   
     drawImgToCanvas(canvas, imgElem);
     
-    document.getElementById('clearCanvis').addEventListener('click', ()=>{sketchpad.clear() });
+    document.getElementById('clearCanvis').addEventListener('click', ()=>{sketchpad.clear();  drawImgToCanvas(canvas, imgElem);});
     document.getElementById('canvas_save').addEventListener('click', (elem)=>{save_canvas(elem.currentTarget, canvas, imgElem)});
-  
+    //sketchpad.addEventListener('strokeend', () => console.info('strokeend'));
   
   }
   
   
   function save_canvas(elem, canvas, imgElem){
-      
-      imgElem.src = canvas.toDataURL();
+      let pngLink = canvas.toDataURL();
+      document.querySelector("#sketchPng").src = pngLink;
+      imgElem.src = pngLink;
+
       toggleDisplayed(elem);
     
   }
@@ -71,5 +74,9 @@ function sketchPopup(elemClicked){
       ctx.drawImage(this, 0, 0, this.width, this.height,
                           0, 0, canvas.width, canvas.height);
     };
+  }
+
+  function getArrayStrokes(){
+
   }
   
