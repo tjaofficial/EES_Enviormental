@@ -291,82 +291,82 @@ def formA5(request, selector):
                 B.save()
 
                 if B.o1_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o1_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o1_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o1_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o2_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o2_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o2_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o2_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o3_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o3_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o3_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o3_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o4_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o4_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o4_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o4_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 

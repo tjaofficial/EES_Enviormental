@@ -184,6 +184,23 @@ def issues_view(request, form_name, form_date, access_page):
                     link = x.frequency + '/' + x.link + '/' + access_page + '/' + day
                 else:
                     link = x.frequency + '/' + x.link + '/' + access_page
+        initial_data = {
+                'date': todays_log.date_save,
+                'form': form_name
+            }
+        picker = ''
+        form = issues_form(initial=initial_data)
+        if request.method == "POST":
+            data = issues_form(request.POST)
+            if data.is_valid():
+                data.save()
+
+                done = Forms.objects.filter(form=form_name)[0]
+                done.submitted = True
+                done.date_submitted = todays_log.date_save
+                done.save()
+
+                return redirect('IncompleteForms')
     elif access_page == 'issue':
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
@@ -244,6 +261,7 @@ def issues_view(request, form_name, form_date, access_page):
             }
 
         form = issues_form(initial=initial_data)
+
         if request.method == "POST":
             if existing:
                 data = issues_form(request.POST, instance=database_form)

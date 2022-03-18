@@ -54,7 +54,7 @@ def formL(request, access_page):
                     home.append((x.time_0, 0))
                     home.append((x.time_6, 6))
                     home.append((x.time_5, 5))
-
+            print(home)
             for days in home:
                 if days[0]:
                     if days[1] == today_number:

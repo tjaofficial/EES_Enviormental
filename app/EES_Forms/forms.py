@@ -16,20 +16,20 @@ class SubFormC1(ModelForm):
         fields = ('date', 'truck_sel', 'area_sel', 'truck_start_time', 'truck_stop_time', 'area_start_time', 'area_stop_time', 'observer', 'cert_date', 'comments', 'average_t', 'average_p')
         
         widgets = {
-            'date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'truck_start_time' : forms.TimeInput(attrs={'id': 'truck_start_time', 'oninput': 'timecheck_1()', 'class': 'input', 'type': 'time'}),
-            'truck_stop_time' : forms.TimeInput(attrs={'id': 'truck_stop_time', 'oninput': 'timecheck_1()', 'class': 'input', 'type': 'time'}),
-            'area_start_time' : forms.TimeInput(attrs={'id': 'area_start_time', 'oninput': 'timecheck_2()', 'class': 'input', 'type': 'time'}),
-            'area_stop_time' : forms.TimeInput(attrs={'id': 'area_stop_time', 'oninput': 'timecheck_2()', 'class': 'input', 'type': 'time'}),
-            'truck_sel' : forms.Select(attrs={'style':'width: 100px;'}),
-            'area_sel' : forms.Select(attrs={'style':'width: 130px;'}),
-            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'cert_date' : forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
-            'average_t' : forms.NumberInput(attrs={'id':'average_t', 'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
-            'average_p' : forms.NumberInput(attrs={'id':'average_p', 'class': 'input', 'type': 'number', 'style':'width: 50px; text-align: center;'}),
+            'date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'truck_start_time': forms.TimeInput(attrs={'id': 'truck_start_time', 'oninput': 'timecheck_1()', 'class': 'input', 'type': 'time'}),
+            'truck_stop_time': forms.TimeInput(attrs={'id': 'truck_stop_time', 'oninput': 'timecheck_1()', 'class': 'input', 'type': 'time'}),
+            'area_start_time': forms.TimeInput(attrs={'id': 'area_start_time', 'oninput': 'timecheck_2()', 'class': 'input', 'type': 'time'}),
+            'area_stop_time': forms.TimeInput(attrs={'id': 'area_stop_time', 'oninput': 'timecheck_2()', 'class': 'input', 'type': 'time'}),
+            'truck_sel': forms.Select(attrs={'style': 'width: 100px;'}),
+            'area_sel': forms.Select(attrs={'style': 'width: 130px;'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'comments': Textarea(attrs={'rows': 7, 'cols': 125}),
+            'average_t': forms.NumberInput(attrs={'id': 'average_t', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'average_p': forms.NumberInput(attrs={'id': 'average_p', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
         }
-        
+
         def clean(self):
             cleaned_data = super().clean()
             start_time = cleaned_data.get("truck_start_time")
@@ -37,45 +37,46 @@ class SubFormC1(ModelForm):
             print('chciken')
             if end_time < start_time:
                 raise forms.ValidationError("End time should be later than start time.")
-    
+
+
 class FormCReadForm(ModelForm):
     class Meta:
         model = formC_readings_model
-        fields = ('TRead1', 'TRead2','TRead3', 'TRead4', 'TRead5', 'TRead6', 'TRead7', 'TRead8', 'TRead9', 'TRead10',  'TRead11', 'TRead12', 'ARead1', 'ARead2', 'ARead3', 'ARead4', 'ARead5', 'ARead6', 'ARead7', 'ARead8', 'ARead9', 'ARead10', 'ARead11', 'ARead12')
+        fields = ('TRead1', 'TRead2', 'TRead3', 'TRead4', 'TRead5', 'TRead6', 'TRead7', 'TRead8', 'TRead9', 'TRead10',  'TRead11', 'TRead12', 'ARead1', 'ARead2', 'ARead3', 'ARead4', 'ARead5', 'ARead6', 'ARead7', 'ARead8', 'ARead9', 'ARead10', 'ARead11', 'ARead12')
         widgets = {
-            'TRead1' : forms.TextInput(attrs={'id':'TRead1', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead2' : forms.TextInput(attrs={'id':'TRead2', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),    
-            'TRead3' : forms.TextInput(attrs={'id':'TRead3', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead4' : forms.TextInput(attrs={'id':'TRead4', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead5' : forms.TextInput(attrs={'id':'TRead5', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead6' : forms.TextInput(attrs={'id':'TRead6', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead7' : forms.TextInput(attrs={'id':'TRead7', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead8' : forms.TextInput(attrs={'id':'TRead8', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead9' : forms.TextInput(attrs={'id':'TRead9', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead10' : forms.TextInput(attrs={'id':'TRead10', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead11' : forms.TextInput(attrs={'id':'TRead11', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'TRead12' : forms.TextInput(attrs={'id':'TRead12', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead1' : forms.TextInput(attrs={'id':'ARead1', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead2' : forms.TextInput(attrs={'id':'ARead2', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead3' : forms.TextInput(attrs={'id':'ARead3', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead4' : forms.TextInput(attrs={'id':'ARead4', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead5' : forms.TextInput(attrs={'id':'ARead5', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead6' : forms.TextInput(attrs={'id':'ARead6', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead7' : forms.TextInput(attrs={'id':'ARead7', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead8' : forms.TextInput(attrs={'id':'ARead8', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead9' : forms.TextInput(attrs={'id':'ARead9', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead10' : forms.TextInput(attrs={'id':'ARead10', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead11' : forms.TextInput(attrs={'id':'ARead11', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
-            'ARead12' : forms.TextInput(attrs={'id':'ARead12', 'oninput':'sumTime()', 'class': 'input', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
+            'TRead1': forms.TextInput(attrs={'id': 'TRead1', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead2': forms.TextInput(attrs={'id': 'TRead2', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead3': forms.TextInput(attrs={'id': 'TRead3', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead4': forms.TextInput(attrs={'id': 'TRead4', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead5': forms.TextInput(attrs={'id': 'TRead5', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead6': forms.TextInput(attrs={'id': 'TRead6', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead7': forms.TextInput(attrs={'id': 'TRead7', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead8': forms.TextInput(attrs={'id': 'TRead8', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead9': forms.TextInput(attrs={'id': 'TRead9', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead10': forms.TextInput(attrs={'id': 'TRead10', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead11': forms.TextInput(attrs={'id': 'TRead11', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead12': forms.TextInput(attrs={'id': 'TRead12', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead1': forms.TextInput(attrs={'id': 'ARead1', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead2': forms.TextInput(attrs={'id': 'ARead2', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead3': forms.TextInput(attrs={'id': 'ARead3', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead4': forms.TextInput(attrs={'id': 'ARead4', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead5': forms.TextInput(attrs={'id': 'ARead5', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead6': forms.TextInput(attrs={'id': 'ARead6', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead7': forms.TextInput(attrs={'id': 'ARead7', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead8': forms.TextInput(attrs={'id': 'ARead8', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead9': forms.TextInput(attrs={'id': 'ARead9', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead10': forms.TextInput(attrs={'id': 'ARead10', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead11': forms.TextInput(attrs={'id': 'ARead11', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead12': forms.TextInput(attrs={'id': 'ARead12', 'oninput': 'sumTime()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
         }
-              
-        
+
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2','first_name', 'last_name']
-        
-        
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+
+
 class daily_battery_profile_form(ModelForm):
     class Meta:
         model = daily_battery_profile_model
@@ -121,8 +122,7 @@ class bat_info_form(ModelForm):
             'total_ovens': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'85'}),
             'facility_name': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'EES Coke Battery LLC'}),
         }
-        
-        
+
 
 class formA1_form(ModelForm):
     class Meta:
@@ -137,14 +137,15 @@ class formA1_form(ModelForm):
         )
         
         widgets = {
-            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'crew' : forms.Select(attrs={'style':'width:40px;'}),
-            'foreman' : forms.Select(attrs={'style':'width: 80px;'}),
-            'start' : forms.TimeInput(attrs={'id': 'main_start', 'oninput': 'equal_start_stop()', 'type':'time', 'style':'width: 120px;'}),
-            'stop' : forms.TimeInput(attrs={'id': 'main_stop', 'type':'time', 'style':'width: 120px;'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'crew': forms.Select(attrs={'style': 'width:40px;'}),
+            'foreman': forms.Select(attrs={'style': 'width: 80px;'}),
+            'start': forms.TimeInput(attrs={'id': 'main_start', 'oninput': 'equal_start_stop()', 'type': 'time', 'style': 'width: 120px;'}),
+            'stop': forms.TimeInput(attrs={'id': 'main_stop', 'type': 'time', 'style': 'width: 120px;'}),
         }
-        
+
+
 class formA1_readings_form(ModelForm):
     class Meta:
         model = formA1_readings_model
@@ -178,7 +179,7 @@ class formA1_readings_form(ModelForm):
             'larry_car',
             'total_seconds'
         )
-        
+
         widgets = {
             'c1_no' : forms.TextInput(attrs={'id':'c1_no', 'type':'text', 'style':'width: 60px; text-align: center;'}),
             'c1_sec' : forms.TextInput(attrs={'id':'c1_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
