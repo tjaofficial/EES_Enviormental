@@ -43,7 +43,7 @@ function sketchPopup(elemClicked){
   
   function save_canvas(elem, canvas, imgElem){
       let pngLink = canvas.toDataURL();
-      document.querySelector("#sketchPng").src = pngLink;
+      document.querySelector("#sketchPng").value = pngLink;
       imgElem.src = pngLink;
 
       toggleDisplayed(elem);
@@ -79,4 +79,4 @@ function sketchPopup(elemClicked){
   function getArrayStrokes(){
 
   }
-  
+
