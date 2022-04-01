@@ -249,7 +249,7 @@ class formA2_form(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'inop_ovens': forms.NumberInput(attrs={'id': 'inop_ovens', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'inop_numbs': forms.NumberInput(attrs={'id': 'inop_numbs', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
+            'inop_numbs': forms.NumberInput(attrs={'onchange': 'pc_doors_not_observed()', 'id': 'inop_numbs', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'crew': forms.Select(attrs={'style': 'width:40px;'}),
             'foreman': forms.Select(attrs={'style': 'width: 80px;'}),
             'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_start', 'type': 'time', 'style': 'width: 120px;'}),
@@ -280,7 +280,8 @@ class formA2_form(ModelForm):
                 'id': 'p_temp_block_to',
                 'class': 'input',
                 'type': 'text',
-                'style': 'width:50px; text-align: center;', 'oninput': 'pc_doors_not_observed()'
+                'style': 'width:50px; text-align: center;',
+                'oninput': 'pc_doors_not_observed()'
             }),
             'c_temp_block_from': forms.TextInput(attrs={
                 'onchange': 'equation()',
