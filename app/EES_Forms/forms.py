@@ -181,39 +181,39 @@ class formA1_readings_form(ModelForm):
         )
 
         widgets = {
-            'c1_no' : forms.TextInput(attrs={'id':'c1_no', 'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c1_sec' : forms.TextInput(attrs={'id':'c1_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
-            'c1_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c2_no' : forms.TextInput(attrs={'id':'c2_no', 'oninput': 'c2_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c2_sec' : forms.TextInput(attrs={'id':'c2_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
-            'c2_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c3_no' : forms.TextInput(attrs={'id':'c3_no', 'oninput': 'c3_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c3_sec' : forms.TextInput(attrs={'id':'c3_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
-            'c3_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c4_no' : forms.TextInput(attrs={'id':'c4_no', 'oninput': 'c4_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c4_sec' : forms.TextInput(attrs={'id':'c4_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
-            'c4_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'c5_no' : forms.TextInput(attrs={'id':'c5_no', 'oninput': 'c5_check()', 'type':'text', 'style':'width: 60px; text-align: center;'}),
-            'c5_sec' : forms.TextInput(attrs={'id':'c5_sec', 'oninput':'sumTime()', 'type':'number','step':'0.5', 'style':'width: 60px; text-align: center;'}),
-            'c5_comments' : forms.TextInput(attrs={'type':'text', 'style':'width: 275px;'}),
-            'comments' : Textarea(attrs={'id':'comments', 'rows':7, 'cols':125}),
-            'c1_start' : forms.TimeInput(attrs={'id': 'c1_start', 'oninput': 'timecheck_c1()', 'type':'time', 'style':'width: 120px;'}),
-            'c2_start' : forms.TimeInput(attrs={'id': 'c2_start', 'oninput': 'timecheck_c2()', 'type':'time', 'style':'width: 120px;'}),
-            'c3_start' : forms.TimeInput(attrs={'id': 'c3_start', 'oninput': 'timecheck_c3()', 'type':'time', 'style':'width: 120px;'}),
-            'c4_start' : forms.TimeInput(attrs={'id': 'c4_start', 'oninput': 'timecheck_c4()', 'type':'time', 'style':'width: 120px;'}),
-            'c5_start' : forms.TimeInput(attrs={'id': 'c5_start', 'oninput': 'timecheck_c5()', 'type':'time', 'style':'width: 120px;'}),
-            'c1_stop' : forms.TimeInput(attrs={'id': 'c1_stop', 'oninput': 'timecheck_c1()', 'type':'time', 'style':'width: 120px;'}),
-            'c2_stop' : forms.TimeInput(attrs={'id': 'c2_stop', 'oninput': 'timecheck_c2()', 'type':'time', 'style':'width: 120px;'}),
-            'c3_stop' : forms.TimeInput(attrs={'id': 'c3_stop', 'oninput': 'timecheck_c3()', 'type':'time', 'style':'width: 120px;'}),
-            'c4_stop' : forms.TimeInput(attrs={'id': 'c4_stop', 'oninput': 'timecheck_c4()', 'type':'time', 'style':'width: 120px;'}),
-            'c5_stop' : forms.TimeInput(attrs={
-                'id': 'c5_stop', 
-                'oninput': 'timecheck_c5()',  
-                'onchange': 'equal_start_stop()', 
-                'type':'time', 
-                'style':'width: 120px;'}),
-            'larry_car' : forms.Select(attrs={'style':'width: 60px;'}),
-            'total_seconds' : forms.TextInput(attrs={'id':'total_seconds','type':'number','step':'0.1', 'style':'width: 60px; text-align: center;'}),
+            'c1_no': forms.TextInput(attrs={'id': 'c1_no', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'c1_sec': forms.TextInput(attrs={'id': 'c1_sec', 'oninput': 'sumTime()', 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c1_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c2_no': forms.TextInput(attrs={'id': 'c2_no', 'oninput': 'c2_check()', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'c2_sec': forms.TextInput(attrs={'id': 'c2_sec', 'oninput': 'sumTime()', 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c2_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c3_no': forms.TextInput(attrs={'id': 'c3_no', 'oninput': 'c3_check()', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'c3_sec': forms.TextInput(attrs={'id': 'c3_sec', 'oninput': 'sumTime()', 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c3_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c4_no': forms.TextInput(attrs={'id': 'c4_no', 'oninput': 'c4_check()', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'c4_sec': forms.TextInput(attrs={'id': 'c4_sec', 'oninput': 'sumTime()', 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c4_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c5_no': forms.TextInput(attrs={'id': 'c5_no', 'oninput': 'c5_check()', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'c5_sec': forms.TextInput(attrs={'id': 'c5_sec', 'oninput': 'sumTime()', 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c5_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'comments': Textarea(attrs={'id': 'comments', 'rows': 7, 'cols': 125}),
+            'c1_start': forms.TimeInput(attrs={'id': 'c1_start', 'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c2_start': forms.TimeInput(attrs={'id': 'c2_start', 'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c3_start': forms.TimeInput(attrs={'id': 'c3_start', 'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c4_start': forms.TimeInput(attrs={'id': 'c4_start', 'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c5_start': forms.TimeInput(attrs={'id': 'c5_start', 'oninput': 'timecheck_c5()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c1_stop': forms.TimeInput(attrs={'id': 'c1_stop', 'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c2_stop': forms.TimeInput(attrs={'id': 'c2_stop', 'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c4_stop': forms.TimeInput(attrs={'id': 'c4_stop', 'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c3_stop': forms.TimeInput(attrs={'id': 'c3_stop', 'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 120px;'}),
+            'c5_stop': forms.TimeInput(attrs={
+                'id': 'c5_stop',
+                'oninput': 'timecheck_c5()',
+                'onchange': 'equal_start_stop()',
+                'type': 'time',
+                'style': 'width: 120px;'}),
+            'larry_car': forms.Select(attrs={'style': 'width: 60px;'}),
+            'total_seconds': forms.TextInput(attrs={'id': 'total_seconds', 'type': 'number', 'step': '0.1', 'style': 'width: 60px; text-align: center;'}),
         }
 
 
@@ -359,7 +359,8 @@ class formA3_form(ModelForm):
             'l_percent_leaking': forms.TextInput(attrs={'id': 'l_percent_leaking', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
         }
-        
+
+
 class formA4_form(ModelForm):
     class Meta:
         model = formA4_model
@@ -374,26 +375,26 @@ class formA4_form(ModelForm):
             'main_1': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'main_2': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'main_3': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'main_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
-            'suction_main' : forms.TextInput(attrs={'type':'text', 'style':'width: 50px; text-align: center;'}),
-            'oven_leak_1' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width:50px; text-align: center;'}),
-            'time_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'date_temp_seal_leak_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_temp_seal_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'temp_seal_by_leak_1' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'date_init_repair_leak_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_init_repair_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'date_comp_repair_leak_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_comp_repair_leak_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'comp_by_leak_1' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'notes' : Textarea(attrs={'rows':7, 'cols':125}),
+            'main_4': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'suction_main': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'oven_leak_1': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
+            'time_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
+            'date_temp_seal_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'time_temp_seal_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
+            'temp_seal_by_leak_1': forms.TextInput(attrs={'type': 'text', 'style': 'width:150px;'}),
+            'date_init_repair_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'time_init_repair_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
+            'date_comp_repair_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'time_comp_repair_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
+            'comp_by_leak_1': forms.TextInput(attrs={'type': 'text', 'style': 'width:150px;'}),
+            'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
         }
-        
+
+
 class formA5_form(ModelForm):
     class Meta:
         model = formA5_model
         fields = ('__all__')
-        
         widgets = {
             'process_equip1': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 250px;'}),
             'background_color_start': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
