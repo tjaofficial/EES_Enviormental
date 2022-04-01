@@ -55,14 +55,15 @@ def formA3(request, selector):
                 'crew': database_form.crew,
                 'foreman': database_form.foreman,
                 'inop_ovens': database_form.inop_ovens,
+                'inop_numbs': database_form.inop_numbs,
                 'om_start': database_form.om_start,
                 'om_stop': database_form.om_stop,
                 'l_start': database_form.l_start,
                 'l_stop': database_form.l_stop,
-                'om_oven1': database_form.om_oven1,
-                'om_loc1': database_form.om_loc1,
-                'l_oven1': database_form.l_oven1,
-                'l_loc1': database_form.l_loc1,
+                'om_leak_json': database_form.om_leak_json,
+                'om_leaks2': database_form.om_leaks2,
+                'l_leak_json': database_form.l_leak_json,
+                'l_leaks2': database_form.l_leaks2,
                 'om_traverse_time_min': database_form.om_traverse_time_min,
                 'om_traverse_time_sec': database_form.om_traverse_time_sec,
                 'l_traverse_time_min': database_form.l_traverse_time_min,
@@ -118,6 +119,7 @@ def formA3(request, selector):
                 done.save()
 
                 return redirect('IncompleteForms')
+            print(form)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

@@ -54,6 +54,7 @@ def formA2(request, selector):
                 'crew': database_form.crew,
                 'foreman': database_form.foreman,
                 'inop_ovens': database_form.inop_ovens,
+                'inop_numbs': database_form.inop_numbs,
                 'p_start': database_form.p_start,
                 'p_stop': database_form.p_stop,
                 'c_start': database_form.c_start,

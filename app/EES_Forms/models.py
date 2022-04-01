@@ -541,6 +541,8 @@ class formA2_model(models.Model):
     )
     inop_ovens = models.IntegerField(
     )
+    inop_numbs = models.IntegerField(
+    )
     crew = models.CharField(
         max_length=1,
         choices=crew_choices
@@ -615,6 +617,8 @@ class formA3_model(models.Model):
     )
     inop_ovens = models.IntegerField(
     )
+    inop_numbs = models.IntegerField(
+    )
     crew = models.CharField(
         max_length=1,
         choices=crew_choices
@@ -643,27 +647,21 @@ class formA3_model(models.Model):
         auto_now=False,
         blank=True
     )
-    om_oven1 = models.CharField(
-        max_length=2,
+    om_leak_json = models.CharField(
+        max_length=500,
         blank=True,
         null=True
     )
-    om_loc1 = models.CharField(
+    om_leaks2 = models.CharField(
         max_length=30,
-        choices=om_location,
+    )
+    l_leak_json = models.CharField(
+        max_length=500,
         blank=True,
         null=True
     )
-    l_oven1 = models.CharField(
-        max_length=2,
-        blank=True,
-        null=True
-    )
-    l_loc1 = models.CharField(
+    l_leaks2 = models.CharField(
         max_length=30,
-        choices=l_location,
-        blank=True,
-        null=True
     )
     om_traverse_time_min = models.CharField(max_length=30)
     om_traverse_time_sec = models.CharField(max_length=30)

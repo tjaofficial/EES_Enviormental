@@ -173,6 +173,34 @@ function createHTMLString(dataJSON, input_ID){
                 let data = dataArray[i];
                 tableHTML = tableHTML+htmlLayout(false, data, input_ID);
             }
+            if(input_ID === "lid"){
+                let l_insert_in_form = document.getElementById('l_leak_json').value = JSON.stringify(dataJSON);
+                let total_lid_leaks = 0;
+
+                for(a=0; a<dataArray.length; a++){
+                    if(dataArray[a]["location"]){
+                        if(dataArray[a]["location"][0] !== "D"){
+                            total_lid_leaks++
+                        }
+                    }
+                }
+                let total_lid_leak_insert = document.getElementById('l_leaks').value = total_lid_leaks;
+                let total_lid_not_obs = document.getElementById('l_not_observed').value = dataArray.length *4;
+            }
+            if(input_ID === "offtake"){
+                let om_insert_in_form = document.getElementById('om_leak_json').value = JSON.stringify(dataJSON);
+                let total_om_leaks = 0;
+
+                for(b=0; b<dataArray.length; b++){
+                    if(dataArray[b]["location"]){
+                        if(dataArray[b]["location"][0] !== "D"){
+                            total_om_leaks++
+                        }
+                    }
+                }
+                let total_om_leak_insert = document.getElementById('om_leaks').value = total_om_leaks;
+                let total_om_not_obs = document.getElementById('om_not_observed').value = dataArray.length *2;
+            }
         }
     }
 
@@ -188,7 +216,7 @@ function createHTMLString(dataJSON, input_ID){
 // Template for Table Rows
 
 function locationHTMLTemplate(value, target, locationIndex, resultInput){
-    let htmlTempate = `<select data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}">
+    let htmlTempate = `<select data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}" style="margin-bottom:3px;">
                             <option value="" ${value? 'selected': ''}>--</option>
                             <option value="D" ${value === "D"? 'selected': ''}>D</option>
                             <option value="C" ${value === "C"? 'selected': ''}>C</option>
@@ -213,10 +241,10 @@ function htmlLayout(empty, data, target){
 
 
     const htmlStr= `<tr>
-                        <td class="boxa6" colspan="1">
-                            <input type="number" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" data-targetinput="${target}"/>
+                        <td class="boxa6" colspan="1" style="text-align: center; width: 84px;">
+                            <input type="number" style="text-align: center; width: 45px; margin-bottom:3px;" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" data-targetinput="${target}"/>
                         </td>
-                        <td class="boxa6" colspan="1">
+                        <td class="boxa6" colspan="1" style="width:90px; margin-bottom:3px;">
                             ${locationhtml}
                         </td>
 
@@ -251,7 +279,29 @@ function update_Temp_Save(event){
 }
 
 
+function l_equation() {
+    const l_leaks = document.getElementById('l_leaks2').value,
+          l_inops = document.getElementById('inop_ovens').value,
+          l_not_obs = document.getElementById('l_not_observed').value;
+    
+    const equate = (parseInt(l_leaks) * 100)/(4*(85 - parseInt(l_inops) - parseInt(l_not_obs)));
+    
+    document.getElementById('l_percent_leaking').value = parseFloat(equate).toFixed(3);
+}
+
+function om_equation() {
+    const om_leaks = document.getElementById('om_leaks2').value,
+          om_inops = document.getElementById('inop_ovens').value,
+          om_not_obs = document.getElementById('om_not_observed').value;
+    
+    const equate = (parseInt(om_leaks) * 100)/(4*(85 - parseInt(om_inops) - parseInt(om_not_obs)));
+    
+    document.getElementById('om_percent_leaking').value = parseFloat(equate).toFixed(3);
+}
+
+
 /*****************************************
 Initiates the Tables on JS load
 *****************************************/
 initate_Result_Table()
+

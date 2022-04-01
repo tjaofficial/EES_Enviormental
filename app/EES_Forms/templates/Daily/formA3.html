@@ -45,6 +45,7 @@
                                     Battery No. 5 &nbsp; &nbsp; &nbsp; 
                                     Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
                                     Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }}
+                                    Inoperable Oven Number(s)&nbsp; &nbsp;{{ data.inop_numbs }}
                                 </th>
                             </tr>
                             <tr>
@@ -65,9 +66,9 @@
                                 <div>Start Time:{{ data.om_start }}</div>
                                 <div>End Time:{{ data.om_stop }}</div>
                                 <input id="offtake" type="hidden" value="{}" data-resulttable=""/>
-                                <table>
+                                <table style="border-collapse: collapse;">
                                     <tr>
-                                        <th id="boxa5" style="max-width: 100px;"colspan="9">
+                                        <th id="boxa5" style="max-width: 100px;"colspan="3">
                                             OFFTAKES AND MINI STANDPIPES
                                         </th>
                                     </tr>
@@ -75,7 +76,7 @@
                                         <th id="boxa6" colspan="1">
                                             Oven
                                         </th>
-                                        <th id="boxa6" colspan="8">
+                                        <th id="boxa6" colspan="2">
                                             Location
                                         </th>
                                     </tr>
@@ -90,7 +91,7 @@
                                 <div> Start Time:{{ data.l_start }} </div>
                                 <div> End Time:{{ data.l_stop }} </div>
                                 <input id="lid" type="hidden" value="{}" data-resulttable=""/>
-                                <table>
+                                <table style="border-collapse: collapse;">
                                     <tr>
                                         <th id="boxa5" style="max-width: 100px;"colspan="6">
                                             LIDS
@@ -123,7 +124,7 @@
                                     D = Dampered off
                                 </td>
                                 <td style="width: 254px; text-align: center;">
-                                    Allowed Traverse Time
+                                    Allowed Traverse Time: {{ data.om_leak_json }}
                                 </td>
                                 <td rowspan="2" style="width: 354px; text-align: left;">
                                     = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
@@ -156,7 +157,7 @@
                                     S = Slip Joint
                                 </td>
                                 <td style="text-align: center;">
-                                    Allowed Traverse Time:
+                                    Allowed Traverse Time: {{ data.l_leak_json }}
                                 </td>
                                 <td rowspan="2" style="width: 354px; text-align: left;">
                                     = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
@@ -210,7 +211,7 @@
                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.l_leaks2 }} x 100
                                 </td>
                                 <td></td>
                                 <td style="width: 75px"></td>
@@ -238,7 +239,7 @@
                                     &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                                 </td>
                                 <td>
-                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.l_not_observed }}
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - {{ data.inop_ovens }}) - {{ data.l_not_observed }}
                                 </td>
                                  <td></td>
                                  <td></td>
@@ -253,7 +254,7 @@
                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PENIS x 100
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.om_leaks2 }} x 100
                                 </td>
                                 <td></td>
                                 <td style="width: 75px"></td>
@@ -281,7 +282,7 @@
                                     &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                                 </td>
                                 <td>
-                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - PENIS) - {{ data.om_not_observed }}
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - {{ data.inop_ovens }}) - {{ data.om_not_observed }}
                                 </td>
                                  <td></td>
                                  <td></td>
