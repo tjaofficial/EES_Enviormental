@@ -417,7 +417,7 @@ class formA5_form(ModelForm):
             'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
-
+            'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
         }
 
 class formA5_readings_form(ModelForm):

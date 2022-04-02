@@ -39,15 +39,18 @@ function sketchPopup(elemClicked){
     //sketchpad.addEventListener('strokeend', () => console.info('strokeend'));
   
   }
-  
+
   
   function save_canvas(elem, canvas, imgElem){
       let pngLink = canvas.toDataURL();
-      document.querySelector("#sketchPng").value = pngLink;
+      //document.querySelector("#sketchPng").value = pngLink;
       imgElem.src = pngLink;
 
+      var val = pngLink;
+      var response = val.substring(val.indexOf(",") + 1);
+      document.getElementById('canvas').value = response;
+
       toggleDisplayed(elem);
-    
   }
   
   function drawImgToCanvas(canvas, imgElem){

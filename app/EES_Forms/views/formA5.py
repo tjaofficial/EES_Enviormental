@@ -1,9 +1,14 @@
+from curses import echo
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
+import PIL.Image as Image
+import io
+import base64
+
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -12,6 +17,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formA5(request, selector):
     now = datetime.datetime.now()
+    exist_canvas = ''
     # today = datetime.date.today()
     unlock = False
     client = False
@@ -98,7 +104,13 @@ def formA5(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
+
         if existing:
+            b = base64.b64decode(database_form.canvas)
+            with open('static/images/formA5_canvas/' + str(todays_log.date_save) + '_A5canvas.png', 'wb') as f:
+                f.write(b)
+
+            exist_canvas = str(todays_log.date_save) + '_A5canvas.png'
             initial_data = {
                 'date': database_form.date,
                 'estab': database_form.estab,
@@ -139,6 +151,7 @@ def formA5(request, selector):
                 'plume_opacity_determined_stop': database_form.plume_opacity_determined_stop,
                 'describe_background_start': database_form.describe_background_start,
                 'describe_background_stop': database_form.describe_background_stop,
+                'canvas': database_form.canvas,
                 'o1': database_form2.o1,
                 'o1_start': database_form2.o1_start,
                 'o1_stop': database_form2.o1_stop,
@@ -273,6 +286,7 @@ def formA5(request, selector):
             readings_form = formA5_readings_form()
 
         if request.method == "POST":
+
             if existing:
                 form = formA5_form(request.POST, instance=database_form)
                 readings = formA5_readings_form(request.POST, instance=database_form2)
@@ -382,5 +396,5 @@ def formA5(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA5.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
+        "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
     })
