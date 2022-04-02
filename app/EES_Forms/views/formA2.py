@@ -85,6 +85,7 @@ def formA2(request, selector):
                 'crew': todays_log.crew,
                 'foreman': todays_log.foreman,
                 'inop_ovens': todays_log.inop_ovens,
+                'inop_numbs': todays_log.inop_numbs,
                 'notes': 'N/A',
             }
 
@@ -108,12 +109,14 @@ def formA2(request, selector):
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
-
+                    print("nigga we made it")
                     return redirect('IncompleteForms')
                 else:
                     issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
+            else:
+                print("Form not valid")
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

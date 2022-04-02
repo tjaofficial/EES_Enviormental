@@ -324,6 +324,7 @@ class daily_battery_profile_model(models.Model):
     foreman = models.CharField(max_length=10, choices=foreman_choices)
     crew = models.CharField(max_length=1, choices=crew_choices)
     inop_ovens = models.CharField(max_length=2)
+    inop_numbs = models.CharField(max_length=50)
     date_save = models.DateField(auto_now_add=True, auto_now=False)
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
 
@@ -541,7 +542,8 @@ class formA2_model(models.Model):
     )
     inop_ovens = models.IntegerField(
     )
-    inop_numbs = models.IntegerField(
+    inop_numbs = models.CharField(
+        max_length=50
     )
     crew = models.CharField(
         max_length=1,
@@ -617,7 +619,8 @@ class formA3_model(models.Model):
     )
     inop_ovens = models.IntegerField(
     )
-    inop_numbs = models.IntegerField(
+    inop_numbs = models.CharField(
+        max_length=50
     )
     crew = models.CharField(
         max_length=1,
