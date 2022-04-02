@@ -20,67 +20,78 @@ def formD(request, selector):
     one_week = datetime.timedelta(days=6)
     end_week = last_saturday + one_week
     sunday = today - datetime.timedelta(days=1)
-    week_start_dates = formD_model.objects.all().order_by('-week_start')
+    submitted_forms = formD_model.objects.all().order_by('-week_start')
 
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:
         todays_log = daily_prof[0]
-        if len(week_start_dates) > 0:
-            week_almost = week_start_dates[0]
-            last_form_sat = week_almost.week_start
+        if len(submitted_forms) > 0:
+            latest_form = submitted_forms[0]
+            starting_saturday = latest_form.week_start
             if today.weekday() not in {5, 6}:
-                if last_form_sat == last_saturday:
+                if starting_saturday == last_saturday:
                     existing = True
             elif today.weekday() == 5:
-                if last_form_sat == today:
+                if starting_saturday == today:
                     existing = True
-            elif last_form_sat == sunday:
+            elif starting_saturday == sunday:
                 existing = True
+        print(existing)
         if existing:
             initial_data = {
-                'week_start': week_almost.week_start,
-                'week_end': week_almost.week_end,
-                'truck_id1': week_almost.truck_id1,
-                'date1': week_almost.date1,
-                'time1': week_almost.time1,
-                'contents1': week_almost.contents1,
-                'freeboard1': week_almost.freeboard1,
-                'wetted1': week_almost.wetted1,
-                'comments1': week_almost.comments1,
-                'truck_id2': week_almost.truck_id2,
-                'date2': week_almost.date2,
-                'time2': week_almost.time2,
-                'contents2': week_almost.contents2,
-                'freeboard2': week_almost.freeboard2,
-                'wetted2': week_almost.wetted2,
-                'comments2': week_almost.comments2,
-                'truck_id3': week_almost.truck_id3,
-                'date3': week_almost.date3,
-                'time3': week_almost.time3,
-                'contents3': week_almost.contents3,
-                'freeboard3': week_almost.freeboard3,
-                'wetted3': week_almost.wetted3,
-                'comments3': week_almost.comments3,
-                'truck_id4': week_almost.truck_id4,
-                'date4': week_almost.date4,
-                'time4': week_almost.time4,
-                'contents4': week_almost.contents4,
-                'freeboard4': week_almost.freeboard4,
-                'wetted4': week_almost.wetted4,
-                'comments4': week_almost.comments4,
-                'truck_id5': week_almost.truck_id5,
-                'date5': week_almost.date5,
-                'time5': week_almost.time5,
-                'contents5': week_almost.contents5,
-                'freeboard5': week_almost.freeboard5,
-                'wetted5': week_almost.wetted5,
-                'comments5': week_almost.comments5,
-                'observer1': week_almost.observer1,
-                'observer2': week_almost.observer2,
-                'observer3': week_almost.observer3,
-                'observer4': week_almost.observer4,
-                'observer5': week_almost.observer5
+                'week_start': latest_form.week_start,
+                'week_end': latest_form.week_end,
+                'truck_id1': latest_form.truck_id1,
+                'date1': latest_form.date1,
+                'time1': latest_form.time1,
+                'contents1': latest_form.contents1,
+                'freeboard1': latest_form.freeboard1,
+                'wetted1': latest_form.wetted1,
+                'comments1': latest_form.comments1,
+                'truck_id2': latest_form.truck_id2,
+                'date2': latest_form.date2,
+                'time2': latest_form.time2,
+                'contents2': latest_form.contents2,
+                'freeboard2': latest_form.freeboard2,
+                'wetted2': latest_form.wetted2,
+                'comments2': latest_form.comments2,
+                'truck_id3': latest_form.truck_id3,
+                'date3': latest_form.date3,
+                'time3': latest_form.time3,
+                'contents3': latest_form.contents3,
+                'freeboard3': latest_form.freeboard3,
+                'wetted3': latest_form.wetted3,
+                'comments3': latest_form.comments3,
+                'truck_id4': latest_form.truck_id4,
+                'date4': latest_form.date4,
+                'time4': latest_form.time4,
+                'contents4': latest_form.contents4,
+                'freeboard4': latest_form.freeboard4,
+                'wetted4': latest_form.wetted4,
+                'comments4': latest_form.comments4,
+                'truck_id5': latest_form.truck_id5,
+                'date5': latest_form.date5,
+                'time5': latest_form.time5,
+                'contents5': latest_form.contents5,
+                'freeboard5': latest_form.freeboard5,
+                'wetted5': latest_form.wetted5,
+                'comments5': latest_form.comments5,
+                'observer1': latest_form.observer1,
+                'observer2': latest_form.observer2,
+                'observer3': latest_form.observer3,
+                'observer4': latest_form.observer4,
+                'observer5': latest_form.observer5
+            }
+        elif today.weekday() == 5:
+            initial_data = {
+                'week_start': today,
+                'week_end': today + datetime.timedelta(days=6)
+            }
+        elif today.weekday() == 6:
+            initial_data = {
+                'week_start': today - datetime.timedelta(days=1),
+                'week_end': today + datetime.timedelta(days=5)
             }
         else:
             initial_data = {
@@ -91,7 +102,7 @@ def formD(request, selector):
         empty_form = formD_form(initial=initial_data)
         if request.method == "POST":
             if existing:
-                form = formD_form(request.POST, instance=week_almost)
+                form = formD_form(request.POST, instance=latest_form)
             else:
                 form = formD_form(request.POST)
             A_valid = form.is_valid()
@@ -100,7 +111,7 @@ def formD(request, selector):
 
                 filled_out = True
                 done = Forms.objects.filter(form='D')[0]
-                for items in week_almost.whatever().values():
+                for items in latest_form.whatever().values():
                     if items is None:
                         filled_out = True  # -change this back to false
                         break
