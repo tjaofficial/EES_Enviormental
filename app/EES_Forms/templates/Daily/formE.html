@@ -1,8 +1,10 @@
 {% extends "ees_forms/layout.html" %}
 
 {% block list%}
-{% load static %}
+{% load static %}   
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <style>
         #boxTitle{
             font-size: 30px;

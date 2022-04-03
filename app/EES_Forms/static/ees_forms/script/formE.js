@@ -10,14 +10,14 @@ function updateEventListeners(){
 
     for(let i=0; i<resultElement.length; i++){
         resultElement[i].addEventListener('change', handle_Table_Input)
-        //resultElement[i].addEventListener('change', update_Temp_Save)
+        resultElement[i].addEventListener('change', update_Temp_Save)
         
     }
 }
 
 function handle_Table_Input(event){
     const elem = event.target;
-    console.log(elem);
+    
     //query information from input
     let elementRowAttr = parseInt(elem.dataset.locationindex); //Index 0 - n of row in table (-1 if Data Hasnt been entered in that row)
     const elementColumnKeyAttr = elem.dataset.resultkey; // Key of Column Effected
@@ -29,7 +29,7 @@ function handle_Table_Input(event){
     const hiddenFormValueArray = parsedDomValue.data ? parsedDomValue.data : [];
     let updatedFormValueArray = []
 
-    console.log(elementRowAttr);
+    
 
     if(elementRowAttr === -1){
         updatedFormValueArray = addArrayData(hiddenFormValueArray, elementColumnKeyAttr, elementValue);
@@ -44,10 +44,6 @@ function handle_Table_Input(event){
             console.log("error: Inproper key")
         }
     }
-
-    console.log(hiddenFormValueArray);
-    console.log(updatedFormValueArray);
-
 
     parsedDomValue.data = updatedFormValueArray;
     hiddenFormDom.value = JSON.stringify(parsedDomValue);
@@ -116,13 +112,13 @@ function htmlTemplate(data, index) {
         let html = `
         <tr>
             <th colspan="1" id="formE_box2">
-                <input type="text" data-locationIndex="${index}" data-resultKey="oven" data-dynamicInputs value="${data.oven? data.oven: ''}"/>
+                <input type="text" data-locationIndex="${index}" data-resultKey="oven" data-dynamicInputs value="${data.oven? data.oven: ''}" data-targetinput="gooseNeckData"/>
             </th>
             <th colspan="1" id="formE_box2">
-                <input type="time" data-locationIndex="${index}" data-resultKey="time" data-dynamicInputs value="${data.time? data.time: ''}"/>
+                <input type="time" data-locationIndex="${index}" data-resultKey="time" data-dynamicInputs value="${data.time? data.time: ''}" data-targetinput="gooseNeckData"/>
             </th>
             <th colspan="1" id="formE_box2">
-                <select data-locationIndex="${index}" data-resultKey="source" data-dynamicInputs/>
+                <select data-locationIndex="${index}" data-resultKey="source" data-dynamicInputs data-targetinput="gooseNeckData"/>
                     <option value="" ${data.source? 'selected': ''}>--</option>
                     <option value="I" ${data.source === "I"? 'selected': ''}>I</option>
                     <option value="G" ${data.source === "G"? 'selected': ''}>G</option>
@@ -131,9 +127,26 @@ function htmlTemplate(data, index) {
                 </select>
             </th>
             <th colspan="1" id="formE_comments">
-                <input type="text" data-locationIndex="${index}" data-resultKey="comment" data-dynamicInputs value="${data.comment? data.comment: ''}"/>
+                <input type="text" data-locationIndex="${index}" data-resultKey="comment" data-dynamicInputs value="${data.comment? data.comment: ''}" data-targetinput="gooseNeckData"/>
             </th>
         </tr>
         `;
         return html
 }
+
+function update_Temp_Save(event){
+    const formName = document.getElementById('formName').dataset.form;
+    const tempSaveKey = formName+"_tempFormData";
+    const currentDate = Date.now();
+    
+    const formTempData = localStorage.getItem(tempSaveKey)?JSON.parse(localStorage.getItem(tempSaveKey)): {"Experation":currentDate, data:{}};
+    const elem = event.target;
+    let target_Input_Field_Id = elem.dataset.targetinput;
+
+
+    formTempData.data[target_Input_Field_Id] = document.getElementById(target_Input_Field_Id).value;
+
+
+    localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
+}
+
