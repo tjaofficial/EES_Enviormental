@@ -325,8 +325,16 @@ li {
     text-decoration:none;
     color: black;
 }
+#canvasHolder{
+    width:95%;
+    margin:auto;
+    height:86%;
+}
 </style>
+{% load static %}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="{% static 'ees_forms/script/admin_dashboard.js' %}"></script>
 
 <body style="background-color:#F2F7FB; margin: 0px;display:flex;">
     <div id="sideBar" style="width:24rem; height:100%; background-color: #263544; display: table; ">
@@ -437,7 +445,7 @@ li {
                         <div class="grid-double">
                             <div class="dataHold2" style="margin-top;1.1rem;">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.5rem;">List of Leaking Doors - Push Side</p>
+                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Doors - Push Side</p>
                                 </div>
                                 <hr>
                                 <div class="gridLeaks dataSingle">
@@ -459,7 +467,7 @@ li {
                             </div>
                             <div class="dataHold2" style="margin-top: .5rem;">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.5rem;">List of Leaking Doors - Push Side</p>
+                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Doors - Push Side</p>
                                 </div>
                                 <hr>
                                 <div class="gridLeaks dataSingle">
@@ -486,15 +494,47 @@ li {
                         <div class="grid-double">
                             <div class="dataHold2">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.5rem;">List of Leaking Lids</p>
+                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Lids</p>
                                 </div>
                                 <hr>
+                                <div class="gridLeaks dataSingle">
+                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
+                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
+                                </div>
+                                {% if lids.data %}
+                                    {% for leaks in lids.data %}
+                                        <div class="gridLeaks">
+                                            <p class="dataFont miniFont">#{{ leaks.oven }}</p>
+                                            {% for where in leaks.location %}
+                                                <p class="dataFont miniFont">{{ where }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                {% endif %}
                             </div>
                             <div class="dataHold2">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.5rem;">List of Leaking Standpipes</p>
+                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Standpipes</p>
                                 </div>
                                 <hr>
+                                <div class="gridLeaks dataSingle">
+                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
+                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
+                                </div>
+                                {% if offtakes.data %}
+                                    {% for leaks in offtakes.data %}
+                                        <div class="gridLeaks">
+                                            <p class="dataFont miniFont">#{{ leaks.oven }}</p>
+                                            {% for where in leaks.location %}
+                                                <p class="dataFont miniFont">{{ where }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -601,6 +641,9 @@ li {
             </div>
             <div id="latestActivity3" class="card halfs">
                 <div class="card-title">Latest Issues/Corrective Actions</div>
+                <div id='canvasHolder'>
+                    <canvas id="myChart" width='1200' height='425'></canvas>
+                </div>
             </div>
             <div id="corrective_actions" class="card quarters">
                 <div class="card-title">Latest Issues/Corrective Actions</div>

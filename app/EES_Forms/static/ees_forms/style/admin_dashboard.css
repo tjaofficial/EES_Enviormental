@@ -1,0 +1,326 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+.whiteFont{
+    color:white; 
+    padding-left: 1rem;
+}
+.highlight_dark:hover {
+    background-color:#1c2630;
+}
+.card{
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 3px 2px 5px 0px #00000021;
+}
+.card.longest{
+    grid-row: span 5;
+    grid-column: span 8;
+}
+.card.skinny{
+    grid-row: span 1;
+    grid-column: span 8;
+}
+.card.quarters{
+    grid-row: span 5;
+    grid-column: span 2;
+}
+.card.halfs{
+    grid-row: span 5;
+    grid-column: span 4;
+}
+.card.eighths{
+    grid-row: span 5;
+    grid-column: span 1;
+}
+.grid-dashboard{
+    display: grid;
+    height: 93%;
+    padding: 2rem;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    grid-gap: 2rem;
+}
+.card-title{
+    padding-top: 1rem;
+    padding-left: 1rem;
+    font-size: 1.3rem;
+    font-family: sans-serif;
+}
+.nested{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 2rem;
+    height: 86%;
+}
+.inner-card{
+    background-color:white;
+    border-radius: 20px;
+    box-shadow: inset 0 0 20px 0px #0000005c;
+    margin-top: 1rem;
+}
+.inner_font{
+    padding: 1rem 0px 0px 1rem;
+    font-size: 1rem;
+}
+.dataSingle{
+    justify-content: center;
+    display:flex;
+    margin-bottom: .3rem;
+    margin-top: .3rem;
+}
+.dataFont{
+    font-size: 2rem;
+    text-align: center;
+    padding-right:1rem;
+    font-weight: 100;
+}
+.dataFont.number{
+    font-size: 2rem;
+    text-align: center;
+    padding-right:1rem;
+    font-weight: 900;
+    color: #263544;
+}
+.dataHold{
+    width: 75%;
+    margin: auto;
+    height: 80%;
+    margin-top: 1.6rem;
+}
+.grid-double{
+    display:grid;
+    grid-gap: .5rem;
+    grid-template-rows: 1fr 1fr;
+    height: 86%;
+}
+.dataHold2{
+    width: 75%;
+    margin: auto;
+    height: 80%;
+}
+.miniFont{
+    font-size: 1.2rem;
+    font-weight: 100;
+}
+.grid-dataMini{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 21rem;
+    margin: auto;
+    grid-gap: .7rem;
+    padding-top: .7rem;
+}
+.grid-dataMini2{
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 15rem;
+    margin: auto;
+    grid-gap: .7rem;
+    padding-top: .7rem;
+}
+.grid-dataMini3{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 15rem;
+    margin: auto;
+    grid-gap: .7rem;
+    padding-top: .7rem;
+}
+.minifont.data{
+    text-align:center;
+}
+.gridLeaks{
+    display:grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.dataLabels{
+    justify-content: center;
+    display:flex;
+    margin-bottom: .3rem;
+    margin-top: .3rem;
+}
+.myTabs{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: inset 0 0 20px 0px #0000005c;
+    width: 86%;
+    margin: 33px auto;
+}
+.myTabs input[type='radio']{
+    display:none;
+}
+.myTabs label{
+    padding: .5rem;
+    background-color: gray;
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+    height:2rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: inset 0 0 20px 0px #0000005c;
+}
+.myTabs .tab{
+    width:100%;
+    padding: 2rem;
+    background-color: white;
+    order: 1;
+    display:none;
+    height: 21rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: inset 0 0 20px 0px #0000005c;
+}
+.myTabs input[type="radio"]:checked + label + .tab{
+    display:block;
+}
+.myTabs input[type="radio"]:checked + label{
+    background-color:white;
+}
+ul {
+  display: block;
+  list-style-type: none;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+}
+li {
+  display: block;
+  list-style-type: none;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 40px;
+  font-size: 1.2rem;
+  font-weight: 100;
+}
+.menuItems a{
+    color: white;
+    text-decoration: none;
+}
+.grid-sliders{
+    display:grid;
+    grid-gap: 1rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin: 2rem 2rem;
+}
+.slider{
+    appearance: none;
+    width: 41rem;
+    height: 7px;
+    border-radius: 37rem;
+}
+.container {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 2rem;
+  height: 10px;
+  margin-top: 2rem;
+}
+.skills {
+  text-align: right;
+  color: white;
+  border-radius: 2rem;
+  height: 10px;
+}
+.weekly {width: {{ weekly_percent }}%; background-color: #F55667;}
+.monthly {width: {{ monthly_percent }}%; background-color: #348EFA;}
+.quarterly {width: 0%; background-color: #4ACFAE;}
+.annually {width: {{ annually_percent }}%; background-color: #FCB050;}
+.grid-observ_singles{
+    display: grid;
+    grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
+    margin: 1rem 2rem;
+}
+.grid-observ_header{
+    display: grid;
+    grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
+    margin: 1rem 2rem;
+}
+.contactFont{
+    font-size: 1rem;
+    align-items: center;
+    display: flex;
+}
+.contactHeader{
+    font-size: 1.5rem;
+    font-weight:900;
+    display: flex;
+}
+.center{
+    justify-content: center;
+}
+.grid-observers{
+    margin: 2rem 5rem;
+}
+.c_card_circle_oven{
+    max-width: 44%;
+    height: auto;
+    transform: translate3d(-50%,-14%,0);
+    align-items: center;
+    display: flex;
+}
+.c_circle_font_color{
+    color: #67886F;
+}
+.grid-battery-weather{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    margin:1rem 2rem;
+    height: 80%;
+    align-items: center;
+}
+.weather_battery_font{
+    font-size: 1.0rem;
+    font-weight: 100;
+    text-align: center;
+}
+.battery_info{
+    margin: 1rem 2rem;
+    margin-top: 1rem;
+}
+.weather_info{
+    margin:auto;
+}
+.weather_battery_font span{
+    color: #9f9f9f;
+}
+.ca_holder{
+    width: 100%;
+    padding: 0rem 2rem;
+}
+.ca_holder ul{
+    height: 21.5rem;
+    overflow: scroll;
+}
+.ca_indie{
+    padding-top: 1rem; 
+    padding-bottom: 1rem; 
+    display: inline-flex; 
+    margin: 8px; 
+    width: 40rem;
+}
+.ca_footer{
+    margin-top: 1.5rem;
+    text-align:center;
+}
+.ca_holder ul a{
+    text-decoration:none;
+    color: black;
+}

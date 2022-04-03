@@ -236,10 +236,16 @@ def admin_dashboard_view(request):
                         most_recent_A3 = formA3[0].date
                         if most_recent_A3 == today:
                             A3data = formA3[0]
+                            lids = json.loads(A3data.l_leak_json)
+                            offtakes = json.loads(A3data.om_leak_json)
                         else:
                             A3data = ""
+                            lids = ""
+                            offtakes = ""
                     else:
                         A3data = ""
+                        lids = ""
+                        offtakes = ""
 
                     if len(formA4) > 0:
                         most_recent_A4 = formA4[0].date
@@ -269,7 +275,7 @@ def admin_dashboard_view(request):
                 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
             })
     return render(request, "admin/admin_dashboard.html", {
-        'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+        'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
     })
 
 
