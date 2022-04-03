@@ -26,10 +26,6 @@ function addResultEventListeners(){
     }
 
 }
-function handle_Table_Input(){
-    console.log('this is a test to see if the events are fireing')
-}
-
 
 /*****************************************
 Update JSON Values
