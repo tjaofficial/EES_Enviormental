@@ -1,26 +1,37 @@
 
 const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
+    document.getElementById('graph-xaxis-data7').innerText,
+    document.getElementById('graph-xaxis-data6').innerText,
+    document.getElementById('graph-xaxis-data5').innerText,
+    document.getElementById('graph-xaxis-data4').innerText,
+    document.getElementById('graph-xaxis-data3').innerText,
+    document.getElementById('graph-xaxis-data2').innerText,
+    document.getElementById('graph-xaxis-data1').innerText
 ];
+
+console.log(Array(labels))
+
 
 const data = {
     labels: labels,
     datasets: [{
-        label: 'My First dataset',
+        label: 'Daily Total Charge Time',
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
-        data: [0, 10, 5, 2, 20, 30, 45],
-        height: '100%',
+        data: [
+            document.getElementById('graph-yaxis-data7').innerText,
+            document.getElementById('graph-yaxis-data6').innerText,
+            document.getElementById('graph-yaxis-data5').innerText, 
+            document.getElementById('graph-yaxis-data4').innerText, 
+            document.getElementById('graph-yaxis-data3').innerText, 
+            document.getElementById('graph-yaxis-data2').innerText, 
+            document.getElementById('graph-yaxis-data1').innerText
+        ],
     }]
 };
 
 const config = {
-    type: 'line',
+    type: 'bar',
     data: data,
     options: {}
 };

@@ -158,7 +158,7 @@
     border-radius: 20px;
     box-shadow: inset 0 0 20px 0px #0000005c;
     width: 86%;
-    margin: 33px auto;
+    margin: 2px auto;
 }
 .myTabs input[type='radio']{
     display:none;
@@ -315,7 +315,7 @@ li {
     padding-bottom: 1rem; 
     display: inline-flex; 
     margin: 8px; 
-    width: 40rem;
+    width: 31rem;
 }
 .ca_footer{
     margin-top: 1.5rem;
@@ -642,7 +642,49 @@ li {
             <div id="latestActivity3" class="card halfs">
                 <div class="card-title">Latest Issues/Corrective Actions</div>
                 <div id='canvasHolder'>
-                    <canvas id="myChart" width='1200' height='425'></canvas>
+                    <canvas id="myChart" width='1100' height='425'></canvas>
+                </div>
+                <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
+                </div>
+                <div id='graph-xaxis-data2' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.1.form.date.month }}/{{ recent_logs.1.form.date.day }}
+                </div>
+                <div id='graph-xaxis-data3' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.2.form.date.month }}/{{ recent_logs.2.form.date.day }}
+                </div>
+                <div id='graph-xaxis-data4' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.3.form.date.month }}/{{ recent_logs.3.form.date.day }}
+                </div>
+                <div id='graph-xaxis-data5' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.4.form.date.month }}/{{ recent_logs.4.form.date.day }}
+                </div>
+                <div id='graph-xaxis-data6' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.5.form.date.month }}/{{ recent_logs.4.form.date.day }}
+                </div>
+                <div id='graph-xaxis-data7' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.6.form.date.month }}/{{ recent_logs.4.form.date.day }}
+                </div>
+                <div id='graph-yaxis-data1' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.0.total_seconds }}
+                </div>
+                <div id='graph-yaxis-data2' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.1.total_seconds }}
+                </div>
+                <div id='graph-yaxis-data3' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.2.total_seconds }}
+                </div>
+                <div id='graph-yaxis-data4' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.3.total_seconds }}
+                </div>
+                <div id='graph-yaxis-data5' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.4.total_seconds }}
+                </div>
+                <div id='graph-yaxis-data6' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.5.total_seconds }}
+                </div>
+                <div id='graph-yaxis-data7' style="height:100%; width:100%;" hidden="true">
+                    {{ recent_logs.6.total_seconds }}
                 </div>
             </div>
             <div id="corrective_actions" class="card quarters">
