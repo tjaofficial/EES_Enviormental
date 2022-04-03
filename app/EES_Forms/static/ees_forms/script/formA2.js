@@ -126,14 +126,6 @@ function createHTMLString(dataJSON, input_ID){
 }
 
 
-
-
-
-
-
-
-
-
 function intiateResultEventListeners(){
     const resultElement = document.querySelectorAll("[data-resultInput]");
     for(i=0; i<resultElement.length; i++){
@@ -323,6 +315,7 @@ function timecheck_cokeDoors() {
     }
 }
 
+//Get total of doors not observed
 function pc_doors_not_observed() {
     const push_from = document.getElementById('p_temp_block_from').value,
           push_to = document.getElementById('p_temp_block_to').value,
@@ -330,23 +323,34 @@ function pc_doors_not_observed() {
           coke_to = document.getElementById('c_temp_block_to').value,
           inop_numbs = document.getElementById('inop_numbs').value;
     
-    
+    //Gets an array of all inoperable doors
+    let remove_spaces = inop_numbs.split(' ').join(""),
+    select_numbers = remove_spaces.split(',');
+
+    //Push Side - Checks if the inoperable oven are listed in the total not observed doors and then subtracts those doors, if any
     if (parseInt(push_from) || parseInt(push_to) >= 0) {
         let push_blocked = Math.abs(parseInt(push_from) - parseInt(push_to)) +1,
         x = 0;
-
+        // push side check and subtract
         if(parseInt(push_from) < parseInt(push_to)){
-            for(i=parseInt(push_from); i<=parseInt(push_to); i++){
-                if(parseInt(i) === parseInt(inop_numbs)){
-                    x += 1;
-                    console.log(x + "this one")
+            for(o=parseInt(push_from); o<=parseInt(push_to); o++){
+                for(i=0; i<select_numbers.length; i++){
+                    console.log("Comparing Ovens " + o + " AND Ovens " + select_numbers[i])
+                    if(parseInt(o) === parseInt(select_numbers[i])){
+                        x += 1;
+                        console.log("Push Side has " + x + " Oven(s) the same.")
+                    }
                 }
             }
         }
         else {
-            for(i=parseInt(push_to); i<=parseInt(push_from); i++){
-                if(parseInt(i) === parseInt(inop_numbs)){
-                    x += 1;
+            for(o=parseInt(push_to); o<=parseInt(push_from); o++){
+                for(i=0; i<select_numbers.length; i++){
+                    console.log("Comparing Ovens " + o + " AND Ovens " + select_numbers[i])
+                    if(parseInt(o) === parseInt(select_numbers[i])){
+                        x += 1;
+                        console.log("Push Side has " + x + " Oven(s) the same.")
+                    }
                 }
             }
         }
@@ -355,10 +359,11 @@ function pc_doors_not_observed() {
     else {
         var push_block_total = 0;
     }
-
+// coke side check and subtract
     if (parseInt(coke_from) || parseInt(coke_to) >= 0) {
         let coke_blocked = Math.abs(parseInt(coke_from) - parseInt(coke_to)) +1,
         y = 0;
+        
 
         if(parseInt(coke_from) < parseInt(coke_to)){
             for(i=parseInt(coke_from); i<=parseInt(coke_to); i++){
@@ -379,6 +384,7 @@ function pc_doors_not_observed() {
     else {
         var coke_block_total = 0;
     }
+//add both sides together to get the total not observed
     const not_observed = parseInt(push_block_total) + parseInt(coke_block_total);
     
     document.getElementById('doors_not_observed').value = not_observed;

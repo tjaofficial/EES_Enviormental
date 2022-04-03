@@ -28,6 +28,7 @@ def daily_battery_profile_view(request, access_page, date):
                     'foreman': todays_log.foreman,
                     'crew': todays_log.crew,
                     'inop_ovens': todays_log.inop_ovens,
+                    'inop_numbs': todays_log.inop_numbs,
                     'date_save': todays_log.date_save,
                 }
                 form = daily_battery_profile_form(initial=initial_data)

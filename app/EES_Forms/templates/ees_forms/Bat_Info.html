@@ -13,8 +13,9 @@
                 <form method="POST" action="">
                     {% csrf_token %}
                     Foreman: {{ form.foreman }}<br>
-                    Crew: {{ form.crew }}<br>
-                    Inoperable Ovens: {{ form.inop_ovens }}<br><br>
+                    Crew: {{ form.crew }}<br><br>
+                    Inoperable Oven Quantity: {{ form.inop_ovens }}<br>
+                    Inoperable Oven Number(s): {{ form.inop_numbs }}<br><br>
 
                     <input type="submit" name="submit_bat_info">
                 </form>

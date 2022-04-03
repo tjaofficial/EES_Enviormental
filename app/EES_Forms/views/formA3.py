@@ -87,6 +87,7 @@ def formA3(request, selector):
                 'crew': todays_log.crew,
                 'foreman': todays_log.foreman,
                 'inop_ovens': todays_log.inop_ovens,
+                'inop_numbs': todays_log.inop_numbs,
                 'notes': 'N/A',
             }
 
