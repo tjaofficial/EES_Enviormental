@@ -1,6 +1,8 @@
 {% extends "ees_forms/layout.html" %}
 
 {% block list%}
+{% load static %}
+    <script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
     <style>
         #boxTitle{
             font-size: 30px;
@@ -109,138 +111,34 @@
                                 <td style="height: 25px" > </td>
                             </tr> 
                         </table>
+                        <input id="gooseNeckData" type="hidden" value="{}"/>
                         <table style="border-collapse: collapse; margin: auto;">
-                            <tr>
-                                <th colspan="4" id="formE_box1">
-                                    Gooseneck Inspection
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box1">
-                                    Oven
-                                </th>
-                                <th colspan="1" id="formE_box1">
-                                    Time
-                                </th>
-                                <th colspan="1" id="formE_box1">
-                                    Source
-                                </th>
-                                <th colspan="1" id="formE_box1">
-                                    Comments
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-                                    {{ form.oven1}}
-                                </th>
-                                <th colspan="1" id="formE_box2">
-                                    {{ form.time1}}
-                                </th>
-                                <th colspan="1" id="formE_box2">
-                                    {{ form.source1}}
-                                </th>
-                                <th colspan="1" id="formE_comments">
-                                    {{ form.comments1}}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_box2">
-
-                                </th>
-                                <th colspan="1" id="formE_comments">
-
-                                </th>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th colspan="4" id="formE_box1">
+                                        Gooseneck Inspection
+                                    </th>
+                                </tr>
+                            
+                            
+                                <tr>
+                                    <th colspan="1" id="formE_box1">
+                                        Oven
+                                    </th>
+                                    <th colspan="1" id="formE_box1">
+                                        Time
+                                    </th>
+                                    <th colspan="1" id="formE_box1">
+                                        Source
+                                    </th>
+                                    <th colspan="1" id="formE_box1">
+                                        Comments
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="gooseNeckInputContainer">
+                                
+                            </tbody>
                             <tr>
                                 <td style="height: 25px" > </td>
                             </tr> 
