@@ -1,4 +1,8 @@
 <style>
+HTML{
+    display: flex;
+    overflow: hidden;
+}
 *{
     margin: 0px;
     padding: 0px;
@@ -19,20 +23,25 @@
     box-shadow: 3px 2px 5px 0px #00000021;
 }
 .card.longest{
-    grid-row: span 5;
+    grid-row: span 6;
     grid-column: span 8;
+    min-width: 1534.42px;
+    min-height: 299.328px;
 }
 .card.skinny{
-    grid-row: span 1;
+    grid-row: span 2;
     grid-column: span 8;
+    min-height: 89.109px;
 }
 .card.quarters{
     grid-row: span 5;
     grid-column: span 2;
+    min-height: 246.766px;
 }
 .card.halfs{
-    grid-row: span 5;
+    grid-row: span 7;
     grid-column: span 4;
+    min-height: 351.891px;
 }
 .card.eighths{
     grid-row: span 5;
@@ -40,16 +49,17 @@
 }
 .grid-dashboard{
     display: grid;
-    height: 93%;
-    padding: 2rem;
+    height: 95%;
+    padding: 1rem;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(18, 1fr);
-    grid-gap: 2rem;
+    grid-gap: 1rem;
+    max-width: 1646px;
 }
 .card-title{
     padding-top: 1rem;
     padding-left: 1rem;
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-family: sans-serif;
 }
 .nested{
@@ -57,7 +67,7 @@
     padding-right: 2rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 2rem;
+    grid-gap: 1rem;
     height: 86%;
 }
 .inner-card{
@@ -65,6 +75,8 @@
     border-radius: 20px;
     box-shadow: inset 0 0 20px 0px #0000005c;
     margin-top: 1rem;
+    height:15rem;
+    min-width: 281.281px;
 }
 .inner_font{
     padding: 1rem 0px 0px 1rem;
@@ -74,10 +86,9 @@
     justify-content: center;
     display:flex;
     margin-bottom: .3rem;
-    margin-top: .3rem;
 }
 .dataFont{
-    font-size: 2rem;
+    font-size: 1rem;
     text-align: center;
     padding-right:1rem;
     font-weight: 100;
@@ -92,38 +103,39 @@
 .dataHold{
     width: 75%;
     margin: auto;
-    height: 80%;
-    margin-top: 1.6rem;
+    height: 11rem;
+    margin-top: 0.3rem;
 }
 .grid-double{
     display:grid;
-    grid-gap: .5rem;
+    grid-gap: .4rem;
     grid-template-rows: 1fr 1fr;
     height: 86%;
 }
 .dataHold2{
     width: 75%;
     margin: auto;
-    height: 80%;
+    height: 100%;
 }
 .miniFont{
-    font-size: 1.2rem;
+    font-size: .8rem;
     font-weight: 100;
+    text-align: center;
 }
 .grid-dataMini{
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    width: 21rem;
-    margin: auto;
-    grid-gap: .7rem;
-    padding-top: .7rem;
+    width: 13rem;
+    grid-gap: .3rem;
+    padding-top: .2rem;
+    padding-bottom: 0.3rem;
 }
 .grid-dataMini2{
     display: grid;
-    grid-template-columns: 1fr 3fr 2fr;
+    grid-template-columns: 1fr 2fr 2fr;
     grid-template-rows: 1fr 1fr 1fr;
-    width: 15rem;
+    width: 12rem;
     margin: auto;
     grid-gap: .7rem;
     padding-top: .7rem;
@@ -132,7 +144,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    width: 15rem;
+    width: 12rem;
     margin: auto;
     grid-gap: .7rem;
     padding-top: .7rem;
@@ -157,8 +169,8 @@
     background-color: white;
     border-radius: 20px;
     box-shadow: inset 0 0 20px 0px #0000005c;
-    width: 86%;
-    margin: 2px auto;
+    width: 46rem;
+    margin: 0.4rem 2rem;
 }
 .myTabs input[type='radio']{
     display:none;
@@ -180,7 +192,7 @@
     background-color: white;
     order: 1;
     display:none;
-    height: 21rem;
+    height: 13rem;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     box-shadow: inset 0 0 20px 0px #0000005c;
@@ -194,8 +206,6 @@
 ul {
   display: block;
   list-style-type: none;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   margin-left: 0;
   margin-right: 0;
 }
@@ -206,8 +216,8 @@ li {
   margin-bottom: 1rem;
   margin-left: 0;
   margin-right: 0;
-  padding-left: 40px;
-  font-size: 1.2rem;
+  padding-left: 35px;
+  font-size: 0.9rem;
   font-weight: 100;
 }
 .menuItems a{
@@ -218,7 +228,7 @@ li {
     display:grid;
     grid-gap: 1rem;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    margin: 2rem 2rem;
+    margin: 1rem 2rem;
 }
 .slider{
     appearance: none;
@@ -231,7 +241,7 @@ li {
   background-color: #ddd;
   border-radius: 2rem;
   height: 10px;
-  margin-top: 2rem;
+  margin-top: .7rem;
 }
 .skills {
   text-align: right;
@@ -246,20 +256,21 @@ li {
 .grid-observ_singles{
     display: grid;
     grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
-    margin: 1rem 2rem;
+    margin: .3rem 1rem;
 }
 .grid-observ_header{
     display: grid;
     grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
-    margin: 1rem 2rem;
+    margin: .4rem 2rem;
 }
 .contactFont{
-    font-size: 1rem;
+    font-size: .7rem;
     align-items: center;
     display: flex;
+    justify-content: center;
 }
 .contactHeader{
-    font-size: 1.5rem;
+    font-size: 0.9rem;
     font-weight:900;
     display: flex;
 }
@@ -267,7 +278,9 @@ li {
     justify-content: center;
 }
 .grid-observers{
-    margin: 2rem 5rem;
+    margin: 0rem 1rem;
+    height:10rem;
+    overflow: scroll;
 }
 .c_card_circle_oven{
     max-width: 44%;
@@ -284,7 +297,7 @@ li {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     margin:1rem 2rem;
-    height: 80%;
+    height: 71%;
     align-items: center;
 }
 .weather_battery_font{
@@ -304,21 +317,20 @@ li {
 }
 .ca_holder{
     width: 100%;
-    padding: 0rem 2rem;
+    padding: 0rem 1rem;
 }
 .ca_holder ul{
-    height: 21.5rem;
+    height: 10.5rem;
     overflow: scroll;
+    width: 100%;
 }
 .ca_indie{
-    padding-top: 1rem; 
-    padding-bottom: 1rem; 
-    display: inline-flex; 
-    margin: 8px; 
-    width: 31rem;
+    display: inline-block; 
+    margin: 8px 0px; 
+    width: 20rem;
 }
 .ca_footer{
-    margin-top: 1.5rem;
+    margin-top: 0.3rem;
     text-align:center;
 }
 .ca_holder ul a{
@@ -326,9 +338,52 @@ li {
     color: black;
 }
 #canvasHolder{
-    width:95%;
-    margin:auto;
-    height:86%;
+    position: relative;
+    margin: auto;
+    height: 80vh;
+    width: 52rem;
+    margin-left: -4rem;
+}
+#sideBar{
+    width:20rem; 
+    height:100%; 
+    background-color: #263544; 
+    display: table;
+    min-height: 1080px;
+}
+#companyBox{
+    width:100%; 
+    height: 3rem; 
+    background-color: #263544; 
+    box-shadow: 0px -10px 14px 0px;
+    align-items: center;
+    display: flex;
+}
+#topBar{
+    width:auto; 
+    height:3rem; 
+    background-color:white; 
+    display: flex;
+    align-items: center;
+    padding-left: 2rem;
+}
+.sideAlign{
+    padding: 0px;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: inset 0 0 20px 0px #0000005c;
+    margin: 0px;
+    margin-top: 0.2rem;
+}
+.card.custom{
+    grid-row: span 9;
+    grid-column: span 4;
+    min-height: 310.797px;
+}
+.card.custom2{
+    grid-row: span 7;
+    grid-column: span 4;
+    min-height: 205.688px;
 }
 </style>
 {% load static %}
@@ -336,10 +391,11 @@ li {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script defer src="{% static 'ees_forms/script/admin_dashboard.js' %}"></script>
 
-<body style="background-color:#F2F7FB; margin: 0px;display:flex;">
-    <div id="sideBar" style="width:24rem; height:100%; background-color: #263544; display: table; ">
-        <div id="companyBox" style="width:100%; height: 4rem; background-color: #263544; box-shadow: 0px -10px 14px 0px;align-items: center;display: flex;">
-            <h2 style="color: white; padding-left: 1rem;font-family: sans-serif;font-weight: 100;">
+<body style="background-color: #dfe5e9; margin: 0px;display:flex; height:100%;">
+    <div id="sideBar">
+        <div id="companyBox">
+            <img style="height:2rem; padding-left: 1rem" src="{% static '../images/Sidocklogo.jpeg' %}">
+            <h2 style="color: white; padding-left: 1rem;font-family: sans-serif;font-weight: 100; font-size:1rem">
                 Sidock Group, Inc.
             </h2>
         </div>
@@ -395,20 +451,47 @@ li {
         </p>
     </div>
     <div style="width:100%;">
-        <div id="topBar" style="width:auto; height:4rem; background-color:white; display: flex;align-items: center;padding-left: 2rem;">
+        <div id="topBar">
             <div style="">DTE - EES Coke</div>
         </div>
         <div class="grid-dashboard">
+            <div id="progress" class="card skinny">
+                <div class="grid-sliders">
+                    <div class="skillBar">
+                        <p>Weekly Progress</p>
+                        <div class="container">
+                            <div class="skills weekly"></div>
+                        </div>
+                    </div>
+
+                    <div class="skillBar">
+                        <p>Monthly Progress</p>
+                        <div class="container">
+                            <div class="skills monthly"></div>
+                        </div>
+                    </div>
+
+                    <div class="skillBar">
+                        <p>Quarterly Progress</p>
+                        <div class="container">
+                            <div class="skills quarterly"></div>
+                        </div>
+                    </div>
+
+                    <div class="skillBar">
+                        <p>Annually Progress</p>
+                        <div class="container">
+                            <div class="skills annually"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div id="fromAInfo" class="card longest">
                 <div class="card-title">Todays Forms</div>
                 <div class="nested">
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-1 - Charges</div>
                         <div class="dataHold">
-                            <div class="dataSingle"> 
-                                <p class="dataFont">Charges</p>
-                            </div>
-                            <hr>
                             {% if A1data %}
                             <div class="grid-dataMini2">
                                 <p class="miniFont title number">1</p> 
@@ -443,9 +526,9 @@ li {
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-2 - Doors</div>
                         <div class="grid-double">
-                            <div class="dataHold2" style="margin-top;1.1rem;">
+                            <div class="dataHold2" style="margin-top:0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Doors - Push Side</p>
+                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
                                 </div>
                                 <hr>
                                 <div class="gridLeaks dataSingle">
@@ -465,9 +548,9 @@ li {
                                     <p class="miniFont" style="text-align:center;">N/A</p>
                                 {% endif %}
                             </div>
-                            <div class="dataHold2" style="margin-top: .5rem;">
+                            <div class="dataHold2" style="margin-top:0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Doors - Push Side</p>
+                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
                                 </div>
                                 <hr>
                                 <div class="gridLeaks dataSingle">
@@ -492,9 +575,9 @@ li {
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
                         <div class="grid-double">
-                            <div class="dataHold2">
+                            <div class="dataHold2" style="margin-top: 0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Lids</p>
+                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Lids</p>
                                 </div>
                                 <hr>
                                 <div class="gridLeaks dataSingle">
@@ -514,9 +597,9 @@ li {
                                     <p class="miniFont" style="text-align:center;">N/A</p>
                                 {% endif %}
                             </div>
-                            <div class="dataHold2">
+                            <div class="dataHold2" style="margin-top: 0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:1.3rem;">List of Leaking Standpipes</p>
+                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Standpipes</p>
                                 </div>
                                 <hr>
                                 <div class="gridLeaks dataSingle">
@@ -571,8 +654,12 @@ li {
                                     N/A
                                 {% endif %}</p>
                             </div>
+                            <hr>
                             <div class="dataSingle"> 
-                                <p class="dataFont" style="padding-top:1.5rem;">Notes: {{ A4data.notes }}</p>
+                                <p class="dataFont" style="padding-top:.24rem;">
+                                    Notes:</br>
+                                    {{ A4data.notes }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -608,41 +695,11 @@ li {
                     </div>
                 </div>
             </div>
-            <div id="progress" class="card skinny">
-                <div class="grid-sliders">
-                    <div class="skillBar">
-                        <p>Weekly Progress</p>
-                        <div class="container">
-                            <div class="skills weekly"></div>
-                        </div>
-                    </div>
-
-                    <div class="skillBar">
-                        <p>Monthly Progress</p>
-                        <div class="container">
-                            <div class="skills monthly"></div>
-                        </div>
-                    </div>
-
-                    <div class="skillBar">
-                        <p>Quarterly Progress</p>
-                        <div class="container">
-                            <div class="skills quarterly"></div>
-                        </div>
-                    </div>
-
-                    <div class="skillBar">
-                        <p>Annually Progress</p>
-                        <div class="container">
-                            <div class="skills annually"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div id="latestActivity3" class="card halfs">
-                <div class="card-title">Latest Issues/Corrective Actions</div>
+                <div class="card-title">7 Day - Total Charges Graph</div>
                 <div id='canvasHolder'>
-                    <canvas id="myChart" width='1100' height='425'></canvas>
+                    <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="115%"></canvas>
                 </div>
                 <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
                     {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
@@ -693,16 +750,17 @@ li {
                     <ul>
                     {% for x in ca_forms %}
                         <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                            <div class="ca_indie">
-                                <div style="width: 311px;">
-                                     {{ x.date }} - {{ x.form }}
+                            <li class="sideAlign">
+                                <div class="ca_indie">
+                                    <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
+                                        {{ x.date }} - {{ x.form }}
+                                    </div>
+                                    <div style="text-align: left; width: 100%; font-size:.6rem; padding-left: 0.4rem;">
+                                        {{ x.issues }}
+                                    </div>
                                 </div>
-                                <div style="text-align: right; width: 100%;">
-                                    {{ x.issues }}
-                                </div>
-                            </div>
+                            </li>
                         </a>
-                        <hr>
                     {% endfor %}
                     </ul>    
                 </div>
@@ -713,9 +771,9 @@ li {
                     </a>
                 </div>
             </div>
-            <div id="battery_weather" class="card eighths">
+            <div id="battery_weather" class="card quarters">
                 <div class="card-title">Todays Battery/Weather Info.</div>
-                <div class="grid-battery-weather battery_info center bat_weather_class">
+                <div style="overflow: scroll;" class="grid-battery-weather battery_info center bat_weather_class">
                     <p class="weather_battery_font">
                         <span>
                             Observer:
@@ -774,7 +832,7 @@ li {
                     </p>
                 </div>
             </div>
-            <div id="latestActivity4" class="card eighths">
+            <div id="latestActivity4" class="card custom">
                 <div class="card-title">90 Day Push Travel Evaluation</div>
                 <div class="myTabs">
                     <input type="radio" id="tab_5day" name="myTabs" checked="checked">
@@ -806,7 +864,7 @@ li {
                     </div>
                 </div>
             </div>
-            <div id="observers" class="card halfs">
+            <div id="observers" class="card custom2">
                 <div class="card-title">Observers</div>
                 <div class="grid-observers">
                     <div class="grid-observ_header">
@@ -833,9 +891,6 @@ li {
                         <hr>
                     {% endfor %}
                 </div>
-            </div>
-            <div id="latestActivity1" class="card halfs">
-                <div class="card-title">Corrective Actions</div>
             </div>
         </div>
     </div>

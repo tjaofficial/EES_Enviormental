@@ -24,7 +24,6 @@ def admin_dashboard_view(request):
     emypty_dp_today = True
     recent_logs = formA1_readings_model.objects.all().order_by('-form')[:7]
 
-
     # -------PROGRESS PERCENTAGES -----------------
 
     weekly_forms_total = []
@@ -273,7 +272,7 @@ def admin_dashboard_view(request):
 
         if emypty_dp_today:
             return render(request, "admin/admin_dashboard.html", {
-                'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+                'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
             })
     return render(request, "admin/admin_dashboard.html", {
         'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
