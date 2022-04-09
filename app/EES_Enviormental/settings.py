@@ -35,7 +35,7 @@ def check_allows_hosts():
 
 ALLOWED_HOSTS = check_allows_hosts()
 
-
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',
 ]
+
+if(USE_S3): INSTALLED_APPS.append('storage')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,7 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
-USE_S3 = os.getenv('USE_S3') == 'TRUE'
+
 
 if USE_S3:
     # aws settings
