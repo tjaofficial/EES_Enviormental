@@ -18,6 +18,9 @@
                         Password:<input type="password" name="password">
                         <input type="submit" value="Login">
                     </form>
+                    {% if login_error.error %}
+                        <p>{{ login_error.message }}</p>
+                    {% endif %}
                 </div>
             </div>
         </body>
