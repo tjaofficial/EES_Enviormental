@@ -10,7 +10,7 @@ today = datetime.date.today()
 
 @lock
 def c_dashboard_view(request):
-    if request.user.groups.filter(name='EES Coke Employees') or request.user.is_superuser or request.user.groups.filter(name='SGI Admin'):
+    if request.user.groups.filter(name='EES Coke Employees') or request.user.is_superuser:
         client = False
         if request.user.groups.filter(name='EES Coke Employees'):
             client = True

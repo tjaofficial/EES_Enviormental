@@ -15,35 +15,57 @@ def login_view(request):
     now = datetime.datetime.now()
     count_bp = daily_battery_profile_model.objects.count()
     existing = False
-    if request.user.is_authenticated:
-        if count_bp != 0:
-            todays_log = daily_prof[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    return redirect('IncompleteForms')
-            batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
-            return redirect(batt_prof)
-    
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('admin_dashboard')
+        elif request.user.groups.filter(name='SGI Admin'):
+            return redirect('admin_dashboard')
+        elif request.user.groups.filter(name='EES Coke Employees'):
+            return redirect('c_dashboard')
+        elif request.user.groups.filter(name='SGI Technician'):
+            if count_bp != 0:
+                todays_log = daily_prof[0]
+                if now.month == todays_log.date_save.month:
+                    if now.day == todays_log.date_save.day:
+                        return redirect('IncompleteForms')
+                batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+                return redirect(batt_prof) 
+        else:
+            return redirect('no_registration')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if count_bp != 0:
-                todays_log = daily_prof[0]
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        return redirect('IncompleteForms')
-            batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            if request.user.is_superuser:
+                return redirect('admin_dashboard')
+            elif request.user.groups.filter(name='SGI Admin'):
+                return redirect('admin_dashboard')
+            elif request.user.groups.filter(name='EES Coke Employees'):
+                return redirect('c_dashboard')
+            elif request.user.groups.filter(name='SGI Technician'):
+                if count_bp != 0:
+                    todays_log = daily_prof[0]
+                    if now.month == todays_log.date_save.month:
+                        if now.day == todays_log.date_save.day:
+                            return redirect('IncompleteForms')
+                batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
-            return redirect(batt_prof)
+                return redirect(batt_prof)
+            else:
+                return redirect('no_registration')
     return render(request, "ees_forms/ees_login.html", {
         "now": now
     })
 
-
+def valid_account_logout(request):
+    
+    return render(request, "admin/no_registration.html")
+    
 def logout_view(request):
     logout(request)
 

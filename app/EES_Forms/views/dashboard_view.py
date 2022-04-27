@@ -542,5 +542,3 @@ def IncompleteForms(request):
         return redirect('admin_dashboard')
     elif request.user.groups.filter(name='EES Coke Employees'):
         return redirect('c_dashboard')
-    else:
-        return redirect('Logout')

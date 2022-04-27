@@ -1,4 +1,4 @@
-{% extends "ees_forms/layout.html" %}
+{% extends "admin/admin_layout.html" %}
 
 {% block list%}
 {% load static %}
@@ -7,7 +7,9 @@
        <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
     </head>
     <div id="login">
+    </br>
         <h1>Register New Observer</h1>
+    </br>
         <form method="POST" action="">
             {% csrf_token %}
             {% for field in form%}

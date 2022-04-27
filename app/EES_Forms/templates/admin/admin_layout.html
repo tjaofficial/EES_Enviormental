@@ -1,0 +1,473 @@
+<style>
+    HTML{
+        display: flex;
+        overflow: hidden;
+    }
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+    .whiteFont{
+        color:white; 
+        padding-left: 1rem;
+    }
+    .highlight_dark:hover {
+        background-color:#1c2630;
+    }
+    .card{
+        width: 100%;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 3px 2px 5px 0px #00000021;
+    }
+    .card.longest{
+        grid-row: span 6;
+        grid-column: span 8;
+        min-width: 1534.42px;
+        min-height: 299.328px;
+    }
+    .card.skinny{
+        grid-row: span 2;
+        grid-column: span 8;
+        min-height: 89.109px;
+    }
+    .card.quarters{
+        grid-row: span 5;
+        grid-column: span 2;
+        min-height: 246.766px;
+    }
+    .card.halfs{
+        grid-row: span 7;
+        grid-column: span 4;
+        min-height: 351.891px;
+    }
+    .card.eighths{
+        grid-row: span 5;
+        grid-column: span 1;
+    }
+    .grid-dashboard{
+        display: grid;
+        height: 95%;
+        padding: 1rem;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(18, 1fr);
+        grid-gap: 1rem;
+        max-width: 1646px;
+    }
+    .card-title{
+        padding-top: 1rem;
+        padding-left: 1rem;
+        font-size: 1rem;
+        font-family: sans-serif;
+    }
+    .nested{
+        padding-left: 2rem;
+        padding-right: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-gap: 1rem;
+        height: 86%;
+    }
+    .inner-card{
+        background-color:white;
+        border-radius: 20px;
+        box-shadow: inset 0 0 20px 0px #0000005c;
+        margin-top: 1rem;
+        height:15rem;
+        min-width: 281.281px;
+    }
+    .inner_font{
+        padding: 1rem 0px 0px 1rem;
+        font-size: 1rem;
+    }
+    .dataSingle{
+        justify-content: center;
+        display:flex;
+        margin-bottom: .3rem;
+    }
+    .dataFont{
+        font-size: 1rem;
+        text-align: center;
+        padding-right:1rem;
+        font-weight: 100;
+    }
+    .dataFont.number{
+        font-size: 2rem;
+        text-align: center;
+        padding-right:1rem;
+        font-weight: 900;
+        color: #263544;
+    }
+    .dataHold{
+        width: 75%;
+        margin: auto;
+        height: 11rem;
+        margin-top: 0.3rem;
+    }
+    .grid-double{
+        display:grid;
+        grid-gap: .4rem;
+        grid-template-rows: 1fr 1fr;
+        height: 86%;
+    }
+    .dataHold2{
+        width: 75%;
+        margin: auto;
+        height: 100%;
+    }
+    .miniFont{
+        font-size: .8rem;
+        font-weight: 100;
+        text-align: center;
+    }
+    .grid-dataMini{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        width: 13rem;
+        grid-gap: .3rem;
+        padding-top: .2rem;
+        padding-bottom: 0.3rem;
+    }
+    .grid-dataMini2{
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        width: 12rem;
+        margin: auto;
+        grid-gap: .7rem;
+        padding-top: .7rem;
+    }
+    .grid-dataMini3{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        width: 12rem;
+        margin: auto;
+        grid-gap: .7rem;
+        padding-top: .7rem;
+    }
+    .minifont.data{
+        text-align:center;
+    }
+    .gridLeaks{
+        display:grid;
+        justify-content: center;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .dataLabels{
+        justify-content: center;
+        display:flex;
+        margin-bottom: .3rem;
+        margin-top: .3rem;
+    }
+    .myTabs{
+        display: flex;
+        flex-wrap: wrap;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: inset 0 0 20px 0px #0000005c;
+        width: 46rem;
+        margin: 0.4rem 2rem;
+    }
+    .myTabs input[type='radio']{
+        display:none;
+    }
+    .myTabs label{
+        padding: .5rem;
+        background-color: gray;
+        display: flex;
+        align-items: center;
+        font-weight: 900;
+        height:2rem;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        box-shadow: inset 0 0 20px 0px #0000005c;
+    }
+    .myTabs .tab{
+        width:100%;
+        padding: 2rem;
+        background-color: white;
+        order: 1;
+        display:none;
+        height: 13rem;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        box-shadow: inset 0 0 20px 0px #0000005c;
+    }
+    .myTabs input[type="radio"]:checked + label + .tab{
+        display:block;
+    }
+    .myTabs input[type="radio"]:checked + label{
+        background-color:white;
+    }
+    ul {
+      display: block;
+      list-style-type: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    li {
+      display: block;
+      list-style-type: none;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 35px;
+      font-size: 0.9rem;
+      font-weight: 100;
+    }
+    .menuItems a{
+        color: white;
+        text-decoration: none;
+    }
+    .grid-sliders{
+        display:grid;
+        grid-gap: 1rem;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        margin: 1rem 2rem;
+    }
+    .slider{
+        appearance: none;
+        width: 41rem;
+        height: 7px;
+        border-radius: 37rem;
+    }
+    .container {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 2rem;
+      height: 10px;
+      margin-top: .7rem;
+    }
+    .skills {
+      text-align: right;
+      color: white;
+      border-radius: 2rem;
+      height: 10px;
+    }
+    .weekly {width: {{ weekly_percent }}%; background-color: #F55667;}
+    .monthly {width: {{ monthly_percent }}%; background-color: #348EFA;}
+    .quarterly {width: 0%; background-color: #4ACFAE;}
+    .annually {width: {{ annually_percent }}%; background-color: #FCB050;}
+    .grid-observ_singles{
+        display: grid;
+        grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
+        margin: .3rem 1rem;
+    }
+    .grid-observ_header{
+        display: grid;
+        grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
+        margin: .4rem 2rem;
+    }
+    .contactFont{
+        font-size: .7rem;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+    .contactHeader{
+        font-size: 0.9rem;
+        font-weight:900;
+        display: flex;
+    }
+    .center{
+        justify-content: center;
+    }
+    .grid-observers{
+        margin: 0rem 1rem;
+        height:10rem;
+        overflow: scroll;
+    }
+    .c_card_circle_oven{
+        max-width: 44%;
+        height: auto;
+        transform: translate3d(-50%,-14%,0);
+        align-items: center;
+        display: flex;
+    }
+    .c_circle_font_color{
+        color: #67886F;
+    }
+    .grid-battery-weather{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        margin:1rem 2rem;
+        height: 71%;
+        align-items: center;
+    }
+    .weather_battery_font{
+        font-size: 1.0rem;
+        font-weight: 100;
+        text-align: center;
+    }
+    .battery_info{
+        margin: 1rem 2rem;
+        margin-top: 1rem;
+    }
+    .weather_info{
+        margin:auto;
+    }
+    .weather_battery_font span{
+        color: #9f9f9f;
+    }
+    .ca_holder{
+        width: 100%;
+        padding: 0rem 1rem;
+    }
+    .ca_holder ul{
+        height: 10.5rem;
+        overflow: scroll;
+        width: 100%;
+    }
+    .ca_indie{
+        display: inline-block; 
+        margin: 8px 0px; 
+        width: 20rem;
+    }
+    .ca_footer{
+        margin-top: 0.3rem;
+        text-align:center;
+    }
+    .ca_holder ul a{
+        text-decoration:none;
+        color: black;
+    }
+    #canvasHolder{
+        position: relative;
+        margin: auto;
+        width: 52rem;
+        margin-left: -4rem;
+    }
+    #sideBar{
+        width:20rem; 
+        height:100%; 
+        background-color: #263544; 
+        display: table;
+        min-height: 1080px;
+    }
+    #companyBox{
+        width:100%; 
+        height: 3rem; 
+        background-color: #263544; 
+        box-shadow: 0px -10px 14px 0px;
+        align-items: center;
+        display: flex;
+    }
+    #topBar{
+        width:auto; 
+        height:3rem; 
+        background-color:white; 
+        display: flex;
+        align-items: center;
+        padding-left: 2rem;
+    }
+    .sideAlign{
+        padding: 0px;
+        background-color: white;
+        border-radius: 2px;
+        box-shadow: inset 0 0 20px 0px #0000005c;
+        margin: 0px;
+        margin-top: 0.2rem;
+    }
+    .card.custom{
+        grid-row: span 9;
+        grid-column: span 4;
+        min-height: 310.797px;
+    }
+    .card.custom2{
+        grid-row: span 7;
+        grid-column: span 4;
+        min-height: 205.688px;
+    }
+    .drop_down{
+        position: fixed;
+        right: 2rem;
+    }
+</style>
+{% load static %}
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script defer src="{% static 'ees_forms/script/admin_dashboard.js' %}"></script>
+        <script defer src="{% static 'ees_forms/script/header.js' %}"></script>
+    </head>
+    <body style="width:100%; background-color: #dfe5e9; margin: 0px;display:flex; height:100%;">
+        <div id="sideBar">
+            <div id="companyBox">
+                <img style="height:2rem; padding-left: 1rem" src="{% static '../images/Sidocklogo.jpeg' %}">
+                <h2 style="color: white; padding-left: 1rem;font-family: sans-serif;font-weight: 100; font-size:1rem">
+                    Sidock Group, Inc.
+                </h2>
+            </div>
+            <div class='menuItems'>
+                <ul>
+                    <li><a href=#>Admin</a>
+                        <ul>
+                            <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                            <li><a href="{% url 'Register' %}">Register New Profile</a></li>
+                            <li><a href=#>Profiles/Contacts</a></li>
+                        </ul>
+                    </li>
+                    <li><a href=#>Daily Reports</a>
+                        <ul>
+                            <li><a href=#>Form A-1</a></li>
+                            <li><a href=#>Form A-2</a></li>
+                            <li><a href=#>Form A-3</a></li>
+                            <li><a href=#>Form A-4</a></li>
+                            <li><a href=#>Form A-5</a></li>
+                        </ul>
+                    </li>
+                    <li><a href=#>Completion Progress</a>
+                        <ul>
+                            <li><a href=#>Daily</a></li>
+                            <li><a href=#>Weekly</a></li>
+                            <li><a href=#>Monthly</a></li>
+                            <li><a href=#>Quartery</a></li>
+                            <li><a href=#>Anually</a></li>
+                        </ul
+                    </li>
+                    <li><a href=#>Schedule</a>
+                        <ul>
+                            <li><a href="{% url 'Schedule' %}">Calendar</a></li>
+                            <li><a href="{% url 'Add Event' %}">Add Events</a></li>
+                        </ul
+                    </li>
+                    <li><a href=#>Client Data</a>
+                        <ul>
+                            <li><a href=#>DTE EES Coke Battery</a>
+                                <ul>
+                                    <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                                    <li><a href="{% url 'archive' %}">Archive</a></li>
+                                    <li><a href="{% url 'Corrective-Action' %}">Corrective Actions</a></li>
+                                    <li><a href=#>Weekly Reports</a></li>
+                                    <li><a href="{% url 'rolling_avg' %}">Data Records</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <p>
+            <a href="{% url 'Register' %}">click here</a>
+            </p>
+        </div>
+        <div style="width:100%;">
+            <div id="topBar">
+                <div style="">DTE - EES Coke</div>
+                <div class="drop_down">
+                    <a href="{% url 'Logout' %}">
+                    {{ request.user.first_name }} {{ request.user.last_name }}
+                    </a>
+                </div>
+            </div>
+            {% block list %}
+            
+            {% endblock %}
+        </div>
+    </body>
+<html>

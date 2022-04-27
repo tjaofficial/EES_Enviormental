@@ -1,0 +1,10 @@
+{% extends "ees_forms/layout.html" %}
+{% block list%}
+<div>
+    The User you are trying to sign in as has not been fully registered. Please speak with Sidock supervisor to resolve this issue.
+</div>
+<br>
+<div>
+    <a style="color:white;" href="{% url "Logout" %}">Return to Login</a>
+</div>
+{% endblock %}

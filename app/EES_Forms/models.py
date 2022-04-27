@@ -10,7 +10,7 @@ position_choices = (
     ('SGI Technician', 'SGI Technician'),
     ('SGI Admin', 'SGI Admin'),
     ('SGI Quality Control', 'SGI Quality Control'),
-    ('EES Coke Personnel', 'EES Coke Personnel')
+    ('EES Coke Personnel', 'EES Coke Employees')
 )
 truck_choices = (
     ('#5', 'Truck #5'),

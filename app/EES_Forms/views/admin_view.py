@@ -10,7 +10,7 @@ import requests
 
 lock = login_required(login_url='Login')
 
-
+@lock
 def admin_dashboard_view(request):
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
@@ -65,7 +65,6 @@ def admin_dashboard_view(request):
         A = []
         for items in reads:
             date = items.form.date
-            # date_array = date.split("-")
 
             year = date.year
             month = date.month
@@ -121,6 +120,27 @@ def admin_dashboard_view(request):
         return B
     cool = final(sort)
 
+    def overdue_30(cool):
+        C = []
+        for x in cool:
+            if x[3] <= 30:
+                C.append(x)
+        return C
+
+    def overdue_10(cool):
+        D = []
+        for x in cool:
+            if x[3] <= 10:
+                D.append(x)
+        return D
+
+    def overdue_5(cool):
+        E = []
+        for x in cool:
+            if x[3] <= 5:
+                E.append(x)
+        return E
+
     def overdue_closest(cool):
         F = []
 
@@ -134,9 +154,15 @@ def admin_dashboard_view(request):
         return F
 
     if len(cool) >= 4:
+        od_30 = overdue_30(cool)
+        od_10 = overdue_10(cool)
+        od_5 = overdue_5(cool)
         od_recent = overdue_closest(cool)
     else:
         od_recent = ''
+        od_30 = ''
+        od_10 = ''
+        od_5 = ''
 
     # ----CONTACTS-----------------
 
@@ -144,6 +170,7 @@ def admin_dashboard_view(request):
     profile = user_profile_model.objects.all()
 
     # ----USER ON SCHEDULE----------
+    todays_obser = 'Schedule Not Updated'
 
     event_cal = Event.objects.all()
     today = datetime.date.today()
@@ -152,10 +179,6 @@ def admin_dashboard_view(request):
         for x in event_cal:
             if x.date == today:
                 todays_obser = x.observer
-            else:
-                todays_obser = 'Schedule Not Updated'
-    else:
-        todays_obser = 'Schedule Not Updated'
 
     # ----ISSUES/CORRECTIVE ACTIONS----------
 
@@ -275,15 +298,13 @@ def admin_dashboard_view(request):
                 'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
             })
     return render(request, "admin/admin_dashboard.html", {
-        'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+        "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
     })
 
 
+@lock
 def register_view(request):
-    # change code to redirect if you are not roger/SGI ADMIN
-    if not request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        return redirect('IncompleteForms')
-    else:
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         form = CreateUserForm()
         profile_form = user_profile_form()
 
@@ -306,6 +327,12 @@ def register_view(request):
                 return redirect('admin_dashboard')
             else:
                 messages.error(request, "The Information Entered Was Invalid.")
+    elif request.user.groups.filter(name='EES Coke Employees'):
+        return redirect('c_dashboard')
+    elif request.user.groups.filter(name='SGI Technician'):
+        return redirect('IncompleteForms')
+    else:
+        return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
                 'form': form, 'profile_form': profile_form
             })
