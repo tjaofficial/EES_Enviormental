@@ -128,13 +128,13 @@
                                     <td id="boxa4" colspan="4" >
                                         HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                                      </td>
-                                     <td id="boxa4" colspan="3" rowspan="7">
-                                        {{ data.canvas }}
+                                     <td id="sketchBox" colspan="3" rowspan="7"
                                         {% if existing %}
-                                            <img id='existingCanvas' src="../../../images/formA5_canvas/{{ exist_canvas }}">
+                                           data-filledSketch = "{% static 'images/formA5_canvas/' %}{{exist_canvas}}"
                                         {% else %}
-                                            <img src="{% static 'ees_forms/images/A-5sketchBlank.png' %}" id="formA5sketch" data-controls="modalContainer" style="width:100%" data-base_img="{% static 'ees_forms/images/A-5sketchBlank.png' %}"/>
-                                        {% endif %}
+                                            data-filledSketch =""
+                                        {% endif %} data-base_img="{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer">
+                                            {{ data.canvas }}
                                      </td>
                                 </tr>
                                   <tr>

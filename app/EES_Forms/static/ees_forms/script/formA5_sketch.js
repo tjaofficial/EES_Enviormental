@@ -1,23 +1,46 @@
-document.getElementById('formA5sketch').addEventListener('click', (elem)=>{sketchPopup(elem.currentTarget)});
 
-function sketchPopup(elemClicked){
+window.addEventListener("load", ()=>{
+  const sketchContainer = document.getElementById('sketchBox');
+  const sketchInput = document.getElementById('canvas');
+  const blankImageURL = sketchContainer.dataset.base_img;
+  const blankImage = new Image()
+  blankImage.src = blankImageURL;
+  blankImage.crossOrigin = "ananymous";
+
+  let fetchedImage = blankImage;
+
+  if(sketchInput.value){
+    const storedImage = new Image()
+    storedImage.src = sketchContainer.dataset.filledsketch;
+    storedImage.crossOrigin = "ananymous";
+    fetchedImage = storedImage
+  }
+  
+  const savedImage = new Image();
+
+  sketchContainer.appendChild(fetchedImage);
+
+  sketchContainer.addEventListener('click', (elem)=>{sketchPopup(elem.currentTarget, blankImage, fetchedImage, savedImage)});
+})
+
+
+function sketchPopup(elemClicked, blankImage, fetchedImage, savedImage){
     const canvas = document.getElementById('sketchpad');
     elemEffected = elemClicked.dataset.controls;
     elem = document.getElementById(elemEffected);
-    console.log(elem);
     canvisInitiated = elem.dataset.canvis_intiated;
-    console.log(canvisInitiated);
     if(canvisInitiated == 'False'){
-      initiateSketch(elemClicked);
+      let sketchpad = initiateSketch(canvas, fetchedImage);
       elem.dataset.canvis_intiated = 'True'
+      document.getElementById('clearCanvis').addEventListener('click', ()=>{sketchpad.clear();  drawImgToCanvas(canvas, blankImage);});
+      document.getElementById('canvas_save').addEventListener('click', (elem)=>{save_canvas(elem.currentTarget, canvas, fetchedImage, savedImage, elemClicked)});
     }
       console.log('test');
       toggleDisplayed(elemClicked);
   }
   
   
-  function initiateSketch(imgElem){
-    const canvas = document.getElementById('sketchpad');
+  function initiateSketch(canvas, imageElem){
   
     // Use the intrinsic size of image in CSS pixels for the canvas element
     canvas.width = 650;
@@ -32,54 +55,41 @@ function sketchPopup(elemClicked){
     });
     sketchpad.smoothing = 0.2;
   
-    drawImgToCanvas(canvas, imgElem);
+    drawImgToCanvas(canvas, imageElem);
     
-    document.getElementById('clearCanvis').addEventListener('click', ()=>{sketchpad.clear();  drawImgToCanvas(canvas, imgElem);});
-    document.getElementById('canvas_save').addEventListener('click', (elem)=>{save_canvas(elem.currentTarget, canvas, imgElem)});
+    return sketchpad;
     //sketchpad.addEventListener('strokeend', () => console.info('strokeend'));
   
   }
 
   
-  function save_canvas(elem, canvas, imgElem){
+  function save_canvas(elem, canvas, fetchedImage, savedImage, elemClicked){
       let pngLink = canvas.toDataURL();
       //document.querySelector("#sketchPng").value = pngLink;
-      imgElem.src = pngLink;
-
-      var val = pngLink;
-      var response = val.substring(val.indexOf(",") + 1);
+      savedImage.src = pngLink;
+      console.log(elemClicked);
+      let val = pngLink;
+      let response = val.substring(val.indexOf(",") + 1);
       document.getElementById('canvas').value = response;
+      
+      if(elemClicked.contains(fetchedImage)){
+        elemClicked.removeChild(fetchedImage);
+        elemClicked.appendChild(savedImage);
+      }
+
+
 
       toggleDisplayed(elem);
   }
   
-  function drawImgToCanvas(canvas, imgElem){
+  function drawImgToCanvas(canvas, imageElem){
     const ctx = canvas.getContext('2d');
   
-    const image = new Image(); // Using optional size for image
-    image.onload = drawPhotograph; // Draw when image has loaded
-  
-    // Load an image of intrinsic size 300x227 in CSS pixels
-    image.src = imgElem.dataset.base_img;
-  
-    function drawPhotograph() {
-      // Use the intrinsic size of image in CSS pixels for the canvas element
-      //canvas.width = 650;
-      //canvas.height = 500;
-    
-      // Will draw the image as 300x227, ignoring the custom size of 60x45
-      // given in the constructor
-      //ctx.drawImage(this, 0, 0);
-    
-      // To use the custom size we'll have to specify the scale parameters
-      // using the element's width and height properties - lets draw one
-      // on top in the corner:
-      ctx.drawImage(this, 0, 0, this.width, this.height,
+
+      ctx.drawImage(imageElem, 0, 0, imageElem.width, imageElem.height,
                           0, 0, canvas.width, canvas.height);
-    };
+    
   }
 
-  function getArrayStrokes(){
 
-  }
 

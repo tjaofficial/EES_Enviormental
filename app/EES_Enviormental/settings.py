@@ -36,6 +36,7 @@ def check_allows_hosts():
 ALLOWED_HOSTS = check_allows_hosts()
 
 USE_S3 = os.getenv('USE_S3') == 'TRUE'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,7 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-if(USE_S3): INSTALLED_APPS.append('storage')
+if(USE_S3): INSTALLED_APPS.append('storages')
+
+#print(INSTALLED_APPS)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
