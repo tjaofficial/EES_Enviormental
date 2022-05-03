@@ -69,7 +69,7 @@ function sketchPopup(elemClicked, blankImage, fetchedImage, savedImage){
       savedImage.src = pngLink;
       console.log(elemClicked);
       let val = pngLink;
-      let response = val.substring(val.indexOf(",") + 1);
+      let response = val;
       document.getElementById('canvas').value = response;
       
       if(elemClicked.contains(fetchedImage)){

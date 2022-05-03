@@ -1,6 +1,9 @@
 from curses import echo
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
@@ -106,11 +109,9 @@ def formA5(request, selector):
                 return redirect(batt_prof)
 
         if existing:
-            b = base64.b64decode(database_form.canvas)
-            with open('static/images/formA5_canvas/' + str(todays_log.date_save) + '_A5canvas.png', 'wb') as f:
-                f.write(b)
 
-            exist_canvas = str(todays_log.date_save) + '_A5canvas.png'
+
+            exist_canvas = database_form.canvasMediaFile.url
             initial_data = {
                 'date': database_form.date,
                 'estab': database_form.estab,
@@ -286,6 +287,13 @@ def formA5(request, selector):
             readings_form = formA5_readings_form()
 
         if request.method == "POST":
+            def base64_file(data, name=None):
+                _format, _img_str = data.split(';base64,')
+                _name, ext = _format.split('/')
+                if not name:
+                    name = _name.split(":")[-1]
+                return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
+
 
             if existing:
                 form = formA5_form(request.POST, instance=database_form)
@@ -298,8 +306,28 @@ def formA5(request, selector):
             B_valid = readings.is_valid()
 
             if A_valid and B_valid:
-                A = form.save()
+
+
+
+
+                A = form.save(commit=False)
                 B = readings.save(commit=False)
+
+                canvasPNG = base64_file(database_form.canvas,str(todays_log.date_save))
+
+                if settings.USE_S3:
+                    print("goes here")
+                    A.canvasMediaFile = canvasPNG
+                    #B.save(commit=False)
+                    image_url = A.canvasMediaFile.url
+                else:
+                    fs = FileSystemStorage()
+                    filename = fs.save(canvasPNG.name, canvasPNG)
+                    image_url = fs.url(filename)
+                #print(image_url)
+                exist_canvas = image_url
+
+                A.save()
 
                 B.form = A
                 B.save()
