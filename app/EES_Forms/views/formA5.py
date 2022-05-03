@@ -292,7 +292,7 @@ def formA5(request, selector):
                 _name, ext = _format.split('/')
                 if not name:
                     name = _name.split(":")[-1]
-                return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
+                return ContentFile(base64.b64decode(_img_str), name='FormA5Canvas/{}_A5Canvas.{}'.format(name, ext))
 
 
             if existing:
