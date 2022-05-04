@@ -9,9 +9,6 @@ const labels = [
     document.getElementById('graph-xaxis-data1').innerText
 ];
 
-console.log(Array(labels))
-
-
 const data = {
     labels: labels,
     datasets: [{
@@ -27,13 +24,27 @@ const data = {
             document.getElementById('graph-yaxis-data2').innerText, 
             document.getElementById('graph-yaxis-data1').innerText
         ],
+        backgroundColor: [
+            'rgb(255, 153, 153)',
+        ],
     }]
 };
 
 const config = {
     type: 'bar',
     data: data,
-    options: {}
+    options: {
+        layout: {
+            padding:{
+                left: 0,
+                right: 0,
+                top: 0,
+                botttom: 0,
+            }
+        }
+    }
 };
 
 const myChart = new Chart(document.getElementById('myChart'), config);
+
+var height = chart.canvas.style.height = '128px';
