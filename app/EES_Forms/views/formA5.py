@@ -288,6 +288,7 @@ def formA5(request, selector):
 
         if request.method == "POST":
             def base64_file(data, name=None):
+                print(data)
                 _format, _img_str = data.split(';base64,')
                 _name, ext = _format.split('/')
                 if not name:
@@ -302,6 +303,8 @@ def formA5(request, selector):
                 form = formA5_form(request.POST)
                 readings = formA5_readings_form(request.POST)
 
+                
+
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
 
@@ -313,7 +316,9 @@ def formA5(request, selector):
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
 
-                canvasPNG = base64_file(database_form.canvas,str(todays_log.date_save))
+                canvasPostData = request.POST["canvas"]
+
+                canvasPNG = base64_file(canvasPostData,str(todays_log.date_save))
 
                 if settings.USE_S3:
                     print("goes here")
