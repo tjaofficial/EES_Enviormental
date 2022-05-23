@@ -2087,17 +2087,7 @@ class formE_model(models.Model):
         max_length=30,
         choices=yes_no_choices
     )
-    oven1 = models.CharField(max_length=2)
-    time1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    source1 = models.CharField(
-        max_length=30,
-        choices=source_choices
-    )
-    comments1 = models.CharField(max_length=30)
+    goose_neck_data = models.CharField(max_length=255)
 
     def __str__(self):
         return str(self.date)

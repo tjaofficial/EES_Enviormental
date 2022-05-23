@@ -887,10 +887,8 @@ class formE_form(ModelForm):
             'start_time',
             'end_time',
             'leaks',
-            'oven1',
-            'time1',
-            'source1',
-            'comments1'
+            'goose_neck_data',
+
         )
         widgets ={
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
@@ -900,10 +898,8 @@ class formE_form(ModelForm):
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'leaks' : forms.Select(attrs={'style':'width: 40px;'}),
-            'oven1' : forms.TextInput(attrs={'type':'text', 'style':'width: 60px;'}),
-            'time1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'source1' : forms.Select(attrs={'style':'width: 130px;'}),
-            'comments1' : forms.TextInput(attrs={'type':'text', 'style':'width: 220px;'})
+            'goose_neck_data' : forms.NumberInput(attrs={'id': "gooseNeckData", 'type': "hidden", 'value': "{}", 'data-resulttable': ""})
+            
         }
         
         
