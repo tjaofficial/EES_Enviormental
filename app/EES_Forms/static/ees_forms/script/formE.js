@@ -1,7 +1,11 @@
 "use strict"
 
 window.addEventListener("load", ()=> {
-    insertHTMLString([])
+    const gooseNeckInputValue = document.querySelector('#gooseNeckData').value;
+    const gooseNeckJSON = JSON.parse(gooseNeckInputValue);
+    const gooseNeckArray = gooseNeckJSON.data
+    
+    insertHTMLString(gooseNeckArray);
     updateEventListeners();
 });
 
@@ -48,7 +52,6 @@ function handle_Table_Input(event){
     parsedDomValue.data = updatedFormValueArray;
     hiddenFormDom.value = JSON.stringify(parsedDomValue);
 
-    
     insertHTMLString(updatedFormValueArray);
     updateEventListeners();
 
