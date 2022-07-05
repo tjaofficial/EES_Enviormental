@@ -14,10 +14,14 @@ def formA1(request, selector):
     existing = False
     unlock = False
     client = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -31,7 +35,6 @@ def formA1(request, selector):
 
     if count_bp != 0:
         todays_log = daily_prof[0]
-
         if selector != 'form':
             for x in org:
                 if str(x.date) == str(selector):
@@ -41,6 +44,8 @@ def formA1(request, selector):
                 if str(x.form.date) == str(selector):
                     database_model2 = x
             readings = database_model2
+            existing = True
+            search = True
         elif len(org) > 0 or len(org2) > 0:
             database_form = org[0]
             database_form2 = org2[0]
@@ -57,56 +62,58 @@ def formA1(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
-        if existing:
-            initial_data = {
-                'date': database_form.date,
-                'observer': database_form.observer,
-                'crew': database_form.crew,
-                'foreman': database_form.foreman,
-                'start': database_form.start,
-                'stop': database_form.stop,
-                'c1_no': database_form2.c1_no,
-                'c2_no': database_form2.c2_no,
-                'c3_no': database_form2.c3_no,
-                'c4_no': database_form2.c4_no,
-                'c5_no': database_form2.c5_no,
-                'c1_start': database_form2.c1_start,
-                'c2_start': database_form2.c2_start,
-                'c3_start': database_form2.c3_start,
-                'c4_start': database_form2.c4_start,
-                'c5_start': database_form2.c5_start,
-                'c1_stop': database_form2.c1_stop,
-                'c2_stop': database_form2.c2_stop,
-                'c3_stop': database_form2.c3_stop,
-                'c4_stop': database_form2.c4_stop,
-                'c5_stop': database_form2.c5_stop,
-                'c1_sec': database_form2.c1_sec,
-                'c2_sec': database_form2.c2_sec,
-                'c3_sec': database_form2.c3_sec,
-                'c4_sec': database_form2.c4_sec,
-                'c5_sec': database_form2.c5_sec,
-                'c1_comments': database_form2.c1_comments,
-                'c2_comments': database_form2.c2_comments,
-                'c3_comments': database_form2.c3_comments,
-                'c4_comments': database_form2.c4_comments,
-                'c5_comments': database_form2.c5_comments,
-                'larry_car': database_form2.larry_car,
-                'comments': database_form2.comments,
-                'total_seconds': database_form2.total_seconds,
-            }
-            readings = formA1_readings_form(initial=initial_data)
+        if search:
+            database_form = ''
         else:
-            initial_data = {
-                'date': todays_log.date_save,
-                'observer': full_name,
-                'crew': todays_log.crew,
-                'foreman': todays_log.foreman,
-            }
-            readings = formA1_readings_form()
+            if existing:
+                initial_data = {
+                    'date': database_form.date,
+                    'observer': database_form.observer,
+                    'crew': database_form.crew,
+                    'foreman': database_form.foreman,
+                    'start': database_form.start,
+                    'stop': database_form.stop,
+                    'c1_no': database_form2.c1_no,
+                    'c2_no': database_form2.c2_no,
+                    'c3_no': database_form2.c3_no,
+                    'c4_no': database_form2.c4_no,
+                    'c5_no': database_form2.c5_no,
+                    'c1_start': database_form2.c1_start,
+                    'c2_start': database_form2.c2_start,
+                    'c3_start': database_form2.c3_start,
+                    'c4_start': database_form2.c4_start,
+                    'c5_start': database_form2.c5_start,
+                    'c1_stop': database_form2.c1_stop,
+                    'c2_stop': database_form2.c2_stop,
+                    'c3_stop': database_form2.c3_stop,
+                    'c4_stop': database_form2.c4_stop,
+                    'c5_stop': database_form2.c5_stop,
+                    'c1_sec': database_form2.c1_sec,
+                    'c2_sec': database_form2.c2_sec,
+                    'c3_sec': database_form2.c3_sec,
+                    'c4_sec': database_form2.c4_sec,
+                    'c5_sec': database_form2.c5_sec,
+                    'c1_comments': database_form2.c1_comments,
+                    'c2_comments': database_form2.c2_comments,
+                    'c3_comments': database_form2.c3_comments,
+                    'c4_comments': database_form2.c4_comments,
+                    'c5_comments': database_form2.c5_comments,
+                    'larry_car': database_form2.larry_car,
+                    'comments': database_form2.comments,
+                    'total_seconds': database_form2.total_seconds,
+                }
+                readings = formA1_readings_form(initial=initial_data)
+            else:
+                initial_data = {
+                    'date': todays_log.date_save,
+                    'observer': full_name,
+                    'crew': todays_log.crew,
+                    'foreman': todays_log.foreman,
+                }
+                readings = formA1_readings_form()
 
-        data = formA1_form(initial=initial_data)
+            data = formA1_form(initial=initial_data)
         if request.method == "POST":
-            print(existing)
             if existing:
                 form = formA1_form(request.POST, instance=database_form)
                 reads = formA1_readings_form(request.POST, instance=database_form2)
@@ -150,5 +157,5 @@ def formA1(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'profile': profile, 'selector': selector, "client": client, 'unlock': unlock
+        'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'profile': profile, 'selector': selector, "client": client, 'unlock': unlock
     })

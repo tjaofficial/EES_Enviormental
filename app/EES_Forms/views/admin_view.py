@@ -23,7 +23,21 @@ def admin_dashboard_view(request):
     now = datetime.datetime.now()
     emypty_dp_today = True
     recent_logs = formA1_readings_model.objects.all().order_by('-form')[:7]
-
+    year = str(now.year)
+    if len(str(now.month)) == 1:
+        month = "0" + str(now.month)
+    else:
+        month = str(now.month)
+    if len(str(now.day)) == 0:
+        day = str(now.day)
+    else:
+        day = str(now.day)
+    date = year + '-' + month + '-' + day
+    form_enteredA1 = False
+    form_enteredA2 = False
+    form_enteredA3 = False
+    form_enteredA4 = False
+    form_enteredA5 = False
     # -------PROGRESS PERCENTAGES -----------------
 
     weekly_forms_total = []
@@ -229,13 +243,13 @@ def admin_dashboard_view(request):
             todays_log = daily_prof[0]
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
-                    print('check 1')
                     emypty_dp_today = False
                     today = todays_log.date_save
                     if len(formA1) > 0:
                         most_recent_A1 = formA1[0].form.date
                         if most_recent_A1 == today:
                             A1data = formA1[0]
+                            form_enteredA1 = True
                         else:
                             A1data = ""
                     else:
@@ -247,6 +261,7 @@ def admin_dashboard_view(request):
                             A2data = formA2[0]
                             push = json.loads(A2data.p_leak_data)
                             coke = json.loads(A2data.c_leak_data)
+                            form_enteredA2 = True
                         else:
                             A2data = ""
                             push = ""
@@ -262,6 +277,7 @@ def admin_dashboard_view(request):
                             A3data = formA3[0]
                             lids = json.loads(A3data.l_leak_json)
                             offtakes = json.loads(A3data.om_leak_json)
+                            form_enteredA3 = True
                         else:
                             A3data = ""
                             lids = ""
@@ -275,6 +291,7 @@ def admin_dashboard_view(request):
                         most_recent_A4 = formA4[0].date
                         if most_recent_A4 == today:
                             A4data = formA4[0]
+                            form_enteredA4 = True
                         else:
                             A4data = ""
                     else:
@@ -284,7 +301,7 @@ def admin_dashboard_view(request):
                         most_recent_A5 = formA5[0].form.date
                         if most_recent_A5 == today:
                             A5data = formA5[0]
-                            print('water')
+                            form_enteredA5 = True
                         else:
                             A5data = ""
                     else:
@@ -298,7 +315,7 @@ def admin_dashboard_view(request):
                 'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
             })
     return render(request, "admin/admin_dashboard.html", {
-        "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+        'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date, "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
     })
 
 

@@ -33,6 +33,8 @@ def formB(request, selector):
                 if str(x.week_start) == str(selector):
                     database_model = x
             data = database_model
+            week = ''
+            week_almost = ''
         else:
             count = formB_model.objects.count()
             if count != 0:
