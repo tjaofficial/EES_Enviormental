@@ -214,7 +214,12 @@ class formA1_readings_form(ModelForm):
                 'type': 'time',
                 'style': 'width: 120px;'}),
             'larry_car': forms.Select(attrs={'style': 'width: 60px;'}),
-            'total_seconds': forms.TextInput(attrs={'id': 'total_seconds', 'type': 'number', 'step': '0.1', 'style': 'width: 60px; text-align: center;'}),
+            'total_seconds': forms.TextInput(attrs={
+                'id': 'total_seconds', 
+                'onchange': 'sumTime()',
+                'type': 'number', 
+                'step': '0.5', 
+                'style': 'width: 60px; text-align: center;'}),
         }
 
 
@@ -1425,8 +1430,7 @@ class formL_form(ModelForm):
             'obser_5' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_5}),
             'obser_6' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_6}),
         }
-
-        
+       
 class formM_form(ModelForm):
     class Meta:
         model = formM_model
