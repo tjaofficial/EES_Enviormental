@@ -5,19 +5,27 @@
 
 
     <head>
-     <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+     <link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
     </head>
         <body>
             <div id="page">
-                <div id="login">
+                <div id="login" class="login__container">
                     <h2>Sidock Group, Inc.</h2>
-                    <h2>DTE EES Coke Sign-In</h2>
+                    <h3>DTE EES Coke</h3>
+                    {% if login_error.error %}
+                        <div class="login__error">{{ login_error.message }}</div>
+                    {% endif %}
                     <form name="login" action="" method="POST">
                         {% csrf_token %}
-                        Username:<input type="text" name="username"><br>
-                        Password:<input type="password" name="password">
-                        <input type="submit" value="Login">
+                        <lable class="login__lable" for="username">Username</lable>
+                        <input class="login__input" id="username" type="text" name="username">
+
+                        <lable class="login__lable" for="password"> Password </lable>
+                        <input class="login__input" id="password" type="password" name="password">
+                        
+                        <input class="login__button" type="submit" value="Login">
                     </form>
+                    
                 </div>
             </div>
         </body>

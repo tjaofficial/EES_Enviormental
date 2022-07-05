@@ -274,7 +274,7 @@ initate_Result_Table()
 
 
 function timecheck_pushDoors() {
-    "use strict";
+    
     
     const start = document.getElementById('p_start').value,
           end = document.getElementById('p_stop').value;
@@ -295,7 +295,7 @@ function timecheck_pushDoors() {
 }
 
 function timecheck_cokeDoors() {
-    "use strict";
+    
     
     const start = document.getElementById('c_start').value,
           end = document.getElementById('c_stop').value;

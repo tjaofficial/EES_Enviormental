@@ -843,6 +843,7 @@ class formA5_model(models.Model):
     describe_background_stop = models.CharField(max_length=30)
     notes = models.CharField(max_length=300)
     canvas = models.CharField(max_length=100000)
+    canvasMediaFile = models.FileField(default='settings.STATIC_ROOT/images/A-5scetchBlack.png')
 
     def __str__(self):
         return str(self.date)
@@ -2086,17 +2087,7 @@ class formE_model(models.Model):
         max_length=30,
         choices=yes_no_choices
     )
-    oven1 = models.CharField(max_length=2)
-    time1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    source1 = models.CharField(
-        max_length=30,
-        choices=source_choices
-    )
-    comments1 = models.CharField(max_length=30)
+    goose_neck_data = models.CharField(max_length=255)
 
     def __str__(self):
         return str(self.date)

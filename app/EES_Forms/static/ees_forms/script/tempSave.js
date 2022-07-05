@@ -18,7 +18,7 @@ const currentDate = Date.now();
 
 clearStorage(currentDate, tempSaveKey);
 inputEventListener(input_select_textarea_combined_array);
-fillForm(tempSaveKey);
+//fillForm(tempSaveKey);
 
 
 function inputEventListener(array){
@@ -71,8 +71,14 @@ function fillForm(tempSaveKey){
         const object = JSON.parse(formTempData);
         dataObject = object.data;
         for(let key in dataObject) {
-            if(dataObject[key]){  
-                document.getElementById(key).value = dataObject[key];
+            if(dataObject[key]){ 
+                
+                    let inputValue = document.getElementById(key).value 
+                    if(!inputValue){
+                        document.getElementById(key).value = dataObject[key];
+                    }                    //= 
+                
+                //}
             }
             
         }

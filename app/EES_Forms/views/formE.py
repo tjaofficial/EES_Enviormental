@@ -50,10 +50,7 @@ def formE(request, selector):
                 'start_time': database_form.start_time,
                 'end_time': database_form.end_time,
                 'leaks': database_form.leaks,
-                'oven1': database_form.oven1,
-                'time1': database_form.time1,
-                'source1': database_form.source1,
-                'comments1': database_form.comments1,
+                'goose_neck_data': database_form.goose_neck_data,
             }
         else:
             initial_data = {
@@ -65,12 +62,14 @@ def formE(request, selector):
 
         form = formE_form(initial=initial_data)
         if request.method == "POST":
+            
             if existing:
                 check = formE_form(request.POST, instance=database_form)
             else:
                 check = formE_form(request.POST)
 
             A_valid = check.is_valid()
+            print(request.POST)
             if A_valid:
                 A = check.save()
                 if A.leaks == "Yes":

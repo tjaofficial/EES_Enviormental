@@ -15,7 +15,7 @@ def login_view(request):
     now = datetime.datetime.now()
     count_bp = daily_battery_profile_model.objects.count()
     existing = False
-
+    login_error = {"error":False, "message":''}
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('admin_dashboard')
@@ -39,6 +39,7 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
             login(request, user)
             if request.user.is_superuser:
@@ -55,11 +56,15 @@ def login_view(request):
                             return redirect('IncompleteForms')
                 batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
-                return redirect(batt_prof)
-            else:
-                return redirect('no_registration')
+            return redirect(batt_prof)
+        
+        else:
+            login_error["error"] = True
+            login_error["message"] = 'Incorrect username or password'
+
     return render(request, "ees_forms/ees_login.html", {
-        "now": now
+        "now": now,
+        "login_error": login_error
     })
 
 def valid_account_logout(request):

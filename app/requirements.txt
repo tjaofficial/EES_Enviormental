@@ -14,7 +14,8 @@ requests==2.26.0
 six==1.16.0
 sqlparse==0.4.1
 urllib3==1.26.6
+boto3==1.17.58
+django-storages==1.11.1
 pandas==1.4.2
 numpy==1.22.3
-chart.js==
-fpdf=1.7.2
+
