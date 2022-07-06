@@ -200,10 +200,10 @@
                 <td style="height: 40px"></td>
               </tr>
             </table>
-            {% if unlock %}
+            {% if admin %} {% elif unlock %}
             <br /><br /><br />
             <input type="submit" value="Submit Form" class="submit_button" />
-            {% else %} {% endif %}
+            {% endif %}
           </div>
         </div>
       </form>

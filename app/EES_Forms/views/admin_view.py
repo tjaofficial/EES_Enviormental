@@ -28,8 +28,8 @@ def admin_dashboard_view(request):
         month = "0" + str(now.month)
     else:
         month = str(now.month)
-    if len(str(now.day)) == 0:
-        day = str(now.day)
+    if len(str(now.day)) == 1:
+        day = '0' + str(now.day)
     else:
         day = str(now.day)
     date = year + '-' + month + '-' + day
@@ -38,16 +38,27 @@ def admin_dashboard_view(request):
     form_enteredA3 = False
     form_enteredA4 = False
     form_enteredA5 = False
+    today = datetime.date.today()
+    todays_num = today.weekday()
     # -------PROGRESS PERCENTAGES -----------------
 
-    weekly_forms_total = []
+    daily_forms_comp = []
+    for forms in Forms.objects.all():
+        if forms.submitted:
+            daily_forms_comp.append(forms.form)
+    if todays_num in {0, 1, 2, 3, 4}:
+        daily_count_total = 11
+    else:
+        daily_count_total = 8
+    daily_count_comp = len(daily_forms_comp)
+    daily_percent = (daily_count_comp / daily_count_total) * 100
+
     weekly_forms_comp = []
     for forms in Forms.objects.all():
         if forms.frequency in {"Daily", "Weekly"}:
-            weekly_forms_total.append(forms.form)
             if forms.submitted:
                 weekly_forms_comp.append(forms.form)
-    weekly_count_total = len(weekly_forms_total)
+    weekly_count_total = 60
     weekly_count_comp = len(weekly_forms_comp)
     weekly_percent = (weekly_count_comp / weekly_count_total) * 100
 
@@ -312,10 +323,10 @@ def admin_dashboard_view(request):
 
         if emypty_dp_today:
             return render(request, "admin/admin_dashboard.html", {
-                'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+                'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent,
             })
     return render(request, "admin/admin_dashboard.html", {
-        'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date, "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+        'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date, "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent,
     })
 
 

@@ -1,0 +1,133 @@
+{% extends "admin/admin_layout.html" %} {% block list%}{% load static %}
+<script defer src="{% static 'ees_forms/script/contacts.js' %}"></script>
+
+<body>
+    <div class="grid-dashboard">
+    <div id="progress" class="card skinny">
+        <div class="grid-sliders">
+        <div class="skillBar">
+            <p>Daily Progress</p>
+            <div class="container">
+            <div class="skills daily"></div>
+            </div>
+        </div>
+        <div class="skillBar">
+            <p>Weekly Progress</p>
+            <div class="container">
+            <div class="skills weekly"></div>
+            </div>
+        </div>
+
+        <div class="skillBar">
+            <p>Monthly Progress</p>
+            <div class="container">
+            <div class="skills monthly"></div>
+            </div>
+        </div>
+
+        <!-- <div class="skillBar">
+                    <p>Quarterly Progress</p>
+                    <div class="container">
+                        <div class="skills quarterly"></div>
+                    </div>
+                </div> -->
+
+        <div class="skillBar">
+            <p>Annually Progress</p>
+            <div class="container">
+            <div class="skills annually"></div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="card contact_card">
+        <div class="card-title">Contacts</div>
+        <div class="contact_list_cont">
+        <div class="grid-observ_header">
+            <p></p>
+            <p class="contactHeader">Name</p>
+            <p class="contactHeader center">Phone</p>
+            <p class="contactHeader center">Email</p>
+            <p class="contactHeader center">Certification Date</p>
+        </div>
+        {% for person in organized_list %}
+        <div class="contact_singles" id="{{ person.0 }}" onmouseover="getid(this);">
+            <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
+            <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
+            <p id="phone{{ person.0 }}" hidden=true>{{ person.1.phone }}</p>
+            <p id="cert_date{{ person.0 }}" hidden=true>{{ person.1.cert_date }}</p>
+            <p id="image{{ person.0 }}" hidden=true>{% if person.1.profile_picture %}<img
+                style="width: 40px; border-radius: 25px"
+                src="../../../images/{{ person.1.profile_picture }}"
+            />{% else %}
+                <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="fas"
+                    data-icon="user"
+                    class="svg-inline--fa fa-user fa-w-14"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    width: 39px;
+                >
+                    <path
+                    fill="currentColor"
+                    d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+                    ></path>
+                </svg>
+                {% endif %}</p>
+            <span class="contact_icon_cont contact_icon_color">
+            {% if person.1.profile_picture %}
+            <img
+                style="width: 40px; border-radius: 25px"
+                src="../../../images/{{ person.1.profile_picture }}"
+            />
+            {% else %}
+            <svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="user"
+                class="svg-inline--fa fa-user fa-w-14"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                width: 39px;
+            >
+                <path
+                fill="currentColor"
+                d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+                ></path>
+            </svg>
+            {% endif %}
+            </span>
+            <p class="contact_list_font">
+            {{ person.1.user.first_name }} {{ person.1.user.last_name }}
+            </p>
+            <p class="contact_list_font center">{{ person.1.phone }}</p>
+            <p class="contact_list_font center">{{ person.1.user.email }}</p>
+            <p class="contact_list_font center">{{ person.1.cert_date }}</p>
+        </div>
+        <hr />
+        {% endfor %}
+        </div>
+    </div>
+    <div class="card contact_data_card" id='replaceContent'>
+        <div class='contact_data_cont'>
+            <div class='contact_image'>
+                <img />
+            </div>
+            <div class='contact_data_cont_inner'>
+                <p>Anthony Ackerman</p>
+                <div class='contact_data'>
+                    <p>Phone: 810-618-2253</p>
+                    <p>Email: aackerman@sidockgroup.com</p>
+                    <p>Certification Date: 04/06/2022</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+{% endblock %}

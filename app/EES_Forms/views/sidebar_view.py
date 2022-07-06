@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User
 from ..forms import issues_form, events_form
 import datetime
 import calendar
@@ -336,4 +336,19 @@ def event_detail_view(request, access_page, event_id):
 
     return render(request, "ees_forms/event_detail.html", {
         'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+    })
+
+@lock
+def shared_contacts_view(request):
+    Users = User.objects.all()
+    profile = user_profile_model.objects.order_by('user')
+    
+    organized_list = []
+    for index, user in enumerate(profile):
+        organized_list.append((index, user))
+    
+    
+    
+    return render(request, "shared/contacts.html", {
+        'profile': profile, 'organized_list': organized_list
     })

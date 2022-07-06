@@ -34,7 +34,9 @@ def formA1(request, selector):
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:
+        print('CHECK 1')
         todays_log = daily_prof[0]
+        print('CHECK 2')
         if selector != 'form':
             for x in org:
                 if str(x.date) == str(selector):
