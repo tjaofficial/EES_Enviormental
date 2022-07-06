@@ -43,7 +43,7 @@ def admin_dashboard_view(request):
     # -------PROGRESS PERCENTAGES -----------------
 
     daily_forms_comp = []
-    for forms in Forms.objects.all():
+    for forms in Forms.objects.filter(frequency = 'Daily'):
         if forms.submitted:
             daily_forms_comp.append(forms.form)
     if todays_num in {0, 1, 2, 3, 4}:
@@ -270,8 +270,12 @@ def admin_dashboard_view(request):
                         most_recent_A2 = formA2[0].date
                         if most_recent_A2 == today:
                             A2data = formA2[0]
-                            push = json.loads(A2data.p_leak_data)
-                            coke = json.loads(A2data.c_leak_data)
+                            if A2data.p_leak_data and A2data.c_leak_data:
+                                push = json.loads(A2data.p_leak_data)
+                                coke = json.loads(A2data.c_leak_data)
+                            else:
+                                push = ""
+                                coke = ""
                             form_enteredA2 = True
                         else:
                             A2data = ""
@@ -286,8 +290,12 @@ def admin_dashboard_view(request):
                         most_recent_A3 = formA3[0].date
                         if most_recent_A3 == today:
                             A3data = formA3[0]
-                            lids = json.loads(A3data.l_leak_json)
-                            offtakes = json.loads(A3data.om_leak_json)
+                            if A3data.l_leak_json and A3data.om_leak_json:
+                                lids = json.loads(A3data.l_leak_json)
+                                offtakes = json.loads(A3data.om_leak_json)
+                            else:
+                                lids = ""
+                                offtakes = ""
                             form_enteredA3 = True
                         else:
                             A3data = ""

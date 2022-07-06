@@ -214,8 +214,10 @@
                                 {{ data.notes }}
                             </div>
                         </section>
+                        {% if admin %} {% elif unlock %}
                         <br><br><br>
                         <input type="submit" value="Submit Form" class="submit_button">
+                        {% endif %}
                     </div>
                 </div>
             </form> 
