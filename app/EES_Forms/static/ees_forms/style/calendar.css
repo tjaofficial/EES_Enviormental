@@ -37,17 +37,14 @@
     font-size: 16px;
       
   }
-  
-  ul {
-    height: 100%;
+  .paper_fitter ul{
     padding: 0px 5px 0px 6px;
+    height: 100%;
   }
-  
-  a {
+  .paper_fitter a{
     color: #17a2b8;
-      font-size: 15px;
+    font-size: 14px;
   }
-
   .left {
     float: left;
   }
@@ -83,6 +80,7 @@
 .container{
     width: fit-content;
     margin: auto;
+    background-color: white;
 }
 button{
     display:inline-block;
@@ -98,4 +96,30 @@ button{
     box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
     text-align:center;
     font-size: 1.1rem;
+}
+#back_arrow{
+  height: 2rem;
+  padding-left: 5rem;
+  color: #cacaca;
+  margin-top: 1rem;
+}
+#card_fitter{
+  width: fit-content; 
+  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.card {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 600px;
+  background-color: white;
+  box-shadow: #0000007d 4px 7px 12px 3px;
+  margin: 2rem;
+  padding: 0 1rem;
+  border-radius: 1rem;
+}
+.paper_fitter{
+  padding-top: 1.5rem; 
+  padding-bottom: 1rem;
+  height: 69rem;
 }

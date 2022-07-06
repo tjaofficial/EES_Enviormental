@@ -6,10 +6,10 @@
     <head>
        <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
     </head>
-    <div id="login">
-    </br>
+    <a href={% url 'admin_dashboard' %}> back</a>
+    <div id="login" class='eventAdd'>
         <h1>Register New Observer</h1>
-    </br>
+        </br>
         <form method="POST" action="">
             {% csrf_token %}
             {% for field in form%}
@@ -17,9 +17,9 @@
                 {{ field }}<br><br>
             {% endfor %}
             {{ profile_form.cert_date.label }}:
-            {{ profile_form.cert_date }}<br>
+            {{ profile_form.cert_date }}<br><br>
             {{ profile_form.phone.label }}:
-            {{ profile_form.phone }}<br>
+            {{ profile_form.phone }}<br><br>
             Work {{ profile_form.position.label }}:
             {{ profile_form.position }}
             <br><br>

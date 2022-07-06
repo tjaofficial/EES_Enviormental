@@ -52,7 +52,7 @@
         grid-column: span 1;
     }
     .card.contact_card{
-        grid-row: span 10;
+        grid-row: span 14;
         grid-column: span 6;
     }
     .grid-dashboard{
@@ -208,6 +208,11 @@
     }
     .myTabs input[type="radio"]:checked + label + .tab{
         display:block;
+        column-count: 3;
+        column-gap: 0px;
+        column-fill: auto;
+        height: 13rem;
+        text-align: center;
     }
     .myTabs input[type="radio"]:checked + label{
         background-color:white;
@@ -407,7 +412,7 @@
     }
     .contact_list_cont{
         margin: 0rem 1rem;
-        height: 31rem;
+        height: 45rem;
         overflow: scroll;
     }
     .contact_singles {
@@ -459,6 +464,14 @@
         font-size: 18px;
         margin: auto;
         width: 93%;
+    }
+    .eventAdd{
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 3px 2px 5px 0px #00000021;
+        margin: auto;
+        padding: 22px;
+        width: 30%;
     }
 </style>
 {% load static %}

@@ -1,4 +1,4 @@
-{% extends "ees_forms/layout.html" %}
+{% extends context.parent_template %}
 
 {% block list%}
 {% load static %}
@@ -6,7 +6,7 @@
 <center>
     {% if access_page == 'view' %}
     <div style="padding-top: 30px;">
-        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="card">
+        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="eventAdd">
             <h3>View Event Details</h3><br>
             
             Observer: {{ my_event.observer }}<br>
@@ -21,21 +21,22 @@
     </div>
     {% elif access_page == 'edit' %}
     <div style="padding-top: 30px;">
-        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto; text-align: left" class="card">
+        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto; text-align: left" class="eventAdd">
             <form action="" method="POST">
                 {% csrf_token %}
             <center>
             <h3>Edit Event Details</h3><br>
             
-            Observer: {{ my_event.observer }}<br>
-            Title: {{ my_event.title }}<br>
-            Date: {{ my_event.date }}<br>
-            Start: {{ my_event.start_time }}<br>
-            End: {{ my_event.end_time }}<br>
-                </center>
+            Observer: {{ my_event.observer }}<br><br>
+            Title: {{ my_event.title }}<br><br>
+            Date: {{ my_event.date }}<br><br>
+            Start: {{ my_event.start_time }}<br><br>
+            End: {{ my_event.end_time }}<br><br>
+                
             Description:<br> {{ my_event.notes }}<br>
             <br>
-             <input type="submit" value="Save">  
+             <input type="submit" value="Save">
+            </center>  
                 </form>
             <div>
                 <a href="../../event_detail/{{ event_id }}/view">Back</a>
