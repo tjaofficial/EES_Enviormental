@@ -252,3 +252,43 @@ function hidden_spills() {
         document.getElementById('id_pushed_back_4').value = '';
     }
 }
+
+function info_already_entered() {
+    const barrier_thickness_0 = document.getElementById('id_barrier_thickness_0').value;
+    const surface_quality_0 = document.getElementById('id_surface_quality_0').value;
+    const surpressant_crust_0 = document.getElementById('id_surpressant_crust_0').value;
+
+    if (barrier_thickness_0 && surface_quality_0 && surpressant_crust_0) {
+        document.getElementById('id_barrier_thickness_1').style.display = 'none';
+        document.getElementById('id_barrier_thickness_2').style.display = 'none';
+        document.getElementById('id_barrier_thickness_3').style.display = 'none';
+        document.getElementById('id_barrier_thickness_4').style.display = 'none';
+        document.getElementById('id_surface_quality_1').style.display = 'none';
+        document.getElementById('id_surface_quality_2').style.display = 'none';
+        document.getElementById('id_surface_quality_3').style.display = 'none';
+        document.getElementById('id_surface_quality_4').style.display = 'none';
+        document.getElementById('id_surpressant_crust_1').style.display = 'none';
+        document.getElementById('id_surpressant_crust_2').style.display = 'none';
+        document.getElementById('id_surpressant_crust_3').style.display = 'none';
+        document.getElementById('id_surpressant_crust_4').style.display = 'none';
+        document.getElementById('id_additional_surpressant_1').style.display = 'none';
+        document.getElementById('id_additional_surpressant_2').style.display = 'none';
+        document.getElementById('id_additional_surpressant_3').style.display = 'none';
+        document.getElementById('id_additional_surpressant_4').style.display = 'none';
+        document.getElementById('id_comments_1').style.display = 'none';
+        document.getElementById('id_comments_2').style.display = 'none';
+        document.getElementById('id_comments_3').style.display = 'none';
+        document.getElementById('id_comments_4').style.display = 'none';
+        if (surpressant_crust_0 == 'Yes') {
+            document.getElementById('id_additional_surpressant_0').style.display = 'none';
+            document.getElementById('id_comments_0').style.display = 'none';
+            document.getElementById('id_additional_surpressant_0').required = false;
+            document.getElementById('id_comments_0').required = false;
+        } else if (q_crust_0 == 'No') {
+            document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+            document.getElementById('id_comments_0').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_0').required = true;
+            document.getElementById('id_comments_0').required = true;
+        }
+    }
+}
