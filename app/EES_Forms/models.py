@@ -120,21 +120,21 @@ paved_roads = (
     ('p14', 'Zug Island Road')
 )
 unpaved_roads = (
-    ('North Gate Truck Turn', 'North Gate Truck Turn'),
-    ('Screening Station Road', 'Screening Station Road'),
-    ('Coal Handling Road (Partial)', 'Coal Handling Road (Partial)'),
-    ('Taj Mahal Road', 'Taj Mahal Road'),
-    ('PECS Approach', 'PECS Approach'),
-    ('No. 2 Boilerhouse Road', 'No. 2 Boilerhouse Road')
+    ('unp1', 'North Gate Truck Turn'),
+    ('unp2', 'Screening Station Road'),
+    ('unp3', 'Coal Handling Road (Partial)'),
+    ('unp4', 'Taj Mahal Road'),
+    ('unp5', 'PECS Approach'),
+    ('unp6', 'No. 2 Boilerhouse Road')
 )
 parking_lots = (
-    ('Gap Gate Parking', 'Gap Gate Parking'),
-    ('Truck Garage Area', 'Truck Garage Area'),
-    ('EES Coke Office Parking', 'EES Coke Office Parking'),
+    ('par1', 'Gap Gate Parking'),
+    ('par2', 'Truck Garage Area'),
+    ('par3', 'EES Coke Office Parking'),
 )
 storage_piles = (
-    ('Area B Coke Storage Piles', 'Area B Coke Storage Piles'),
-    ('EES Coke Coal Storage Piles', 'EES Coke Coal Storage Piles'),
+    ('sto1', 'Area B Coke Storage Piles'),
+    ('sto2', 'EES Coke Coal Storage Piles'),
 )
 larry_car_choices = (
     ('1', '1'),
