@@ -639,36 +639,48 @@ class formB_form(ModelForm):
         name_2 = False
         name_3 = False
         name_4 = False
+        sec_1 = False
+        sec_2 = False
         if today.weekday() == 0:
             name_0 = True
             name_1 = False
             name_2 = False
             name_3 = False
             name_4 = False
+            sec_1 = False
+            sec_2 = False
         if today.weekday() == 1:
             name_0 = True
             name_1 = True
             name_2 = False
             name_3 = False
             name_4 = False
+            sec_1 = False
+            sec_2 = False
         if today.weekday() == 2:
             name_0 = True
             name_1 = True
             name_2 = True
             name_3 = False
             name_4 = False
+            sec_1 = False
+            sec_2 = False
         if today.weekday() == 3:
             name_0 = True
             name_1 = True
             name_2 = True
             name_3 = True
             name_4 = False
+            sec_1 = False
+            sec_2 = False
         if today.weekday() == 4:
             name_0 = True
             name_1 = True
             name_2 = True
             name_3 = True
             name_4 = True
+            sec_1 = False
+            sec_2 = False
             
         model = formB_model
         fields = ('__all__')
@@ -689,13 +701,13 @@ class formB_form(ModelForm):
             'water_sprays_0' : forms.Select(attrs={'style':'width: 50px;', 'required': name_0}),
             'loader_lowered_0' : forms.Select(attrs={'style':'width: 50px;', 'required': name_0}),
             'working_water_sprays_0' : forms.Select(attrs={'style':'width: 50px;', 'required': name_0}),
-            'barrier_thickness_0' : forms.Select(attrs={'oninput':'info_already_entered()', 'style':'width: 80px;', 'required': name_0}),
-            'surface_quality_0' : forms.Select(attrs={'oninput':'info_already_entered()', 'style':'width: 60px;', 'required': name_0}),
-            'surpressant_crust_0' : forms.Select(attrs={'oninput': 'info_already_entered()', 'style':'width: 50px;', 'required': name_0}),
-            'additional_surpressant_0' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': name_0}),
-            'comments_0' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': name_0}),
-            'wharf_0' : forms.Select(attrs={'style':'width: 80px;', 'required': name_0}),
-            'breeze_0' : forms.Select(attrs={'style':'width: 80px;', 'required': name_0}),
+            'barrier_thickness_0' : forms.Select(attrs={'oninput':'info_already_entered_0()', 'style':'width: 80px;', 'required': sec_1}),
+            'surface_quality_0' : forms.Select(attrs={'oninput':'info_already_entered_0()', 'style':'width: 60px;', 'required': sec_1}),
+            'surpressant_crust_0' : forms.Select(attrs={'oninput': 'info_already_entered_0()', 'style':'width: 50px;', 'required': sec_1}),
+            'additional_surpressant_0' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': sec_1}),
+            'comments_0' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': sec_1}),
+            'wharf_0' : forms.Select(attrs={'oninput':'house_keeping_0()', 'style':'width: 80px;', 'required': sec_2}),
+            'breeze_0' : forms.Select(attrs={'oninput':'house_keeping_0()', 'style':'width: 80px;', 'required': sec_2}),
             
             'observer_1' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_1}),
             'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_1}),
@@ -711,13 +723,13 @@ class formB_form(ModelForm):
             'water_sprays_1' : forms.Select(attrs={'style':'width: 50px;', 'required': name_1}),
             'loader_lowered_1' : forms.Select(attrs={'style':'width: 50px;', 'required': name_1}),
             'working_water_sprays_1' : forms.Select(attrs={'style':'width: 50px;', 'required': name_1}),
-            'barrier_thickness_1' : forms.Select(attrs={'style':'width: 80px;', 'required': name_1}),
-            'surface_quality_1' : forms.Select(attrs={'style':'width: 60px;', 'required': name_1}),
-            'surpressant_crust_1' : forms.Select(attrs={'oninput':'hidden_questions()','style':'width: 50px;', 'required': name_1}),
-            'additional_surpressant_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': name_1}),
-            'comments_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': name_1}),
-            'wharf_1' : forms.Select(attrs={'style':'width: 80px;', 'required': name_1}),
-            'breeze_1' : forms.Select(attrs={'style':'width: 80px;', 'required': name_1}),
+            'barrier_thickness_1' : forms.Select(attrs={'oninput':'info_already_entered_1()', 'style':'width: 80px;', 'required': sec_1}),
+            'surface_quality_1' : forms.Select(attrs={'oninput':'info_already_entered_1()', 'style':'width: 60px;', 'required': sec_1}),
+            'surpressant_crust_1' : forms.Select(attrs={'oninput':'info_already_entered_1()', 'style':'width: 50px;', 'required': sec_1}),
+            'additional_surpressant_1' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': sec_1}),
+            'comments_1' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': sec_1}),
+            'wharf_1' : forms.Select(attrs={'oninput':'house_keeping_1()', 'style':'width: 80px;', 'required': sec_2}),
+            'breeze_1' : forms.Select(attrs={'oninput':'house_keeping_1()', 'style':'width: 80px;', 'required': sec_2}),
             
             'observer_2' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_2}),
             'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_2}),
@@ -733,13 +745,13 @@ class formB_form(ModelForm):
             'water_sprays_2' : forms.Select(attrs={'style':'width: 50px;', 'required': name_2}),
             'loader_lowered_2' : forms.Select(attrs={'style':'width: 50px;', 'required': name_2}),
             'working_water_sprays_2' : forms.Select(attrs={'style':'width: 50px;', 'required': name_2}),
-            'barrier_thickness_2' : forms.Select(attrs={'style':'width: 80px;', 'required': name_2}),
-            'surface_quality_2' : forms.Select(attrs={'style':'width: 60px;', 'required': name_2}),
-            'surpressant_crust_2' : forms.Select(attrs={'oninput':'hidden_questions()', 'style':'width: 50px;', 'required': name_2}),
-            'additional_surpressant_2' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': name_2}),
-            'comments_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': name_2}),
-            'wharf_2' : forms.Select(attrs={'style':'width: 80px;', 'required': name_2}),
-            'breeze_2' : forms.Select(attrs={'style':'width: 80px;', 'required': name_2}),
+            'barrier_thickness_2' : forms.Select(attrs={'oninput':'info_already_entered_2()', 'style':'width: 80px;', 'required': sec_1}),
+            'surface_quality_2' : forms.Select(attrs={'oninput':'info_already_entered_2()', 'style':'width: 60px;', 'required': sec_1}),
+            'surpressant_crust_2' : forms.Select(attrs={'oninput':'info_already_entered_2()', 'style':'width: 50px;', 'required': sec_1}),
+            'additional_surpressant_2' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': sec_1}),
+            'comments_2' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': sec_1}),
+            'wharf_2' : forms.Select(attrs={'oninput':'house_keeping_2()', 'style':'width: 80px;', 'required': sec_2}),
+            'breeze_2' : forms.Select(attrs={'oninput':'house_keeping_2()', 'style':'width: 80px;', 'required': sec_2}),
             
             'observer_3' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_3}),
             'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_3}),
@@ -755,13 +767,13 @@ class formB_form(ModelForm):
             'water_sprays_3' : forms.Select(attrs={'style':'width: 50px;', 'required': name_3}),
             'loader_lowered_3' : forms.Select(attrs={'style':'width: 50px;', 'required': name_3}),
             'working_water_sprays_3' : forms.Select(attrs={'style':'width: 50px;', 'required': name_3}),
-            'barrier_thickness_3' : forms.Select(attrs={'style':'width: 80px;', 'required': name_3}),
-            'surface_quality_3' : forms.Select(attrs={'style':'width: 60px;', 'required': name_3}),
-            'surpressant_crust_3' : forms.Select(attrs={'oninput':'hidden_questions()', 'style':'width: 50px;', 'required': name_3}),
-            'additional_surpressant_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': name_3}),
-            'comments_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': name_3}),
-            'wharf_3' : forms.Select(attrs={'style':'width: 80px;', 'required': name_3}),
-            'breeze_3' : forms.Select(attrs={'style':'width: 80px;', 'required': name_3}),
+            'barrier_thickness_3' : forms.Select(attrs={'oninput':'info_already_entered_3()', 'style':'width: 80px;', 'required': sec_1}),
+            'surface_quality_3' : forms.Select(attrs={'oninput':'info_already_entered_3()', 'style':'width: 60px;', 'required': sec_1}),
+            'surpressant_crust_3' : forms.Select(attrs={'oninput':'info_already_entered_3()', 'style':'width: 50px;', 'required': sec_1}),
+            'additional_surpressant_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': sec_1}),
+            'comments_3' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': sec_1}),
+            'wharf_3' : forms.Select(attrs={'oninput':'house_keeping_3()', 'style':'width: 80px;', 'required': sec_2}),
+            'breeze_3' : forms.Select(attrs={'oninput':'house_keeping_3()', 'style':'width: 80px;', 'required': sec_2}),
             
             'observer_4' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_4}),
             'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;', 'required': name_4}),
@@ -777,13 +789,13 @@ class formB_form(ModelForm):
             'water_sprays_4' : forms.Select(attrs={'style':'width: 50px;', 'required': name_4}),
             'loader_lowered_4' : forms.Select(attrs={'style':'width: 50px;', 'required': name_4}),
             'working_water_sprays_4' : forms.Select(attrs={'style':'width: 50px;', 'required': name_4}),
-            'barrier_thickness_4' : forms.Select(attrs={'style':'width: 80px;', 'required': name_4}),
-            'surface_quality_4' : forms.Select(attrs={'style':'width: 60px;', 'required': name_4}),
-            'surpressant_crust_4' : forms.Select(attrs={'oninput':'hidden_questions()', 'style':'width: 50px;', 'required': name_4}),
-            'additional_surpressant_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': name_4}),
-            'comments_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': name_4}),
-            'wharf_4' : forms.Select(attrs={'style':'width: 80px;', 'required': name_4}),
-            'breeze_4' : forms.Select(attrs={'style':'width: 80px;', 'required': name_4}),
+            'barrier_thickness_4' : forms.Select(attrs={'oninput':'info_already_entered_4()', 'style':'width: 80px;', 'required': sec_1}),
+            'surface_quality_4' : forms.Select(attrs={'oninput':'info_already_entered_4()', 'style':'width: 60px;', 'required': sec_1}),
+            'surpressant_crust_4' : forms.Select(attrs={'oninput':'info_already_entered_4()', 'style':'width: 50px;', 'required': sec_1}),
+            'additional_surpressant_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;', 'required': sec_1}),
+            'comments_4' : forms.TextInput(attrs={'type':'text', 'style':'width: 130px; text-align: center;', 'required': sec_1}),
+            'wharf_4' : forms.Select(attrs={'oninput':'house_keeping_4()', 'style':'width: 80px;', 'required': sec_2}),
+            'breeze_4' : forms.Select(attrs={'oninput':'house_keeping_4()', 'style':'width: 80px;', 'required': sec_2}),
         }
         
         

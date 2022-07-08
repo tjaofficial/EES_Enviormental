@@ -118,7 +118,7 @@ function hidden_questions() {
     }
     
 }
-hidden_questions()
+
 
 function hidden_vessel() {
     const q_vessel_0 = document.getElementById('id_coal_vessel_0').value;
@@ -253,12 +253,16 @@ function hidden_spills() {
     }
 }
 
-function info_already_entered() {
+function info_already_entered_0() {
     const barrier_thickness_0 = document.getElementById('id_barrier_thickness_0').value;
     const surface_quality_0 = document.getElementById('id_surface_quality_0').value;
     const surpressant_crust_0 = document.getElementById('id_surpressant_crust_0').value;
 
-    if (barrier_thickness_0 && surface_quality_0 && surpressant_crust_0) {
+    if (barrier_thickness_0 || surface_quality_0 || surpressant_crust_0) {
+        document.getElementById('id_barrier_thickness_0').required = true;
+        document.getElementById('id_surface_quality_0').required = true;
+        document.getElementById('id_surpressant_crust_0').required = true;
+
         document.getElementById('id_barrier_thickness_1').style.display = 'none';
         document.getElementById('id_barrier_thickness_2').style.display = 'none';
         document.getElementById('id_barrier_thickness_3').style.display = 'none';
@@ -284,11 +288,560 @@ function info_already_entered() {
             document.getElementById('id_comments_0').style.display = 'none';
             document.getElementById('id_additional_surpressant_0').required = false;
             document.getElementById('id_comments_0').required = false;
-        } else if (q_crust_0 == 'No') {
+        } else if (surpressant_crust_0 == 'No') {
             document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
             document.getElementById('id_comments_0').style.display = 'inline-block';
             document.getElementById('id_additional_surpressant_0').required = true;
             document.getElementById('id_comments_0').required = true;
+        } else {
+            document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+            document.getElementById('id_comments_0').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_0').required = false;
+            document.getElementById('id_comments_0').required = false;
         }
+    } else {
+        document.getElementById('id_barrier_thickness_1').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_2').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_3').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_4').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_1').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_2').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_3').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_4').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_1').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_2').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_3').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_4').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+        document.getElementById('id_comments_1').style.display = 'inline-block';
+        document.getElementById('id_comments_2').style.display = 'inline-block';
+        document.getElementById('id_comments_3').style.display = 'inline-block';
+        document.getElementById('id_comments_4').style.display = 'inline-block';
+
+        document.getElementById('id_barrier_thickness_0').required = false;
+        document.getElementById('id_surface_quality_0').required = false;
+        document.getElementById('id_surpressant_crust_0').required = false;
+
+        document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+        document.getElementById('id_comments_0').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_0').required = false;
+        document.getElementById('id_comments_0').required = false;
+    }
+}
+
+function info_already_entered_1() {
+    const barrier_thickness_1 = document.getElementById('id_barrier_thickness_1').value;
+    const surface_quality_1 = document.getElementById('id_surface_quality_1').value;
+    const surpressant_crust_1 = document.getElementById('id_surpressant_crust_1').value;
+
+    if (barrier_thickness_1 || surface_quality_1 || surpressant_crust_1) {
+        document.getElementById('id_barrier_thickness_1').required = true;
+        document.getElementById('id_surface_quality_1').required = true;
+        document.getElementById('id_surpressant_crust_1').required = true;
+
+        document.getElementById('id_barrier_thickness_0').style.display = 'none';
+        document.getElementById('id_barrier_thickness_2').style.display = 'none';
+        document.getElementById('id_barrier_thickness_3').style.display = 'none';
+        document.getElementById('id_barrier_thickness_4').style.display = 'none';
+        document.getElementById('id_surface_quality_0').style.display = 'none';
+        document.getElementById('id_surface_quality_2').style.display = 'none';
+        document.getElementById('id_surface_quality_3').style.display = 'none';
+        document.getElementById('id_surface_quality_4').style.display = 'none';
+        document.getElementById('id_surpressant_crust_0').style.display = 'none';
+        document.getElementById('id_surpressant_crust_2').style.display = 'none';
+        document.getElementById('id_surpressant_crust_3').style.display = 'none';
+        document.getElementById('id_surpressant_crust_4').style.display = 'none';
+        document.getElementById('id_additional_surpressant_0').style.display = 'none';
+        document.getElementById('id_additional_surpressant_2').style.display = 'none';
+        document.getElementById('id_additional_surpressant_3').style.display = 'none';
+        document.getElementById('id_additional_surpressant_4').style.display = 'none';
+        document.getElementById('id_comments_0').style.display = 'none';
+        document.getElementById('id_comments_2').style.display = 'none';
+        document.getElementById('id_comments_3').style.display = 'none';
+        document.getElementById('id_comments_4').style.display = 'none';
+        
+        if (surpressant_crust_1 == 'Yes') {
+            document.getElementById('id_additional_surpressant_1').style.display = 'none';
+            document.getElementById('id_comments_1').style.display = 'none';
+            document.getElementById('id_additional_surpressant_1').required = false;
+            document.getElementById('id_comments_1').required = false;
+        } else if (surpressant_crust_1 == 'No') {
+            document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+            document.getElementById('id_comments_1').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_1').required = true;
+            document.getElementById('id_comments_1').required = true;
+        } else {
+            document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+            document.getElementById('id_comments_1').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_1').required = false;
+            document.getElementById('id_comments_1').required = false;
+        }
+    } else {
+        document.getElementById('id_barrier_thickness_0').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_2').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_3').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_4').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_0').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_2').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_3').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_4').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_0').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_2').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_3').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_4').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+        document.getElementById('id_comments_0').style.display = 'inline-block';
+        document.getElementById('id_comments_2').style.display = 'inline-block';
+        document.getElementById('id_comments_3').style.display = 'inline-block';
+        document.getElementById('id_comments_4').style.display = 'inline-block';
+
+        document.getElementById('id_barrier_thickness_1').required = false;
+        document.getElementById('id_surface_quality_1').required = false;
+        document.getElementById('id_surpressant_crust_1').required = false;
+
+        document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+        document.getElementById('id_comments_1').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_1').required = false;
+        document.getElementById('id_comments_1').required = false;
+    }
+}
+
+function info_already_entered_2() {
+    const barrier_thickness_2 = document.getElementById('id_barrier_thickness_2').value;
+    const surface_quality_2 = document.getElementById('id_surface_quality_2').value;
+    const surpressant_crust_2 = document.getElementById('id_surpressant_crust_2').value;
+
+    if (barrier_thickness_2 || surface_quality_2 || surpressant_crust_2) {
+        document.getElementById('id_barrier_thickness_2').required = true;
+        document.getElementById('id_surface_quality_2').required = true;
+        document.getElementById('id_surpressant_crust_2').required = true;
+
+        document.getElementById('id_barrier_thickness_0').style.display = 'none';
+        document.getElementById('id_barrier_thickness_1').style.display = 'none';
+        document.getElementById('id_barrier_thickness_3').style.display = 'none';
+        document.getElementById('id_barrier_thickness_4').style.display = 'none';
+        document.getElementById('id_surface_quality_0').style.display = 'none';
+        document.getElementById('id_surface_quality_1').style.display = 'none';
+        document.getElementById('id_surface_quality_3').style.display = 'none';
+        document.getElementById('id_surface_quality_4').style.display = 'none';
+        document.getElementById('id_surpressant_crust_0').style.display = 'none';
+        document.getElementById('id_surpressant_crust_1').style.display = 'none';
+        document.getElementById('id_surpressant_crust_3').style.display = 'none';
+        document.getElementById('id_surpressant_crust_4').style.display = 'none';
+        document.getElementById('id_additional_surpressant_0').style.display = 'none';
+        document.getElementById('id_additional_surpressant_1').style.display = 'none';
+        document.getElementById('id_additional_surpressant_3').style.display = 'none';
+        document.getElementById('id_additional_surpressant_4').style.display = 'none';
+        document.getElementById('id_comments_0').style.display = 'none';
+        document.getElementById('id_comments_1').style.display = 'none';
+        document.getElementById('id_comments_3').style.display = 'none';
+        document.getElementById('id_comments_4').style.display = 'none';
+        if (surpressant_crust_2 == 'Yes') {
+            document.getElementById('id_additional_surpressant_2').style.display = 'none';
+            document.getElementById('id_comments_2').style.display = 'none';
+            document.getElementById('id_additional_surpressant_2').required = false;
+            document.getElementById('id_comments_2').required = false;
+        } else if (surpressant_crust_2 == 'No') {
+            document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+            document.getElementById('id_comments_2').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_2').required = true;
+            document.getElementById('id_comments_2').required = true;
+        } else {
+            document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+            document.getElementById('id_comments_2').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_2').required = false;
+            document.getElementById('id_comments_2').required = false;
+        }
+    } else {
+        document.getElementById('id_barrier_thickness_0').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_1').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_3').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_4').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_0').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_1').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_3').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_4').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_0').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_1').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_3').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_4').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+        document.getElementById('id_comments_0').style.display = 'inline-block';
+        document.getElementById('id_comments_1').style.display = 'inline-block';
+        document.getElementById('id_comments_3').style.display = 'inline-block';
+        document.getElementById('id_comments_4').style.display = 'inline-block';
+
+        document.getElementById('id_barrier_thickness_2').required = false;
+        document.getElementById('id_surface_quality_2').required = false;
+        document.getElementById('id_surpressant_crust_2').required = false;
+
+        document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+        document.getElementById('id_comments_2').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_2').required = false;
+        document.getElementById('id_comments_2').required = false;
+    }
+}
+
+function info_already_entered_3() {
+    const barrier_thickness_3 = document.getElementById('id_barrier_thickness_3').value;
+    const surface_quality_3 = document.getElementById('id_surface_quality_3').value;
+    const surpressant_crust_3 = document.getElementById('id_surpressant_crust_3').value;
+
+    if (barrier_thickness_3 || surface_quality_3 || surpressant_crust_3) {
+        document.getElementById('id_barrier_thickness_3').required = true;
+        document.getElementById('id_surface_quality_3').required = true;
+        document.getElementById('id_surpressant_crust_3').required = true;
+        document.getElementById('id_barrier_thickness_0').style.display = 'none';
+        document.getElementById('id_barrier_thickness_1').style.display = 'none';
+        document.getElementById('id_barrier_thickness_2').style.display = 'none';
+        document.getElementById('id_barrier_thickness_4').style.display = 'none';
+        document.getElementById('id_surface_quality_0').style.display = 'none';
+        document.getElementById('id_surface_quality_1').style.display = 'none';
+        document.getElementById('id_surface_quality_2').style.display = 'none';
+        document.getElementById('id_surface_quality_4').style.display = 'none';
+        document.getElementById('id_surpressant_crust_0').style.display = 'none';
+        document.getElementById('id_surpressant_crust_1').style.display = 'none';
+        document.getElementById('id_surpressant_crust_2').style.display = 'none';
+        document.getElementById('id_surpressant_crust_4').style.display = 'none';
+        document.getElementById('id_additional_surpressant_0').style.display = 'none';
+        document.getElementById('id_additional_surpressant_1').style.display = 'none';
+        document.getElementById('id_additional_surpressant_2').style.display = 'none';
+        document.getElementById('id_additional_surpressant_4').style.display = 'none';
+        document.getElementById('id_comments_0').style.display = 'none';
+        document.getElementById('id_comments_1').style.display = 'none';
+        document.getElementById('id_comments_2').style.display = 'none';
+        document.getElementById('id_comments_4').style.display = 'none';
+        if (surpressant_crust_3 == 'Yes') {
+            document.getElementById('id_additional_surpressant_3').style.display = 'none';
+            document.getElementById('id_comments_3').style.display = 'none';
+            document.getElementById('id_additional_surpressant_3').required = false;
+            document.getElementById('id_comments_3').required = false;
+        } else if (surpressant_crust_3 == 'No') {
+            document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+            document.getElementById('id_comments_3').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_3').required = true;
+            document.getElementById('id_comments_3').required = true;
+        } else {
+            document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+            document.getElementById('id_comments_3').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_3').required = false;
+            document.getElementById('id_comments_3').required = false;
+        }
+    } else {
+        document.getElementById('id_barrier_thickness_0').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_1').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_2').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_4').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_0').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_1').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_2').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_4').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_0').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_1').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_2').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_4').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+        document.getElementById('id_comments_0').style.display = 'inline-block';
+        document.getElementById('id_comments_1').style.display = 'inline-block';
+        document.getElementById('id_comments_2').style.display = 'inline-block';
+        document.getElementById('id_comments_4').style.display = 'inline-block';
+
+        document.getElementById('id_barrier_thickness_3').required = false;
+        document.getElementById('id_surface_quality_3').required = false;
+        document.getElementById('id_surpressant_crust_3').required = false;
+
+        document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+        document.getElementById('id_comments_3').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_3').required = false;
+        document.getElementById('id_comments_3').required = false;
+    }
+}
+
+function info_already_entered_4() {
+    const barrier_thickness_4 = document.getElementById('id_barrier_thickness_4').value;
+    const surface_quality_4 = document.getElementById('id_surface_quality_4').value;
+    const surpressant_crust_4 = document.getElementById('id_surpressant_crust_4').value;
+
+    if (barrier_thickness_4 || surface_quality_4 || surpressant_crust_4) {
+        document.getElementById('id_barrier_thickness_4').required = true;
+        document.getElementById('id_surface_quality_4').required = true;
+        document.getElementById('id_surpressant_crust_4').required = true;
+
+        document.getElementById('id_barrier_thickness_0').style.display = 'none';
+        document.getElementById('id_barrier_thickness_1').style.display = 'none';
+        document.getElementById('id_barrier_thickness_2').style.display = 'none';
+        document.getElementById('id_barrier_thickness_3').style.display = 'none';
+        document.getElementById('id_surface_quality_0').style.display = 'none';
+        document.getElementById('id_surface_quality_1').style.display = 'none';
+        document.getElementById('id_surface_quality_2').style.display = 'none';
+        document.getElementById('id_surface_quality_3').style.display = 'none';
+        document.getElementById('id_surpressant_crust_0').style.display = 'none';
+        document.getElementById('id_surpressant_crust_1').style.display = 'none';
+        document.getElementById('id_surpressant_crust_2').style.display = 'none';
+        document.getElementById('id_surpressant_crust_3').style.display = 'none';
+        document.getElementById('id_additional_surpressant_0').style.display = 'none';
+        document.getElementById('id_additional_surpressant_1').style.display = 'none';
+        document.getElementById('id_additional_surpressant_2').style.display = 'none';
+        document.getElementById('id_additional_surpressant_3').style.display = 'none';
+        document.getElementById('id_comments_0').style.display = 'none';
+        document.getElementById('id_comments_1').style.display = 'none';
+        document.getElementById('id_comments_2').style.display = 'none';
+        document.getElementById('id_comments_3').style.display = 'none';
+        if (surpressant_crust_4 == 'Yes') {
+            document.getElementById('id_additional_surpressant_4').style.display = 'none';
+            document.getElementById('id_comments_4').style.display = 'none';
+            document.getElementById('id_additional_surpressant_4').required = false;
+            document.getElementById('id_comments_4').required = false;
+        } else if (surpressant_crust_4 == 'No') {
+            document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+            document.getElementById('id_comments_4').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_4').required = true;
+            document.getElementById('id_comments_4').required = true;
+        } else {
+            document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+            document.getElementById('id_comments_4').style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_4').required = false;
+            document.getElementById('id_comments_4').required = false;
+        }
+    } else {
+        document.getElementById('id_barrier_thickness_0').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_1').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_2').style.display = 'inline-block';
+        document.getElementById('id_barrier_thickness_3').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_0').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_1').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_2').style.display = 'inline-block';
+        document.getElementById('id_surface_quality_3').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_0').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_1').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_2').style.display = 'inline-block';
+        document.getElementById('id_surpressant_crust_3').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_0').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_1').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_2').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_3').style.display = 'inline-block';
+        document.getElementById('id_comments_0').style.display = 'inline-block';
+        document.getElementById('id_comments_1').style.display = 'inline-block';
+        document.getElementById('id_comments_2').style.display = 'inline-block';
+        document.getElementById('id_comments_3').style.display = 'inline-block';
+
+        document.getElementById('id_barrier_thickness_4').required = false;
+        document.getElementById('id_surface_quality_4').required = false;
+        document.getElementById('id_surpressant_crust_4').required = false;
+
+        document.getElementById('id_additional_surpressant_4').style.display = 'inline-block';
+        document.getElementById('id_comments_4').style.display = 'inline-block';
+        document.getElementById('id_additional_surpressant_4').required = false;
+        document.getElementById('id_comments_4').required = false;
+    }
+}
+
+function run_it() {
+    const barrier_thickness_0 = document.getElementById('id_barrier_thickness_0').value;
+    const barrier_thickness_1 = document.getElementById('id_barrier_thickness_1').value;
+    const barrier_thickness_2 = document.getElementById('id_barrier_thickness_2').value;
+    const barrier_thickness_3 = document.getElementById('id_barrier_thickness_3').value;
+    const barrier_thickness_4 = document.getElementById('id_barrier_thickness_4').value;
+    const wharf_0 = document.getElementById('id_wharf_0').value;
+    const wharf_1 = document.getElementById('id_wharf_0').value;
+    const wharf_2 = document.getElementById('id_wharf_0').value;
+    const wharf_3 = document.getElementById('id_wharf_0').value;
+    const wharf_4 = document.getElementById('id_wharf_0').value;
+
+    if (barrier_thickness_0){
+        info_already_entered_0()
+    } else if (barrier_thickness_1){
+        info_already_entered_1()
+    } else if (barrier_thickness_2){
+        info_already_entered_2()
+    } else if (barrier_thickness_3){
+        info_already_entered_3()
+    } else if (barrier_thickness_4){
+        info_already_entered_4()
+    }
+
+    if (wharf_0){
+        house_keeping_0()
+    } else if (wharf_1){
+        house_keeping_1()
+    } else if (wharf_2){
+        house_keeping_2()
+    } else if (wharf_3){
+        house_keeping_3()
+    } else if (wharf_4){
+        house_keeping_4()
+    }
+}
+run_it()
+
+function house_keeping_0() {
+    const wharf_0 = document.getElementById('id_wharf_0').value;
+    const breeze_0 = document.getElementById('id_breeze_0').value;
+
+    if (wharf_0 || breeze_0) {
+        document.getElementById('id_wharf_0').required = true;
+        document.getElementById('id_breeze_0').required = true;
+
+        document.getElementById('id_wharf_1').style.display = 'none';
+        document.getElementById('id_breeze_1').style.display = 'none';
+        document.getElementById('id_wharf_2').style.display = 'none';
+        document.getElementById('id_breeze_2').style.display = 'none';
+        document.getElementById('id_wharf_3').style.display = 'none';
+        document.getElementById('id_breeze_3').style.display = 'none';
+        document.getElementById('id_wharf_4').style.display = 'none';
+        document.getElementById('id_breeze_4').style.display = 'none';
+    } else {
+        document.getElementById('id_wharf_1').style.display = 'inline-block';
+        document.getElementById('id_breeze_1').style.display = 'inline-block';
+        document.getElementById('id_wharf_2').style.display = 'inline-block';
+        document.getElementById('id_breeze_2').style.display = 'inline-block';
+        document.getElementById('id_wharf_3').style.display = 'inline-block';
+        document.getElementById('id_breeze_3').style.display = 'inline-block';
+        document.getElementById('id_wharf_4').style.display = 'inline-block';
+        document.getElementById('id_breeze_4').style.display = 'inline-block';
+        
+
+        document.getElementById('id_wharf_0').required = false;
+        document.getElementById('id_breeze_0').required = false;
+    }
+}
+
+function house_keeping_1() {
+    const wharf_1 = document.getElementById('id_wharf_1').value;
+    const breeze_1 = document.getElementById('id_breeze_1').value;
+
+    if (wharf_1 || breeze_1) {
+        document.getElementById('id_wharf_1').required = true;
+        document.getElementById('id_breeze_1').required = true;
+
+        document.getElementById('id_wharf_0').style.display = 'none';
+        document.getElementById('id_breeze_0').style.display = 'none';
+        document.getElementById('id_wharf_2').style.display = 'none';
+        document.getElementById('id_breeze_2').style.display = 'none';
+        document.getElementById('id_wharf_3').style.display = 'none';
+        document.getElementById('id_breeze_3').style.display = 'none';
+        document.getElementById('id_wharf_4').style.display = 'none';
+        document.getElementById('id_breeze_4').style.display = 'none';
+    } else {
+        document.getElementById('id_wharf_0').style.display = 'inline-block';
+        document.getElementById('id_breeze_0').style.display = 'inline-block';
+        document.getElementById('id_wharf_2').style.display = 'inline-block';
+        document.getElementById('id_breeze_2').style.display = 'inline-block';
+        document.getElementById('id_wharf_3').style.display = 'inline-block';
+        document.getElementById('id_breeze_3').style.display = 'inline-block';
+        document.getElementById('id_wharf_4').style.display = 'inline-block';
+        document.getElementById('id_breeze_4').style.display = 'inline-block';
+        
+
+        document.getElementById('id_wharf_1').required = false;
+        document.getElementById('id_breeze_1').required = false;
+    }
+}
+
+function house_keeping_2() {
+    const wharf_2 = document.getElementById('id_wharf_2').value;
+    const breeze_2 = document.getElementById('id_breeze_2').value;
+
+    if (wharf_2 || breeze_2) {
+        document.getElementById('id_wharf_2').required = true;
+        document.getElementById('id_breeze_2').required = true;
+
+        document.getElementById('id_wharf_0').style.display = 'none';
+        document.getElementById('id_breeze_0').style.display = 'none';
+        document.getElementById('id_wharf_1').style.display = 'none';
+        document.getElementById('id_breeze_1').style.display = 'none';
+        document.getElementById('id_wharf_3').style.display = 'none';
+        document.getElementById('id_breeze_3').style.display = 'none';
+        document.getElementById('id_wharf_4').style.display = 'none';
+        document.getElementById('id_breeze_4').style.display = 'none';
+    } else {
+        document.getElementById('id_wharf_0').style.display = 'inline-block';
+        document.getElementById('id_breeze_0').style.display = 'inline-block';
+        document.getElementById('id_wharf_1').style.display = 'inline-block';
+        document.getElementById('id_breeze_1').style.display = 'inline-block';
+        document.getElementById('id_wharf_3').style.display = 'inline-block';
+        document.getElementById('id_breeze_3').style.display = 'inline-block';
+        document.getElementById('id_wharf_4').style.display = 'inline-block';
+        document.getElementById('id_breeze_4').style.display = 'inline-block';
+        
+
+        document.getElementById('id_wharf_2').required = false;
+        document.getElementById('id_breeze_2').required = false;
+    }
+}
+
+function house_keeping_3() {
+    const wharf_3 = document.getElementById('id_wharf_3').value;
+    const breeze_3 = document.getElementById('id_breeze_3').value;
+
+    if (wharf_3 || breeze_3) {
+        document.getElementById('id_wharf_3').required = true;
+        document.getElementById('id_breeze_3').required = true;
+
+        document.getElementById('id_wharf_0').style.display = 'none';
+        document.getElementById('id_breeze_0').style.display = 'none';
+        document.getElementById('id_wharf_1').style.display = 'none';
+        document.getElementById('id_breeze_1').style.display = 'none';
+        document.getElementById('id_wharf_2').style.display = 'none';
+        document.getElementById('id_breeze_2').style.display = 'none';
+        document.getElementById('id_wharf_4').style.display = 'none';
+        document.getElementById('id_breeze_4').style.display = 'none';
+    } else {
+        document.getElementById('id_wharf_0').style.display = 'inline-block';
+        document.getElementById('id_breeze_0').style.display = 'inline-block';
+        document.getElementById('id_wharf_1').style.display = 'inline-block';
+        document.getElementById('id_breeze_1').style.display = 'inline-block';
+        document.getElementById('id_wharf_2').style.display = 'inline-block';
+        document.getElementById('id_breeze_2').style.display = 'inline-block';
+        document.getElementById('id_wharf_4').style.display = 'inline-block';
+        document.getElementById('id_breeze_4').style.display = 'inline-block';
+        
+
+        document.getElementById('id_wharf_3').required = false;
+        document.getElementById('id_breeze_3').required = false;
+    }
+}
+
+function house_keeping_4() {
+    const wharf_4 = document.getElementById('id_wharf_4').value;
+    const breeze_4 = document.getElementById('id_breeze_4').value;
+
+    if (wharf_4 || breeze_4) {
+        document.getElementById('id_wharf_4').required = true;
+        document.getElementById('id_breeze_4').required = true;
+
+        document.getElementById('id_wharf_0').style.display = 'none';
+        document.getElementById('id_breeze_0').style.display = 'none';
+        document.getElementById('id_wharf_1').style.display = 'none';
+        document.getElementById('id_breeze_1').style.display = 'none';
+        document.getElementById('id_wharf_2').style.display = 'none';
+        document.getElementById('id_breeze_2').style.display = 'none';
+        document.getElementById('id_wharf_3').style.display = 'none';
+        document.getElementById('id_breeze_3').style.display = 'none';
+    } else {
+        document.getElementById('id_wharf_0').style.display = 'inline-block';
+        document.getElementById('id_breeze_0').style.display = 'inline-block';
+        document.getElementById('id_wharf_1').style.display = 'inline-block';
+        document.getElementById('id_breeze_1').style.display = 'inline-block';
+        document.getElementById('id_wharf_2').style.display = 'inline-block';
+        document.getElementById('id_breeze_2').style.display = 'inline-block';
+        document.getElementById('id_wharf_3').style.display = 'inline-block';
+        document.getElementById('id_breeze_3').style.display = 'inline-block';
+        
+
+        document.getElementById('id_wharf_4').required = false;
+        document.getElementById('id_breeze_4').required = false;
     }
 }
