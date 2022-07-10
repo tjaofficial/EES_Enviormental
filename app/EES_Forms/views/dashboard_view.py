@@ -520,13 +520,8 @@ def IncompleteForms(request):
                 if today != A:
                     forms.submitted = False
                     forms.save()
-
-        pull = Forms.objects.filter(submitted__exact=False).order_by('form')
-        pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
         
         all_forms = Forms.objects.all().order_by('form')
-        incomplete_forms = Forms.objects.filter(submitted__exact=False).order_by('form')
-        completed_forms = Forms.objects.filter(submitted__exact=True).order_by('form')
         
         all_incomplete_forms = []
         all_complete_forms = []
@@ -600,9 +595,10 @@ def IncompleteForms(request):
         form_check1 = ["", ]
         form_check2 = ["", ]
         form_checkAll = ["", ]
+        form_checkDaily2 = ["", ]
 
         return render(request, "ees_forms/dashboard.html", {
-            'form_checkAll': form_checkAll, "pull": pull, "pullNot": pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday, 'sorting_array': sorting_array
+            'form_checkDaily2': form_checkDaily2, 'form_checkAll': form_checkAll, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday, 'sorting_array': sorting_array
         })
     elif request.user.groups.filter(name='SGI Admin'):
         return redirect('admin_dashboard')
