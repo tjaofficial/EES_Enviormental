@@ -206,7 +206,7 @@ frequent_choices = (
     ('Annual', 'Annual')
 )
 days_choices = (
-    ('Any', 'Any'),
+    ('Everyday', 'Everyday'),
     ('0', 'Mondays'),
     ('1', 'Tuesdays'),
     ('2', 'Wednesdays'),
@@ -214,6 +214,8 @@ days_choices = (
     ('4', 'Fridays'),
     ('5', 'Saturdays'),
     ('6', 'Sundays'),
+    ('Weekends', 'Weekends'),
+    ('Weekdays', 'Weekdays'),
 )
 weekend_choices = (
     ('5', 'Saturday'),
