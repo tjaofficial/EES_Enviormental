@@ -595,10 +595,28 @@ def IncompleteForms(request):
         form_check1 = ["", ]
         form_check2 = ["", ]
         form_checkAll = ["", ]
+        form_checkAll2 = ["", ]
         form_checkDaily2 = ["", ]
 
         return render(request, "ees_forms/dashboard.html", {
-            'form_checkDaily2': form_checkDaily2, 'form_checkAll': form_checkAll, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday, 'sorting_array': sorting_array
+            'form_checkDaily2': form_checkDaily2, 
+            'form_checkAll': form_checkAll, 
+            "today": today, 
+            'od_recent': od_recent, 
+            "todays_log": todays_log, 
+            'now': now, 
+            'profile_entered': profile_entered, 
+            'form_check1': form_check1, 
+            'form_check2': form_check2, 
+            'profile': profile, 
+            'today_str': today_str, 
+            'todays_num': todays_num, 
+            'weekend_list': weekend_list, 
+            'weather': weather, 
+            'wind_direction': wind_direction, 
+            'saturday': saturday, 
+            'sorting_array': sorting_array,
+            "form_checkAll2": form_checkAll2,
         })
     elif request.user.groups.filter(name='SGI Admin'):
         return redirect('admin_dashboard')
