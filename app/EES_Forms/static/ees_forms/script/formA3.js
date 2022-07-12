@@ -4,6 +4,7 @@ Initial Page Load Setup
 *****************************************/
 // Run once on js load only
 function initate_Result_Table(){
+    console.log('HELLO');
     const query_Tables = document.querySelectorAll("[data-resulttable]");
     const result_Table_DOM_Array = Array.from(query_Tables)
     result_Table_DOM_Array.forEach((elem)=>{
@@ -50,7 +51,7 @@ function handle_Table_Input(event){
     const result_Array = parsed_Result.data ? parsed_Result.data : [];
 
 
-    if(resultInputAttr === -1){
+    if(parseInt(resultInputAttr) === -1){
         let new_Object = {};
         if(resultKeyAttr === "oven"){
             new_Object[resultKeyAttr] = elemValue;
@@ -169,8 +170,10 @@ function createHTMLString(dataJSON, input_ID){
     if(dataJSON.data){
         const dataArray = dataJSON.data;
         if(dataArray.length > 0){
+            console.log('TEST 1')
             for(i=0; i<dataArray.length; i++){
                 let data = dataArray[i];
+                console.log(data)
                 tableHTML = tableHTML+htmlLayout(false, data, input_ID);
             }
             if(input_ID === "lid"){
@@ -206,10 +209,9 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
+    console.log(tableHTML)
+    console.log(input_ID)
     document.getElementById(`${input_ID}_tableBody`).innerHTML = tableHTML;
-    
-
-
 }
 
 // Takes objects determines whether should be empty and data to return string of html

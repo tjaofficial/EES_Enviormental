@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, Forms, formA3_model
 from ..forms import formA3_form
+import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -55,6 +56,11 @@ def formA3(request, selector):
 
         if search:
             database_form = ''
+            omSide_Raw_JSON = json.loads(data.om_leak_json)
+            lSide_Raw_JSON = json.loads(data.l_leak_json)
+            omSide_json = omSide_Raw_JSON['data']
+            lSide_json = lSide_Raw_JSON['data']
+            
         else:
             if existing:
                 initial_data = {
@@ -135,5 +141,5 @@ def formA3(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA3.html", {
-        "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client,
+        "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json,
     })

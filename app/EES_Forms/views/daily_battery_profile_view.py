@@ -44,5 +44,5 @@ def daily_battery_profile_view(request, access_page, date):
             return redirect('IncompleteForms')
 
     return render(request, "ees_forms/Bat_Info.html", {
-        'form': form, 'now': now, 'todays_log': todays_log, 'profile': profile
+        'form': form, 'now': now, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page,
     })

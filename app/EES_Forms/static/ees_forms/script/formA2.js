@@ -91,6 +91,7 @@ Adding Rows to Table
 *****************************************/
 
 function initate_Result_Table(){
+    console.log('HELLO');
     const query_Tables = document.querySelectorAll("[data-resulttable]");
     const result_Table_DOM_Array = Array.from(query_Tables)
     result_Table_DOM_Array.forEach((elem)=>{
@@ -118,11 +119,7 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
-
     document.getElementById(`${input_ID}_ctableBody`).innerHTML = tableHTML;
-    
-
-
 }
 
 

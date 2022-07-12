@@ -21,11 +21,7 @@
                 </form>
                 
                 <br>
-                {% if access_page == 'login' %}
-                <p>
-                    Don't have this information yet? <a href="{% url 'IncompleteForms'  %}">Skip To Forms</a>
-                </p>
-                {% elif access_page == 'edit' %}
+                {% if access_page == 'login' or access_page == 'edit' %}
                 <p>
                     Don't have this information yet? <a href="{% url 'IncompleteForms'  %}">Skip To Forms</a>
                 </p>
