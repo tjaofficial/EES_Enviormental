@@ -106,6 +106,8 @@ def formA3(request, selector):
                 }
 
             data = formA3_form(initial=initial_data)
+            omSide_json = ''
+            lSide_json = ''
         if request.method == "POST":
             if existing:
                 form = formA3_form(request.POST, instance=database_form)
