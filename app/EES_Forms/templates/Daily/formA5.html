@@ -5,7 +5,9 @@
 {% include "ees_forms/drawing_modal.html" %}
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
+    {% if admin %}{% else %}
     <script defer src="{% static 'ees_forms/script/formA5_sketch.js' %}"></script>
+    {% endif %}
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">    
         <div>
@@ -128,7 +130,16 @@
                                     <td id="boxa4" colspan="4" >
                                         HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                                      </td>
-                                     {% if admin %}{% else %}
+                                     {% if admin %}
+                                     <td id="sketchBox" colspan="3" rowspan="7">
+                                        {% if existing %}
+                                           <image src="{{exist_canvas}}" />
+                                        {% else %}
+                                            <image src="{% static 'ees_forms/images/A-5sketchBlank.png' %}" />
+                                        {% endif %}
+                                     </td>
+
+                                     {% else %}
                                      <td id="sketchBox" colspan="3" rowspan="7"
                                         {% if existing %}
                                            data-filledSketch = "{{exist_canvas}}"
