@@ -19,17 +19,31 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA5(request, selector):
-    now = datetime.datetime.now()
-    exist_canvas = ''
-    # today = datetime.date.today()
+    formName = "A5"
+    existing = False
     unlock = False
     client = False
+    search = False
+    admin = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
-
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    
+    org = formA5_model.objects.all().order_by('-date')
+    org2 = formA5_readings_model.objects.all().order_by('-form')
+    
+    full_name = request.user.get_full_name()
+    
+    count_bp = daily_battery_profile_model.objects.count()
+    exist_canvas = ''
+    
+
     if len(profile) > 0:
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
         if same_user:
@@ -39,10 +53,8 @@ def formA5(request, selector):
     else:
         return redirect('IncompleteForms')
 
-    formName = "A5"
-    existing = False
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    full_name = request.user.get_full_name()
+    
+    
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
     city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
@@ -56,10 +68,7 @@ def formA5(request, selector):
         'humidity': city_weather['main']['humidity'],
     }
     degree = weather['wind_direction']
-    count_bp = daily_battery_profile_model.objects.count()
-    org = formA5_model.objects.all().order_by('-date')
-    org2 = formA5_readings_model.objects.all().order_by('-form')
-
+    
     def toTextualDescription(degree):
         if degree > 337.5:
             return 'N'
@@ -92,6 +101,8 @@ def formA5(request, selector):
                     database_model2 = x
             readings_form = database_model2
             profile_form = ''
+            existing = True
+            search = True
         elif len(org) > 0 or len(org2) > 0:
             database_form = org[0]
             database_form2 = org2[0]
@@ -108,183 +119,184 @@ def formA5(request, selector):
 
                 return redirect(batt_prof)
 
-        if existing:
-
-
-            exist_canvas = database_form.canvasMediaFile.url
-            initial_data = {
-                'date': database_form.date,
-                'estab': database_form.estab,
-                'county': database_form.county,
-                'estab_no': database_form.estab_no,
-                'equip_loc': database_form.equip_loc,
-                'district': database_form.district,
-                'city': database_form.city,
-                'observer': database_form.observer,
-                'cert_date': database_form.cert_date,
-                'process_equip1': database_form.process_equip1,
-                'process_equip2': database_form.process_equip2,
-                'op_mode1': database_form.op_mode1,
-                'op_mode2': database_form.op_mode2,
-                'background_color_start': database_form.background_color_start,
-                'background_color_stop': database_form.background_color_stop,
-                'sky_conditions': database_form.sky_conditions,
-                'wind_speed_start': database_form.wind_speed_start,
-                'wind_speed_stop': database_form.wind_speed_stop,
-                'wind_direction': database_form.wind_direction,
-                'emission_point_start': database_form.emission_point_start,
-                'emission_point_stop': database_form.emission_point_stop,
-                'ambient_temp_start': database_form.ambient_temp_start,
-                'ambient_temp_stop': database_form.ambient_temp_stop,
-                'humidity': database_form.humidity,
-                'height_above_ground': database_form.height_above_ground,
-                'height_rel_observer': database_form.height_rel_observer,
-                'distance_from': database_form.distance_from,
-                'direction_from': database_form.direction_from,
-                'describe_emissions_start': database_form.describe_emissions_start,
-                'describe_emissions_stop': database_form.describe_emissions_stop,
-                'emission_color_start': database_form.emission_color_start,
-                'emission_color_stop': database_form.emission_color_stop,
-                'plume_type': database_form.plume_type,
-                'water_drolet_present': database_form.water_drolet_present,
-                'water_droplet_plume': database_form.water_droplet_plume,
-                'plume_opacity_determined_start': database_form.plume_opacity_determined_start,
-                'plume_opacity_determined_stop': database_form.plume_opacity_determined_stop,
-                'describe_background_start': database_form.describe_background_start,
-                'describe_background_stop': database_form.describe_background_stop,
-                'canvas': database_form.canvas,
-                'o1': database_form2.o1,
-                'o1_start': database_form2.o1_start,
-                'o1_stop': database_form2.o1_stop,
-                'o1_highest_opacity': database_form2.o1_highest_opacity,
-                'o1_instant_over_20': database_form2.o1_instant_over_20,
-                'o1_average_6': database_form2.o1_average_6,
-                'o1_average_6_over_35': database_form2.o1_average_6_over_35,
-                'o2': database_form2.o2,
-                'o2_start': database_form2.o2_start,
-                'o2_stop': database_form2.o2_stop,
-                'o2_highest_opacity': database_form2.o2_highest_opacity,
-                'o2_instant_over_20': database_form2.o2_instant_over_20,
-                'o2_average_6': database_form2.o2_average_6,
-                'o2_average_6_over_35': database_form2.o2_average_6_over_35,
-                'o3': database_form2.o3,
-                'o3_start': database_form2.o3_start,
-                'o3_stop': database_form2.o3_stop,
-                'o3_highest_opacity': database_form2.o3_highest_opacity,
-                'o3_instant_over_20': database_form2.o3_instant_over_20,
-                'o3_average_6': database_form2.o3_average_6,
-                'o3_average_6_over_35': database_form2.o3_average_6_over_35,
-                'o4': database_form2.o4,
-                'o4_start': database_form2.o4_start,
-                'o4_stop': database_form2.o4_stop,
-                'o4_highest_opacity': database_form2.o4_highest_opacity,
-                'o4_instant_over_20': database_form2.o4_instant_over_20,
-                'o4_average_6': database_form2.o4_average_6,
-                'o4_average_6_over_35': database_form2.o4_average_6_over_35,
-                'o1_1_reads': database_form2.o1_1_reads,
-                'o1_2_reads': database_form2.o1_2_reads,
-                'o1_3_reads': database_form2.o1_3_reads,
-                'o1_4_reads': database_form2.o1_4_reads,
-                'o1_5_reads': database_form2.o1_5_reads,
-                'o1_6_reads': database_form2.o1_6_reads,
-                'o1_7_reads': database_form2.o1_7_reads,
-                'o1_8_reads': database_form2.o1_8_reads,
-                'o1_9_reads': database_form2.o1_9_reads,
-                'o1_10_reads': database_form2.o1_10_reads,
-                'o1_11_reads': database_form2.o1_11_reads,
-                'o1_12_reads': database_form2.o1_12_reads,
-                'o1_13_reads': database_form2.o1_13_reads,
-                'o1_14_reads': database_form2.o1_14_reads,
-                'o1_15_reads': database_form2.o1_15_reads,
-                'o1_16_reads': database_form2.o1_16_reads,
-                'o2_1_reads': database_form2.o2_1_reads,
-                'o2_2_reads': database_form2.o2_2_reads,
-                'o2_3_reads': database_form2.o2_3_reads,
-                'o2_4_reads': database_form2.o2_4_reads,
-                'o2_5_reads': database_form2.o2_5_reads,
-                'o2_6_reads': database_form2.o2_6_reads,
-                'o2_7_reads': database_form2.o2_7_reads,
-                'o2_8_reads': database_form2.o2_8_reads,
-                'o2_9_reads': database_form2.o2_9_reads,
-                'o2_10_reads': database_form2.o2_10_reads,
-                'o2_11_reads': database_form2.o2_11_reads,
-                'o2_12_reads': database_form2.o2_12_reads,
-                'o2_13_reads': database_form2.o2_13_reads,
-                'o2_14_reads': database_form2.o2_14_reads,
-                'o2_15_reads': database_form2.o2_15_reads,
-                'o2_16_reads': database_form2.o2_16_reads,
-                'o3_1_reads': database_form2.o3_1_reads,
-                'o3_2_reads': database_form2.o3_2_reads,
-                'o3_3_reads': database_form2.o3_3_reads,
-                'o3_4_reads': database_form2.o3_4_reads,
-                'o3_5_reads': database_form2.o3_5_reads,
-                'o3_6_reads': database_form2.o3_6_reads,
-                'o3_7_reads': database_form2.o3_7_reads,
-                'o3_8_reads': database_form2.o3_8_reads,
-                'o3_9_reads': database_form2.o3_9_reads,
-                'o3_10_reads': database_form2.o3_10_reads,
-                'o3_11_reads': database_form2.o3_11_reads,
-                'o3_12_reads': database_form2.o3_12_reads,
-                'o3_13_reads': database_form2.o3_13_reads,
-                'o3_14_reads': database_form2.o3_14_reads,
-                'o3_15_reads': database_form2.o3_15_reads,
-                'o3_16_reads': database_form2.o3_16_reads,
-                'o4_1_reads': database_form2.o4_1_reads,
-                'o4_2_reads': database_form2.o4_2_reads,
-                'o4_3_reads': database_form2.o4_3_reads,
-                'o4_4_reads': database_form2.o4_4_reads,
-                'o4_5_reads': database_form2.o4_5_reads,
-                'o4_6_reads': database_form2.o4_6_reads,
-                'o4_7_reads': database_form2.o4_7_reads,
-                'o4_8_reads': database_form2.o4_8_reads,
-                'o4_9_reads': database_form2.o4_9_reads,
-                'o4_10_reads': database_form2.o4_10_reads,
-                'o4_11_reads': database_form2.o4_11_reads,
-                'o4_12_reads': database_form2.o4_12_reads,
-                'o4_13_reads': database_form2.o4_13_reads,
-                'o4_14_reads': database_form2.o4_14_reads,
-                'o4_15_reads': database_form2.o4_15_reads,
-                'o4_16_reads': database_form2.o4_16_reads,
-                'notes': database_form.notes,
-            }
-            data = formA5_form(initial=initial_data)
-            readings_form = formA5_readings_form(initial=initial_data)
-            profile_form = user_profile_form()
+        if search:
+            database_form = ''
         else:
-            initial_data = {
-                'date': todays_log.date_save,
-                'estab': "EES COKE BATTERY",
-                'county': "Wayne",
-                'estab_no': "P0408",
-                'equip_loc': "Zug Island",
-                'district': "Detroit",
-                'city': "River Rouge",
-                'observer': full_name,
-                'cert_date': cert_date,
-                'process_equip1': "Coke Battery / Door Machine / Hot Car",
-                'process_equip2': "Door Machine / PECS",
-                'op_mode1': "normal",
-                'op_mode2': "normal",
-                'emission_point_start': "Above hot car",
-                'emission_point_stop': "Above door machine hood",
-                'height_above_ground': "45",
-                'height_rel_observer': "45",
-                'plume_type': 'N/A',
-                'water_drolet_present': "No",
-                'water_droplet_plume': "N/A",
-                'plume_opacity_determined_start': "Above hot car",
-                'plume_opacity_determined_stop': "Above door machine hood",
-                'describe_background_start': "Skies",
-                'describe_background_stop': "Same",
-                'sky_conditions': weather['description'],
-                'wind_speed_start': weather['wind_speed'],
-                'wind_direction': wind_direction,
-                'ambient_temp_start': weather['temperature'],
-                'humidity': weather['humidity'],
-            }
-            data = formA5_form(initial=initial_data)
-            profile_form = user_profile_form()
-            readings_form = formA5_readings_form()
+            if existing:
+                exist_canvas = database_form.canvasMediaFile.url
+                initial_data = {
+                    'date': database_form.date,
+                    'estab': database_form.estab,
+                    'county': database_form.county,
+                    'estab_no': database_form.estab_no,
+                    'equip_loc': database_form.equip_loc,
+                    'district': database_form.district,
+                    'city': database_form.city,
+                    'observer': database_form.observer,
+                    'cert_date': database_form.cert_date,
+                    'process_equip1': database_form.process_equip1,
+                    'process_equip2': database_form.process_equip2,
+                    'op_mode1': database_form.op_mode1,
+                    'op_mode2': database_form.op_mode2,
+                    'background_color_start': database_form.background_color_start,
+                    'background_color_stop': database_form.background_color_stop,
+                    'sky_conditions': database_form.sky_conditions,
+                    'wind_speed_start': database_form.wind_speed_start,
+                    'wind_speed_stop': database_form.wind_speed_stop,
+                    'wind_direction': database_form.wind_direction,
+                    'emission_point_start': database_form.emission_point_start,
+                    'emission_point_stop': database_form.emission_point_stop,
+                    'ambient_temp_start': database_form.ambient_temp_start,
+                    'ambient_temp_stop': database_form.ambient_temp_stop,
+                    'humidity': database_form.humidity,
+                    'height_above_ground': database_form.height_above_ground,
+                    'height_rel_observer': database_form.height_rel_observer,
+                    'distance_from': database_form.distance_from,
+                    'direction_from': database_form.direction_from,
+                    'describe_emissions_start': database_form.describe_emissions_start,
+                    'describe_emissions_stop': database_form.describe_emissions_stop,
+                    'emission_color_start': database_form.emission_color_start,
+                    'emission_color_stop': database_form.emission_color_stop,
+                    'plume_type': database_form.plume_type,
+                    'water_drolet_present': database_form.water_drolet_present,
+                    'water_droplet_plume': database_form.water_droplet_plume,
+                    'plume_opacity_determined_start': database_form.plume_opacity_determined_start,
+                    'plume_opacity_determined_stop': database_form.plume_opacity_determined_stop,
+                    'describe_background_start': database_form.describe_background_start,
+                    'describe_background_stop': database_form.describe_background_stop,
+                    'canvas': database_form.canvas,
+                    'o1': database_form2.o1,
+                    'o1_start': database_form2.o1_start,
+                    'o1_stop': database_form2.o1_stop,
+                    'o1_highest_opacity': database_form2.o1_highest_opacity,
+                    'o1_instant_over_20': database_form2.o1_instant_over_20,
+                    'o1_average_6': database_form2.o1_average_6,
+                    'o1_average_6_over_35': database_form2.o1_average_6_over_35,
+                    'o2': database_form2.o2,
+                    'o2_start': database_form2.o2_start,
+                    'o2_stop': database_form2.o2_stop,
+                    'o2_highest_opacity': database_form2.o2_highest_opacity,
+                    'o2_instant_over_20': database_form2.o2_instant_over_20,
+                    'o2_average_6': database_form2.o2_average_6,
+                    'o2_average_6_over_35': database_form2.o2_average_6_over_35,
+                    'o3': database_form2.o3,
+                    'o3_start': database_form2.o3_start,
+                    'o3_stop': database_form2.o3_stop,
+                    'o3_highest_opacity': database_form2.o3_highest_opacity,
+                    'o3_instant_over_20': database_form2.o3_instant_over_20,
+                    'o3_average_6': database_form2.o3_average_6,
+                    'o3_average_6_over_35': database_form2.o3_average_6_over_35,
+                    'o4': database_form2.o4,
+                    'o4_start': database_form2.o4_start,
+                    'o4_stop': database_form2.o4_stop,
+                    'o4_highest_opacity': database_form2.o4_highest_opacity,
+                    'o4_instant_over_20': database_form2.o4_instant_over_20,
+                    'o4_average_6': database_form2.o4_average_6,
+                    'o4_average_6_over_35': database_form2.o4_average_6_over_35,
+                    'o1_1_reads': database_form2.o1_1_reads,
+                    'o1_2_reads': database_form2.o1_2_reads,
+                    'o1_3_reads': database_form2.o1_3_reads,
+                    'o1_4_reads': database_form2.o1_4_reads,
+                    'o1_5_reads': database_form2.o1_5_reads,
+                    'o1_6_reads': database_form2.o1_6_reads,
+                    'o1_7_reads': database_form2.o1_7_reads,
+                    'o1_8_reads': database_form2.o1_8_reads,
+                    'o1_9_reads': database_form2.o1_9_reads,
+                    'o1_10_reads': database_form2.o1_10_reads,
+                    'o1_11_reads': database_form2.o1_11_reads,
+                    'o1_12_reads': database_form2.o1_12_reads,
+                    'o1_13_reads': database_form2.o1_13_reads,
+                    'o1_14_reads': database_form2.o1_14_reads,
+                    'o1_15_reads': database_form2.o1_15_reads,
+                    'o1_16_reads': database_form2.o1_16_reads,
+                    'o2_1_reads': database_form2.o2_1_reads,
+                    'o2_2_reads': database_form2.o2_2_reads,
+                    'o2_3_reads': database_form2.o2_3_reads,
+                    'o2_4_reads': database_form2.o2_4_reads,
+                    'o2_5_reads': database_form2.o2_5_reads,
+                    'o2_6_reads': database_form2.o2_6_reads,
+                    'o2_7_reads': database_form2.o2_7_reads,
+                    'o2_8_reads': database_form2.o2_8_reads,
+                    'o2_9_reads': database_form2.o2_9_reads,
+                    'o2_10_reads': database_form2.o2_10_reads,
+                    'o2_11_reads': database_form2.o2_11_reads,
+                    'o2_12_reads': database_form2.o2_12_reads,
+                    'o2_13_reads': database_form2.o2_13_reads,
+                    'o2_14_reads': database_form2.o2_14_reads,
+                    'o2_15_reads': database_form2.o2_15_reads,
+                    'o2_16_reads': database_form2.o2_16_reads,
+                    'o3_1_reads': database_form2.o3_1_reads,
+                    'o3_2_reads': database_form2.o3_2_reads,
+                    'o3_3_reads': database_form2.o3_3_reads,
+                    'o3_4_reads': database_form2.o3_4_reads,
+                    'o3_5_reads': database_form2.o3_5_reads,
+                    'o3_6_reads': database_form2.o3_6_reads,
+                    'o3_7_reads': database_form2.o3_7_reads,
+                    'o3_8_reads': database_form2.o3_8_reads,
+                    'o3_9_reads': database_form2.o3_9_reads,
+                    'o3_10_reads': database_form2.o3_10_reads,
+                    'o3_11_reads': database_form2.o3_11_reads,
+                    'o3_12_reads': database_form2.o3_12_reads,
+                    'o3_13_reads': database_form2.o3_13_reads,
+                    'o3_14_reads': database_form2.o3_14_reads,
+                    'o3_15_reads': database_form2.o3_15_reads,
+                    'o3_16_reads': database_form2.o3_16_reads,
+                    'o4_1_reads': database_form2.o4_1_reads,
+                    'o4_2_reads': database_form2.o4_2_reads,
+                    'o4_3_reads': database_form2.o4_3_reads,
+                    'o4_4_reads': database_form2.o4_4_reads,
+                    'o4_5_reads': database_form2.o4_5_reads,
+                    'o4_6_reads': database_form2.o4_6_reads,
+                    'o4_7_reads': database_form2.o4_7_reads,
+                    'o4_8_reads': database_form2.o4_8_reads,
+                    'o4_9_reads': database_form2.o4_9_reads,
+                    'o4_10_reads': database_form2.o4_10_reads,
+                    'o4_11_reads': database_form2.o4_11_reads,
+                    'o4_12_reads': database_form2.o4_12_reads,
+                    'o4_13_reads': database_form2.o4_13_reads,
+                    'o4_14_reads': database_form2.o4_14_reads,
+                    'o4_15_reads': database_form2.o4_15_reads,
+                    'o4_16_reads': database_form2.o4_16_reads,
+                    'notes': database_form.notes,
+                }
+                data = formA5_form(initial=initial_data)
+                readings_form = formA5_readings_form(initial=initial_data)
+                profile_form = user_profile_form()
+            else:
+                initial_data = {
+                    'date': todays_log.date_save,
+                    'estab': "EES COKE BATTERY",
+                    'county': "Wayne",
+                    'estab_no': "P0408",
+                    'equip_loc': "Zug Island",
+                    'district': "Detroit",
+                    'city': "River Rouge",
+                    'observer': full_name,
+                    'cert_date': cert_date,
+                    'process_equip1': "Coke Battery / Door Machine / Hot Car",
+                    'process_equip2': "Door Machine / PECS",
+                    'op_mode1': "normal",
+                    'op_mode2': "normal",
+                    'emission_point_start': "Above hot car",
+                    'emission_point_stop': "Above door machine hood",
+                    'height_above_ground': "45",
+                    'height_rel_observer': "45",
+                    'plume_type': 'N/A',
+                    'water_drolet_present': "No",
+                    'water_droplet_plume': "N/A",
+                    'plume_opacity_determined_start': "Above hot car",
+                    'plume_opacity_determined_stop': "Above door machine hood",
+                    'describe_background_start': "Skies",
+                    'describe_background_stop': "Same",
+                    'sky_conditions': weather['description'],
+                    'wind_speed_start': weather['wind_speed'],
+                    'wind_direction': wind_direction,
+                    'ambient_temp_start': weather['temperature'],
+                    'humidity': weather['humidity'],
+                }
+                data = formA5_form(initial=initial_data)
+                profile_form = user_profile_form()
+                readings_form = formA5_readings_form()
 
         if request.method == "POST":
             def base64_file(data, name=None):
@@ -429,5 +441,5 @@ def formA5(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA5.html", {
-        "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
+        "admin": admin, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
     })

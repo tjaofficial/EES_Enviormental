@@ -1,896 +1,455 @@
-<style>
-HTML{
-    display: flex;
-    overflow: hidden;
-}
-*{
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-    font-family: sans-serif;
-}
-.whiteFont{
-    color:white; 
-    padding-left: 1rem;
-}
-.highlight_dark:hover {
-    background-color:#1c2630;
-}
-.card{
-    width: 100%;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 3px 2px 5px 0px #00000021;
-}
-.card.longest{
-    grid-row: span 6;
-    grid-column: span 8;
-    min-width: 1534.42px;
-    min-height: 299.328px;
-}
-.card.skinny{
-    grid-row: span 2;
-    grid-column: span 8;
-    min-height: 89.109px;
-}
-.card.quarters{
-    grid-row: span 5;
-    grid-column: span 2;
-    min-height: 246.766px;
-}
-.card.halfs{
-    grid-row: span 7;
-    grid-column: span 4;
-    min-height: 351.891px;
-}
-.card.eighths{
-    grid-row: span 5;
-    grid-column: span 1;
-}
-.grid-dashboard{
-    display: grid;
-    height: 95%;
-    padding: 1rem;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(18, 1fr);
-    grid-gap: 1rem;
-    max-width: 1646px;
-}
-.card-title{
-    padding-top: 1rem;
-    padding-left: 1rem;
-    font-size: 1rem;
-    font-family: sans-serif;
-}
-.nested{
-    padding-left: 2rem;
-    padding-right: 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 1rem;
-    height: 86%;
-}
-.inner-card{
-    background-color:white;
-    border-radius: 20px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-    margin-top: 1rem;
-    height:15rem;
-    min-width: 281.281px;
-}
-.inner_font{
-    padding: 1rem 0px 0px 1rem;
-    font-size: 1rem;
-}
-.dataSingle{
-    justify-content: center;
-    display:flex;
-    margin-bottom: .3rem;
-}
-.dataFont{
-    font-size: 1rem;
-    text-align: center;
-    padding-right:1rem;
-    font-weight: 100;
-}
-.dataFont.number{
-    font-size: 2rem;
-    text-align: center;
-    padding-right:1rem;
-    font-weight: 900;
-    color: #263544;
-}
-.dataHold{
-    width: 75%;
-    margin: auto;
-    height: 11rem;
-    margin-top: 0.3rem;
-}
-.grid-double{
-    display:grid;
-    grid-gap: .4rem;
-    grid-template-rows: 1fr 1fr;
-    height: 86%;
-}
-.dataHold2{
-    width: 75%;
-    margin: auto;
-    height: 100%;
-}
-.miniFont{
-    font-size: .8rem;
-    font-weight: 100;
-    text-align: center;
-}
-.grid-dataMini{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    width: 13rem;
-    grid-gap: .3rem;
-    padding-top: .2rem;
-    padding-bottom: 0.3rem;
-}
-.grid-dataMini2{
-    display: grid;
-    grid-template-columns: 1fr 2fr 2fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    width: 12rem;
-    margin: auto;
-    grid-gap: .7rem;
-    padding-top: .7rem;
-}
-.grid-dataMini3{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    width: 12rem;
-    margin: auto;
-    grid-gap: .7rem;
-    padding-top: .7rem;
-}
-.minifont.data{
-    text-align:center;
-}
-.gridLeaks{
-    display:grid;
-    justify-content: center;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-.dataLabels{
-    justify-content: center;
-    display:flex;
-    margin-bottom: .3rem;
-    margin-top: .3rem;
-}
-.myTabs{
-    display: flex;
-    flex-wrap: wrap;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-    width: 46rem;
-    margin: 0.4rem 2rem;
-}
-.myTabs input[type='radio']{
-    display:none;
-}
-.myTabs label{
-    padding: .5rem;
-    background-color: gray;
-    display: flex;
-    align-items: center;
-    font-weight: 900;
-    height:2rem;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-}
-.myTabs .tab{
-    width:100%;
-    padding: 2rem;
-    background-color: white;
-    order: 1;
-    display:none;
-    height: 13rem;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-}
-.myTabs input[type="radio"]:checked + label + .tab{
-    display:block;
-}
-.myTabs input[type="radio"]:checked + label{
-    background-color:white;
-}
-ul {
-  display: block;
-  list-style-type: none;
-  margin-left: 0;
-  margin-right: 0;
-}
-li {
-  display: block;
-  list-style-type: none;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 0;
-  margin-right: 0;
-  padding-left: 35px;
-  font-size: 0.9rem;
-  font-weight: 100;
-}
-.menuItems a{
-    color: white;
-    text-decoration: none;
-}
-.grid-sliders{
-    display:grid;
-    grid-gap: 1rem;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    margin: 1rem 2rem;
-}
-.slider{
-    appearance: none;
-    width: 41rem;
-    height: 7px;
-    border-radius: 37rem;
-}
-.container {
-  width: 100%;
-  background-color: #ddd;
-  border-radius: 2rem;
-  height: 10px;
-  margin-top: .7rem;
-}
-.skills {
-  text-align: right;
-  color: white;
-  border-radius: 2rem;
-  height: 10px;
-}
-.weekly {width: {{ weekly_percent }}%; background-color: #F55667;}
-.monthly {width: {{ monthly_percent }}%; background-color: #348EFA;}
-.quarterly {width: 0%; background-color: #4ACFAE;}
-.annually {width: {{ annually_percent }}%; background-color: #FCB050;}
-.grid-observ_singles{
-    display: grid;
-    grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
-    margin: .3rem 1rem;
-}
-.grid-observ_header{
-    display: grid;
-    grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
-    margin: .4rem 2rem;
-}
-.contactFont{
-    font-size: .7rem;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.contactHeader{
-    font-size: 0.9rem;
-    font-weight:900;
-    display: flex;
-}
-.center{
-    justify-content: center;
-}
-.grid-observers{
-    margin: 0rem 1rem;
-    height:10rem;
-    overflow: scroll;
-}
-.c_card_circle_oven{
-    max-width: 44%;
-    height: auto;
-    transform: translate3d(-50%,-14%,0);
-    align-items: center;
-    display: flex;
-}
-.c_circle_font_color{
-    color: #67886F;
-}
-.grid-battery-weather{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    margin:1rem 2rem;
-    height: 71%;
-    align-items: center;
-}
-.weather_battery_font{
-    font-size: 1.0rem;
-    font-weight: 100;
-    text-align: center;
-}
-.battery_info{
-    margin: 1rem 2rem;
-    margin-top: 1rem;
-}
-.weather_info{
-    margin:auto;
-}
-.weather_battery_font span{
-    color: #9f9f9f;
-}
-.ca_holder{
-    width: 100%;
-    padding: 0rem 1rem;
-}
-.ca_holder ul{
-    height: 10.5rem;
-    overflow: scroll;
-    width: 100%;
-}
-.ca_indie{
-    display: inline-block; 
-    margin: 8px 0px; 
-    width: 20rem;
-}
-.ca_footer{
-    margin-top: 0.3rem;
-    text-align:center;
-}
-.ca_holder ul a{
-    text-decoration:none;
-    color: black;
-}
-#canvasHolder{
-    position: relative;
-    margin: auto;
-    width: 52rem;
-    margin-left: -4rem;
-}
-#sideBar{
-    width:20rem; 
-    height:100%; 
-    background-color: #263544; 
-    display: table;
-    min-height: 1080px;
-}
-#companyBox{
-    width:100%; 
-    height: 3rem; 
-    background-color: #263544; 
-    box-shadow: 0px -10px 14px 0px;
-    align-items: center;
-    display: flex;
-}
-#topBar{
-    width:auto; 
-    height:3rem; 
-    background-color:white; 
-    display: flex;
-    align-items: center;
-    padding-left: 2rem;
-}
-.sideAlign{
-    padding: 0px;
-    background-color: white;
-    border-radius: 2px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-    margin: 0px;
-    margin-top: 0.2rem;
-}
-.card.custom{
-    grid-row: span 9;
-    grid-column: span 4;
-    min-height: 310.797px;
-}
-.card.custom2{
-    grid-row: span 7;
-    grid-column: span 4;
-    min-height: 205.688px;
-}
-</style>
-{% load static %}
+{% extends "admin/admin_layout.html" %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script defer src="{% static 'ees_forms/script/admin_dashboard.js' %}"></script>
-
-<body style="background-color: #dfe5e9; margin: 0px;display:flex; height:100%;">
-    <div id="sideBar">
-        <div id="companyBox">
-            <img style="height:2rem; padding-left: 1rem" src="{% static '../images/Sidocklogo.jpeg' %}">
-            <h2 style="color: white; padding-left: 1rem;font-family: sans-serif;font-weight: 100; font-size:1rem">
-                Sidock Group, Inc.
-            </h2>
-        </div>
-        <div class='menuItems'>
-            <ul>
-                <li><a href=#>Admin</a>
-                    <ul>
-                        <li><a href=#>Veiw All Profiles</a></li>
-                        <li><a href="{% url 'Register' %}">Register New Profile</a></li>
-                    </ul>
-                </li>
-                <li><a href=#>Daily Reports</a>
-                    <ul>
-                        <li><a href=#>Form A-1</a></li>
-                        <li><a href=#>Form A-2</a></li>
-                        <li><a href=#>Form A-3</a></li>
-                        <li><a href=#>Form A-4</a></li>
-                        <li><a href=#>Form A-5</a></li>
-                    </ul>
-                </li>
-                <li><a href=#>Completion Progress</a>
-                    <ul>
-                        <li><a href=#>Daily</a></li>
-                        <li><a href=#>Weekly</a></li>
-                        <li><a href=#>Monthly</a></li>
-                        <li><a href=#>Quartery</a></li>
-                        <li><a href=#>Anually</a></li>
-                    </ul
-                </li>
-                <li><a href=#>Schedule</a>
-                    <ul>
-                        <li><a href=#>Calendar</a></li>
-                        <li><a href="{% url 'Add Event' %}">Add Events</a></li>
-                    </ul
-                </li>
-                <li><a href=#>Client Data</a>
-                    <ul>
-                        <li><a href=#>DTE EES Coke Battery</a>
-                            <ul>
-                                <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-                                <li><a href="{% url 'archive' %}">Archive</a></li>
-                                <li><a href="{% url 'Corrective-Action' %}">Corrective Actions</a></li>
-                                <li><a href=#>Weekly Reports</a></li>
-                                <li><a href="{% url 'rolling_avg' %}">Data Records</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <p>
-        <a href="{% url 'Register' %}">click here</a>
-        </p>
-    </div>
-    <div style="width:100%;">
-        <div id="topBar">
-            <div style="">DTE - EES Coke</div>
-        </div>
-        <div class="grid-dashboard">
-            <div id="progress" class="card skinny">
-                <div class="grid-sliders">
-                    <div class="skillBar">
-                        <p>Weekly Progress</p>
-                        <div class="container">
-                            <div class="skills weekly"></div>
-                        </div>
-                    </div>
-
-                    <div class="skillBar">
-                        <p>Monthly Progress</p>
-                        <div class="container">
-                            <div class="skills monthly"></div>
-                        </div>
-                    </div>
-
-                    <div class="skillBar">
-                        <p>Quarterly Progress</p>
-                        <div class="container">
-                            <div class="skills quarterly"></div>
-                        </div>
-                    </div>
-
-                    <div class="skillBar">
-                        <p>Annually Progress</p>
-                        <div class="container">
-                            <div class="skills annually"></div>
-                        </div>
-                    </div>
+{% block list%}
+<div class="grid-dashboard">
+    <div id="progress" class="card skinny">
+        <div class="grid-sliders">
+            <div class="skillBar">
+                <p>Daily Progress</p>
+                <div class="container">
+                    <div class="skills daily"></div>
                 </div>
             </div>
-            <div id="fromAInfo" class="card longest">
-                <div class="card-title">Todays Forms</div>
-                <div class="nested">
-                    <div class="inner-card">
-                        <div class="card-title inner_font">Form A-1 - Charges</div>
-                        <div class="dataHold">
-                            {% if A1data %}
-                            <div class="grid-dataMini2">
-                                <p class="miniFont title number">1</p> 
-                                <p class="miniFont">Oven #{{ A1data.c1_no }}</p> 
-                                <p class="miniFont title">{{ A1data.c1_sec }} sec</p> 
+            <div class="skillBar">
+                <p>Weekly Progress</p>
+                <div class="container">
+                    <div class="skills weekly"></div>
+                </div>
+            </div>
 
-                                <p class="miniFont title number">2</p> 
-                                <p class="miniFont title">Oven #{{ A1data.c2_no }}</p> 
-                                <p class="miniFont title">{{ A1data.c2_sec }} sec</p> 
+            <div class="skillBar">
+                <p>Monthly Progress</p>
+                <div class="container">
+                    <div class="skills monthly"></div>
+                </div>
+            </div>
 
-                                <p class="miniFont title number">3</p> 
-                                <p class="miniFont title">Oven #{{ A1data.c3_no }}</p> 
-                                <p class="miniFont title">{{ A1data.c3_sec }} sec</p> 
+            <!-- <div class="skillBar">
+                <p>Quarterly Progress</p>
+                <div class="container">
+                    <div class="skills quarterly"></div>
+                </div>
+            </div> -->
 
-                                <p class="miniFont title number">4</p> 
-                                <p class="miniFont title">Oven #{{ A1data.c4_no }}</p> 
-                                <p class="miniFont title">{{ A1data.c4_sec }} sec</p> 
+            <div class="skillBar">
+                <p>Annually Progress</p>
+                <div class="container">
+                    <div class="skills annually"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="fromAInfo" class="card longest">
+        <div class="card-title">Todays Forms</div>
+        <div class="nested">
+            <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{ date }}" {% else %} {% endif %}>
+                <div class="inner-card">
+                    <div class="card-title inner_font">Form A-1 - Charges</div>
+                    <div class="dataHold">
+                        {% if A1data %}
+                        <div class="grid-dataMini2">
+                            <p class="miniFont title number">1</p> 
+                            <p class="miniFont">Oven #{{ A1data.c1_no }}</p> 
+                            <p class="miniFont title">{{ A1data.c1_sec }} sec</p> 
 
-                                <p class="miniFont title number">5</p> 
-                                <p class="miniFont title">Oven #{{ A1data.c5_no }}</p> 
-                                <p class="miniFont title">{{ A1data.c5_sec }} sec</p> 
+                            <p class="miniFont title number">2</p> 
+                            <p class="miniFont title">Oven #{{ A1data.c2_no }}</p> 
+                            <p class="miniFont title">{{ A1data.c2_sec }} sec</p> 
+
+                            <p class="miniFont title number">3</p> 
+                            <p class="miniFont title">Oven #{{ A1data.c3_no }}</p> 
+                            <p class="miniFont title">{{ A1data.c3_sec }} sec</p> 
+
+                            <p class="miniFont title number">4</p> 
+                            <p class="miniFont title">Oven #{{ A1data.c4_no }}</p> 
+                            <p class="miniFont title">{{ A1data.c4_sec }} sec</p> 
+
+                            <p class="miniFont title number">5</p> 
+                            <p class="miniFont title">Oven #{{ A1data.c5_no }}</p> 
+                            <p class="miniFont title">{{ A1data.c5_sec }} sec</p> 
+                        </div>
+                        <br>
+                        <div class="dataSingle"> 
+                            <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
+                        </div>
+                        {% else %}
+                        <p class="miniFont" style="text-align:center;">N/A</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            <a class="no_link_css" {% if form_enteredA2 %} href="Daily/formA2/{{ date }}" {% else %} {% endif %}>
+                <div class="inner-card">
+                    <div class="card-title inner_font">Form A-2 - Doors</div>
+                    <div class="grid-double">
+                        <div class="dataHold2" style="margin-top:0.3rem;">
+                            <div class="dataSingle" style="justify-content: left;">
+                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
                             </div>
-                            <br>
-                            <div class="dataSingle"> 
-                                <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
+                            <hr>
+                            <div class="gridLeaks dataSingle">
+                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
+                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
+                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">zone:</p>
                             </div>
+                            {% if push.data %}
+                                {% for leaks in push.data %}
+                                    <div class="gridLeaks">
+                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
+                                        <p class="dataFont miniFont">{{ leaks.location }}</p>
+                                        <p class="dataFont miniFont">{{ leaks.zone }}</p>
+                                    </div>
+                                {% endfor %}
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">N/A</p>
+                                <p class="miniFont" style="text-align:center;">N/A</p>
                             {% endif %}
                         </div>
-                    </div>
-                    <div class="inner-card">
-                        <div class="card-title inner_font">Form A-2 - Doors</div>
-                        <div class="grid-double">
-                            <div class="dataHold2" style="margin-top:0.3rem;">
-                                <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
-                                </div>
-                                <hr>
-                                <div class="gridLeaks dataSingle">
-                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
-                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
-                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">zone:</p>
-                                </div>
-                                {% if push.data %}
-                                    {% for leaks in push.data %}
-                                        <div class="gridLeaks">
-                                            <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                            <p class="dataFont miniFont">{{ leaks.location }}</p>
-                                            <p class="dataFont miniFont">{{ leaks.zone }}</p>
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
-                                {% endif %}
-                            </div>
-                            <div class="dataHold2" style="margin-top:0.3rem;">
-                                <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
-                                </div>
-                                <hr>
-                                <div class="gridLeaks dataSingle">
-                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
-                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
-                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">zone:</p>
-                                </div>
-                                {% if coke.data %}
-                                    {% for leaks in coke.data %}
-                                        <div class="gridLeaks">
-                                            <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                            <p class="dataFont miniFont">{{ leaks.location }}</p>
-                                            <p class="dataFont miniFont">{{ leaks.zone }}</p>
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-card">
-                        <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
-                        <div class="grid-double">
-                            <div class="dataHold2" style="margin-top: 0.3rem;">
-                                <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Lids</p>
-                                </div>
-                                <hr>
-                                <div class="gridLeaks dataSingle">
-                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
-                                    <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
-                                </div>
-                                {% if lids.data %}
-                                    {% for leaks in lids.data %}
-                                        <div class="gridLeaks">
-                                            <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                            {% for where in leaks.location %}
-                                                <p class="dataFont miniFont">{{ where }}</p>
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
-                                {% endif %}
-                            </div>
-                            <div class="dataHold2" style="margin-top: 0.3rem;">
-                                <div class="dataSingle" style="justify-content: left;">
-                                    <p class="dataFont" style="font-size:.74rem;">List of Leaking Standpipes</p>
-                                </div>
-                                <hr>
-                                <div class="gridLeaks dataSingle">
-                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
-                                    <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
-                                </div>
-                                {% if offtakes.data %}
-                                    {% for leaks in offtakes.data %}
-                                        <div class="gridLeaks">
-                                            <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                            {% for where in leaks.location %}
-                                                <p class="dataFont miniFont">{{ where }}</p>
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-card">
-                        <div class="card-title inner_font">Form A-4 - Collection Main</div>
-                        <div class="dataHold">
-                            <div class="dataSingle"> 
-                                <p class="dataFont">Pressures</p>
+                        <div class="dataHold2" style="margin-top:0.3rem;">
+                            <div class="dataSingle" style="justify-content: left;">
+                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
                             </div>
                             <hr>
-                            <div class="grid-dataMini">
-                                <p class="miniFont title">Collection Main #1:</p>
-                                <p class="miniFont data">{% if A4data %}{{ A4data.main_1 }}{% else %}
-                                    N/A
-                                {% endif %}</p>
-                            
-                                <p class="miniFont title">Collection Main #2:</p>
-                                <p class="miniFont data">{% if A4data %}{{ A4data.main_2 }}{% else %}
-                                    N/A
-                                {% endif %}</p>
-                            
-                                <p class="miniFont title">Collection Main #3:</p>
-                                <p class="miniFont data">{% if A4data %}{{ A4data.main_3 }}{% else %}
-                                    N/A
-                                {% endif %}</p>
-                            
-                                <p class="miniFont title">Collection Main #4:</p>
-                                <p class="miniFont data">{% if A4data %}{{ A4data.main_4 }}{% else %}
-                                    N/A
-                                {% endif %}</p>
-                            
-                                <p class="miniFont title">Suction Main Pressure:</p>
-                                <p class="miniFont data">{% if A4data %}{{ A4data.suction_main }}{% else %}
-                                    N/A
-                                {% endif %}</p>
+                            <div class="gridLeaks dataSingle">
+                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
+                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
+                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">zone:</p>
                             </div>
-                            <hr>
-                            <div class="dataSingle"> 
-                                <p class="dataFont" style="padding-top:.24rem;">
-                                    Notes:</br>
-                                    {{ A4data.notes }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-card">
-                        <div class="card-title inner_font">Form A-5 - Push Travels</div>
-                        <div class="dataHold">
-                            <div class="dataSingle"> 
-                                <p class="dataFont">Push Travels</p>
-                            </div>
-                            <hr>
-                            {% if A5data %}
-                                <div class="grid-dataMini3">
-                                    <p class="miniFont title number">1</p> 
-                                    <p class="miniFont">Oven #{{ A5data.o1 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o1_highest_opacity }}%</p> 
-
-                                    <p class="miniFont title number">2</p> 
-                                    <p class="miniFont title">Oven #{{ A5data.o2 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o2_highest_opacity }}%</p> 
-
-                                    <p class="miniFont title number">3</p> 
-                                    <p class="miniFont title">Oven #{{ A5data.o3 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o3_highest_opacity }}%</p> 
-
-                                    <p class="miniFont title number">4</p> 
-                                    <p class="miniFont title">Oven #{{ A5data.o4 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o4_highest_opacity }}%</p> 
-                                </div>
+                            {% if coke.data %}
+                                {% for leaks in coke.data %}
+                                    <div class="gridLeaks">
+                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
+                                        <p class="dataFont miniFont">{{ leaks.location }}</p>
+                                        <p class="dataFont miniFont">{{ leaks.zone }}</p>
+                                    </div>
+                                {% endfor %}
                             {% else %}
                                 <p class="miniFont" style="text-align:center;">N/A</p>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div id="latestActivity3" class="card halfs">
-                <div class="card-title">7 Day - Total Charges Graph</div>
-                <div id='canvasHolder'>
-                    <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="115%"></canvas>
-                </div>
-                <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
-                </div>
-                <div id='graph-xaxis-data2' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.1.form.date.month }}/{{ recent_logs.1.form.date.day }}
-                </div>
-                <div id='graph-xaxis-data3' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.2.form.date.month }}/{{ recent_logs.2.form.date.day }}
-                </div>
-                <div id='graph-xaxis-data4' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.3.form.date.month }}/{{ recent_logs.3.form.date.day }}
-                </div>
-                <div id='graph-xaxis-data5' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.4.form.date.month }}/{{ recent_logs.4.form.date.day }}
-                </div>
-                <div id='graph-xaxis-data6' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.5.form.date.month }}/{{ recent_logs.4.form.date.day }}
-                </div>
-                <div id='graph-xaxis-data7' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.6.form.date.month }}/{{ recent_logs.4.form.date.day }}
-                </div>
-                <div id='graph-yaxis-data1' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.0.total_seconds }}
-                </div>
-                <div id='graph-yaxis-data2' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.1.total_seconds }}
-                </div>
-                <div id='graph-yaxis-data3' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.2.total_seconds }}
-                </div>
-                <div id='graph-yaxis-data4' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.3.total_seconds }}
-                </div>
-                <div id='graph-yaxis-data5' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.4.total_seconds }}
-                </div>
-                <div id='graph-yaxis-data6' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.5.total_seconds }}
-                </div>
-                <div id='graph-yaxis-data7' style="height:100%; width:100%;" hidden="true">
-                    {{ recent_logs.6.total_seconds }}
-                </div>
-            </div>
-            <div id="corrective_actions" class="card quarters">
-                <div class="card-title">Latest Issues/Corrective Actions</div>
-                <div class="ca_holder">
-                    <ul>
-                    {% for x in ca_forms %}
-                        <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                            <li class="sideAlign">
-                                <div class="ca_indie">
-                                    <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
-                                        {{ x.date }} - {{ x.form }}
+            </a>
+            <a class="no_link_css" {% if form_enteredA3 %} href="Daily/formA3/{{ date }}" {% else %} {% endif %}>
+                <div class="inner-card">
+                    <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
+                    <div class="grid-double">
+                        <div class="dataHold2" style="margin-top: 0.3rem;">
+                            <div class="dataSingle" style="justify-content: left;">
+                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Lids</p>
+                            </div>
+                            <hr>
+                            <div class="gridLeaks dataSingle">
+                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
+                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
+                            </div>
+                            {% if lids.data %}
+                                {% for leaks in lids.data %}
+                                    <div class="gridLeaks">
+                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
+                                        {% for where in leaks.location %}
+                                            <p class="dataFont miniFont">{{ where }}</p>
+                                        {% endfor %}
                                     </div>
-                                    <div style="text-align: left; width: 100%; font-size:.6rem; padding-left: 0.4rem;">
-                                        {{ x.issues }}
+                                {% endfor %}
+                            {% else %}
+                                <p class="miniFont" style="text-align:center;">N/A</p>
+                            {% endif %}
+                        </div>
+                        <div class="dataHold2" style="margin-top: 0.3rem;">
+                            <div class="dataSingle" style="justify-content: left;">
+                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Standpipes</p>
+                            </div>
+                            <hr>
+                            <div class="gridLeaks dataSingle">
+                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
+                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
+                            </div>
+                            {% if offtakes.data %}
+                                {% for leaks in offtakes.data %}
+                                    <div class="gridLeaks">
+                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
+                                        {% for where in leaks.location %}
+                                            <p class="dataFont miniFont">{{ where }}</p>
+                                        {% endfor %}
                                     </div>
-                                </div>
-                            </li>
-                        </a>
-                    {% endfor %}
-                    </ul>    
-                </div>
-                <div class="ca_footer">
-                    <a href="{% url 'Corrective-Action' %}">
-                        Show all issues
-                        <svg style='height:1rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="link_arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>
-                    </a>
-                </div>
-            </div>
-            <div id="battery_weather" class="card quarters">
-                <div class="card-title">Todays Battery/Weather Info.</div>
-                <div style="overflow: scroll;" class="grid-battery-weather battery_info center bat_weather_class">
-                    <p class="weather_battery_font">
-                        <span>
-                            Observer:
-                        </span>
-                        <br>
-                        {{ todays_obser }}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            Foreman:
-                        </span>
-                        <br>
-                        {% if todays_log.foreman %}{{ todays_log.foreman }}{% else %}N/A{% endif %}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            Crew:
-                        </span>
-                        <br>
-                        {% if todays_log.foreman %}{{ todays_log.crew }}{% else %}N/A{% endif %}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            City:
-                        </span>
-                        <br>
-                        {% if weather %}{{ weather.city }}{% else %}N/A{% endif %}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            Temperature:
-                        </span>
-                        <br>
-                        {% if weather %}{{ weather.temperature|floatformat:"0" }}° F{% else %}N/A{% endif %}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            Description:
-                        </span>
-                        <br>
-                        {% if weather %}{{ weather.description }}{% else %}N/A{% endif %}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            Wind:
-                        </span>
-                        <br>
-                        {% if weather %}{{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}{% else %}N/A{% endif %}
-                    </p>
-                    <p class="weather_battery_font">
-                        <span>
-                            Humidity:
-                        </span>
-                        <br>
-                        {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
-                    </p>
-                </div>
-            </div>
-            <div id="latestActivity4" class="card custom">
-                <div class="card-title">90 Day Push Travel Evaluation</div>
-                <div class="myTabs">
-                    <input type="radio" id="tab_5day" name="myTabs" checked="checked">
-                    <label for="tab_5day">Due 5 Days</label>
-                    <div class="tab">
-                    {% for x in od_recent %}
-                        Oven #{{ x.0 }}
-                        Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
-                    {% endfor %}
-                    </div>
-                    <input type="radio" id="tab_10day" name="myTabs">
-                    <label for="tab_10day">Due 10 Days</label>
-                    <div class="tab">
-                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. 
-                        It has roots in a piece of classical Latin literature from 45 BC, 
-                        making it over 2000 years old. Richard McClintock, a Latin professor 
-                        at Hampden-Sydney College in Virginia, looked up one of the more 
-                        obscure Latin words, consectetur, from a Lorem Ipsum passage, and 
-                        going through the cites of the word in classical literature, 
-                        discovered the undoubtable source. Lorem Ipsum comes from sections 
-                        1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes 
-                        of Good and Evil) by Cicero, written in 45 BC. This book is a 
-                        treatise on the theory of ethics, very popular during the Renaissance. </p>
-                    </div>
-                    <input type="radio" id="tab_30day" name="myTabs">
-                    <label for="tab_30day">Due 30 Days</label>
-                    <div class="tab">
-                        <p>what</p>
+                                {% endfor %}
+                            {% else %}
+                                <p class="miniFont" style="text-align:center;">N/A</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="observers" class="card custom2">
-                <div class="card-title">Observers</div>
-                <div class="grid-observers">
-                    <div class="grid-observ_header">
-                        <p></p>
-                        <p class="contactHeader">Name</p>
-                        <p class="contactHeader center">Phone</p>
-                        <p class="contactHeader center">Email</p>
-                        <p class="contactHeader center">Certification Date</p>
-                    </div>
-                    {% for person in profile %}
-                        <div class="grid-observ_singles">
-                            <span class="c_card_circle_oven c_circle_font_color">
-                                {% if person.profile_picture %}
-                                    <img style="width: 40px;border-radius: 25px;" src="../../../images/{{ x.profile_picture }}">
-                                {% else %}
-                                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
-                                {% endif %}
-                            </span>
-                            <p class="contactFont">{{ person.user.first_name }} {{ person.user.last_name }}</p>
-                            <p class="contactFont center">{{ person.phone }}</p>
-                            <p class="contactFont center">{{ person.user.email }}</p>
-                            <p class="contactFont center">{{ person.cert_date }}</p>
+            </a>
+            <a class="no_link_css" {% if form_enteredA4 %} href="Daily/formA4/{{ date }}" {% else %} {% endif %}>
+                <div class="inner-card">
+                    <div class="card-title inner_font">Form A-4 - Collection Main</div>
+                    <div class="dataHold">
+                        <div class="dataSingle"> 
+                            <p class="dataFont">Pressures</p>
                         </div>
                         <hr>
-                    {% endfor %}
+                        <div class="grid-dataMini">
+                            <p class="miniFont title">Collection Main #1:</p>
+                            <p class="miniFont data">{% if A4data %}{{ A4data.main_1 }}{% else %}
+                                N/A
+                            {% endif %}</p>
+                        
+                            <p class="miniFont title">Collection Main #2:</p>
+                            <p class="miniFont data">{% if A4data %}{{ A4data.main_2 }}{% else %}
+                                N/A
+                            {% endif %}</p>
+                        
+                            <p class="miniFont title">Collection Main #3:</p>
+                            <p class="miniFont data">{% if A4data %}{{ A4data.main_3 }}{% else %}
+                                N/A
+                            {% endif %}</p>
+                        
+                            <p class="miniFont title">Collection Main #4:</p>
+                            <p class="miniFont data">{% if A4data %}{{ A4data.main_4 }}{% else %}
+                                N/A
+                            {% endif %}</p>
+                        
+                            <p class="miniFont title">Suction Main Pressure:</p>
+                            <p class="miniFont data">{% if A4data %}{{ A4data.suction_main }}{% else %}
+                                N/A
+                            {% endif %}</p>
+                        </div>
+                        <hr>
+                        <div class="dataSingle"> 
+                            <p class="dataFont" style="padding-top:.24rem;">
+                                Notes:</br>
+                                {{ A4data.notes }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
+            </a>
+            <a class="no_link_css" {% if form_enteredA5 %} href="Daily/formA5/{{ date }}" {% else %} {% endif %}>
+                <div class="inner-card">
+                    <div class="card-title inner_font">Form A-5 - Push Travels</div>
+                    <div class="dataHold">
+                        <div class="dataSingle"> 
+                            <p class="dataFont">Push Travels</p>
+                        </div>
+                        <hr>
+                        {% if A5data %}
+                            <div class="grid-dataMini3">
+                                <p class="miniFont title number">1</p> 
+                                <p class="miniFont">Oven #{{ A5data.o1 }}</p> 
+                                <p class="miniFont title">{{ A5data.o1_highest_opacity }}%</p> 
+
+                                <p class="miniFont title number">2</p> 
+                                <p class="miniFont title">Oven #{{ A5data.o2 }}</p> 
+                                <p class="miniFont title">{{ A5data.o2_highest_opacity }}%</p> 
+
+                                <p class="miniFont title number">3</p> 
+                                <p class="miniFont title">Oven #{{ A5data.o3 }}</p> 
+                                <p class="miniFont title">{{ A5data.o3_highest_opacity }}%</p> 
+
+                                <p class="miniFont title number">4</p> 
+                                <p class="miniFont title">Oven #{{ A5data.o4 }}</p> 
+                                <p class="miniFont title">{{ A5data.o4_highest_opacity }}%</p> 
+                            </div>
+                        {% else %}
+                            <p class="miniFont" style="text-align:center;">N/A</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div id="latestActivity3" class="card halfs">
+        <div class="card-title">7 Day - Total Charges Graph</div>
+        <div id='canvasHolder'>
+            <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%"></canvas>
+        </div>
+        <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
+        </div>
+        <div id='graph-xaxis-data2' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.1.form.date.month }}/{{ recent_logs.1.form.date.day }}
+        </div>
+        <div id='graph-xaxis-data3' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.2.form.date.month }}/{{ recent_logs.2.form.date.day }}
+        </div>
+        <div id='graph-xaxis-data4' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.3.form.date.month }}/{{ recent_logs.3.form.date.day }}
+        </div>
+        <div id='graph-xaxis-data5' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.4.form.date.month }}/{{ recent_logs.4.form.date.day }}
+        </div>
+        <div id='graph-xaxis-data6' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.5.form.date.month }}/{{ recent_logs.4.form.date.day }}
+        </div>
+        <div id='graph-xaxis-data7' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.6.form.date.month }}/{{ recent_logs.4.form.date.day }}
+        </div>
+        <div id='graph-yaxis-data1' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.0.total_seconds }}
+        </div>
+        <div id='graph-yaxis-data2' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.1.total_seconds }}
+        </div>
+        <div id='graph-yaxis-data3' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.2.total_seconds }}
+        </div>
+        <div id='graph-yaxis-data4' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.3.total_seconds }}
+        </div>
+        <div id='graph-yaxis-data5' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.4.total_seconds }}
+        </div>
+        <div id='graph-yaxis-data6' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.5.total_seconds }}
+        </div>
+        <div id='graph-yaxis-data7' style="height:100%; width:100%;" hidden="true">
+            {{ recent_logs.6.total_seconds }}
+        </div>
+    </div>
+    <div id="corrective_actions" class="card quarters">
+        <div class="card-title">Latest Issues/Corrective Actions</div>
+        <div class="ca_holder">
+            <ul>
+            {% for x in ca_forms %}
+                <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                    <li class="sideAlign">
+                        <div class="ca_indie">
+                            <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
+                                {{ x.date }} - {{ x.form }}
+                            </div>
+                            <div style="text-align: left; width: 100%; font-size:.6rem; padding-left: 0.4rem;">
+                                {{ x.issues }}
+                            </div>
+                        </div>
+                    </li>
+                </a>
+            {% endfor %}
+            </ul>    
+        </div>
+        <div class="ca_footer">
+            <a href="{% url 'Corrective-Action' %}">
+                Show all issues
+                <svg style='height:1rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="link_arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path></svg>
+            </a>
+        </div>
+    </div>
+    <div id="battery_weather" class="card quarters">
+        <div class="card-title">Todays Battery/Weather Info.</div>
+        <div style="overflow: scroll;" class="grid-battery-weather battery_info center bat_weather_class">
+            <p class="weather_battery_font">
+                <span>
+                    Observer:
+                </span>
+                <br>
+                {{ todays_obser }}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Foreman:
+                </span>
+                <br>
+                {% if todays_log.foreman %}{{ todays_log.foreman }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Crew:
+                </span>
+                <br>
+                {% if todays_log.foreman %}{{ todays_log.crew }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    City:
+                </span>
+                <br>
+                {% if weather %}{{ weather.city }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Temperature:
+                </span>
+                <br>
+                {% if weather %}{{ weather.temperature|floatformat:"0" }}° F{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Description:
+                </span>
+                <br>
+                {% if weather %}{{ weather.description }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Wind:
+                </span>
+                <br>
+                {% if weather %}{{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Humidity:
+                </span>
+                <br>
+                {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
+            </p>
+        </div>
+    </div>
+    <div id="latestActivity4" class="card custom">
+        <div class="card-title">90 Day Push Travel Evaluation</div>
+        <div class="myTabs">
+            <input type="radio" id="tab_5day" name="myTabs" checked="checked">
+            <label for="tab_5day">Due 5 Days</label>
+            <div class="tab">
+            {% for x in od_recent %}
+                Oven #{{ x.0 }}
+                Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
+            {% endfor %}
+            </div>
+            <input type="radio" id="tab_10day" name="myTabs">
+            <label for="tab_10day">Due 10 Days</label>
+            <div class="tab">
+                {% for x in od_10 %}
+                Oven #{{ x.0 }}
+                Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
+                {% endfor %}
+            </div>
+            <input type="radio" id="tab_30day" name="myTabs">
+            <label for="tab_30day">Due 30 Days</label>
+            <div class="tab">
+                {% for x in od_30 %}
+                Oven #{{ x.0 }}
+                Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
+                {% endfor %}
             </div>
         </div>
     </div>
-</body>
+    <div id="observers" class="card custom2">
+        <div class="card-title">Observers</div>
+        <div class="grid-observers">
+            <div class="grid-observ_header">
+                <p></p>
+                <p class="contactHeader">Name</p>
+                <p class="contactHeader center">Phone</p>
+                <p class="contactHeader center">Email</p>
+                <p class="contactHeader center">Certification Date</p>
+            </div>
+            {% for person in profile %}
+                <div class="grid-observ_singles">
+                    <span class="c_card_circle_oven c_circle_font_color">
+                        {% if person.profile_picture %}
+                            <img style="width: 40px;border-radius: 25px;" src="../../static/images/profile_pics/TJA.jpg">
+                        {% else %}
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
+                        {% endif %}
+                    </span>
+                    <p class="contactFont">{{ person.user.first_name }} {{ person.user.last_name }}</p>
+                    <p class="contactFont center">{{ person.phone }}</p>
+                    <p class="contactFont center">{{ person.user.email }}</p>
+                    <p class="contactFont center">{{ person.cert_date }}</p>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

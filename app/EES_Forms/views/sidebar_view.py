@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User
 from ..forms import issues_form, events_form
 import datetime
 import calendar
@@ -31,15 +31,24 @@ def corrective_action_view(request):
 def calendar_view(request, year, month):
     unlock = False
     client = False
+    admin = False
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
-
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+    
     profile = user_profile_model.objects.all()
     month = month.title()
     month_number = list(calendar.month_name).index(month)
     month_number = int(month_number)
+
+    context = {}
+    if admin:
+        context['parent_template'] = 'admin/admin_layout.html'
+    else:
+        context['parent_template'] = 'ees_forms/layout.html'
 
     if month_number == 1:
         prev_month = str(calendar.month_name[12])
@@ -62,19 +71,22 @@ def calendar_view(request, year, month):
     html_cal = calend.formatmonth(year, month_number, year, withyear=True)
 
     return render(request, "ees_forms/schedule.html", {
-        'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'context': context, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
 
 
 @lock
 def schedule_view(request):
+    admin = False
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     today_year = int(datetime.date.today().year)
     today_month = str(calendar.month_name[datetime.date.today().month])
 
     return redirect('schedule/' + str(today_year) + '/' + str(today_month))
 
     return render(request, "ees_forms/scheduling.html", {
-        'today_year': today_year, 'today_month': today_month
+        'today_year': today_year, 'today_month': today_month, 'admin': admin,
     })
 
 
@@ -309,6 +321,15 @@ def event_detail_view(request, access_page, event_id):
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
+    admin = False
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+        
+    context = {}
+    if admin:
+        context['parent_template'] = 'admin/admin_layout.html'
+    else:
+        context['parent_template'] = 'ees_forms/layout.html'
 
     form = events_form()
     if access_page == 'view':
@@ -335,5 +356,20 @@ def event_detail_view(request, access_page, event_id):
                 return redirect('../../event_detail/' + str(event_id) + '/view')
 
     return render(request, "ees_forms/event_detail.html", {
-        'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+        'context': context, "admin": admin, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+    })
+
+@lock
+def shared_contacts_view(request):
+    Users = User.objects.all()
+    profile = user_profile_model.objects.order_by('user')
+    
+    organized_list = []
+    for index, user in enumerate(profile):
+        organized_list.append((index, user))
+    
+    
+    
+    return render(request, "shared/contacts.html", {
+        'profile': profile, 'organized_list': organized_list
     })

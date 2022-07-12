@@ -1,6 +1,7 @@
 // Sums the times on input
  
 function sumTime(){
+    const totalTime = document.getElementById('total_seconds').value;
     const c1_sec_value  = document.getElementById('c1_sec').value;
     const c2_sec_value  = document.getElementById('c2_sec').value;
     const c3_sec_value  = document.getElementById('c3_sec').value;
@@ -9,9 +10,18 @@ function sumTime(){
 
     let summedTime =  parseFloat(c1_sec_value) + parseFloat(c2_sec_value) + parseFloat(c3_sec_value) + parseFloat(c4_sec_value) + parseFloat(c5_sec_value);
 
-    document.getElementById('total_seconds').value = summedTime;
+    if (totalTime) {
+        if (parseFloat(summedTime) == parseFloat(totalTime)) {
+            document.getElementById("total_seconds").style.backgroundColor = "#3c983c85";
+        } else {
+            document.getElementById("total_seconds").style.backgroundColor = "#F49B9B";
+        }
+    } else {
+        document.getElementById('total_seconds').placeholder = summedTime;
+        document.getElementById("total_seconds").style.backgroundColor = "#FFFA8B";
+    }
 }
-function equal_start_stop() {
+/*function equal_start_stop() {
     let start = document.getElementById('main_start').value;
     
     document.getElementById('c1_start').value = start;
@@ -19,7 +29,7 @@ function equal_start_stop() {
     let stop = document.getElementById('c5_stop').value;
     
     document.getElementById('main_stop').value = stop;
-}
+}*/
 function c2_check() {
     const oven1 = parseInt(document.getElementById('c1_no').value),
           oven2 = parseInt(document.getElementById('c2_no').value);

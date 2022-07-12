@@ -8,6 +8,7 @@ urlpatterns = [
 
     path("Register", views.register_view, name="Register"),
     path("Login", views.login_view, name="Login"),
+    path("no_registration", views.valid_account_logout, name="no_registration"),
     path("Logout", views.logout_view, name="Logout"),
     path('profile_redirect', views.profile_redirect, name='profile_redirect'),
     path("password", PasswordsChangeView.as_view(), name='PasswordChange'),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('archive', views.archive_view, name='archive'),
     path('search_forms/<str:access_page>', views.search_forms_view, name='search_forms'),
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
+    path("Contacts", views.shared_contacts_view, name="Contacts"),
 
     path("Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("Daily/formA2/<str:selector>", views.formA2, name="formA2"),

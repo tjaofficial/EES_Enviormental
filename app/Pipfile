@@ -11,6 +11,7 @@ requests = "*"
 pillow = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
+fpdf = "*"
 
 [dev-packages]
 

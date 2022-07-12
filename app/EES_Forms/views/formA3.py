@@ -10,16 +10,19 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA3(request, selector):
-    now = datetime.datetime.now()
+    formName = "A3"
+    existing = False
     unlock = False
     client = False
+    search = False
+    admin = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
-
-    formName = "A3"
-    existing = False
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     full_name = request.user.get_full_name()
@@ -33,6 +36,8 @@ def formA3(request, selector):
                 if str(x.date) == str(selector):
                     database_model = x
             data = database_model
+            existing = True
+            search = True
         elif len(org) > 0:
             database_form = org[0]
             if now.month == todays_log.date_save.month:
@@ -48,50 +53,53 @@ def formA3(request, selector):
 
                 return redirect(batt_prof)
 
-        if existing:
-            initial_data = {
-                'date': database_form.date,
-                'observer': database_form.observer,
-                'crew': database_form.crew,
-                'foreman': database_form.foreman,
-                'inop_ovens': database_form.inop_ovens,
-                'inop_numbs': database_form.inop_numbs,
-                'om_start': database_form.om_start,
-                'om_stop': database_form.om_stop,
-                'l_start': database_form.l_start,
-                'l_stop': database_form.l_stop,
-                'om_leak_json': database_form.om_leak_json,
-                'om_leaks2': database_form.om_leaks2,
-                'l_leak_json': database_form.l_leak_json,
-                'l_leaks2': database_form.l_leaks2,
-                'om_traverse_time_min': database_form.om_traverse_time_min,
-                'om_traverse_time_sec': database_form.om_traverse_time_sec,
-                'l_traverse_time_min': database_form.l_traverse_time_min,
-                'l_traverse_time_sec': database_form.l_traverse_time_sec,
-                'om_allowed_traverse_time': database_form.om_allowed_traverse_time,
-                'l_allowed_traverse_time': database_form.l_allowed_traverse_time,
-                'om_valid_run': database_form.om_valid_run,
-                'l_valid_run': database_form.l_valid_run,
-                'om_leaks': database_form.om_leaks,
-                'l_leaks': database_form.l_leaks,
-                'om_not_observed': database_form.om_not_observed,
-                'l_not_observed': database_form.l_not_observed,
-                'om_percent_leaking': database_form.om_percent_leaking,
-                'l_percent_leaking': database_form.l_percent_leaking,
-                'notes': database_form.notes,
-            }
+        if search:
+            database_form = ''
         else:
-            initial_data = {
-                'date': todays_log.date_save,
-                'observer': full_name,
-                'crew': todays_log.crew,
-                'foreman': todays_log.foreman,
-                'inop_ovens': todays_log.inop_ovens,
-                'inop_numbs': todays_log.inop_numbs,
-                'notes': 'N/A',
-            }
+            if existing:
+                initial_data = {
+                    'date': database_form.date,
+                    'observer': database_form.observer,
+                    'crew': database_form.crew,
+                    'foreman': database_form.foreman,
+                    'inop_ovens': database_form.inop_ovens,
+                    'inop_numbs': database_form.inop_numbs,
+                    'om_start': database_form.om_start,
+                    'om_stop': database_form.om_stop,
+                    'l_start': database_form.l_start,
+                    'l_stop': database_form.l_stop,
+                    'om_leak_json': database_form.om_leak_json,
+                    'om_leaks2': database_form.om_leaks2,
+                    'l_leak_json': database_form.l_leak_json,
+                    'l_leaks2': database_form.l_leaks2,
+                    'om_traverse_time_min': database_form.om_traverse_time_min,
+                    'om_traverse_time_sec': database_form.om_traverse_time_sec,
+                    'l_traverse_time_min': database_form.l_traverse_time_min,
+                    'l_traverse_time_sec': database_form.l_traverse_time_sec,
+                    'om_allowed_traverse_time': database_form.om_allowed_traverse_time,
+                    'l_allowed_traverse_time': database_form.l_allowed_traverse_time,
+                    'om_valid_run': database_form.om_valid_run,
+                    'l_valid_run': database_form.l_valid_run,
+                    'om_leaks': database_form.om_leaks,
+                    'l_leaks': database_form.l_leaks,
+                    'om_not_observed': database_form.om_not_observed,
+                    'l_not_observed': database_form.l_not_observed,
+                    'om_percent_leaking': database_form.om_percent_leaking,
+                    'l_percent_leaking': database_form.l_percent_leaking,
+                    'notes': database_form.notes,
+                }
+            else:
+                initial_data = {
+                    'date': todays_log.date_save,
+                    'observer': full_name,
+                    'crew': todays_log.crew,
+                    'foreman': todays_log.foreman,
+                    'inop_ovens': todays_log.inop_ovens,
+                    'inop_numbs': todays_log.inop_numbs,
+                    'notes': 'N/A',
+                }
 
-        data = formA3_form(initial=initial_data)
+            data = formA3_form(initial=initial_data)
         if request.method == "POST":
             if existing:
                 form = formA3_form(request.POST, instance=database_form)
@@ -127,5 +135,5 @@ def formA3(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client,
+        "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client,
     })

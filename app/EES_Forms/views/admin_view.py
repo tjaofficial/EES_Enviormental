@@ -10,7 +10,7 @@ import requests
 
 lock = login_required(login_url='Login')
 
-
+@lock
 def admin_dashboard_view(request):
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
@@ -23,17 +23,42 @@ def admin_dashboard_view(request):
     now = datetime.datetime.now()
     emypty_dp_today = True
     recent_logs = formA1_readings_model.objects.all().order_by('-form')[:7]
-
+    year = str(now.year)
+    if len(str(now.month)) == 1:
+        month = "0" + str(now.month)
+    else:
+        month = str(now.month)
+    if len(str(now.day)) == 1:
+        day = '0' + str(now.day)
+    else:
+        day = str(now.day)
+    date = year + '-' + month + '-' + day
+    form_enteredA1 = False
+    form_enteredA2 = False
+    form_enteredA3 = False
+    form_enteredA4 = False
+    form_enteredA5 = False
+    today = datetime.date.today()
+    todays_num = today.weekday()
     # -------PROGRESS PERCENTAGES -----------------
 
-    weekly_forms_total = []
+    daily_forms_comp = []
+    for forms in Forms.objects.filter(frequency = 'Daily'):
+        if forms.submitted:
+            daily_forms_comp.append(forms.form)
+    if todays_num in {0, 1, 2, 3, 4}:
+        daily_count_total = 11
+    else:
+        daily_count_total = 8
+    daily_count_comp = len(daily_forms_comp)
+    daily_percent = (daily_count_comp / daily_count_total) * 100
+
     weekly_forms_comp = []
     for forms in Forms.objects.all():
         if forms.frequency in {"Daily", "Weekly"}:
-            weekly_forms_total.append(forms.form)
             if forms.submitted:
                 weekly_forms_comp.append(forms.form)
-    weekly_count_total = len(weekly_forms_total)
+    weekly_count_total = 60
     weekly_count_comp = len(weekly_forms_comp)
     weekly_percent = (weekly_count_comp / weekly_count_total) * 100
 
@@ -65,7 +90,6 @@ def admin_dashboard_view(request):
         A = []
         for items in reads:
             date = items.form.date
-            # date_array = date.split("-")
 
             year = date.year
             month = date.month
@@ -121,6 +145,27 @@ def admin_dashboard_view(request):
         return B
     cool = final(sort)
 
+    def overdue_30(cool):
+        C = []
+        for x in cool:
+            if x[3] <= 30:
+                C.append(x)
+        return C
+
+    def overdue_10(cool):
+        D = []
+        for x in cool:
+            if x[3] <= 10:
+                D.append(x)
+        return D
+
+    def overdue_5(cool):
+        E = []
+        for x in cool:
+            if x[3] <= 5:
+                E.append(x)
+        return E
+
     def overdue_closest(cool):
         F = []
 
@@ -134,9 +179,15 @@ def admin_dashboard_view(request):
         return F
 
     if len(cool) >= 4:
+        od_30 = overdue_30(cool)
+        od_10 = overdue_10(cool)
+        od_5 = overdue_5(cool)
         od_recent = overdue_closest(cool)
     else:
         od_recent = ''
+        od_30 = ''
+        od_10 = ''
+        od_5 = ''
 
     # ----CONTACTS-----------------
 
@@ -144,6 +195,7 @@ def admin_dashboard_view(request):
     profile = user_profile_model.objects.all()
 
     # ----USER ON SCHEDULE----------
+    todays_obser = 'Schedule Not Updated'
 
     event_cal = Event.objects.all()
     today = datetime.date.today()
@@ -152,10 +204,6 @@ def admin_dashboard_view(request):
         for x in event_cal:
             if x.date == today:
                 todays_obser = x.observer
-            else:
-                todays_obser = 'Schedule Not Updated'
-    else:
-        todays_obser = 'Schedule Not Updated'
 
     # ----ISSUES/CORRECTIVE ACTIONS----------
 
@@ -206,13 +254,13 @@ def admin_dashboard_view(request):
             todays_log = daily_prof[0]
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
-                    print('check 1')
                     emypty_dp_today = False
                     today = todays_log.date_save
                     if len(formA1) > 0:
                         most_recent_A1 = formA1[0].form.date
                         if most_recent_A1 == today:
                             A1data = formA1[0]
+                            form_enteredA1 = True
                         else:
                             A1data = ""
                     else:
@@ -222,8 +270,13 @@ def admin_dashboard_view(request):
                         most_recent_A2 = formA2[0].date
                         if most_recent_A2 == today:
                             A2data = formA2[0]
-                            push = json.loads(A2data.p_leak_data)
-                            coke = json.loads(A2data.c_leak_data)
+                            if A2data.p_leak_data and A2data.c_leak_data:
+                                push = json.loads(A2data.p_leak_data)
+                                coke = json.loads(A2data.c_leak_data)
+                            else:
+                                push = ""
+                                coke = ""
+                            form_enteredA2 = True
                         else:
                             A2data = ""
                             push = ""
@@ -237,8 +290,13 @@ def admin_dashboard_view(request):
                         most_recent_A3 = formA3[0].date
                         if most_recent_A3 == today:
                             A3data = formA3[0]
-                            lids = json.loads(A3data.l_leak_json)
-                            offtakes = json.loads(A3data.om_leak_json)
+                            if A3data.l_leak_json and A3data.om_leak_json:
+                                lids = json.loads(A3data.l_leak_json)
+                                offtakes = json.loads(A3data.om_leak_json)
+                            else:
+                                lids = ""
+                                offtakes = ""
+                            form_enteredA3 = True
                         else:
                             A3data = ""
                             lids = ""
@@ -252,6 +310,7 @@ def admin_dashboard_view(request):
                         most_recent_A4 = formA4[0].date
                         if most_recent_A4 == today:
                             A4data = formA4[0]
+                            form_enteredA4 = True
                         else:
                             A4data = ""
                     else:
@@ -261,7 +320,7 @@ def admin_dashboard_view(request):
                         most_recent_A5 = formA5[0].form.date
                         if most_recent_A5 == today:
                             A5data = formA5[0]
-                            print('water')
+                            form_enteredA5 = True
                         else:
                             A5data = ""
                     else:
@@ -272,18 +331,16 @@ def admin_dashboard_view(request):
 
         if emypty_dp_today:
             return render(request, "admin/admin_dashboard.html", {
-                'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+                'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent,
             })
     return render(request, "admin/admin_dashboard.html", {
-        'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent
+        'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date, "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent,
     })
 
 
+@lock
 def register_view(request):
-    # change code to redirect if you are not roger/SGI ADMIN
-    if not request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        return redirect('IncompleteForms')
-    else:
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         form = CreateUserForm()
         profile_form = user_profile_form()
 
@@ -306,6 +363,12 @@ def register_view(request):
                 return redirect('admin_dashboard')
             else:
                 messages.error(request, "The Information Entered Was Invalid.")
+    elif request.user.groups.filter(name='EES Coke Employees'):
+        return redirect('c_dashboard')
+    elif request.user.groups.filter(name='SGI Technician'):
+        return redirect('IncompleteForms')
+    else:
+        return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
                 'form': form, 'profile_form': profile_form
             })

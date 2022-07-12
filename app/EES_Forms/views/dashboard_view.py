@@ -520,13 +520,73 @@ def IncompleteForms(request):
                 if today != A:
                     forms.submitted = False
                     forms.save()
+        
+        all_forms = Forms.objects.all().order_by('form')
+        
+        all_incomplete_forms = []
+        all_complete_forms = []
+        daily_incomplete_forms = []
+        daily_complete_forms = []
+        weekly_incomplete_forms = []
+        weekly_complete_forms = []
+        monthly_incomplete_forms = []
+        monthly_complete_forms = []
+        quarterly_incomplete_forms = []
+        quarterly_complete_forms = []
+        annual_incomplete_forms = []
+        annual_complete_forms = []
+        sannual_incomplete_forms = []
+        sannual_complete_forms = []
+        
+        for forms in all_forms:
+            if (forms.day_freq in {'Everyday', todays_num}) or (todays_num in {5, 6} and forms.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and forms.day_freq == 'Weekdays'):
+                if forms.submitted == False:
+                    all_incomplete_forms.append(forms)
+                    if forms.frequency == 'Daily':
+                        daily_incomplete_forms.append(forms)
+                    elif forms.frequency == 'Weekly':
+                        weekly_incomplete_forms.append(forms)
+                    elif forms.frequency == 'Monthly':
+                        monthly_incomplete_forms.append(forms)
+                    elif forms.frequency == 'Quarterly':
+                        quarterly_incomplete_forms.append(forms)
+                    elif forms.frequency == 'Annual':
+                        annual_incomplete_forms.append(forms)
+                    elif forms.frequency == 'Semi-Annual':
+                        sannual_incomplete_forms.append(forms)
+                elif forms.submitted == True: 
+                    all_complete_forms.append(forms)
+                    if forms.frequency == 'Daily':
+                        daily_complete_forms.append(forms)
+                    elif forms.frequency == 'Weekly':
+                        weekly_complete_forms.append(forms)
+                    elif forms.frequency == 'Monthly':
+                        monthly_complete_forms.append(forms)
+                    elif forms.frequency == 'Quarterly':
+                        quarterly_complete_forms.append(forms)
+                    elif forms.frequency == 'Annual':
+                        annual_complete_forms.append(forms)
+                    elif forms.frequency == 'Semi-Annual':
+                        sannual_complete_forms.append(forms)
+                 
+        sorting_array = [
+            all_incomplete_forms,
+            all_complete_forms,
+            daily_incomplete_forms,
+            daily_complete_forms,
+            weekly_incomplete_forms,
+            weekly_complete_forms,
+            monthly_incomplete_forms,
+            monthly_complete_forms,
+            quarterly_incomplete_forms,
+            quarterly_complete_forms,
+            annual_incomplete_forms,
+            annual_complete_forms,
+            sannual_incomplete_forms,
+            sannual_complete_forms,
+        ]
 
-        pull = Forms.objects.filter(submitted__exact=False).order_by('form')
-        pullNot = Forms.objects.filter(submitted__exact=True).order_by('form')
-
-        day_number = today.weekday()
-
-        if day_number == 6:
+        if todays_num == 6:
             saturday = False
         else:
             saturday = True
@@ -534,13 +594,13 @@ def IncompleteForms(request):
         weekend_list = [5, 6]
         form_check1 = ["", ]
         form_check2 = ["", ]
+        form_checkAll = ["", ]
+        form_checkDaily2 = ["", ]
 
         return render(request, "ees_forms/dashboard.html", {
-            "pull": pull, "pullNot": pullNot, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'day_number': day_number, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday,
+            'form_checkDaily2': form_checkDaily2, 'form_checkAll': form_checkAll, "today": today, 'od_recent': od_recent, "todays_log": todays_log, 'now': now, 'profile_entered': profile_entered, 'form_check1': form_check1, 'form_check2': form_check2, 'profile': profile, 'today_str': today_str, 'todays_num': todays_num, 'weekend_list': weekend_list, 'weather': weather, 'wind_direction': wind_direction, 'saturday': saturday, 'sorting_array': sorting_array
         })
     elif request.user.groups.filter(name='SGI Admin'):
         return redirect('admin_dashboard')
     elif request.user.groups.filter(name='EES Coke Employees'):
         return redirect('c_dashboard')
-    else:
-        return redirect('Logout')

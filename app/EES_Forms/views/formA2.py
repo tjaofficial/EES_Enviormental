@@ -12,11 +12,14 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formA2(request, selector):
     unlock = False
     client = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
-
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     formName = "A2"
     existing = False
     now = datetime.datetime.now()
@@ -33,6 +36,8 @@ def formA2(request, selector):
                 if str(x.date) == str(selector):
                     database_model = x
             data = database_model
+            existing = True
+            search = True
         elif len(org) > 0:
             database_form = org[0]
             if now.month == todays_log.date_save.month:
@@ -47,49 +52,52 @@ def formA2(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
-        if existing:
-            initial_data = {
-                'date': database_form.date,
-                'observer': database_form.observer,
-                'crew': database_form.crew,
-                'foreman': database_form.foreman,
-                'inop_ovens': database_form.inop_ovens,
-                'inop_numbs': database_form.inop_numbs,
-                'p_start': database_form.p_start,
-                'p_stop': database_form.p_stop,
-                'c_start': database_form.c_start,
-                'c_stop': database_form.c_stop,
-                'p_leak_data': database_form.p_leak_data,
-                'c_leak_data': database_form.c_leak_data,
-                'notes': database_form.notes,
-                'p_temp_block_from': database_form.p_temp_block_from,
-                'p_temp_block_to': database_form.p_temp_block_to,
-                'c_temp_block_from': database_form.c_temp_block_from,
-                'c_temp_block_to': database_form.c_temp_block_to,
-                'p_traverse_time_min': database_form.p_traverse_time_min,
-                'p_traverse_time_sec': database_form.p_traverse_time_sec,
-                'c_traverse_time_min': database_form.c_traverse_time_min,
-                'c_traverse_time_sec': database_form.c_traverse_time_sec,
-                'total_traverse_time': database_form.total_traverse_time,
-                'allowed_traverse_time': database_form.allowed_traverse_time,
-                'valid_run': database_form.valid_run,
-                'leaking_doors': database_form.leaking_doors,
-                'doors_not_observed': database_form.doors_not_observed,
-                'inop_doors_eq': database_form.inop_doors_eq,
-                'percent_leaking': database_form.percent_leaking,
-            }
+        if search:
+            database_form = ''
         else:
-            initial_data = {
-                'date': todays_log.date_save,
-                'observer': full_name,
-                'crew': todays_log.crew,
-                'foreman': todays_log.foreman,
-                'inop_ovens': todays_log.inop_ovens,
-                'inop_numbs': todays_log.inop_numbs,
-                'notes': 'N/A',
-            }
+            if existing:
+                initial_data = {
+                    'date': database_form.date,
+                    'observer': database_form.observer,
+                    'crew': database_form.crew,
+                    'foreman': database_form.foreman,
+                    'inop_ovens': database_form.inop_ovens,
+                    'inop_numbs': database_form.inop_numbs,
+                    'p_start': database_form.p_start,
+                    'p_stop': database_form.p_stop,
+                    'c_start': database_form.c_start,
+                    'c_stop': database_form.c_stop,
+                    'p_leak_data': database_form.p_leak_data,
+                    'c_leak_data': database_form.c_leak_data,
+                    'notes': database_form.notes,
+                    'p_temp_block_from': database_form.p_temp_block_from,
+                    'p_temp_block_to': database_form.p_temp_block_to,
+                    'c_temp_block_from': database_form.c_temp_block_from,
+                    'c_temp_block_to': database_form.c_temp_block_to,
+                    'p_traverse_time_min': database_form.p_traverse_time_min,
+                    'p_traverse_time_sec': database_form.p_traverse_time_sec,
+                    'c_traverse_time_min': database_form.c_traverse_time_min,
+                    'c_traverse_time_sec': database_form.c_traverse_time_sec,
+                    'total_traverse_time': database_form.total_traverse_time,
+                    'allowed_traverse_time': database_form.allowed_traverse_time,
+                    'valid_run': database_form.valid_run,
+                    'leaking_doors': database_form.leaking_doors,
+                    'doors_not_observed': database_form.doors_not_observed,
+                    'inop_doors_eq': database_form.inop_doors_eq,
+                    'percent_leaking': database_form.percent_leaking,
+                }
+            else:
+                initial_data = {
+                    'date': todays_log.date_save,
+                    'observer': full_name,
+                    'crew': todays_log.crew,
+                    'foreman': todays_log.foreman,
+                    'inop_ovens': todays_log.inop_ovens,
+                    'inop_numbs': todays_log.inop_numbs,
+                    'notes': 'N/A',
+                }
 
-        data = formA2_form(initial=initial_data)
+            data = formA2_form(initial=initial_data)
         if request.method == "POST":
             if existing:
                 form = formA2_form(request.POST, instance=database_form)
@@ -123,5 +131,5 @@ def formA2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client,
+        "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client,
     })
