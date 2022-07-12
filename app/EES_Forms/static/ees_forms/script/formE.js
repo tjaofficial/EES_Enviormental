@@ -1,9 +1,16 @@
 "use strict"
 
 window.addEventListener("load", ()=> {
+    let gooseNeckArray = []
     const gooseNeckInputValue = document.querySelector('#gooseNeckData').value;
-    const gooseNeckJSON = JSON.parse(gooseNeckInputValue);
-    const gooseNeckArray = gooseNeckJSON.data
+    const gooseNeckObj = JSON.parse(gooseNeckInputValue);
+    if(gooseNeckObj.hasOwnProperty('data')){
+        gooseNeckArray = gooseNeckObj.data;
+    }
+    else{
+        gooseNeckArray = [];
+    }
+    
     
     insertHTMLString(gooseNeckArray);
     updateEventListeners();
