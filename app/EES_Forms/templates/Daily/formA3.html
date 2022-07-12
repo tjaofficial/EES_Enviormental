@@ -8,6 +8,7 @@
     <link href="{% static 'ees_forms/style/formA3/formA3.css' %}" rel="stylesheet">
     <script defer src="{% static 'ees_forms/script/formA3.js' %}"></script>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+
     <div id="paperSize">
         <div>
             <a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% elif selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}">
@@ -65,10 +66,10 @@
                             <div class="resultTables_container">
                                 <div>Start Time:{{ data.om_start }}</div>
                                 <div>End Time:{{ data.om_stop }}</div>
-                                <input id="offtake" type="hidden" value="{}" data-resulttable=""/>
+                                <div hidden="true">{{ data.om_leak_json }}</div>
                                 <table style="border-collapse: collapse;">
                                     <tr>
-                                        <th id="boxa5" style="max-width: 100px;"colspan="3">
+                                        <th id="boxa5" colspan="3">
                                             OFFTAKES AND MINI STANDPIPES
                                         </th>
                                     </tr>
@@ -80,9 +81,23 @@
                                             Location
                                         </th>
                                     </tr>
-                                    <tbody id="offtake_tableBody">
-    
-                                    </tbody>
+                                    {% for item in omSide_json %}
+                                        <tr>
+                                            <th id="boxa6" colspan="1">
+                                                {{ item.oven }}
+                                            </th>
+                                            <th id="boxa6" colspan="2">
+                                                {% for loc in item.location %}
+                                                    {% if forloop.last %}
+                                                        {{ loc }}
+                                                    {% else %}
+                                                        {{ loc }},
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    <tbody id="offtakes_tableBody" data-numRows="1">
                                 </table>
                                 <div>Traverse Time: {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec</div>
                             </div>
@@ -90,10 +105,10 @@
                             <div class="resultTables_container">
                                 <div> Start Time:{{ data.l_start }} </div>
                                 <div> End Time:{{ data.l_stop }} </div>
-                                <input id="lid" type="hidden" value="{}" data-resulttable=""/>
+                                <div hidden="true">{{ data.l_leak_json }}</div>
                                 <table style="border-collapse: collapse;">
                                     <tr>
-                                        <th id="boxa5" style="max-width: 100px;"colspan="6">
+                                        <th id="boxa5" colspan="6">
                                             LIDS
                                         </th>
                                     </tr>
@@ -105,11 +120,24 @@
                                             Location
                                         </th>
                                     </tr>
-                                    <tbody id="lid_tableBody">
-    
+                                    {% for item in lSide_json %}
+                                        <tr>
+                                            <th id="boxa6" colspan="1">
+                                                {{ item.oven }}
+                                            </th>
+                                            <th id="boxa6" colspan="2">
+                                                {% for loc in item.location %}
+                                                    {% if forloop.last %}
+                                                        {{ loc }}
+                                                    {% else %}
+                                                        {{ loc }},
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    <tbody id="lids_tableBody" data-numRows="1">
                                     </tbody>
-
-                                    
                                 </table>
                                 <div>Traverse Time: {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec</div>
                             </div>
@@ -124,7 +152,7 @@
                                     D = Dampered off
                                 </td>
                                 <td style="width: 254px; text-align: center;">
-                                    Allowed Traverse Time: {{ data.om_leak_json }}
+                                    Allowed Traverse Time:
                                 </td>
                                 <td rowspan="2" style="width: 354px; text-align: left;">
                                     = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
@@ -141,7 +169,7 @@
                                 <td style="text-align: center;">
                                     (Offtakes)
                                 </td>
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
                                     {{ data.om_valid_run }}
                                 </td>
                             </tr>
@@ -157,7 +185,7 @@
                                     S = Slip Joint
                                 </td>
                                 <td style="text-align: center;">
-                                    Allowed Traverse Time: {{ data.l_leak_json }}
+                                    Allowed Traverse Time:
                                 </td>
                                 <td rowspan="2" style="width: 354px; text-align: left;">
                                     = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
@@ -173,7 +201,7 @@
                                 <td style="text-align: center;">
                                     (Lids)
                                 </td>
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
                                     {{ data.l_valid_run }}
                                 </td>
                             </tr> 

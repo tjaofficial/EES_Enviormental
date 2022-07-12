@@ -11,7 +11,10 @@ requests = "*"
 pillow = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 39c6f5a1c7adfed0ff39bed55094899612effdc4
 
 [dev-packages]
 

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, Forms, formA2_model
 from ..forms import formA2_form
+import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -54,6 +55,13 @@ def formA2(request, selector):
                 return redirect(batt_prof)
         if search:
             database_form = ''
+            pSide_Raw_JSON = json.loads(data.p_leak_data)
+            cSide_Raw_JSON = json.loads(data.c_leak_data)
+            pSide_json = pSide_Raw_JSON['data']
+            cSide_json = cSide_Raw_JSON['data']
+            #for item in pSide_json['data'][0]:
+            print(pSide_Raw_JSON['data'])
+                
         else:
             if existing:
                 initial_data = {
@@ -98,6 +106,9 @@ def formA2(request, selector):
                 }
 
             data = formA2_form(initial=initial_data)
+            pSide_json = ''
+            cSide_json = ''
+            
         if request.method == "POST":
             if existing:
                 form = formA2_form(request.POST, instance=database_form)
@@ -131,5 +142,5 @@ def formA2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {
-        "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client,
+        "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json,
     })

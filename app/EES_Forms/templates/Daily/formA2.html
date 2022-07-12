@@ -60,7 +60,7 @@
                                     </span>
                                 </div>
                                 <div>End Time:{{ data.p_stop }}</div>
-                                {{ data.p_leak_data }}
+                                <div hidden='true'>{{ data.p_leak_data }}</div>
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
                                     <tr>
@@ -74,6 +74,19 @@
                                             Zone
                                         </td>
                                     </tr>
+                                    {% for item in pSide_json %}
+                                        <tr>
+                                            <td class="boxa6" colspan="1">
+                                                {{ item.oven }}
+                                            </td>
+                                            <td class="boxa6" colspan="1">
+                                                {{ item.location }}
+                                            </td>
+                                            <td class="boxa6" colspan="1">
+                                                {{ item.zone }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                     <tbody id="pushSide_ctableBody" data-numRows="1">
                                     </tbody>
                                 </table>
@@ -95,7 +108,7 @@
                                     </span>
                                 </div>
                                 <div>End Time:{{ data.c_stop }}</div>
-                                {{ data.c_leak_data }}
+                                <div hidden='true'> {{ data.c_leak_data }}</div>
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>
                                     <tr>
@@ -109,7 +122,20 @@
                                             Zone
                                         </td>
                                     </tr>
-                                    <tbody id="cokeSide_ctableBody" data-numRows="1"> 
+                                    {% for item in cSide_json %}
+                                        <tr>
+                                            <td class="boxa6" colspan="1">
+                                                {{ item.oven }}
+                                            </td>
+                                            <td class="boxa6" colspan="1">
+                                                {{ item.location }}
+                                            </td>
+                                            <td class="boxa6" colspan="1">
+                                                {{ item.zone }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tbody id="cokeSide_ctableBody" data-numRows="1"></tbody>
                                 </table>
                                 <div class="readings_col">
                                     <div>Temp. Blocked</div>

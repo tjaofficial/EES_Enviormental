@@ -325,8 +325,8 @@ class formA2_form(ModelForm):
             }),
             'percent_leaking': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'notes': Textarea(attrs={'rows': 7, 'style': 'width: 805px;'}),
-            'p_leak_data': forms.NumberInput(attrs={'id': "pushSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
-            'c_leak_data': forms.NumberInput(attrs={'id': "cokeSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
+            'p_leak_data': forms.TextInput(attrs={'id': "pushSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
+            'c_leak_data': forms.TextInput(attrs={'id': "cokeSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
         }
 
 
@@ -345,9 +345,9 @@ class formA3_form(ModelForm):
             'om_stop': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
             'l_start': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
             'l_stop': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'om_leak_json': forms.TextInput(attrs={'id': 'om_leak_json', 'type': "hidden", 'class': 'input', 'style': 'width:300px; text-align: center;'}),
+            'om_leak_json': forms.TextInput(attrs={'id': 'offtakes', 'type': "hidden", 'value': '{}', 'data-resulttable': ""}),
             'om_leaks2': forms.NumberInput(attrs={'onchange': 'om_equation()', 'id': 'om_leaks2', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'l_leak_json': forms.TextInput(attrs={'id': 'l_leak_json', 'type': "hidden", 'class': 'input', 'style': 'width:50px; text-align: center;'}),
+            'l_leak_json': forms.TextInput(attrs={'id': 'lids', 'type': "hidden", 'value': '{}', 'data-resulttable': ""}),
             'l_leaks2': forms.NumberInput(attrs={'onchange': 'l_equation()', 'id': 'l_leaks2', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'om_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'om_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
@@ -425,6 +425,7 @@ class formA5_form(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
         }
+
 
 class formA5_readings_form(ModelForm):
     class Meta:
@@ -626,11 +627,8 @@ class formA5_readings_form(ModelForm):
             'o4_15_reads' : forms.TextInput(attrs={'id':'o4_15_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
             'o4_16_reads' : forms.TextInput(attrs={'id':'o4_16_reads', 'class': 'input', 'oninput':'pt4_averages()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
         }
-        
     
-
-
-    
+ 
 class formB_form(ModelForm):
     class Meta:
         today = datetime.date.today()
@@ -797,8 +795,8 @@ class formB_form(ModelForm):
             'wharf_4' : forms.Select(attrs={'oninput':'house_keeping_4()', 'style':'width: 80px;', 'required': sec_2}),
             'breeze_4' : forms.Select(attrs={'oninput':'house_keeping_4()', 'style':'width: 80px;', 'required': sec_2}),
         }
-        
-        
+
+         
 class formD_form(ModelForm):
     class Meta:
         model = formD_model
