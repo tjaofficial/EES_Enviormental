@@ -262,8 +262,8 @@ class formC_model(models.Model):
     comments = models.CharField(
         max_length=300
     )
-    average_t = models.IntegerField(blank=True)
-    average_p = models.IntegerField(blank=True)
+    average_t = models.FloatField(blank=True)
+    average_p = models.FloatField(blank=True)
 
     def clean_t(self):
         if self.truck_start_time > self.truck_stop_time:
