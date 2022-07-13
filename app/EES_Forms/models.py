@@ -3704,18 +3704,6 @@ class formM_model(models.Model):
         auto_now_add=False,
         auto_now=False,
     )
-    storage = models.CharField(
-        max_length=30,
-        choices=storage_piles
-    )
-    sto_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-    )
-    sto_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-    )
     observer = models.CharField(
         max_length=30
     )
@@ -3847,43 +3835,7 @@ class formM_readings_model(models.Model):
     par_12 = models.CharField(
         max_length=30,
     )
-
-    storage_1 = models.CharField(
-        max_length=30,
-    )
-    storage_2 = models.CharField(
-        max_length=30,
-    )
-    storage_3 = models.CharField(
-        max_length=30,
-    )
-    storage_4 = models.CharField(
-        max_length=30,
-    )
-    storage_5 = models.CharField(
-        max_length=30,
-    )
-    storage_6 = models.CharField(
-        max_length=30,
-    )
-    storage_7 = models.CharField(
-        max_length=30,
-    )
-    storage_8 = models.CharField(
-        max_length=30,
-    )
-    storage_9 = models.CharField(
-        max_length=30,
-    )
-    storage_10 = models.CharField(
-        max_length=30,
-    )
-    storage_11 = models.CharField(
-        max_length=30,
-    )
-    storage_12 = models.CharField(
-        max_length=30,
-    )
+    
     pav_total = models.CharField(
         max_length=30,
     )
@@ -3893,10 +3845,6 @@ class formM_readings_model(models.Model):
     par_total = models.CharField(
         max_length=30,
     )
-    storage_total = models.CharField(
-        max_length=30,
-    )
-
     def __str__(self):
         return str(self.form)
 
