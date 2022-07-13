@@ -1492,7 +1492,7 @@ class formM_readings_form(ModelForm):
             'pav_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_12' : forms.TextInput(attrs={'oninput':'sumTime1()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_12' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1504,7 +1504,7 @@ class formM_readings_form(ModelForm):
             'unp_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_12' : forms.TextInput(attrs={'oninput':'sumTime2()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_12' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1516,10 +1516,10 @@ class formM_readings_form(ModelForm):
             'par_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_12' : forms.TextInput(attrs={'oninput':'sumTime3()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_total' : forms.TextInput(attrs={'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_12' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_total' : forms.TextInput(attrs={'oninput':'paved_average()', 'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_total' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_total' : forms.TextInput(attrs={'oninput':'parking_average()', 'type':'text', 'style': 'width: 50px; text-align: center;'}),
         }
 class formO_form(ModelForm):
     class Meta:

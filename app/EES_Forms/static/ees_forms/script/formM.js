@@ -1,3 +1,58 @@
+function paved_average() {
+    list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    var paved_total = 0;
+    for (let i=0; i < list.length; i++){
+        const opacities = list[i];
+        const paved_opac  = document.getElementById('id_pav_' + opacities).value;
+        paved_total += parseInt(paved_opac);
+    }
+    const pavedAverage = (paved_total / 12).toFixed(3);
+    document.getElementById('id_pav_total').placeholder = pavedAverage;
+    const id_param = document.getElementById('id_pav_total').id;
+    stop_light(pavedAverage, id_param);
+}
+
+function unpaved_average() {
+    list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    var unpaved_total = 0;
+    for (let i=0; i < list.length; i++){
+        const opacities = list[i];
+        const unpaved_opac  = document.getElementById('id_unp_' + opacities).value;
+        unpaved_total += parseInt(unpaved_opac);
+    }
+    const unpavedAverage = (unpaved_total / 12).toFixed(3);
+    document.getElementById('id_unp_total').placeholder = unpavedAverage;
+    const id_param = document.getElementById('id_unp_total').id;
+    stop_light(unpavedAverage, id_param);
+}
+
+function parking_average() {
+    list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    var parking_total = 0;
+    for (let i=0; i < list.length; i++){
+        const opacities = list[i];
+        const parking_opac  = document.getElementById('id_par_' + opacities).value;
+        parking_total += parseInt(parking_opac);
+    }
+    const parkingAverage = (parking_total / 12).toFixed(3);
+    document.getElementById('id_par_total').placeholder = parkingAverage;
+    const id_param = document.getElementById('id_par_total').id;
+    stop_light(parkingAverage, id_param);
+}
+
+function stop_light(average, id_param) {
+    const inputAverage = document.getElementById(id_param).value;
+    if (inputAverage) {
+        if (parseFloat(inputAverage) == parseFloat(average)) {
+            document.getElementById(id_param).style.backgroundColor = '#3c983c85';
+        } else {
+            document.getElementById(id_param).style.backgroundColor = '#F49B9B';
+        }
+    } else {
+        document.getElementById(id_param).style.backgroundColor = '#FFFA8B';
+    }
+}
+
 function sumTime1() {
     const pav_1_value  = document.getElementById('id_pav_1').value,
           pav_2_value  = document.getElementById('id_pav_2').value,

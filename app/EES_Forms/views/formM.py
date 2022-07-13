@@ -56,9 +56,6 @@ def formM(request, selector):
                 'parking': database_form.parking,
                 'par_start': database_form.par_start,
                 'par_stop': database_form.par_stop,
-                'storage': database_form.storage,
-                'sto_start': database_form.sto_start,
-                'sto_stop': database_form.sto_stop,
                 'observer': database_form.observer,
                 'cert_date': database_form.cert_date,
                 'comments': database_form.comments,
@@ -99,23 +96,10 @@ def formM(request, selector):
                 'par_10': database_form2.par_10,
                 'par_11': database_form2.par_11,
                 'par_12': database_form2.par_12,
-                'storage_1': database_form2.storage_1,
-                'storage_2': database_form2.storage_2,
-                'storage_3': database_form2.storage_3,
-                'storage_4': database_form2.storage_4,
-                'storage_5': database_form2.storage_5,
-                'storage_6': database_form2.storage_6,
-                'storage_7': database_form2.storage_7,
-                'storage_8': database_form2.storage_8,
-                'storage_9': database_form2.storage_9,
-                'storage_10': database_form2.storage_10,
-                'storage_11': database_form2.storage_11,
-                'storage_12': database_form2.storage_12,
 
                 'pav_total': database_form2.pav_total,
                 'unp_total': database_form2.unp_total,
                 'par_total': database_form2.par_total,
-                'storage_total': database_form2.storage_total,
             }
             form2 = formM_readings_form(initial=initial_data)
         else:
