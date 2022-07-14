@@ -305,5 +305,7 @@ function om_equation() {
 /*****************************************
 Initiates the Tables on JS load
 *****************************************/
-initate_Result_Table()
+setTimeout(
+initate_Result_Table(),
+1000)
 

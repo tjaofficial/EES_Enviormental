@@ -266,7 +266,9 @@ function update_Temp_Save(){
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
-initate_Result_Table()
+    initate_Result_Table();
+
+
 
 
 
