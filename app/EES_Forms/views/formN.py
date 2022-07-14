@@ -35,12 +35,6 @@ def formN(request, selector):
         if x.parking:
             if x.date.month == today.month:
                 parking_loc.append((x.parking, x.date))
-                
-    storage_loc = []
-    for x in form_pull:
-        if x.storage:
-            if x.date.month == today.month:
-                storage_loc.append((x.storage, x.date))
 
     if count_bp != 0:
         todays_log = daily_prof[0]
@@ -50,5 +44,5 @@ def formN(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formn.html", {
-        'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc, 'storage_loc': storage_loc,
+        'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
     })

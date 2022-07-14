@@ -252,6 +252,10 @@ class formC_model(models.Model):
     truck_stop_time = models.TimeField()
     area_start_time = models.TimeField()
     area_stop_time = models.TimeField()
+    sto_start_time = models.TimeField()
+    sto_stop_time = models.TimeField()
+    salt_start_time = models.TimeField()
+    salt_stop_time = models.TimeField()
     observer = models.CharField(
         max_length=30
     )
@@ -264,6 +268,8 @@ class formC_model(models.Model):
     )
     average_t = models.FloatField(blank=True)
     average_p = models.FloatField(blank=True)
+    average_storage = models.FloatField(blank=True)
+    average_salt = models.FloatField(blank=True)
 
     def clean_t(self):
         if self.truck_start_time > self.truck_stop_time:
@@ -308,6 +314,30 @@ class formC_readings_model(models.Model):
     ARead10 = models.CharField(max_length=3)
     ARead11 = models.CharField(max_length=3)
     ARead12 = models.CharField(max_length=3)
+    storage_1 = models.CharField(max_length=3)
+    storage_2 = models.CharField(max_length=3)
+    storage_3 = models.CharField(max_length=3)
+    storage_4 = models.CharField(max_length=3)
+    storage_5 = models.CharField(max_length=3)
+    storage_6 = models.CharField(max_length=3)
+    storage_7 = models.CharField(max_length=3)
+    storage_8 = models.CharField(max_length=3)
+    storage_9 = models.CharField(max_length=3)
+    storage_10 = models.CharField(max_length=3)
+    storage_11 = models.CharField(max_length=3)
+    storage_12 = models.CharField(max_length=3)
+    salt_1 = models.CharField(max_length=3)
+    salt_2 = models.CharField(max_length=3)
+    salt_3 = models.CharField(max_length=3)
+    salt_4 = models.CharField(max_length=3)
+    salt_5 = models.CharField(max_length=3)
+    salt_6 = models.CharField(max_length=3)
+    salt_7 = models.CharField(max_length=3)
+    salt_8 = models.CharField(max_length=3)
+    salt_9 = models.CharField(max_length=3)
+    salt_10 = models.CharField(max_length=3)
+    salt_11 = models.CharField(max_length=3)
+    salt_12 = models.CharField(max_length=3)
 
     def __str__(self):
         return str(self.form)
@@ -4546,3 +4576,19 @@ class spill_kits_model(models.Model):
 
     def __str__(self):
         return str(self.month)
+
+class sop_model(models.Model):
+    name = models.CharField(
+        max_length=50
+    )
+    revision_date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
+    pdf_link = models.CharField(
+        max_length=30
+    )
+    
+    def __str__(self):
+        return str(self.name)

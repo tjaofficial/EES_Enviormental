@@ -6,7 +6,7 @@
     <link href="{% static 'ees_forms/style/formA2/formA2.css' %}" rel="stylesheet">
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
-
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
 
     {{ BASE_DIR }}
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
@@ -55,7 +55,7 @@
                             <div class="readings_col" style="margin-right: 6rem;">
                                 <div>
                                     Start Time:{{ data.p_start }} 
-                                    <span class="push_popup_class" id="pushTime_popup">
+                                    <span class="push_popup_class" id="p_timePopup">
                                         Please Change End Time
                                     </span>
                                 </div>
@@ -103,7 +103,7 @@
                             <div class="readings_col">
                                 <div>
                                     Start Time:{{ data.c_start }}
-                                    <span class="push_popup_class" id="cokeTime_popup">
+                                    <span class="push_popup_class" id="c_timePopup">
                                         Please Change End Time
                                     </span>
                                 </div>

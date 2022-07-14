@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model
 from ..forms import issues_form, events_form
 import datetime
 import calendar
@@ -372,4 +372,11 @@ def shared_contacts_view(request):
     
     return render(request, "shared/contacts.html", {
         'profile': profile, 'organized_list': organized_list
+    })
+    
+def sop_view(request):
+    sops = sop_model.objects.all().order_by('name')
+
+    return render(request, 'shared/sops.html', {
+        'sops': sops,
     })

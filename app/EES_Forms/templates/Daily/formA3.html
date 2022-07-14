@@ -7,6 +7,7 @@
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <link href="{% static 'ees_forms/style/formA3/formA3.css' %}" rel="stylesheet">
     <script defer src="{% static 'ees_forms/script/formA3.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 
     <div id="paperSize">
@@ -66,6 +67,9 @@
                             <div class="resultTables_container">
                                 <div>Start Time:{{ data.om_start }}</div>
                                 <div>End Time:{{ data.om_stop }}</div>
+                                <span class="popup_class" id="om_timePopup">
+                                    Please Change End Time
+                                </span>
                                 <div hidden="true">{{ data.om_leak_json }}</div>
                                 <table style="border-collapse: collapse;">
                                     <tr>
@@ -105,6 +109,9 @@
                             <div class="resultTables_container">
                                 <div> Start Time:{{ data.l_start }} </div>
                                 <div> End Time:{{ data.l_stop }} </div>
+                                <span class="popup_class" id="l_timePopup">
+                                    Please Change End Time
+                                </span>
                                 <div hidden="true">{{ data.l_leak_json }}</div>
                                 <table style="border-collapse: collapse;">
                                     <tr>

@@ -16,6 +16,7 @@ urlpatterns = [
     path("profile/<str:access_page>", views.profile, name="profile"),
     path('about', views.about_view, name='about'),
     path('safety', views.safety_view, name='safety'),
+    
 
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
 
@@ -28,6 +29,7 @@ urlpatterns = [
     path('search_forms/<str:access_page>', views.search_forms_view, name='search_forms'),
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("Contacts", views.shared_contacts_view, name="Contacts"),
+    path("Sop", views.sop_view, name="Sop"),
 
     path("Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("Daily/formA2/<str:selector>", views.formA2, name="formA2"),

@@ -30,6 +30,8 @@
 
     <script defer src="{% static 'ees_forms/script/formM.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
 
 
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
@@ -108,7 +110,7 @@
                     <tr>
                         <td colspan="5" class="formM_box1">
                             PAVED: {{ form.paved }}&nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
-                            <span class="pav_popup_class" id="pav_popup">Please Change Time</span>
+                            <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
@@ -176,7 +178,7 @@
                         <td colspan="5" class="formM_box1">
                             UNPAVED: {{ form.unpaved }} &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
-                            <span class="unp_popup_class" id="unp_popup">Please Change Time</span>
+                            <span class="unp_popup_class" id="unp_timePopup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
@@ -248,7 +250,7 @@
                         <td colspan="5" class="formM_box1">
                             PARKING LOT: {{ form.parking }} &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
-                            <span class="par_popup_class" id="par_popup">Please Change Time</span>
+                            <span class="par_popup_class" id="par_timePopup">Please Change Time</span>
                         </td>
                     </tr>
                     <tr>
@@ -351,8 +353,10 @@
                         </td>
                     </tr>
                 </table>
+                {% if admin or not unlock %} {% elif unlock %}
                 <br><br><br>
                 <input type="submit" value="Submit Form" class="submit_button">
+                {% endif %}
             </div>
         </div>
     </form>  
