@@ -23,10 +23,9 @@ def pt_admin1_view(request):
 
     def all_ovens(reads):
         A = []
-        for items in reads:
-            date = items.form.date
-            # date_array = date.split("-")
-
+        for p in reads:
+            date = p.form.date
+            list = [p.o1, p.o2, p.o3, p.o4]
             year = date.year
             month = date.month
             day = date.day
@@ -34,37 +33,20 @@ def pt_admin1_view(request):
             form_date = datetime.datetime(year, month, day)
             added_date = form_date + datetime.timedelta(days=91)
             due_date = added_date - datetime.datetime.now()
+            
+            for q in list:
+                if len(str(q)) == 1:
+                    oven = "0" + str(q)
+                else:
+                    oven = q
 
-            if len(str(items.o1)) == 1:
-                oven1 = "0" + str(items.o1)
-            else:
-                oven1 = items.o1
-            A.append((oven1, items.form.date, added_date.date, due_date.days))
-
-            if len(str(items.o2)) == 1:
-                oven2 = "0" + str(items.o2)
-            else:
-                oven2 = items.o2
-            A.append((oven2, items.form.date, added_date.date, due_date.days))
-
-            if len(str(items.o3)) == 1:
-                oven3 = "0" + str(items.o3)
-            else:
-                oven3 = items.o3
-            A.append((oven3, items.form.date, added_date.date, due_date.days))
-
-            if len(str(items.o4)) == 1:
-                oven4 = "0" + str(items.o4)
-            else:
-                oven4 = items.o4
-            A.append((oven4, items.form.date, added_date.date, due_date.days))
-
+                A.append((oven, p.form.date, added_date.date, due_date.days))
         return A
 
-    hello = all_ovens(reads)
+    all_read_ovens = all_ovens(reads)
     func = lambda x: (x[0], x[1])
-    sort = sorted(hello, key=func, reverse=True)
-
+    sort = sorted(all_read_ovens, key=func, reverse=True)
+   
     def final(sort):
         B = []
         i = 1
@@ -73,14 +55,26 @@ def pt_admin1_view(request):
 
         for x in sort:
             for y in range(i, len(sort)):
-                tree = sort[y]
-                if tree[0] == x[0]:
-                    if tree in B:
-                        B.remove(tree)
+                check_instance = sort[y]
+                if check_instance[0] == x[0]:
+                    if check_instance in B:
+                        B.remove(check_instance)
             i += 1
+            
+        for oven in B:
+            for n in range(1, 86):
+                if oven[0] == n:
+                    exist = True
+                    break
+                else:
+                    exist = False
+            if not exist:
+                B.append((oven, 'N/A', 0, 0))
+                
+                    
         return B
     cool = final(sort)
-
+    print(cool)
     def overdue_30(cool):
         C = []
         for x in cool:
