@@ -32,3 +32,4 @@ from .formP import *
 from .con_dashboard_view import *
 from .spill_kits_view import *
 from .weekly_enviornmental_inspections import *
+from .delete_sop_view import *

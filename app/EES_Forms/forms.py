@@ -1837,8 +1837,15 @@ class spill_kits_form(ModelForm):
             
         }
         
-        
-        
+class sop_form(ModelForm):
+    class Meta:
+        model = sop_model
+        fields = ('__all__')
+        widgets = {
+            'name' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'revision_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'pdf_link' : forms.TextInput(attrs={'oninput': 'pdf_link_change()' , 'type':'text', 'style':'width:150px; display:none;'}),
+        }
         
         
         

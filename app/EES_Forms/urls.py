@@ -30,6 +30,8 @@ urlpatterns = [
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("Contacts", views.shared_contacts_view, name="Contacts"),
     path("Sop", views.sop_view, name="Sop"),
+    path("DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
+
 
     path("Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("Daily/formA2/<str:selector>", views.formA2, name="formA2"),

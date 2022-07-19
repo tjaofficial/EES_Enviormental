@@ -4586,8 +4586,9 @@ class sop_model(models.Model):
         auto_now=False,
         blank=True,
     )
+    pdf_file = models.FileField(upload_to='SOPs/')
     pdf_link = models.CharField(
-        max_length=30
+        max_length=90
     )
     
     def __str__(self):
