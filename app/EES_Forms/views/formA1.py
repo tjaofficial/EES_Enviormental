@@ -23,7 +23,6 @@ def formA1(request, selector):
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
     now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
     org = formA1_model.objects.all().order_by('-date')
@@ -159,5 +158,5 @@ def formA1(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA1.html", {
-        'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'profile': profile, 'selector': selector, "client": client, 'unlock': unlock
+        'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock
     })

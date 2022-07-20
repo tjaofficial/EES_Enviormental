@@ -59,6 +59,7 @@ urlpatterns = [
     path("Monthly/formN/<str:selector>", views.formN, name="formN"),
     path("Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
+    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
 
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),
@@ -68,7 +69,7 @@ urlpatterns = [
 
     path("c_dashboard", views.c_dashboard_view, name="c_dashboard"),
 
-    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
+    
 
     # path("calendar", views.CalendarView.as_view(), name='calendar'),
 ]
