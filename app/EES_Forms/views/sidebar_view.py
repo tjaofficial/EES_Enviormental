@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.apps import apps
 from ..utils import Calendar
 from django.contrib.auth.decorators import login_required
+import os
 
 lock = login_required(login_url='Login')
 
@@ -381,11 +382,14 @@ def sop_view(request):
     
     if request.method == 'POST':
         form = sop_form(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            print('SAVED')
+        if os.path.exists("./media/SOPs/" + request.POST['pdf_link']):
+            ('EXISTS')
         else:
-            print(request.POST)
+            if form.is_valid():
+                #form.save()
+                print('SAVED')
+            else:
+                print('NOT SAVED')
             
     return render(request, 'shared/sops.html', {
         'sops': sops, 'sopForm': sopForm,

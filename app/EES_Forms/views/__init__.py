@@ -4,6 +4,7 @@ from .sidebar_view import corrective_action_view, schedule_view, archive_view, s
 from .dashboard_view import IncompleteForms
 from .admin_view import admin_dashboard_view, register_view
 from .data_view import pt_admin1_view, pt_mth_input
+from .crud_sop_view import delete_sop_view, update_sop_view
 
 
 from .daily_battery_profile_view import *
@@ -32,4 +33,4 @@ from .formP import *
 from .con_dashboard_view import *
 from .spill_kits_view import *
 from .weekly_enviornmental_inspections import *
-from .delete_sop_view import *
+

@@ -31,6 +31,7 @@ urlpatterns = [
     path("Contacts", views.shared_contacts_view, name="Contacts"),
     path("Sop", views.sop_view, name="Sop"),
     path("DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
+    path("UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
 
 
     path("Daily/formA1/<str:selector>", views.formA1, name="formA1"),
