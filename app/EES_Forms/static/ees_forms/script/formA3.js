@@ -4,7 +4,6 @@ Initial Page Load Setup
 *****************************************/
 // Run once on js load only
 function initate_Result_Table(){
-    console.log('HELLO');
     const query_Tables = document.querySelectorAll("[data-resulttable]");
     const result_Table_DOM_Array = Array.from(query_Tables)
     result_Table_DOM_Array.forEach((elem)=>{
@@ -127,14 +126,6 @@ function handle_Table_Input(event){
             if(!checkLocationHasData && !checkOvenHasData){
                 result_Array.splice(resultInputAttr, 1);
             }
-
-
-            
-
-            console.log(`${checkLocationHasData} ${checkOvenHasData} -- this is a test i just enter`);
-
-            
-
             
             //targeted_input_DOM.value = JSON.stringify(parsed_Result);
             //createHTMLString(parsed_Result, target);
@@ -162,7 +153,6 @@ Updates the HTML based on the stored JSON
 
 // Takes array of Objects and builds the string of HTML
 function createHTMLString(dataJSON, input_ID){
-    console.log('test');
 
     console.log(`${JSON.stringify(dataJSON)} - ${input_ID}`);    
     let tableHTML = "";
@@ -170,10 +160,8 @@ function createHTMLString(dataJSON, input_ID){
     if(dataJSON.data){
         const dataArray = dataJSON.data;
         if(dataArray.length > 0){
-            console.log('TEST 1')
             for(i=0; i<dataArray.length; i++){
                 let data = dataArray[i];
-                console.log(data)
                 tableHTML = tableHTML+htmlLayout(false, data, input_ID);
             }
             if(input_ID === "lid"){
@@ -209,8 +197,6 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
-    console.log(tableHTML)
-    console.log(input_ID)
     document.getElementById(`${input_ID}_tableBody`).innerHTML = tableHTML;
 }
 

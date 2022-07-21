@@ -1,0 +1,67 @@
+{% extends "ees_forms/layout.html" %} {% block list%} {% load static %}
+<body>
+    <head>
+        <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
+        <script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
+    </head>
+    <div>
+        <a href="{% url 'IncompleteForms' %}">
+            <svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
+            </svg>
+        </a>
+    </div>
+    <div style="text-align: center;padding-top: 50px;">
+        <div style='display:inline-flex;'>
+            <div>
+                <button id="addBtn">Add SOP</button>
+            </div>
+        </div>
+        <div id="addModal" class="modalAdd">
+            <div class="modal-content">
+                <span class="closeAdd">&times;</span>
+                <div class='modalHeader'>
+                    <h1>ADD SOP PDF</h1>
+                </div>
+                <div class='modalContent'>
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <center>
+                            Name: {{ sopForm.name }}<br><br>
+                            Revision Date: {{ sopForm.revision_date }}<br><br>
+                            File Upload: {{ sopForm.pdf_file }}<br><br>
+                            {{ sopForm.pdf_link }}
+                            <br>
+                            <input type="submit" value="Save">
+                        </center>  
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div>
+            Corrective Action Forms - By Date
+        </div>
+        <br>
+        <div style="text-align: left; width:700px;margin: auto; font-size: 25px;">
+            <ul style="text-align: center;">
+            {% for x in sops %}
+                <div class="card" style="width: 80%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
+                    <a href='../media/SOPs/{{ x.pdf_link }}' target="_blank">
+                        <div style="width: 100%; text-align: left;font-size: 20px;">
+                            {{ x.name }} - {{ x.revision_date }}
+                        </div>
+                    </a>
+                    <div style='text-align:right; margin:auto; margin-right:0;display: inline-flex;}'>
+                        <div>
+                            <a style='color:red; font-size:10px;' href={% url 'DeleteSop' x.id %}>delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </ul>    
+        </div>
+    </div>
+{% endblock %}
+</body>

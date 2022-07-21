@@ -16,6 +16,7 @@ urlpatterns = [
     path("profile/<str:access_page>", views.profile, name="profile"),
     path('about', views.about_view, name='about'),
     path('safety', views.safety_view, name='safety'),
+    
 
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
 
@@ -28,6 +29,10 @@ urlpatterns = [
     path('search_forms/<str:access_page>', views.search_forms_view, name='search_forms'),
     path("issues_view/<str:form_name>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("Contacts", views.shared_contacts_view, name="Contacts"),
+    path("Sop", views.sop_view, name="Sop"),
+    path("DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
+    path("UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
+
 
     path("Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("Daily/formA2/<str:selector>", views.formA2, name="formA2"),
@@ -54,6 +59,7 @@ urlpatterns = [
     path("Monthly/formN/<str:selector>", views.formN, name="formN"),
     path("Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
+    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
 
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),
@@ -63,7 +69,7 @@ urlpatterns = [
 
     path("c_dashboard", views.c_dashboard_view, name="c_dashboard"),
 
-    path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
+    
 
     # path("calendar", views.CalendarView.as_view(), name='calendar'),
 ]

@@ -18,7 +18,10 @@ def formB(request, selector):
     last_monday = today - datetime.timedelta(days=today.weekday())
     one_week = datetime.timedelta(days=4)
     end_week = last_monday + one_week
-
+    freq = False
+    if 2 < today.month < 11:
+        freq = True
+    
     week_start_dates = formB_model.objects.all().order_by('-week_start')
     # last submitted monday
 
@@ -383,5 +386,5 @@ def formB(request, selector):
 
         return redirect(batt_prof)
     return render(request, "Daily/formB.html", {
-        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName
+        "back": back, 'todays_log': todays_log, 'week': week, 'week_almost': week_almost, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq,
     })

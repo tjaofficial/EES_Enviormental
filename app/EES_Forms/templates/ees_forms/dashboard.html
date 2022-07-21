@@ -101,6 +101,22 @@
                 </table>
             </div>
         </div>
+        <div class="card2">
+            <div class="card2_header" >
+                <h2 class="card2_title">
+                    EES Personnell Sign Off
+                </h2>
+            </div>
+            <div class="card2_Form">
+                <a href=#>
+                    <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
+                        <p style="font-size: 28px; margin-top: -8px;">
+                            Tap to Sign
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 
     <section class="forms">
@@ -2477,9 +2493,9 @@
                 {% for item in sorting_array.1 %}
                     {% if item.day_freq == 'Everyday'%}
                         {% if item.form|length >= 2 %}
-                            {% if item.form.0 not in form_checkDaily2 %}
+                            {% if item.form.0 not in form_checkAll2 %}
                                 <div style="display: none;">
-                                {{ form_checkDaily2|append_list:item.form.0 }}
+                                {{ form_checkAll2|append_list:item.form.0 }}
                                 </div>
                                 <div class="card_Form">
                                     <h3 class="card_Form_letter">
@@ -2546,9 +2562,9 @@
                         {% endif %}
                     {% elif item.day_freq == 'Weekends' %}
                         {% if item.form|length >= 2 %}
-                            {% if item.form.0 not in form_checkDaily2 %}
+                            {% if item.form.0 not in form_checkAll2 %}
                                 <div style="display: none;">
-                                {{ form_checkDaily2|append_list:item.form.0 }}
+                                {{ form_checkAll2|append_list:item.form.0 }}
                                 </div>
                                 <div class="card_Form">
                                     <h3 class="card_Form_letter">
@@ -2618,9 +2634,9 @@
                         {% endif %}
                     {% elif item.day_freq == 'Weekdays' %}
                         {% if item.form|length >= 2 %}
-                            {% if item.form.0 not in form_checkDaily2 %}
+                            {% if item.form.0 not in form_checkAll2 %}
                                 <div style="display: none;">
-                                {{ form_checkDaily2|append_list:item.form.0 }}
+                                {{ form_checkAll2|append_list:item.form.0 }}
                                 </div>
                                 <div class="card_Form">
                                     <h3 class="card_Form_letter">
@@ -2689,9 +2705,9 @@
                             </a>
                         {% endif %}
                     {% elif item.form|length >= 2 %}
-                        {% if item.form.0 not in form_checkDaily2 %}
+                        {% if item.form.0 not in form_checkAll2 %}
                             <div style="display: none;">
-                            {{ form_checkDaily2|append_list:item.form.0 }}
+                            {{ form_checkAll2|append_list:item.form.0 }}
                             </div>
                             <div class="card_Form">
                                 <h3 class="card_Form_letter">

@@ -18,6 +18,8 @@
     </style>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formC.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 
 <div id="paperSize">
@@ -29,8 +31,8 @@
         <div class="card" id="card_fitter">
             <div class="paper_fitter" style="padding: 3rem;">
                 <table style="border-collapse: collapse; margin: auto;">
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!-- Header Information -->
+                    <!-- vvvvvv Header Information vvvvvvvvv -->
                     <tr>
                         <th id="boxTitle" colspan="6" style="text-align: center;">
                             Method 9D Fugitive Dust Inspections - Coal Field - Form (C)
@@ -52,12 +54,8 @@
                     <tr>
                         <td style="height: 25px" > </td>
                     </tr> 
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                    <!--   ^^^^^^^^Header Information  ^^^^^^ -->
+                    <!--   Header Information -->
                     <tr>
                             <th style="text-decoration: underline; text-align: left;" colspan="3">Observe one vehicle per day traveling on Coal Field Road or in the coal field</th>
                             <th></th>
@@ -78,7 +76,7 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td style="border-left: 1px black solid; border-top: 1px black solid;">
+                        <td style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px;'>
                             Truck:
                         </td>
                         <td style="border-top: 1px black solid;">
@@ -86,7 +84,7 @@
                         </td>
                         <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
                             Start Time:{{ form.truck_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.truck_stop_time }}
-                            <span class="truck_popup_class" id="truck_popup">Please Change Time</span>
+                            <span class="truck_popup_class" id="truck_timePopup">Please Change Time</span>
                         </td>
                         <td></td>
                         <td></td>
@@ -151,15 +149,15 @@
                         <td style="height: 35px" > </td>
                     </tr> 
                     <tr>
-                        <td style="border-left: 1px black solid; border-top: 1px black solid;">
-                            Area:
+                        <td style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px;'>
+                            Coal Storage Area:
                         </td>
                         <td style="border-top: 1px black solid;">
                             {{ form.area_sel }}
                         </td>
                         <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
                             Start Time:{{ form.area_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.area_stop_time }}
-                            <span class="area_popup_class" id="area_popup">Please Change Time</span>
+                            <span class="area_popup_class" id="area_timePopup">Please Change Time</span>
                         </td>
                         <td></td>
                         <td></td>
@@ -223,6 +221,152 @@
                     <tr>
                         <td style="height: 40px" > </td>
                     </tr> 
+                    <tr>
+                        <td colspan="5" style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px; border-right: 1px black solid;'>
+                            Area B Coke Storage Area: &nbsp; &nbsp; &nbsp; &nbsp;
+                            Start Time:{{ form.sto_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.sto_stop_time }}
+                            <span class="storage_popup_class" id="storage_timePopup">Please Change Time</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">MIN/SEC</td>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">15</td>
+                        <td id="boxc1">30</td>
+                        <td id="boxc1">45</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">
+                            {{ read.storage_1 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_2 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_3 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_4 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">1</td>
+                        <td id="boxc1">
+                            {{ read.storage_5 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_6 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_7 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_8 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">2</td>
+                        <td id="boxc1">
+                            {{ read.storage_9 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_10 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_11 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.storage_12 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">
+                            3-minute Average Opacity (sum of the 12 readings above/12)
+                        </td>
+                        <td id="boxc1">{{ form.average_storage }}</td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
+                    <tr>
+                        <td colspan="5" style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px; border-right: 1px black solid;'>
+                            Monthly Salt Pile Inspection: &nbsp; &nbsp; &nbsp; &nbsp;
+                            Start Time:{{ form.salt_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.salt_stop_time }}
+                            <span class="storage_popup_class" id="salt_timePopup">Please Change Time</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">MIN/SEC</td>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">15</td>
+                        <td id="boxc1">30</td>
+                        <td id="boxc1">45</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">0</td>
+                        <td id="boxc1">
+                            {{ read.salt_1 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_2 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_3 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_4 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">1</td>
+                        <td id="boxc1">
+                            {{ read.salt_5 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_6 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_7 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_8 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td id="boxc1">2</td>
+                        <td id="boxc1">
+                            {{ read.salt_9 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_10 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_11 }}
+                        </td>
+                        <td id="boxc1">
+                            {{ read.salt_12 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">
+                            3-minute Average Opacity (sum of the 12 readings above/12)
+                        </td>
+                        <td id="boxc1">
+                            {{ form.average_salt }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height: 40px" > </td>
+                    </tr> 
                     <tr style="text-align: center;">
                         <td colspan="6" style="font-size: 25px;">Observer:{{ form.observer }} Certified Date:{{ form.cert_date }}</td>
                     </tr>
@@ -242,8 +386,10 @@
                         <td colspan="6">{{ form.comments }}</td>
                     </tr>
                 </table>
+                {% if admin %} {% elif unlock %}
                 <br><br><br>
                 <input type="submit" value="Submit Form" class="submit_button">
+                {% endif %}
             </div>
         </div>
     </form> 

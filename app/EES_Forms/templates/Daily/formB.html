@@ -34,6 +34,7 @@
     </div>
     <form action="" method=POST style="margin: auto; width: fit-content; margin-bottom: 100px;">
         {% csrf_token %}
+        <div id="frequency" hidden="true">{{ freq }}</div>
         <div class="card" id="card_fitter">
             <div class="paper_fitter" style="padding: 3rem;">
                 <table style="border-collapse: collapse">

@@ -1,6 +1,7 @@
+from mimetypes import init
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User
-from ..forms import issues_form, events_form
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model
+from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
 from django.core.exceptions import FieldError
@@ -8,6 +9,7 @@ from django.db.models import Q
 from django.apps import apps
 from ..utils import Calendar
 from django.contrib.auth.decorators import login_required
+import os
 
 lock = login_required(login_url='Login')
 
@@ -372,4 +374,23 @@ def shared_contacts_view(request):
     
     return render(request, "shared/contacts.html", {
         'profile': profile, 'organized_list': organized_list
+    })
+    
+def sop_view(request):
+    sops = sop_model.objects.all().order_by('name')
+    sopForm = sop_form()
+    
+    if request.method == 'POST':
+        form = sop_form(request.POST, request.FILES)
+        if os.path.exists("./media/SOPs/" + request.POST['pdf_link']):
+            ('EXISTS')
+        else:
+            if form.is_valid():
+                #form.save()
+                print('SAVED')
+            else:
+                print('NOT SAVED')
+            
+    return render(request, 'shared/sops.html', {
+        'sops': sops, 'sopForm': sopForm,
     })

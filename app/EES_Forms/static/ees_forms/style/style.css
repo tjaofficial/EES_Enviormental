@@ -46,11 +46,12 @@ body {
 
 .profileDropdown {
   position: fixed;
-  right: 0px;
+  right: 27px;
   top: 2.5rem;
   width: 15rem;
-  background-color: #E4F2E7;
+  background-color: #dfe5e9;
   border-radius: 1rem;
+  box-shadow: 1px 3px 7px 0px #9898a6;
 }
 .profileDropdown a:hover {
   text-decoration: underline;
@@ -91,12 +92,13 @@ body {
 .sidebar_svg {
   height: 2em;
   width: 2em;
-  background-color: #d0e6d5;
+  background-color: #40516a;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 0.5em;
+  color: #cbcbd8;
 }
 .sidebar_svg svg {
   height: 50%;

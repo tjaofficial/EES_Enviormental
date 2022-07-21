@@ -91,7 +91,6 @@ Adding Rows to Table
 *****************************************/
 
 function initate_Result_Table(){
-    console.log('HELLO');
     const query_Tables = document.querySelectorAll("[data-resulttable]");
     const result_Table_DOM_Array = Array.from(query_Tables)
     result_Table_DOM_Array.forEach((elem)=>{
@@ -272,47 +271,7 @@ function update_Temp_Save(){
 
 
 
-function timecheck_pushDoors() {
-    
-    
-    const start = document.getElementById('p_start').value,
-          end = document.getElementById('p_stop').value;
 
-    if (end == false) {
-        var popup = document.getElementById("pushTime_popup").style.visibility = 'hidden';
-    }
-    else if (start >= end) {
-        document.getElementById("pushTime_popup").style.visibility = 'visible';
-        document.getElementById("p_start").style.backgroundColor = "white";
-        document.getElementById("p_stop").style.backgroundColor = "white";
-    }
-    else{
-        var popup = document.getElementById("pushTime_popup").style.visibility = 'hidden';
-        document.getElementById("p_start").style.backgroundColor = "#3c983c85";
-        document.getElementById("p_stop").style.backgroundColor = "#3c983c85";
-    }
-}
-
-function timecheck_cokeDoors() {
-    
-    
-    const start = document.getElementById('c_start').value,
-          end = document.getElementById('c_stop').value;
-
-    if (end == false) {
-        var popup = document.getElementById("cokeTime_popup").style.visibility = 'hidden';
-    }
-    else if (start >= end) {
-        document.getElementById("cokeTime_popup").style.visibility = 'visible';
-        document.getElementById("c_start").style.backgroundColor = "white";
-        document.getElementById("c_stop").style.backgroundColor = "white";
-    }
-    else{
-        var popup = document.getElementById("cokeTime_popup").style.visibility = 'hidden';
-        document.getElementById("c_start").style.backgroundColor = "#3c983c85";
-        document.getElementById("c_stop").style.backgroundColor = "#3c983c85";
-    }
-}
 
 //Get total of doors not observed
 function pc_doors_not_observed() {

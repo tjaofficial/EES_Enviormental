@@ -1,6 +1,7 @@
 {% extends "ees_forms/layout.html" %} {% block list%} {% load static %}
 <script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
 <link href="{% static 'ees_forms/formA1_style.css' %}" rel="stylesheet" />
 
 <body>
@@ -79,7 +80,7 @@
                 <td id="boxa2">{{ readings.c1_no }}</td>
                 <td id="boxa1">
                   {{ readings.c1_start }}
-                  <span class="c1_popup_class" id="c1_popup"
+                  <span class="c1_popup_class" id="c1_timePopup"
                     >Please Change Time</span
                   >
                 </td>
@@ -97,7 +98,7 @@
                 </td>
                 <td id="boxa1">
                   {{ readings.c2_start }}
-                  <span class="c1_popup_class" id="c2_popup"
+                  <span class="c1_popup_class" id="c2_timePopup"
                     >Please Change Time</span
                   >
                 </td>
@@ -115,7 +116,7 @@
                 </td>
                 <td id="boxa1">
                   {{ readings.c3_start }}
-                  <span class="c1_popup_class" id="c3_popup"
+                  <span class="c1_popup_class" id="c3_timePopup"
                     >Please Change Time</span
                   >
                 </td>
@@ -133,7 +134,7 @@
                 </td>
                 <td id="boxa1">
                   {{ readings.c4_start }}
-                  <span class="c1_popup_class" id="c4_popup"
+                  <span class="c1_popup_class" id="c4_timePopup"
                     >Please Change Time</span
                   >
                 </td>
@@ -151,7 +152,7 @@
                 </td>
                 <td id="boxa1">
                   {{ readings.c5_start }}
-                  <span class="c1_popup_class" id="c5_popup"
+                  <span class="c1_popup_class" id="c5_timePopup"
                     >Please Change Time</span
                   >
                 </td>
