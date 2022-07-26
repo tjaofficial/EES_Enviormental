@@ -14,6 +14,7 @@
     }
 </style>
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/spillKits.js' %}"></script>
 <body>
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div id="paperSize">
@@ -46,7 +47,7 @@
                                 <td style="height: 25px" > </td>
                             </tr> 
                             <tr>
-                                <th colspan="6">Inspector Names: &nbsp; &nbsp;{{ sk_form.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Dates:&nbsp; &nbsp;{{ sk_form.date }}
+                                <th colspan="6">Inspector Names: &nbsp; &nbsp;{{ sk_form.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ sk_form.date }}
                             </tr>
                         </table>
                         <br>

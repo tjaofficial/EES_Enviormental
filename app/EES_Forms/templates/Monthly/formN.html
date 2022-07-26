@@ -16,27 +16,6 @@
                     <a href="../../Daily/formM/form">
                         Form M - List
                     </a><br>
-                    <div id="addModal" class="modalAdd">
-                        <div class="modal-content">
-                            <span class="closeAdd">&times;</span>
-                            <div class='modalHeader'>
-                                <h1>ADD SOP PDF</h1>
-                            </div>
-                            <div class='modalContent'>
-                                <form action="" method="POST" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <center>
-                                        Name: {{ sopForm.name }}<br><br>
-                                        Revision Date: {{ sopForm.revision_date }}<br><br>
-                                        File Upload: {{ sopForm.pdf_file }}<br><br>
-                                        {{ sopForm.pdf_link }}
-                                        <br>
-                                        <input type="submit" value="Save">
-                                    </center>  
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <table style="border-collapse: collapse; margin: auto;">
                         <tr>

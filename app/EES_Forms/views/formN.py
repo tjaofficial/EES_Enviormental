@@ -43,6 +43,6 @@ def formN(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Monthly/formn.html", {
+    return render(request, "Monthly/formN.html", {
         'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
     })
