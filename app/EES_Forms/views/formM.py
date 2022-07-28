@@ -155,15 +155,15 @@ def formM(request, selector):
                 B.form = A
                 B.save()
 
-                if B.form.pav_total > 5:
+                if int(B.pav_total) > 5:
                     issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
-                if B.form.unp_total > 5:
+                if int(B.unp_total) > 5:
                     issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
-                if B.form.par_total > 5:
+                if int(B.par_total) > 5:
                     issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)

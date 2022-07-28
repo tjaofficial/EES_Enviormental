@@ -1,0 +1,21 @@
+#box{
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 18px;
+    width: 350px;
+}
+#box2{
+    border: 3px solid black;
+    padding: 5px;
+    width: 170px;
+}
+#box3{
+    border: 1px solid black;
+    padding: 15px;
+    font-size: 18px;
+    text-align: center;
+}
+#boxTitle{
+    font-size: 30px;
+    width: 525px;
+}

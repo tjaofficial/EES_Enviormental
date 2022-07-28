@@ -1,0 +1,85 @@
+#boxc1{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 200px;
+    max-width: 200px;
+    height: 35px;
+}
+#boxTitle{
+    font-size: 30px;
+}
+#formDbox1{
+    width: 130px; 
+    text-align: right;
+    border-left: 3px solid black;
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+#formDbox2{
+    width: 100px; 
+    text-align: center;
+    
+}
+#formDbox3{
+    width: 130px; 
+    text-align: center;
+    border-left: 3px solid black;
+    border-right: 3px solid black;
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+#formCborder{
+    width: 125px;
+    border-right: 3px solid black;
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+#formCborder2{
+    width: 125px;
+    border-right: 3px solid black;
+    border-left: 3px solid black;
+    padding-bottom: 7px;
+    padding-top: 7px;
+}
+#alltrucks{
+    margin: auto;
+    width: fit-content;
+    display: flex;
+}
+#formCspace{
+    padding: 10px;
+}
+#formL_Location{
+    border: 1px solid black;
+    width: 250px;
+    text-align: left;
+    padding-left: 5px;
+}
+#formL_Day{
+    border: 1px solid black;
+    width: 220px;
+    text-align: center;
+    height: 50px;
+}
+#formL_Title{
+    border: 3px solid black;
+    text-align: center;
+}
+#formL_Emissions{
+    border: 1px solid black;
+    width: 80px;
+    text-align: center;
+}
+#formL_Comments{
+    border: 1px solid black;
+    width: 200px;
+    text-align: left;
+    padding-left: 5px;
+}
+#formL_obser{
+    border: 1px solid black;
+    width: 220px;
+    text-align: center;
+    height: 50px;
+}
