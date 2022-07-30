@@ -3,24 +3,13 @@
 {% block list%}
 {% load static %}
 
-    <style>
-        #boxc1{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            width: 170px;
-            height: 35px;
-        }
-        #boxTitle{
-            font-size: 30px;
-        }
-    
-    </style>
-    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-    <script defer src="{% static 'ees_forms/script/formC.js' %}"></script>
-    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
-    <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
-    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+<link href="{% static 'ees_forms/style/formC.css' %}" rel="stylesheet">
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formC.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
+
+<div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 
 <div id="paperSize">
     <div>
@@ -222,13 +211,19 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
+                        <td colspan="4">
+                            <div id='areaLabel' onclick='add_areas()'>Area B Coke Storage Area</div>
+                        </td>
+                    </tr>
+                    <tr id="areasGrab" class='area_table'>
                         <td colspan="5" style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px; border-right: 1px black solid;'>
-                            Area B Coke Storage Area: &nbsp; &nbsp; &nbsp; &nbsp;
+                            <div style="display: inline-flex;">Area B Coke Storage Area: &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.sto_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.sto_stop_time }}
+                            <p onclick='remove_area()' class='remove_link'>remove</p></div>
                             <span class="storage_popup_class" id="storage_timePopup">Please Change Time</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="areasGrab" class='area_table'>
                         <td id="boxc1">MIN/SEC</td>
                         <td id="boxc1">0</td>
                         <td id="boxc1">15</td>
@@ -236,7 +231,7 @@
                         <td id="boxc1">45</td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr id="areasGrab" class='area_table'>
                         <td id="boxc1">0</td>
                         <td id="boxc1">
                             {{ read.storage_1 }}
@@ -252,7 +247,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr id="areasGrab" class='area_table'>
                         <td id="boxc1">1</td>
                         <td id="boxc1">
                             {{ read.storage_5 }}
@@ -268,7 +263,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr id="areasGrab" class='area_table'>
                         <td id="boxc1">2</td>
                         <td id="boxc1">
                             {{ read.storage_9 }}
@@ -284,7 +279,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr id="areasGrab" class='area_table'>
                         <td colspan="5" style="font-size: 20px; border: 1px solid black;">
                             3-minute Average Opacity (sum of the 12 readings above/12)
                         </td>
@@ -294,13 +289,19 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
+                        <td colspan="4">
+                            <div id='saltLabel' onclick='add_salts()'>Monthly Salt Pile Inspection</div>
+                        </td>
+                    </tr>
+                    <tr class='salt_table'>
                         <td colspan="5" style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px; border-right: 1px black solid;'>
-                            Monthly Salt Pile Inspection: &nbsp; &nbsp; &nbsp; &nbsp;
+                            <div style="display: inline-flex;">Monthly Salt Pile Inspection: &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.salt_start_time }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.salt_stop_time }}
+                            <p onclick='remove_salt()' class='remove_link'>remove</p></div>
                             <span class="storage_popup_class" id="salt_timePopup">Please Change Time</span>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class='salt_table'>
                         <td id="boxc1">MIN/SEC</td>
                         <td id="boxc1">0</td>
                         <td id="boxc1">15</td>
@@ -308,7 +309,7 @@
                         <td id="boxc1">45</td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr class='salt_table'>
                         <td id="boxc1">0</td>
                         <td id="boxc1">
                             {{ read.salt_1 }}
@@ -324,7 +325,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr class='salt_table'>
                         <td id="boxc1">1</td>
                         <td id="boxc1">
                             {{ read.salt_5 }}
@@ -340,7 +341,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr class='salt_table'>
                         <td id="boxc1">2</td>
                         <td id="boxc1">
                             {{ read.salt_9 }}
@@ -356,7 +357,7 @@
                         </td>
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr class='salt_table'>
                         <td colspan="5" style="font-size: 20px; border: 1px solid black;">
                             3-minute Average Opacity (sum of the 12 readings above/12)
                         </td>

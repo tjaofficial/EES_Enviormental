@@ -1,0 +1,21 @@
+#boxc1{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    width: 170px;
+    height: 35px;
+}
+#boxTitle{
+    font-size: 30px;
+}
+.area_table{
+    display: none;
+}
+.salt_table{
+    display: none;
+}
+.remove_link{
+    width: 161px;
+    text-align: right;
+    color: red;
+}

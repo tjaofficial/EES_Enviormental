@@ -1,6 +1,4 @@
 
-
-
 function timecheck_1() {
     "use strict";
     const start1 = document.getElementById('truck_start_time').value,
@@ -39,3 +37,72 @@ function timecheck_2() {
         document.getElementById("area_stop_time").style.backgroundColor = "#3c983c85";
     }
 }
+
+function add_areas() {
+    const group = document.getElementsByClassName('area_table');
+    for (let i=0;i<group.length;i+=1){
+        group[i].style.display = 'table-row';
+    }
+    for (let x=1;x<13;x+=1){
+        document.getElementById('storage_' + x).required = true;
+    }
+    document.getElementById('id_sto_start_time').required = true;
+    document.getElementById('id_sto_stop_time').required = true;
+    document.getElementById('average_storage').required = true;
+    document.getElementById('areaLabel').style.visibility = 'hidden';
+}
+function add_salts() {
+    const group = document.getElementsByClassName('salt_table');
+    for (let i=0;i<group.length;i+=1){
+        group[i].style.display = 'table-row';
+    }
+    for (let x=1;x<13;x+=1){
+        document.getElementById('salt_' + x).required = true;
+    }
+    document.getElementById('id_salt_start_time').required = true;
+    document.getElementById('id_salt_stop_time').required = true;
+    document.getElementById('average_salt').required = true;
+    document.getElementById('saltLabel').style.visibility = 'hidden';
+}
+
+function remove_area() {
+    const group = document.getElementsByClassName('area_table');
+    for (let i=0;i<group.length;i+=1){
+        group[i].style.display = 'none';
+    }
+    for (let x=1;x<13;x+=1){
+        document.getElementById('storage_' + x).required = false;
+    }
+    document.getElementById('id_sto_start_time').required = false;
+    document.getElementById('id_sto_stop_time').required = false;
+    document.getElementById('average_storage').required = false;
+    document.getElementById('areaLabel').style.visibility = 'visible';
+    document.getElementById('id_sto_start_time').value = null;
+}
+function remove_salt() {
+    const group = document.getElementsByClassName('salt_table');
+    for (let i=0;i<group.length;i+=1){
+        group[i].style.display = 'none';
+    }
+    for (let x=1;x<13;x+=1){
+        document.getElementById('salt_' + x).required = false;
+    }
+    document.getElementById('id_salt_start_time').required = false;
+    document.getElementById('id_salt_stop_time').required = false;
+    document.getElementById('average_salt').required = false;
+    document.getElementById('saltLabel').style.visibility = 'visible';
+    document.getElementById('id_salt_start_time').value = null;
+}
+
+function display_check() {
+    const storage_start = document.getElementById('id_sto_start_time').value;
+    const salt_start = document.getElementById('id_salt_start_time').value;
+
+    if (storage_start) {
+        add_areas();
+    }
+    if (salt_start) {
+        add_salts();
+    }
+}
+display_check();
