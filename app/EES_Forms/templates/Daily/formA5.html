@@ -5,6 +5,8 @@
 {% include "ees_forms/drawing_modal.html" %}
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+    <link href="{% static 'ees_forms/style/formA5.css' %}" rel="stylesheet" />
     {% if admin %}{% else %}
     <script defer src="{% static 'ees_forms/script/formA5_sketch.js' %}"></script>
     {% endif %}

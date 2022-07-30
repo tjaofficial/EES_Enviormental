@@ -92,3 +92,19 @@ function timecheck_unpav(){
 function timecheck_par(){
     check_time('id_par_start', 'id_par_stop', 'par_timePopup')
 }
+
+/*************
+ FORM A-5 - Push Travels
+*************/
+function timecheck_pt1(){
+    check_time('o1_start', 'o1_stop', 'myPopup1')
+}
+function timecheck_pt2(){
+    check_time('o2_start', 'o2_stop', 'myPopup2')
+}
+function timecheck_pt3(){
+    check_time('o3_start', 'o3_stop', 'myPopup3')
+}
+function timecheck_pt4(){
+    check_time('o4_start', 'o4_stop', 'myPopup4')
+}
