@@ -129,16 +129,6 @@ function intiateResultEventListeners(){
         resultElement[i].addEventListener('input', update_Temp_Save)
         resultElement[i].addEventListener('input', total_leaking_doors)
         resultElement[i].addEventListener('input', allowed_time)
-
-
-        // resultElement[i].addEventListener('input',(event)=>{
-        //     let elem = event.target;
-            
-        //     handle_Table_Input(elem);
-        //     //update_Temp_Save();
-            
-        // })
-        
     }
 }
 

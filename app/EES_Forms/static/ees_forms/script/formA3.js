@@ -20,11 +20,10 @@ Add event Listeners
 //This adds the event listeners every Time the Table is rebuilt
 function addResultEventListeners(){
     const resultElement = document.querySelectorAll("[data-resultInput]");
-
     for(i=0; i<resultElement.length; i++){
-        resultElement[i].addEventListener('change', handle_Table_Input)
-        resultElement[i].addEventListener('change', update_Temp_Save)
-        
+        resultElement[i].addEventListener('input', handle_Table_Input)
+        resultElement[i].addEventListener('input', update_Temp_Save)
+        resultElement[i].addEventListener('input', total_leaking_doors)
     }
 
 }
@@ -265,6 +264,51 @@ function update_Temp_Save(event){
 
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
+
+
+function total_leaking_doors() {
+    const o_elem = document.querySelector(['#offtakes']),
+          l_elem = document.querySelector(['#lids']);
+    
+    const o_array = JSON.parse(o_elem.value).data,
+          l_array = JSON.parse(l_elem.value).data;
+    if (typeof o_array === 'undefined') {
+        var o_len = 0;
+    } else {
+        var x = 0;
+        for (let i=0; i < o_array.length; i+=1) {
+            if (o_array[i]['location'] == 'D'){
+                x +=1;
+            }
+        }
+        var o_len = o_array.length;
+        const o_damper = x;
+        const o_other = o_len - x;
+        document.getElementById('om_leaks').value = o_other;
+        document.getElementById('om_leaks2').value = o_other;
+        document.getElementById('om_not_observed').value = o_damper * 2;
+        om_equation();
+    }
+    if (typeof l_array === 'undefined') {
+        var l_len = 0;
+    } else {
+        var y = 0;
+        for (let c=0; c < l_array.length; c+=1) {
+            if (l_array[c]['location'] == 'D'){
+                y +=1;
+            }
+        }
+        var l_len = l_array.length;
+        const l_damper = y;
+        const l_other = l_len - y;
+        document.getElementById('l_leaks').value = l_other;
+        document.getElementById('l_leaks2').value = l_other;
+        document.getElementById('l_not_observed').value = l_damper * 4;
+        l_equation();
+    }
+}
+total_leaking_doors()
+
 
 
 function l_equation() {
