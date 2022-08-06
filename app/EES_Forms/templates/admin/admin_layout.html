@@ -178,7 +178,7 @@
         background-color: white;
         border-radius: 20px;
         box-shadow: inset 0 0 20px 0px #0000005c;
-        width: 46rem;
+        width: 92%;
         margin: 0.4rem 2rem;
     }
     .myTabs input[type='radio']{
@@ -240,9 +240,8 @@
     }
     .grid-sliders{
         display:grid;
-        grid-gap: 1rem;
+        grid-gap: .1rem;
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        margin: 1rem 2rem;
     }
     .slider{
         appearance: none;
@@ -254,14 +253,14 @@
       width: 100%;
       background-color: #ddd;
       border-radius: 2rem;
-      height: 10px;
+      height: 10%;
       margin-top: .7rem;
     }
     .skills {
       text-align: right;
       color: white;
       border-radius: 2rem;
-      height: 10px;
+      height: 100%;
     }
     .daily {width: {{ daily_percent }}%; background-color: #348EFA;}
     .weekly {width: {{ weekly_percent }}%; background-color: #F55667;}
@@ -359,12 +358,12 @@
         margin-left: 0rem;
     }
     #sideBar{
-        width:20rem; 
-        height:100%; 
+        width:20rem;
         background-color: #263544; 
         display: table;
         min-height: 1080px;
         min-width: 273.578px;
+        margin: 0px;
     }
     #companyBox{
         width:100%; 
@@ -473,6 +472,17 @@
         padding: 22px;
         width: 30%;
     }
+    .progress_bars_whole{
+        height: 100%;
+        justify-items: center;
+        align-items: center;
+    }
+    .progress_bar_div{
+        width: 22rem;
+    }
+    #progress{
+        padding: 0 20px 0 20px;
+    }
 </style>
 {% load static %}
 <html>
@@ -558,7 +568,7 @@
                 </ul>
             </div>
         </div>
-        <div style="width:100%;">
+        <div style="width:100%; overflow: scroll;">
             <div id="topBar">
                 <div style="">DTE - EES Coke</div>
                 <div class="drop_down">
