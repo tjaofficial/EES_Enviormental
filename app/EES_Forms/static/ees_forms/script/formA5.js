@@ -21,13 +21,14 @@ function averages_func(oven) {
             the_group.push(the_opac);
         }
     }
+    console.log(the_group);
     if (the_group.length > 0) {
         const highest_avg = [];
 
         const highest_read = the_group.reduce(function(a, b) {
             return Math.max(a, b);
         }, 0);
-
+        console.log('read ' + highest_read);
         if (the_group.length > 6) {
             const instances = [];
             for (let h = 0; h < (the_group.length + 1) - 6; h++) {
@@ -67,7 +68,8 @@ function averages_func(oven) {
             stop_light(parseFloat(ha1).toFixed(2), id_average_6);
         }
         
-        if (highest_read) {
+        if (highest_read != null) {
+            console.log('CHECK 1')
             document.getElementById(id_high_opac).placeholder = highest_read;
             stop_light(parseInt(highest_read), id_high_opac);
         }
