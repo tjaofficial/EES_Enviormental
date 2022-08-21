@@ -41,11 +41,13 @@ def formL(request, access_page):
             week_almost = week_start_dates[0]
             this_week_saturday = week_almost.week_start
             database = week_almost
-
+            
             # -----check if the days data has been filled in
             home = []
             filled_in = False
             for x in formL_model.objects.all():
+                print(x)
+                ## print(last_saturday)
                 if x.week_start == last_saturday:
                     home.append((x.time_4, 4))
                     home.append((x.time_3, 3))
@@ -79,25 +81,36 @@ def formL(request, access_page):
                 if access_page == 'form':
                     if this_week_saturday == today:
                         existing = True
+                    else:
+                        new_saturday = True
+                        new_sunday = ''
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
                 elif access_page == "edit":
-                    if today_number == 5:
-                        if this_week_saturday == today:
-                            existing = True
-                            filled_in = False
+                    if this_week_saturday == today:
+                        existing = True
+                        filled_in = False
+                    else:
+                        print('error - Editing a form that does not exist in the data base')
             # ----if today is a Sunday-------
             else:
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if access_page == 'form':
                     sunday_last_sat = today - datetime.timedelta(days=1)
+                    print('BUT WE HERE THO')
                     if this_week_saturday == sunday_last_sat:
                         existing = True
+                    else:
+                        new_sunday = True
+                        new_saturday = ''
+                        
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
                 elif access_page == "edit":
                     sunday_last_sat = today - datetime.timedelta(days=1)
                     if this_week_saturday == sunday_last_sat:
                         existing = True
                         filled_in = False
+                    else:
+                        print('error - Editing a form that does not exist in the data base')
         if existing:
             initial_data = {
                 'week_start': database.week_start,
@@ -154,9 +167,18 @@ def formL(request, access_page):
             this_week_saturday = ''
             week_almost = ''
             filled_in = False
+            if new_saturday:
+                set_start_date = today
+                set_end_date = today + datetime.timedelta(days=6)
+            elif new_sunday:
+                set_start_date = sunday_last_sat
+                set_end_date = today + datetime.timedelta(days=5)
+            else:
+                set_start_date = last_saturday
+                set_end_date = end_week
             initial_data = {
-                'week_start': last_saturday,
-                'week_end': end_week
+                'week_start': set_start_date,
+                'week_end': set_end_date
             }
             empty_form = formL_form(initial=initial_data)
 
