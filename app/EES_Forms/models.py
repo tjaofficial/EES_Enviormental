@@ -355,7 +355,7 @@ class Profile(models.Model):
 
 
 class daily_battery_profile_model(models.Model):
-    foreman = models.CharField(max_length=10, choices=foreman_choices)
+    foreman = models.CharField(max_length=30)
     crew = models.CharField(max_length=1, choices=crew_choices)
     inop_ovens = models.CharField(max_length=2)
     inop_numbs = models.CharField(max_length=50)
@@ -364,7 +364,6 @@ class daily_battery_profile_model(models.Model):
 
     def __str__(self):
         return str(self.date_save)
-
 
 class bat_info_model(models.Model):
     bat_num = models.CharField(max_length=30)
