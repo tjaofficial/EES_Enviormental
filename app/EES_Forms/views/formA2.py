@@ -57,8 +57,12 @@ def formA2(request, selector):
             database_form = ''
             pSide_Raw_JSON = json.loads(data.p_leak_data)
             cSide_Raw_JSON = json.loads(data.c_leak_data)
-            pSide_json = pSide_Raw_JSON['data']
-            cSide_json = cSide_Raw_JSON['data']
+            if len(pSide_Raw_JSON) > 0:
+                pSide_json = pSide_Raw_JSON['data']
+                cSide_json = cSide_Raw_JSON['data']
+            else:
+                pSide_json = ''
+                cSide_json = ''
         else:
             if existing:
                 initial_data = {
