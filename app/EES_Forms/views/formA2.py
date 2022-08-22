@@ -59,9 +59,11 @@ def formA2(request, selector):
             cSide_Raw_JSON = json.loads(data.c_leak_data)
             if len(pSide_Raw_JSON) > 0:
                 pSide_json = pSide_Raw_JSON['data']
-                cSide_json = cSide_Raw_JSON['data']
             else:
                 pSide_json = ''
+            if len(cSide_Raw_JSON) > 0:
+                cSide_json = cSide_Raw_JSON['data']
+            else:
                 cSide_json = ''
         else:
             if existing:
