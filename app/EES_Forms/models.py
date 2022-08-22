@@ -32,7 +32,7 @@ foreman_choices = (
     ('Zajas', 'Zajas'),
     ('Folding', 'Folding'),
     ('Cooper', 'Cooper'),
-    ('Lopez', 'Lopez')
+    ('Rice', 'Rice')
 )
 
 crew_choices = (
