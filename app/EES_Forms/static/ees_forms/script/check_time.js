@@ -108,3 +108,10 @@ function timecheck_pt3(){
 function timecheck_pt4(){
     check_time('o4_start', 'o4_stop', 'myPopup4')
 }
+
+/*************
+ FORM H - Combustion Stack
+*************/
+function timecheck_combustion(){
+    check_time('comb_start', 'comb_stop', 'combPopup1')
+}

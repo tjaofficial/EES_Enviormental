@@ -1,80 +1,15 @@
 {% extends "ees_forms/layout.html" %}
  
 {% block list%}
-    <style> 
-        #boxTitle{
-            font-size: 30px;
-        }
-        #boxa4{
-            border: 1px solid black;
-            padding: 5px;
-        }
-        span.sideWord{
-            writing-mode: vertical-rl;
-        }
-        #pushTravels{
-            width: auto;
-            text-align: center;
-        }
-        #ptTable{
-            padding-left: 50px;
-        }
-        #ptInfo{
-            width: auto;
-            text-align: center;
-        }
-        #bothTables{
-            width: auto;
-            display: inline-flex;
-        }
-        #tableSize{
-            width: 75px;
-        }
-        #tableSize2{
-            width: 40px;
-        }
-        #ptInfoInner{
-            width: auto;
-            text-align: center;
-        }
-        #tableSize3{
-            width: 200px;
-            font-size: 15px;
-        }
-        #tableSize4{
-            width: 350px;
-            font-size: 15px;
-        }
-        #ptInfoInner2{
-            text-align: center;
-            display: inline-flex;
-        }
-        #tableSize5{
-             width: 130px;
-            font-size: 15px;
-        }
-        #tableSize6{
-             width: 50px;
-            font-size: 15px;
-        }
-        #newName{
-            width: auto;
-            display: inline-flex;
-        }
-        #formH_box1{
-            border: 1px solid black;
-            text-align: center;
-            width: 45px;
-        }
-        #formH_box2{
-            border: 1px solid black;
-            width: 60px;
-            text-align: center;
-        }
-    </style>
+{% load static %}
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
+    <link href="{% static 'ees_forms/style/formH.css' %}" rel="stylesheet" />
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">    
         <div>
-            <a href="{% if access_page == 'search' %}{% url 'IncompleteForms' %}{% elif access_page == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+            <a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% elif access_page == 'search' %}{% url 'IncompleteForms' %}{% elif access_page == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
         </div>
         <form action="" method="POST">
             {% csrf_token %}
@@ -85,19 +20,11 @@
                             <div id="newName">
                             <table style="border-collapse: collapse;">
                                 <tr>
-                                    {% if access_page == 'form' %}
                                     <th id="boxTitle" colspan="15" style="text-align: center;">
                                         Visible Emission Observation Form - (H)<br>
                                         Method 9<br>
                                         Combustion Stack
                                     </th>
-                                    {% else %}
-                                    <th id="boxTitle" colspan="15" style="text-align: center;">
-                                        Visible Emission Observation Form - (H)<br>
-                                        Method 9<br>
-                                        Form L - Visual Emissions
-                                    </th>
-                                    {% endif %}
                                     <th></th>
                                 </tr>
                                 <tr>
@@ -286,14 +213,6 @@
 
                                         </th>
                                         <th colspan="3" style="text-align: left;">
-                                           input
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="3" style="text-align: left;">
-
-                                        </th>
-                                        <th colspan="3" style="text-align: left;">
 
                                         </th>
                                     </tr><tr>
@@ -317,16 +236,17 @@
                                     </tr> 
                                     <tr>
                                         <td colspan="1" style="text-align: left;">
-                                           Start Time:
+                                           Start Time: 
                                         </td>
                                         <td colspan="2" style="text-align: left;">
-                                           input
+                                            {{ readings_form.comb_start }}
+                                            <span class="popuptext1" id="combPopup1">Please Change Time</span>
                                         </td>
                                         <td colspan="1" style="text-align: left;">
-                                           Stop Time:
+                                           Stop Time: 
                                         </td>
                                         <td colspan="2" style="text-align: left;">
-                                           input
+                                            {{ readings_form.comb_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -352,16 +272,16 @@
                                            0
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_1 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_2 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_3 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_4 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -369,16 +289,16 @@
                                            1
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_5 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_6 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_7 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_8 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -386,16 +306,16 @@
                                            2
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_9 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_10 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_11 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_12 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -403,16 +323,16 @@
                                            3
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_13 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_14 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_15 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_16 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -420,16 +340,16 @@
                                            4
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_17 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_18 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_19 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_20 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -437,16 +357,16 @@
                                            5
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_21 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_22 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_23 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_24 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -454,16 +374,16 @@
                                            6
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_25 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_26 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_27 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.comb_read_28 }}
                                         </td>
                                     </tr>
                                     {% else %}
@@ -729,7 +649,14 @@
                             <br>
                             <div id="ptTable"> 
                                 <table style="border-collapse: collapse;">
-
+                                    <tr>
+                                        <td colspan="1" id="formG1_box2">
+                                           Average:
+                                        </td>
+                                        <td colspan="1" id="formG1_box1">
+                                            {{ readings_form.comb_average }}
+                                        </td>
+                                    </tr>
                                 </table>
                             </div> 
                         </div>

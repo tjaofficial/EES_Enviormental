@@ -321,10 +321,6 @@ def formA5(request, selector):
             B_valid = readings.is_valid()
 
             if A_valid and B_valid:
-
-
-
-
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
 

@@ -237,7 +237,6 @@ function info_already_entered() {
             list.splice(item,1);
             for (let x=0; x < list.length; x++){
                 const item2 = list[x];
-                console.log(item2);
                 document.getElementById('id_barrier_thickness_' + item2).style.display = 'none';
                 document.getElementById('id_surface_quality_' + item2).style.display = 'none';
                 document.getElementById('id_surpressant_crust_' + item2).style.display = 'none';
@@ -345,34 +344,6 @@ function house_keeping() {
         }
     }
 }
-
-/*function sprayed_storage() {
-    list = [0,1,2,3,4];
-    for (let item=0; item < list.length; item++){
-        const barrier_thick = document.getElementById('id_barrier_thickness_' + item).value;
-        const surface_quality = document.getElementById('id_surface_quality_' + item).value;
-        if (barrier_thick || surface_quality) {
-            document.getElementById('id_barrier_thickness_' + item).required = true;
-            document.getElementById('id_surface_quality_' + item).required = true;
-            list.splice(item,1);
-            for (let x=0; x < list.length; x++){
-                const item2 = list[x];
-                document.getElementById('id_barrier_thickness_' + item).style.display = 'none';
-                document.getElementById('id_surface_quality_' + item).style.display = 'none';
-            }
-            break;
-        } else {
-            document.getElementById('id_barrier_thickness_' + item).required = false;
-            document.getElementById('id_surface_quality_' + item).required = false;
-            list.splice(item,1);
-            list.forEach((item2) => {
-                document.getElementById('id_barrier_thickness_' + item).style.display = 'inline-block';
-                document.getElementById('id_surface_quality_' + item).style.display = 'inline-block';
-            })
-            list.splice(item, 0, item);
-        }
-    }
-} */
 
 run_it();
 house_keeping();

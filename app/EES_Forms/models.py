@@ -3330,7 +3330,11 @@ class formH_model(models.Model):
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
     observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
+    cert_date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
     process_equip1 = models.CharField(max_length=50)
     process_equip2 = models.CharField(max_length=50)
     op_mode1 = models.CharField(max_length=30)
@@ -3338,18 +3342,18 @@ class formH_model(models.Model):
     background_color_start = models.CharField(max_length=30)
     background_color_stop = models.CharField(max_length=30)
     sky_conditions = models.CharField(max_length=30)
-    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_start = models.CharField(max_length=4)
     wind_speed_stop = models.CharField(max_length=4)
     wind_direction = models.CharField(max_length=3)
     emission_point_start = models.CharField(max_length=50)
     emission_point_stop = models.CharField(max_length=50)
-    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_start = models.CharField(max_length=5)
     ambient_temp_stop = models.CharField(max_length=4)
     humidity = models.CharField(max_length=3)
     height_above_ground = models.CharField(max_length=30)
     height_rel_observer = models.CharField(max_length=30)
     distance_from = models.CharField(max_length=30)
-    direction_from = models.CharField(max_length=30)
+    direction_from = models.CharField(max_length=3)
     describe_emissions_start = models.CharField(max_length=30)
     describe_emissions_stop = models.CharField(max_length=30)
     emission_color_start = models.CharField(max_length=30)
@@ -3364,6 +3368,46 @@ class formH_model(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+class formH_readings_model(models.Model):
+    form = models.OneToOneField(
+        formH_model,
+        on_delete=models.CASCADE,
+    )
+    comb_read_1 = models.CharField(max_length=3)
+    comb_read_2 = models.CharField(max_length=3)
+    comb_read_3 = models.CharField(max_length=3)
+    comb_read_4 = models.CharField(max_length=3)
+    comb_read_5 = models.CharField(max_length=3)
+    comb_read_6 = models.CharField(max_length=3)
+    comb_read_7 = models.CharField(max_length=3)
+    comb_read_8 = models.CharField(max_length=3)
+    comb_read_9 = models.CharField(max_length=3)
+    comb_read_10 = models.CharField(max_length=3)
+    comb_read_11 = models.CharField(max_length=3)
+    comb_read_12 = models.CharField(max_length=3)
+    comb_read_13 = models.CharField(max_length=3)
+    comb_read_14 = models.CharField(max_length=3)
+    comb_read_15 = models.CharField(max_length=3)
+    comb_read_16 = models.CharField(max_length=3)
+    comb_read_17 = models.CharField(max_length=3)
+    comb_read_18 = models.CharField(max_length=3)
+    comb_read_19 = models.CharField(max_length=3)
+    comb_read_20 = models.CharField(max_length=3)
+    comb_read_21 = models.CharField(max_length=3)
+    comb_read_22 = models.CharField(max_length=3)
+    comb_read_23 = models.CharField(max_length=3)
+    comb_read_24 = models.CharField(max_length=3)
+    comb_read_25 = models.CharField(max_length=3)
+    comb_read_26 = models.CharField(max_length=3)
+    comb_read_27 = models.CharField(max_length=3)
+    comb_read_28 = models.CharField(max_length=3)
+    comb_start = models.TimeField()
+    comb_stop = models.TimeField()
+    comb_average = models.FloatField(blank=True)
+    
+    def __str__(self):
+        return str(self.form)
 
 # ----------------------------------------------------------------------FORM I---------------<
 
