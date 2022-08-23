@@ -172,13 +172,6 @@ function hidden_vessel() {
 function run_it() {
     const freq = document.getElementById('frequency').innerText;
     if (freq == 'True') {
-        const list = [0,1,2,3,4];
-        list.forEach((item) => {
-            const surpressant_crust = document.getElementById('id_surpressant_crust_' + item).value;
-            const coal_vessel = document.getElementById('id_coal_vessel_' + item).value;
-
-            auto_hide_storage(surpressant_crust, item)
-        })
         auto_fill_vessel();
         auto_fill_spills();
         return '5days';
@@ -229,50 +222,48 @@ function loading() {
 }
 
 function info_already_entered() {
-    run_it();
-
-    if (run_it() == '1day') {
-        list = [0,1,2,3,4];
-        for (let item=0; item < list.length; item++){
-            const barrier_thickness = document.getElementById('id_barrier_thickness_' + item).value;
-            const surface_quality = document.getElementById('id_surface_quality_' + item).value;
-            const surpressant_crust = document.getElementById('id_surpressant_crust_' + item).value;
+    list = [0,1,2,3,4];
+    for (let item=0; item < list.length; item++){
+        const barrier_thickness = document.getElementById('id_barrier_thickness_' + item).value;
+        const surface_quality = document.getElementById('id_surface_quality_' + item).value;
+        const surpressant_crust = document.getElementById('id_surpressant_crust_' + item).value;
+        
+        if (barrier_thickness || surface_quality || surpressant_crust) {
+            document.getElementById('id_barrier_thickness_' + item).required = true;
+            document.getElementById('id_surface_quality_' + item).required = true;
+            document.getElementById('id_surpressant_crust_' + item).required = true;
+            auto_hide_storage(surpressant_crust, item)
             
-            if (barrier_thickness || surface_quality || surpressant_crust) {
-                document.getElementById('id_barrier_thickness_' + item).required = true;
-                document.getElementById('id_surface_quality_' + item).required = true;
-                document.getElementById('id_surpressant_crust_' + item).required = true;
-
-                list.splice(item,1);
-                for (let x=0; x < list.length; x++){
-                    const item2 = list[x];
-                    document.getElementById('id_barrier_thickness_' + item2).style.display = 'none';
-                    document.getElementById('id_surface_quality_' + item2).style.display = 'none';
-                    document.getElementById('id_surpressant_crust_' + item2).style.display = 'none';
-                    document.getElementById('id_additional_surpressant_' + item2).style.display = 'none';
-                    document.getElementById('id_comments_' + item2).style.display = 'none';
-                }
-                auto_hide_storage(surpressant_crust, item)
-            } else {
-                document.getElementById('id_barrier_thickness_' + item).required = false;
-                document.getElementById('id_surface_quality_' + item).required = false;
-                document.getElementById('id_surpressant_crust_' + item).required = false;
-
-                document.getElementById('id_additional_surpressant_' + item).style.display = 'inline-block';
-                document.getElementById('id_comments_' + item).style.display = 'inline-block';
-                document.getElementById('id_additional_surpressant_' + item).required = false;
-                document.getElementById('id_comments_' + item).required = false;
-
-                list.splice(item,1);
-                for (let x=0; x < list.length; x++){
-                    const item2 = list[x];
-                    document.getElementById('id_barrier_thickness_' + item2).style.display = 'inline-block';
-                    document.getElementById('id_surface_quality_' + item2).style.display = 'inline-block';
-                    document.getElementById('id_surpressant_crust_' + item2).style.display = 'inline-block';
-                    document.getElementById('id_additional_surpressant_' + item2).style.display = 'inline-block';
-                    document.getElementById('id_comments_' + item2).style.display = 'inline-block';
-                }
+            list.splice(item,1);
+            for (let x=0; x < list.length; x++){
+                const item2 = list[x];
+                console.log(item2);
+                document.getElementById('id_barrier_thickness_' + item2).style.display = 'none';
+                document.getElementById('id_surface_quality_' + item2).style.display = 'none';
+                document.getElementById('id_surpressant_crust_' + item2).style.display = 'none';
+                document.getElementById('id_additional_surpressant_' + item2).style.display = 'none';
+                document.getElementById('id_comments_' + item2).style.display = 'none';
             }
+            break;
+        } else {
+            document.getElementById('id_barrier_thickness_' + item).required = false;
+            document.getElementById('id_surface_quality_' + item).required = false;
+            document.getElementById('id_surpressant_crust_' + item).required = false;
+
+            document.getElementById('id_additional_surpressant_' + item).style.display = 'inline-block';
+            document.getElementById('id_comments_' + item).style.display = 'inline-block';
+            document.getElementById('id_additional_surpressant_' + item).required = false;
+            document.getElementById('id_comments_' + item).required = false;
+
+            list.splice(item,1);
+            list.forEach((item2) => {
+                document.getElementById('id_barrier_thickness_' + item2).style.display = 'inline-block';
+                document.getElementById('id_surface_quality_' + item2).style.display = 'inline-block';
+                document.getElementById('id_surpressant_crust_' + item2).style.display = 'inline-block';
+                document.getElementById('id_additional_surpressant_' + item2).style.display = 'inline-block';
+                document.getElementById('id_comments_' + item2).style.display = 'inline-block';
+            })
+            list.splice(item, 0, item);
         }
     }
 }
@@ -355,5 +346,34 @@ function house_keeping() {
     }
 }
 
+/*function sprayed_storage() {
+    list = [0,1,2,3,4];
+    for (let item=0; item < list.length; item++){
+        const barrier_thick = document.getElementById('id_barrier_thickness_' + item).value;
+        const surface_quality = document.getElementById('id_surface_quality_' + item).value;
+        if (barrier_thick || surface_quality) {
+            document.getElementById('id_barrier_thickness_' + item).required = true;
+            document.getElementById('id_surface_quality_' + item).required = true;
+            list.splice(item,1);
+            for (let x=0; x < list.length; x++){
+                const item2 = list[x];
+                document.getElementById('id_barrier_thickness_' + item).style.display = 'none';
+                document.getElementById('id_surface_quality_' + item).style.display = 'none';
+            }
+            break;
+        } else {
+            document.getElementById('id_barrier_thickness_' + item).required = false;
+            document.getElementById('id_surface_quality_' + item).required = false;
+            list.splice(item,1);
+            list.forEach((item2) => {
+                document.getElementById('id_barrier_thickness_' + item).style.display = 'inline-block';
+                document.getElementById('id_surface_quality_' + item).style.display = 'inline-block';
+            })
+            list.splice(item, 0, item);
+        }
+    }
+} */
+
 run_it();
 house_keeping();
+info_already_entered();
