@@ -1500,6 +1500,7 @@ class formI_form(ModelForm):
 class formL_form(ModelForm):
     class Meta:
         today = datetime.date.today()
+        print(today)
         name_5 = False
         name_6 = False
         name_0 = False
@@ -1508,6 +1509,7 @@ class formL_form(ModelForm):
         name_3 = False
         name_4 = False
         if today.weekday() == 5:
+            print('saturday')
             name_5 = True
             name_6 = False
             name_0 = False
@@ -1515,7 +1517,8 @@ class formL_form(ModelForm):
             name_2 = False
             name_3 = False
             name_4 = False
-        if today.weekday() == 6:
+        elif today.weekday() == 6:
+            print('sunday')
             name_5 = True
             name_6 = True
             name_0 = False
@@ -1523,7 +1526,8 @@ class formL_form(ModelForm):
             name_2 = False
             name_3 = False
             name_4 = False
-        if today.weekday() == 0:
+        elif today.weekday() == 0:
+            print('monday')
             name_5 = True
             name_6 = True
             name_0 = True
@@ -1531,7 +1535,8 @@ class formL_form(ModelForm):
             name_2 = False
             name_3 = False
             name_4 = False
-        if today.weekday() == 1:
+        elif today.weekday() == 1:
+            print('tuesday')
             name_5 = True
             name_6 = True
             name_0 = True
@@ -1539,7 +1544,8 @@ class formL_form(ModelForm):
             name_2 = False
             name_3 = False
             name_4 = False
-        if today.weekday() == 2:
+        elif today.weekday() == 2:
+            print('wednesday')
             name_5 = True
             name_6 = True
             name_0 = True
@@ -1547,7 +1553,8 @@ class formL_form(ModelForm):
             name_2 = True
             name_3 = False
             name_4 = False
-        if today.weekday() == 3:
+        elif today.weekday() == 3:
+            print('thursday')
             name_5 = True
             name_6 = True
             name_0 = True
@@ -1555,7 +1562,8 @@ class formL_form(ModelForm):
             name_2 = True
             name_3 = True
             name_4 = False
-        if today.weekday() == 4:
+        elif today.weekday() == 4:
+            print('friday')
             name_5 = True
             name_6 = True
             name_0 = True
@@ -1563,6 +1571,8 @@ class formL_form(ModelForm):
             name_2 = True
             name_3 = True
             name_4 = True
+            
+        print(name_1)
         
         model = formL_model
         fields = ('__all__')

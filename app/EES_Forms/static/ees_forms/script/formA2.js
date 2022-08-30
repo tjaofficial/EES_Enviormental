@@ -274,7 +274,7 @@ function pc_doors_not_observed() {
     //Gets an array of all inoperable doors
     let remove_spaces = inop_numbs.split(' ').join(""),
     select_numbers = remove_spaces.split(',');
-
+    console.log(select_numbers)
     //Push Side - Checks if the inoperable oven are listed in the total not observed doors and then subtracts those doors, if any
     if (parseInt(push_from) || parseInt(push_to) >= 0) {
         let push_blocked = Math.abs(parseInt(push_from) - parseInt(push_to)) +1,
@@ -311,19 +311,27 @@ function pc_doors_not_observed() {
     if (parseInt(coke_from) || parseInt(coke_to) >= 0) {
         let coke_blocked = Math.abs(parseInt(coke_from) - parseInt(coke_to)) +1,
         y = 0;
-        
+        console.log(coke_blocked);
 
         if(parseInt(coke_from) < parseInt(coke_to)){
             for(i=parseInt(coke_from); i<=parseInt(coke_to); i++){
-                if(parseInt(i) === parseInt(inop_numbs)){
-                    y += 1;
+                for(k=0; k<select_numbers.length; k++){
+                    console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
+                    if(parseInt(i) === parseInt(inop_numbs)){
+                        y += 1;
+                        console.log("Coke Side has " + y + " Oven(s) the same.")
+                    }
                 }
             }
         }
         else {
             for(i=parseInt(coke_to); i<=parseInt(coke_from); i++){
-                if(parseInt(i) === parseInt(inop_numbs)){
-                    y += 1;
+                for(k=0; k<select_numbers.length; k++){
+                    console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
+                    if(parseInt(i) === parseInt(select_numbers[k])){
+                        y += 1;
+                        console.log("Coke Side has " + y + " Oven(s) the same.")
+                    }
                 }
             }
         }

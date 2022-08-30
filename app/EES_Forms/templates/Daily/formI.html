@@ -1,68 +1,16 @@
-{% extends "ees_forms/layout.html" %}
+{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
+<link href="{% static 'ees_forms/style/formI.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formI.js' %}"></script>
 
-{% block list%}
-    <style>
-        #boxc1{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 200px;
-            max-width: 200px;
-            height: 35px;
-        }
-        #boxTitle{
-            font-size: 30px;
-        }
-        #formDbox1{
-            width: 130px; 
-            text-align: right;
-            border-left: 3px solid black;
-            padding-bottom: 7px;
-            padding-top: 7px;
-        }
-        #formDbox2{
-            width: 100px; 
-            text-align: center;
-            
-        }
-        #formDbox3{
-            width: 130px; 
-            text-align: center;
-            border-left: 3px solid black;
-            border-right: 3px solid black;
-            padding-bottom: 7px;
-            padding-top: 7px;
-        }
-        #formCborder{
-            width: 125px;
-            border-right: 3px solid black;
-            padding-bottom: 7px;
-            padding-top: 7px;
-        }
-        #formCborder2{
-            width: 125px;
-            border-right: 3px solid black;
-            border-left: 3px solid black;
-            padding-bottom: 7px;
-            padding-top: 7px;
-        }
-        #alltrucks{
-            margin: auto;
-            width: fit-content;
-            display: flex;
-        }
-        #formCspace{
-            padding: 10px;
-        }
-        #formI_box1{
-            border: 1px solid black;
-            width: 100px;
-            text-align: center;
-        }
-    </style>
-
+<body>
+    <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div>
-        <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'edit' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+        <a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% elif selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' or selector == 'edit'%}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}">
+            <svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
+            </svg>
+        </a>    
     </div>
     <form action="" method="POST" style="width: fit-content; margin: auto;">
         {% csrf_token %}
@@ -226,5 +174,6 @@
             </div>
         </div>
     </form>
+</body>
     
 {% endblock %}

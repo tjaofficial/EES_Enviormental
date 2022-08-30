@@ -12,6 +12,16 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formL(request, access_page):
     formName = "L"
     existing = False
+    unlock = False
+    client = False
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -63,6 +73,8 @@ def formL(request, access_page):
                         filled_in = True
             # ------check if today is a Weekday
             if today_number not in {5, 6}:
+                new_saturday = ''
+                new_sunday = ''
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if access_page == 'form':
                     print('check 3')
@@ -232,5 +244,5 @@ def formL(request, access_page):
         return redirect(batt_prof)
 
     return render(request, "Daily/formL.html", {
-        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'week_almost': week_almost, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName
+        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'week_almost': week_almost, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
     })
