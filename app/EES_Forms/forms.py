@@ -1499,80 +1499,70 @@ class formI_form(ModelForm):
         
 class formL_form(ModelForm):
     class Meta:
-        today = datetime.date.today()
-        print(today)
-        name_5 = False
-        name_6 = False
-        name_0 = False
-        name_1 = False
-        name_2 = False
-        name_3 = False
-        name_4 = False
-        if today.weekday() == 5:
-            print('saturday')
-            name_5 = True
-            name_6 = False
-            name_0 = False
-            name_1 = False
-            name_2 = False
-            name_3 = False
-            name_4 = False
-        elif today.weekday() == 6:
-            print('sunday')
-            name_5 = True
-            name_6 = True
-            name_0 = False
-            name_1 = False
-            name_2 = False
-            name_3 = False
-            name_4 = False
-        elif today.weekday() == 0:
-            print('monday')
-            name_5 = True
-            name_6 = True
-            name_0 = True
-            name_1 = False
-            name_2 = False
-            name_3 = False
-            name_4 = False
-        elif today.weekday() == 1:
-            print('tuesday')
-            name_5 = True
-            name_6 = True
-            name_0 = True
-            name_1 = True
-            name_2 = False
-            name_3 = False
-            name_4 = False
-        elif today.weekday() == 2:
-            print('wednesday')
-            name_5 = True
-            name_6 = True
-            name_0 = True
-            name_1 = True
-            name_2 = True
-            name_3 = False
-            name_4 = False
-        elif today.weekday() == 3:
-            print('thursday')
-            name_5 = True
-            name_6 = True
-            name_0 = True
-            name_1 = True
-            name_2 = True
-            name_3 = True
-            name_4 = False
-        elif today.weekday() == 4:
-            print('friday')
-            name_5 = True
-            name_6 = True
-            name_0 = True
-            name_1 = True
-            name_2 = True
-            name_3 = True
-            name_4 = True
-            
-        print(name_1)
+        #today = datetime.date.today()
+        #name_5 = False
+        #name_6 = False
+        #name_0 = False
+        #name_1 = False
+        #name_2 = False
+        #name_3 = False
+        #name_4 = False
+        #if today.weekday() == 5:
+            #name_5 = True
+            #name_6 = False
+            #name_0 = False
+            #name_1 = False
+            #name_2 = False
+            #name_3 = False
+            #name_4 = False
+        #elif today.weekday() == 6:
+            #name_5 = True
+            #name_6 = True
+            #name_0 = False
+            #name_1 = False
+            #name_2 = False
+            #name_3 = False
+            #name_4 = False
+        #elif today.weekday() == 0:
+            #name_5 = True
+            #name_6 = True
+            #name_0 = True
+            #name_1 = False
+            #name_2 = False
+            #name_3 = False
+            #name_4 = False
+        #elif today.weekday() == 1:
+            #name_5 = True
+            #name_6 = True
+            #name_0 = True
+            #name_1 = True
+            #name_2 = False
+            #name_3 = False
+            #name_4 = False
+        #elif today.weekday() == 2:
+            #name_5 = True
+            #name_6 = True
+            #name_0 = True
+            #name_1 = True
+            #name_2 = True
+            #name_3 = False
+            #name_4 = False
+        #elif today.weekday() == 3:
+            #name_5 = True
+            #name_6 = True
+            #name_0 = True
+            #name_1 = True
+            #name_2 = True
+            #name_3 = True
+            #name_4 = False
+        #elif today.weekday() == 4:
+            #name_5 = True
+            #name_6 = True
+            #name_0 = True
+            #name_1 = True
+            #name_2 = True
+            #name_3 = True
+            #name_4 = True
         
         model = formL_model
         fields = ('__all__')
@@ -1580,20 +1570,20 @@ class formL_form(ModelForm):
         widgets = {
             'week_start' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_0}),
-            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_1}),
-            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_2}),
-            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_3}),
-            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_4}),
-            'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_5}),
-            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;', 'required': name_6}),
-            'obser_0' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_0}),
-            'obser_1' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_1}),
-            'obser_2' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_2}),
-            'obser_3' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_3}),
-            'obser_4' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_4}),
-            'obser_5' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_5}),
-            'obser_6' : forms.TextInput(attrs={'style':'width: 150px;', 'required': name_6}),
+            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_5' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'time_6' : forms.TimeInput(attrs={'type':'time', 'style':'width: 130px;'}),
+            'obser_0' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'obser_1' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'obser_2' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'obser_3' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'obser_4' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'obser_5' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'obser_6' : forms.TextInput(attrs={'style':'width: 150px;'}),
         }
        
 class formM_form(ModelForm):
