@@ -131,7 +131,6 @@ def formA2(request, selector):
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
-                    print("nigga we made it")
                     return redirect('IncompleteForms')
                 else:
                     issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
