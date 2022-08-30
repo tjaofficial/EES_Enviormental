@@ -12,7 +12,6 @@ import PIL.Image as Image
 import io
 import base64
 
-
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
