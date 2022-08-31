@@ -242,7 +242,6 @@ def spill_kits(request, access_page):
                 form.save()
 
                 done = Forms.objects.filter(form='Spill Kits')[0]
-                print(done.submitted)
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
