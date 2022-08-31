@@ -22,7 +22,7 @@ def spill_kits(request, access_page):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-        
+
     now = datetime.datetime.now()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     sk_form = spill_kits_form()
@@ -241,7 +241,8 @@ def spill_kits(request, access_page):
             if form.is_valid():
                 form.save()
 
-                done = Forms.objects.filter(form='spill_kits')[0]
+                done = Forms.objects.filter(form='Spill Kits')[0]
+                print(done.submitted)
                 done.submitted = True
                 done.date_submitted = todays_log.date_save
                 done.save()
@@ -253,5 +254,5 @@ def spill_kits(request, access_page):
         return redirect(batt_prof)
 
     return render(request, 'Monthly/spillkits.html', {
-        'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock
+        'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName
     })
