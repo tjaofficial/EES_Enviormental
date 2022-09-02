@@ -25,8 +25,9 @@ def formO(request, selector, weekend_day):
         ss_filler = 5
     elif weekend_day == 'sunday':
         ss_filler = 6
+    else:
+        ss_filler = ''
 
-    print(ss_filler)
     if formO_model.objects.count() != 0:
         database_form = org[0]
         database_date = database_form.date
