@@ -34,19 +34,23 @@ def formI(request, selector):
     opened = True
     submit = True
     filled_in = False
+    partial_form = False
     week = ''
     week_almost = ''
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:
+        print('CHECK 1')
         todays_log = daily_prof[0]
         if selector not in ('form', 'edit'):
+            print('CHECK 2.1')
             submit = False
             for x in week_start_dates:
                 if str(x.week_start) == str(selector):
                     database_model = x
             empty_form = database_model
         elif len(week_start_dates) > 0:
+            print('CHECK 2.2')
             week_almost = week_start_dates[0]
             week = week_almost.week_start
             # ------- check if todays data has been filled in or not
@@ -59,16 +63,22 @@ def formI(request, selector):
                     home.append((x.time_2, 2))
                     home.append((x.time_1, 1))
                     home.append((x.time_0, 0))
+                    
+            print(home)
             for days in home:
                 if days[0]:
+                    partial_form = True
                     if days[1] == today_number:
                         filled_in = True
             # -----check if today is a Weekday
             if today_number not in {5, 6}:
+                print('CHECK 3.1')
                 # --------FORM------------FORM----------FORM-------------
                 if selector == 'form':
+                    print(week)
+                    print(last_saturday)
                     if week == last_saturday:
-                        if filled_in:
+                        if filled_in or partial_form:
                             empty_form = week_almost
                             submit = False
                             existing = True
@@ -78,6 +88,7 @@ def formI(request, selector):
                         filled_in = False
                         existing = True
             elif today_number == 5:
+                print('CHECK 3.2')
                 opened = False
                 submit = False
                 initial_data = {
@@ -86,6 +97,7 @@ def formI(request, selector):
                 }
                 empty_form = formI_form(initial=initial_data)
             else:
+                print('CHECK 3.3')
                 opened = False
                 submit = False
                 initial_data = {
@@ -158,5 +170,5 @@ def formI(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formI.html", {
-        'admin': admin, "back": back, 'todays_log': todays_log, 'empty': empty_form, 'week': week, 'opened': opened, 'week_almost': week_almost, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock
+        'admin': admin, "back": back, 'todays_log': todays_log, 'empty': empty_form, 'week': week, 'opened': opened, 'week_almost': week_almost, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })
