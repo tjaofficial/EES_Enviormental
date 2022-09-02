@@ -515,7 +515,7 @@ def IncompleteForms(request):
                 if A.year != today.year or A.month != today.month:
                     forms.submitted = False
                     forms.save()
-                elif str(A.day) > last_day:
+                elif str(A.day) > str(last_day):
                     forms.submitted = False
                     forms.save()
             elif forms.frequency == 'Weekly':
