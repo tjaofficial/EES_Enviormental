@@ -28,6 +28,7 @@ def formD(request, selector):
         todays_log = daily_prof[0]
         if len(submitted_forms) > 0:
             latest_form = submitted_forms[0]
+            print(latest_form.whatever().values())
             starting_saturday = latest_form.week_start
             if today.weekday() not in {5, 6}:
                 if starting_saturday == last_saturday:
@@ -113,7 +114,7 @@ def formD(request, selector):
                 done = Forms.objects.filter(form='D')[0]
                 for items in latest_form.whatever().values():
                     if items is None:
-                        filled_out = True  # -change this back to false
+                        filled_out = False  # -change this back to false
                         break
 
                 if filled_out:

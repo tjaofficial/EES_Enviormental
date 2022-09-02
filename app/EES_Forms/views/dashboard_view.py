@@ -3,6 +3,7 @@ from ..models import user_profile_model, formA5_readings_model, Forms, daily_bat
 from django.contrib.auth.decorators import login_required
 import datetime
 import requests
+import calendar
 
 lock = login_required(login_url='Login')
 
@@ -506,16 +507,31 @@ def IncompleteForms(request):
 
     # ------------------------------------------------------Form Data-------------
         for forms in sub_forms:
-            if todays_num in {0, 1, 2, 3, 4}:
-                forms.due_date = weekday_fri
-
+            if forms.frequency == 'Monthly':
+                last_day = calendar.monthrange(today.year, today.month)[1]
+                forms.due_date = str(today.year) + '-' + str(today.month) + '-' + str(last_day)
                 A = forms.date_submitted
-                if today != A:
+                B = forms.due_date
+                if A.year != today.year or A.month != today.month:
                     forms.submitted = False
                     forms.save()
-            else:
-                forms.due_date = weekend_fri
-
+                elif str(A.day) > last_day:
+                    forms.submitted = False
+                    forms.save()
+            elif forms.frequency == 'Weekly':
+                if todays_num in {0, 1, 2, 3, 4}:
+                    forms.due_date = weekday_fri
+                    start_sat = weekday_fri - datetime.timedelta(days=6)
+                else:
+                    forms.due_date = weekend_fri
+                    start_sat = today - datetime.timedelta(days= todays_num - 5)
+                A = forms.date_submitted
+                if A < start_sat or A > forms.due_date:
+                    forms.submitted = False
+                    forms.save()
+            elif forms.frequency == 'Daily':
+                forms.due_date = today
+                
                 A = forms.date_submitted
                 if today != A:
                     forms.submitted = False
