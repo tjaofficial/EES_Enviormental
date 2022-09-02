@@ -1,3 +1,8 @@
+individual_day();
+house_keeping();
+run_it();
+info_already_entered();
+
 function hidden_material() {
     run_it();
 
@@ -232,7 +237,7 @@ function info_already_entered() {
             document.getElementById('id_barrier_thickness_' + item).required = true;
             document.getElementById('id_surface_quality_' + item).required = true;
             document.getElementById('id_surpressant_crust_' + item).required = true;
-            auto_hide_storage(surpressant_crust, item)
+            auto_hide_storage(surpressant_crust, item);
             
             list.splice(item,1);
             for (let x=0; x < list.length; x++){
@@ -416,11 +421,11 @@ function individual_day() {
     document.getElementById('id_wind_speed_2').required = name_2;
     document.getElementById('id_wind_speed_3').required = name_3;
     document.getElementById('id_wind_speed_4').required = name_4;
-    document.getElementById('id_fugitive_dust_observed_0_0').required = name_0;
-    document.getElementById('id_fugitive_dust_observed_0_1').required = name_1;
-    document.getElementById('id_fugitive_dust_observed_0_2').required = name_2;
-    document.getElementById('id_fugitive_dust_observed_0_3').required = name_3;
-    document.getElementById('id_fugitive_dust_observed_0_4').required = name_4;
+    document.getElementById('id_fugitive_dust_observed_0').required = name_0;
+    document.getElementById('id_fugitive_dust_observed_1').required = name_1;
+    document.getElementById('id_fugitive_dust_observed_2').required = name_2;
+    document.getElementById('id_fugitive_dust_observed_3').required = name_3;
+    document.getElementById('id_fugitive_dust_observed_4').required = name_4;
     document.getElementById('id_supressant_applied_0').required = name_0;
     document.getElementById('id_supressant_applied_1').required = name_1;
     document.getElementById('id_supressant_applied_2').required = name_2;
@@ -503,7 +508,3 @@ function individual_day() {
     document.getElementById('id_breeze_4').required = sec_2;
 }
 
-individual_day();
-run_it();
-house_keeping();
-info_already_entered();
