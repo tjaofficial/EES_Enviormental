@@ -109,11 +109,11 @@ def formD(request, selector):
             A_valid = form.is_valid()
             if A_valid:
                 form.save()
-
+                new_latest_form = formD_model.objects.all().order_by('-week_start')[0]
                 filled_out = True
                 done = Forms.objects.filter(form='D')[0]
-                for items in latest_form.whatever().values():
-                    if items is None:
+                for items in new_latest_form.whatever().values():
+                    if items is None or items == '':
                         filled_out = False  # -change this back to false
                         break
 
