@@ -28,7 +28,7 @@ def IncompleteForms(request):
             A1 = Forms(
                 form="A-1",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formA1",
@@ -40,7 +40,7 @@ def IncompleteForms(request):
             A2 = Forms(
                 form="A-2",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formA2",
@@ -52,7 +52,7 @@ def IncompleteForms(request):
             A3 = Forms(
                 form="A-3",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formA3",
@@ -64,7 +64,7 @@ def IncompleteForms(request):
             A4 = Forms(
                 form="A-4",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formA4",
@@ -76,7 +76,7 @@ def IncompleteForms(request):
             A5 = Forms(
                 form="A-5",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formA5",
@@ -88,7 +88,7 @@ def IncompleteForms(request):
             B = Forms(
                 form="B",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=True,
                 weekend_only=False,
                 link="formB",
@@ -100,7 +100,7 @@ def IncompleteForms(request):
             C = Forms(
                 form="C",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formC",
@@ -112,7 +112,7 @@ def IncompleteForms(request):
             D = Forms(
                 form="D",
                 frequency="Weekly",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formD",
@@ -124,7 +124,7 @@ def IncompleteForms(request):
             E = Forms(
                 form="E",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formE",
@@ -136,7 +136,7 @@ def IncompleteForms(request):
             F1 = Forms(
                 form="F-1",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF1",
@@ -148,7 +148,7 @@ def IncompleteForms(request):
             F2 = Forms(
                 form="F-2",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF2",
@@ -160,7 +160,7 @@ def IncompleteForms(request):
             F3 = Forms(
                 form="F-3",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF3",
@@ -172,7 +172,7 @@ def IncompleteForms(request):
             F4 = Forms(
                 form="F-4",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF4",
@@ -184,7 +184,7 @@ def IncompleteForms(request):
             F5 = Forms(
                 form="F-5",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF5",
@@ -196,7 +196,7 @@ def IncompleteForms(request):
             F6 = Forms(
                 form="F-6",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF6",
@@ -208,7 +208,7 @@ def IncompleteForms(request):
             F7 = Forms(
                 form="F-7",
                 frequency="Weekly",
-                day_freq='Wednesday',
+                day_freq='Wednesdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formF7",
@@ -220,7 +220,7 @@ def IncompleteForms(request):
             G1 = Forms(
                 form="G-1",
                 frequency="Weekly",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formG1",
@@ -232,7 +232,7 @@ def IncompleteForms(request):
             G2 = Forms(
                 form="G-2",
                 frequency="Weekly",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formG2",
@@ -244,7 +244,7 @@ def IncompleteForms(request):
             H = Forms(
                 form="H",
                 frequency="Weekly",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formH",
@@ -256,7 +256,7 @@ def IncompleteForms(request):
             I = Forms(
                 form="I",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=True,
                 weekend_only=False,
                 link="formI",
@@ -268,7 +268,7 @@ def IncompleteForms(request):
             L = Forms(
                 form="L",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formL",
@@ -280,7 +280,7 @@ def IncompleteForms(request):
             M = Forms(
                 form="M",
                 frequency="Daily",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=True,
                 weekend_only=False,
                 link="formM",
@@ -292,7 +292,7 @@ def IncompleteForms(request):
             N = Forms(
                 form="N",
                 frequency="Monthly",
-                day_freq='Any',
+                day_freq='Weekdays',
                 weekdays_only=False,
                 weekend_only=False,
                 link="formN",
@@ -304,7 +304,7 @@ def IncompleteForms(request):
             O = Forms(
                 form="O",
                 frequency="Weekly",
-                day_freq='Any',
+                day_freq='Weekends',
                 weekdays_only=False,
                 weekend_only=True,
                 link="formO",
@@ -316,7 +316,7 @@ def IncompleteForms(request):
             P = Forms(
                 form="P",
                 frequency="Weekly",
-                day_freq='Any',
+                day_freq='Weekends',
                 weekdays_only=False,
                 weekend_only=True,
                 link="formP",
@@ -328,7 +328,7 @@ def IncompleteForms(request):
             spill_kits = Forms(
                 form="Spill Kits",
                 frequency="Monthly",
-                day_freq='Any',
+                day_freq='Everyday',
                 weekdays_only=False,
                 weekend_only=False,
                 link="spill_kits",
