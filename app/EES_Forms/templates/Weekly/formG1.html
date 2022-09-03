@@ -1,81 +1,11 @@
-{% extends "ees_forms/layout.html" %}
- 
-{% block list%}
-    <style>
-        #boxTitle{
-            font-size: 30px;
-        }
-        #boxa4{
-            border: 1px solid black;
-            padding: 5px;
-        }
-        span.sideWord{
-            writing-mode: vertical-rl;
-        }
-        #pushTravels{
-            width: auto;
-            text-align: center;
-        }
-        #ptTable{
-            padding-left: 50px;
-        }
-        #ptInfo{
-            width: auto;
-            text-align: center;
-        }
-        #bothTables{
-            width: auto;
-            display: inline-flex;
-        }
-        #tableSize{
-            width: 75px;
-        }
-        #tableSize2{
-            width: 40px;
-        }
-        #ptInfoInner{
-            width: auto;
-            text-align: center;
-        }
-        #tableSize3{
-            width: 200px;
-            font-size: 15px;
-        }
-        #tableSize4{
-            width: 350px;
-            font-size: 15px;
-        }
-        #ptInfoInner2{
-            text-align: center;
-            display: inline-flex;
-        }
-        #tableSize5{
-             width: 130px;
-            font-size: 15px;
-        }
-        #tableSize6{
-             width: 50px;
-            font-size: 15px;
-        }
-        #newName{
-            width: auto;
-            display: inline-flex;
-        }
-        #formG1_box1{
-            border: 1px solid black;
-            text-align: center;
-            width: 45px;
-        }
-        #formG1_box2{
-            border: 1px solid black;
-            width: 60px;
-            text-align: center;
-        }
-    </style>
-    
+{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formG1.js' %}"></script>
+    <link href="{% static 'ees_forms/style/formG1.css' %}" rel="stylesheet" />
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">    
         <div>
-            <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+            <a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% elif selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
         </div>
         <form action="" method="POST">
             {% csrf_token %}
@@ -247,11 +177,15 @@
                             </div>
                         </div>
                     </div>
-                    <br><br><br><br><br>
-                    <div id=pushTravels>
+                    <br><br><br>
+                    <center>
+                        Type of Visible Emissions Observation (select once and complete form below): <span id='method9' class='type_buttons'>Method 9</span><span id='nonCert' class='type_buttons'>Non-Certified</span>
+                    </center>    
+                    <br><br>
+                    <div id='pushTravels'>
                         <div id="bothTables">
                             <div>
-                                <table style="border-collapse: collapse;">
+                                <table id='formG1method9' style="border-collapse: collapse; width: 30rem; display: none;">
                                     <tr>
                                         <th colspan="7" style="text-align: center;">
                                             Method 9 Observation
@@ -307,13 +241,13 @@
                                            Start Time:
                                         </td>
                                         <td colspan="2" style="text-align: left;">
-                                           input
+                                            {{ readings_form.PEC_start }}
                                         </td>
                                         <td colspan="1" style="text-align: left;">
                                            Stop Time:
                                         </td>
                                         <td colspan="2" style="text-align: left;">
-                                           input
+                                            {{ readings_form.PEC_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -338,16 +272,16 @@
                                            0
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_1 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_2 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_3 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_4 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -355,16 +289,16 @@
                                            1
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_5 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_6 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_7 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_8 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -372,16 +306,16 @@
                                            2
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_9 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_10 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_11 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_12 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -389,16 +323,16 @@
                                            3
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_13 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_14 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_15 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_16 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -406,16 +340,16 @@
                                            4
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_17 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_18 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_19 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_20 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -423,43 +357,88 @@
                                            5
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_21 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_22 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_23 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_read_24 }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="1" id="formG1_box2">
-                                           6
+                                           Average:
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-
-                                        </td>
-                                        <td colspan="1" id="formG1_box1">
-
-                                        </td>
-                                        <td colspan="1" id="formG1_box1">
-
-                                        </td>
-                                        <td colspan="1" id="formG1_box1">
-
+                                            {{ readings_form.PEC_average }}
                                         </td>
                                     </tr>
                                 </table>
+                                <br>
+                                <table id='formG1Non' style="border-collapse: collapse; width: 31rem; display: none;">
+                                    <tr>
+                                        <th colspan="7" style="text-align: center;">
+                                            Non-Certified Observation
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px;" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <td colspan="9" style="text-align: left;">
+                                           One (1) instantaneous observation during pushing.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px;" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <th colspan="3" style="text-align: left;">
+                                           Pushing - Oven # and Time:
+                                        </th>
+                                        <th colspan="4" style="text-align: left;">
+                                            {{ readings_form.PEC_push_oven }} - {{ readings_form.PEC_push_time }}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px;" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <th colspan="3" style="text-align: left;">
+                                           Time of observation:
+                                        </th>
+                                        <th colspan="3" style="text-align: left;">
+                                            {{ readings_form.PEC_observe_time }}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px;" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <th colspan="3" style="text-align: left;">
+                                           Visible Emissions Present?
+                                        </th>
+                                        <th colspan="3" style="text-align: left;">
+                                            {{ readings_form.PEC_emissions_present }}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px;" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <th colspan="7" style="text-align: left;">
+                                            If visible emissions are present during during the non-certified 
+                                            <br> observation perform method 9B readings for three consecutive 
+                                            <br> pushes and document the observation using form G-2.
+                                         </th>
+                                    </tr> 
+                                </table>
                             </div>    
                             <br>
-                            <div id="ptTable"> 
-                                <table style="border-collapse: collapse;">
-
-                                </table>
-                            </div> 
                         </div>
                         <br><br><br><br>
                         <div style="text-align: left;">

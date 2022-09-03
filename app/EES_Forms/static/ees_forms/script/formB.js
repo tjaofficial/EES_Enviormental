@@ -201,23 +201,23 @@ function loading() {
 
                 list.splice(item,1);
                 list.forEach((item2) => {
-                    document.getElementsById('id_coal_vessel_' + item2).style.display = 'none';
-                    document.getElementsById('id_water_sprays_' + item2).style.display = 'none';
-                    document.getElementsById('id_loader_lowered_' + item2).style.display = 'none';
-                    document.getElementsById('id_working_water_sprays_' + item2).style.display = 'none';
+                    document.getElementById('id_coal_vessel_' + item2).style.display = 'none';
+                    document.getElementById('id_water_sprays_' + item2).style.display = 'none';
+                    document.getElementById('id_loader_lowered_' + item2).style.display = 'none';
+                    document.getElementById('id_working_water_sprays_' + item2).style.display = 'none';
                 })
             } else {
-                document.getElementsById('id_coal_vessel_' + item).required = false;
-                document.getElementsById('id_water_sprays_' + item).required = false;
-                document.getElementsById('id_loader_lowered_' + item).required = false;
-                document.getElementsById('id_working_water_sprays_' + item).required = false;
+                document.getElementById('id_coal_vessel_' + item).required = false;
+                document.getElementById('id_water_sprays_' + item).required = false;
+                document.getElementById('id_loader_lowered_' + item).required = false;
+                document.getElementById('id_working_water_sprays_' + item).required = false;
 
                 list.splice(item,1);
                 list.forEach((item2) => {
-                    document.getElementsById('id_coal_vessel_' + item2).style.display = 'inline-block';
-                    document.getElementsById('id_water_sprays_' + item2).style.display = 'inline-block';
-                    document.getElementsById('id_loader_lowered_' + item2).style.display = 'inline-block';
-                    document.getElementsById('id_working_water_sprays_' + item2).style.display = 'inline-block';
+                    document.getElementById('id_coal_vessel_' + item2).style.display = 'inline-block';
+                    document.getElementById('id_water_sprays_' + item2).style.display = 'inline-block';
+                    document.getElementById('id_loader_lowered_' + item2).style.display = 'inline-block';
+                    document.getElementById('id_working_water_sprays_' + item2).style.display = 'inline-block';
                 })
             }
 

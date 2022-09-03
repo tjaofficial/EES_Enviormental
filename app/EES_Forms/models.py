@@ -3224,7 +3224,11 @@ class formF7_model(models.Model):
 
 
 class formG1_model(models.Model):
-    date = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
     estab = models.CharField(max_length=30)
     county = models.CharField(max_length=30)
     estab_no = models.CharField(max_length=30)
@@ -3232,7 +3236,11 @@ class formG1_model(models.Model):
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
     observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
+    cert_date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
     process_equip1 = models.CharField(max_length=50)
     process_equip2 = models.CharField(max_length=50)
     op_mode1 = models.CharField(max_length=30)
@@ -3240,12 +3248,12 @@ class formG1_model(models.Model):
     background_color_start = models.CharField(max_length=30)
     background_color_stop = models.CharField(max_length=30)
     sky_conditions = models.CharField(max_length=30)
-    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_start = models.CharField(max_length=4)
     wind_speed_stop = models.CharField(max_length=4)
     wind_direction = models.CharField(max_length=3)
     emission_point_start = models.CharField(max_length=50)
     emission_point_stop = models.CharField(max_length=50)
-    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_start = models.CharField(max_length=5)
     ambient_temp_stop = models.CharField(max_length=4)
     humidity = models.CharField(max_length=3)
     height_above_ground = models.CharField(max_length=30)
@@ -3267,11 +3275,159 @@ class formG1_model(models.Model):
     def __str__(self):
         return str(self.date)
 
+class formG1_readings_model(models.Model):
+    form = models.OneToOneField(
+        formG1_model,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    PEC_read_1 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_2 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_3 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_4 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_5 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_6 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_7 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_8 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_9 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_10 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_11 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_12 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_13 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_14 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_15 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_16 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_17 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_18 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_19 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_20 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_21 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_22 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_23 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+    PEC_read_24 = models.CharField(
+        max_length=3, 
+        blank=True,
+        null=True
+    )
+
+    PEC_start = models.TimeField(
+        blank=True,
+        null=True
+    )
+    PEC_stop = models.TimeField(
+        blank=True,
+        null=True
+    )
+    PEC_average = models.FloatField(blank=True, null=True)
+    PEC_push_oven = models.IntegerField(blank=True, null=True)
+    PEC_push_time = models.TimeField(blank=True, null=True)
+    PEC_observe_time = models.TimeField(blank=True, null=True)
+    PEC_emissions_present = models.BooleanField(default=None,blank=True, null=True)
+    
+    
+    def __str__(self):
+        return str(self.form)
 # ----------------------------------------------------------------------FORM H---------------<
 
 
 class formG2_model(models.Model):
-    date = models.CharField(max_length=30)
+    date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
     estab = models.CharField(max_length=30)
     county = models.CharField(max_length=30)
     estab_no = models.CharField(max_length=30)
@@ -3279,7 +3435,11 @@ class formG2_model(models.Model):
     district = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
     observer = models.CharField(max_length=30)
-    cert_date = models.CharField(max_length=30)
+    cert_date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
     process_equip1 = models.CharField(max_length=50)
     process_equip2 = models.CharField(max_length=50)
     op_mode1 = models.CharField(max_length=30)
@@ -3287,12 +3447,12 @@ class formG2_model(models.Model):
     background_color_start = models.CharField(max_length=30)
     background_color_stop = models.CharField(max_length=30)
     sky_conditions = models.CharField(max_length=30)
-    wind_speed_start = models.CharField(max_length=2)
+    wind_speed_start = models.CharField(max_length=4)
     wind_speed_stop = models.CharField(max_length=4)
     wind_direction = models.CharField(max_length=3)
     emission_point_start = models.CharField(max_length=50)
     emission_point_stop = models.CharField(max_length=50)
-    ambient_temp_start = models.CharField(max_length=3)
+    ambient_temp_start = models.CharField(max_length=5)
     ambient_temp_stop = models.CharField(max_length=4)
     humidity = models.CharField(max_length=3)
     height_above_ground = models.CharField(max_length=30)
@@ -3314,6 +3474,53 @@ class formG2_model(models.Model):
     def __str__(self):
         return str(self.date)
 
+class formG2_readings_model(models.Model):
+    form = models.OneToOneField(
+        formG2_model,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    PEC_read_1 = models.CharField(max_length=3)
+    PEC_read_2 = models.CharField(max_length=3)
+    PEC_read_3 = models.CharField(max_length=3)
+    PEC_read_4 = models.CharField(max_length=3)
+    PEC_read_5 = models.CharField(max_length=3)
+    PEC_read_6 = models.CharField(max_length=3)
+    PEC_read_7 = models.CharField(max_length=3)
+    PEC_read_8 = models.CharField(max_length=3)
+    
+    PEC_read_9 = models.CharField(max_length=3)
+    PEC_read_10 = models.CharField(max_length=3)
+    PEC_read_11 = models.CharField(max_length=3)
+    PEC_read_12 = models.CharField(max_length=3)
+    PEC_read_13 = models.CharField(max_length=3)
+    PEC_read_14 = models.CharField(max_length=3)
+    PEC_read_15 = models.CharField(max_length=3)
+    PEC_read_16 = models.CharField(max_length=3)
+    
+    PEC_read_17 = models.CharField(max_length=3)
+    PEC_read_18 = models.CharField(max_length=3)
+    PEC_read_19 = models.CharField(max_length=3)
+    PEC_read_20 = models.CharField(max_length=3)
+    PEC_read_21 = models.CharField(max_length=3)
+    PEC_read_22 = models.CharField(max_length=3)
+    PEC_read_23 = models.CharField(max_length=3)
+    PEC_read_24 = models.CharField(max_length=3)
+    
+    PEC_oven_1 = models.IntegerField()
+    PEC_oven_2 = models.IntegerField()
+    PEC_oven_3 = models.IntegerField()
+    PEC_start_1 = models.TimeField()
+    PEC_start_2 = models.TimeField()
+    PEC_start_3 = models.TimeField()
+    PEC_average_1 = models.FloatField(blank=True)
+    PEC_average_2 = models.FloatField(blank=True)
+    PEC_average_3 = models.FloatField(blank=True)
+    PEC_average_m = models.FloatField(blank=True)
+    
+    
+    def __str__(self):
+        return str(self.form)
 # ----------------------------------------------------------------------FORM H---------------<
 
 
@@ -3373,6 +3580,7 @@ class formH_readings_model(models.Model):
     form = models.OneToOneField(
         formH_model,
         on_delete=models.CASCADE,
+        primary_key=True
     )
     comb_read_1 = models.CharField(max_length=3)
     comb_read_2 = models.CharField(max_length=3)

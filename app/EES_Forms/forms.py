@@ -844,8 +844,7 @@ class formB_form(ModelForm):
             'wharf_4' : forms.Select(attrs={'oninput':'house_keeping()', 'style':'width: 80px;'}),
             'breeze_4' : forms.Select(attrs={'oninput':'house_keeping()', 'style':'width: 80px;'}),
         }
-
-         
+    
 class formD_form(ModelForm):
     class Meta:
         model = formD_model
@@ -938,8 +937,7 @@ class formD_form(ModelForm):
             'observer4' : forms.TextInput(attrs={'style':'width: 150px;'}),
             'observer5' : forms.TextInput(attrs={'style':'width: 150px;'}),
         }
-
-        
+  
 class formE_form(ModelForm):
     class Meta:
         model = formE_model
@@ -965,8 +963,7 @@ class formE_form(ModelForm):
             'goose_neck_data' : forms.NumberInput(attrs={'id': "gooseNeckData", 'type': "hidden", 'value': "{}", 'data-resulttable': ""})
             
         }
-        
-        
+             
 class formF1_form(ModelForm):
     class Meta:
         model = formF1_model
@@ -1015,8 +1012,6 @@ class formF1_form(ModelForm):
             'dates_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
         }
-        
-        
 class formF2_form(ModelForm):
     class Meta:
         model = formF2_model
@@ -1062,7 +1057,6 @@ class formF2_form(ModelForm):
             'dates_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
         }
-
 class formF3_form(ModelForm):
     class Meta:
         model = formF3_model
@@ -1108,7 +1102,6 @@ class formF3_form(ModelForm):
             'dates_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
         }
-
 class formF4_form(ModelForm):
     class Meta:
         model = formF4_model
@@ -1154,7 +1147,6 @@ class formF4_form(ModelForm):
             'dates_3' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
         }
-
 class formF5_form(ModelForm):
     class Meta:
         model = formF5_model
@@ -1297,31 +1289,137 @@ class formG1_form(ModelForm):
         fields = ('__all__')
         
         widgets = {
+            'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'cert_date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
             'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
             'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'humidity': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'sky_conditions': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
+            'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
+            'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'distance_from': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+        }      
+class formG1_readings_form(ModelForm):
+    class Meta:
+        model = formG1_readings_model
+        fields = ('__all__')
+        exclude = ('form',)
+        widgets = {
+            'PEC_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'PEC_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'PEC_read_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_4' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_5' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_6' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_7' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_8' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_9' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_10' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_11' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_12' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_13' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_14' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_15' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_16' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_17' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_18' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_19' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_20' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_21' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_22' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_23' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_24' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+
+            'PEC_average' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_push_oven' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
+            'PEC_push_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
+            'PEC_observe_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
+            'PEC_emissions_present' : forms.CheckboxInput(attrs={'style': 'width: 50px;'}),
         }
+
 class formG2_form(ModelForm):
     class Meta:
         model = formG2_model
         fields = ('__all__')
         
         widgets = {
+            'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'cert_date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
             'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
             'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
+            'humidity': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'sky_conditions': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
+            'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
+            'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'distance_from': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+        }
+class formG2_readings_form(ModelForm):
+    class Meta:
+        model = formG2_readings_model
+        fields = ('__all__')
+        exclude = ('form',)
+        widgets = {
+            'PEC_read_1' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_2' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_3' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_4' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_5' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_6' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_7' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_8' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            
+            'PEC_read_9' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_10' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_11' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_12' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_13' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_14' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_15' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_16' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            
+            'PEC_read_17' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_18' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_19' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_20' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_21' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_22' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_23' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_read_24' : forms.TextInput(attrs={'oninput': 'PEC_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+
+            'PEC_oven_1' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
+            'PEC_oven_2' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
+            'PEC_oven_3' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
+            'PEC_start_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
+            'PEC_start_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
+            'PEC_start_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
+            'PEC_average_1' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_average_2' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_average_3' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_average_m' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
         }
         
 class formH_form(ModelForm):

@@ -1,0 +1,75 @@
+.type_buttons{
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 9px;
+    margin: 0 6px 0 6px;
+}
+#boxTitle{
+    font-size: 30px;
+}
+#boxa4{
+    border: 1px solid black;
+    padding: 5px;
+}
+span.sideWord{
+    writing-mode: vertical-rl;
+}
+#pushTravels{
+    width: auto;
+    text-align: center;
+}
+#ptTable{
+    padding-left: 50px;
+}
+#ptInfo{
+    width: auto;
+    text-align: center;
+}
+#bothTables{
+    width: auto;
+    display: inline-flex;
+}
+#tableSize{
+    width: 75px;
+}
+#tableSize2{
+    width: 40px;
+}
+#ptInfoInner{
+    width: auto;
+    text-align: center;
+}
+#tableSize3{
+    width: 200px;
+    font-size: 15px;
+}
+#tableSize4{
+    width: 350px;
+    font-size: 15px;
+}
+#ptInfoInner2{
+    text-align: center;
+    display: inline-flex;
+}
+#tableSize5{
+        width: 130px;
+    font-size: 15px;
+}
+#tableSize6{
+        width: 50px;
+    font-size: 15px;
+}
+#newName{
+    width: auto;
+    display: inline-flex;
+}
+#formG1_box1{
+    border: 1px solid black;
+    text-align: center;
+    width: 45px;
+}
+#formG1_box2{
+    border: 1px solid black;
+    width: 60px;
+    text-align: center;
+}
