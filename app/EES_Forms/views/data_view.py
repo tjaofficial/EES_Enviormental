@@ -17,7 +17,7 @@ def pt_admin1_view(request):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
 
-    reads = formA5_readings_model.objects.all()
+    all_db_reads = formA5_readings_model.objects.all()
     data = formA5_model.objects.all()
     # add_days = datetime.timedelta(days=91)
 
@@ -30,51 +30,58 @@ def pt_admin1_view(request):
             month = date.month
             day = date.day
 
-            form_date = datetime.datetime(year, month, day)
-            added_date = form_date + datetime.timedelta(days=91)
-            due_date = added_date - datetime.datetime.now()
+            dateAdded = datetime.datetime(year, month, day)
+            EXPdate = dateAdded + datetime.timedelta(days=91)
+            daysLeft = EXPdate - datetime.datetime.now()
             
             for q in list:
                 if len(str(q)) == 1:
-                    oven = "0" + str(q)
+                    ovenNumber = "0" + str(q)
                 else:
-                    oven = q
+                    ovenNumber = q
 
-                A.append((oven, p.form.date, added_date.date, due_date.days))
+                A.append((ovenNumber, p.form.date, EXPdate.date, daysLeft.days))
         return A
-
-    all_read_ovens = all_ovens(reads)
+    all_read_ovens = all_ovens(all_db_reads)
     func = lambda x: (x[0], x[1])
-    sort = sorted(all_read_ovens, key=func, reverse=True)
-   
-    def final(sort):
+    sort_by_oven = sorted(all_read_ovens, key=func, reverse=True)
+    
+    print('START HERE')
+    
+    def final(organizedOvens):
         B = []
         i = 1
-        for new in sort:
-            B.append(new)
-
-        for x in sort:
-            for y in range(i, len(sort)):
-                check_instance = sort[y]
-                if check_instance[0] == x[0]:
+        for oven_a in organizedOvens:
+            B.append(oven_a)
+        for oven_b in organizedOvens:
+            for y in range(i, len(organizedOvens)):
+                check_instance = organizedOvens[y]
+                if check_instance[0] == oven_b[0]:
                     if check_instance in B:
                         B.remove(check_instance)
             i += 1
-            
-        for oven in B:
-            for n in range(1, 86):
-                if oven[0] == n:
+
+        for n in range(1, 86):
+            for oven in B:
+                if len(str(n)) == 1:
+                    zero_n = "0" + str(n)
+                else:
+                    zero_n = str(n)
+                    
+                if zero_n == oven[0]:
                     exist = True
                     break
                 else:
                     exist = False
             if not exist:
-                B.append((oven, 'N/A', 0, 0))
-                
-                    
+                B.append((zero_n, 'N/A', 0, 0))              
         return B
-    cool = final(sort)
-    print(cool)
+    all_ovens_EXP = final(sort_by_oven)
+    
+    def sort_key(oven):
+        return oven[0]
+    all_ovens_EXP.sort(key=sort_key, reverse=True) 
+    
     def overdue_30(cool):
         C = []
         for x in cool:
@@ -98,23 +105,23 @@ def pt_admin1_view(request):
 
     def overdue_closest(cool):
         F = []
-
+    
         func2 = lambda R: (R[3])
         sort2 = sorted(cool, key=func2)
         most_recent = sort2[0][3]
-
+    
         for x in sort2:
             if x[3] == most_recent:
                 F.append(x)
         return F
 
-    od_30 = overdue_30(cool)
-    od_10 = overdue_10(cool)
-    od_5 = overdue_5(cool)
-    od_recent = overdue_closest(cool)
+    od_30 = overdue_30(all_ovens_EXP)
+    od_10 = overdue_10(all_ovens_EXP)
+    od_5 = overdue_5(all_ovens_EXP)
+    od_recent = overdue_closest(all_ovens_EXP)
 
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': reads, 'data': data, 'cool': cool, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client,
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens_EXP, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client,
     })
 
 
