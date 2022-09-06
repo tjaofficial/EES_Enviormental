@@ -21,9 +21,9 @@ Add event Listeners
 function addResultEventListeners(){
     const resultElement = document.querySelectorAll("[data-resultInput]");
     for(i=0; i<resultElement.length; i++){
-        resultElement[i].addEventListener('input', handle_Table_Input)
+        resultElement[i].addEventListener('change', handle_Table_Input)
         resultElement[i].addEventListener('input', update_Temp_Save)
-        resultElement[i].addEventListener('input', total_leaking_doors)
+        resultElement[i].addEventListener('change', total_leaking_doors)
     }
 
 }
