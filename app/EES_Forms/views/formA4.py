@@ -102,7 +102,7 @@ def formA4(request, selector):
             if form.is_valid():
                 A = form.save()
 
-                if A.notes not in {'No VE', 'NO VE', 'no ve', 'no VE', 'No Ve'}:
+                if A.notes.lower() != 'no ve':
                     issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
 
                     return redirect(issue_page)
