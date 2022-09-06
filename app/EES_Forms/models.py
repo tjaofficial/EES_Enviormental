@@ -713,6 +713,7 @@ class formA3_model(models.Model):
     l_not_observed = models.CharField(max_length=30)
     om_percent_leaking = models.CharField(max_length=30)
     l_percent_leaking = models.CharField(max_length=30)
+    one_pass = models.BooleanField(default=False, null=True)
     notes = models.CharField(max_length=30)
 
     def __str__(self):

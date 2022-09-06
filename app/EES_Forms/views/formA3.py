@@ -98,6 +98,7 @@ def formA3(request, selector):
                     'l_not_observed': database_form.l_not_observed,
                     'om_percent_leaking': database_form.om_percent_leaking,
                     'l_percent_leaking': database_form.l_percent_leaking,
+                    'one_pass': database_form.one_pass,
                     'notes': database_form.notes,
                 }
             else:

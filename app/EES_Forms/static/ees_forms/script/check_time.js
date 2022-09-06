@@ -21,15 +21,14 @@ function check_time(startId, endId, timePopup) {
 /*************
  FORM A-3 - OFFTAKES AND LIDS
 *************/
-
 function offtake_time() {
     check_time('id_om_start', 'id_om_stop', 'om_timePopup');
 }
 function lid_time() {
     check_time('id_l_start', 'id_l_stop', 'l_timePopup');
 }
-
-
+lid_time();
+offtake_time();
 
 /*************
  FORM A-2 - DOORS
@@ -40,8 +39,6 @@ function timecheck_pushDoors() {
 function timecheck_cokeDoors() {
     check_time('c_start', 'c_stop', 'c_timePopup');
 }
-
-
 
 /*************
  FORM A-1 - CHARGES
@@ -61,7 +58,6 @@ function timecheck_c4() {
 function timecheck_c5() {
     check_time('c5_start', 'c5_stop', 'c5_timePopup')
 }
-
 
 /*************
  FORM C - COAL FIELD

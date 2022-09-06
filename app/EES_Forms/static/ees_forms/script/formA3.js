@@ -331,11 +331,27 @@ function om_equation() {
     document.getElementById('om_percent_leaking').value = parseFloat(equate).toFixed(3);
 }
 
+function one_pass_func() {
+    const checked = document.getElementById('id_one_pass').checked;
+    const om_start = document.getElementById('id_om_start').value;
+    const om_stop = document.getElementById('id_om_stop').value;
+    const om_traverse_time_min = document.getElementById('id_om_traverse_time_min').value;
+    const om_traverse_time_sec = document.getElementById('id_om_traverse_time_sec').value;
+    console.log(checked);
+    if (checked) {
+        document.getElementById('id_l_start').value = om_start;
+        document.getElementById('id_l_stop').value = om_stop;
+        document.getElementById('id_l_traverse_time_min').value = om_traverse_time_min;
+        document.getElementById('id_l_traverse_time_sec').value = om_traverse_time_sec;
+    }
+}
+one_pass_func();
 
 /*****************************************
 Initiates the Tables on JS load
 *****************************************/
 setTimeout(
-initate_Result_Table(),
-1000)
+    initate_Result_Table(),
+    1000
+)
 
