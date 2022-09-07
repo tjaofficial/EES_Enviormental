@@ -34,12 +34,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='formh_model',
             name='ambient_temp_start',
-            field=models.CharField(max_length=3),
+            field=models.CharField(max_length=5),
         ),
         migrations.AlterField(
             model_name='formh_model',
             name='wind_speed_start',
-            field=models.CharField(max_length=2),
+            field=models.CharField(max_length=4),
         ),
         migrations.AlterField(
             model_name='pt_admin1_model',
