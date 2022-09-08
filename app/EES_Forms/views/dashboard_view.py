@@ -231,7 +231,7 @@ def IncompleteForms(request):
                 submitted=False,)
             G2 = Forms(
                 form="G-2",
-                frequency="Weekly",
+                frequency="Monthly",
                 day_freq='Weekdays',
                 weekdays_only=False,
                 weekend_only=False,

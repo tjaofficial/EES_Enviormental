@@ -8,10 +8,6 @@ from .utils import EventCalendar
 
 # Register your models here.
 
-
-
-
-
 admin.site.register(Forms)
 admin.site.register(formC_readings_model)
 admin.site.register(daily_battery_profile_model)
@@ -49,13 +45,6 @@ admin.site.register(formO_model)
 admin.site.register(formP_model)
 admin.site.register(spill_kits_model)
 admin.site.register(sop_model)
-
-
-
-
-
-
-
 admin.site.register(issues_model)
 
 class EventAdmin(admin.ModelAdmin):
