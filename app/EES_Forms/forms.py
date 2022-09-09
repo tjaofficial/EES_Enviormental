@@ -461,7 +461,7 @@ class formA3_form(ModelForm):
             'l_not_observed': forms.NumberInput(attrs={'id': 'l_not_observed', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'om_percent_leaking': forms.TextInput(attrs={'id': 'om_percent_leaking', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'l_percent_leaking': forms.TextInput(attrs={'id': 'l_percent_leaking', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'one_pass': forms.CheckboxInput(attrs={'onchange': 'one_pass_func()', 'style': 'width: 20px;', 'required': 'true', 'initial': 'false'}),
+            'one_pass': forms.CheckboxInput(attrs={'onchange': 'one_pass_func()', 'style': 'width: 20px;', 'initial': 'false'}),
             'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
         }
 
