@@ -1,5 +1,21 @@
 {% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
 {% include "ees_forms/drawing_modal.html" %}
+    <style>
+        
+        .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
+    </style>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
@@ -145,7 +161,11 @@
                                         {% else %}
                                             data-filledSketch =""
                                         {% endif %} data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer">
-                                            {{ data.canvas }}
+                                        <div id='imgspinner' class="loader"></div>
+                                            {% if selector == 'form' %}
+                                                {{data.canvas}}
+                                            {% endif %}
+
                                      </td>
                                      {% endif %}
                                 </tr>
