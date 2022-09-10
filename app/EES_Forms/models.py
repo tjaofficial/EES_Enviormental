@@ -877,7 +877,7 @@ class formA5_model(models.Model):
     describe_background_stop = models.CharField(max_length=30)
     notes = models.CharField(max_length=300)
     canvas = models.CharField(max_length=100000)
-    canvasMediaFile = models.FileField(default='settings.STATIC_ROOT/images/A-5scetchBlack.png')
+    canvasMediaFile = models.FileField(default='/images/A-5scetchBlack.png')
 
     def __str__(self):
         return str(self.date)

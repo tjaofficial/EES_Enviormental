@@ -333,11 +333,15 @@ def formA5(request, selector):
                     #B.save(commit=False)
                     image_url = A.canvasMediaFile.url
                 else:
+                    print("actually goes here")
+                    print(canvasPNG.name)
+                    
                     fs = FileSystemStorage()
                     filename = fs.save(canvasPNG.name, canvasPNG)
+                    
                     image_url = fs.url(filename)
-                #print(image_url)
-                exist_canvas = image_url
+                    A.canvasMediaFile = canvasPNG
+                    exist_canvas = A.canvasMediaFile.url
 
                 A.save()
 
