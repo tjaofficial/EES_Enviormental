@@ -1,6 +1,5 @@
-from mimetypes import init
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model
 from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
@@ -363,8 +362,62 @@ def event_detail_view(request, access_page, event_id):
 
 @lock
 def shared_contacts_view(request):
+    unlock = False
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     Users = User.objects.all()
     profile = user_profile_model.objects.order_by('user')
+    
+    form_enteredA1 = False
+    form_enteredA2 = False
+    form_enteredA3 = False
+    form_enteredA4 = False
+    form_enteredA5 = False
+    formA1 = formA1_readings_model.objects.all().order_by('-form')
+    formA2 = formA2_model.objects.all().order_by('-date')
+    formA3 = formA3_model.objects.all().order_by('-date')
+    formA4 = formA4_model.objects.all().order_by('-date')
+    formA5 = formA5_readings_model.objects.all().order_by('-form')
+    now = datetime.datetime.now()
+    year = str(now.year)
+    if len(str(now.month)) == 1:
+        month = "0" + str(now.month)
+    else:
+        month = str(now.month)
+    if len(str(now.day)) == 1:
+        day = '0' + str(now.day)
+    else:
+        day = str(now.day)
+    date = year + '-' + month + '-' + day
+    today = datetime.date.today()
+    if len(formA1) > 0:
+        most_recent_A1 = formA1[0].form.date
+        if most_recent_A1 == today:
+            form_enteredA1 = True
+    if len(formA2) > 0:
+        most_recent_A2 = formA2[0].date
+        if most_recent_A2 == today:
+            form_enteredA2 = True
+    if len(formA3) > 0:
+        most_recent_A3 = formA3[0].date
+        if most_recent_A3 == today:
+            form_enteredA3 = True
+    if len(formA4) > 0:
+        most_recent_A4 = formA4[0].date
+        if most_recent_A4 == today:
+            form_enteredA4 = True
+    if len(formA5) > 0:
+        most_recent_A5 = formA5[0].form.date
+        if most_recent_A5 == today:
+            form_enteredA5 = True
+    
+    
     
     organized_list = []
     for index, user in enumerate(profile):
@@ -373,7 +426,7 @@ def shared_contacts_view(request):
     
     
     return render(request, "shared/contacts.html", {
-        'profile': profile, 'organized_list': organized_list
+        'profile': profile, 'organized_list': organized_list, 'admin': admin, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
     })
     
 def sop_view(request):

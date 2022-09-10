@@ -67,7 +67,7 @@ urlpatterns = [
     path("method303_rolling_avg", views.method303_rolling_avg, name="rolling_avg"),
     path("admin_data", views.admin_data_view, name="admin_data"),
 
-    path("c_dashboard", views.c_dashboard_view, name="c_dashboard"),
+    path("c_dashboard", views.client_dashboard_view, name="c_dashboard"),
 
     
 
