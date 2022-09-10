@@ -47,7 +47,7 @@ def formA1(request, selector):
             readings = database_model2
             existing = True
             search = True
-        elif len(org) > 0 or len(org2) > 0:
+        elif len(org) > 0 and len(org2) > 0:
             database_form = org[0]
             database_form2 = org2[0]
 

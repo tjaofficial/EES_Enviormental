@@ -1348,7 +1348,7 @@ class formG1_readings_form(ModelForm):
             'PEC_push_oven' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
             'PEC_push_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
             'PEC_observe_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
-            'PEC_emissions_present' : forms.CheckboxInput(attrs={'style': 'width: 50px;'}),
+            'PEC_emissions_present' : forms.CheckboxInput(attrs={'style': 'width: 50px;', 'initial': 'false' }),
         }
 
 class formG2_form(ModelForm):

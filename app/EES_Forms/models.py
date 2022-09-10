@@ -3415,7 +3415,7 @@ class formG1_readings_model(models.Model):
     PEC_push_oven = models.IntegerField(blank=True, null=True)
     PEC_push_time = models.TimeField(blank=True, null=True)
     PEC_observe_time = models.TimeField(blank=True, null=True)
-    PEC_emissions_present = models.BooleanField(default=None,blank=True, null=True)
+    PEC_emissions_present = models.BooleanField(default=None, null=True)
     
     
     def __str__(self):

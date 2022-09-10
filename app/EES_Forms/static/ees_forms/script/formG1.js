@@ -43,7 +43,6 @@ function nonCert() {
     document.getElementById('id_PEC_push_oven').required = true;
     document.getElementById('id_PEC_push_time').required = true;
     document.getElementById('id_PEC_observe_time').required = true;
-    document.getElementById('id_PEC_emissions_present').required = true;
 
     document.getElementById('formG1Non').style.display = 'inline-block';
     document.getElementById('formG1method9').style.display = 'none';

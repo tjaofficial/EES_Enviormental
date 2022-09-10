@@ -92,7 +92,7 @@ def formG1(request, selector):
             existing = True
             search = True
         # ------check if database is empty----------
-        elif len(org) > 0 or len(org2) > 0:
+        elif len(org) > 0 and len(org2) > 0:
             database_form = org[0]
             database_form2 = org2[0]
             # -------check if there is a daily battery profile
