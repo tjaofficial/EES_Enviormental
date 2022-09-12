@@ -177,12 +177,13 @@ function pt4_check() {
         document.getElementById("oven4_pop_id").style.visibility = 'hidden';
         document.getElementById("comment_skip_id").style.visibility = 'visible';
         document.getElementById("comment_skip_id").innerHTML = '<a id="exit_pop_id" class="exit_pop_class">X</a>Please change Oven No. for FORTH oven or comment below what oven(s) were skipped.';
+        document.getElementById("exit_pop_id").onclick = function() {
+            exit_pop()
+        };
     } 
 }
 
-document.getElementById("exit_pop_id").onclick = function() {
-    exit_pop()
-};
+
 
 function exit_pop() {
     document.getElementById("comment_skip_id").style.visibility = 'hidden';
