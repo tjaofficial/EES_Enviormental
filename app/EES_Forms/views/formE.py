@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formE_model
 from ..forms import formE_form
+import json
 
 lock = login_required(login_url='Login')
 
@@ -13,12 +14,34 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formE(request, selector):
     formName = "E"
     existing = False
+    unlock = False
+    client = False
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    full_name = request.user.get_full_name()
-    count_bp = daily_battery_profile_model.objects.count()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    
     org = formE_model.objects.all().order_by('-date')
+    
+    count_bp = daily_battery_profile_model.objects.count()
+    
+    full_name = request.user.get_full_name()
+    
+    if len(profile) > 0:
+        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
+        if same_user:
+            cert_date = request.user.user_profile_model.cert_date
+        else:
+            return redirect('IncompleteForms')
+    else:
+        return redirect('IncompleteForms')
 
     if count_bp != 0:
         todays_log = daily_prof[0]
@@ -27,6 +50,8 @@ def formE(request, selector):
                 if str(x.date) == str(selector):
                     database_model = x
             form = database_model
+            existing = True
+            search = True
         elif len(org) > 0:
             database_form = org[0]
             if now.month == todays_log.date_save.month:
@@ -41,35 +66,43 @@ def formE(request, selector):
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof)
-        if existing:
-            initial_data = {
-                'observer': database_form.observer,
-                'date': database_form.date,
-                'crew': database_form.crew,
-                'foreman': database_form.foreman,
-                'start_time': database_form.start_time,
-                'end_time': database_form.end_time,
-                'leaks': database_form.leaks,
-                'goose_neck_data': database_form.goose_neck_data,
-            }
+        if search:
+            database_form = ''
+            goose_neck_data_raw_JSON = json.loads(form.goose_neck_data)
+            if len(goose_neck_data_raw_JSON) > 0:
+                goose_neck_data_JSON = goose_neck_data_raw_JSON['data']
+            else:
+                goose_neck_data_JSON = ''
         else:
-            initial_data = {
-                'date': todays_log.date_save,
-                'observer': full_name,
-                'crew': todays_log.crew,
-                'foreman': todays_log.foreman,
-            }
-
-        form = formE_form(initial=initial_data)
+            if existing:
+                initial_data = {
+                    'observer': database_form.observer,
+                    'date': database_form.date,
+                    'crew': database_form.crew,
+                    'foreman': database_form.foreman,
+                    'start_time': database_form.start_time,
+                    'end_time': database_form.end_time,
+                    'leaks': database_form.leaks,
+                    'goose_neck_data': database_form.goose_neck_data,
+                }
+                form = formE_form(initial=initial_data)
+            else:
+                initial_data = {
+                    'date': todays_log.date_save,
+                    'observer': full_name,
+                    'crew': todays_log.crew,
+                    'foreman': todays_log.foreman,
+                }
+                form = formE_form(initial=initial_data)
+            goose_neck_data_JSON = ''
         if request.method == "POST":
-            
             if existing:
                 check = formE_form(request.POST, instance=database_form)
             else:
                 check = formE_form(request.POST)
 
             A_valid = check.is_valid()
-            print(request.POST)
+
             if A_valid:
                 A = check.save()
                 if A.leaks == "Yes":
@@ -89,5 +122,5 @@ def formE(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formE.html", {
-        "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName
+        "client": client, 'unlock': unlock, 'admin': admin, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search
     })

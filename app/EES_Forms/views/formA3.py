@@ -56,17 +56,22 @@ def formA3(request, selector):
 
         if search:
             database_form = ''
-            omSide_Raw_JSON = json.loads(data.om_leak_json)
-            lSide_Raw_JSON = json.loads(data.l_leak_json)
-            if len(omSide_Raw_JSON) > 0:
-                omSide_json = omSide_Raw_JSON['data']
+            if data.om_leak_json:
+                omSide_Raw_JSON = json.loads(data.om_leak_json)
+                if len(omSide_Raw_JSON) > 0:
+                    omSide_json = omSide_Raw_JSON['data']
+                else:
+                    omSide_json = ''
             else:
                 omSide_json = ''
-            if len(lSide_Raw_JSON) > 0:
-                lSide_json = lSide_Raw_JSON['data']
+            if data.l_leak_json:
+                lSide_Raw_JSON = json.loads(data.l_leak_json)
+                if len(lSide_Raw_JSON) > 0:
+                    lSide_json = lSide_Raw_JSON['data']
+                else:
+                    lSide_json = ''
             else:
                 lSide_json = ''
-            
         else:
             if existing:
                 initial_data = {

@@ -1,52 +1,10 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list%}
-{% load static %}   
-    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-    <script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
-    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
-    <style>
-        #boxTitle{
-            font-size: 30px;
-        }
-        #boxa1{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 150px;
-            max-width: 150px;
-            height: 35px;
-        }
-        #boxa2{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 80px;
-            max-width: 80px;
-            height: 35px;
-        }
-        #boxa3{
-            align-content: center;
-            text-align: center;
-            border: 1px solid black;
-            min-width: 300px;
-            max-width: 300px;
-            height: 35px;
-        }
-        #formE_box1{
-            border: 3px solid black;
-        }
-        #formE_box2{
-            border: 1px solid black;
-            width: 100px;
-        }
-        #formE_comments{
-            border: 1px solid black;
-            width: 250px;
-        }
-    </style>
-
+{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}   
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
+<link href="{% static 'ees_forms/style/formE.css' %}" rel="stylesheet" />
     
+<body>
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div>
             <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
@@ -105,15 +63,15 @@
                                 <td style="height: 25px" > </td>
                             </tr> 
                             <tr>
-                                <td colspan="6" style="text-align: center;"> 
-                                    Leaks? {{ form.leaks }}
+                                <td colspan="6" style="text-align: center; display: flex;">
+                                    <p style='font-weight: bold;'>Leaks?</p> <p>{{ form.leaks }}</p>
                                 </td>
                             </tr> 
                             <tr>
                                 <td style="height: 25px" > </td>
                             </tr> 
                         </table>
-                        {{ form.goose_neck_data }}
+                        <div hidden="true">{{ form.goose_neck_data }}</div>
                         <table style="border-collapse: collapse; margin: auto;">
                             <thead>
                                 <tr>
@@ -138,6 +96,32 @@
                                     </th>
                                 </tr>
                             </thead>
+                            {% if not leak_JSON %}
+                                <tr>
+                                    <td colspan="4" id="formE_box1">
+                                        <center style='padding-top: 20px; padding-bottom: 20px;'>
+                                            No Leaks Found During Observation
+                                        </center>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for item in leak_JSON %}
+                                    <tr>
+                                        <td colspan="1" id="formE_box1">
+                                            {{ item.oven }}
+                                        </td>
+                                        <td colspan="1" id="formE_box1">
+                                            {{ item.time }}
+                                        </td>
+                                        <td colspan="1" id="formE_box1">
+                                            {{ item.source }}
+                                        </td>
+                                        <td colspan="1" id="formE_box1">
+                                            {{ item.comment }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                             <tbody id="gooseNeckInputContainer">
                                 
                             </tbody>
@@ -193,11 +177,14 @@
                                 <td style="height: 25px" > </td>
                             </tr> 
                         </table>
+                        {% if admin or client %} {% elif unlock and not search %}
                         <br><br><br>
                         <input type="submit" value="Submit Form" class="submit_button">
+                        {% endif %}
                     </div>
                 </div>
             </form> 
         </div>    
     </div>
+</body>
 {% endblock %}
