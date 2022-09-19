@@ -125,7 +125,8 @@ unpaved_roads = (
     ('unp3', 'Coal Handling Road (Partial)'),
     ('unp4', 'Taj Mahal Road'),
     ('unp5', 'PECS Approach'),
-    ('unp6', 'No. 2 Boilerhouse Road')
+    ('unp6', 'No. 2 Boilerhouse Road'),
+    ('unp7', 'Bypass Route')
 )
 parking_lots = (
     ('par1', 'Gap Gate Parking'),
