@@ -10,7 +10,8 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA4(request, selector):
-    now = datetime.datetime.now()
+    formName = "A4"
+    existing = False
     unlock = False
     client = False
     admin = False
@@ -21,28 +22,26 @@ def formA4(request, selector):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-    formName = "A4"
-    existing = False
+    now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    full_name = request.user.get_full_name()
-    count_bp = daily_battery_profile_model.objects.count()
+    
     org = formA4_model.objects.all().order_by('-date')
-
+    
+    count_bp = daily_battery_profile_model.objects.count()
+    
+    full_name = request.user.get_full_name()
+    
     if count_bp != 0:
-        print('CHECK 1')
         todays_log = daily_prof[0]
         if selector != 'form':
-            print('CHECK 2-1')
             for x in org:
                 if str(x.date) == str(selector):
-                    print('CHECK 3-1')
                     database_model = x
             data = database_model
             existing = True
             search = True
         elif len(org) > 0:
-            print('CHECK 2-2')
             database_form = org[0]
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:

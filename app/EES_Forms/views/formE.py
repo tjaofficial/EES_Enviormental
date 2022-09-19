@@ -33,15 +33,6 @@ def formE(request, selector):
     count_bp = daily_battery_profile_model.objects.count()
     
     full_name = request.user.get_full_name()
-    
-    if len(profile) > 0:
-        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-        if same_user:
-            cert_date = request.user.user_profile_model.cert_date
-        else:
-            return redirect('IncompleteForms')
-    else:
-        return redirect('IncompleteForms')
 
     if count_bp != 0:
         todays_log = daily_prof[0]

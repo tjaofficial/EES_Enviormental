@@ -160,3 +160,13 @@ function update_Temp_Save(event){
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
+function no_leaks() {
+    const leaks = document.getElementById('id_leaks').value;
+
+    if (leaks == 'No') {
+        document.getElementById('gooseNeckInputContainer').style.display = 'none';
+    } else if (leaks == "Yes" || !leaks) {
+        document.getElementById('gooseNeckInputContainer').style.display = 'contents';
+    }
+}
+no_leaks();

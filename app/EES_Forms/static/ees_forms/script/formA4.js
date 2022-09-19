@@ -8,8 +8,6 @@ function initate_Result_Table(){
     let parsedJSON = JSON.parse(query_Table.value)
     createHTMLString(parsedJSON);
     addResultEventListeners();
-
-    console.log('this is a test to see if this works');
 }
 
 /*****************************************

@@ -63,7 +63,7 @@
                                 <td style="height: 25px" > </td>
                             </tr> 
                             <tr>
-                                <td colspan="6" style="text-align: center; display: flex;">
+                                <td colspan="6" style="text-align: center; display: inline;">
                                     <p style='font-weight: bold;'>Leaks?</p> <p>{{ form.leaks }}</p>
                                 </td>
                             </tr> 
@@ -96,31 +96,33 @@
                                     </th>
                                 </tr>
                             </thead>
-                            {% if not leak_JSON %}
-                                <tr>
-                                    <td colspan="4" id="formE_box1">
-                                        <center style='padding-top: 20px; padding-bottom: 20px;'>
-                                            No Leaks Found During Observation
-                                        </center>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                {% for item in leak_JSON %}
+                            {% if existing %}
+                                {% if not leak_JSON %}
                                     <tr>
-                                        <td colspan="1" id="formE_box1">
-                                            {{ item.oven }}
-                                        </td>
-                                        <td colspan="1" id="formE_box1">
-                                            {{ item.time }}
-                                        </td>
-                                        <td colspan="1" id="formE_box1">
-                                            {{ item.source }}
-                                        </td>
-                                        <td colspan="1" id="formE_box1">
-                                            {{ item.comment }}
+                                        <td colspan="4" id="formE_box1">
+                                            <center style='padding-top: 20px; padding-bottom: 20px;'>
+                                                No Leaks Found During Observation
+                                            </center>
                                         </td>
                                     </tr>
-                                {% endfor %}
+                                {% else %}
+                                    {% for item in leak_JSON %}
+                                        <tr>
+                                            <td colspan="1" id="formE_box1">
+                                                {{ item.oven }}
+                                            </td>
+                                            <td colspan="1" id="formE_box1">
+                                                {{ item.time }}
+                                            </td>
+                                            <td colspan="1" id="formE_box1">
+                                                {{ item.source }}
+                                            </td>
+                                            <td colspan="1" id="formE_box1">
+                                                {{ item.comment }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
                             {% endif %}
                             <tbody id="gooseNeckInputContainer">
                                 
