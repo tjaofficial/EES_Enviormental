@@ -181,10 +181,6 @@ def formH(request, access_page):
                     'comb_read_22': database_form2.comb_read_22,
                     'comb_read_23': database_form2.comb_read_23,
                     'comb_read_24': database_form2.comb_read_24,
-                    'comb_read_25': database_form2.comb_read_25,
-                    'comb_read_26': database_form2.comb_read_26,
-                    'comb_read_27': database_form2.comb_read_27,
-                    'comb_read_28': database_form2.comb_read_28,
                     'comb_average': database_form2.comb_average,
                 }
                 data = formH_form(initial=initial_data)

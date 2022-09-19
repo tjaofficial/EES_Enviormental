@@ -1,8 +1,8 @@
 function get_average(opac_id, total_id, amount) {
     if (parseInt(amount) == 12) {
         list = [1,2,3,4,5,6,7,8,9,10,11,12]
-    } else if (parseInt(amount) == 28) {
-        list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+    } else if (parseInt(amount) == 24) {
+        list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
     }
     
     var the_total = 0;
@@ -16,8 +16,8 @@ function get_average(opac_id, total_id, amount) {
         document.getElementById(total_id).placeholder = theAverage;
         const id_param = document.getElementById(total_id).id;
         stop_light(theAverage, id_param);
-    } else if (parseInt(amount) == 28) {
-        const theAverage = (the_total / 28).toFixed(3);
+    } else if (parseInt(amount) == 24) {
+        const theAverage = (the_total / 24).toFixed(3);
         document.getElementById(total_id).placeholder = theAverage;
         const id_param = document.getElementById(total_id).id;
         stop_light(theAverage, id_param);
@@ -72,5 +72,6 @@ function parking_average(){
  FORM H - Combustion Stack
 *************/
 function comb_averages() {
-    get_average('id_comb_read_', 'id_comb_average', 28);
+    get_average('id_comb_read_', 'id_comb_average', 24);
 }
+comb_averages()
