@@ -50,22 +50,14 @@ function handle_Table_Input(event){
         let new_Object = {};
         new_Object[resultKeyAttr] = elemValue;
 
-        
-        
         result_Array.push(new_Object);
-
     }
     else{
         if(result_Array[resultInputAttr]){
             let rowData = result_Array[resultInputAttr];
-                
                 // 1. update the data
                 
             rowData[resultKeyAttr] = elemValue;
-
-
- 
-
 
             //delete row if both objects are empty
             
@@ -80,33 +72,18 @@ function handle_Table_Input(event){
             if(!ovenHasData && !timeHasData && !tempSealedHasData && !tempSealedByHasData && !repairInitHasData && !repairCompleteHasData && !repairByHasData){
                 result_Array.splice(resultInputAttr, 1);
             }
-
-
-            
-
-            //console.log(`${ovenHasData} ${timeHasData} ${tempSealedHasData} ${tempSealedByHasData} ${repairInitHasData} ${repairCompleteHasData} ${repairByHasData} -- this is a test i just enter`);
-
         }
 
         else{
             console.log("error: Inproper key")
         }
-
-            
-            //targeted_input_DOM.value = JSON.stringify(parsed_Result);
-            //createHTMLString(parsed_Result, target);
-            //addResultEventListeners();
-        //}
-        //else {console.log('this needs to read out')}
     }
 
     parsed_Result.data = result_Array;
     targeted_input_DOM.value = JSON.stringify(parsed_Result);
 
-    
     createHTMLString(parsed_Result);
     addResultEventListeners();
-
 }
 
 
@@ -136,8 +113,6 @@ function createHTMLString(dataJSON){
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {});
     document.getElementById(`pushSide_tableBody`).innerHTML = tableHTML;
-    
-
 
 }
 
@@ -147,9 +122,6 @@ function createHTMLString(dataJSON){
 
 
 function htmlLayout(empty, data){
-    
-
-
     const htmlStr= `<tr>
                         <th id="formA5_box1">
                             <input type="number" value="${!empty && data.oven ? data.oven : ""}" data-resultKey="oven" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>

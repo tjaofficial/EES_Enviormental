@@ -131,6 +131,43 @@
                                       By
                                     </th>
                                 </tr>
+                              {% if existing %}
+                                  {% if not leak_JSON %}
+                                      <tr>
+                                          <td colspan="4" id="formE_box1">
+                                              <center style='padding-top: 20px; padding-bottom: 20px;'>
+                                                  No Leaks Found During Observation
+                                              </center>
+                                          </td>
+                                      </tr>
+                                  {% else %}
+                                      {% for item in leak_JSON %}
+                                          <tr>
+                                            <th style="text-align: center;border: 2px solid black; width: 150px;">
+                                              {{ data.oven_leak_1 }}
+                                            </th>
+                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                              {{ data.time_leak_1 }}
+                                            </th>
+                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                              {{ data.date_temp_seal_leak_1 }}, {{ data.time_temp_seal_leak_1 }}
+                                            </th>
+                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                              {{ data.temp_seal_by_leak_1 }}
+                                            </th>
+                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                              {{ data.date_init_repair_leak_1 }}, {{ data.time_init_repair_leak_1 }}
+                                            </th>
+                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                              {{ data.date_comp_repair_leak_1 }}{{ data.time_comp_repair_leak_1 }}
+                                            </th>
+                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                              {{ data.comp_by_leak_1 }}
+                                            </th>
+                                          </tr>
+                                      {% endfor %}
+                                  {% endif %}
+                              {% endif %}
                                 <tbody id="pushSide_tableBody"></tbody>
                                 <tr>
                                     <td style="height: 40px"></td>

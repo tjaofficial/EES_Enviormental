@@ -100,7 +100,6 @@ def formE(request, selector):
                     issue_page = '../../issues_view/E/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
-
                 done = Forms.objects.filter(form='E')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save

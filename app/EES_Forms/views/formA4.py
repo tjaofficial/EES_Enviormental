@@ -94,6 +94,7 @@ def formA4(request, selector):
             data = formA4_form(initial=initial_data)
 
         if request.method == "POST":
+            print(request.POST)
             if existing:
                 form = formA4_form(request.POST, instance=database_form)
             else:
@@ -101,6 +102,9 @@ def formA4(request, selector):
             if form.is_valid():
                 A = form.save()
 
+                print('Check 1')
+                print(A.oven_leak_1)
+                
                 if A.notes.lower() != 'no ve':
                     issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
 
