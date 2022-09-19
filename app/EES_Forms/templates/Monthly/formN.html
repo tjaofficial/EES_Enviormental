@@ -342,6 +342,20 @@
                             {% endfor %}
                         </td>
                     </tr>
+                    <tr>
+                        <td class="roads_format">Bypass Route</td>
+                        <td class="date_format">
+                            {% for x in unpaved_loc %}
+                                {% if 'unp7' == x.0 %}
+                                    <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
+                                        ({{ x.1.month }}/{{ x.1.day }})
+                                    </a>,
+                                {% else %}
+
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
                     <tr class="roads_headers">    
                         <th>
                             Parking Lots
