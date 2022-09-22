@@ -1,7 +1,5 @@
-{% extends context.parent_template %}
-
-{% block list %}
-{% load static %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
 <div>
     <a href="{% if client %}{% url 'c_dashboard' %}{% else %}{% url 'IncompleteForms' %}{% endif %}">

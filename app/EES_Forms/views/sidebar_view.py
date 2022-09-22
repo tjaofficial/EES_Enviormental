@@ -15,25 +15,30 @@ lock = login_required(login_url='Login')
 
 @lock
 def corrective_action_view(request):
+    unlock = False
     client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
 
     profile = user_profile_model.objects.all()
 
     ca_forms = issues_model.objects.all().order_by('-id')
 
     return render(request, "ees_forms/corrective_actions.html", {
-        'ca_forms': ca_forms, 'profile': profile, 'client': client
+        'ca_forms': ca_forms, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
-
 
 @lock
 def calendar_view(request, year, month):
     unlock = False
     client = False
     admin = False
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+    if request.user.groups.filter(name='SGI Technician'):
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
@@ -44,12 +49,6 @@ def calendar_view(request, year, month):
     month = month.title()
     month_number = list(calendar.month_name).index(month)
     month_number = int(month_number)
-
-    context = {}
-    if admin:
-        context['parent_template'] = 'admin/admin_layout.html'
-    else:
-        context['parent_template'] = 'ees_forms/layout.html'
 
     if month_number == 1:
         prev_month = str(calendar.month_name[12])
@@ -72,9 +71,8 @@ def calendar_view(request, year, month):
     html_cal = calend.formatmonth(year, month_number, year, withyear=True)
 
     return render(request, "ees_forms/schedule.html", {
-        'context': context, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
-
 
 @lock
 def schedule_view(request):
@@ -90,19 +88,23 @@ def schedule_view(request):
         'today_year': today_year, 'today_month': today_month, 'admin': admin,
     })
 
-
 @lock
 def archive_view(request):
+    unlock = False
     client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
         client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
 
     profile = user_profile_model.objects.all()
 
     return render(request, 'ees_forms/ees_archive.html', {
-        'profile': profile, 'client': client
+        'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
-
 
 @lock
 def search_forms_view(request, access_page):
@@ -172,7 +174,6 @@ def search_forms_view(request, access_page):
         return render(request, 'ees_forms/search_forms.html', {
             'profile': profile, 'access_page': access_page, 'database': database, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
-
 
 @lock
 def issues_view(request, form_name, form_date, access_page):
@@ -293,9 +294,18 @@ def issues_view(request, form_name, form_date, access_page):
         'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock
     })
 
-
 @lock
 def event_add_view(request):
+    unlock = False
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+        
     today = datetime.date.today()
     profile = user_profile_model.objects.all()
     today_year = int(today.year)
@@ -313,9 +323,8 @@ def event_add_view(request):
             return redirect(cal_link)
 
     return render(request, "ees_forms/event_add.html", {
-        'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile,
+        'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'admin': admin, "client": client, 'unlock': unlock, 
     })
-
 
 @lock
 def event_detail_view(request, access_page, event_id):
@@ -430,6 +439,15 @@ def shared_contacts_view(request):
     })
     
 def sop_view(request):
+    unlock = False
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     sops = sop_model.objects.all().order_by('name')
     sopForm = sop_form()
     
@@ -445,5 +463,5 @@ def sop_view(request):
                 print('NOT SAVED')
             
     return render(request, 'shared/sops.html', {
-        'sops': sops, 'sopForm': sopForm,
+        'sops': sops, 'sopForm': sopForm, 'admin': admin, "client": client, 'unlock': unlock
     })

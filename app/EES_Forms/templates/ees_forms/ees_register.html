@@ -1,13 +1,7 @@
-{% extends "admin/admin_layout.html" %}
-
-{% block list%}
-{% load static %}
-
-    <head>
-       <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
-    </head>
-    <a href={% url 'admin_dashboard' %}> back</a>
-    <div id="login" class='eventAdd'>
+{% extends "admin/admin_layout.html" %}{% block list%}{% load static %}
+<link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+<body>
+    <div id="login" class='eventAdd' style='margin-top: 25px;'>
         <h1>Register New Observer</h1>
         </br>
         <form method="POST" action="">
@@ -30,4 +24,5 @@
             <p>{{message}}</p>
         {% endfor%}
     </div>
+</body>
 {% endblock %}

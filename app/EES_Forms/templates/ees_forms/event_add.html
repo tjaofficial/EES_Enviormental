@@ -1,11 +1,8 @@
-{% extends "admin/admin_layout.html" %}
-
-{% block list%}
-{% load static %}
+{% extends "admin/admin_layout.html" %}{% block list%}{% load static %}
 <a href="schedule/{{today_year}}/{{today_month}}"> Calendar</a>
 
 <center>
-    <div class="eventAdd">
+    <div class="eventAdd" style='margin-top: 25px;'>
         <h3>Create New Event</h3>
         <br>
         <form action="" method="POST">

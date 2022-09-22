@@ -1,205 +1,196 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list %}
-{% load static %}
-    <link href="{% static 'ees_forms/data_style.css' %}" rel="stylesheet">
-
-        <table style="border-collapse: collapse; overflow: scroll;">
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/data_style.css' %}" rel="stylesheet">
+<body>
+    <table style="border-collapse: collapse; overflow: scroll;">
+        <tr>
+            <th id="first_column_name" style="width: 250px;">
+                Record<br>
+                Number
+            </th>
+            <th id="column_name1">
+                No. of<br>Ovens
+            </th>
+            <th id="column_name" style="width: 100px">
+                No. of Lids<br>Per Oven
+            </th>
+            <th id="column_name">
+                No. of Offtakes<br>Per Oven
+            </th>
+            <th id="column_name">
+                No. of Stationary<br>Jumper Pipes
+            </th>
+            <th id="column_name">
+                .
+            </th>
+            <th id="column_name">
+                Date
+            </th>
+            <th id="column_name">
+                Inspector ID
+            </th>
+            <th id="column_name">
+                No. of Ovens<br>Not Operable
+            </th>
+            <th id="column_name">
+                No. of Doors<br>Not Observed
+            </th>
+            <th id="column_name">
+                No. of Door Leaks<br>Yard
+            </th>
+            <th id="column_name">
+                No. of Door Leaks<br>Bench
+            </th>
+            <th id="column_name">
+                No. of Lids<br>Not Observed
+            </th>
+            <th id="column_name">
+                No. of Lid<br>Leaks
+            </th>
+            <th id="column_name">
+                No. of Offtakes<br>Not Observed
+            </th>
+            <th id="column_name">
+                No. of Offtakes<br>Leaks
+            </th>
+            <th id="column_name">
+                Charge 1
+            </th>
+            <th id="column_name">
+                Charge 2
+            </th>
+            <th id="column_name">
+                Charge 3
+            </th>
+            <th id="column_name">
+                Charge 4
+            </th>
+            <th id="column_name">
+                Charge 5
+            </th>
+        </tr>
+        {% for entry in list_of_records %}
+        <tr class="{% if forloop.counter|divisibleby:'7' %}row_standard2{% else %}row_standard{% endif %}" style="background-color: {{ entry.19 }};">
+            <td id="default_box" style="border-left: 3px black solid;">
+                {{ entry.0 }}
+            </td>
+            <td id="default_box" style="border-right: 3px black solid;">
+                0
+            </td>
+            <td id="default_box">
+                0
+            </td>
+            <td id="default_box">
+                0
+            </td>
+            <td id="default_box">
+                0
+            </td>
+            <td id="default_box">
+                0
+            </td>
+            <td id="default_box">
+                {{ entry.1.month }}/{{ entry.1.day }}/{{ entry.1.year }}
+            </td>
+            <td id="default_box">
+                
+            </td>
+            <td id="default_box">
+                {{ entry.7 }}
+            </td>
+            <td id="default_box" style="border-right: 3px black solid;">
+                {{ entry.8 }}
+            </td>
+            <td id="default_box">
+                {{ entry.9 }}
+            </td>
+            <td id="default_box">
+                
+            </td>
+            <td id="default_box">
+                {{ entry.11 }}
+            </td>
+            <td id="default_box">
+                {{ entry.12 }}
+            </td>
+            <td id="default_box">
+                {{ entry.13 }}
+            </td>
+            <td id="default_box" style="border-right: 3px black solid;">
+                {{ entry.14 }}
+            </td>
+            <td id="default_box">
+                {{ entry.2 }}
+            </td>
+            <td id="default_box">
+                {{ entry.3 }}
+            </td>
+            <td id="default_box">
+                {{ entry.4 }}
+            </td>
+            <td id="default_box">
+                {{ entry.5 }}
+            </td>
+            <td id="default_box" style="border-right: 3px black solid;">
+                {{ entry.6 }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <br>
+    
+    <div style="text-align: center;">
+        <h1>DTE - EES Coke Battery</h1><br>
+        <h2>Record #5376&nbsp;&nbsp; - &nbsp;&nbsp;07/19/2021</h2><br>
+        <h3>Standard Battery Info.</h3>
+        No. of Ovens: 85, No. of Lids per Oven: 4<br>
+        No. of Offtakes per Oven: 2, No. of Stationary Jumper Pipes: 4<br>
+        <br>
+        <h3>Charges</h3>
+        <table style="margin: auto; border-collapse: collapse;">
             <tr>
-                <th id="first_column_name" style="width: 250px;">
-                    Record<br>
-                    Number
+                <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                    #1
                 </th>
-                <th id="column_name1">
-                    No. of<br>Ovens
+                <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                    #2
                 </th>
-                <th id="column_name" style="width: 100px">
-                    No. of Lids<br>Per Oven
+                <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                    #3
                 </th>
-                <th id="column_name">
-                    No. of Offtakes<br>Per Oven
+                <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                    #4
                 </th>
-                <th id="column_name">
-                    No. of Stationary<br>Jumper Pipes
-                </th>
-                <th id="column_name">
-                    .
-                </th>
-                <th id="column_name">
-                    Date
-                </th>
-                <th id="column_name">
-                    Inspector ID
-                </th>
-                <th id="column_name">
-                    No. of Ovens<br>Not Operable
-                </th>
-                <th id="column_name">
-                    No. of Doors<br>Not Observed
-                </th>
-                <th id="column_name">
-                    No. of Door Leaks<br>Yard
-                </th>
-                <th id="column_name">
-                    No. of Door Leaks<br>Bench
-                </th>
-                <th id="column_name">
-                    No. of Lids<br>Not Observed
-                </th>
-                <th id="column_name">
-                    No. of Lid<br>Leaks
-                </th>
-                <th id="column_name">
-                    No. of Offtakes<br>Not Observed
-                </th>
-                <th id="column_name">
-                    No. of Offtakes<br>Leaks
-                </th>
-                <th id="column_name">
-                    Charge 1
-                </th>
-                <th id="column_name">
-                    Charge 2
-                </th>
-                <th id="column_name">
-                    Charge 3
-                </th>
-                <th id="column_name">
-                    Charge 4
-                </th>
-                <th id="column_name">
-                    Charge 5
+                <th style="border: 1px solid black; padding: 10px; text-align: center;">
+                    #5
                 </th>
             </tr>
-            {% for entry in list_of_records %}
-            <tr class="{% if forloop.counter|divisibleby:'7' %}row_standard2{% else %}row_standard{% endif %}" style="background-color: {{ entry.19 }};">
-                <td id="default_box" style="border-left: 3px black solid;">
-                    {{ entry.0 }}
+            <tr>
+                <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                    6.0
                 </td>
-                <td id="default_box" style="border-right: 3px black solid;">
-                    0
+                <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                    3.5
                 </td>
-                <td id="default_box">
-                    0
+                <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                    2.5
                 </td>
-                <td id="default_box">
-                    0
+                <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                    0.5
                 </td>
-                <td id="default_box">
-                    0
-                </td>
-                <td id="default_box">
-                    0
-                </td>
-                <td id="default_box">
-                    {{ entry.1.month }}/{{ entry.1.day }}/{{ entry.1.year }}
-                </td>
-                <td id="default_box">
-                    
-                </td>
-                <td id="default_box">
-                    {{ entry.7 }}
-                </td>
-                <td id="default_box" style="border-right: 3px black solid;">
-                    {{ entry.8 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.9 }}
-                </td>
-                <td id="default_box">
-                    
-                </td>
-                <td id="default_box">
-                    {{ entry.11 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.12 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.13 }}
-                </td>
-                <td id="default_box" style="border-right: 3px black solid;">
-                    {{ entry.14 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.2 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.3 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.4 }}
-                </td>
-                <td id="default_box">
-                    {{ entry.5 }}
-                </td>
-                <td id="default_box" style="border-right: 3px black solid;">
-                    {{ entry.6 }}
+                <td style="border: 1px solid black; padding: 10px; text-align: center;">
+                    2.0
                 </td>
             </tr>
-            {% endfor %}
         </table>
-        <br>
-        <br>
-        <br>
-        
-        <div style="text-align: center;">
-            <h1>DTE - EES Coke Battery</h1><br>
-            <h2>Record #5376&nbsp;&nbsp; - &nbsp;&nbsp;07/19/2021</h2><br>
-            <h3>Standard Battery Info.</h3>
-            No. of Ovens: 85, No. of Lids per Oven: 4<br>
-            No. of Offtakes per Oven: 2, No. of Stationary Jumper Pipes: 4<br>
-            <br>
-            <h3>Charges</h3>
-            <table style="margin: auto; border-collapse: collapse;">
-                <tr>
-                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
-                        #1
-                    </th>
-                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
-                        #2
-                    </th>
-                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
-                        #3
-                    </th>
-                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
-                        #4
-                    </th>
-                    <th style="border: 1px solid black; padding: 10px; text-align: center;">
-                        #5
-                    </th>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
-                        6.0
-                    </td>
-                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
-                        3.5
-                    </td>
-                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
-                        2.5
-                    </td>
-                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
-                        0.5
-                    </td>
-                    <td style="border: 1px solid black; padding: 10px; text-align: center;">
-                        2.0
-                    </td>
-                </tr>
-            </table>
-            
-            Sum of Charges:<br>
-            No. of Charges: <br>
-            Log Average of Charges: <br>
-            
-            
-            
-            
-            
-            
-            
-            
-        </div>
-        
+        Sum of Charges:<br>
+        No. of Charges: <br>
+        Log Average of Charges: <br>
+    </div>
+</body>
 
 {% endblock %}

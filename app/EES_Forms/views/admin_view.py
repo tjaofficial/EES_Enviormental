@@ -12,6 +12,15 @@ lock = login_required(login_url='Login')
 
 @lock
 def admin_dashboard_view(request):
+    unlock = False
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')
@@ -334,13 +343,23 @@ def admin_dashboard_view(request):
                 'ca_forms': ca_forms, 'recent_logs': recent_logs, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'weather': weather, 'wind_direction': wind_direction, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent,
             })
     return render(request, "admin/admin_dashboard.html", {
-        'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date, "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent,
+        'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date, "od_10": od_10, "od_5": od_5, "od_30": od_30, 'recent_logs': recent_logs, 'lids': lids, 'offtakes': offtakes, 'ca_forms': ca_forms, 'weather': weather, 'wind_direction': wind_direction, 'todays_log': todays_log, 'todays_obser': todays_obser, 'Users': Users, 'profile': profile, 'A1data': A1data, 'A2data': A2data, 'A3data': A3data, 'A4data': A4data, 'A5data': A5data, 'push': push, 'coke': coke, 'od_recent': od_recent, 'weekly_percent': weekly_percent, 'monthly_percent': monthly_percent, 'annually_percent': annually_percent, 'daily_percent': daily_percent, 'admin': admin, "client": client, 'unlock': unlock, 
     })
 
 
 @lock
 def register_view(request):
+    unlock = False
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+
+    if admin:
         form = CreateUserForm()
         profile_form = user_profile_form()
 
@@ -370,5 +389,5 @@ def register_view(request):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-                'form': form, 'profile_form': profile_form
+                'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 
             })

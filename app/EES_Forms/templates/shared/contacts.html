@@ -1,45 +1,8 @@
-{% extends "admin/admin_layout.html" %} {% block list%}{% load static %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}{% block list%}{% load static %}
 <script defer src="{% static 'ees_forms/script/contacts.js' %}"></script>
 
 <body>
     <div class="grid-dashboard">
-    <div id="progress" class="card skinny">
-        <div class="grid-sliders">
-        <div class="skillBar">
-            <p>Daily Progress</p>
-            <div class="container">
-            <div class="skills daily"></div>
-            </div>
-        </div>
-        <div class="skillBar">
-            <p>Weekly Progress</p>
-            <div class="container">
-            <div class="skills weekly"></div>
-            </div>
-        </div>
-
-        <div class="skillBar">
-            <p>Monthly Progress</p>
-            <div class="container">
-            <div class="skills monthly"></div>
-            </div>
-        </div>
-
-        <!-- <div class="skillBar">
-                    <p>Quarterly Progress</p>
-                    <div class="container">
-                        <div class="skills quarterly"></div>
-                    </div>
-                </div> -->
-
-        <div class="skillBar">
-            <p>Annually Progress</p>
-            <div class="container">
-            <div class="skills annually"></div>
-            </div>
-        </div>
-        </div>
-    </div>
     <div class="card contact_card">
         <div class="card-title">Contacts</div>
         <div class="contact_list_cont">

@@ -1,9 +1,13 @@
-{% extends "ees_forms/layout.html" %} {% block list%} {% load static %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%} {% load static %}
 <body>
     <head>
         <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
+        <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
         <script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
     </head>
+    {% if unlock %}
     <div>
         <a href="{% url 'IncompleteForms' %}">
             <svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -11,6 +15,7 @@
             </svg>
         </a>
     </div>
+    {% endif %}
     <div style="text-align: center;padding-top: 50px;">
         <div style='display:inline-flex;'>
             <div>

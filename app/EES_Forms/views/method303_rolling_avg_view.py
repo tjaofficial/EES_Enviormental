@@ -7,6 +7,16 @@ profile = user_profile_model.objects.all()
 
 
 def method303_rolling_avg(request):
+    unlock = False
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
+        
     now = datetime.datetime.now()
     today = datetime.date.today()
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
@@ -32,13 +42,27 @@ def method303_rolling_avg(request):
                                 if date_select.date_save == logA3.date:
                                     A3 = logA3
 
-                                    A.append((i, date_select.date_save, A1.c1_sec, A1.c2_sec, A1.c3_sec, A1.c4_sec, A1.c5_sec, A2.inop_ovens, A2.doors_not_observed, A2.leaking_doors, A3.inop_ovens, A3.l_not_observed, A3.l_leaks, A3.om_not_observed, A3.om_leaks))
-                                    print(i)
+                                    A.append((
+                                        i, date_select.date_save, 
+                                        A1.c1_sec, 
+                                        A1.c2_sec, 
+                                        A1.c3_sec, 
+                                        A1.c4_sec, 
+                                        A1.c5_sec, 
+                                        A2.inop_ovens, 
+                                        A2.doors_not_observed, 
+                                        A2.leaking_doors, 
+                                        A3.inop_ovens, 
+                                        A3.l_not_observed, 
+                                        A3.l_leaks, 
+                                        A3.om_not_observed, 
+                                        A3.om_leaks
+                                    ))
                                     i += 1
         return A
 
     list_of_records = form_compile(daily_prof)
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile,
+        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
