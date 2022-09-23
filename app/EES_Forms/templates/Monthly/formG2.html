@@ -1,7 +1,8 @@
 {% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
-    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-    <script defer src="{% static 'ees_forms/script/formG2.js' %}"></script>
-    <link href="{% static 'ees_forms/style/formG2.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formG2.js' %}"></script>
+<link href="{% static 'ees_forms/style/formG2.css' %}" rel="stylesheet" />
+<body>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">    
         <div>
@@ -181,7 +182,7 @@
                     <center>
                         Method 9B Observations shall be performed during pushing.
                         <br><br><br>
-                        Highest average opacity for Method 9B reading: {{ readings_form.PEC_average_m }}
+                        Highest average opacity for Method 9B reading: {{ readings_form.PEC_average_main }}
                     </center>    
                     <br><br>
                     <div id='pushTravels'>
@@ -190,12 +191,12 @@
                               <table name="oven1" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.PEC_oven_1 }}
+                                            Oven No: {{ readings_form.PEC_oven_a }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.PEC_start_1 }}
+                                            Start Time: {{ readings_form.PEC_start_a }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -213,25 +214,25 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_1 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_2 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_3 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_4 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_1 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_2 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_3 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_4 }}</td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_5 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_6 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_7 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_8 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_5 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_6 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_7 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_a_8 }}</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
                                     </tr> 
                                     <tr>
                                         <td colspan="6">
-                                            Highest 6-reading opacity for push: {{ readings_form.PEC_average_1 }}
+                                            Highest 6-reading Average Opacity for Push: {{ readings_form.PEC_average_a }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -244,13 +245,13 @@
                                 <table name="oven2" style="border-collapse: collapse;">
                                      <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.PEC_oven_2 }}
+                                            Oven No: {{ readings_form.PEC_oven_b }}
                                             <span class="oven2_pop_class" id="oven2_pop_id">Please Change Oven No.</span>
                                          </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.PEC_start_2 }}
+                                            Start Time: {{ readings_form.PEC_start_b }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -268,25 +269,25 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_9 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_10 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_11 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_12 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_1 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_2 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_3 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_4 }}</td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_13 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_14 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_15 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_16 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_5 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_6 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_7 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_b_8 }}</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
                                     </tr> 
                                     <tr>
                                         <td colspan="6">
-                                            Highest 6-reading opacity for push: {{ readings_form.PEC_average_2 }}
+                                            Highest 6-reading Average Opacity for Push: {{ readings_form.PEC_average_b }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -301,13 +302,13 @@
                                 <table name="oven3" style="border-collapse: collapse;">
                                      <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.PEC_oven_3 }}
+                                            Oven No: {{ readings_form.PEC_oven_c }}
                                             <span class="oven1_pop_class" id="oven3_pop_id">Please Change Oven No.</span>
                                          </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.PEC_start_3 }}
+                                            Start Time: {{ readings_form.PEC_start_c }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -325,25 +326,25 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_17 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_18 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_19 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_20 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_1 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_2 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_3 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_4 }}</td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_21 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_22}}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_23 }}</td>
-                                        <td id="boxa4">{{ readings_form.PEC_read_24 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_5 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_6 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_7 }}</td>
+                                        <td id="boxa4">{{ readings_form.PEC_read_c_8 }}</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
                                     </tr> 
                                     <tr>
                                         <td colspan="6">
-                                            Highest 6-reading opacity for push: {{ readings_form.PEC_average_3 }}
+                                            Highest 6-reading Average Opacity for Push: {{ readings_form.PEC_average_c }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -366,5 +367,7 @@
                     </div>
                 </div>
             </div>
-        </form>   
-   {% endblock %}
+        </form>
+    </div>
+</body>
+{% endblock %}

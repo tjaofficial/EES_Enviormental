@@ -72,7 +72,6 @@ function fillForm(tempSaveKey){
         dataObject = object.data;
         for(let key in dataObject) {
             if(dataObject[key]){ 
-                    //console.log(key)
                     let inputValue = document.getElementById(key).value 
                     if(!inputValue || inputValue !== {}){
                         document.getElementById(key).value = dataObject[key];
