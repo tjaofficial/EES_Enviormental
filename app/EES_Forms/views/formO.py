@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formO_model
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model
 from ..forms import formO_form
 import calendar
 
@@ -116,7 +116,11 @@ def formO(request, selector, weekend_day):
                                     A.Q_8,
                                     A.Q_9,
                                 }:
-                                    issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/form'
+                                    finder = issues_model.objects.filter(date=A.date, form='O')
+                                    if finder:
+                                        issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/issue'
+                                    else:
+                                        issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/form'
 
                                     return redirect(issue_page)
 

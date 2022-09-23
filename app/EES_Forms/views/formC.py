@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms
 from ..forms import SubFormC1, FormCReadForm
 
 lock = login_required(login_url='Login')
@@ -175,17 +175,12 @@ def formC(request, selector):
                 B.form = A
                 B.save()
 
-                if B.form.average_t > 5:
-                    issue_page = '../../issues_view/C/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-                if B.form.average_p > 5:
-                    issue_page = '../../issues_view/C/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if A.comments not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/C/' + str(database_form.date) + '/form'
+                if B.form.average_t > 5 or B.form.average_p > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
+                    finder = issues_model.objects.filter(date=A.date, form='C')
+                    if finder:
+                        issue_page = '../../issues_view/C/' + str(database_form.date) + '/issue'
+                    else:
+                        issue_page = '../../issues_view/C/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
 

@@ -104,7 +104,7 @@ def formA4(request, selector):
                 if A.notes.lower() != 'no ve' or A.oven_leak_1:
                     finder = issues_model.objects.filter(date=A.date, form='A-4')
                     if finder:
-                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/issue'
                     else:
                         issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
                     

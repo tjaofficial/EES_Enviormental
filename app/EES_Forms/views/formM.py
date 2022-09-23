@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model
 from ..forms import formM_form, formM_readings_form
 
 lock = login_required(login_url='Login')
@@ -155,21 +155,12 @@ def formM(request, selector):
                 B.form = A
                 B.save()
 
-                if int(B.pav_total) > 5:
-                    issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-                if int(B.unp_total) > 5:
-                    issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-                if int(B.par_total) > 5:
-                    issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if A.comments not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
+                if int(B.pav_total) > 5 or int(B.unp_total) > 5 or int(B.par_total) > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
+                    finder = issues_model.objects.filter(date=A.date, form='M')
+                    if finder:
+                        issue_page = '../../issues_view/M/' + str(database_form.date) + '/issue'
+                    else:
+                        issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
                 
