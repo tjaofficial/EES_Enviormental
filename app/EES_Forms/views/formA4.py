@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, formA4_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA4_model
 from ..forms import formA4_form
 
 lock = login_required(login_url='Login')
@@ -94,7 +94,6 @@ def formA4(request, selector):
             data = formA4_form(initial=initial_data)
 
         if request.method == "POST":
-            print(request.POST)
             if existing:
                 form = formA4_form(request.POST, instance=database_form)
             else:
@@ -102,18 +101,15 @@ def formA4(request, selector):
             if form.is_valid():
                 A = form.save()
 
-                print('Check 1')
-                print(A.oven_leak_1)
+                if A.notes.lower() != 'no ve' or A.oven_leak_1:
+                    finder = issues_model.objects.filter(date=A.date, form='A-4')
+                    if finder:
+                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+                    else:
+                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
+                    
+                    return redirect(issue_page)
                 
-                if A.notes.lower() != 'no ve':
-                    issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-
-                    return redirect(issue_page)
-                if A.oven_leak_1:
-                    issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-
-                    return redirect(issue_page)
-
                 done = Forms.objects.filter(form='A-4')[0]
                 done.submitted = True
                 done.date_submitted = todays_log.date_save

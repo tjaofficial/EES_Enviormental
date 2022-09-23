@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model
+from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model, issues_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
 import PIL.Image as Image
@@ -299,7 +299,7 @@ def formA5(request, selector):
 
         if request.method == "POST":
             def base64_file(data, name=None):
-                print(data)
+                #print(data)
                 _format, _img_str = data.split(';base64,')
                 _name, ext = _format.split('/')
                 if not name:
@@ -315,14 +315,13 @@ def formA5(request, selector):
                 readings = formA5_readings_form(request.POST)
 
                 
-
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
 
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
-
+                print(A.date);
                 canvasPostData = request.POST["canvas"]
 
                 canvasPNG = base64_file(canvasPostData,str(todays_log.date_save))
@@ -348,82 +347,26 @@ def formA5(request, selector):
                 B.form = A
                 B.save()
 
-                if B.o1_highest_opacity >= 10:
+                if B.o1_highest_opacity >= 10 or B.o1_average_6 >= 35 or B.o1_instant_over_20 == 'Yes' or B.o1_average_6_over_35 == 'Yes':
+                    finder = issues_model.objects.filter(date=A.date, form='A-5')
+                    if finder:
+                        issue_page = '../../issues_view/A-5/' + str(A.date) + '/issue'
+                    else:
+                        issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
+
+                    return redirect(issue_page)
+
+                if B.o2_highest_opacity >= 10 or B.o2_average_6 >= 35 or B.o2_instant_over_20 == 'Yes'  or B.o2_average_6_over_35 == 'Yes':
                     issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
-                if B.o1_average_6 >= 35:
+                if B.o3_highest_opacity >= 10 or B.o3_average_6 >= 35 or B.o3_instant_over_20 == 'Yes' or B.o3_average_6_over_35 == 'Yes':
                     issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
-                if B.o1_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o1_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o2_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o2_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o2_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o2_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o3_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o3_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o3_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o3_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o4_highest_opacity >= 10:
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o4_average_6 >= 35:
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o4_instant_over_20 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o4_average_6_over_35 == 'Yes':
+                if B.o4_highest_opacity >= 10 or B.o4_average_6 >= 35 or B.o4_instant_over_20 == 'Yes' or B.o4_average_6_over_35 == 'Yes':
                     issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
 
                     return redirect(issue_page)

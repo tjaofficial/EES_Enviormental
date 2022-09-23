@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
 from ..forms import formA1_form, formA1_readings_form
 
 lock = login_required(login_url='Login')
@@ -131,6 +131,7 @@ def formA1(request, selector):
                 B.form = A
                 B.save()
 
+                finder = issues_model.objects.filter(date=A.date, form='A-1')
             #     if B.comments not in {'-', 'n/a', 'N/A'}:
             #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
@@ -138,12 +139,18 @@ def formA1(request, selector):
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 for x in sec:
                     if 10 <= x:
-                        issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                        if finder:
+                            issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/issue'
+                        else:
+                            issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
                         return redirect(issue_page)
                     else:
                         if B.total_seconds >= 55:
-                            issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                            if finder:
+                                issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/issue'
+                            else:
+                                issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
                             return redirect(issue_page)
                 done = Forms.objects.filter(form='A-1')[0]

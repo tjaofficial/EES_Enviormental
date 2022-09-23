@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, formA3_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA3_model
 from ..forms import formA3_form
 import json
 
@@ -129,16 +129,12 @@ def formA3(request, selector):
             if form.is_valid():
                 A = form.save()
 
-                if A.notes not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-                if int(A.om_leaks) > 0:
-                    issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-                if int(A.l_leaks) > 0:
-                    issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/form'
+                if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
+                    finder = issues_model.objects.filter(date=A.date, form='A-3')
+                    if finder:
+                        issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/issue'
+                    else:
+                        issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
 

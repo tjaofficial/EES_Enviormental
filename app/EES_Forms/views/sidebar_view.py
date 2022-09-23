@@ -180,7 +180,7 @@ def issues_view(request, form_name, form_date, access_page):
     unlock = False
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
         unlock = True
-
+    print(str(form_date))
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -216,11 +216,17 @@ def issues_view(request, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms')
     elif access_page == 'issue':
-        org = issues_model.objects.all().order_by('-date')
+        org = issues_model.objects.filter(date__exact=form_date)
         database_form = org[0]
+        print(org[0].form)
+        print('CHECK 1')
         for entry in org:
             if str(form_date) == str(entry.date):
+                print('CHECK 2')
+                print(form_name)
+                print(entry.form)
                 if form_name == entry.form:
+                    print('CHECK 3')
                     picker = entry
                     form = issues_form()
                     link = ''

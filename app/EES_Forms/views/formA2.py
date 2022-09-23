@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, formA2_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA2_model
 from ..forms import formA2_form
 import json
 
@@ -133,7 +133,11 @@ def formA2(request, selector):
                     done.save()
                     return redirect('IncompleteForms')
                 else:
-                    issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
+                    finder = issues_model.objects.filter(date=A.date, form='A-2')
+                    if finder:
+                        issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/issue'
+                    else:
+                        issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
             else:
