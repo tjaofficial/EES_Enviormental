@@ -11,6 +11,18 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formO(request, selector, weekend_day):
+    formName = "O"
+    existing = False
+    unlock = False
+    client = False
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()

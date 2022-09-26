@@ -526,9 +526,14 @@ def IncompleteForms(request):
                     forms.due_date = weekend_fri
                     start_sat = today - datetime.timedelta(days= todays_num - 5)
                 A = forms.date_submitted
-                if A < start_sat or A > forms.due_date:
-                    forms.submitted = False
-                    forms.save()
+                if forms.day_freq == 'Weekends':
+                    if A != today:
+                        forms.submitted = False
+                        forms.save()   
+                else:
+                    if A < start_sat or A > forms.due_date:
+                        forms.submitted = False
+                        forms.save()
             elif forms.frequency == 'Daily':
                 forms.due_date = today
                 

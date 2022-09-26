@@ -1,7 +1,10 @@
+hidden_material();
 individual_day();
 house_keeping();
 run_it();
 info_already_entered();
+loading();
+
 
 function hidden_material() {
     run_it();
@@ -511,4 +514,3 @@ function individual_day() {
     document.getElementById('id_breeze_3').required = sec_2;
     document.getElementById('id_breeze_4').required = sec_2;
 }
-
