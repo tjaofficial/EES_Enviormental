@@ -352,7 +352,7 @@ def formG2(request, selector):
             # -------check if there is a daily battery profile
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
+                    if todays_log.date_save.month == database_form.date.month:
                         existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
