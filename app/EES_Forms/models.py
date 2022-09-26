@@ -267,7 +267,7 @@ class formC_model(models.Model):
         auto_now=False
     )
     comments = models.CharField(
-        max_length=300
+        max_length=600
     )
     average_t = models.FloatField(blank=True)
     average_p = models.FloatField(blank=True)
@@ -535,26 +535,26 @@ class formA1_readings_model(models.Model):
         max_length=5
     )
     c1_comments = models.CharField(
-        max_length=30
+        max_length=150
     )
     c2_comments = models.CharField(
-        max_length=30
+        max_length=150
     )
     c3_comments = models.CharField(
-        max_length=30
+        max_length=150
     )
     c4_comments = models.CharField(
-        max_length=30
+        max_length=150
     )
     c5_comments = models.CharField(
-        max_length=30
+        max_length=150
     )
     larry_car = models.CharField(
         max_length=30,
         choices=larry_car_choices
     )
     comments = models.CharField(
-        max_length=300
+        max_length=600
     )
     total_seconds = models.FloatField(
         max_length=30
@@ -820,7 +820,7 @@ class formA4_model(models.Model):
         blank=True,
         null=True,
     )
-    notes = models.CharField(max_length=30)
+    notes = models.CharField(max_length=600)
 
     def __str__(self):
         return str(self.date)
@@ -876,7 +876,7 @@ class formA5_model(models.Model):
     plume_opacity_determined_stop = models.CharField(max_length=50)
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
-    notes = models.CharField(max_length=300)
+    notes = models.CharField(max_length=600)
     canvas = models.CharField(max_length=100000)
     canvasMediaFile = models.FileField(default='/images/A-5scetchBlack.png')
 
