@@ -10,7 +10,7 @@
             ENVIORNMENTAL PROGRAM
         </div>
         <div id="button_profile" class="header_profile header_text_color" data-controls="profileDropdown">
-            {% if access %}    
+            {% if not access %}    
                 {% for x in profile %}
                     {% if x.user == request.user %}
                         {% if x.profile_picture %}

@@ -34,9 +34,9 @@ def login_view(request):
                 return redirect(batt_prof) 
         else:
             return redirect('no_registration')
-        access = True
-    else:
         access = False
+    else:
+        access = True
 
     if request.method == 'POST':
         username = request.POST.get('username')
