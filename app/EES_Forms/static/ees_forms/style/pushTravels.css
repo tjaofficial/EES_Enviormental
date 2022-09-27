@@ -1,0 +1,57 @@
+.dataLanes {
+    text-align: center; 
+    padding: 5px; 
+    border: 2px solid #513b3b00;
+    width: 15rem;
+    background-color: #dfe5e9;
+}
+.ptHolder {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 70rem;
+    background-color: #253544;
+    box-shadow: #0000007d 4px 7px 12px 3px;
+    margin: 2rem;
+    padding: 0 1rem;
+    border-radius: 1rem;
+    padding-bottom: 60px;
+}
+.headerTitle {
+    padding-top: 25px;
+    font-size: 25px;
+    color: white;
+}
+.tableStyle {
+    margin: auto; 
+    border-collapse: collapse;
+}
+.headerTable {
+    text-align: center; 
+    width: 700px;
+    background-color: #8295a5;
+    padding-top: 12px;
+    padding-bottom: 10px;
+    font-size: 17px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.table2Style {
+    background-color: #253544;
+    width: 41rem;
+    padding: 30px;
+    border-radius: 15px;
+}
+.dataLanes2 {
+    height: 40px; 
+    padding-left: 30px; 
+    padding-right: 30px;
+    background-color: #dfe5e9;
+    border-bottom: 2px #0000001a solid;
+}
+.dataLanes2Header {
+    height: 40px; 
+    padding-left: 30px; 
+    padding-right: 30px;
+    background-color: #8295a5;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
