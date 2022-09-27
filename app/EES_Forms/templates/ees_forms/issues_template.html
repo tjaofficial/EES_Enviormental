@@ -1,10 +1,8 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list%}
-{% load static %}
-
-    <link href="{% static 'ees_forms/formA1_style.css' %}" rel="stylesheet">
-    
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/formA1_style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<body>
     <div style="padding-top: 30px;">
         <div style="padding-top: 25px; margin: auto;" class="card">
             {% if access_page == 'form' %}
@@ -127,4 +125,5 @@
             {% endif %}
         </div>
     </div>
+</body>
 {% endblock %}

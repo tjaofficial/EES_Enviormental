@@ -178,8 +178,14 @@ def search_forms_view(request, access_page):
 @lock
 def issues_view(request, form_name, form_date, access_page):
     unlock = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    client = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
         unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     print(str(form_date))
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -230,6 +236,9 @@ def issues_view(request, form_name, form_date, access_page):
                     picker = entry
                     form = issues_form()
                     link = ''
+                    if client:
+                        entry.viewed = True
+                        entry.save()
     elif access_page == 'edit':
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
@@ -297,7 +306,7 @@ def issues_view(request, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms')
     return render(request, "ees_forms/issues_template.html", {
-        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock
+        'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "admin": admin
     })
 
 @lock

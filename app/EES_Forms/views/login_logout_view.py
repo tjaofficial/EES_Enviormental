@@ -34,6 +34,9 @@ def login_view(request):
                 return redirect(batt_prof) 
         else:
             return redirect('no_registration')
+        access = True
+    else:
+        access = False
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -64,7 +67,7 @@ def login_view(request):
 
     return render(request, "ees_forms/ees_login.html", {
         "now": now,
-        "login_error": login_error
+        "login_error": login_error, 'access': access
     })
 
 def valid_account_logout(request):

@@ -1,4 +1,5 @@
-{% extends "admin/admin_layout.html" %}{% block list%}
+{% extends "admin/admin_layout.html" %}{% block list%}{% load static %}
+<script defer src="{% static 'ees_forms/script/clientDash.js' %}"></script>
 <div>
     <div class="grid-dashboard">
         <div id="progress" class="card skinny">
@@ -311,7 +312,7 @@
                 <ul>
                 {% for x in ca_forms %}
                     <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                        <li class="sideAlign">
+                        <li class="sideAlign" style="{% if not x.viewed %} background-color: #ebee17;{% else %} background-color: white;{% endif %}">
                             <div class="ca_indie">
                                 <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
                                     {{ x.date }} - {{ x.form }}
@@ -399,14 +400,18 @@
                 <input type="radio" id="tab_5day" name="myTabs" checked="checked">
                 <label for="tab_5day">Due 5 Days</label>
                 <div class="tab">
-                {% for x in od_recent %}
-                    Oven #{{ x.0 }}
-                    Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
-                {% endfor %}
+                    <div class='dataPT'>
+                    {% for x in od_recent %}
+                        <div class='dataStyle'>
+                            Oven #{{ x.0 }}
+                            Due:&nbsp;&nbsp;{{ x.2 }}<br>
+                        </div>
+                    {% endfor %}
+                    </div>
                 </div>
                 <input type="radio" id="tab_10day" name="myTabs">
                 <label for="tab_10day">Due 10 Days</label>
-                <div class="tab">
+                <div class="tab" style='display:none;'>
                     {% for x in od_10 %}
                     Oven #{{ x.0 }}
                     Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
@@ -414,7 +419,7 @@
                 </div>
                 <input type="radio" id="tab_30day" name="myTabs">
                 <label for="tab_30day">Due 30 Days</label>
-                <div class="tab">
+                <div class="tab" style='display:none;'>
                     {% for x in od_30 %}
                     Oven #{{ x.0 }}
                     Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
