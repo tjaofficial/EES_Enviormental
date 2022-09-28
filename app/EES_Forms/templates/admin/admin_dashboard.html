@@ -1,8 +1,6 @@
-{% extends "admin/admin_layout.html" %}
-
-{% block list%}
+{% extends "admin/admin_layout.html" %}{% block list%}
 <body>
-    <div class="grid-dashboard">
+    <div class="grid-dashboard" style="overflow: scroll;">
         <div id="progress" class="card skinny">
             <div class="grid-sliders progress_bars_whole">
                 <div class="skillBar progress_bar_div">
@@ -401,14 +399,18 @@
                 <input type="radio" id="tab_5day" name="myTabs" checked="checked">
                 <label for="tab_5day">Due 5 Days</label>
                 <div class="tab">
-                {% for x in od_recent %}
-                    Oven #{{ x.0 }}
-                    Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
-                {% endfor %}
+                    <div class='dataPT'>
+                    {% for x in od_recent %}
+                        <div class='dataStyle'>
+                            Oven #{{ x.0 }}
+                            Due:&nbsp;&nbsp;{{ x.2 }}<br>
+                        </div>
+                    {% endfor %}
+                    </div>
                 </div>
                 <input type="radio" id="tab_10day" name="myTabs">
                 <label for="tab_10day">Due 10 Days</label>
-                <div class="tab">
+                <div class="tab" style='display:none;'>
                     {% for x in od_10 %}
                     Oven #{{ x.0 }}
                     Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
@@ -416,7 +418,7 @@
                 </div>
                 <input type="radio" id="tab_30day" name="myTabs">
                 <label for="tab_30day">Due 30 Days</label>
-                <div class="tab">
+                <div class="tab" style='display:none;'>
                     {% for x in od_30 %}
                     Oven #{{ x.0 }}
                     Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
