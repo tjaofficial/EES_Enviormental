@@ -28,13 +28,6 @@ area_choices = (
     ('elk valley', 'Elk Valley'),
 )
 
-foreman_choices = (
-    ('Zajas', 'Zajas'),
-    ('Folding', 'Folding'),
-    ('Cooper', 'Cooper'),
-    ('Rice', 'Rice')
-)
-
 crew_choices = (
     ('A', 'A'),
     ('B', 'B'),
@@ -431,7 +424,6 @@ class formA1_model(models.Model):
     )
     foreman = models.CharField(
         max_length=30,
-        choices=foreman_choices
     )
     start = models.TimeField(
         auto_now_add=False,
@@ -585,7 +577,6 @@ class formA2_model(models.Model):
     )
     foreman = models.CharField(
         max_length=30,
-        choices=foreman_choices
     )
     p_start = models.TimeField(
         auto_now_add=False,
@@ -661,8 +652,7 @@ class formA3_model(models.Model):
         choices=crew_choices
     )
     foreman = models.CharField(
-        max_length=30,
-        choices=foreman_choices
+        max_length=30
     )
     om_start = models.TimeField(
         auto_now_add=False,
@@ -735,8 +725,7 @@ class formA4_model(models.Model):
         choices=crew_choices
     )
     foreman = models.CharField(
-        max_length=30,
-        choices=foreman_choices
+        max_length=30
     )
     main_start = models.TimeField(
         auto_now_add=False,
@@ -2105,8 +2094,7 @@ class formE_model(models.Model):
         choices=crew_choices
     )
     foreman = models.CharField(
-        max_length=30,
-        choices=foreman_choices
+        max_length=30
     )
     start_time = models.TimeField(
         auto_now_add=False,
