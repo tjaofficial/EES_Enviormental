@@ -21,7 +21,6 @@ def formB(request, selector):
     freq = False
     if 2 < today.month < 11:
         freq = True
-    
     week_start_dates = formB_model.objects.all().order_by('-week_start')
     # last submitted monday
 

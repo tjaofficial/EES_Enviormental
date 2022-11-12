@@ -1,0 +1,239 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <title>Form '' | Date | PDF</title>
+        <style>
+            #boxTitle{
+                font-size: 30px;
+            }
+            #boxa1{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 150px;
+                max-width: 150px;
+                height: 35px;
+            }
+            #boxa2{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 80px;
+                max-width: 80px;
+                height: 35px;
+            }
+            #boxa3{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 300px;
+                max-width: 300px;
+                height: 35px;
+            }
+            #boxa13{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 150px;
+                max-width: 150px;
+                height: 35px;
+            }
+            .issue_boxes{ border: 1px solid black; 
+                font-size: 20px;
+            }
+            #issues{
+                width: 1000px;  
+            }
+            #person_notified{
+            }
+            #datetime {
+                width: 203px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="paperSize">
+            <div>
+                <div style="width: fit-content; margin: auto; margin-bottom: 100px">
+                    {% csrf_token %}
+                    <div class="card" id="card_fitter">
+                    <div class="paper_fitter" style="padding: 3rem">
+                        <table style="border-collapse: collapse; margin: auto">
+                        <tr>
+                            <th id="boxTitle" colspan="6" style="text-align: center">
+                            Method 303 Charging - Form (A-1)
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th colspan="6" style="text-align: center">
+                            Facility Name: EES Coke Battery LLC
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">
+                            Inspectors Name: &nbsp; &nbsp; {{ specificForm.observer }} &nbsp;
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp; &nbsp;
+                            &nbsp; {{ specificForm.date }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">
+                            Battery No. 5 &nbsp; Crew: &nbsp; &nbsp; {{ specificForm.crew }}
+                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Battery Foreman:
+                            &nbsp; &nbsp;{{ specificForm.foreman }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="6">
+                            Start Time:{{ specificForm.start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                            &nbsp; End Time:{{ specificForm.stop }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px"></td>
+                        </tr>
+                        <tr>
+                            <td id="boxa2">Charge Number</td>
+                            <td id="boxa2">Oven Number</td>
+                            <td id="boxa1">Start Time</td>
+                            <td id="boxa1">Stop Time</td>
+                            <td id="boxa1">Visible Emissions (sec)</td>
+                            <td id="boxa3">Comments</td>
+                        </tr>
+                        <tr>
+                            <td id="boxa2" style="text-align: center">1</td>
+                            <td id="boxa2">{{ readings.c1_no }}</td>
+                            <td id="boxa1">
+                            {{ readings.c1_start }}
+                            <span class="c1_popup_class" id="c1_timePopup"
+                                >Please Change Time</span
+                            >
+                            </td>
+                            <td id="boxa1">{{ readings.c1_stop }}</td>
+                            <td id="boxa1">{{ readings.c1_sec }}</td>
+                            <td id="boxa3">{{ readings.c1_comments }}</td>
+                        </tr>
+                        <tr>
+                            <td id="boxa2" style="text-align: center">2</td>
+                            <td id="boxa2">
+                            {{ readings.c2_no }}
+                            <span class="c_popup_oven_class" id="c2_popup_oven"
+                                >Please Change Oven No.</span
+                            >
+                            </td>
+                            <td id="boxa1">
+                            {{ readings.c2_start }}
+                            <span class="c1_popup_class" id="c2_timePopup"
+                                >Please Change Time</span
+                            >
+                            </td>
+                            <td id="boxa1">{{ readings.c2_stop }}</td>
+                            <td id="boxa1">{{ readings.c2_sec }}</td>
+                            <td id="boxa3">{{ readings.c2_comments }}</td>
+                        </tr>
+                        <tr>
+                            <td id="boxa2" style="text-align: center">3</td>
+                            <td id="boxa2">
+                            {{ readings.c3_no }}
+                            <span class="c_popup_oven_class" id="c3_popup_oven"
+                                >Please Change Oven No.</span
+                            >
+                            </td>
+                            <td id="boxa1">
+                            {{ readings.c3_start }}
+                            <span class="c1_popup_class" id="c3_timePopup"
+                                >Please Change Time</span
+                            >
+                            </td>
+                            <td id="boxa1">{{ readings.c3_stop }}</td>
+                            <td id="boxa1">{{ readings.c3_sec }}</td>
+                            <td id="boxa3">{{ readings.c3_comments }}</td>
+                        </tr>
+                        <tr>
+                            <td id="boxa2" style="text-align: center">4</td>
+                            <td id="boxa2">
+                            {{ readings.c4_no }}
+                            <span class="c_popup_oven_class" id="c4_popup_oven"
+                                >Please Change Oven No.</span
+                            >
+                            </td>
+                            <td id="boxa1">
+                            {{ readings.c4_start }}
+                            <span class="c1_popup_class" id="c4_timePopup"
+                                >Please Change Time</span
+                            >
+                            </td>
+                            <td id="boxa1">{{ readings.c4_stop }}</td>
+                            <td id="boxa1">{{ readings.c4_sec }}</td>
+                            <td id="boxa3">{{ readings.c4_comments }}</td>
+                        </tr>
+                        <tr>
+                            <td id="boxa2" style="text-align: center">5</td>
+                            <td id="boxa2">
+                            {{ readings.c5_no }}
+                            <span class="c_popup_oven_class" id="c5_popup_oven"
+                                >Please Change Oven No.</span
+                            >
+                            </td>
+                            <td id="boxa1">
+                            {{ readings.c5_start }}
+                            <span class="c1_popup_class" id="c5_timePopup"
+                                >Please Change Time</span
+                            >
+                            </td>
+                            <td id="boxa1">{{ readings.c5_stop }}</td>
+                            <td id="boxa1">{{ readings.c5_sec }}</td>
+                            <td id="boxa3">{{ readings.c5_comments }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td id="boxa1">Total(Seconds):</td>
+                            <td id="boxa1">{{readings.total_seconds}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="height: 40px">LC #: {{ readings.larry_car }}</td>
+                        </tr>
+                        <tr style="font-size: 20px">
+                            <td>Comments:</td>
+                        </tr>
+                        <tr style="font-size: 20px; text-align: center">
+                            <td colspan="6">
+                            {{ readings.comments }}
+                            <span class="comment_skip_class" id="comment_skip_id"> </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 40px"></td>
+                        </tr>
+                        </table>
+                        {% if admin %} {% elif unlock %}
+                        <br /><br /><br />
+                        <input type="submit" value="Submit Form" class="submit_button" />
+                        {% endif %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

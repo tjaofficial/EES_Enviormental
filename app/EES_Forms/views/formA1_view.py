@@ -1,8 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
 from ..forms import formA1_form, formA1_readings_form
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+import xhtml2pdf.pisa as pisa
+from django.contrib.staticfiles import finders
+
+
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -167,3 +174,28 @@ def formA1(request, selector):
     return render(request, "Daily/formA1.html", {
         'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock
     })
+
+def render_pdf_view(request, *args, **kwargs):
+    form = kwargs.get('form')
+    date = kwargs.get('date')
+    specificForm = get_object_or_404(formA1_model, date=date)
+    
+    template_path = 'formPDF.html'
+    context = {'specificForm': specificForm}
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    # if download:
+    # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # if display:
+    response['Content-Disposition'] = 'filename="form-date.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
