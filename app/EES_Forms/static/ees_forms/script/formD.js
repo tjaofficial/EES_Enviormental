@@ -63,3 +63,106 @@ function if_one_then_all(){
 }
 
 if_one_then_all()
+
+
+document.getElementById("tab1Cont").addEventListener("click", changeTab1);
+document.getElementById("tab2Cont").addEventListener("click", changeTab2);
+document.getElementById("tab3Cont").addEventListener("click", changeTab3);
+document.getElementById("tab4Cont").addEventListener("click", changeTab4);
+document.getElementById("tab5Cont").addEventListener("click", changeTab5);
+
+function changeTab1() {
+    document.getElementById('truck1Card').style.display = 'block';
+    document.getElementById('truck2Card').style.display = 'none';
+    document.getElementById('truck3Card').style.display = 'none';
+    document.getElementById('truck4Card').style.display = 'none';
+    document.getElementById('truck5Card').style.display = 'none';
+
+    document.getElementById('tab1Cont').style.backgroundColor = '#dfe5e9';
+    document.getElementById('tab1Cont').style.color = 'black';
+
+    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab2Cont').style.color = 'white';
+    document.getElementById('tab3Cont').style.color = 'white';
+    document.getElementById('tab4Cont').style.color = 'white';
+    document.getElementById('tab5Cont').style.color = 'white';
+}
+function changeTab2() {
+    document.getElementById('truck2Card').style.display = 'block';
+    document.getElementById('truck1Card').style.display = 'none';
+    document.getElementById('truck3Card').style.display = 'none';
+    document.getElementById('truck4Card').style.display = 'none';
+    document.getElementById('truck5Card').style.display = 'none';
+
+    document.getElementById('tab2Cont').style.backgroundColor = '#dfe5e9';
+    document.getElementById('tab2Cont').style.color = 'black';
+    
+    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab1Cont').style.color = 'white';
+    document.getElementById('tab3Cont').style.color = 'white';
+    document.getElementById('tab4Cont').style.color = 'white';
+    document.getElementById('tab5Cont').style.color = 'white';
+}
+function changeTab3() {
+    document.getElementById('truck3Card').style.display = 'block';
+    document.getElementById('truck1Card').style.display = 'none';
+    document.getElementById('truck2Card').style.display = 'none';
+    document.getElementById('truck4Card').style.display = 'none';
+    document.getElementById('truck5Card').style.display = 'none';
+
+    document.getElementById('tab3Cont').style.backgroundColor = '#dfe5e9';
+    document.getElementById('tab3Cont').style.color = 'black';
+    
+    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab1Cont').style.color = 'white';
+    document.getElementById('tab2Cont').style.color = 'white';
+    document.getElementById('tab4Cont').style.color = 'white';
+    document.getElementById('tab5Cont').style.color = 'white';
+}
+function changeTab4() {
+    document.getElementById('truck4Card').style.display = 'block';
+    document.getElementById('truck1Card').style.display = 'none';
+    document.getElementById('truck2Card').style.display = 'none';
+    document.getElementById('truck3Card').style.display = 'none';
+    document.getElementById('truck5Card').style.display = 'none';
+
+    document.getElementById('tab4Cont').style.backgroundColor = '#dfe5e9';
+    document.getElementById('tab4Cont').style.color = 'black';
+    
+    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab1Cont').style.color = 'white';
+    document.getElementById('tab2Cont').style.color = 'white';
+    document.getElementById('tab3Cont').style.color = 'white';
+    document.getElementById('tab5Cont').style.color = 'white';
+}
+function changeTab5() {
+    document.getElementById('truck5Card').style.display = 'block';
+    document.getElementById('truck1Card').style.display = 'none';
+    document.getElementById('truck2Card').style.display = 'none';
+    document.getElementById('truck3Card').style.display = 'none';
+    document.getElementById('truck4Card').style.display = 'none';
+
+    document.getElementById('tab5Cont').style.backgroundColor = '#dfe5e9';
+    document.getElementById('tab5Cont').style.color = 'black';
+    
+    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
+    document.getElementById('tab1Cont').style.color = 'white';
+    document.getElementById('tab2Cont').style.color = 'white';
+    document.getElementById('tab3Cont').style.color = 'white';
+    document.getElementById('tab4Cont').style.color = 'white';
+}

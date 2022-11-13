@@ -47,7 +47,381 @@
                         <td style="height: 25px;" ></td>
                     </tr>
                 </table>
-                <div id="alltrucks">
+                <div id="truckCard">
+                    <div id="truckTabs">
+                        <div class="tabContainer topLeftCont" id='tab1Cont'>
+                            Truck 1
+                        </div>
+                        <div class="tabContainer" id='tab2Cont'>
+                            Truck 2
+                        </div>
+                        <div class="tabContainer" id='tab3Cont'>
+                            Truck 3
+                        </div>
+                        <div class="tabContainer" id='tab4Cont'>
+                            Truck 4
+                        </div>
+                        <div class="tabContainer topRightCont" id='tab5Cont'>
+                            Truck 5
+                        </div>
+                    </div>
+                    <div class="truckForm" id='truck1Card'>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th class="inputHeader">
+                                    Observer:
+                                </th>
+                                <td>
+                                    {{ empty.observer1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Truck ID
+                                </th>
+                                <td>
+                                    {{ empty.truck_id1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Date: 
+                                </th>
+                                <td>
+                                    {{ empty.date1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Time:
+                                </th>
+                                <td>
+                                    {{ empty.time1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Contents:
+                                </th>
+                                <td>
+                                    {{ empty.contents1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    6" or greater freeboard?
+                                </th>
+                                <td>
+                                    {{ empty.freeboard1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    If NO, is material adequately wetted and stable?
+                                </th>
+                                <td>
+                                    {{ empty.wetted1 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="inputHeaderComment">
+                                    Comments:
+                                </th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td colspan="2">
+                                    {{ empty.comments1 }}
+                                    <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="truckForm" id='truck2Card'>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th class="inputHeader">
+                                    Observer:
+                                </th>
+                                <td>
+                                    {{ empty.observer2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Truck ID
+                                </th>
+                                <td>
+                                    {{ empty.truck_id2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Date: 
+                                </th>
+                                <td>
+                                    {{ empty.date2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Time:
+                                </th>
+                                <td>
+                                    {{ empty.time2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Contents:
+                                </th>
+                                <td>
+                                    {{ empty.contents2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    6" or greater freeboard?
+                                </th>
+                                <td>
+                                    {{ empty.freeboard2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    If NO, is material adequately wetted and stable?
+                                </th>
+                                <td>
+                                    {{ empty.wetted2 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="inputHeaderComment">
+                                    Comments:
+                                </th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td colspan="2">
+                                    {{ empty.comments2 }}
+                                    <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="truckForm" id='truck3Card'>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th class="inputHeader">
+                                    Observer:
+                                </th>
+                                <td>
+                                    {{ empty.observer3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Truck ID
+                                </th>
+                                <td>
+                                    {{ empty.truck_id3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Date: 
+                                </th>
+                                <td>
+                                    {{ empty.date3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Time:
+                                </th>
+                                <td>
+                                    {{ empty.time3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Contents:
+                                </th>
+                                <td>
+                                    {{ empty.contents3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    6" or greater freeboard?
+                                </th>
+                                <td>
+                                    {{ empty.freeboard3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    If NO, is material adequately wetted and stable?
+                                </th>
+                                <td>
+                                    {{ empty.wetted3 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="inputHeaderComment">
+                                    Comments:
+                                </th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td colspan="2">
+                                    {{ empty.comments3 }}
+                                    <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="truckForm" id='truck4Card'>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th class="inputHeader">
+                                    Observer:
+                                </th>
+                                <td>
+                                    {{ empty.observer4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Truck ID
+                                </th>
+                                <td>
+                                    {{ empty.truck_id4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Date: 
+                                </th>
+                                <td>
+                                    {{ empty.date4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Time:
+                                </th>
+                                <td>
+                                    {{ empty.time4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Contents:
+                                </th>
+                                <td>
+                                    {{ empty.contents4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    6" or greater freeboard?
+                                </th>
+                                <td>
+                                    {{ empty.freeboard4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    If NO, is material adequately wetted and stable?
+                                </th>
+                                <td>
+                                    {{ empty.wetted4 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="inputHeaderComment">
+                                    Comments:
+                                </th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td colspan="2">
+                                    {{ empty.comments4 }}
+                                    <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="truckForm" id='truck5Card'>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th class="inputHeader">
+                                    Observer:
+                                </th>
+                                <td>
+                                    {{ empty.observer5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Truck ID
+                                </th>
+                                <td>
+                                    {{ empty.truck_id5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Date: 
+                                </th>
+                                <td>
+                                    {{ empty.date5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Time:
+                                </th>
+                                <td>
+                                    {{ empty.time5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    Contents:
+                                </th>
+                                <td>
+                                    {{ empty.contents5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    6" or greater freeboard?
+                                </th>
+                                <td>
+                                    {{ empty.freeboard5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="inputHeader">
+                                    If NO, is material adequately wetted and stable?
+                                </th>
+                                <td>
+                                    {{ empty.wetted5 }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="inputHeaderComment">
+                                    Comments:
+                                </th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td colspan="2">
+                                    {{ empty.comments5 }}
+                                    <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- <div id="alltrucks">
                     <div id="formCspace">
                         <table style="border-collapse: collapse;">
                             <tr style="border: 3px solid black;" >
@@ -505,7 +879,7 @@
                         </tr>
                     </table>
                     </div>
-                </div>
+                </div> -->
                 <br><br><br>
                 <input type="submit" value="Submit Form" class="submit_button">
             </div>

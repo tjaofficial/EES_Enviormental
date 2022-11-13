@@ -50,3 +50,92 @@
 #formCspace{
     padding: 10px;
 }
+#truckCard{
+    background-color: #dfe5e9;
+    /* height: 48rem; */
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 2px 2px 17px 0px #8080804a;
+    border: black solid 2px;
+    /* width: 742px; */
+}
+#truckTabs{
+    background-color: rgb(55, 55, 55);
+    height: 3.5rem;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    display: flex;
+    /* width: 738px; */
+}
+.tabContainer{
+    background-color: #6c7d88;
+    /* height: 3.5rem;*/
+    width: 9rem;
+    text-align: center;
+    padding: 19px 0;
+    font-weight: bolder;
+}.topLeftCont{
+    border-top-left-radius: 13px;
+}
+.topRightCont{
+    border-top-right-radius: 13px;
+}
+.tabContainer:hover{
+    background-color: white;
+    /* height: 3.5rem;*/
+    display: inline-block;
+    width: 9rem;
+    text-align: center;
+    padding: 19px 0;
+    font-weight: bolder;
+}
+.truckForm{
+    padding: 3rem 0;
+}
+.inputHeader{
+    width: 20rem;
+    text-align: right;
+    font-size: 1.5rem;
+    padding: 7px 0;
+    padding-right: 6rem;
+}
+.inputHeaderComment{
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 7px 0;
+    width: 20rem;
+}
+#truck1Card{
+    /* display: none; */
+}
+#truck2Card{
+    display: none;
+}
+#truck3Card{
+    display: none;
+}
+#truck4Card{
+    display: none;
+}
+#truck5Card{
+    display: none;
+}
+#tab1Cont{
+    background-color: #dfe5e9;
+}
+#tab2Cont{
+    background-color: #6c7d88;
+    color: white;
+}
+#tab3Cont{
+    background-color: #6c7d88;
+    color: white;
+}
+#tab4Cont{
+    background-color: #6c7d88;
+    color: white;
+}
+#tab5Cont{
+    background-color: #6c7d88;
+    color: white;
+}
