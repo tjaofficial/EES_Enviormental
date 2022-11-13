@@ -240,13 +240,24 @@ def spill_kits(request, access_page):
                 
             if form.is_valid():
                 form.save()
-
+                new_latest_form = spill_kits_model.objects.filter(month=month_name)[0]
+                filled_out = True
                 done = Forms.objects.filter(form='Spill Kits')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                for items in new_latest_form.whatever().values():
+                    print(items)
+                    if items is None or items == '':
+                        filled_out = False  # -change this back to false
+                        break
 
-                return redirect('IncompleteForms')
+                if filled_out:    
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
+                else:
+                    done.submitted = False
+                    done.save()
+                    
+            return redirect('IncompleteForms')
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

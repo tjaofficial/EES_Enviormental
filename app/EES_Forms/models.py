@@ -4319,7 +4319,7 @@ class Event(models.Model):
 
 class spill_kits_model(models.Model):
     observer = models.CharField(
-        max_length=30
+        max_length=150
     )
     date = models.DateField(
         auto_now_add=False,
@@ -4330,492 +4330,906 @@ class spill_kits_model(models.Model):
     )
     sk1_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk1_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk1_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk1_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk1_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk2_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk2_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk2_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk2_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk2_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk3_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk3_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk3_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk3_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk3_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk4_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk4_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk4_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk4_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk4_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk5_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk5_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk5_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk5_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk5_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk6_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk6_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk6_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk6_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk6_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk6_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk6_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk6_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk6_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk6_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk7_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk7_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk7_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk7_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk7_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk8_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk8_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk8_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk8_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk8_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk9_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk9_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk9_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk9_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk9_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk10_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk10_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk10_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk10_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk10_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk11_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk11_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk11_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk11_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk11_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk12_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk12_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk12_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk12_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk12_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk13_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk13_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk13_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk13_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk13_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk14_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk14_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk14_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk14_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk14_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk15_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk15_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk15_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk15_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk15_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk16_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk16_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk16_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk16_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk16_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk17_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk17_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk17_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk17_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk17_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk18_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk18_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk18_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk18_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk18_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk19_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk19_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk19_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk19_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk19_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk20_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk20_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk20_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk20_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk20_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     sk21_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk21_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     sk21_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     sk21_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     sk21_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     skut23_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut23_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     skut23_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut23_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     skut23_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     skut24_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut24_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     skut24_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut24_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     skut24_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     skut25_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut25_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     skut25_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut25_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     skut25_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     skut26_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut26_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     skut26_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut26_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     skut26_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     skut27_tag_on = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut27_serial = models.CharField(
-        max_length=7
+        max_length=7,
+        blank=True,
+        null=True,
     )
     skut27_complete = models.CharField(
         max_length=3,
-        choices=yes_no_choices
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
     )
     skut27_report = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True,
     )
     skut27_comment = models.CharField(
-        max_length=100
+        max_length=100,
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
         return str(self.month)
+    
+    def whatever(self):
+        return{
+            'observer': self.observer,
+            'date': self.date,
+            'month': self.month,
+            'sk1_tag_on': self.sk1_tag_on,
+            'sk2_tag_on': self.sk2_tag_on,
+            'sk3_tag_on': self.sk3_tag_on,
+            'sk4_tag_on': self.sk4_tag_on,
+            'sk5_tag_on': self.sk5_tag_on,
+            'sk6_tag_on': self.sk6_tag_on,
+            'sk7_tag_on': self.sk7_tag_on,
+            'sk8_tag_on': self.sk8_tag_on,
+            'sk9_tag_on': self.sk9_tag_on,
+            'sk10_tag_on': self.sk10_tag_on,
+            'sk11_tag_on': self.sk11_tag_on,
+            'sk12_tag_on': self.sk12_tag_on,
+            'sk13_tag_on': self.sk13_tag_on,
+            'sk14_tag_on': self.sk14_tag_on,
+            'sk15_tag_on': self.sk15_tag_on,
+            'sk16_tag_on': self.sk16_tag_on,
+            'sk17_tag_on': self.sk17_tag_on,
+            'sk18_tag_on': self.sk18_tag_on,
+            'sk19_tag_on': self.sk19_tag_on,
+            'sk20_tag_on': self.sk20_tag_on,
+            'sk21_tag_on': self.sk21_tag_on,
+            'skut23_tag_on': self.skut23_tag_on,
+            'skut24_tag_on': self.skut24_tag_on,
+            'skut25_tag_on': self.skut25_tag_on,
+            'skut26_tag_on': self.skut26_tag_on,
+            'skut27_tag_on': self.skut27_tag_on,
+            'sk1_serial' : self.sk1_serial,
+            'sk2_serial' : self.sk2_serial,
+            'sk3_serial' : self.sk3_serial,
+            'sk4_serial' : self.sk4_serial,
+            'sk5_serial' : self.sk5_serial,
+            'sk6_serial' : self.sk6_serial,
+            'sk7_serial' : self.sk7_serial,
+            'sk8_serial' : self.sk8_serial,
+            'sk9_serial' : self.sk9_serial,
+            'sk10_serial' : self.sk10_serial,
+            'sk11_serial' : self.sk11_serial,
+            'sk12_serial' : self.sk12_serial,
+            'sk13_serial' : self.sk13_serial,
+            'sk14_serial' : self.sk14_serial,
+            'sk15_serial' : self.sk15_serial,
+            'sk16_serial' : self.sk16_serial,
+            'sk17_serial' : self.sk17_serial,
+            'sk18_serial' : self.sk18_serial,
+            'sk19_serial' : self.sk19_serial,
+            'sk20_serial' : self.sk20_serial,
+            'sk21_serial' : self.sk21_serial,
+            
+            'skut23_serial' : self.skut23_serial,
+            'skut24_serial' : self.skut24_serial,
+            'skut25_serial' : self.skut25_serial,
+            'skut26_serial' : self.skut26_serial,
+            'skut27_serial' : self.skut27_serial,
+            
+            'sk1_complete' : self.sk1_complete,
+            'sk2_complete' : self.sk2_complete,
+            'sk3_complete' : self.sk3_complete,
+            'sk4_complete' : self.sk4_complete,
+            'sk5_complete' : self.sk5_complete,
+            'sk6_complete' : self.sk6_complete,
+            'sk7_complete' : self.sk7_complete,
+            'sk8_complete' : self.sk8_complete,
+            'sk9_complete' : self.sk9_complete,
+            'sk10_complete' : self.sk10_complete,
+            'sk11_complete' : self.sk11_complete,
+            'sk12_complete' : self.sk12_complete,
+            'sk13_complete' : self.sk13_complete,
+            'sk14_complete' : self.sk14_complete,
+            'sk15_complete' : self.sk15_complete,
+            'sk16_complete' : self.sk16_complete,
+            'sk17_complete' : self.sk17_complete,
+            'sk18_complete' : self.sk18_complete,
+            'sk19_complete' : self.sk19_complete,
+            'sk20_complete' : self.sk20_complete,
+            'sk21_complete' : self.sk21_complete,
+            
+            'skut23_complete' : self.skut23_complete,
+            'skut24_complete' : self.skut24_complete,
+            'skut25_complete' : self.skut25_complete,
+            'skut26_complete' : self.skut26_complete,
+            'skut27_complete' : self.skut27_complete,
+            
+            'sk1_report' : self.sk1_report,
+            'sk2_report' : self.sk2_report,
+            'sk3_report' : self.sk3_report,
+            'sk4_report' : self.sk4_report,
+            'sk5_report' : self.sk5_report,
+            'sk6_report' : self.sk6_report,
+            'sk7_report' : self.sk7_report,
+            'sk8_report' : self.sk8_report,
+            'sk9_report' : self.sk9_report,
+            'sk10_report' : self.sk10_report,
+            'sk11_report' : self.sk11_report,
+            'sk12_report' : self.sk12_report,
+            'sk13_report' : self.sk13_report,
+            'sk14_report' : self.sk14_report,
+            'sk15_report' : self.sk15_report,
+            'sk16_report' : self.sk16_report,
+            'sk17_report' : self.sk17_report,
+            'sk18_report' : self.sk18_report,
+            'sk19_report' : self.sk19_report,
+            'sk20_report' : self.sk20_report,
+            'sk21_report' : self.sk21_report,
+            
+            'skut23_report' : self.skut23_report,
+            'skut24_report' : self.skut24_report,
+            'skut25_report' : self.skut25_report,
+            'skut26_report' : self.skut26_report,
+            'skut27_report' : self.skut27_report,
+            
+            'sk1_comment' : self.sk1_comment,
+            'sk2_comment' : self.sk2_comment,
+            'sk3_comment' : self.sk3_comment,
+            'sk4_comment' : self.sk4_comment,
+            'sk5_comment' : self.sk5_comment,
+            'sk6_comment' : self.sk6_comment,
+            'sk7_comment' : self.sk7_comment,
+            'sk8_comment' : self.sk8_comment,
+            'sk9_comment' : self.sk9_comment,
+            'sk10_comment' : self.sk10_comment,
+            'sk11_comment' : self.sk11_comment,
+            'sk12_comment' : self.sk12_comment,
+            'sk13_comment' : self.sk13_comment,
+            'sk14_comment' : self.sk14_comment,
+            'sk15_comment' : self.sk15_comment,
+            'sk16_comment' : self.sk16_comment,
+            'sk17_comment' : self.sk17_comment,
+            'sk18_comment' : self.sk18_comment,
+            'sk19_comment' : self.sk19_comment,
+            'sk20_comment' : self.sk20_comment,
+            'sk21_comment' : self.sk21_comment,
+            
+            'skut23_comment' : self.skut23_comment,
+            'skut24_comment' : self.skut24_comment,
+            'skut25_comment' : self.skut25_comment,
+            'skut26_comment' : self.skut26_comment,
+            'skut27_comment' : self.skut27_comment,
+        }
 
 class sop_model(models.Model):
     name = models.CharField(
