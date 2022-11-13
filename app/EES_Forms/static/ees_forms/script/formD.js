@@ -166,3 +166,24 @@ function changeTab5() {
     document.getElementById('tab3Cont').style.color = 'white';
     document.getElementById('tab4Cont').style.color = 'white';
 }
+
+
+function truckFinished(){
+    list = [1,2,3,4,5];
+    for (let item=0; item < list.length; item++){
+        const tNumber = list[item];
+        const truck_id = document.getElementById('id_truck_id' + tNumber).value;
+        const date = document.getElementById('id_date' + tNumber).value;
+        const time = document.getElementById('id_time' + tNumber).value;
+        const contents = document.getElementById('id_contents' + tNumber).value;
+        const freeboard = document.getElementById('id_freeboard' + tNumber).value;
+        const wetted = document.getElementById('id_wetted' + tNumber).value;
+        const comments = document.getElementById('id_comments' + tNumber).value;
+
+        if (truck_id && date && time && contents && freeboard && wetted && comments) {
+            document.getElementById('tab' + tNumber + 'Cont').style.textDecoration = 'line-through'; 
+        }
+    }
+}
+
+truckFinished();
