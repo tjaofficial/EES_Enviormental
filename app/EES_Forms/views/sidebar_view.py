@@ -204,14 +204,39 @@ def issues_view(request, form_name, form_date, access_page):
                     link = x.frequency + '/' + x.link + '/' + access_page + '/' + day
                 else:
                     link = x.frequency + '/' + x.link + '/' + access_page
-        initial_data = {
+                    
+                    
+        existing = False
+        picker = 'n/a'
+        
+        if issues_model.objects.count() != 0:
+            org = issues_model.objects.all().order_by('-date')
+            database_form = org[0]
+            if todays_log.date_save == database_form.date:
+                if database_form.form == form_name:
+                    existing = True
+        if existing:
+            initial_data = {
+                'form': database_form.form,
+                'issues': database_form.issues,
+                'notified': database_form.notified,
+                'time': database_form.time,
+                'date': database_form.date,
+                'cor_action': database_form.cor_action
+            }
+        else:             
+            initial_data = {
                 'date': todays_log.date_save,
                 'form': form_name
             }
-        picker = ''
+            picker = ''
         form = issues_form(initial=initial_data)
+        
         if request.method == "POST":
-            data = issues_form(request.POST)
+            if existing:
+                data = issues_form(request.POST, instance=database_form)
+            else:
+                data = issues_form(request.POST)
             if data.is_valid():
                 data.save()
 
