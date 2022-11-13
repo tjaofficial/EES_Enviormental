@@ -97,11 +97,13 @@ function remove_salt() {
 function display_check() {
     const storage_start = document.getElementById('id_sto_start_time').value;
     const salt_start = document.getElementById('id_salt_start_time').value;
+    const storage_stop = document.getElementById('id_sto_stop_time').value;
+    const salt_stop = document.getElementById('id_salt_stop_time').value;
 
-    if (storage_start) {
+    if (storage_start || storage_stop) {
         add_areas();
     }
-    if (salt_start) {
+    if (salt_start || salt_stop) {
         add_salts();
     }
 }
