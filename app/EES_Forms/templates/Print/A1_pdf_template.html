@@ -1,0 +1,229 @@
+{% load static %}
+<html>
+    <head>
+        <!-- <style>
+            #boxTitle{
+                font-size: 30px;
+                text-align: center;
+            }
+            .headerInfo{
+                text-align: center;
+                font-size: 15px;
+            }
+            #boxa1{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 150px;
+                max-width: 150px;
+                height: 35px;
+            }
+            #boxa2{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 80px;
+                max-width: 80px;
+                height: 35px;
+            }
+            #boxa3{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 300px;
+                max-width: 300px;
+                height: 35px;
+            }
+            #boxa13{
+                align-content: center;
+                text-align: center;
+                border: 1px solid black;
+                min-width: 150px;
+                max-width: 150px;
+                height: 35px;
+            }
+
+            .issue_boxes{ border: 1px solid black; 
+                font-size: 20px;
+            }
+            #issues{
+                width: 1000px;  
+            }
+            #person_notified{
+            }
+            #datetime {
+                width: 203px;
+            }
+            .card {
+                font-family: Arial, Helvetica, sans-serif;
+                width: 600px;
+                background-color: white;
+                box-shadow: #0000007d 4px 7px 12px 3px;
+                margin: 2rem;
+                padding: 0 1rem;
+                border-radius: 1rem;
+              }
+            #card_fitter{
+                width: fit-content; 
+                margin: auto;
+                margin-top: 1rem;
+                margin-bottom: 2rem;
+            }
+            .paper_fitter{
+                padding-top: 1.5rem; 
+                padding-bottom: 1rem;
+            }
+        </style> -->
+    </head>
+    <body>
+        <!-- <div>
+            <div id="boxTitle">
+                Method 303 Charging - Form (A-1)
+            </div>
+            <div class='headerInfo'>
+                Facility Name: EES Coke Battery LLC
+            </div>
+            <div class='headerInfo'>
+                Inspectors Name: &nbsp; &nbsp; {{ data.observer }} &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp; &nbsp;
+                &nbsp; {{ data.date }}
+            </div>
+            <div style="width: fit-content; margin: auto; margin-bottom: 100px">
+                <div class="card" id="card_fitter">
+                  <div class="paper_fitter" style="padding: 3rem">
+                        <table style="border-collapse: collapse; margin: auto; width: 100%;">
+                            <tr>
+                            
+                            <th></th>
+                            </tr>
+                            <tr>
+                            
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                            <tr>
+                            <td style="height: 25px"></td>
+                            </tr>
+                            <tr>
+                            
+                            </tr>
+                            <tr>
+                            <td style="height: 25px"></td>
+                            </tr>
+                            <tr>
+                            <th colspan="12">
+                                Battery No. 5 &nbsp; Crew: &nbsp; &nbsp; {{ data.crew }}
+                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Battery Foreman:
+                                &nbsp; &nbsp;{{ data.foreman }}
+                            </th>
+                            </tr>
+                            <tr>
+                            <td style="height: 25px"></td>
+                            </tr>
+                            <tr>
+                            <th colspan="12">
+                                Start Time:{{ data.start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                &nbsp; End Time:{{ data.stop }}
+                            </th>
+                            </tr>
+                            <tr>
+                            <td style="height: 25px"></td>
+                            </tr>
+                            <tr>
+                            <td id="boxa2">Charge Number</td>
+                            <td id="boxa2">Oven Number</td>
+                            <td id="boxa1">Start Time</td>
+                            <td id="boxa1">Stop Time</td>
+                            <td id="boxa1">Visible Emissions (sec)</td>
+                            <td id="boxa3">Comments</td>
+                            </tr>
+                            <tr>
+                            <td id="boxa2" style="text-align: center">1</td>
+                            <td id="boxa2">{{ readings.c1_no }}</td>
+                            <td id="boxa1">
+                                {{ readings.c1_start }}
+                            </td>
+                            <td id="boxa1">{{ readings.c1_stop }}</td>
+                            <td id="boxa1">{{ readings.c1_sec }}</td>
+                            <td id="boxa3">{{ readings.c1_comments }}</td>
+                            </tr>
+                            <tr>
+                            <td id="boxa2" style="text-align: center">2</td>
+                            <td id="boxa2">
+                                {{ readings.c2_no }}
+                            </td>
+                            <td id="boxa1">
+                                {{ readings.c2_start }}
+                            </td>
+                            <td id="boxa1">{{ readings.c2_stop }}</td>
+                            <td id="boxa1">{{ readings.c2_sec }}</td>
+                            <td id="boxa3">{{ readings.c2_comments }}</td>
+                            </tr>
+                            <tr>
+                            <td id="boxa2" style="text-align: center">3</td>
+                            <td id="boxa2">
+                                {{ readings.c3_no }}
+                            </td>
+                            <td id="boxa1">
+                                {{ readings.c3_start }}
+                            </td>
+                            <td id="boxa1">{{ readings.c3_stop }}</td>
+                            <td id="boxa1">{{ readings.c3_sec }}</td>
+                            <td id="boxa3">{{ readings.c3_comments }}</td>
+                            </tr>
+                            <tr>
+                            <td id="boxa2" style="text-align: center">4</td>
+                            <td id="boxa2">
+                                {{ readings.c4_no }}
+                            </td>
+                            <td id="boxa1">
+                                {{ readings.c4_start }}
+                            </td>
+                            <td id="boxa1">{{ readings.c4_stop }}</td>
+                            <td id="boxa1">{{ readings.c4_sec }}</td>
+                            <td id="boxa3">{{ readings.c4_comments }}</td>
+                            </tr>
+                            <tr>
+                            <td id="boxa2" style="text-align: center">5</td>
+                            <td id="boxa2">
+                                {{ readings.c5_no }}
+                            </td>
+                            <td id="boxa1">
+                                {{ readings.c5_start }}
+                            </td>
+                            <td id="boxa1">{{ readings.c5_stop }}</td>
+                            <td id="boxa1">{{ readings.c5_sec }}</td>
+                            <td id="boxa3">{{ readings.c5_comments }}</td>
+                            </tr>
+                            <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td id="boxa1">Total(Seconds):</td>
+                            <td id="boxa1">{{readings.total_seconds}}</td>
+                            <td></td>
+                            </tr>
+                            <tr>
+                            <td style="height: 40px">LC #: {{ readings.larry_car }}</td>
+                            </tr>
+                            <tr style="font-size: 20px">
+                            <td>Comments:</td>
+                            </tr>
+                            <tr style="font-size: 20px; text-align: center">
+                            <td colspan="12">
+                                {{ readings.comments }}
+                                <span class="comment_skip_class" id="comment_skip_id"> </span>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td style="height: 40px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </body>
+</html>

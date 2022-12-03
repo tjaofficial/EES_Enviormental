@@ -1,14 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
+from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
 from ..forms import formA1_form, formA1_readings_form
-
-from django.http import HttpResponse
-from django.template.loader import get_template
-import xhtml2pdf.pisa as pisa
-from django.contrib.staticfiles import finders
-
+from django.conf import settings
+import os
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
 
 
 lock = login_required(login_url='Login')
@@ -175,27 +177,142 @@ def formA1(request, selector):
         'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock
     })
 
-def render_pdf_view(request, *args, **kwargs):
-    form = kwargs.get('form')
-    date = kwargs.get('date')
-    specificForm = get_object_or_404(formA1_model, date=date)
-    
-    template_path = 'formPDF.html'
-    context = {'specificForm': specificForm}
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    # if download:
-    # response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # if display:
-    response['Content-Disposition'] = 'filename="form-date.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
+def time_change(time):
+    hourNum = int(str(time)[0:2])
+    minNum = str(time)[3:5]
+    timeLabel = 'AM'
+    if hourNum > 12:
+        newHourNum = str(hourNum - 12)
+        timeLabel = 'PM'
+        newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+    elif hourNum == 00:
+        newHourNum = '12'
+        newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+    else:
+        newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
+    return newTime
+        
 
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-        html, dest=response)
-    # if error then show some funny view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
+def formA1_pdf(request, formDate):
+    org = formA1_model.objects.all().order_by('-date')
+    org2 = formA1_readings_model.objects.all().order_by('-form')
+    print (time_change('00:59:00'))
+    for x in org:
+        if str(x.date) == str(formDate):
+            database_model = x
+    data = database_model
+    for x in org2:
+        if str(x.form.date) == str(formDate):
+            database_model2 = x
+    readings = database_model2
+    print(str(data.start)[0:5])
+    styles = getSampleStyleSheet()
+    fileName = "Form_Print.pdf"
+    documentTitle = 'NewPrint'
+    title = 'Method 303 Charging - Form (A-1)'
+    subTitle = 'Facility Name: EES Coke Battery LLC'
+    inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+    batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
+    startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.stop) + '</para>', styles['Normal'])
+    
+    text1 = Paragraph(readings.c1_comments,
+              styles['Normal'])
+    text2 = Paragraph(readings.c2_comments,
+              styles['Normal'])
+    text3 = Paragraph(readings.c3_comments,
+              styles['Normal'])
+    text4 = Paragraph(readings.c4_comments,
+              styles['Normal'])
+    text5 = Paragraph(readings.c5_comments,
+              styles['Normal'])
+    comments = Paragraph('<b>Comments:</b>    ' + readings.comments,
+              styles['Normal'])
+    tableData = [
+        [title],
+        [subTitle],
+        [inspectorDate],
+        [batNumCrewForeman],
+        [startEnd],
+        ['', '', '', '', '', ''],
+        ['', Paragraph('<para align=center><b>Oven Number</b></para>', styles['Normal']), 'Start Time', 'Stop Time', Paragraph('<para align=center><b>Visible Emissions (sec)</b></para>',styles['Normal']), 'Comments'],
+        [1, readings.c1_no, time_change(readings.c1_start), time_change(readings.c1_stop), readings.c1_sec, text1],
+        [2, readings.c2_no, time_change(readings.c2_start), time_change(readings.c2_stop), readings.c2_sec, text2],
+        [3, readings.c3_no, time_change(readings.c3_start), time_change(readings.c3_stop), readings.c3_sec, text3],
+        [4, readings.c4_no, time_change(readings.c4_start), time_change(readings.c4_stop), readings.c4_sec, text4],
+        [5, readings.c5_no, time_change(readings.c5_start), time_change(readings.c5_stop), readings.c5_sec, text5],
+        ['', '', '', 'Total Seconds:', readings.total_seconds],
+        [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + readings.larry_car, styles['Normal'])],
+        [comments],
+    ]
+    
+    
+    pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch)
+    #pdf = canvas.Canvas(fileName)
+    
+    # pdf.setTitle(documentTitle)
+    
+    # pdf.setFont('Times-Bold', 25)
+    # pdf.drawCentredString(300, 774, title)
+    # pdf.setFont('Times-Bold', 18)
+    # pdf.drawCentredString(300, 750, subTitle)
+    
+    # pdf.setFont('Times-Roman', 13)
+    # pdf.drawCentredString(300, 720, inspector + date)
+    # pdf.setFont('Times-Roman', 13)
+    # pdf.drawCentredString(300, 702, batNum + crew + forman)
+    # pdf.setFont('Times-Roman', 13)
+    # pdf.drawCentredString(300, 684, start + end)
+    
+    table = Table(tableData, colWidths=(25,70,100,100,90,150))
+    
+    
+    style = TableStyle([
+        ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+        ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+        
+        ('VALIGN',(0,7),(-1,11),'MIDDLE'),
+        ('VALIGN',(0,6),(-1,6),'MIDDLE'),
+        ('FONT', (0,6), (-1,6), 'Helvetica-Bold'),
+        ('BACKGROUND', (0,6), (-1,6),'(.6,.7,.8)'),
+        #('BACKGROUND', (1,7), (1,7),'(.6,.7,.8)'),
+        ('BOX', (0,6), (-1,11), 1, colors.black),
+        ('BOX', (3,12), (4,12), 1, colors.black),
+        ('ALIGN', (0,0), (-1,4), 'CENTER'),
+        ('ALIGN', (0,6), (-1,6), 'CENTER'),
+        ('ALIGN', (0,7), (4,11), 'CENTER'),
+        ('ALIGN', (4,12), (4,12), 'CENTER'),
+        ('ALIGN', (3,12), (3,12), 'RIGHT'),
+        ('SPAN', (0,0), (-1,0)),
+        ('SPAN', (0,1), (-1,1)),
+        ('SPAN', (0,2), (-1,2)),
+        #('SPAN', (2,2), (3,2)),
+        #('SPAN', (4,2), (5,2)),
+        ('SPAN', (0,3), (-1,3)),
+        ('SPAN', (0,4), (-1,4)),
+        ('SPAN', (0,14), (-1,14)),
+        ('SPAN', (0,13), (-1,13)),
+        ('GRID',(0,6), (-1,11), 0.5,colors.grey),
+        ('BOTTOMPADDING',(0,1), (-1,1), 25),
+    ])
+    
+    table.setStyle(style)
+    
+    for i in range(7,12):
+        if i % 2 == 0:
+            bc = '(.9,.9,.9)'
+        else:
+            bc = colors.white
+        ts = TableStyle([
+            ('BACKGROUND', (0,i), (-1,i), bc),
+        ])
+        table.setStyle(ts)
+    
+    elems = []
+    elems.append(table)
+    pdf.build(elems)
+
+    return redirect('../../media/Print/' + fileName)
+
+    # return render(request, "Print/print_index.html", {
+    #     formDate: 'formDate'
+    # })

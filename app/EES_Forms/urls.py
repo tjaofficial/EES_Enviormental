@@ -69,7 +69,13 @@ urlpatterns = [
 
     path("c_dashboard", views.client_dashboard_view, name="c_dashboard"),
 
-    path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
+    # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
 
     # path("calendar", views.CalendarView.as_view(), name='calendar'),
+    
+    
+    # path('pdf_view', views.render_pdf_view, name="pdf_view"),
+    path('printIndex/<str:formDate>', views.formA1_pdf, name='printIndex'),
+    #path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
+    #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
 ]
