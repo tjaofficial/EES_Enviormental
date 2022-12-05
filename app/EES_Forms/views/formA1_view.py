@@ -11,6 +11,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
+from django.apps import apps
 
 
 lock = login_required(login_url='Login')
@@ -193,7 +194,8 @@ def time_change(time):
     return newTime
         
 
-def formA1_pdf(request, formDate):
+def formA1_pdf(request, formDate, formName):
+    #Model = apps.get_model('EES_Forms', 'form' + formName + '_model')
     org = formA1_model.objects.all().order_by('-date')
     org2 = formA1_readings_model.objects.all().order_by('-form')
     print (time_change('00:59:00'))
@@ -205,7 +207,7 @@ def formA1_pdf(request, formDate):
         if str(x.form.date) == str(formDate):
             database_model2 = x
     readings = database_model2
-    print(str(data.start)[0:5])
+
     styles = getSampleStyleSheet()
     fileName = "Form_Print.pdf"
     documentTitle = 'NewPrint'
@@ -245,23 +247,7 @@ def formA1_pdf(request, formDate):
         [comments],
     ]
     
-    
     pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch)
-    #pdf = canvas.Canvas(fileName)
-    
-    # pdf.setTitle(documentTitle)
-    
-    # pdf.setFont('Times-Bold', 25)
-    # pdf.drawCentredString(300, 774, title)
-    # pdf.setFont('Times-Bold', 18)
-    # pdf.drawCentredString(300, 750, subTitle)
-    
-    # pdf.setFont('Times-Roman', 13)
-    # pdf.drawCentredString(300, 720, inspector + date)
-    # pdf.setFont('Times-Roman', 13)
-    # pdf.drawCentredString(300, 702, batNum + crew + forman)
-    # pdf.setFont('Times-Roman', 13)
-    # pdf.drawCentredString(300, 684, start + end)
     
     table = Table(tableData, colWidths=(25,70,100,100,90,150))
     
@@ -311,8 +297,4 @@ def formA1_pdf(request, formDate):
     elems.append(table)
     pdf.build(elems)
 
-    return redirect('../../media/Print/' + fileName)
-
-    # return render(request, "Print/print_index.html", {
-    #     formDate: 'formDate'
-    # })
+    return redirect(settings.MEDIA_URL +'/Print/' + fileName)
