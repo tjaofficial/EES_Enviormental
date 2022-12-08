@@ -223,18 +223,75 @@ def formPDF(request, formDate, formName):
     #always the same on all A-forms
     inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
     
+    if formName == 'A1':
+        batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
+        startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.stop) + '</para>', styles['Normal'])
+        text1 = Paragraph(readings.c1_comments,
+                styles['Normal'])
+        text2 = Paragraph(readings.c2_comments,
+                styles['Normal'])
+        text3 = Paragraph(readings.c3_comments,
+                styles['Normal'])
+        text4 = Paragraph(readings.c4_comments,
+                styles['Normal'])
+        text5 = Paragraph(readings.c5_comments,
+                styles['Normal'])
+        comments = Paragraph('<b>Comments:</b>    ' + readings.comments,
+                styles['Normal'])
+        tableData = [
+                [title],
+                [subTitle],
+                [inspectorDate],
+                [batNumCrewForeman],
+                [startEnd],
+                ['', '', '', '', '', ''],
+                ['', Paragraph('<para align=center><b>Oven Number</b></para>', styles['Normal']), 'Start Time', 'Stop Time', Paragraph('<para align=center><b>Visible Emissions (sec)</b></para>',styles['Normal']), 'Comments'],
+                [1, readings.c1_no, time_change(readings.c1_start), time_change(readings.c1_stop), readings.c1_sec, text1],
+                [2, readings.c2_no, time_change(readings.c2_start), time_change(readings.c2_stop), readings.c2_sec, text2],
+                [3, readings.c3_no, time_change(readings.c3_start), time_change(readings.c3_stop), readings.c3_sec, text3],
+                [4, readings.c4_no, time_change(readings.c4_start), time_change(readings.c4_stop), readings.c4_sec, text4],
+                [5, readings.c5_no, time_change(readings.c5_start), time_change(readings.c5_stop), readings.c5_sec, text5],
+                ['', '', '', 'Total Seconds:', readings.total_seconds],
+                [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + readings.larry_car, styles['Normal'])],
+                [comments],
+            ]
+        tableColWidths = (25,70,100,100,90,150)
+        style = [
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('VALIGN',(0,7),(-1,11),'MIDDLE'),
+            ('VALIGN',(0,6),(-1,6),'MIDDLE'),
+            ('FONT', (0,6), (-1,6), 'Helvetica-Bold'),
+            ('BACKGROUND', (0,6), (-1,6),'(.6,.7,.8)'),
+            ('BOX', (0,6), (-1,11), 1, colors.black),
+            ('BOX', (3,12), (4,12), 1, colors.black),
+            ('ALIGN', (0,0), (-1,4), 'CENTER'),
+            ('ALIGN', (0,6), (-1,6), 'CENTER'),
+            ('ALIGN', (0,7), (4,11), 'CENTER'),
+            ('ALIGN', (4,12), (4,12), 'CENTER'),
+            ('ALIGN', (3,12), (3,12), 'RIGHT'),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('SPAN', (0,3), (-1,3)),
+            ('SPAN', (0,4), (-1,4)),
+            ('SPAN', (0,14), (-1,14)),
+            ('SPAN', (0,13), (-1,13)),
+            ('GRID',(0,6), (-1,11), 0.5,colors.grey),
+            ('BOTTOMPADDING',(0,1), (-1,1), 25),
+        ]
     if formName in ('A2', 'A3'):
-        if data.p_leak_data != '{}':
-            p_leaks = json.loads(data.p_leak_data)['data']
-        else:
-            p_leaks = ''
-        if data.c_leak_data != '{}':
-            c_leaks = json.loads(data.c_leak_data)['data']
-        else:
-            c_leaks = ''
         batOvenInop = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Total No. Ovens:</b>&#160;&#160;85&#160;&#160;&#160;&#160;&#160;<b>Total No. Inoperable Ovens:</b>&#160;&#160;' + str(data.inop_ovens) + '&#160;(' + str(data.inop_numbs) + ')'  + '</para>', styles['Normal'])
         crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
         if formName == 'A2':
+            if data.p_leak_data != '{}':
+                p_leaks = json.loads(data.p_leak_data)['data']
+            else:
+                p_leaks = ''
+            if data.c_leak_data != '{}':
+                c_leaks = json.loads(data.c_leak_data)['data']
+            else:
+                c_leaks = ''
             tableData = [
                 [title],
                 [subTitle],
@@ -256,13 +313,13 @@ def formPDF(request, formDate, formName):
                     tableData.insert(9,['', '', pleak['oven'], pleak['location'], pleak['zone'], '', '', '', '', '', '', ''],),
                 spaced = len(p_leaks) 
                 spacedP = len(p_leaks)
-                spacedC = len(p_leaks)
+                spacedC = 1
             elif c_leaks != '' and p_leaks == '':
                 for cleak in c_leaks:
                     tableData.insert(9,['', '', '', '', '', '', '', cleak['oven'], cleak['location'], cleak['zone'],'', '', '', ''],),
-                spaced = len(p_leaks)
-                spacedP = len(p_leaks)
-                spacedC = len(p_leaks)
+                spaced = len(c_leaks)
+                spacedP = 1
+                spacedC = len(c_leaks)
             elif p_leaks != '' and c_leaks != '' :
                 pLen = len(p_leaks)
                 cLen = len(c_leaks)
@@ -382,70 +439,183 @@ def formPDF(request, formDate, formName):
                 del style[20]
                 style.append(('BOX', (2,9), (4,8 + spacedP), 1, colors.black),)
                 style.append(('BOX', (7,9), (9,8 + spacedC), 1, colors.black),)
-    elif formName in ('A1'):
-        batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
-        startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.stop) + '</para>', styles['Normal'])
-        text1 = Paragraph(readings.c1_comments,
-                styles['Normal'])
-        text2 = Paragraph(readings.c2_comments,
-                styles['Normal'])
-        text3 = Paragraph(readings.c3_comments,
-                styles['Normal'])
-        text4 = Paragraph(readings.c4_comments,
-                styles['Normal'])
-        text5 = Paragraph(readings.c5_comments,
-                styles['Normal'])
-        comments = Paragraph('<b>Comments:</b>    ' + readings.comments,
-                styles['Normal'])
-        tableData = [
+        if formName == 'A3':
+            if data.om_leak_json != '{}':
+                om_leaks = json.loads(data.om_leak_json)['data']
+            else:
+                om_leaks = ''
+            if data.l_leak_json != '{}':
+                l_leaks = json.loads(data.l_leak_json)['data']
+            else:
+                l_leaks = ''
+            tableData = [
                 [title],
                 [subTitle],
                 [inspectorDate],
-                [batNumCrewForeman],
-                [startEnd],
-                ['', '', '', '', '', ''],
-                ['', Paragraph('<para align=center><b>Oven Number</b></para>', styles['Normal']), 'Start Time', 'Stop Time', Paragraph('<para align=center><b>Visible Emissions (sec)</b></para>',styles['Normal']), 'Comments'],
-                [1, readings.c1_no, time_change(readings.c1_start), time_change(readings.c1_stop), readings.c1_sec, text1],
-                [2, readings.c2_no, time_change(readings.c2_start), time_change(readings.c2_stop), readings.c2_sec, text2],
-                [3, readings.c3_no, time_change(readings.c3_start), time_change(readings.c3_stop), readings.c3_sec, text3],
-                [4, readings.c4_no, time_change(readings.c4_start), time_change(readings.c4_stop), readings.c4_sec, text4],
-                [5, readings.c5_no, time_change(readings.c5_start), time_change(readings.c5_stop), readings.c5_sec, text5],
-                ['', '', '', 'Total Seconds:', readings.total_seconds],
-                [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + readings.larry_car, styles['Normal'])],
-                [comments],
+                [batOvenInop],
+                [crewBat],
+                ['', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.om_start) + '</para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.l_start) + '</para>', styles['Normal']), '', ''],
+                ['', '', Paragraph('<para align=center><b>Stop Time:</b>&#160;&#160;' + time_change(data.om_stop) + '</para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Stop Time:</b>&#160;&#160;' + time_change(data.l_stop) + '</para>', styles['Normal']), '', ''],
+                ['', '','Oven', 'Location', '', '', '', 'Oven', 'Location', ''],
             ]
-        tableColWidths = (25,70,100,100,90,150)
-        style = [
-            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
-            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
-            ('VALIGN',(0,7),(-1,11),'MIDDLE'),
-            ('VALIGN',(0,6),(-1,6),'MIDDLE'),
-            ('FONT', (0,6), (-1,6), 'Helvetica-Bold'),
-            ('BACKGROUND', (0,6), (-1,6),'(.6,.7,.8)'),
-            ('BOX', (0,6), (-1,11), 1, colors.black),
-            ('BOX', (3,12), (4,12), 1, colors.black),
-            ('ALIGN', (0,0), (-1,4), 'CENTER'),
-            ('ALIGN', (0,6), (-1,6), 'CENTER'),
-            ('ALIGN', (0,7), (4,11), 'CENTER'),
-            ('ALIGN', (4,12), (4,12), 'CENTER'),
-            ('ALIGN', (3,12), (3,12), 'RIGHT'),
-            ('SPAN', (0,0), (-1,0)),
-            ('SPAN', (0,1), (-1,1)),
-            ('SPAN', (0,2), (-1,2)),
-            ('SPAN', (0,3), (-1,3)),
-            ('SPAN', (0,4), (-1,4)),
-            ('SPAN', (0,14), (-1,14)),
-            ('SPAN', (0,13), (-1,13)),
-            ('GRID',(0,6), (-1,11), 0.5,colors.grey),
-            ('BOTTOMPADDING',(0,1), (-1,1), 25),
-        ]
-    
+            
+            if om_leaks == '' and l_leaks == '':
+                tableData.insert(9,['', '', 'N/A', '', '', '', '', 'N/A', '', '', '', ''],)
+                spaced = 1
+                spacedOm = 1
+                spacedL = 1
+            elif om_leaks != '' and l_leaks != '' :
+                omLen = len(om_leaks)
+                lLen = len(l_leaks)
+                for x in range(omLen):
+                    text = ''
+                    for letters in om_leaks[x]['location']:
+                        text += letters + ','
+                    tableData.insert(9,['', '', om_leaks[x]['oven'], text, '', '', '', '', '', '', '', ''],)
+                if omLen < lLen:
+                    for rest in range(lLen - omLen):
+                        tableData.insert((9 + omLen),['', '', '', '', '', '', '', '', '', '', '', ''],)
+                    spaced = lLen
+                    spacedOm = omLen
+                    spacedL = lLen
+                else:
+                    spaced = omLen
+                    spacedOm = omLen
+                    spacedL = lLen
+                for y in range(lLen):
+                    textl = ''
+                    for letterL in l_leaks[y]['location']:
+                        textl += letterL + ','
+                    tableData[9 + y][7] = l_leaks[y]['oven']
+                    tableData[9 + y][8] = textl
+            elif om_leaks != '' and l_leaks == '':
+                for omleak in om_leaks:
+                    text = ''
+                    for letters in omleak['location']:
+                        text += letters + ','
+                    tableData.insert(9,['', '', omleak['oven'], text, '', '', '', '', '', '', '', ''],),
+                spaced = len(om_leaks) 
+                spacedOm = len(om_leaks)
+                spacedL = 1
+            elif l_leaks != '' and om_leaks == '':
+                for lleak in l_leaks:
+                    textl = ''
+                    for letterL in lleak['location']:
+                        textl += letterL + ','
+                    tableData.insert(9,['', '', '', '', '', '', '', lleak['oven'], textl, '','', '', '', ''],),
+                spaced = len(l_leaks)
+                spacedOm = 1
+                spacedL = len(l_leaks)
+        
+            tableInsert = [
+                ['', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', ''],
+                ['', '', '', str(data.om_traverse_time_min) + 'min ' + str(data.om_traverse_time_sec) + 'sec', '', '', '', '', str(data.l_traverse_time_min) + 'min ' + str(data.l_traverse_time_sec) + 'sec', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', Paragraph('<para align=left>D = Dampered Off<br/>C = Cap</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time: (Offtakes)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + data.om_allowed_traverse_time, '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(data.om_valid_run) + '</para>', styles['Normal']), ''],
+                ['', 'F = Flange', '', '', '', '', '', '', '', '', '', ''],
+                ['', Paragraph('<para align=left>S = Slip Joint<br/>B = Base</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time:<br/>(lids)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + data.l_allowed_traverse_time, '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(data.l_valid_run) + '</para>', styles['Normal']), ''],
+                ['', 'P = Piping', '', '', '', '', '', '', '', '', '', ''],
+                ['', 'O = Other', '', '', '', '', '', '', '', '', '', ''],
+                ['', 'MS = Mini Standpipe', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '                                    Pve X 100                ' + str(data.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
+                ['', 'Percent Leaking Lids = ---------------------- = ------------------------ = ' + str(data.l_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '          Povn(N - Ni) - Pno        4(85 - ' + str(data.inop_ovens) + ') - ' + str(data.l_not_observed), '', '', '', '', '', '', ''],
+                ['', '', '', '                                    Pve X 100                  ' + str(data.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
+                ['', 'Percent Leaking Offtakes = ---------------------- = ------------------------ = ' + str(data.om_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '           Povn(N - Ni) - Pno          4(85 - ' + str(data.inop_ovens) + ') - ' + str(data.om_not_observed), '', '', '', '', '', '', ''],
+                ['', 'Where: Ly = Leaking Doors Obsered, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + data.notes + '</para>', styles['Normal'])]
+            ]
+            for lines in tableInsert:
+                tableData.append(lines)
+                
+            style = [
+                #Top header and info
+                ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+                ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+                ('BOTTOMPADDING',(0,1), (-1,1), 25),
+                ('SPAN', (0,0), (-1,0)),
+                ('SPAN', (0,1), (-1,1)),
+                ('SPAN', (0,2), (-1,2)),
+                ('SPAN', (0,3), (-1,3)),
+                ('SPAN', (0,4), (-1,4)),
+                ('ALIGN', (0,0), (-1,4), 'CENTER'),
+                
+                #table header
+                ('ALIGN', (0,7), (-1,8), 'CENTER'),
+                ('SPAN', (2,6), (4,6)),
+                ('SPAN', (2,7), (4,7)),
+                ('SPAN', (7,6), (9,6)),
+                ('SPAN', (7,7), (9,7)),
+                ('SPAN', (3,8), (4,8)),
+                ('SPAN', (8,8), (9,8)),
+                ('BOX', (2,8), (4,8), 1, colors.black),
+                ('BOX', (7,8), (9,8), 1, colors.black),
+                ('BACKGROUND', (2,8), (4,8),'(.6,.7,.8)'),
+                ('BACKGROUND', (7,8), (9,8),'(.6,.7,.8)'),
+                
+                #table data
+                ('ALIGN', (0,9), (-1,8 + spaced), 'CENTER'),
+                ('BOX', (2,9), (4,8 + spacedOm), 1, colors.black),
+                ('BOX', (7,9), (9,8 + spacedL), 1, colors.black),
+                
+                #traverse time
+                ('ALIGN', (2,10 + spaced), (-1,11 + spaced), 'CENTER'),
+                ('SPAN', (2,10 + spaced), (4,10 + spaced)),
+                #('BACKGROUND', (2,10 + spaced), (4,10 + spaced),'(.6,.7,.8)'),
+                ('SPAN', (7,10 + spaced), (9,10 + spaced)),
+                
+                #bottom data
+                ('SPAN', (1,13 + spaced), (2, 13 + spaced)),
+                ('SPAN', (1,14 + spaced), (2, 14 + spaced)),
+                ('SPAN', (1,15 + spaced), (2, 15 + spaced)),
+                ('SPAN', (1,16 + spaced), (2, 16 + spaced)),
+                ('SPAN', (1,17 + spaced), (2, 17 + spaced)),
+                ('BOX', (1,13 + spaced), (2,18 + spaced), 1, colors.black),
+                
+                ('SPAN', (3,13 + spaced), (5, 13 + spaced)),
+                ('SPAN', (3,15 + spaced), (5, 15 + spaced)),
+                ('SPAN', (6,13 + spaced), (8, 13 + spaced)),
+                ('SPAN', (6,15 + spaced), (8, 15 + spaced)),
+                ('VALIGN', (6,13 + spaced), (8, 13 + spaced), 'MIDDLE'),
+                ('VALIGN', (6,15 + spaced), (8, 15 + spaced), 'MIDDLE'),
+                #('RIGHTPADDING',(6,13 + spaced), (6,13 + spaced), 75),
+                ('SPAN', (10,15 + spaced), (11, 15 + spaced)),
+                ('BOX', (10,15 + spaced), (11,15 + spaced), 1, colors.black),
+                ('SPAN', (10,13 + spaced), (11, 13 + spaced)),
+                ('BOX', (10,13 + spaced), (11,13 + spaced), 1, colors.black),
+                ('ALIGN', (10,13 + spaced), (11, 15 + spaced), 'CENTER'),
+                
+                ('SPAN', (1,23 + spaced), (10, 23 + spaced)),
+                ('ALIGN', (1,23 + spaced), (10, 23 + spaced), 'CENTER'),
+                ('SPAN', (1,20 + spaced), (10, 20 + spaced)),
+                ('ALIGN', (1,20 + spaced), (10, 20 + spaced), 'CENTER'),
+                ('SPAN', (1,25 + spaced), (10, 25 + spaced)),
+                ('ALIGN', (1,25 + spaced), (10, 25 + spaced), 'CENTER'),
+                ('SPAN', (1,27 + spaced), (10, 27 + spaced)),
+            ]
+            if om_leaks == '':
+                style.append(('SPAN', (2,9), (4,8 + spaced)),)
+            if l_leaks == '':
+                style.append(('SPAN', (7,9), (9,8 + spaced)),)
+                
+            if om_leaks != '' and l_leaks != '':
+                del style[21]
+                del style[22]
+                style.append(('BOX', (2,9), (4,8 + spacedOm), 1, colors.black),)
+                style.append(('BOX', (7,9), (9,8 + spacedL), 1, colors.black),)
+                for spot in range(spaced):
+                    style.append(('SPAN', (3,9 + spot), (4,9 + spot)))
+                    style.append(('SPAN', (8,9 + spot), (9,9 + spot)))
+
+            tableColWidths=(40,65,40,55,40,40,50,40,55,40,35,35)
+            
     pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch, title=documentTitle)
     
     table = Table(tableData, colWidths=tableColWidths)
-    
-    
-    #formStyles = {'A1':styleA1, 'A2':styleA2}
     
     style = TableStyle(style)
     
