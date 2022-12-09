@@ -7,7 +7,6 @@ from ..forms import formA4_form
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
-
 @lock
 def formA4(request, selector):
     formName = "A4"
@@ -92,7 +91,7 @@ def formA4(request, selector):
                 }
 
             data = formA4_form(initial=initial_data)
-
+            
         if request.method == "POST":
             if existing:
                 form = formA4_form(request.POST, instance=database_form)
@@ -100,7 +99,6 @@ def formA4(request, selector):
                 form = formA4_form(request.POST)
             if form.is_valid():
                 A = form.save()
-
                 if A.notes.lower() != 'no ve' or A.oven_leak_1:
                     finder = issues_model.objects.filter(date=A.date, form='A-4')
                     if finder:
@@ -122,5 +120,5 @@ def formA4(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA4.html", {
-        "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock,
+        'existing': existing, "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock,
     })

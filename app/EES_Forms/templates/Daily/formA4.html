@@ -112,7 +112,10 @@
                             </table>
 
                             <input id="pushSide" type="hidden" value="{}" data-resulttable="" />
-                            <table style='border-collapse: collapse;'>
+                            <table style='border-collapse: collapse; width: 100%;'>
+                              {% if existing %}
+                                  {% if not leak_JSON %}
+                                  {% else %}
                                 <tr>
                                     <th colspan="7" class='mainHeader'>
                                       PUSH SIDE COLLECTION MAIN - Leak Observation Detail
@@ -141,10 +144,41 @@
                                       By
                                     </th>
                                 </tr>
+                                {% endif %}
+                              {% else %}
+                                <tr>
+                                  <th colspan="7" class='mainHeader'>
+                                    PUSH SIDE COLLECTION MAIN - Leak Observation Detail
+                                  </th>
+                                </tr>
+                                <tr>
+                                    <th class='headerMiddle'>
+                                      Ovens
+                                    </th>
+                                    <th class='headerMiddle'>
+                                      Time
+                                    </th>
+                                    <th class='headerMiddle' style='width:235px;'>
+                                      Time/Date<br/>Temporarily<br/>sealed
+                                    </th>
+                                    <th class='headerMiddle'>
+                                      By
+                                    </th>
+                                    <th class='headerMiddle' style='width:235px;'>
+                                      Time/Date<br/>Final Repair<br/>Initiated
+                                    </th>
+                                    <th class='headerMiddle' style='width:235px;'>
+                                      Time/Date<br/>Final Repair<br/>Completed
+                                    </th>
+                                    <th class='headerMiddle'>
+                                      By
+                                    </th>
+                                </tr>
+                              {% endif %}
                               {% if existing %}
                                   {% if not leak_JSON %}
                                       <tr>
-                                          <td colspan="4" id="formE_box1">
+                                          <td colspan="7" id="formE_box1" style='border: 2px solid black;'>
                                               <center style='padding-top: 20px; padding-bottom: 20px;'>
                                                   No Leaks Found During Observation
                                               </center>
@@ -177,8 +211,9 @@
                                           </tr>
                                       {% endfor %}
                                   {% endif %}
-                              {% endif %}
+                              {% else %}
                                 <tbody id="pushSide_tableBody"></tbody>
+                              {% endif %}
                                 <tr>
                                     <td style="height: 40px"></td>
                                 </tr>
