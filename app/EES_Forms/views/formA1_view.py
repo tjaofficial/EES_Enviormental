@@ -280,7 +280,7 @@ def formPDF(request, formDate, formName):
             ('GRID',(0,6), (-1,11), 0.5,colors.grey),
             ('BOTTOMPADDING',(0,1), (-1,1), 25),
         ]
-    if formName in ('A2', 'A3'):
+    elif formName in ('A2', 'A3'):
         batOvenInop = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Total No. Ovens:</b>&#160;&#160;85&#160;&#160;&#160;&#160;&#160;<b>Total No. Inoperable Ovens:</b>&#160;&#160;' + str(data.inop_ovens) + '&#160;(' + str(data.inop_numbs) + ')'  + '</para>', styles['Normal'])
         crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
         if formName == 'A2':
@@ -612,7 +612,73 @@ def formPDF(request, formDate, formName):
                     style.append(('SPAN', (8,9 + spot), (9,9 + spot)))
 
             tableColWidths=(40,65,40,55,40,40,50,40,55,40,35,35)
+    elif formName == 'A4':
+        batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
+        startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.main_start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.main_stop) + '</para>', styles['Normal'])
+        tableData = [
+            [title],
+            [subTitle],
+            [inspectorDate],
+            [batNumCrewForeman],
+            [startEnd],
+            ['', '', '', '', '', '', '', ''],
+            ['', Paragraph('<para align=right><b>Colletions Main #1:</b></para>', styles['Normal']), '', '', data.main_1, '', '', ''],
+            ['', Paragraph('<para align=right><b>Colletions Main #2:</b></para>', styles['Normal']), '', '', data.main_2, '', '', ''],
+            ['', Paragraph('<para align=right><b>Colletions Main #3:</b></para>', styles['Normal']), '', '', data.main_3, '', '', ''],
+            ['', Paragraph('<para align=right><b>Colletions Main #4:</b></para>', styles['Normal']), '', '', data.main_4, '', '', ''],
+            ['', Paragraph('<para align=right><b>Suction Main Pressure:</b></para>', styles['Normal']), '', '', data.suction_main, '', '', ''],
+            ['', '', '', '', '', '', '', ''],
+            ['', 'PUSH SIDE COLLECTION MAIN - Leak Observation Detail', '', '', '', '', '', ''],
+        ]
+        tableColWidths = (120,70,70,70,70,70,70,70)
+        
+        if data.oven_leak_1:
+            tableData.append(['', 'Here is some information', '', '', '', '', '', ''],)
+            spaced = 1
+        else:
+            tableData.append(['', 'N/A', '', '', '', '', '', ''],)
+            spaced = 1
             
+        tableInsert = [
+            ['', '', '', '', '', '', '', ''],
+            ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + data.notes + '</para>', styles['Normal']), '', '', '', '', '', ''],
+        ]
+        for lines in tableInsert:
+            tableData.append(lines)
+            
+        
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,1), (-1,1), 25),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('SPAN', (0,3), (-1,3)),
+            ('SPAN', (0,4), (-1,4)),
+            ('ALIGN', (0,0), (-1,4), 'CENTER'),
+            
+            #pressures
+            ('SPAN', (1,6), (3,6)), ('SPAN', (4,6), (5,6)),
+            ('SPAN', (1,7), (3,7)), ('SPAN', (4,7), (5,7)),
+            ('SPAN', (1,8), (3,8)), ('SPAN', (4,8), (5,8)),
+            ('SPAN', (1,9), (3,9)), ('SPAN', (4,9), (5,9)),
+            ('SPAN', (1,10), (3,10)), ('SPAN', (4,10), (5,10)),
+            
+            #leaks
+            ('SPAN', (1,12), (5,12)),
+            ('SPAN', (1,13), (5,13)),
+            ('BOX', (1,12), (5,12), 1, colors.black),
+            ('BOX', (1,13), (5,13), 1, colors.black),
+            ('ALIGN', (1,12), (5,13), 'CENTER'),
+            ('BACKGROUND', (1,12), (5,12),'(.6,.7,.8)'),
+            
+            #notes
+            ('SPAN', (1,15), (5,15)),
+        ]
+        
+        
     pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch, title=documentTitle)
     
     table = Table(tableData, colWidths=tableColWidths)

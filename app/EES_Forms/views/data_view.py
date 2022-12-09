@@ -16,7 +16,9 @@ def pt_admin1_view(request):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-
+        
+    allForms = Forms.objects.all()
+        
     today = datetime.date.today()
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
@@ -127,7 +129,7 @@ def pt_admin1_view(request):
     od_recent = overdue_closest(all_ovens_EXP)
 
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens_EXP, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens_EXP, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 'allForms': allForms
     })
 
 

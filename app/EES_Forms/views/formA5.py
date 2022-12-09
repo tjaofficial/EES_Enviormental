@@ -90,7 +90,7 @@ def formA5(request, selector):
 
     if count_bp != 0:
         todays_log = daily_prof[0]
-        if selector != 'form':
+        if selector != 'form' and selector != 'new':
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
@@ -103,20 +103,23 @@ def formA5(request, selector):
             existing = True
             search = True
         elif len(org) > 0 and len(org2) > 0:
-            database_form = org[0]
-            database_form2 = org2[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if str(todays_log.date_save) == str(database_form.date):
-                        existing = True
+            if selector == 'new':
+                existing = False
+            else:
+                database_form = org[0]
+                database_form2 = org2[0]
+                if now.month == todays_log.date_save.month:
+                    if now.day == todays_log.date_save.day:
+                        if str(todays_log.date_save) == str(database_form.date):
+                            existing = True
+                    else:
+                        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+                        return redirect(batt_prof)
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                     return redirect(batt_prof)
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                return redirect(batt_prof)
 
         if search:
             database_form = ''
@@ -293,6 +296,8 @@ def formA5(request, selector):
                     'ambient_temp_start': weather['temperature'],
                     'humidity': weather['humidity'],
                 }
+                if selector == 'new':
+                    initial_data['date'] = ''
                 data = formA5_form(initial=initial_data)
                 profile_form = user_profile_form()
                 readings_form = formA5_readings_form()
@@ -371,10 +376,11 @@ def formA5(request, selector):
 
                     return redirect(issue_page)
 
-                done = Forms.objects.filter(form='A-5')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                if selector != 'new':
+                    done = Forms.objects.filter(form='A-5')[0]
+                    done.submitted = True
+                    done.date_submitted = todays_log.date_save
+                    done.save()
 
                 return redirect('IncompleteForms')
     else:
