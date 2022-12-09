@@ -123,26 +123,26 @@ function createHTMLString(dataJSON){
 
 function htmlLayout(empty, data){
     const htmlStr= `<tr>
-                        <th id="formA5_box1">
-                            <input type="number" value="${!empty && data.oven ? data.oven : ""}" data-resultKey="oven" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                        <th id="A4ovens">
+                            <input type="number" style="width:50px; text-align: center;" value="${!empty && data.oven ? data.oven : ""}" data-resultKey="oven" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
                         <th id="formA5_box1">
-                            <input type="time" value="${!empty && data.time ? data.time : ''}" data-resultKey="time" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                            <input type="time" style="width: 120px;" value="${!empty && data.time ? data.time : ''}" data-resultKey="time" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
                         <th id="formA5_box1">
-                            <input type="datetime-local" value="${!empty && data.tempSealed ? data.tempSealed : ''}" data-resultKey="tempSealed" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                            <input type="datetime-local" style="" value="${!empty && data.tempSealed ? data.tempSealed : ''}" data-resultKey="tempSealed" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
                         <th id="formA5_box1">
-                            <input type="text" value="${!empty && data.tempSealedBy ? data.tempSealedBy : ''}" data-resultKey="tempSealedBy" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                            <input type="text" style="width:120px; text-align: center;" value="${!empty && data.tempSealedBy ? data.tempSealedBy : ''}" data-resultKey="tempSealedBy" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
                         <th id="formA5_box1">
-                            <input type="datetime-local" value="${!empty && data.repairInit ? data.repairInit : ''}" data-resultKey="repairInit" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                            <input type="datetime-local" style="" value="${!empty && data.repairInit ? data.repairInit : ''}" data-resultKey="repairInit" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
                         <th id="formA5_box1">
-                            <input type="datetime-local" value="${!empty && data.repairComplete ? data.repairComplete : ''}" data-resultKey="repairComplete" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                            <input type="datetime-local" style="" value="${!empty && data.repairComplete ? data.repairComplete : ''}" data-resultKey="repairComplete" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
                         <th id="formA5_box1">
-                            <input type="text" value="${!empty && data.repairBy ? data.repairBy : ''}" data-resultKey="repairBy" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
+                            <input type="text" style="width:120px; text-align: center;" value="${!empty && data.repairBy ? data.repairBy : ''}" data-resultKey="repairBy" data-resultInput="${empty? -1: i}" data-targetinput="pushSide"/>
                         </th>
 
                     </tr>`;

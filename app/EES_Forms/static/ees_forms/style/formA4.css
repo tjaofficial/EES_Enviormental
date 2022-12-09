@@ -29,5 +29,24 @@
     text-align: center;
     border: 1px solid black;
     width: 150px;
-    height: 55px;
+    height: 35px;
+  }
+  .headerMiddle{
+    text-align: center;
+    border: 2px solid black;
+    min-width: 80px;
+  }
+  .mainHeader{
+    text-align: center;
+    border: 2px solid black;
+    padding: 5px 0 5px 0;
+  }
+  #A4ovens{
+    border: 1px solid black;
+    text-align: center;
+  }
+  .rowsMiddle{
+    text-align: center;
+    border: 2px solid black;
+    min-width: 80px;
   }

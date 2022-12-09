@@ -112,32 +112,32 @@
                             </table>
 
                             <input id="pushSide" type="hidden" value="{}" data-resulttable="" />
-                            <table>
+                            <table style='border-collapse: collapse;'>
                                 <tr>
-                                    <th colspan="7" style="text-align: center; border: 2px solid black">
+                                    <th colspan="7" class='mainHeader'>
                                       PUSH SIDE COLLECTION MAIN - Leak Observation Detail
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th style="text-align: center;border: 2px solid black; width: 150px;">
+                                    <th class='headerMiddle'>
                                       Ovens
                                     </th>
-                                    <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                    <th class='headerMiddle'>
                                       Time
                                     </th>
-                                    <th style="text-align: center; border: 2px solid black; width: 150px;">
-                                      Time/Date<br />Temporarily<br />sealed
+                                    <th class='headerMiddle' style='width:235px;'>
+                                      Time/Date<br/>Temporarily<br/>sealed
                                     </th>
-                                    <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                    <th class='headerMiddle'>
                                       By
                                     </th>
-                                    <th style="text-align: center; border: 2px solid black; width: 150px;">
-                                      Time/Date<br />Final Repair<br />Initiated
+                                    <th class='headerMiddle' style='width:235px;'>
+                                      Time/Date<br/>Final Repair<br/>Initiated
                                     </th>
-                                    <th style="text-align: center; border: 2px solid black; width: 150px;">
-                                      Time/Date<br />Final Repair<br />Completed
+                                    <th class='headerMiddle' style='width:235px;'>
+                                      Time/Date<br/>Final Repair<br/>Completed
                                     </th>
-                                    <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                    <th class='headerMiddle'>
                                       By
                                     </th>
                                 </tr>
@@ -153,25 +153,25 @@
                                   {% else %}
                                       {% for item in leak_JSON %}
                                           <tr>
-                                            <th style="text-align: center;border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.oven_leak_1 }}
                                             </th>
-                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.time_leak_1 }}
                                             </th>
-                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.date_temp_seal_leak_1 }}, {{ data.time_temp_seal_leak_1 }}
                                             </th>
-                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.temp_seal_by_leak_1 }}
                                             </th>
-                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.date_init_repair_leak_1 }}, {{ data.time_init_repair_leak_1 }}
                                             </th>
-                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.date_comp_repair_leak_1 }}{{ data.time_comp_repair_leak_1 }}
                                             </th>
-                                            <th style="text-align: center; border: 2px solid black; width: 150px;">
+                                            <th class='rowsMiddle'>
                                               {{ data.comp_by_leak_1 }}
                                             </th>
                                           </tr>
