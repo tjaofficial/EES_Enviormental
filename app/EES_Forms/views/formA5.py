@@ -11,6 +11,7 @@ import requests
 import PIL.Image as Image
 import io
 import base64
+import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -87,7 +88,9 @@ def formA5(request, selector):
             return 'NE'
         return 'N'
     wind_direction = toTextualDescription(degree)
-
+    weather['wind_direction'] = wind_direction
+    weather2 = json.dumps(weather)
+    
     if count_bp != 0:
         todays_log = daily_prof[0]
         if selector != 'form' and selector != 'new':
@@ -290,11 +293,11 @@ def formA5(request, selector):
                     'plume_opacity_determined_stop': "Above door machine hood",
                     'describe_background_start': "Skies",
                     'describe_background_stop': "Same",
-                    'sky_conditions': weather['description'],
-                    'wind_speed_start': weather['wind_speed'],
-                    'wind_direction': wind_direction,
-                    'ambient_temp_start': weather['temperature'],
-                    'humidity': weather['humidity'],
+                    #'sky_conditions': weather['description'],
+                    'wind_speed_stop': 'TDB',
+                    #'wind_direction': wind_direction,
+                    'ambient_temp_stop': 'TBD',
+                    #'humidity': weather['humidity'],
                 }
                 if selector == 'new':
                     initial_data['date'] = ''
@@ -310,15 +313,13 @@ def formA5(request, selector):
                 if not name:
                     name = _name.split(":")[-1]
                 return ContentFile(base64.b64decode(_img_str), name='FormA5Canvas/{}_A5Canvas.{}'.format(name, ext))
-
-
+            
             if existing:
                 form = formA5_form(request.POST, instance=database_form)
                 readings = formA5_readings_form(request.POST, instance=database_form2)
             else:
                 form = formA5_form(request.POST)
                 readings = formA5_readings_form(request.POST)
-
                 
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
@@ -326,10 +327,19 @@ def formA5(request, selector):
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
-                print(A.date);
+                print(A.date)
                 canvasPostData = request.POST["canvas"]
 
                 canvasPNG = base64_file(canvasPostData,str(todays_log.date_save))
+                if not existing:
+                    if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                        A.wind_speed_stop = 'same'
+                    else:
+                        A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                    if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                        A.wind_temp_stop = 'same'
+                    else:
+                        A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
 
                 if settings.USE_S3:
                     print("goes here")
@@ -346,7 +356,6 @@ def formA5(request, selector):
                     image_url = fs.url(filename)
                     A.canvasMediaFile = canvasPNG
                     exist_canvas = A.canvasMediaFile.url
-
                 A.save()
 
                 B.form = A
@@ -389,5 +398,5 @@ def formA5(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA5.html", {
-        "admin": admin, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
+        'weather': weather2, "admin": admin, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
     })

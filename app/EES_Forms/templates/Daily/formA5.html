@@ -23,7 +23,8 @@
     {% if admin %}{% else %}
     <script defer src="{% static 'ees_forms/script/formA5_sketch.js' %}"></script>
     {% endif %}
-    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+    <div id="formName" style="display: hidden;" data-form=""{{formName}}""></div>
+    <input id="weather" style="display: hidden;" value="{{weather}}"></div>
     <div id="paperSize">    
         <div>
             <a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% elif selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
@@ -121,7 +122,7 @@
                                         OPERATING MODE<br>{{ data.op_mode2 }}
                                      </td>
                                     <td id="boxa4" colspan="2" >
-                                        WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }} mph
+                                        WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }}mph
                                     </td>
                                     <td id="boxa4" colspan="1">
                                         WIND DIRECTION<br>{{ data.wind_direction }}
