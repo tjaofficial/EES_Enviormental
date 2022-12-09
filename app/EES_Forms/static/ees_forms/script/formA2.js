@@ -317,7 +317,7 @@ function pc_doors_not_observed() {
             for(i=parseInt(coke_from); i<=parseInt(coke_to); i++){
                 for(k=0; k<select_numbers.length; k++){
                     console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
-                    if(parseInt(i) === parseInt(inop_numbs)){
+                    if(parseInt(i) === parseInt(select_numbers[k])){
                         y += 1;
                         console.log("Coke Side has " + y + " Oven(s) the same.")
                     }
