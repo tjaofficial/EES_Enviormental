@@ -13,6 +13,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from django.apps import apps
+from django.core.exceptions import FieldError
 
 
 lock = login_required(login_url='Login')
@@ -198,22 +199,31 @@ def time_change(time):
 def formPDF(request, formDate, formName):
     if len(formName) > 1:
         reFormName = formName[0] + '-' + formName[1]
-    ModelForms = Forms.objects.filter(form=reFormName)[0]
+        ModelForms = Forms.objects.filter(form=reFormName)[0]
+    else:
+        ModelForms = Forms.objects.filter(form=formName)[0]
     print(ModelForms)
     mainModel = apps.get_model('EES_Forms', 'form' + formName + '_model')
-    org = mainModel.objects.all().order_by('-date')
-    for x in org:
-        if str(x.date) == str(formDate):
-            database_model = x
-    data = database_model
+    try:
+        org = mainModel.objects.all().order_by('-date')
+        for x in org:
+            if str(x.date) == str(formDate):
+                database_model = x
+        data = database_model
     
-    if formName in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
-        readingsModel = apps.get_model('EES_Forms', 'form' + formName + '_readings_model')
-        org2 = readingsModel.objects.all().order_by('-form')
-        for x in org2:
-            if str(x.form.date) == str(formDate):
-                database_model2 = x
-        readings = database_model2
+        if formName in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
+            readingsModel = apps.get_model('EES_Forms', 'form' + formName + '_readings_model')
+            org2 = readingsModel.objects.all().order_by('-form')
+            for x in org2:
+                if str(x.form.date) == str(formDate):
+                    database_model2 = x
+            readings = database_model2
+    except FieldError as e:
+        org = mainModel.objects.all().order_by('-week_start')
+        for r in org:
+            if str(r.week_start) == str(formDate):
+                database_model = r
+        data = database_model
 
     styles = getSampleStyleSheet()
     fileName = 'form' + formName + '_' + formDate + ".pdf"
@@ -677,7 +687,49 @@ def formPDF(request, formDate, formName):
             #notes
             ('SPAN', (1,15), (5,15)),
         ]
+    elif formName == 'A5':
+        title = ModelForms.header + ' Visible Emission Observation Form'
+        title2 = ModelForms.title + ' - Form (' + ModelForms.form + ')'
+        tableData = [
+            [title],
+            [title2],
+            [subTitle],
+            ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+        ]
+        tableColWidths = (20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20)
         
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('FONT', (0,2), (-1,2), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,2), (-1,2), 25),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
+        ]
+    elif formName == 'B':
+        title2 = ModelForms.title + ' - Form (' + ModelForms.form + ')'
+        tableData = [
+            [title],
+            [title2],
+            [subTitle],
+            ['', '', '', '', '', ''],
+        ]
+        tableColWidths = (20,20,20,20,20,20)
+        
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('FONT', (0,2), (-1,2), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,2), (-1,2), 25),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
+        ]
         
     pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch, title=documentTitle)
     
