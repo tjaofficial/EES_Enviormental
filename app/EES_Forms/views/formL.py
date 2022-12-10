@@ -37,7 +37,6 @@ def formL(request, access_page):
     # -----check if Daily Battery Profile
     if count_bp != 0:
         todays_log = daily_prof[0]
-        print('check 1')
         # -------check if access is for Form or Edit
         if access_page not in ('form', 'edit'):
             for x in week_start_dates:
@@ -47,7 +46,6 @@ def formL(request, access_page):
             empty_form = database_model
         # -----check if database is empty
         elif len(week_start_dates) > 0:
-            print('check 2')
             week_almost = week_start_dates[0]
             this_week_saturday = week_almost.week_start
             database = week_almost
@@ -56,7 +54,6 @@ def formL(request, access_page):
             home = []
             filled_in = False
             for x in formL_model.objects.all():
-                print(x)
                 ## print(last_saturday)
                 if x.week_start == last_saturday:
                     home.append((x.time_4, 4))
@@ -66,7 +63,6 @@ def formL(request, access_page):
                     home.append((x.time_0, 0))
                     home.append((x.time_6, 6))
                     home.append((x.time_5, 5))
-            print(home)
             for days in home:
                 if days[0]:
                     if days[1] == today_number:
@@ -77,14 +73,11 @@ def formL(request, access_page):
                 new_sunday = ''
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if access_page == 'form':
-                    print('check 3')
-                    print(filled_in)
                     if this_week_saturday == last_saturday:
                         existing = True
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
                 elif access_page == "edit":
                     if this_week_saturday == last_saturday:
-                        print('check 8')
                         existing = True
                         filled_in = False
             # ------check if today is a Saturday
@@ -108,7 +101,6 @@ def formL(request, access_page):
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if access_page == 'form':
                     sunday_last_sat = today - datetime.timedelta(days=1)
-                    print('BUT WE HERE THO')
                     if this_week_saturday == sunday_last_sat:
                         existing = True
                     else:
@@ -171,7 +163,6 @@ def formL(request, access_page):
                 'm_comments_6': database.m_comments_6,
             }
             if filled_in:
-                print('check 9')
                 empty_form = database
             else:
                 empty_form = formL_form(initial=initial_data)
@@ -208,15 +199,28 @@ def formL(request, access_page):
                     return redirect('../formH/formL')
 
                 B = []
+                print(last_saturday)
+                
                 for x in formL_model.objects.all():
-                    if x.week_start == last_saturday:
-                        B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4))
-                        B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3))
-                        B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2))
-                        B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1))
-                        B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0))
-                        B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6))
-                        B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5))
+                    if today_number not in {5,6}:
+                        if x.week_start == last_saturday:
+                            B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4))
+                            B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3))
+                            B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2))
+                            B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1))
+                            B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0))
+                            B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6))
+                            B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5))
+                    else:
+                        if x.week_start == todays_log.date_save - datetime.timedelta(days = (today_number - 5)):
+                            B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4))
+                            B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3))
+                            B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2))
+                            B.append((1, x.time_1, x.obser_1, x.vents_1, x.mixer_1, x.v_comments_1, x.m_comments_1))
+                            B.append((0, x.time_0, x.obser_0, x.vents_0, x.mixer_0, x.v_comments_0, x.m_comments_0))
+                            B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6))
+                            B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5))
+
                 for days in B:
                     if days[0] == today_number:
                         if days[1] and days[2] and days[3] and days[4] and days[5] and days[6]:
@@ -224,7 +228,6 @@ def formL(request, access_page):
                         else:
                             filled_in = False
                 if filled_in:
-                    print('chicken')
                     done = Forms.objects.filter(form='L')[0]
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
