@@ -99,12 +99,17 @@ function display_check() {
     const salt_start = document.getElementById('id_salt_start_time').value;
     const storage_stop = document.getElementById('id_sto_stop_time').value;
     const salt_stop = document.getElementById('id_salt_stop_time').value;
-
+    console.log(storage_start)
+    console.log(storage_stop)
     if (storage_start || storage_stop) {
         add_areas();
+    } else {
+        remove_area();
     }
     if (salt_start || salt_stop) {
         add_salts();
+    } else {
+        remove_salt();
     }
 }
 display_check();
