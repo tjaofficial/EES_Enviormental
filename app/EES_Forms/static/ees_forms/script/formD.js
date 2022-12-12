@@ -64,6 +64,25 @@ function if_one_then_all(){
 
 if_one_then_all()
 
+window.onload = function initialDisplay() {
+    for (number=1;number<6;number+=1){
+        const formTruck = document.getElementById('id_observer'+number).value;
+        if(!formTruck){
+            if (number == 1) {
+                changeTab1()
+            } else if (number == 2) {
+                changeTab2()
+            } else if (number == 3) {
+                changeTab3()
+            } else if (number == 4) {
+                changeTab4()
+            } else if (number == 5) {
+                changeTab5()
+            }
+            break;
+        }
+    }
+}
 
 document.getElementById("tab1Cont").addEventListener("click", changeTab1);
 document.getElementById("tab2Cont").addEventListener("click", changeTab2);
