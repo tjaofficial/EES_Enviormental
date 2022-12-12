@@ -231,7 +231,7 @@ def formPDF(request, formDate, formName):
     title = ModelForms.header + ' ' + ModelForms.title + ' - Form (' + ModelForms.form + ')'
     subTitle = 'Facility Name: EES Coke Battery LLC'
     #always the same on all A-forms
-    inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+    #inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
     
     if formName == 'A1':
         batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
@@ -732,7 +732,8 @@ def formPDF(request, formDate, formName):
         ]
         
     pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch, title=documentTitle)
-    
+    print(str(settings.MEDIA_URL))
+    print(str(settings.MEDIA_ROOT))
     table = Table(tableData, colWidths=tableColWidths)
     
     style = TableStyle(style)
@@ -753,4 +754,4 @@ def formPDF(request, formDate, formName):
     elems.append(table)
     pdf.build(elems)
 
-    return redirect(settings.MEDIA_URL +'Print/' + fileName)
+    return redirect(settings.MEDIA_URL + 'Print/' + fileName)
