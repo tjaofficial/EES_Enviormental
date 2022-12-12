@@ -753,4 +753,4 @@ def formPDF(request, formDate, formName):
     elems.append(table)
     pdf.build(elems)
 
-    return redirect(settings.MEDIA_URL +'/Print/' + fileName)
+    return redirect(settings.MEDIA_URL +'Print/' + fileName)
