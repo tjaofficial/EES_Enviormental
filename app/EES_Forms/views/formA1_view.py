@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
@@ -6,6 +6,9 @@ from ..forms import formA1_form, formA1_readings_form
 from django.conf import settings
 import os
 import json
+import io
+import boto3
+import requests
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph
 from reportlab.lib.pagesizes import letter
@@ -231,7 +234,10 @@ def formPDF(request, formDate, formName):
     title = ModelForms.header + ' ' + ModelForms.title + ' - Form (' + ModelForms.form + ')'
     subTitle = 'Facility Name: EES Coke Battery LLC'
     #always the same on all A-forms
-    #inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+    inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+    
+    #create a stream
+    stream = io.BytesIO()
     
     if formName == 'A1':
         batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
@@ -731,9 +737,8 @@ def formPDF(request, formDate, formName):
             ('ALIGN', (0,0), (-1,2), 'CENTER'),
         ]
         
-    pdf = SimpleDocTemplate(settings.MEDIA_ROOT + '/Print/' + fileName, pagesize=letter, topMargin=0.4*inch, title=documentTitle)
-    print(str(settings.MEDIA_URL))
-    print(str(settings.MEDIA_ROOT))
+    pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=0.4*inch, title=documentTitle)
+    #settings.MEDIA_ROOT + '/Print/' + fileName
     table = Table(tableData, colWidths=tableColWidths)
     
     style = TableStyle(style)
@@ -753,5 +758,25 @@ def formPDF(request, formDate, formName):
     elems = []
     elems.append(table)
     pdf.build(elems)
+    
+    # get buffer
+    stream.seek(0)
+    pdf_buffer = stream.getbuffer()
+    # bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+    # object_name = 'media/Print/'
+    
+    # s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+    #      aws_secret_access_key= settings.AWS_SECRET_ACCESS_KEY)
 
-    return redirect(settings.MEDIA_URL + 'Print/' + fileName)
+    # s3.Bucket(bucket_name).put_object(Key=object_name + fileName, Body=bytes(pdf_buffer))
+
+    # stream2 = io.BytesIO()
+    # s3.Object(bucket_name, object_name + fileName).download_fileobj(stream2)
+    # stream2.seek(0)
+    # pdf_buffer2 = stream2.getbuffer()
+    
+    #with open(settings.MEDIA_ROOT + '/penis/'+ fileName, 'ab') as file:
+    #    file.write(bytes(pdf_buffer2))
+    #    file.close()
+    response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
+    return response
