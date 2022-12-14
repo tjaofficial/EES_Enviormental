@@ -6,7 +6,8 @@ from .admin_view import admin_dashboard_view, register_view
 from .data_view import pt_admin1_view, pt_mth_input
 from .crud_sop_view import delete_sop_view, update_sop_view
 from .client_view import client_dashboard_view
-from .formA1_view import formA1, formPDF
+from .formA1_view import formA1
+from .print_form_view import form_PDF
 
 
 from .daily_battery_profile_view import *
