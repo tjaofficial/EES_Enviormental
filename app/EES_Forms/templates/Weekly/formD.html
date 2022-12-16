@@ -431,7 +431,7 @@
                         </table>
                     </div>
                 </div> 
-                {% if admin %} {% elif unlock %}
+                {% if admin or client %} {% elif unlock and not search %}
                 <br /><br /><br />
                 <input type="submit" value="Submit Form" class="submit_button" />
                 {% endif %}

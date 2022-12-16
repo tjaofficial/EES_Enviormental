@@ -196,5 +196,5 @@ def formC(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formC.html", {
-        "client": client, 'unlock': unlock, 'admin': admin, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName
+        "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName
     })

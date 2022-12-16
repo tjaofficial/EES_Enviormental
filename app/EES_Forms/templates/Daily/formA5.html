@@ -707,10 +707,9 @@
                             </a>
                             Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
                         </span>
-                        {% if unlock %}
+                        {% if admin or client %} {% elif unlock and not search %}
                         <br><br><br>
-                        <input type="submit" value="Submit Form" class="submit_button">
-                        {% else %}
+                        <input type="submit" value="Submit Form" class="submit_button" />
                         {% endif %}
                     </div>
                 </div>

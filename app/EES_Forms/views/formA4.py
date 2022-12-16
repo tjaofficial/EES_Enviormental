@@ -120,5 +120,5 @@ def formA4(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA4.html", {
-        'existing': existing, "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock,
+        "search": search, 'existing': existing, "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock,
     })

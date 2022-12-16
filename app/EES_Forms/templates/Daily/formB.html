@@ -277,8 +277,10 @@
                             <td colspan="6">Clear, Cloudy, Rain, Snow, and/or Excessive Wind.</td>
                         </tr>
                     </table>
+                    {% if admin or client %} {% elif unlock and not search %}
                     <br><br><br>
-                    <input type="submit" value="Submit Form" class="submit_button">
+                    <input type="submit" value="Submit Form" class="submit_button" />
+                    {% endif %}
                 </div>
             </div>
         </form>

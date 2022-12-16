@@ -155,5 +155,5 @@ def formD(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formD.html", {
-        "client": client, 'unlock': unlock, 'admin': admin, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName
+        "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName
     })

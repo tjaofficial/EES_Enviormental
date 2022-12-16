@@ -148,5 +148,5 @@ def formA2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {
-        "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json,
+        "search": search, "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json,
     })
