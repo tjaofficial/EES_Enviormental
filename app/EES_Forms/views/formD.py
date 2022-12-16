@@ -7,11 +7,20 @@ from ..forms import formD_form
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
-
 @lock
 def formD(request, selector):
     formName = "D"
     existing = False
+    unlock = False
+    client = False
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -26,10 +35,18 @@ def formD(request, selector):
 
     if count_bp != 0:
         todays_log = daily_prof[0]
-        if len(submitted_forms) > 0:
-            latest_form = submitted_forms[0]
-            print(latest_form.whatever().values())
-            starting_saturday = latest_form.week_start
+        if selector != 'form':
+            for x in submitted_forms:
+                if str(x.week_start) == str(selector):
+                    database_model = x
+            form = database_model
+            existing = True
+            search = True
+            unlock = False
+        elif len(submitted_forms) > 0:
+            database_form = submitted_forms[0]
+            #print(database_form.whatever().values())
+            starting_saturday = database_form.week_start
             if today.weekday() not in {5, 6}:
                 if starting_saturday == last_saturday:
                     existing = True
@@ -39,71 +56,77 @@ def formD(request, selector):
             elif starting_saturday == sunday:
                 existing = True
         print(existing)
-        if existing:
-            initial_data = {
-                'week_start': latest_form.week_start,
-                'week_end': latest_form.week_end,
-                'truck_id1': latest_form.truck_id1,
-                'date1': latest_form.date1,
-                'time1': latest_form.time1,
-                'contents1': latest_form.contents1,
-                'freeboard1': latest_form.freeboard1,
-                'wetted1': latest_form.wetted1,
-                'comments1': latest_form.comments1,
-                'truck_id2': latest_form.truck_id2,
-                'date2': latest_form.date2,
-                'time2': latest_form.time2,
-                'contents2': latest_form.contents2,
-                'freeboard2': latest_form.freeboard2,
-                'wetted2': latest_form.wetted2,
-                'comments2': latest_form.comments2,
-                'truck_id3': latest_form.truck_id3,
-                'date3': latest_form.date3,
-                'time3': latest_form.time3,
-                'contents3': latest_form.contents3,
-                'freeboard3': latest_form.freeboard3,
-                'wetted3': latest_form.wetted3,
-                'comments3': latest_form.comments3,
-                'truck_id4': latest_form.truck_id4,
-                'date4': latest_form.date4,
-                'time4': latest_form.time4,
-                'contents4': latest_form.contents4,
-                'freeboard4': latest_form.freeboard4,
-                'wetted4': latest_form.wetted4,
-                'comments4': latest_form.comments4,
-                'truck_id5': latest_form.truck_id5,
-                'date5': latest_form.date5,
-                'time5': latest_form.time5,
-                'contents5': latest_form.contents5,
-                'freeboard5': latest_form.freeboard5,
-                'wetted5': latest_form.wetted5,
-                'comments5': latest_form.comments5,
-                'observer1': latest_form.observer1,
-                'observer2': latest_form.observer2,
-                'observer3': latest_form.observer3,
-                'observer4': latest_form.observer4,
-                'observer5': latest_form.observer5
-            }
-        elif today.weekday() == 5:
-            initial_data = {
-                'week_start': today,
-                'week_end': today + datetime.timedelta(days=6)
-            }
-        elif today.weekday() == 6:
-            initial_data = {
-                'week_start': today - datetime.timedelta(days=1),
-                'week_end': today + datetime.timedelta(days=5)
-            }
+        if search:
+            database_form = ''
         else:
-            initial_data = {
-                'week_start': last_saturday,
-                'week_end': end_week
-            }
+            if existing:
+                initial_data = {
+                    'week_start': database_form.week_start,
+                    'week_end': database_form.week_end,
+                    'truck_id1': database_form.truck_id1,
+                    'date1': database_form.date1,
+                    'time1': database_form.time1,
+                    'contents1': database_form.contents1,
+                    'freeboard1': database_form.freeboard1,
+                    'wetted1': database_form.wetted1,
+                    'comments1': database_form.comments1,
+                    'truck_id2': database_form.truck_id2,
+                    'date2': database_form.date2,
+                    'time2': database_form.time2,
+                    'contents2': database_form.contents2,
+                    'freeboard2': database_form.freeboard2,
+                    'wetted2': database_form.wetted2,
+                    'comments2': database_form.comments2,
+                    'truck_id3': database_form.truck_id3,
+                    'date3': database_form.date3,
+                    'time3': database_form.time3,
+                    'contents3': database_form.contents3,
+                    'freeboard3': database_form.freeboard3,
+                    'wetted3': database_form.wetted3,
+                    'comments3': database_form.comments3,
+                    'truck_id4': database_form.truck_id4,
+                    'date4': database_form.date4,
+                    'time4': database_form.time4,
+                    'contents4': database_form.contents4,
+                    'freeboard4': database_form.freeboard4,
+                    'wetted4': database_form.wetted4,
+                    'comments4': database_form.comments4,
+                    'truck_id5': database_form.truck_id5,
+                    'date5': database_form.date5,
+                    'time5': database_form.time5,
+                    'contents5': database_form.contents5,
+                    'freeboard5': database_form.freeboard5,
+                    'wetted5': database_form.wetted5,
+                    'comments5': database_form.comments5,
+                    'observer1': database_form.observer1,
+                    'observer2': database_form.observer2,
+                    'observer3': database_form.observer3,
+                    'observer4': database_form.observer4,
+                    'observer5': database_form.observer5
+                }
+            else:
+                if today.weekday() == 5:
+                    initial_data = {
+                        'week_start': today,
+                        'week_end': today + datetime.timedelta(days=6)
+                    }
+                elif today.weekday() == 6:
+                    initial_data = {
+                        'week_start': today - datetime.timedelta(days=1),
+                        'week_end': today + datetime.timedelta(days=5)
+                    }
+                else:
+                    initial_data = {
+                        'week_start': last_saturday,
+                        'week_end': end_week
+                    }
+                form = formD_form()
 
-        empty_form = formD_form(initial=initial_data)
+            form = formD_form(initial=initial_data)
+        print(form.truck_id1)
         if request.method == "POST":
             if existing:
-                form = formD_form(request.POST, instance=latest_form)
+                form = formD_form(request.POST, instance=database_form)
             else:
                 form = formD_form(request.POST)
             A_valid = form.is_valid()
@@ -132,5 +155,5 @@ def formD(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formD.html", {
-        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'profile': profile, 'selector': selector, 'formName': formName
+        "client": client, 'unlock': unlock, 'admin': admin, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName
     })

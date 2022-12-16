@@ -814,7 +814,7 @@ class formA4_model(models.Model):
     def __str__(self):
         return str(self.date)
 
-
+# ----------------------------------------------------------------------FORM A5 - DATA---------------<
 class formA5_model(models.Model):
     date = models.DateField(
         auto_now_add=False,
@@ -871,9 +871,6 @@ class formA5_model(models.Model):
 
     def __str__(self):
         return str(self.date)
-
-# ----------------------------------------------------------------------FORM A5 - DATA---------------<
-
 
 class formA5_readings_model(models.Model):
     form = models.OneToOneField(
@@ -2077,9 +2074,8 @@ class formD_model(models.Model):
             'wetted5': self.wetted5,
             'comments5': self.comments5,
         }
+
 # ------------------------FORM E---------------<
-
-
 class formE_model(models.Model):
     observer = models.CharField(
         max_length=30
