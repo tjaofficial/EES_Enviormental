@@ -123,7 +123,6 @@ def formD(request, selector):
                 form = formD_form()
 
             form = formD_form(initial=initial_data)
-        print(form.truck_id1)
         if request.method == "POST":
             if existing:
                 form = formD_form(request.POST, instance=database_form)
