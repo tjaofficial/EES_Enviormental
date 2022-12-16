@@ -31,6 +31,12 @@ def time_change(time):
             newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
         return newTime
         
+def emptyInputs(input):
+    if not input:
+        this = 'N/A'
+        return this
+    else:
+        return input
 @lock
 def form_PDF(request, formDate, formName):
     if len(formName) > 1:
@@ -939,13 +945,118 @@ def form_PDF(request, formDate, formName):
             ]
             for styleTwo in styleInsertTwo:
                 style.append(styleTwo)
-    #elif formName == 'D':
-        
+    elif formName == 'D':
+        tableData = [
+            [title],
+            [subTitle],
+            ['', '', Paragraph('<para><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal']), '', '', ''],
+            ['Truck 1', '', '', '', '', ''],
+            [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(data.observer1) + '</para>', styles['Normal']), '', '', '', '', ''],
+            [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(data.truck_id1) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(data.contents1) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(data.date1)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(data.time1)) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(data.wetted1) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(data.freeboard1) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(data.comments1) + '</para>', styles['Normal']), '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['Truck 2', '', '', '', '', ''],
+            [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(data.observer2) + '</para>', styles['Normal']), '', '', '', '', ''],
+            [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(data.truck_id2) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(data.contents2) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(data.date2)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(data.time2)) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(data.wetted2) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(data.freeboard2) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(data.comments2) + '</para>', styles['Normal']), '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['Truck 3', '', '', '', '', ''],
+            [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(data.observer3) + '</para>', styles['Normal']), '', '', '', '', ''],
+            [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(data.truck_id3) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(data.contents3) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(data.date3)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(data.time3)) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(data.wetted3) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(data.freeboard3) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(data.comments3) + '</para>', styles['Normal']), '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['Truck 4', '', '', '', '', ''],
+            [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(data.observer4) + '</para>', styles['Normal']), '', '', '', '', ''],
+            [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(data.truck_id4) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(data.contents4) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(data.date4)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(data.time4)) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(data.wetted4) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(data.freeboard4) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(data.comments4) + '</para>', styles['Normal']), '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['Truck 5', '', '', '', '', ''],
+            [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(data.observer5) + '</para>', styles['Normal']), '', '', '', '', ''],
+            [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(data.truck_id5) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(data.contents5) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(data.date5)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(data.time5)) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(data.wetted5) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(data.freeboard5) + '</para>', styles['Normal']), '', ''],
+            [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(data.comments5) + '</para>', styles['Normal']), '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+        ]
+        tableColWidths = (80,90,100,90,80,80)
+
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,2), (-1,2), 25),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (2,2), (3,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
+            
+            #truck 1
+            ('FONT', (0,3), (0,3), 'Times-Bold', 15),
+            ('SPAN', (0,3), (-1,3)),
+            ('ALIGN', (0,3), (-1,3), 'LEFT'),
+            ('SPAN', (0,4), (1,4)),
+            ('SPAN', (2,4), (3,4)),
+            ('SPAN', (4,4), (5,4)),
+            ('SPAN', (4,5), (5,5)),
+            ('SPAN', (0,6), (2,6)),
+            ('SPAN', (0,7), (3,7)),
+            
+            #truck 2
+            ('FONT', (0,9), (0,9), 'Times-Bold', 15),
+            ('SPAN', (0,9), (-1,9)),
+            ('ALIGN', (0,9), (-1,9), 'LEFT'),
+            ('SPAN', (0,10), (1,10)),
+            ('SPAN', (2,10), (3,10)),
+            ('SPAN', (4,10), (5,10)),
+            ('SPAN', (4,11), (5,11)),
+            ('SPAN', (0,12), (2,12)),
+            ('SPAN', (0,13), (3,13)),
+            
+            #truck 3
+            ('FONT', (0,15), (0,15), 'Times-Bold', 15),
+            ('SPAN', (0,15), (-1,15)),
+            ('ALIGN', (0,15), (-1,15), 'LEFT'),
+            ('SPAN', (0,16), (1,16)),
+            ('SPAN', (2,16), (3,16)),
+            ('SPAN', (4,16), (5,16)),
+            ('SPAN', (4,17), (5,17)),
+            ('SPAN', (0,18), (2,18)),
+            ('SPAN', (0,19), (3,19)),
+            
+            #truck 4
+            ('FONT', (0,21), (0,21), 'Times-Bold', 15),
+            ('SPAN', (0,21), (-1,21)),
+            ('ALIGN', (0,21), (-1,21), 'LEFT'),
+            ('SPAN', (0,22), (1,22)),
+            ('SPAN', (2,22), (3,22)),
+            ('SPAN', (4,22), (5,22)),
+            ('SPAN', (4,23), (5,23)),
+            ('SPAN', (0,24), (2,24)),
+            ('SPAN', (0,25), (3,25)),
+            
+            #truck 5
+            ('FONT', (0,27), (0,27), 'Times-Bold', 15),
+            ('SPAN', (0,27), (-1,27)),
+            ('ALIGN', (0,27), (-1,27), 'LEFT'),
+            ('SPAN', (0,28), (1,28)),
+            ('SPAN', (2,28), (3,28)),
+            ('SPAN', (4,28), (5,28)),
+            ('SPAN', (4,29), (5,29)),
+            ('SPAN', (0,30), (2,30)),
+            ('SPAN', (0,31), (3,31)),
+        ]
+    elif formName == 'E':
+        'hello'
             
     pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
     #settings.MEDIA_ROOT + '/Print/' + fileName
-    table = Table(tableData, colWidths=tableColWidths, rowHeights=tableRowHeights)
-    
+    if formName in ('A5'):
+        table = Table(tableData, colWidths=tableColWidths, rowHeights=tableRowHeights)
+    else:
+        table = Table(tableData, colWidths=tableColWidths)
     style = TableStyle(style)
     
     table.setStyle(style)
