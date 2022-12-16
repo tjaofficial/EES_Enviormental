@@ -994,9 +994,10 @@ def form_PDF(request, formDate, formName):
             ('ALIGN', (0,0), (-1,2), 'CENTER'),
             
             #truck 1
+            ('BOX',(0,3), (-3,7), 0.5,colors.black),
             ('FONT', (0,3), (0,3), 'Times-Bold', 15),
-            ('SPAN', (0,3), (-1,3)),
-            ('ALIGN', (0,3), (-1,3), 'LEFT'),
+            ('SPAN', (0,3), (-3,3)),
+            ('ALIGN', (0,3), (-3,3), 'LEFT'),
             ('SPAN', (0,4), (1,4)),
             ('SPAN', (2,4), (3,4)),
             ('SPAN', (4,4), (5,4)),
@@ -1005,9 +1006,10 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (0,7), (3,7)),
             
             #truck 2
+            ('BOX',(0,9), (-3,13), 0.5,colors.black),
             ('FONT', (0,9), (0,9), 'Times-Bold', 15),
-            ('SPAN', (0,9), (-1,9)),
-            ('ALIGN', (0,9), (-1,9), 'LEFT'),
+            ('SPAN', (0,9), (-3,9)),
+            ('ALIGN', (0,9), (-3,9), 'LEFT'),
             ('SPAN', (0,10), (1,10)),
             ('SPAN', (2,10), (3,10)),
             ('SPAN', (4,10), (5,10)),
@@ -1016,9 +1018,10 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (0,13), (3,13)),
             
             #truck 3
+            ('BOX',(0,15), (-3,19), 0.5,colors.black),
             ('FONT', (0,15), (0,15), 'Times-Bold', 15),
-            ('SPAN', (0,15), (-1,15)),
-            ('ALIGN', (0,15), (-1,15), 'LEFT'),
+            ('SPAN', (0,15), (-3,15)),
+            ('ALIGN', (0,15), (-3,15), 'LEFT'),
             ('SPAN', (0,16), (1,16)),
             ('SPAN', (2,16), (3,16)),
             ('SPAN', (4,16), (5,16)),
@@ -1027,9 +1030,10 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (0,19), (3,19)),
             
             #truck 4
+            ('BOX',(0,21), (-3,25), 0.5,colors.black),
             ('FONT', (0,21), (0,21), 'Times-Bold', 15),
-            ('SPAN', (0,21), (-1,21)),
-            ('ALIGN', (0,21), (-1,21), 'LEFT'),
+            ('SPAN', (0,21), (-3,21)),
+            ('ALIGN', (0,21), (-3,21), 'LEFT'),
             ('SPAN', (0,22), (1,22)),
             ('SPAN', (2,22), (3,22)),
             ('SPAN', (4,22), (5,22)),
@@ -1038,9 +1042,10 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (0,25), (3,25)),
             
             #truck 5
+            ('BOX',(0,27), (-3,31), 0.5,colors.black),
             ('FONT', (0,27), (0,27), 'Times-Bold', 15),
-            ('SPAN', (0,27), (-1,27)),
-            ('ALIGN', (0,27), (-1,27), 'LEFT'),
+            ('SPAN', (0,27), (-3,27)),
+            ('ALIGN', (0,27), (-3,27), 'LEFT'),
             ('SPAN', (0,28), (1,28)),
             ('SPAN', (2,28), (3,28)),
             ('SPAN', (4,28), (5,28)),
