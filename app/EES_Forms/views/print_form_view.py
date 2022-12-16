@@ -1054,7 +1054,62 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (0,31), (3,31)),
         ]
     elif formName == 'E':
-        'hello'
+        count = 0
+        inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+        batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
+        startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start_time) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.end_time) + '</para>', styles['Normal'])
+        tableData = [
+            [title],
+            [subTitle],
+            [inspectorDate],
+            [batNumCrewForeman],
+            [startEnd],
+            [Paragraph('<para align=center><b>Leaks:</b>&#160;&#160;' + data.leaks + '</para>', styles['Normal'])],
+            ['', 'Gooseneck Inspection', '', '', '', ''],
+            ['', 'Oven', 'Time', 'Source', 'Comments', ''],
+            ['', '', 'I', 'Inspection Cap', '', ''],
+            ['', '', 'G', 'GooseNeck', '', ''],
+            ['', '', 'F', 'Flange', '', ''],
+            ['', '', 'J', 'Expansion Joint', '', ''],
+        ]
+        tableColWidths = (80,60,80,80,120,80)
+
+        if data.goose_neck_data != '{}':
+            allLeaks = json.loads(data.goose_neck_data)['data']
+            count = len(allLeaks)
+            rowCount = 0
+            for leak in allLeaks:
+                tableData.insert(8 + rowCount, ['', leak['oven'], time_change(leak['time']), leak['source'], Paragraph('<para align=center>' + leak['comment'] + '</para>', styles['Normal']), ''],)
+                rowCount += 1
+                 
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,1), (-1,1), 25),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('SPAN', (0,3), (-1,3)),
+            ('SPAN', (0,4), (-1,4)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
+            ('BOTTOMPADDING',(0,4), (-1,4), 20),
+            ('SPAN', (0,5), (-1,5)),
+            ('BOTTOMPADDING',(0,5), (-1,5), 15),
+            
+            #table
+            ('SPAN', (1,6), (4,6)),
+            ('GRID', (1,6), (4,7), 0.5, colors.black),
+            ('ALIGN', (1,6), (4,7), 'CENTER'),
+            ('FONT', (1,6), (4,7), 'Helvetica-Bold', 10),
+            ('ALIGN', (2,8 + count), (2,11 + count), 'CENTER'),
+            ('TOPPADDING',(0,8 + count), (-1,8 + count), 35),
+        ]
+        
+        if data.goose_neck_data != '{}':
+            for x in range(count):
+                style.append(('ALIGN', (1,8 + x), (4,8 + x), 'CENTER'),)
+                style.append(('GRID', (1,8 + x), (4,8 + x), 0.5, colors.black),)
             
     pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
     #settings.MEDIA_ROOT + '/Print/' + fileName
