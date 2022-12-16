@@ -55,7 +55,6 @@ def formD(request, selector):
                     existing = True
             elif starting_saturday == sunday:
                 existing = True
-        print(existing)
         if search:
             database_form = ''
         else:
@@ -120,8 +119,6 @@ def formD(request, selector):
                         'week_start': last_saturday,
                         'week_end': end_week
                     }
-                form = formD_form()
-
             form = formD_form(initial=initial_data)
         if request.method == "POST":
             if existing:
