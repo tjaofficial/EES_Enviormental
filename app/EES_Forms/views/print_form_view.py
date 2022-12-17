@@ -1081,6 +1081,8 @@ def form_PDF(request, formDate, formName):
             for leak in allLeaks:
                 tableData.insert(8 + rowCount, ['', leak['oven'], time_change(leak['time']), leak['source'], Paragraph('<para align=center>' + leak['comment'] + '</para>', styles['Normal']), ''],)
                 rowCount += 1
+        else:
+            tableData.insert(8, ['', 'No Leaks Found During Observation', '', '', '',''],)
                  
         style = [
             #Top header and info
@@ -1100,16 +1102,29 @@ def form_PDF(request, formDate, formName):
             #table
             ('SPAN', (1,6), (4,6)),
             ('GRID', (1,6), (4,7), 0.5, colors.black),
+            
             ('ALIGN', (1,6), (4,7), 'CENTER'),
             ('FONT', (1,6), (4,7), 'Helvetica-Bold', 10),
             ('ALIGN', (2,8 + count), (2,11 + count), 'CENTER'),
-            ('TOPPADDING',(0,8 + count), (-1,8 + count), 35),
+            
         ]
         
         if data.goose_neck_data != '{}':
             for x in range(count):
                 style.append(('ALIGN', (1,8 + x), (4,8 + x), 'CENTER'),)
                 style.append(('GRID', (1,8 + x), (4,8 + x), 0.5, colors.black),)
+                style.append(('TOPPADDING',(0,8 + count), (-1,8 + count), 35),)
+                style.append(('BOX', (1,6), (4,7 + count), 1.5, colors.black),)
+                style.append(('ALIGN', (2,8 + count), (2,11 + count), 'CENTER'),)
+        else:
+            style.append(('ALIGN', (1,8), (4,8), 'CENTER'),)
+            style.append(('SPAN', (1,8), (4,8)),)
+            style.append(('BOX', (1,6), (4,8), 1.5, colors.black),)
+            style.append(('TOPPADDING',(1,8), (4,8), 10),)
+            style.append(('BOTTOMPADDING',(1,8), (4,8), 10),)
+            style.append(('TOPPADDING',(1,9), (4,9), 35),)
+            style.append(('ALIGN', (2,9), (2,12), 'CENTER'),)
+            
             
     pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
     #settings.MEDIA_ROOT + '/Print/' + fileName
