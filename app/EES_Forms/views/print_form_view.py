@@ -1164,6 +1164,71 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (1,7), (4,7)),
             ('ALIGN', (0,7), (-1,7), 'CENTER'),
         ]
+    elif formName == 'L':
+        tableData = [
+            [title],
+            [subTitle],
+            [Paragraph('<para align=center><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal'])],
+            ['', '', '', '', ''],
+            [Paragraph('<para align=center><b>Observer</b></para>', styles['Normal']), Paragraph('<para align=center><b>Day/Time</b></para>', styles['Normal']), Paragraph('<para align=center><b>Location</b></para>', styles['Normal']), Paragraph('<para align=center><b>Visible Emissions</b></para>', styles['Normal']), Paragraph('<para align=center><b>Comments</b></para>', styles['Normal'])],
+            [data.obser_0, 'Saturday/' + time_change(data.time_0), 'Coal Bin Vents', data.vents_0, Paragraph('<para>' + data.v_comments_0 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_0, Paragraph('<para>' + data.m_comments_0 + '</para>', styles['Normal'])],
+            [data.obser_1, 'Sunday/' + time_change(data.time_1), 'Coal Bin Vents', data.vents_1, Paragraph('<para>' + data.v_comments_1 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_1, Paragraph('<para>' + data.m_comments_1 + '</para>', styles['Normal'])],
+            [data.obser_2, 'Monday/' + time_change(data.time_2), 'Coal Bin Vents', data.vents_2, Paragraph('<para>' + data.v_comments_2 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_2, Paragraph('<para>' + data.m_comments_2 + '</para>', styles['Normal'])],
+            [data.obser_3, 'Tuesday/' + time_change(data.time_3), 'Coal Bin Vents', data.vents_3, Paragraph('<para>' + data.v_comments_3 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_3, Paragraph('<para>' + data.m_comments_3 + '</para>', styles['Normal'])],
+            [data.obser_4, 'Wednesday/' + time_change(data.time_4), 'Coal Bin Vents', data.vents_4, Paragraph('<para>' + data.v_comments_4 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_4, Paragraph('<para>' + data.m_comments_4 + '</para>', styles['Normal'])],
+            [data.obser_5, 'Thursday/' + time_change(data.time_5), 'Coal Bin Vents', data.vents_5, Paragraph('<para>' + data.v_comments_5 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_5, Paragraph('<para>' + data.m_comments_5 + '</para>', styles['Normal'])],
+            [data.obser_6, 'Friday/' + time_change(data.time_6), 'Coal Bin Vents', data.vents_6, Paragraph('<para>' + data.v_comments_6 + '</para>', styles['Normal'])],
+            ['', '', 'Mixer Building Bag House', data.mixer_6, Paragraph('<para>' + data.m_comments_6 + '</para>', styles['Normal'])],
+            ['Observe visual emissions areas once per day', '', '', '', ''],
+            ['If visual emission are observed perform a Method 9 Observation for 15 minutes MINIMUM', '', '', '', ''],
+            ['If average opacity > 10%, Contact and Notify Enviornmental Engineer', '', '', '', ''],
+        ]
+        tableColWidths = (70,110,130,65,130)
+
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,1), (-1,1), 25),
+            ('BOTTOMPADDING',(0,2), (-1,2), 25),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
+            
+            #table
+            ('GRID', (0,4),(-1,4), 1.5,  colors.black),
+            ('GRID', (0,5),(-1,18), 0.5,  colors.black),
+            ('SPAN', (0,5), (0,6)),
+            ('SPAN', (1,5), (1,6)),
+            ('SPAN', (0,7), (0,8)),
+            ('SPAN', (1,7), (1,8)),
+            ('SPAN', (0,9), (0,10)),
+            ('SPAN', (1,9), (1,10)),
+            ('SPAN', (0,11), (0,12)),
+            ('SPAN', (1,11), (1,12)),
+            ('SPAN', (0,13), (0,14)),
+            ('SPAN', (1,13), (1,14)),
+            ('SPAN', (0,15), (0,16)),
+            ('SPAN', (1,15), (1,16)),
+            ('SPAN', (0,17), (0,18)),
+            ('SPAN', (1,17), (1,18)),
+            ('VALIGN', (0,5),(-1,18), 'MIDDLE'),
+            ('VALIGN', (0,4),(-1,4), 'MIDDLE'),
+            ('ALIGN', (0,4),(-1,4), 'CENTER'),
+            ('ALIGN', (0,5),(1,18), 'CENTER'),
+            ('ALIGN', (3,5),(3,18), 'CENTER'),
+            ('TOPPADDING',(0,19), (-1,19), 25),
+            ('SPAN', (0,19), (-1,19)),
+            ('SPAN', (0,20), (-1,20)),
+            ('SPAN', (0,21), (-1,21)),
+        ]
             
     pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
     #settings.MEDIA_ROOT + '/Print/' + fileName
