@@ -362,10 +362,10 @@
                         </table>
                     </div>
                 </div>
-                {% if admin or client or filled_in == True %}
-                {% else %}
-                <br><br><br>
-                <input type="submit" value="Submit Form" class="submit_button" />
+                {% if admin or client or search or filled_in == True %}
+                {% elif unlock and not search %}
+                    <br><br><br>
+                    <input type="submit" value="Submit Form" class="submit_button" />
                 {% endif %}
             </div>
         </div>

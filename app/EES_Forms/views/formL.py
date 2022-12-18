@@ -46,6 +46,7 @@ def formL(request, access_page):
             data = database_model
             existing = True
             filled_in = True
+            search = True
         # -----check if database is empty
         elif len(week_start_dates) > 0:
             week_almost = week_start_dates[0]
@@ -250,5 +251,5 @@ def formL(request, access_page):
         return redirect(batt_prof)
 
     return render(request, "Daily/formL.html", {
-        "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
+        'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
     })
