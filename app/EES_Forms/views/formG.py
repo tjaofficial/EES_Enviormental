@@ -80,13 +80,17 @@ def formG1(request, selector):
     if count_bp != 0:
         todays_log = daily_prof[0]
         if selector != 'form':
+            print(str(selector))
+            
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
             data = database_model
-            for x in org2:
-                if str(x.form.date) == str(selector):
-                    database_model2 = x
+            for log in org2:
+                print('hello')
+                if str(log.form.date) == str(selector):
+                    database_model2 = log
+                break
             readings_form = database_model2
             profile_form = ''
             existing = True
