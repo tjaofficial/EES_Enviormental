@@ -1124,7 +1124,46 @@ def form_PDF(request, formDate, formName):
             style.append(('BOTTOMPADDING',(1,8), (4,8), 10),)
             style.append(('TOPPADDING',(1,9), (4,9), 35),)
             style.append(('ALIGN', (2,9), (2,12), 'CENTER'),)
+    elif formName == 'G1':
+        print('G1')
+    elif formName == 'G2':
+        print('G2')
+    elif formName == 'H':
+        print('H')
+    elif formName == 'I':
+        tableData = [
+            [title],
+            [subTitle],
+            ['', Paragraph('<para align=center><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal']), '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            [Paragraph('<para align=center><b>Sampling Time</b></para>', styles['Normal']), time_change(data.time_0), time_change(data.time_1), time_change(data.time_2), time_change(data.time_3), time_change(data.time_4)],
+            [Paragraph("<para align=center><b>Inspector's Signature</b></para>", styles['Normal']), data.obser_0, data.obser_1, data.obser_2, data.obser_3, data.obser_4],
+            ['', '*Collect 100 mL each day (Monday - Friday)', '', '', '', ''],
+        ]
+        tableColWidths = (70,80,80,80,80,80)
+
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,2), (-1,2), 55),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (1,2), (4,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
             
+            #table
+            ('GRID', (0,4),(-1,6), 0.5,  colors.black),
+            ('BOX', (0,4),(-1,6), 1.5,  colors.black),
+            ('ALIGN', (0,4), (-1,6), 'CENTER'),
+            ('VALIGN', (0,4), (-1,6), 'MIDDLE'),
+            
+            #under table
+            ('TOPPADDING',(0,7), (-1,7), 35),
+            ('SPAN', (1,7), (4,7)),
+            ('ALIGN', (0,7), (-1,7), 'CENTER'),
+        ]
             
     pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
     #settings.MEDIA_ROOT + '/Print/' + fileName
