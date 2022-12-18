@@ -339,12 +339,11 @@
                             <tr>
                                 <td colspan="4" style="height: 25px;" ></td>
                                 <td style="text-align: right;">
-                                    {% if filled_in == True %}
+                                    {% if admin or client %}
+                                    {% elif filled_in == True %}
                                         <a href="../../Daily/formL/edit">
                                             Edit
                                         </a>
-                                    {% else %}
-                                    
                                     {% endif %}
                                 </td>
                             </tr>
@@ -363,11 +362,10 @@
                         </table>
                     </div>
                 </div>
-                {% if filled_in == True %}
-
+                {% if admin or client or filled_in == True %}
                 {% else %}
                 <br><br><br>
-                <input type="submit" value="Submit Form" class="submit_button">
+                <input type="submit" value="Submit Form" class="submit_button" />
                 {% endif %}
             </div>
         </div>

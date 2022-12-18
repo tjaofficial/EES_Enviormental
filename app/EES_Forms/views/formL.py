@@ -43,12 +43,14 @@ def formL(request, access_page):
                 if str(x.week_start) == str(access_page):
                     database_model = x
                     filled_in = True
-            empty_form = database_model
+            data = database_model
+            existing = True
+            filled_in = True
         # -----check if database is empty
         elif len(week_start_dates) > 0:
             week_almost = week_start_dates[0]
             this_week_saturday = week_almost.week_start
-            database = week_almost
+            database_model = week_almost
             
             # -----check if the days data has been filled in
             home = []
@@ -117,55 +119,56 @@ def formL(request, access_page):
                         print('error - Editing a form that does not exist in the data base')
         if existing:
             initial_data = {
-                'week_start': database.week_start,
-                'week_end': database.week_end,
-                'time_0': database.time_0,
-                'obser_0': database.obser_0,
-                'vents_0': database.vents_0,
-                'mixer_0': database.mixer_0,
-                'v_comments_0': database.v_comments_0,
-                'm_comments_0': database.m_comments_0,
-                'time_1': database.time_1,
-                'obser_1': database.obser_1,
-                'vents_1': database.vents_1,
-                'mixer_1': database.mixer_1,
-                'v_comments_1': database.v_comments_1,
-                'm_comments_1': database.m_comments_1,
-                'time_2': database.time_2,
-                'obser_2': database.obser_2,
-                'vents_2': database.vents_2,
-                'mixer_2': database.mixer_2,
-                'v_comments_2': database.v_comments_2,
-                'm_comments_2': database.m_comments_2,
-                'time_3': database.time_3,
-                'obser_3': database.obser_3,
-                'vents_3': database.vents_3,
-                'mixer_3': database.mixer_3,
-                'v_comments_3': database.v_comments_3,
-                'm_comments_3': database.m_comments_3,
-                'time_4': database.time_4,
-                'obser_4': database.obser_4,
-                'vents_4': database.vents_4,
-                'mixer_4': database.mixer_4,
-                'v_comments_4': database.v_comments_4,
-                'm_comments_4': database.m_comments_4,
-                'time_5': database.time_5,
-                'obser_5': database.obser_5,
-                'vents_5': database.vents_5,
-                'mixer_5': database.mixer_5,
-                'v_comments_5': database.v_comments_5,
-                'm_comments_5': database.m_comments_5,
-                'time_6': database.time_6,
-                'obser_6': database.obser_6,
-                'vents_6': database.vents_6,
-                'mixer_6': database.mixer_6,
-                'v_comments_6': database.v_comments_6,
-                'm_comments_6': database.m_comments_6,
+                'week_start': database_model.week_start,
+                'week_end': database_model.week_end,
+                'time_0': database_model.time_0,
+                'obser_0': database_model.obser_0,
+                'vents_0': database_model.vents_0,
+                'mixer_0': database_model.mixer_0,
+                'v_comments_0': database_model.v_comments_0,
+                'm_comments_0': database_model.m_comments_0,
+                'time_1': database_model.time_1,
+                'obser_1': database_model.obser_1,
+                'vents_1': database_model.vents_1,
+                'mixer_1': database_model.mixer_1,
+                'v_comments_1': database_model.v_comments_1,
+                'm_comments_1': database_model.m_comments_1,
+                'time_2': database_model.time_2,
+                'obser_2': database_model.obser_2,
+                'vents_2': database_model.vents_2,
+                'mixer_2': database_model.mixer_2,
+                'v_comments_2': database_model.v_comments_2,
+                'm_comments_2': database_model.m_comments_2,
+                'time_3': database_model.time_3,
+                'obser_3': database_model.obser_3,
+                'vents_3': database_model.vents_3,
+                'mixer_3': database_model.mixer_3,
+                'v_comments_3': database_model.v_comments_3,
+                'm_comments_3': database_model.m_comments_3,
+                'time_4': database_model.time_4,
+                'obser_4': database_model.obser_4,
+                'vents_4': database_model.vents_4,
+                'mixer_4': database_model.mixer_4,
+                'v_comments_4': database_model.v_comments_4,
+                'm_comments_4': database_model.m_comments_4,
+                'time_5': database_model.time_5,
+                'obser_5': database_model.obser_5,
+                'vents_5': database_model.vents_5,
+                'mixer_5': database_model.mixer_5,
+                'v_comments_5': database_model.v_comments_5,
+                'm_comments_5': database_model.m_comments_5,
+                'time_6': database_model.time_6,
+                'obser_6': database_model.obser_6,
+                'vents_6': database_model.vents_6,
+                'mixer_6': database_model.mixer_6,
+                'v_comments_6': database_model.v_comments_6,
+                'm_comments_6': database_model.m_comments_6,
             }
+            this_week_saturday = ''
             if filled_in:
-                empty_form = database
+                data = database_model
             else:
-                empty_form = formL_form(initial=initial_data)
+                data = formL_form(initial=initial_data)
         else:
             this_week_saturday = ''
             week_almost = ''
@@ -183,11 +186,11 @@ def formL(request, access_page):
                 'week_start': set_start_date,
                 'week_end': set_end_date
             }
-            empty_form = formL_form(initial=initial_data)
+            data = formL_form(initial=initial_data)
 
         if request.method == "POST":
             if existing:
-                form = formL_form(request.POST, instance=database)
+                form = formL_form(request.POST, instance=database_model)
             else:
                 form = formL_form(request.POST)
 
@@ -247,5 +250,5 @@ def formL(request, access_page):
         return redirect(batt_prof)
 
     return render(request, "Daily/formL.html", {
-        "back": back, 'todays_log': todays_log, 'empty': empty_form, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'week_almost': week_almost, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
+        "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
     })

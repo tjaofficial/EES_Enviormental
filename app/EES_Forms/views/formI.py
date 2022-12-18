@@ -7,7 +7,6 @@ from ..forms import formI_form
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
-
 @lock
 def formI(request, selector):
     formName = "I"
@@ -36,23 +35,24 @@ def formI(request, selector):
     filled_in = False
     partial_form = False
     week = ''
-    week_almost = ''
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:
-        print('CHECK 1')
         todays_log = daily_prof[0]
         if selector not in ('form', 'edit'):
-            print('CHECK 2.1')
             submit = False
             for x in week_start_dates:
                 if str(x.week_start) == str(selector):
+                    print('CHECK 2')
                     database_model = x
-            empty_form = database_model
+            data = database_model
+            existing = True
+            search = True
+            filled_in = True
         elif len(week_start_dates) > 0:
-            print('CHECK 2.2')
-            week_almost = week_start_dates[0]
-            week = week_almost.week_start
+            print('CHECK 3')
+            database_model = week_start_dates[0]
+            week = database_model.week_start
             # ------- check if todays data has been filled in or not
             home = []
 
@@ -79,7 +79,7 @@ def formI(request, selector):
                     print(last_saturday)
                     if week == last_saturday:
                         if filled_in or partial_form:
-                            empty_form = week_almost
+                            data = database_model
                             submit = False
                             existing = True
                 # --------EDIT------------EDIT----------EDIT-------------
@@ -95,7 +95,7 @@ def formI(request, selector):
                     'week_start': today,
                     'week_end': today + one_week
                 }
-                empty_form = formI_form(initial=initial_data)
+                data = formI_form(initial=initial_data)
             else:
                 print('CHECK 3.3')
                 opened = False
@@ -104,36 +104,40 @@ def formI(request, selector):
                     'week_start': today - datetime.timedelta(days=1),
                     'week_end': today + one_week
                 }
-                empty_form = formI_form(initial=initial_data)
+                data = formI_form(initial=initial_data)
+                
         if existing:
+            print('Check 2.1')
             initial_data = {
-                'week_start': week_almost.week_start,
-                'week_end': week_almost.week_end,
-                'time_0': week_almost.time_0,
-                'time_1': week_almost.time_1,
-                'time_2': week_almost.time_2,
-                'time_3': week_almost.time_3,
-                'time_4': week_almost.time_4,
-                'obser_0': week_almost.obser_0,
-                'obser_1': week_almost.obser_1,
-                'obser_2': week_almost.obser_2,
-                'obser_3': week_almost.obser_3,
-                'obser_4': week_almost.obser_4,
+                'week_start': database_model.week_start,
+                'week_end': database_model.week_end,
+                'time_0': database_model.time_0,
+                'time_1': database_model.time_1,
+                'time_2': database_model.time_2,
+                'time_3': database_model.time_3,
+                'time_4': database_model.time_4,
+                'obser_0': database_model.obser_0,
+                'obser_1': database_model.obser_1,
+                'obser_2': database_model.obser_2,
+                'obser_3': database_model.obser_3,
+                'obser_4': database_model.obser_4,
             }
             if filled_in:
-                empty_form = week_almost
+                data = database_model
             else:
-                empty_form = formI_form(initial=initial_data)
+                print('Check 2.2')
+                data = formI_form(initial=initial_data)
         else:
             initial_data = {
                 'week_start': last_saturday,
                 'week_end': end_week
             }
-            empty_form = formI_form(initial=initial_data)
-
+            data = formI_form(initial=initial_data)
+        print(data)
+        print(database_model)
         if request.method == "POST":
             if existing:
-                form = formI_form(request.POST, instance=week_almost)
+                form = formI_form(request.POST, instance=database_model)
             else:
                 form = formI_form(request.POST)
 
@@ -170,5 +174,5 @@ def formI(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formI.html", {
-        'admin': admin, "back": back, 'todays_log': todays_log, 'empty': empty_form, 'week': week, 'opened': opened, 'week_almost': week_almost, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
+        "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })

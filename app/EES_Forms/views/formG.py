@@ -81,7 +81,6 @@ def formG1(request, selector):
         todays_log = daily_prof[0]
         if selector != 'form':
             print(str(selector))
-            
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
@@ -192,9 +191,7 @@ def formG1(request, selector):
                     'PEC_observe_time': database_form2.PEC_observe_time,
                     'PEC_emissions_present': database_form2.PEC_emissions_present,
                 }
-                data = formG1_form(initial=initial_data)
                 readings_form = formG1_readings_form(initial=initial_data)
-                profile_form = user_profile_form()
             else:
                 initial_data = {
                     'date': todays_log.date_save,
@@ -224,9 +221,9 @@ def formG1(request, selector):
                     'ambient_temp_start': weather['temperature'],
                     'humidity': weather['humidity'],
                 }
-                data = formG1_form(initial=initial_data)
-                profile_form = user_profile_form()
                 readings_form = formG1_readings_form()
+            data = formG1_form(initial=initial_data)
+            profile_form = user_profile_form()
 
         if request.method == "POST":
             if existing:
