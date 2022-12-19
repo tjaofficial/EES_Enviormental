@@ -14,6 +14,17 @@ import io
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
+def date_change(date):
+    if len(str(date.month)) == 2:
+        month = str(date.month)
+    else:
+        month = '0'+str(date.month)
+    if len(str(date.day)) == 2:
+        day = str(date.day)
+    else:
+        day = '0'+str(date.day)
+    parsed = month + '-' + day + '-' + str(date.year)
+    return parsed
 
 def time_change(time):
     if str(time) not in {'None', '', 'No'}:
@@ -30,6 +41,45 @@ def time_change(time):
         else:
             newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
         return newTime
+
+def road_choices(input):
+    paved_roads = {
+        'p1': '#4 Booster Station',
+        'p2': '#5 Battery Road',
+        'p3': 'Coal Dump Horseshoe',
+        'p4': 'Coal Handling Road (Partial)',
+        'p5': 'Coke Plant Road',
+        'p6': 'Coke Plant Mech Road',
+        'p7': 'North Gate Area',
+        'p8': 'Compund Road',
+        'p9': 'D-4 Blast Furnace Road',
+        'p10': 'Gap Gate Road',
+        'p11': '#3 Ore Dock Road',
+        'p12': 'River Road',
+        'p13': 'Weigh Station Road',
+        'p14': 'Zug Island Road'
+    }
+    unpaved_roads = {
+        'unp1': 'North Gate Truck Turn',
+        'unp2': 'Screening Station Road',
+        'unp3': 'Coal Handling Road (Partial)',
+        'unp4': 'Taj Mahal Road',
+        'unp5': 'PECS Approach',
+        'unp6': 'No. 2 Boilerhouse Road',
+        'unp7': 'Bypass Route',
+    }
+    parking_lots = {
+        'par1': 'Gap Gate Parking',
+        'par2': 'Truck Garage Area',
+        'par3': 'EES Coke Office Parking',
+    }
+    if input[1].isnumeric():
+        answer = paved_roads[input]
+    elif input[0] == 'u':
+        answer = unpaved_roads[input]
+    else:
+        answer = parking_lots[input]
+    return answer
         
 def emptyInputs(input):
     if not input:
@@ -37,6 +87,8 @@ def emptyInputs(input):
         return this
     else:
         return input
+    
+
 @lock
 def form_PDF(request, formDate, formName):
     if len(formName) > 1:
@@ -44,7 +96,6 @@ def form_PDF(request, formDate, formName):
         ModelForms = Forms.objects.filter(form=reFormName)[0]
     else:
         ModelForms = Forms.objects.filter(form=formName)[0]
-    print(ModelForms)
     mainModel = apps.get_model('EES_Forms', 'form' + formName + '_model')
     try:
         org = mainModel.objects.all().order_by('-date')
@@ -815,7 +866,7 @@ def form_PDF(request, formDate, formName):
             [subTitle],
             [date],
             ['','','','','','','',''],
-            ['',Paragraph('<para align=left><b>Truck:</b> ' + data.truck_sel + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
+            ['',Paragraph('<para align=left><b>Truck:</b> ' + roads_choices(data.truck_sel) + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
             ['','MIN/SEC','0','15','30','45','',''],
             ['','0',readings.TRead1,readings.TRead2,readings.TRead3,readings.TRead4,'',''],
             ['','1',readings.TRead5,readings.TRead6,readings.TRead7,readings.TRead8,'',''],
@@ -1228,6 +1279,97 @@ def form_PDF(request, formDate, formName):
             ('SPAN', (0,19), (-1,19)),
             ('SPAN', (0,20), (-1,20)),
             ('SPAN', (0,21), (-1,21)),
+        ]
+    elif formName == 'M':
+        date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(data.date) + '</para>', styles['Normal'])
+        startStopPaved = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.pav_start) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.pav_stop)+ '</para>', styles['Normal'])
+        startStopUnPaved = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.unp_start) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.unp_stop)+ '</para>', styles['Normal'])
+        startStopPark = '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>Start:</b>&#160;' + time_change(data.par_start) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.par_stop)
+        observerCert = Paragraph('<para align=center><b>Observer:</b>&#160;' + data.observer + '&#160;&#160;&#160;&#160;<b>Certified Date:</b>&#160;' + date_change(data.cert_date) + '</para>', styles['Normal'])
+        comments = Paragraph('<para align=left><b>Comments:</b>    ' + data.comments + '</para>', styles['Normal'])
+        print(data.unpaved)
+        tableData = [
+            [title],
+            [subTitle],
+            [date],
+            ['','','','','','','',''],
+            ['',Paragraph('<para align=left><b>Paved:</b> ' + road_choices(data.paved) + '</para>', styles['Normal']),'',startStopPaved,'','','',''],
+            ['','MIN/SEC','0','15','30','45','',''],
+            ['','0',readings.pav_1,readings.pav_2,readings.pav_3,readings.pav_4,'',''],
+            ['','1',readings.pav_5,readings.pav_6,readings.pav_7,readings.pav_8,'',''],
+            ['','2',readings.pav_9,readings.pav_10,readings.pav_11,readings.pav_12,'',''],
+            ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',readings.pav_total,''],
+            ['','','','','','','',''],
+            ['',Paragraph('<para align=left><b>Area:</b> ' + road_choices(data.unpaved) + '</para>', styles['Normal']),'',startStopUnPaved,'','','',''],
+            ['','MIN/SEC','0','15','30','45','',''],
+            ['','0',readings.unp_1,readings.unp_2,readings.unp_3,readings.unp_4,'',''],
+            ['','1',readings.unp_5,readings.unp_6,readings.unp_7,readings.unp_8,'',''],
+            ['','2',readings.unp_9,readings.unp_10,readings.unp_11,readings.unp_12,'',''],
+            ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',readings.unp_total,''],
+            ['','','','','','','',''],
+            ['',Paragraph('<para align=left><b>Parking Lot:</b> ' + road_choices(data.parking) + startStopPark + '</para>', styles['Normal']),'','','','','',''],
+            ['','MIN/SEC','0','15','30','45','',''],
+            ['','0',readings.par_1,readings.par_2,readings.par_3,readings.par_4,'',''],
+            ['','1',readings.par_5,readings.par_6,readings.par_7,readings.par_8,'',''],
+            ['','2',readings.par_9,readings.par_10,readings.par_11,readings.par_12,'',''],
+            ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',readings.par_total,''],
+            ['','','','','','','',''],
+            ['',observerCert,'','','','','',''],
+            ['','','','','','','',''],
+            ['',comments,'','','','','',''],
+        ]
+        
+        tableColWidths = (60,75,75,75,75,75,40,60)
+        
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 18),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 10),
+            #('BOTTOMPADDING',(0,2), (-1,2), 5),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('SPAN', (0,2), (-1,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
+            
+            #pav table (1,4)
+            ('GRID',(1,5), (-3,9), 0.5,colors.black),
+            ('BOX',(1,4), (-3,9), 0.5,colors.black),
+            ('GRID',(6,9), (-2,9), 0.5,colors.black),
+            ('SPAN', (1,4), (2,4)),
+            ('SPAN', (1,9), (5,9)),
+            ('ALIGN', (1,5), (5,8), 'CENTER'),
+            ('ALIGN', (6,9), (6,9), 'CENTER'),
+            ('SPAN', (3,4), (5,4)),
+            ('ALIGN', (3,4), (5,4), 'RIGHT'),
+            ('BACKGROUND', (1,5), (5,5),'(.6,.7,.8)'),
+            
+            #unpaved table (1,11)
+            ('GRID',(1,12), (-3,16), 0.5,colors.black),
+            ('BOX',(1,11), (-3,16), 0.5,colors.black),
+            ('GRID',(6,16), (-2,16), 0.5,colors.black),
+            ('SPAN', (1,11), (2,11)),
+            ('SPAN', (1,16), (5,16)),
+            ('ALIGN', (1,12), (5,15), 'CENTER'),
+            ('ALIGN', (6,16), (6,16), 'CENTER'),
+            ('SPAN', (3,11), (5,11)),
+            ('ALIGN', (3,11), (5,11), 'RIGHT'),
+            ('BACKGROUND', (1,12), (5,12),'(.6,.7,.8)'),
+            
+            #park table
+            ('GRID',(1,19), (-3,23), 0.5,colors.black),
+            ('BOX',(1,18), (-3,23), 0.5,colors.black),
+            ('GRID',(6,23), (-2,23), 0.5,colors.black),
+            ('SPAN', (1,18), (5,18)),
+            ('SPAN', (1,23), (5,23)),
+            ('ALIGN', (1,19), (5,22), 'CENTER'),
+            ('ALIGN', (6,23), (6,23), 'CENTER'),
+            ('SPAN', (3,18), (5,18)),
+            ('ALIGN', (3,18), (5,18), 'RIGHT'),
+            ('BACKGROUND', (1,19), (5,19),'(.6,.7,.8)'),
+            
+            #ending data (1,18)
+            ('SPAN', (1,25), (6,25)),
+            ('SPAN', (1,27), (6,27)),
         ]
             
     pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
