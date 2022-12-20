@@ -1,6 +1,6 @@
 from ..models import Forms
 from django.conf import settings
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from django.core.exceptions import FieldError
@@ -8,7 +8,8 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
+from reportlab.lib.units import inch, mm
+from reportlab.pdfgen import canvas
 import json
 import io
 
@@ -88,55 +89,123 @@ def emptyInputs(input):
     else:
         return input
     
+class PageNumCanvas(canvas.Canvas):
+    def __init__(self, *args, **kwargs):
+        #Constructor
+        canvas.Canvas.__init__(self, *args, **kwargs)
+        self.pages = []
+    #----------------------------------------------------------------------
+    def showPage(self):
+        #On a page break, add information to the list
+        self.pages.append(dict(self.__dict__))
+        self._startPage()
+    #----------------------------------------------------------------------
+    def save(self):
+        #Add the page number to each page (page x of y)
+        page_count = len(self.pages)
+        for page in self.pages:
+            self.__dict__.update(page)
+            self.draw_page_number(page_count)
+            canvas.Canvas.showPage(self)
+        canvas.Canvas.save(self)
+    #----------------------------------------------------------------------
+    def draw_page_number(self, page_count):
+        #Add the page number
+        page = "Page %s of %s" % (self._pageNumber, page_count)
+        self.setFont("Helvetica", 9)
+        self.drawRightString(200*mm, 10*mm, page)
 
 @lock
 def form_PDF(request, formDate, formName):
-    if str(formDate)[0:6] == 'single':
-        formDate = str(formDate)[7:]
-    if len(formName) > 1:
-        reFormName = formName[0] + '-' + formName[1]
-        ModelForms = Forms.objects.filter(form=reFormName)[0]
-    else:
-        ModelForms = Forms.objects.filter(form=formName)[0]
-    mainModel = apps.get_model('EES_Forms', 'form' + formName + '_model')
-    print(mainModel)
-    try:
-        org = mainModel.objects.all().order_by('-date')
-        for x in org:
-            print(x.date)
-            if str(x.date) == str(formDate):
-                database_model = x
-            else:
-                print('FROM DOES NOT EXIST')
-        data = database_model
+    if formDate[0:6] == 'single':
+        formTag = formDate[0:6]
+        formDate = formDate[7:]
+    elif formDate[0:5] == 'group':
+        formTag = formDate[0:5]
+        formDate = formDate[6:]
     
-        if formName in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
-            readingsModel = apps.get_model('EES_Forms', 'form' + formName + '_readings_model')
-            org2 = readingsModel.objects.all().order_by('-form')
-            for x in org2:
-                if str(x.form.date) == str(formDate):
-                    database_model2 = x
-            readings = database_model2
-    except FieldError as e:
-        org = mainModel.objects.all().order_by('-week_start')
-        for r in org:
-            if str(r.week_start) == str(formDate):
-                database_model = r
-        data = database_model
+    if formTag == 'single':
+        formList = [formName]
+    elif formName == 'formA':
+        formList = ['A1', 'A2', 'A3', 'A4', 'A5']
+    elif formName == 'weekly':
+        formList = []
+        for allForms in Forms.objects.all():
+            formList.append(str(allForms).replace('-',''))
+        print(formList)
+    elif formName == 'monthly':
+        formList = []
+    elif formName == 'tanks':
+        formList = []
+    elif formName == 'waste':
+        formList = []
 
-    styles = getSampleStyleSheet()
-    fileName = 'form' + formName + '_' + formDate + ".pdf"
-    documentTitle = 'form' + formName + '_' + formDate
-    title = ModelForms.header + ' ' + ModelForms.title + ' - Form (' + ModelForms.form + ')'
-    subTitle = 'Facility Name: EES Coke Battery LLC'
-    #always the same on all A-forms
-    marginSet = 0.4
-    
-    #create a stream
-    stream = io.BytesIO()
-    pageGroup = []
-    for page in pageGroup:
-        if formName == 'A1':
+    elems = []
+    for item in formList:
+        if item in ('N', 'Spill Kits') or item[0] == 'F':
+            continue
+        goNext = False
+        if len(item) > 1:
+            reFormName = item[0] + '-' + item[1]
+            ModelForms = Forms.objects.filter(form=reFormName)[0]
+        else:
+            ModelForms = Forms.objects.filter(form=item)[0]
+        mainModel = apps.get_model('EES_Forms', 'form' + item + '_model')
+        try:
+            org = mainModel.objects.all().order_by('-date')
+            print(item + ' WINS')
+            for x in org:
+                if str(x.date) == str(formDate):
+                    database_model = x
+                    break
+                elif org[len(org)-1] == x:
+                    database_model = ''
+                    print('FORM DOES NOT EXIST')
+                    goNext = True
+                    print('goNext1')
+            data = database_model
+
+            if item in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
+                readingsModel = apps.get_model('EES_Forms', 'form' + item + '_readings_model')
+                org2 = readingsModel.objects.all().order_by('-form')
+                for x in org2:
+                    if str(x.form.date) == str(formDate):
+                        database_model2 = x
+                        break
+                    else:
+                        database_model2 = ''
+                readings = database_model2
+        except FieldError as e:
+            print('Check A - Form ' + item)
+            org = mainModel.objects.all().order_by('-week_start')
+            for r in org:
+                print(str(r.week_start))
+                print(str(formDate))
+                if str(r.week_start) == str(formDate):
+                    database_model = r
+                    print('Check B - Form Exist')
+                elif org[len(org)-1] == r:
+                    database_model = ''
+                    print('FORM DOES NOT EXIST')
+                    goNext = True
+                    print('goNext2')
+            data = database_model
+        if goNext:
+            continue
+            print(r.week_start)
+        styles = getSampleStyleSheet()
+        fileName = 'form' + formName + '_' + formDate + ".pdf"
+        documentTitle = 'form' + formName + '_' + formDate
+        title = ModelForms.header + ' ' + ModelForms.title + ' - Form (' + ModelForms.form + ')'
+        subTitle = 'Facility Name: EES Coke Battery LLC'
+        #always the same on all A-forms
+        marginSet = 0.4
+        
+        dataList = []
+        
+        #create a stream
+        stream = io.BytesIO()
+        if item == 'A1':
             inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
             batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
             startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.stop) + '</para>', styles['Normal'])
@@ -194,11 +263,11 @@ def form_PDF(request, formDate, formName):
                 ('GRID',(0,6), (-1,11), 0.5,colors.grey),
                 ('BOTTOMPADDING',(0,1), (-1,1), 25),
             ]
-        elif formName in ('A2', 'A3'):
+        elif item in ('A2', 'A3'):
             inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
             batOvenInop = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Total No. Ovens:</b>&#160;&#160;85&#160;&#160;&#160;&#160;&#160;<b>Total No. Inoperable Ovens:</b>&#160;&#160;' + str(data.inop_ovens) + '&#160;(' + str(data.inop_numbs) + ')'  + '</para>', styles['Normal'])
             crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
-            if formName == 'A2':
+            if item == 'A2':
                 if data.p_leak_data != '{}':
                     p_leaks = json.loads(data.p_leak_data)['data']
                 else:
@@ -354,7 +423,7 @@ def form_PDF(request, formDate, formName):
                     del style[20]
                     style.append(('BOX', (2,9), (4,8 + spacedP), 1, colors.black),)
                     style.append(('BOX', (7,9), (9,8 + spacedC), 1, colors.black),)
-            if formName == 'A3':
+            if item == 'A3':
                 if data.om_leak_json != '{}':
                     om_leaks = json.loads(data.om_leak_json)['data']
                 else:
@@ -527,7 +596,7 @@ def form_PDF(request, formDate, formName):
                         style.append(('SPAN', (8,9 + spot), (9,9 + spot)))
 
                 tableColWidths=(40,65,40,55,40,40,50,40,55,40,35,35)
-        elif formName == 'A4':
+        elif item == 'A4':
             inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
             batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
             startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.main_start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.main_stop) + '</para>', styles['Normal'])
@@ -593,7 +662,7 @@ def form_PDF(request, formDate, formName):
                 #notes
                 ('SPAN', (1,15), (5,15)),
             ]
-        elif formName == 'A5':
+        elif item == 'A5':
             marginSet = 0.3
             o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + readings.o1 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.o1_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(readings.o1_stop) + '</para>', styles['Normal'])
             o2NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + readings.o2 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.o2_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(readings.o2_stop) + '</para>', styles['Normal'])
@@ -782,7 +851,8 @@ def form_PDF(request, formDate, formName):
                 
                 ('SPAN', (0,15), (11,15)),
             ]
-        elif formName == 'B':
+        elif item == 'B':
+            print(item)
             marginSet = 0.3
             title2 = ModelForms.title + ' - Form (' + ModelForms.form + ')'
             tableData = [
@@ -851,7 +921,7 @@ def form_PDF(request, formDate, formName):
                 ('BOX', (0,26), (-1,26), 1.5, colors.black),
                 ('SPAN', (0,26), (-1,26)),
             ]
-        elif formName == 'C':
+        elif item == 'C':
             if data.sto_start_time and not data.salt_start_time or not data.sto_start_time and data.salt_start_time:
                 count = 7
             elif data.sto_start_time and data.salt_start_time:
@@ -1003,7 +1073,7 @@ def form_PDF(request, formDate, formName):
                 ]
                 for styleTwo in styleInsertTwo:
                     style.append(styleTwo)
-        elif formName == 'D':
+        elif item == 'D':
             tableData = [
                 [title],
                 [subTitle],
@@ -1111,7 +1181,7 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (0,30), (2,30)),
                 ('SPAN', (0,31), (3,31)),
             ]
-        elif formName == 'E':
+        elif item == 'E':
             count = 0
             inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
             batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
@@ -1182,13 +1252,13 @@ def form_PDF(request, formDate, formName):
                 style.append(('BOTTOMPADDING',(1,8), (4,8), 10),)
                 style.append(('TOPPADDING',(1,9), (4,9), 35),)
                 style.append(('ALIGN', (2,9), (2,12), 'CENTER'),)
-        elif formName == 'G1':
+        elif item == 'G1':
             print('G1')
-        elif formName == 'G2':
+        elif item == 'G2':
             print('G2')
-        elif formName == 'H':
+        elif item == 'H':
             print('H')
-        elif formName == 'I':
+        elif item == 'I':
             tableData = [
                 [title],
                 [subTitle],
@@ -1222,7 +1292,7 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (1,7), (4,7)),
                 ('ALIGN', (0,7), (-1,7), 'CENTER'),
             ]
-        elif formName == 'L':
+        elif item == 'L':
             tableData = [
                 [title],
                 [subTitle],
@@ -1287,7 +1357,7 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (0,20), (-1,20)),
                 ('SPAN', (0,21), (-1,21)),
             ]
-        elif formName == 'M':
+        elif item == 'M':
             date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(data.date) + '</para>', styles['Normal'])
             startStopPaved = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.pav_start) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.pav_stop)+ '</para>', styles['Normal'])
             startStopUnPaved = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.unp_start) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.unp_stop)+ '</para>', styles['Normal'])
@@ -1378,7 +1448,7 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (1,25), (6,25)),
                 ('SPAN', (1,27), (6,27)),
             ]
-        elif formName == 'O':
+        elif item == 'O':
             tableData = [
                 [title],
                 [subTitle],
@@ -1424,7 +1494,7 @@ def form_PDF(request, formDate, formName):
                 ('ALIGN', (3,15), (4,16), 'CENTER'),
                 ('VALIGN', (3,15), (4,16), 'MIDDLE'),
             ]
-        elif formName == 'P':
+        elif item == 'P':
             title = 'Outfall 008 Observation Form' + ' - Form (' + ModelForms.form + ')'
             tableData = [
                 [title],
@@ -1471,51 +1541,35 @@ def form_PDF(request, formDate, formName):
                 ('ALIGN', (3,15), (4,16), 'CENTER'),
                 ('VALIGN', (3,15), (4,16), 'MIDDLE'),
             ]
-            
-    pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
-    #settings.MEDIA_ROOT + '/Print/' + fileName
-    if formName in ('A5'):
-        table = Table(tableData, colWidths=tableColWidths, rowHeights=tableRowHeights)
-    else:
-        table = Table(tableData, colWidths=tableColWidths)
-    style = TableStyle(style)
-    
-    table.setStyle(style)
-    
-    #for i in range(7,12):
-    #    if i % 2 == 0:
-    #        bc = '(.9,.9,.9)'
-    #    else:
-    #        bc = colors.white
-    #    ts = TableStyle([
-    #        ('BACKGROUND', (0,i), (-1,i), bc),
-    #    ])
-    #    table.setStyle(ts)
-    
-    elems = []
-    
-    elems.append(table)
-    elems.append(PageBreak())
-    pdf.build(elems)
-    
-    # get buffer
-    stream.seek(0)
-    pdf_buffer = stream.getbuffer()
-    # bucket_name = settings.AWS_STORAGE_BUCKET_NAME
-    # object_name = 'media/Print/'
-    
-    # s3 = boto3.resource('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-    #      aws_secret_access_key= settings.AWS_SECRET_ACCESS_KEY)
+        
+        if item == 'A5':
+            dataList.append([tableData, tableColWidths, style, tableRowHeights],)
+        else:
+            dataList.append([tableData, tableColWidths, style, None],)
 
-    # s3.Bucket(bucket_name).put_object(Key=object_name + fileName, Body=bytes(pdf_buffer))
+        pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
 
-    # stream2 = io.BytesIO()
-    # s3.Object(bucket_name, object_name + fileName).download_fileobj(stream2)
-    # stream2.seek(0)
-    # pdf_buffer2 = stream2.getbuffer()
+        if item in ('A5'):
+            table = Table(dataList[0][0], colWidths=dataList[0][1], rowHeights=dataList[0][3])
+        else:
+            table = Table(dataList[0][0], colWidths=dataList[0][1])
+        style = TableStyle(dataList[0][2])
+        
+        table.setStyle(style)
+        
+        elems.append(table)
+        elems.append(PageBreak())
     
-    #with open(settings.MEDIA_ROOT + '/penis/'+ fileName, 'ab') as file:
-    #    file.write(bytes(pdf_buffer2))
-    #    file.close()
-    response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
+    try:
+        pdf.build(elems, canvasmaker=PageNumCanvas)
+        
+         # get buffer
+        stream.seek(0)
+        pdf_buffer = stream.getbuffer()
+
+        response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
+    except UnboundLocalError as e:
+        PrintSelect = '../../PrintSelect'
+        return redirect(PrintSelect)
+   
     return response

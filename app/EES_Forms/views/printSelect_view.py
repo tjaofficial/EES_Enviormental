@@ -18,23 +18,26 @@ def printSelect(request):
         admin = True
         
     if request.method == "POST":
-        formCheck = request.POST['forms'].capitalize()
-        mainModel = apps.get_model('EES_Forms', 'form' + formCheck + '_model')
-        filtered = mainModel.objects.filter(date=request.POST['formDate'])
-        if len(filtered) == 0:
-            alertMessage = '*FORM DOES NOT EXIST PLEASE SELECT ANOTHER DATE*'
-        else:
-            alertMessage = ''
-            typeFormDate = '/' + request.POST['type'] + '-' + request.POST['formDate']
+        if request.POST['forms'] != '':
+            formCheck = request.POST['forms'].capitalize()
+            print(formCheck)
+            mainModel = apps.get_model('EES_Forms', 'form' + formCheck + '_model')
+            filtered = mainModel.objects.filter(date=request.POST['formDate'])
+            if len(filtered) == 0:
+                alertMessage = '*FORM DOES NOT EXIST PLEASE SELECT ANOTHER DATE*'
+            else:
+                alertMessage = ''
+        
+        typeFormDate = '/' + request.POST['type'] + '-' + request.POST['formDate']
             
-            if request.POST['forms'] == '' and request.POST['formGroups'] != '':
-                formGroups = '/' + request.POST['formGroups']
-                craftUrl = 'printIndex' + formGroups + typeFormDate
-            elif request.POST['formGroups'] == '' and request.POST['forms'] != '':
-                forms = '/' + request.POST['forms'].capitalize()
-                craftUrl = 'printIndex' + forms + typeFormDate
+        if request.POST['forms'] == '' and request.POST['formGroups'] != '':
+            formGroups = '/' + request.POST['formGroups']
+            craftUrl = 'printIndex' + formGroups + typeFormDate
+        elif request.POST['formGroups'] == '' and request.POST['forms'] != '':
+            forms = '/' + request.POST['forms'].capitalize()
+            craftUrl = 'printIndex' + forms + typeFormDate
 
-            return redirect(craftUrl)
+        return redirect(craftUrl)
     
     return render(request, "shared/printSelect.html", {
         'admin': admin, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,

@@ -13,8 +13,8 @@
                 <p>{{alertMessage}}</p>
                 <div id='selItem'>
                     <label for="type">Choose one:</label>
-                    <select name="type" id="type" required="True">
-                        <option value="">------</option>
+                    <select name="type" id="type" required="True" autofocus>
+                        <option value="" selected>------</option>
                         <option value="single">Single Form</option>
                         <option value="group">Group Forms</option>
                     </select>
@@ -23,19 +23,21 @@
                 <div id='selForm' style='visibility:hidden;'>
                     <label for="forms">Choose Form:</label>
                     <select name="forms" id="forms">
-                        <option value="">------</option>
+                        <option value="" selected>------</option>
                         <option value="a1">A-1</option>
                         <option value="a2">A-2</option>
                         <option value="a3">A-3</option>
+                        <option value="a4">A-4</option>
+                        <option value="a5">A-5</option>
                     </select>
                 </div>
                 <br/>
                 <div id='selGroup' style='visibility:hidden;'>
                     <label for="formGroups">Choose Group:</label>
                     <select name="formGroups" id="formGroups">
-                        <option value="">------</option>
+                        <option value="" selected>------</option>
                         <option value="formA">Form A</option>
-                        <option value="weekend">Weekend</option>
+                        <option value="weekly">Weekly Packet</option>
                         <option value="monthly">Monthly</option>
                         <option value="tanks">Monthly Tanks/Areas</option>
                         <option value="waste">Waste Weekly</option>

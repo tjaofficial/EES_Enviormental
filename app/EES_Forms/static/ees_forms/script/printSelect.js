@@ -9,16 +9,20 @@ function selectItemLis() {
         document.getElementById('selForm').style.visibility = 'visible';
         document.getElementById('selGroup').style.visibility = 'hidden';
         document.getElementById('forms').addEventListener("change", selectFormLis);
+        document.getElementById('formGroups').value = '';
     } else if ( start == 'group'){
         console.log('CHECK 4')
         document.getElementById('selGroup').style.visibility = 'visible';
         document.getElementById('selForm').style.visibility = 'hidden';
         document.getElementById('formGroups').addEventListener("change", selectGroupLis);
+        document.getElementById('forms').value = '';
     } else {
         document.getElementById('selForm').style.visibility = 'hidden';
         document.getElementById('selGroup').style.visibility = 'hidden';
         document.getElementById('selDate').style.visibility = 'hidden';
         document.getElementById('printButton').style.visibility = 'hidden';
+        document.getElementById('formGroups').value = '';
+        document.getElementById('forms').value = '';
     }
 }
 
@@ -40,7 +44,7 @@ function selectFormLis() {
 
 function selectGroupLis() {
     const group = document.getElementById('formGroups').value;
-        if(group == 'formA'){
+        if(group != ''){
             document.getElementById('selDate').style.visibility = 'visible';
             document.getElementById('formDate').addEventListener("change", selectPrintLis);
         } else if (group == ''){
