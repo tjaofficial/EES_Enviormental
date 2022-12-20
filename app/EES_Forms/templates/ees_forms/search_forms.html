@@ -32,22 +32,25 @@
     {% if access_page %}
     <div class="card" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
         {% if att_check != 5 %}
-            <div style="">
-                <a style="display: flex;" href="{% url 'archive' %}">
-                    <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                </a>
-                <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Select Date Below:</h2>
-            </div>
-            <ul style="height: auto; padding-bottom: 2rem;">
-                {% for item in mainList %}
-                <!-- Daily - Date -->
-                <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}">
-                    <li style="text-align: left;">
-                        {{ item.1 }}
-                    </li>
-                </a>
-                {% endfor %}
-            </ul>
+                <div style="">
+                    <a style="display: flex;" href="{% url 'archive' %}">
+                        <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
+                    </a>
+                    <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Select Date Below:</h2>
+                </div>
+                <ul style="height: auto; padding-bottom: 2rem;">
+                    {% for item in mainList %}
+                    <!-- Daily - Date -->
+                    <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                        <li style="text-align: left;">
+                            {{ item.1 }}
+                        </li>
+                    </a>
+                    {% endfor %}
+                </ul>
+            
+
+            
         <!--{% elif att_check == 2 %}
             <div style="">
                 <a style="display: flex;" href="{% url 'archive' %}">

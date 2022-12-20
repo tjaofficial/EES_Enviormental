@@ -171,8 +171,13 @@ def search_forms_view(request, access_page):
                 for x in database:
                     mainList.append([access_page, x.week_start, x, 'Daily'])
             if att_check == 4:
-                for x in database:
-                    mainList.append([access_page, x.date, x, 'Weekly'])
+                if not weekend:
+                    for x in database:
+                        mainList.append([access_page, x.date, x, 'Weekly'])
+                else:
+                    for x in database:
+                        mainList.append([access_page, x.date, x, 'Weekly', '/' + x.weekend_day])
+                    
                     
             try:
                 Model2 = apps.get_model('EES_Forms', access_page[0:7] + 'readings_model')
