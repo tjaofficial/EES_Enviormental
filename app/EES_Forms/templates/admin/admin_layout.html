@@ -28,6 +28,7 @@
                             <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% endif %}">Dashboard</a></li>
                             {% if client %}{% elif admin %}<li><a href="{% url 'Register' %}">Register New Profile</a></li>{% endif %}
                             <li><a href="{% url 'Contacts' %}">Profiles/Contacts</a></li>
+                            <li><a href="{% url 'PrintSelect' %}">Print Forms</a></li>
                         </ul>
                     </li>
                     <li><a href=#>Daily Reports</a>

@@ -76,6 +76,7 @@ urlpatterns = [
     
     # path('pdf_view', views.render_pdf_view, name="pdf_view"),
     path('printIndex/<str:formName>/<str:formDate>', views.form_PDF, name='printIndex'),
+    path('PrintSelect', views.printSelect, name='PrintSelect'),
     #path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
     #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
 ]

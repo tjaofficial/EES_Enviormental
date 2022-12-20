@@ -1,0 +1,56 @@
+{% extends "admin/admin_layout.html" %}{% block list%}{% load static %}
+<link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<script defer src="{% static 'ees_forms/script/printSelect.js' %}"></script>
+<body>
+    <div>
+        <a href="{% if client %}{% url 'c_dashboard' %}{% else %}{% url 'IncompleteForms' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+    </div>
+    <center>
+        <div class="card" style="min-width: 400px; min-height: 500px;">
+            <form action="" method="POST" style="padding: 2rem; ">
+                {% csrf_token %}
+                <p>{{alertMessage}}</p>
+                <div id='selItem'>
+                    <label for="type">Choose one:</label>
+                    <select name="type" id="type" required="True">
+                        <option value="">------</option>
+                        <option value="single">Single Form</option>
+                        <option value="group">Group Forms</option>
+                    </select>
+                </div>
+                <br/>
+                <div id='selForm' style='visibility:hidden;'>
+                    <label for="forms">Choose Form:</label>
+                    <select name="forms" id="forms">
+                        <option value="">------</option>
+                        <option value="a1">A-1</option>
+                        <option value="a2">A-2</option>
+                        <option value="a3">A-3</option>
+                    </select>
+                </div>
+                <br/>
+                <div id='selGroup' style='visibility:hidden;'>
+                    <label for="formGroups">Choose Group:</label>
+                    <select name="formGroups" id="formGroups">
+                        <option value="">------</option>
+                        <option value="formA">Form A</option>
+                        <option value="weekend">Weekend</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="tanks">Monthly Tanks/Areas</option>
+                        <option value="waste">Waste Weekly</option>
+                    </select>
+                </div>
+                <br/>
+                <div id='selDate' style='visibility:hidden;'>
+                    <label for="formDate">Pick a Date:</label>
+                    <input id='formDate' name='formDate' type='date'/>
+                    
+                </div>
+                <br/>
+                <button id='printButton' type="submit" style='visibility:hidden;'>Print</button>
+            </form>
+        </div>
+    </center>
+</body>
+{% endblock %}
