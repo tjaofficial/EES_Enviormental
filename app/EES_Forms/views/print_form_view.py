@@ -1390,8 +1390,53 @@ def form_PDF(request, formDate, formName):
             ['', '', '', '', '', ''],
             ['', Paragraph('<para><b>Comments (Describe any problemsor conditions found during inspections)</b></para>', styles['Normal']), '', data.comments, '', ''],
             ['', Paragraph('<para><b>Actions Taken (Include date mitigated)</b></para>', styles['Normal']), '', data.actions_taken, '', ''],
-            #[Paragraph("<para align=center><b>Inspector's Signature</b></para>", styles['Normal']), data.obser_0, data.obser_1, data.obser_2, data.obser_3, data.obser_4],
+        ]
+        tableColWidths = (40,50,270,80,50,40)
+
+        style = [
+            #Top header and info
+            ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+            ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+            ('BOTTOMPADDING',(0,2), (-1,2), 0),
+            ('SPAN', (0,0), (-1,0)),
+            ('SPAN', (0,1), (-1,1)),
+            ('BOTTOMPADDING',(0,1), (-1,1), 15),
+            ('SPAN', (1,2), (4,2)),
+            ('ALIGN', (0,0), (-1,2), 'CENTER'),
             
+            #table
+            ('GRID',(2,5), (3,13), 0.5,colors.black),
+            ('SPAN', (2,4), (3,4)),
+            ('ALIGN', (2,4), (3,4), 'CENTER'),
+            ('ALIGN', (3,5), (3,13), 'CENTER'),
+            ('SPAN', (1,15), (2,15)),
+            ('SPAN', (3,15), (4,15)),
+            ('SPAN', (1,16), (2,16)),
+            ('SPAN', (3,16), (4,16)),
+            ('GRID',(1,15), (4,16), 0.5,colors.black),
+            ('ALIGN', (3,15), (4,16), 'CENTER'),
+            ('VALIGN', (3,15), (4,16), 'MIDDLE'),
+        ]
+    elif formName == 'P':
+        title = 'Outfall 008 Observation Form' + ' - Form (' + ModelForms.form + ')'
+        tableData = [
+            [title],
+            [subTitle],
+            ['', Paragraph('<para align=center><b>Date:&#160;</b>' + date_change(data.date) + '</para>', styles['Normal']), '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''],
+            ['', '', Paragraph('<para><b>Flow observed at monitoring location?</b></para>', styles['Normal']), data.Q_1, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have an unnatural turbidity?</b></para>', styles['Normal']), data.Q_2, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have an unnatural color?</b></para>', styles['Normal']), data.Q_3, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have an oil film?</b></para>', styles['Normal']), data.Q_4, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have floating solids?</b></para>', styles['Normal']), data.Q_5, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have foams?</b></para>', styles['Normal']), data.Q_6, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have settleable solids?</b></para>', styles['Normal']), data.Q_7, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have suspended solids?</b></para>', styles['Normal']), data.Q_8, '', ''],
+            ['', '', Paragraph('<para><b>Does the observed flow have deposits?</b></para>', styles['Normal']), data.Q_9, '', ''],
+            ['', '', '', '', '', ''],
+            ['', Paragraph('<para><b>Comments (Describe any problemsor conditions found during inspections)</b></para>', styles['Normal']), '', data.comments, '', ''],
+            ['', Paragraph('<para><b>Actions Taken (Include date mitigated)</b></para>', styles['Normal']), '', data.actions_taken, '', ''],
         ]
         tableColWidths = (40,50,270,80,50,40)
 

@@ -40,12 +40,6 @@ def formO(request, selector, weekend_day):
     else:
         ss_filler = ''
 
-    if formO_model.objects.count() != 0:
-        database_form = org[0]
-        database_date = database_form.date
-    else:
-        database_date = ''
-
     count_bp = daily_battery_profile_model.objects.count()
 
     if count_bp != 0:
@@ -104,9 +98,9 @@ def formO(request, selector, weekend_day):
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
                     finder = issues_model.objects.filter(date=A.date, form='O')
                     if finder:
-                        issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/issue'
+                        issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/issue'
                     else:
-                        issue_page = '../../../issues_view/P/' + str(todays_log.date_save) + '/form'
+                        issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/form'
 
                     return redirect(issue_page)
 
