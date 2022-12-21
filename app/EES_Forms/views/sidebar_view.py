@@ -142,6 +142,8 @@ def search_forms_view(request, access_page):
                                 weekend = True
                             else:
                                 weekend = False
+                        elif x.frequency[0] == 'M':
+                            att_check = 6
                         else:
                             # THESE ARE DAILY FORMS
                             att_check = 1
@@ -161,22 +163,26 @@ def search_forms_view(request, access_page):
                             att_check = 2
                     else:
                         print('Error - EES_00006')
+
             if att_check == 1:
                 for x in database:
                     mainList.append([access_page, x.date, x, 'Daily'])
-            if att_check == 2:
+            elif att_check == 2:
                 for x in database:
                     mainList.append([access_page, x.week_start, x, 'Weekly'])
-            if att_check == 3:
+            elif att_check == 3:
                 for x in database:
                     mainList.append([access_page, x.week_start, x, 'Daily'])
-            if att_check == 4:
+            elif att_check == 4:
                 if not weekend:
                     for x in database:
                         mainList.append([access_page, x.date, x, 'Weekly'])
                 else:
                     for x in database:
                         mainList.append([access_page, x.date, x, 'Weekly', '/' + x.weekend_day])
+            elif att_check == 6:
+                for x in database:
+                    mainList.append([access_page, x.date, x, 'Monthly'])
                     
                     
             try:

@@ -1442,6 +1442,9 @@ def form_PDF(request, formDate, formName):
                 style.append(line2)
         elif item == 'G2':
             marginSet = 0.3
+            o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + str(readings.PEC_oven_a) + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.PEC_start_a) + '</para>', styles['Normal'])
+            o2NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + str(readings.PEC_oven_b) + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.PEC_start_b) + '</para>', styles['Normal'])
+            o3NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + str(readings.PEC_oven_c) + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.PEC_start_c) + '</para>', styles['Normal'])
             title = Paragraph('<para align=center><b>' + ModelForms.header + ' Visible Emission Observation Form</b><br/><b>' + ModelForms.title + ' - Form (' + ModelForms.form + ')</b></para>', styles['Normal'])
             if data.wind_speed_stop == 'same':
                 suffix = ''
@@ -1470,10 +1473,24 @@ def form_PDF(request, formDate, formName):
                 [Paragraph('<para fontSize=7><b>POINT IN PLUME WERE OPACITY WAS DETERMINED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.plume_opacity_determined_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.plume_opacity_determined_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE BACKGROUND</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.describe_background_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.describe_background_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                # bottom tables (0,17)
+                ['', '', o1NumberTime, '', '', '', '', '', '', '', o2NumberTime, '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '0', '15', '30', '45', '', '', '', '', '0', '15', '30', '45', ''],
+                ['', '', '', '0', readings.PEC_read_a_1, readings.PEC_read_a_2, readings.PEC_read_a_3, readings.PEC_read_a_4, '', '', '', '0', readings.PEC_read_b_1, readings.PEC_read_b_2, readings.PEC_read_b_3, readings.PEC_read_b_4, ''],
+                ['', '', '', '1', readings.PEC_read_a_5, readings.PEC_read_a_6, readings.PEC_read_a_7, readings.PEC_read_a_8, '', '', '', '1', readings.PEC_read_b_5, readings.PEC_read_b_6, readings.PEC_read_b_7, readings.PEC_read_b_8, ''],
+                ['', '', Paragraph('<para fontSize=9><b>Highest 6-reading Average Opacity for Push:&#160;</b>' + str(readings.PEC_average_a) + '%</para>', styles['Normal']), '', '', '', '', '', '', '', Paragraph('<para fontSize=9><b>Highest 6-reading Average Opacity for Push:&#160;</b>' + str(readings.PEC_average_b) + '%</para>', styles['Normal']), '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', o3NumberTime, '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '0', '15', '30', '45', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '0', readings.PEC_read_c_1, readings.PEC_read_c_2, readings.PEC_read_c_3, readings.PEC_read_c_4, '', Paragraph('<para fontSize=9 align=center><b>Highest average opacity for Method 9B reading:&#160;</b>' + str(readings.PEC_average_main) + '%</para>', styles['Normal']), '', '', '', '', '', ''],
+                ['', '', '', '1', readings.PEC_read_c_5, readings.PEC_read_c_6, readings.PEC_read_c_7, readings.PEC_read_c_8, '', '', '', '', '', '', '', '', ''],
+                ['', '', Paragraph('<para fontSize=9><b>Highest 6-reading Average Opacity for Push:&#160;</b>' + str(readings.PEC_average_c) + '%</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
             ]
             
             tableColWidths = (45,10,20,20,40,40,40,40,30,40,20,20,42,42,42,42,40)
-            tableRowHeights = (20, 20, 5, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 30)
+            tableRowHeights = (20, 20, 5, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 30, 15, 2, 20, 20, 20, 30, 20, 15, 2, 20, 20, 20, 30)
             
             style = [
                 #Fonts
@@ -1533,6 +1550,31 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (0,14), (11,14)),
                 
                 ('SPAN', (0,15), (11,15)),
+                
+                #bottom table
+                ('SPAN', (2,17), (8,17)),
+                ('SPAN', (10,17), (16,17)),
+                ('SPAN', (2,19), (2,21)),
+                ('SPAN', (10,19), (10,21)),
+                ('VALIGN', (0,17), (-1,29), 'MIDDLE'),
+                ('ALIGN', (0,17), (-1,25), 'CENTER'),
+                ('GRID', (2,19), (7,21), 0.5, colors.black),
+                ('GRID', (10,19), (15,21), 0.5, colors.black),
+                ('BACKGROUND', (3,19), (7,19),'(.6,.7,.8)'),
+                ('BACKGROUND', (11,19), (15,19),'(.6,.7,.8)'),
+                ('SPAN', (2,22), (8,22)),
+                ('SPAN', (10,22), (16,22)),
+                
+                ('SPAN', (2,24), (8,24)),
+                ('SPAN', (2,26), (2,28)),
+                ('VALIGN', (0,24), (-1,36), 'MIDDLE'),
+                ('ALIGN', (0,24), (-1,32), 'CENTER'),
+                ('GRID', (2,26), (7,28), 0.5, colors.black),
+                ('BACKGROUND', (3,26), (7,26),'(.6,.7,.8)'),
+                ('SPAN', (2,29), (8,29)),
+                
+                ('SPAN', (9,27), (16,27)),
+                ('ALIGN', (9,27), (16,27), 'CENTER'),
             ]
         elif item == 'H':
             print('H')
@@ -1820,14 +1862,15 @@ def form_PDF(request, formDate, formName):
                 ('VALIGN', (3,15), (4,16), 'MIDDLE'),
             ]
         
-        if item in ('A5', 'G1'):
+        heightGroup = ('A5', 'G1', 'G2')
+        if item in heightGroup:
             dataList.append([tableData, tableColWidths, style, tableRowHeights],)
         else:
             dataList.append([tableData, tableColWidths, style, None],)
 
         pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
 
-        if item in ('A5', 'G1'):
+        if item in heightGroup:
             table = Table(dataList[0][0], colWidths=dataList[0][1], rowHeights=dataList[0][3])
         else:
             table = Table(dataList[0][0], colWidths=dataList[0][1])
