@@ -4,6 +4,7 @@ from django.shortcuts import HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from django.core.exceptions import FieldError
+from django.http import HttpResponseNotFound
 from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, PageBreak
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -1569,7 +1570,8 @@ def form_PDF(request, formDate, formName):
 
         response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
     except UnboundLocalError as e:
-        PrintSelect = '../../PrintSelect'
-        return redirect(PrintSelect)
+        #PrintSelect = '../../PrintSelect'
+        #return redirect(PrintSelect)
+        return HttpResponseNotFound("hello")
    
     return response

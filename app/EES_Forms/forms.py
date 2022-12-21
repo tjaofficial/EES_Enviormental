@@ -1343,7 +1343,11 @@ class formG1_readings_form(ModelForm):
             'PEC_read_22' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'PEC_read_23' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'PEC_read_24' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-
+            'PEC_oven1' : forms.NumberInput(attrs={'type': 'number',}),
+            'PEC_oven2' : forms.NumberInput(attrs={'type': 'number',}),
+            'PEC_time1' : forms.TimeInput(attrs={'type': 'time'}),
+            'PEC_time2' : forms.TimeInput(attrs={'type': 'time'}),
+            'PEC_type' : forms.TextInput(attrs={'type': 'hidden'}),
             'PEC_average' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
             'PEC_push_oven' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
             'PEC_push_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),

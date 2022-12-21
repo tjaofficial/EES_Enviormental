@@ -1,4 +1,5 @@
 document.getElementById('type').addEventListener("change", selectItemLis);
+selectItemLis();
 
 function selectItemLis() {
     formList = ['a1','a2','a3','a4','a5','b','c','d','e','g1','g2','h','i','l','m','o','p',]

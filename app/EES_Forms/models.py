@@ -3396,6 +3396,27 @@ class formG1_readings_model(models.Model):
         blank=True,
         null=True
     )
+    PEC_oven1 = models.CharField(
+        max_length=2, 
+        blank=True,
+        null=True
+    )
+    PEC_oven2 = models.CharField(
+        max_length=2, 
+        blank=True,
+        null=True
+    )
+    PEC_time1 = models.TimeField(
+        blank=True,
+        null=True
+    )
+    PEC_time2 = models.TimeField(
+        blank=True,
+        null=True
+    )
+    PEC_type = models.CharField(
+        max_length=14,
+    )
     PEC_average = models.FloatField(blank=True, null=True)
     PEC_push_oven = models.IntegerField(blank=True, null=True)
     PEC_push_time = models.TimeField(blank=True, null=True)

@@ -185,7 +185,11 @@ def formG1(request, selector):
                     'PEC_read_24': database_form2.PEC_read_24,
 
                     'PEC_average': database_form2.PEC_average,
-                    
+                    'PEC_oven1' : database_form2.PEC_oven1,
+                    'PEC_oven2' : database_form2.PEC_oven2,
+                    'PEC_time1' : database_form2.PEC_time1,
+                    'PEC_time2' : database_form2.PEC_time2,
+                    'PEC_type' : database_form2.PEC_type,
                     'PEC_push_oven': database_form2.PEC_push_oven,
                     'PEC_push_time': database_form2.PEC_push_time,
                     'PEC_observe_time': database_form2.PEC_observe_time,
