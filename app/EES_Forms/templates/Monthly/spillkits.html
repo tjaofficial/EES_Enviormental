@@ -603,8 +603,10 @@
                                 </td>
                             </tr>
                         </table>
-                        <br><br><br>
-                        <input type="submit" value="Submit Form" class="submit_button">
+                        {% if admin or client %} {% elif unlock and not search %}
+                            <br /><br /><br />
+                            <input type="submit" value="Submit Form" class="submit_button" />
+                        {% endif %}
                     </div>
                 </div>
             </form>

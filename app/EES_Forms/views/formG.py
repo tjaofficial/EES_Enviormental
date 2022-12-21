@@ -84,12 +84,13 @@ def formG1(request, selector):
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
+                    break
             data = database_model
             for log in org2:
                 print('hello')
                 if str(log.form.date) == str(selector):
                     database_model2 = log
-                break
+                    break
             readings_form = database_model2
             profile_form = ''
             existing = True

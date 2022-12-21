@@ -258,5 +258,5 @@ def spill_kits(request, access_page):
         return redirect(batt_prof)
 
     return render(request, 'Monthly/spillkits.html', {
-        'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName
+        'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
     })
