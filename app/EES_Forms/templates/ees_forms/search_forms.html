@@ -16,12 +16,19 @@
             <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Search results for "{{ searched }}":</h2>
         </div>
         <ul style="height: auto; padding-bottom: 2rem;">
-            {% for form in forms %}
-            <li style="text-align: left;">
-                <a style="font-size: 1.4rem;" href="../../ees_forms/search_forms/form{{ form.form.0 }}{{ form.form.2 }}_model">
-                    Form {{ form.form }} - {{ form.title }}
-                </a>
-            </li>
+            {% for letterF in letterForms %}
+                <li style="text-align: left;">
+                    <a style="font-size: 1.4rem;" href="../../ees_forms/search_forms/{{letterF.1 }}">
+                        Form {{ letterF.2.form }} - {{ letterF.2.title }}
+                    </a>
+                </li>
+            {% endfor %}
+            {% for otherF in otherForms %}
+                <li style="text-align: left;">
+                    <a style="font-size: 1.4rem;" href="../../ees_forms/search_forms/{{otherF.1}}">
+                        {{ otherF.2.form }} {{ otherF.2.title }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>
@@ -40,12 +47,19 @@
                 </div>
                 <ul style="height: auto; padding-bottom: 2rem;">
                     {% for item in mainList %}
-                    <!-- Daily - Date -->
-                    <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
-                        <li style="text-align: left;">
-                            {{ item.1 }}
-                        </li>
-                    </a>
+                        {% if item.0|slice:"0:4" == 'form' %}
+                            <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                                <li style="text-align: left;">
+                                    {{ item.1 }}
+                                </li>
+                            </a>
+                        {% else %}
+                            <a style="font-size: 1.4rem;" href="../{{item.3}}/{{item.0|slice:"0:-6"}}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                                <li style="text-align: left;">
+                                    {{ item.1 }}
+                                </li>
+                            </a>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             

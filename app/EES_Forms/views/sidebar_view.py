@@ -120,7 +120,6 @@ def search_forms_view(request, access_page):
     if access_page != 'search':
         chk_database = apps.get_model('EES_Forms', access_page).objects.count()
         mainList = []
-        
         # DATE - DAILY = 1, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}"
         # DATE - WEEKLY = 4, href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}{% if weekend %}/{% if x.weekend_day == 5 %}Saturday{% else %}Sunday{% endif %}{% else %}{% endif %}"
         # WEEK - DAILY = 3, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}"
@@ -133,7 +132,7 @@ def search_forms_view(request, access_page):
                 # THESE ARE FORMS USING DATE
                 database = apps.get_model('EES_Forms', access_page).objects.all().order_by('-date')
                 for x in ModelForms:
-                    if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
+                    if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
                         print(access_page)
                         if x.frequency[0] == 'W':
                             # THESE ARE WEEKLY FORMS
@@ -215,9 +214,16 @@ def search_forms_view(request, access_page):
         form_list = Forms.objects.filter(Q(form__icontains=searched) | Q(frequency__icontains=searched) | Q(title__icontains=searched))
 
         forms = form_list.order_by('form')
+        letterForms = []
+        otherForms = []
+        for x in forms:
+            if len(x.form) <= 3:
+                letterForms.append([x.form.replace('-',''), 'form' + x.form.replace('-','') + '_model', x])
+            else:
+                otherForms.append([x.form.replace(' ', '_'), x.form.replace(' ', '_').lower() + '_model', x])
 
         return render(request, 'ees_forms/search_forms.html', {
-            'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
