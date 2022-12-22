@@ -10,7 +10,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def spill_kits(request, access_page):
-    formName = "SpillKits"
+    formName = "spill_kits"
     existing = False
     unlock = False
     client = False

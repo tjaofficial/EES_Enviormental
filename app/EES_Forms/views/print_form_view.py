@@ -145,21 +145,29 @@ def form_PDF(request, formDate, formName):
 
     elems = []
     for item in formList:
-        if item in ('N', 'Spill Kits') or item[0] == 'F':
+        if item in ('N') or item[0] == 'F':
             continue
         goNext = False
-        if len(item) > 1:
+        if len(item) > 1 and len(item) <= 3:
             reFormName = item[0] + '-' + item[1]
-            ModelForms = Forms.objects.filter(form=reFormName)[0]
+            modelName = 'form' + item + '_model'
+        elif len(item) > 3:
+            reFormName = item.replace('_', ' ').title()
+            modelName = item + '_model'
         else:
-            ModelForms = Forms.objects.filter(form=item)[0]
-        mainModel = apps.get_model('EES_Forms', 'form' + item + '_model')
+            reFormName = item
+            modelName = 'form' + item + '_model'
+        ModelForms = Forms.objects.filter(form=reFormName)[0]
+            
+        mainModel = apps.get_model('EES_Forms', modelName)
         try:
             org = mainModel.objects.all().order_by('-date')
             print(item + ' WINS')
             for x in org:
+                print(x)
                 if str(x.date) == str(formDate):
                     database_model = x
+                    print(database_model)
                     break
                 elif org[len(org)-1] == x:
                     database_model = ''
@@ -2011,7 +2019,69 @@ def form_PDF(request, formDate, formName):
                 ('ALIGN', (3,15), (4,16), 'CENTER'),
                 ('VALIGN', (3,15), (4,16), 'MIDDLE'),
             ]
-        
+        elif item == 'spill_kits':
+            title = ModelForms.header + ' - ' + ModelForms.title
+            tableData = [
+                [title],
+                [subTitle],
+                [Paragraph('<para align=center><b>Month:&#160;</b>' + data.month + '</para>', styles['Normal']), '', '', '', ''],
+                ['', '', '', '', '', ''],
+                [Paragraph('<para align=center><b>Inspector Names:&#160;</b>' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:&#160;</b>' + date_change(data.date) +'</para>', styles['Normal']), '', '', '', ''],
+                ['', '', '', '', '', ''],
+                [Paragraph('<para align=center><b>Spill Kit #</b></para>', styles['Normal']), Paragraph('<para align=center><b>Tag On?</b></para>', styles['Normal']), Paragraph('<para align=center><b>Tag Serial #</b></para>', styles['Normal']), Paragraph('<para align=center><b>Complete Kit?</b></para>', styles['Normal']), Paragraph('<para align=center><b>Incident Report</b></para>', styles['Normal']), Paragraph('<para align=center><b>Comments</b></para>', styles['Normal'])],
+                ['1', str(data.sk1_tag_on), str(data.sk1_serial), str(data.sk1_complete), str(data.sk1_report), data.sk1_comment],
+                ['2', str(data.sk2_tag_on), str(data.sk2_serial), str(data.sk2_complete), str(data.sk2_report), data.sk2_comment],
+                ['3', str(data.sk3_tag_on), str(data.sk3_serial), str(data.sk3_complete), str(data.sk3_report), data.sk3_comment],
+                ['4', str(data.sk4_tag_on), str(data.sk4_serial), str(data.sk4_complete), str(data.sk4_report), data.sk4_comment],
+                ['5', str(data.sk5_tag_on), str(data.sk5_serial), str(data.sk5_complete), str(data.sk5_report), data.sk5_comment],
+                ['6', str(data.sk6_tag_on), str(data.sk6_serial), str(data.sk6_complete), str(data.sk6_report), data.sk6_comment],
+                ['7', str(data.sk7_tag_on), str(data.sk7_serial), str(data.sk7_complete), str(data.sk7_report), data.sk7_comment],
+                ['8', str(data.sk8_tag_on), str(data.sk8_serial), str(data.sk8_complete), str(data.sk8_report), data.sk8_comment],
+                ['9', str(data.sk9_tag_on), str(data.sk9_serial), str(data.sk9_complete), str(data.sk9_report), data.sk9_comment],
+                ['10', str(data.sk10_tag_on), str(data.sk10_serial), str(data.sk10_complete), str(data.sk10_report), data.sk10_comment],
+                ['11', str(data.sk11_tag_on), str(data.sk11_serial), str(data.sk11_complete), str(data.sk11_report), data.sk11_comment],
+                ['12', str(data.sk12_tag_on), str(data.sk12_serial), str(data.sk12_complete), str(data.sk12_report), data.sk12_comment],
+                ['13', str(data.sk13_tag_on), str(data.sk13_serial), str(data.sk13_complete), str(data.sk13_report), data.sk13_comment],
+                ['14', str(data.sk14_tag_on), str(data.sk14_serial), str(data.sk14_complete), str(data.sk14_report), data.sk14_comment],
+                ['15', str(data.sk15_tag_on), str(data.sk15_serial), str(data.sk15_complete), str(data.sk15_report), data.sk15_comment],
+                ['16', str(data.sk16_tag_on), str(data.sk16_serial), str(data.sk16_complete), str(data.sk16_report), data.sk16_comment],
+                ['17', str(data.sk17_tag_on), str(data.sk17_serial), str(data.sk17_complete), str(data.sk17_report), data.sk17_comment],
+                ['18', str(data.sk18_tag_on), str(data.sk18_serial), str(data.sk18_complete), str(data.sk18_report), data.sk18_comment],
+                ['19', str(data.sk19_tag_on), str(data.sk19_serial), str(data.sk19_complete), str(data.sk19_report), data.sk19_comment],
+                ['20', str(data.sk20_tag_on), str(data.sk20_serial), str(data.sk20_complete), str(data.sk20_report), data.sk20_comment],
+                ['21', str(data.sk21_tag_on), str(data.sk21_serial), str(data.sk21_complete), str(data.sk21_report), data.sk21_comment],
+                ['', '', '', '', '', ''],
+                ['#2 Boilerhouse', '', '', '', '', ''],
+                ['UT-23', str(data.skut23_tag_on), str(data.skut23_serial), str(data.skut23_complete), str(data.skut23_report), data.skut23_comment],
+                ['UT-24', str(data.skut24_tag_on), str(data.skut24_serial), str(data.skut24_complete), str(data.skut24_report), data.skut24_comment],
+                ['UT-25', str(data.skut25_tag_on), str(data.skut25_serial), str(data.skut25_complete), str(data.skut25_report), data.skut25_comment],
+                ['UT-26', str(data.skut26_tag_on), str(data.skut26_serial), str(data.skut26_complete), str(data.skut26_report), data.skut26_comment],
+                ['UT-27', str(data.skut27_tag_on), str(data.skut27_serial), str(data.skut27_complete), str(data.skut27_report), data.skut27_comment],
+            ]
+            tableColWidths = (50,80,80,80,80,80)
+
+            style = [
+                #Top header and info
+                ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+                ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
+                ('BOTTOMPADDING',(0,2), (-1,2), 5),
+                ('SPAN', (0,0), (-1,0)),
+                ('SPAN', (0,1), (-1,1)),
+                ('SPAN', (0,2), (-1,2)),
+                ('SPAN', (0,4), (-1,4)),
+                ('ALIGN', (0,0), (-1,2), 'CENTER'),
+                
+                #table
+                ('GRID', (0,6),(-1,27), 0.5,  colors.black),
+                ('BOX', (0,6),(-1,6), 1.5,  colors.black),
+                ('ALIGN', (0,4), (-1,6), 'CENTER'),
+                ('VALIGN', (0,4), (-1,6), 'MIDDLE'),
+                ('ALIGN', (0,6), (-1,27), 'CENTER'),
+                
+                ('GRID', (0,30),(-1,35), 0.5,  colors.black),
+                ('ALIGN', (0,30),(-1,35), 'CENTER'),
+            ]
+            
         heightGroup = ('A5', 'G1', 'G2', 'H')
         if item in heightGroup:
             dataList.append([tableData, tableColWidths, style, tableRowHeights],)
