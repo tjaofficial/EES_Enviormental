@@ -234,7 +234,3 @@ function weatherStoplight() {
     }
 }
 weatherStoplight();
-
-function reload() {
-    location.reload();
-}
