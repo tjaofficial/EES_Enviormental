@@ -4,10 +4,11 @@
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <link href="{% static 'ees_forms/style/formB.css' %}" rel="stylesheet" />
 {% if not unlock %}
-        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-    {% endif %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
 <body>
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+    <input id="weather" type="hidden" value="{{weather}}"></div>
     <div id="paperSize">
         <div>
             <a href="{% if selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}">

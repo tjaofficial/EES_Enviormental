@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, formB_model
 from ..forms import Forms, formB_form
+import requests
+import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -36,6 +38,13 @@ def formB(request, selector):
 
     count_bp = daily_battery_profile_model.objects.count()
 
+    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
+    city = 'Dearborn'
+    city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
+    weather = {
+        'wind_speed': round(city_weather['wind']['speed'], 0),
+    }
+    weather2 = json.dumps(weather)
     if count_bp != 0:
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -202,5 +211,5 @@ def formB(request, selector):
 
         return redirect(batt_prof)
     return render(request, "Daily/formB.html", {
-        "search": search, "client": client, 'unlock': unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq,
+        'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq,
     })
