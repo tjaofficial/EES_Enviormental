@@ -8,17 +8,19 @@ window.addEventListener("load", ()=>{
   //create 2 images the defualt image and the stored image
   const blankImageUrl = sketchContainer.dataset.base_img
   const existingImgUrl = sketchContainer.dataset.filledsketch
+  const selector = sketchContainer.dataset.selector
   let urlToRender = sketchContainer.dataset.base_img
   const blankImage= newImageObject(blankImageUrl)
   
   //check if existing image
   if(existingImgUrl != "") urlToRender = existingImgUrl
 
-  //if moreUptodateone is saved locally
-  const localSavedLink = loadLocalStorage()
-  if(localSavedLink) urlToRender = localSavedLink;
-
-//Create render Image
+  if(selector == 'form'){
+    //if moreUptodateone is saved locally
+    const localSavedLink = loadLocalStorage()
+    if(localSavedLink) urlToRender = localSavedLink;
+  }
+  //Create render Image
   const renderedImage = newImageObject(urlToRender)
 
   //hide loader add Image
@@ -26,23 +28,28 @@ window.addEventListener("load", ()=>{
   sketchContainer.appendChild(renderedImage);
 
   sketchContainer.addEventListener('click', (elem)=>{sketchPopup(elem.currentTarget, blankImage, renderedImage)});
+  
 })
 
 
 function sketchPopup(elemClicked, blankImage, renderedImage){
-    const canvas = document.getElementById('sketchpad');
-    elemEffected = elemClicked.dataset.controls;
-    elem = document.getElementById(elemEffected);
-    canvisInitiated = elem.dataset.canvis_intiated;
+  const sketchContainer = document.getElementById('sketchBox');
+  const selector = sketchContainer.dataset.selector
+  const canvas = document.getElementById('sketchpad');
+  elemEffected = elemClicked.dataset.controls;
+  elem = document.getElementById(elemEffected);
+  canvisInitiated = elem.dataset.canvis_intiated;
+  if(selector == 'form'){
     if(canvisInitiated == 'False'){
       let sketchpad = initiateSketch(canvas, renderedImage);
       elem.dataset.canvis_intiated = 'True'
       document.getElementById('clearCanvis').addEventListener('click', ()=>{sketchpad.clear();  drawImgToCanvas(canvas, blankImage);});
       document.getElementById('canvas_save').addEventListener('click', (elem)=>{save_canvas(elem.currentTarget, canvas, renderedImage, elemClicked)});
     }
-      console.log('test');
-      toggleDisplayed(elemClicked);
+    console.log('test');
+    toggleDisplayed(elemClicked);
   }
+}
   
   
   function initiateSketch(canvas, imageElem){

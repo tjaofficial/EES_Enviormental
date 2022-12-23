@@ -1,9 +1,12 @@
-{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%}{% load static %}
     <link href="{% static 'ees_forms/style/formA2/formA2.css' %}" rel="stylesheet">
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
-
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
     {{ BASE_DIR }}
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 

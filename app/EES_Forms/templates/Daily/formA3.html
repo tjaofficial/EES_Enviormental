@@ -1,5 +1,4 @@
-{% extends "ees_forms/layout.html" %}
-
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
 {% block list%}
 {% load static %}
 
@@ -8,7 +7,9 @@
     <script defer src="{% static 'ees_forms/script/formA3.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
-
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
     <div id="paperSize">
         <div>
             <a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% elif selector == 'search' %}{% url 'IncompleteForms' %}{% elif selector == 'form' %}{% url 'IncompleteForms' %}{% else %}{% url 'archive' %}{% endif %}">

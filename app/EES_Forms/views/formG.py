@@ -4,6 +4,7 @@ import datetime
 from ..models import Forms, formG1_model, formG1_readings_model, formG2_model, user_profile_model, daily_battery_profile_model, formG2_readings_model
 from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readings_form, user_profile_form
 import requests
+import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -34,14 +35,17 @@ def formG1(request, selector):
     
     full_name = request.user.get_full_name()
 
-    if len(profile) > 0:
-        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-        if same_user:
-            cert_date = request.user.user_profile_model.cert_date
+    exist_canvas = ''
+    
+    if unlock:
+        if len(profile) > 0:
+            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
+            if same_user:
+                cert_date = request.user.user_profile_model.cert_date
+            else:
+                return redirect('IncompleteForms')
         else:
             return redirect('IncompleteForms')
-    else:
-        return redirect('IncompleteForms')
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
@@ -76,6 +80,8 @@ def formG1(request, selector):
             return 'NE'
         return 'N'
     wind_direction = toTextualDescription(degree)
+    weather['wind_direction'] = wind_direction
+    weather2 = json.dumps(weather)
 
     if count_bp != 0:
         todays_log = daily_prof[0]
@@ -115,8 +121,10 @@ def formG1(request, selector):
         
         if search:
             database_form = ''
+            exist_canvas = data.canvas
         else:
             if existing:
+                exist_canvas = database_form.canvas
                 initial_data = {
                     'date': database_form.date,
                     'estab': database_form.estab,
@@ -214,17 +222,17 @@ def formG1(request, selector):
                     'op_mode2': "normal",
                     'emission_point_start': "Above Stack",
                     'emission_point_stop': "Same",
-                    'height_above_ground': "300",
-                    'height_rel_observer': "300",
+                    'height_above_ground': "100",
+                    'height_rel_observer': "100",
                     'water_drolet_present': "No",
                     'water_droplet_plume': "N/A",
                     'describe_background_start': "Skies",
                     'describe_background_stop': "Same",
-                    'sky_conditions': weather['description'],
-                    'wind_speed_start': weather['wind_speed'],
-                    'wind_direction': wind_direction,
-                    'ambient_temp_start': weather['temperature'],
-                    'humidity': weather['humidity'],
+                    #'sky_conditions': weather['description'],
+                    'wind_speed_stop': 'TBD',
+                    #'wind_direction': wind_direction,
+                    'ambient_temp_stop': 'TBD',
+                    #'humidity': weather['humidity'],
                 }
                 readings_form = formG1_readings_form()
             data = formG1_form(initial=initial_data)
@@ -245,6 +253,16 @@ def formG1(request, selector):
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
                 
+                if not existing:
+                    if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                        A.wind_speed_stop = 'same'
+                    else:
+                        A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                    if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                        A.wind_temp_stop = 'same'
+                    else:
+                        A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                        
                 A.save()
 
                 B.form = A
@@ -265,7 +283,7 @@ def formG1(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formG1.html", {
-        "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
     })
 
 
@@ -293,15 +311,18 @@ def formG2(request, selector):
     count_bp = daily_battery_profile_model.objects.count()
     
     full_name = request.user.get_full_name()
-
-    if len(profile) > 0:
-        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-        if same_user:
-            cert_date = request.user.user_profile_model.cert_date
+    
+    exist_canvas = ''
+    
+    if unlock:
+        if len(profile) > 0:
+            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
+            if same_user:
+                cert_date = request.user.user_profile_model.cert_date
+            else:
+                return redirect('IncompleteForms')
         else:
             return redirect('IncompleteForms')
-    else:
-        return redirect('IncompleteForms')
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
@@ -336,6 +357,8 @@ def formG2(request, selector):
             return 'NE'
         return 'N'
     wind_direction = toTextualDescription(degree)
+    weather['wind_direction'] = wind_direction
+    weather2 = json.dumps(weather)
 
     if count_bp != 0:
         todays_log = daily_prof[0]
@@ -371,8 +394,10 @@ def formG2(request, selector):
         
         if search:
             database_form = ''
+            exist_canvas = data.canvas
         else:
             if existing:
+                exist_canvas = database_form.canvas
                 initial_data = {
                     'date': database_form.date,
                     'estab': database_form.estab,
@@ -478,11 +503,11 @@ def formG2(request, selector):
                     'water_droplet_plume': "N/A",
                     'describe_background_start': "Skies",
                     'describe_background_stop': "Same",
-                    'sky_conditions': weather['description'],
-                    'wind_speed_start': weather['wind_speed'],
-                    'wind_direction': wind_direction,
-                    'ambient_temp_start': weather['temperature'],
-                    'humidity': weather['humidity'],
+                    #'sky_conditions': weather['description'],
+                    'wind_speed_stop': 'TBD',
+                    #'wind_direction': wind_direction,
+                    'ambient_temp_stop': 'TBD',
+                    #'humidity': weather['humidity'],
                 }
                 data = formG2_form(initial=initial_data)
                 profile_form = user_profile_form()
@@ -503,6 +528,16 @@ def formG2(request, selector):
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
                 
+                if not existing:
+                    if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                        A.wind_speed_stop = 'same'
+                    else:
+                        A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                    if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                        A.wind_temp_stop = 'same'
+                    else:
+                        A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                
                 A.save()
 
                 B.form = A
@@ -522,5 +557,5 @@ def formG2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formG2.html", {
-        "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
     })

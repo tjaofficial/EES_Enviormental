@@ -12,6 +12,7 @@
         <script defer src="{% static 'ees_forms/script/admin_dashboard.js' %}"></script>
         <script defer src="{% static 'ees_forms/script/admin_header.js' %}"></script>
         <link href="{% static 'ees_forms/style/admin_layout.css' %}" rel="stylesheet" />
+        <link href="{% static 'ees_forms/style/admin_form.css' %}" rel="stylesheet" />
     </head>
     <body style="width:100%; background-color: #dfe5e9; margin: 0px;display:flex; height:100%;">
         <div id="sideBar">
@@ -153,9 +154,11 @@
                     </a>
                 </div>
             </div>
+            <div style='margin-top:60px;'>
             {% block list %}
             
             {% endblock %}
+            </div>
         </div>
     </body>
 <html>

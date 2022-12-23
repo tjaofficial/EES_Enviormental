@@ -200,7 +200,7 @@ def formL(request, access_page):
                 A = form.save()
 
                 if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6}:
-                    return redirect('../formH/formL')
+                    return redirect('../../Weekly/formH/formL')
 
                 B = []
                 print(last_saturday)

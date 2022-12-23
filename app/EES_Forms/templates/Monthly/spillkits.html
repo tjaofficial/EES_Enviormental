@@ -1,5 +1,4 @@
-{% extends "ees_forms/layout.html" %}
-
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
 {% block list%}
 {% load static %}
 <style>
@@ -15,6 +14,9 @@
 </style>
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/spillKits.js' %}"></script>
+{% if not unlock %}
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
 <body>
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div id="paperSize">

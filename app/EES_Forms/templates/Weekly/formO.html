@@ -1,7 +1,8 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list%}
-
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%} {% load static %}
+{% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
 <body>
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div>

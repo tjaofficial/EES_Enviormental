@@ -697,7 +697,7 @@ def form_PDF(request, formDate, formName):
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
-                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
+                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', Paragraph('<para align=center><img src=' + data.canvas + ' height=175 width=248 valign=middle></img></para>'), '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DISTANCE FROM OBSERVER</b><br/></para><para fontSize=7>' + data.distance_from + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>DIRECTION FROM OBSERVER</b><br/></para><para fontSize=7>' + data.direction_from + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSIONS</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.describe_emissions_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.describe_emissions_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>EMISSIONS COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;</para><para fontSize=7>' + data.emission_color_stop + '</para>', styles['Normal']), '', '', '', '', '', '', Paragraph('<para fontSize=7><b>PLUME TYPE:</b><br/></para><para fontSize=7>' + data.plume_type + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', ''],
@@ -708,11 +708,11 @@ def form_PDF(request, formDate, formName):
                 # bottom data starts at (0,17)
                 ['', '', o1NumberTime, '', '', '', '', '', '', '', o2NumberTime, '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-                ['', '', '', '', '0', '15', '30', '45', '', '', '', '', '0', '15', '30', '45', ''],
+                ['', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', '', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', ''],
                 ['', '', '', '0', readings.o1_1_reads, readings.o1_2_reads, readings.o1_3_reads, readings.o1_4_reads, '', '', '', '0', readings.o2_1_reads, readings.o2_2_reads, readings.o2_3_reads, readings.o2_4_reads, ''],
                 ['', '', '', '1', readings.o1_5_reads, readings.o1_6_reads, readings.o1_7_reads, readings.o1_8_reads, '', '', '', '1', readings.o2_5_reads, readings.o2_6_reads, readings.o2_7_reads, readings.o2_8_reads, ''],
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-                ['', '', '', '', '0', '15', '30', '45', '', '', '', '', '0', '15', '30', '45', ''],
+                ['', '', Paragraph('<para fontSize=10 leading=9><b>T</b></para>',styles['Normal']), '', '0', '15', '30', '45', '', '', Paragraph('<para fontSize=10 leading=9><b>T</b></para>',styles['Normal']), '', '0', '15', '30', '45', ''],
                 ['', '', '', '0', readings.o1_9_reads, readings.o1_10_reads, readings.o1_11_reads, readings.o1_12_reads, '', '', '', '0', readings.o2_9_reads, readings.o2_10_reads, readings.o2_11_reads, readings.o2_12_reads, ''],
                 ['', '', '', '1', readings.o1_13_reads, readings.o1_14_reads, readings.o1_15_reads, readings.o1_16_reads, '', '', '', '1', readings.o2_13_reads, readings.o2_14_reads, readings.o2_15_reads, readings.o2_16_reads, ''],
                 ['', '', Paragraph('<para fontSize=9>Highest Instantaneous Opacity:&#160;' + str(readings.o1_highest_opacity) + '%</para>', styles['Normal']), '', '', '', '', '', '', '', Paragraph('<para fontSize=9>Highest Instantaneous Opacity:&#160;' + str(readings.o2_highest_opacity) + '%</para>', styles['Normal']), '', '', '', '', '', ''],
@@ -722,11 +722,11 @@ def form_PDF(request, formDate, formName):
                 # bottom data starts at (0,30)
                 ['', '', o3NumberTime, '', '', '', '', '', '', '', o4NumberTime, '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-                ['', '', '', '', '0', '15', '30', '45', '', '', '', '', '0', '15', '30', '45', ''],
+                ['', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', '', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', ''],
                 ['', '', '', '0', readings.o3_1_reads, readings.o3_2_reads, readings.o3_3_reads, readings.o3_4_reads, '', '', '', '0', readings.o4_1_reads, readings.o4_2_reads, readings.o4_3_reads, readings.o4_4_reads, ''],
                 ['', '', '', '1', readings.o3_5_reads, readings.o3_6_reads, readings.o3_7_reads, readings.o3_8_reads, '', '', '', '1', readings.o4_5_reads, readings.o4_6_reads, readings.o4_7_reads, readings.o4_8_reads, ''],
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-                ['', '', '', '', '0', '15', '30', '45', '', '', '', '', '0', '15', '30', '45', ''],
+                ['', '', Paragraph('<para fontSize=10 leading=9><b>T</b></para>',styles['Normal']), '', '0', '15', '30', '45', '', '', Paragraph('<para fontSize=10 leading=9><b>T</b></para>',styles['Normal']), '', '0', '15', '30', '45', ''],
                 ['', '', '', '0', readings.o3_9_reads, readings.o3_10_reads, readings.o3_11_reads, readings.o3_12_reads, '', '', '', '0', readings.o4_9_reads, readings.o4_10_reads, readings.o4_11_reads, readings.o4_12_reads, ''],
                 ['', '', '', '1', readings.o3_13_reads, readings.o3_14_reads, readings.o3_15_reads, readings.o3_16_reads, '', '', '', '1', readings.o4_13_reads, readings.o4_14_reads, readings.o4_15_reads, readings.o4_16_reads, ''],
                 ['', '', Paragraph('<para fontSize=9>Highest Instantaneous Opacity:&#160;' + str(readings.o3_highest_opacity) + '%</para>', styles['Normal']), '', '', '', '', '', '', '', Paragraph('<para fontSize=9>Highest Instantaneous Opacity:&#160;' + str(readings.o4_highest_opacity) + '%</para>', styles['Normal']), '', '', '', '', '', ''],
@@ -816,7 +816,7 @@ def form_PDF(request, formDate, formName):
                 # top table information
                 ('VALIGN', (0,6), (-1,15), 'MIDDLE'),
                 ('GRID', (0,3), (-1,8), 0.5, colors.black),
-                ('GRID', (0,3), (11,15), 0.5, colors.black),
+                ('GRID', (0,3), (9,15), 0.5, colors.black),
                 ('SPAN', (0,3), (10,3)),
                 ('SPAN', (11,3), (13,3)),
                 ('SPAN', (14,3), (-1,3)),
@@ -844,22 +844,26 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (15,8), (-1,8)),
                 
                 ('SPAN', (0,9), (5,9)),
-                ('SPAN', (6,9), (11,9)),
+                ('SPAN', (6,9), (9,9)),
                 
                 ('SPAN', (0,10), (5,10)),
-                ('SPAN', (6,10), (11,10)),
+                ('SPAN', (6,10), (9,10)),
                 
-                ('SPAN', (0,11), (11,11)),
+                ('SPAN', (0,11), (9,11)),
                 
                 ('SPAN', (0,12), (6,12)),
-                ('SPAN', (7,12), (11,12)),
+                ('SPAN', (7,12), (9,12)),
                 
                 ('SPAN', (0,13), (6,13)),
-                ('SPAN', (7,13), (11,13)),
+                ('SPAN', (7,13), (9,13)),
                 
-                ('SPAN', (0,14), (11,14)),
+                ('SPAN', (0,14), (9,14)),
                 
-                ('SPAN', (0,15), (11,15)),
+                ('SPAN', (0,15), (9,15)),
+                #canvas
+                ('SPAN', (10,9), (16,15)),
+                ('BOX', (10,9), (16,15), 0.5, colors.black),
+                ('VALIGN', (10,9), (16,15), 'MIDDLE'),
             ]
         elif item == 'B':
             print(item)
@@ -1298,7 +1302,7 @@ def form_PDF(request, formDate, formName):
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
-                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
+                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '',  Paragraph('<para align=center><img src=' + data.canvas + ' height=175 width=248 valign=middle></img></para>'), '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DISTANCE FROM OBSERVER</b><br/></para><para fontSize=7>' + data.distance_from + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>DIRECTION FROM OBSERVER</b><br/></para><para fontSize=7>' + data.direction_from + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSIONS</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.describe_emissions_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.describe_emissions_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>EMISSIONS COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;</para><para fontSize=7>' + data.emission_color_stop + '</para>', styles['Normal']), '', '', '', '', '', '', Paragraph('<para fontSize=7><b>PLUME TYPE:</b><br/></para><para fontSize=7>' + data.plume_type + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', ''],
@@ -1392,22 +1396,25 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (15,8), (-1,8)),
                 
                 ('SPAN', (0,9), (5,9)),
-                ('SPAN', (6,9), (11,9)),
+                ('SPAN', (6,9), (9,9)),
                 
                 ('SPAN', (0,10), (5,10)),
-                ('SPAN', (6,10), (11,10)),
+                ('SPAN', (6,10), (9,10)),
                 
-                ('SPAN', (0,11), (11,11)),
+                ('SPAN', (0,11), (9,11)),
                 
                 ('SPAN', (0,12), (6,12)),
-                ('SPAN', (7,12), (11,12)),
+                ('SPAN', (7,12), (9,12)),
                 
                 ('SPAN', (0,13), (6,13)),
-                ('SPAN', (7,13), (11,13)),
+                ('SPAN', (7,13), (9,13)),
                 
-                ('SPAN', (0,14), (11,14)),
+                ('SPAN', (0,14), (9,14)),
                 
-                ('SPAN', (0,15), (11,15)),
+                ('SPAN', (0,15), (9,15)),
+                
+                ('SPAN', (10,9), (-1,15)),
+                ('BOX', (10,9), (-1,15), 0.5, colors.black),
             ]
             if readings.PEC_type == 'non':
                 styleInsert = [
@@ -1473,7 +1480,7 @@ def form_PDF(request, formDate, formName):
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
-                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
+                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', Paragraph('<para align=center><img src=' + data.canvas + ' height=175 width=248 valign=middle></img></para>'), '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DISTANCE FROM OBSERVER</b><br/></para><para fontSize=7>' + data.distance_from + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>DIRECTION FROM OBSERVER</b><br/></para><para fontSize=7>' + data.direction_from + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSIONS</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.describe_emissions_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.describe_emissions_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>EMISSIONS COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;</para><para fontSize=7>' + data.emission_color_stop + '</para>', styles['Normal']), '', '', '', '', '', '', Paragraph('<para fontSize=7><b>PLUME TYPE:</b><br/></para><para fontSize=7>' + data.plume_type + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', ''],
@@ -1542,22 +1549,25 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (15,8), (-1,8)),
                 
                 ('SPAN', (0,9), (5,9)),
-                ('SPAN', (6,9), (11,9)),
+                ('SPAN', (6,9), (9,9)),
                 
                 ('SPAN', (0,10), (5,10)),
-                ('SPAN', (6,10), (11,10)),
+                ('SPAN', (6,10), (9,10)),
                 
-                ('SPAN', (0,11), (11,11)),
+                ('SPAN', (0,11), (9,11)),
                 
                 ('SPAN', (0,12), (6,12)),
-                ('SPAN', (7,12), (11,12)),
+                ('SPAN', (7,12), (9,12)),
                 
                 ('SPAN', (0,13), (6,13)),
-                ('SPAN', (7,13), (11,13)),
+                ('SPAN', (7,13), (9,13)),
                 
-                ('SPAN', (0,14), (11,14)),
+                ('SPAN', (0,14), (9,14)),
                 
-                ('SPAN', (0,15), (11,15)),
+                ('SPAN', (0,15), (9,15)),
+                
+                ('SPAN', (10,9), (-1,15)),
+                ('BOX', (10,9), (-1,15), 0.5, colors.black),
                 
                 #bottom table
                 ('SPAN', (2,17), (8,17)),
@@ -1589,6 +1599,11 @@ def form_PDF(request, formDate, formName):
             startStop = Paragraph('<para fontSize=10 align=center><b>Start:</b>&#160;' + str(readings.comb_start) + '&#160;&#160;&#160; <b>Stop:</b>&#160;' + time_change(readings.comb_stop) + '</para>', styles['Normal'])
             bottomHeader = Paragraph('<para fontSize=10 align=center><b>Method 9 Observation</b></para>', styles['Normal'])
             title = Paragraph('<para align=center><b>' + ModelForms.header + ' Visible Emission Observation Form</b><br/><b>' + ModelForms.title + ' - Form (' + ModelForms.form + ')</b></para>', styles['Normal'])
+            if readings.comb_formL:
+                interval = 'Read for 15 minutes MINIMUM at 15 second intervals'
+            else:
+                interval = 'Read for 6 minutes at 15 second intervals'
+            
             if data.wind_speed_stop == 'same':
                 suffix = ''
             else:
@@ -1608,7 +1623,7 @@ def form_PDF(request, formDate, formName):
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
-                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
+                [Paragraph('<para fontSize=7><b>HEIGHT ABOVE GROUND LEVEL</b><br/></para><para fontSize=7>' + data.height_above_ground + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>HEIGHT RELATIVE TO OBSERVER</b><br/></para><para fontSize=7>'+ data.height_rel_observer + '&#160;ft.</para>', styles['Normal']), '', '', '', '', Paragraph('<para align=center><img src=' + data.canvas + ' height=175 width=228 valign=middle></img></para>'), '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DISTANCE FROM OBSERVER</b><br/></para><para fontSize=7>' + data.distance_from + '&#160;ft.</para>', styles['Normal']), '', '', '', '', '', Paragraph('<para fontSize=7><b>DIRECTION FROM OBSERVER</b><br/></para><para fontSize=7>' + data.direction_from + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>DESCRIBE EMISSIONS</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.describe_emissions_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.describe_emissions_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 [Paragraph('<para fontSize=7><b>EMISSIONS COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;</para><para fontSize=7>' + data.emission_color_stop + '</para>', styles['Normal']), '', '', '', '', '', '', Paragraph('<para fontSize=7><b>PLUME TYPE:</b><br/></para><para fontSize=7>' + data.plume_type + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', ''],
@@ -1618,7 +1633,7 @@ def form_PDF(request, formDate, formName):
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 # bottom tables (0,17)
                 ['', bottomHeader, '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-                ['', 'Read for 15 minutes MINIMUM at 15 second intervals', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', interval, '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 ['', startStop, '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '', '0', '15', '30', '45'],
@@ -1628,21 +1643,34 @@ def form_PDF(request, formDate, formName):
                 ['', '', '', '', '', '', '', '3', readings.comb_read_13, readings.comb_read_14, readings.comb_read_15, readings.comb_read_16],
                 ['', '', '', '', '', '', '', '4', readings.comb_read_17, readings.comb_read_18, readings.comb_read_19, readings.comb_read_20],
                 ['', '', '', '', '', '', '', '5', readings.comb_read_21, readings.comb_read_22, readings.comb_read_23, readings.comb_read_24],
-                ['', '', '', '', '', '', '', '6', readings.comb_read_25, readings.comb_read_26, readings.comb_read_27, readings.comb_read_28],
-                ['', '', '', '', '', '', '', '7', readings.comb_read_29, readings.comb_read_30, readings.comb_read_31, readings.comb_read_32],
-                ['', '', '', '', '', '', '', '8', readings.comb_read_33, readings.comb_read_34, readings.comb_read_35, readings.comb_read_36],
-                ['', '', '', '', '', '', '', '9', readings.comb_read_37, readings.comb_read_38, readings.comb_read_39, readings.comb_read_40],
-                ['', '', '', '', '', '', '', '10', readings.comb_read_41, readings.comb_read_42, readings.comb_read_43, readings.comb_read_44],
-                ['', '', '', '', '', '', '', '11', readings.comb_read_45, readings.comb_read_46, readings.comb_read_47, readings.comb_read_48],
-                ['', '', '', '', '', '', '', '12', readings.comb_read_49, readings.comb_read_50, readings.comb_read_51, readings.comb_read_52],
-                ['', '', '', '', '', '', '', '13', readings.comb_read_53, readings.comb_read_54, readings.comb_read_55, readings.comb_read_56],
-                ['', '', '', '', '', '', '', '14', readings.comb_read_57, readings.comb_read_58, readings.comb_read_59, readings.comb_read_60],
-                ['', '', Paragraph('<para fontSize=10 align=center><b>Highest 6-reading Average Opacity for Push:&#160;</b>' + str(readings.comb_average) + '%</para>', styles['Normal'])],
-                ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
             ]
             
+            if readings.comb_formL:
+                tableInsert = [   
+                    ['', '', '', '', '', '', '', '6', readings.comb_read_25, readings.comb_read_26, readings.comb_read_27, readings.comb_read_28],
+                    ['', '', '', '', '', '', '', '7', readings.comb_read_29, readings.comb_read_30, readings.comb_read_31, readings.comb_read_32],
+                    ['', '', '', '', '', '', '', '8', readings.comb_read_33, readings.comb_read_34, readings.comb_read_35, readings.comb_read_36],
+                    ['', '', '', '', '', '', '', '9', readings.comb_read_37, readings.comb_read_38, readings.comb_read_39, readings.comb_read_40],
+                    ['', '', '', '', '', '', '', '10', readings.comb_read_41, readings.comb_read_42, readings.comb_read_43, readings.comb_read_44],
+                    ['', '', '', '', '', '', '', '11', readings.comb_read_45, readings.comb_read_46, readings.comb_read_47, readings.comb_read_48],
+                    ['', '', '', '', '', '', '', '12', readings.comb_read_49, readings.comb_read_50, readings.comb_read_51, readings.comb_read_52],
+                    ['', '', '', '', '', '', '', '13', readings.comb_read_53, readings.comb_read_54, readings.comb_read_55, readings.comb_read_56],
+                    ['', '', '', '', '', '', '', '14', readings.comb_read_57, readings.comb_read_58, readings.comb_read_59, readings.comb_read_60],
+                    ['', '', Paragraph('<para fontSize=10 align=center><b>Highest 6-reading Average Opacity for Push:&#160;</b>' + str(readings.comb_average) + '%</para>', styles['Normal'])],
+                    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ]
+                tableRowHeights = (20, 20, 5, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 5, 20, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 25, 20)
+            else:
+                tableInsert = [
+                    ['', '', Paragraph('<para fontSize=10 align=center><b>Highest 6-reading Average Opacity for Push:&#160;</b>' + str(readings.comb_average) + '%</para>', styles['Normal'])],
+                    ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ]
+                tableRowHeights = (20, 20, 5, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 5, 20, 15, 15, 15, 15, 15, 15, 15, 25, 20)
+                
+            for lines in tableInsert:
+                tableData.append(lines)
+            
             tableColWidths = (45,10,20,20,25,30,40, 30,40,40,40,40,20,42,42,42,42)
-            tableRowHeights = (20, 20, 5, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 5, 20, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 25, 20)
             
             style = [
                 #Fonts
@@ -1686,56 +1714,55 @@ def form_PDF(request, formDate, formName):
                 ('SPAN', (15,8), (-1,8)),
                 
                 ('SPAN', (0,9), (5,9)),
-                ('SPAN', (6,9), (11,9)),
+                ('SPAN', (6,9), (10,9)),
                 
                 ('SPAN', (0,10), (5,10)),
-                ('SPAN', (6,10), (11,10)),
+                ('SPAN', (6,10), (10,10)),
                 
-                ('SPAN', (0,11), (11,11)),
+                ('SPAN', (0,11), (10,11)),
                 
                 ('SPAN', (0,12), (6,12)),
-                ('SPAN', (7,12), (11,12)),
+                ('SPAN', (7,12), (10,12)),
                 
                 ('SPAN', (0,13), (6,13)),
-                ('SPAN', (7,13), (11,13)),
+                ('SPAN', (7,13), (10,13)),
                 
-                ('SPAN', (0,14), (11,14)),
+                ('SPAN', (0,14), (10,14)),
                 
-                ('SPAN', (0,15), (11,15)),
+                ('SPAN', (0,15), (10,15)),
                 
-                #bottom table
-                ('BACKGROUND', (7,21), (11,21),'(.6,.7,.8)'),
-                ('SPAN', (1,17), (-2,17)),
-                ('SPAN', (1,18), (-2,18)),
-                ('ALIGN', (1,18), (-2,18), 'CENTER'),
-                ('SPAN', (1,20), (-2,20)),
-                ('GRID', (7,21), (11,36), 0.5, colors.black),
-                ('ALIGN', (7,21), (11,36), 'CENTER'),
-                ('VALIGN', (7,21), (11,36), 'MIDDLE'),
-                ('SPAN', (2,37), (-2,37)),
-                # ('SPAN', (10,17), (16,17)),
-                # ('SPAN', (2,19), (2,21)),
-                # ('SPAN', (10,19), (10,21)),
-                # ('VALIGN', (0,17), (-1,29), 'MIDDLE'),
-                # ('ALIGN', (0,17), (-1,25), 'CENTER'),
-                # ('GRID', (2,19), (7,21), 0.5, colors.black),
-                # ('GRID', (10,19), (15,21), 0.5, colors.black),
-                # ('BACKGROUND', (3,19), (7,19),'(.6,.7,.8)'),
-                # ('BACKGROUND', (11,19), (15,19),'(.6,.7,.8)'),
-                # ('SPAN', (2,22), (8,22)),
-                # ('SPAN', (10,22), (16,22)),
-                
-                # ('SPAN', (2,24), (8,24)),
-                # ('SPAN', (2,26), (2,28)),
-                # ('VALIGN', (0,24), (-1,36), 'MIDDLE'),
-                # ('ALIGN', (0,24), (-1,32), 'CENTER'),
-                # ('GRID', (2,26), (7,28), 0.5, colors.black),
-                # ('BACKGROUND', (3,26), (7,26),'(.6,.7,.8)'),
-                # ('SPAN', (2,29), (8,29)),
-                
-                # ('SPAN', (9,27), (16,27)),
-                # ('ALIGN', (9,27), (16,27), 'CENTER'),
+                ('SPAN', (11,9), (-1,15)),
+                ('BOX', (11,9), (-1,15), 0.5, colors.black),
             ]
+            
+            if readings.comb_formL:
+                styleInsert = [
+                    #bottom table
+                    ('BACKGROUND', (7,21), (11,21),'(.6,.7,.8)'),
+                    ('SPAN', (1,17), (-2,17)),
+                    ('SPAN', (1,18), (-2,18)),
+                    ('ALIGN', (1,18), (-2,18), 'CENTER'),
+                    ('SPAN', (1,20), (-2,20)),
+                    ('GRID', (7,21), (11,36), 0.5, colors.black),
+                    ('ALIGN', (7,21), (11,36), 'CENTER'),
+                    ('VALIGN', (7,21), (11,36), 'MIDDLE'),
+                    ('SPAN', (2,37), (-2,37)),
+                ]
+            else:
+                styleInsert = [
+                    ('BACKGROUND', (7,21), (11,21),'(.6,.7,.8)'),
+                    ('SPAN', (1,17), (-2,17)),
+                    ('SPAN', (1,18), (-2,18)),
+                    ('ALIGN', (1,18), (-2,18), 'CENTER'),
+                    ('SPAN', (1,20), (-2,20)),
+                    ('GRID', (7,21), (11,27), 0.5, colors.black),
+                    ('ALIGN', (7,21), (11,27), 'CENTER'),
+                    ('VALIGN', (7,21), (11,27), 'MIDDLE'),
+                    ('SPAN', (2,28), (-2,28)),
+                ]
+                
+            for lineStyle in styleInsert:
+                style.append(lineStyle)
         elif item == 'I':
             tableData = [
                 [title],

@@ -1,21 +1,13 @@
-from curses import echo
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from django.core.files.base import ContentFile
-from django.core.files.storage import FileSystemStorage
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model, issues_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
-import PIL.Image as Image
-import io
-import base64
 import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-
 
 @lock
 def formA5(request, selector):
@@ -41,6 +33,7 @@ def formA5(request, selector):
     full_name = request.user.get_full_name()
     
     count_bp = daily_battery_profile_model.objects.count()
+    
     exist_canvas = ''
     
     if unlock:
@@ -126,9 +119,10 @@ def formA5(request, selector):
 
         if search:
             database_form = ''
+            exist_canvas = data.canvas
         else:
             if existing:
-                exist_canvas = database_form.canvasMediaFile.url
+                exist_canvas = database_form.canvas
                 initial_data = {
                     'date': database_form.date,
                     'estab': database_form.estab,
@@ -306,14 +300,6 @@ def formA5(request, selector):
                 readings_form = formA5_readings_form()
 
         if request.method == "POST":
-            def base64_file(data, name=None):
-                #print(data)
-                _format, _img_str = data.split(';base64,')
-                _name, ext = _format.split('/')
-                if not name:
-                    name = _name.split(":")[-1]
-                return ContentFile(base64.b64decode(_img_str), name='FormA5Canvas/{}_A5Canvas.{}'.format(name, ext))
-            
             if existing:
                 form = formA5_form(request.POST, instance=database_form)
                 readings = formA5_readings_form(request.POST, instance=database_form2)
@@ -328,9 +314,7 @@ def formA5(request, selector):
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
                 print(A.date)
-                canvasPostData = request.POST["canvas"]
 
-                canvasPNG = base64_file(canvasPostData,str(todays_log.date_save))
                 if not existing:
                     if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
                         A.wind_speed_stop = 'same'
@@ -341,21 +325,6 @@ def formA5(request, selector):
                     else:
                         A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
 
-                if settings.USE_S3:
-                    print("goes here")
-                    A.canvasMediaFile = canvasPNG
-                    #B.save(commit=False)
-                    image_url = A.canvasMediaFile.url
-                else:
-                    print("actually goes here")
-                    print(canvasPNG.name)
-                    
-                    fs = FileSystemStorage()
-                    filename = fs.save(canvasPNG.name, canvasPNG)
-                    
-                    image_url = fs.url(filename)
-                    A.canvasMediaFile = canvasPNG
-                    exist_canvas = A.canvasMediaFile.url
                 A.save()
 
                 B.form = A
