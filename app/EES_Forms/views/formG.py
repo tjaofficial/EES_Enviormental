@@ -254,14 +254,16 @@ def formG1(request, selector):
                 B = readings.save(commit=False)
                 
                 if not existing:
-                    if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
-                        A.wind_speed_stop = 'same'
-                    else:
-                        A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
-                    if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
-                        A.wind_temp_stop = 'same'
-                    else:
-                        A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                    if A.wind_speed_stop == 'TBD':
+                        if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                            A.wind_speed_stop = 'same'
+                        else:
+                            A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                    if A.wind_temp_stop == 'TBD':
+                        if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                            A.wind_temp_stop = 'same'
+                        else:
+                            A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
                         
                 A.save()
 
@@ -529,14 +531,16 @@ def formG2(request, selector):
                 B = readings.save(commit=False)
                 
                 if not existing:
-                    if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
-                        A.wind_speed_stop = 'same'
-                    else:
-                        A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
-                    if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
-                        A.wind_temp_stop = 'same'
-                    else:
-                        A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                    if A.wind_speed_stop == 'TBD':
+                        if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                            A.wind_speed_stop = 'same'
+                        else:
+                            A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                    if A.wind_temp_stop == 'TBD':
+                        if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                            A.wind_temp_stop = 'same'
+                        else:
+                            A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
                 
                 A.save()
 
