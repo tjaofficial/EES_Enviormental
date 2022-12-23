@@ -30,128 +30,38 @@ function sumTime(){
     
     document.getElementById('main_stop').value = stop;
 }*/
-function c2_check() {
-    const oven1 = parseInt(document.getElementById('c1_no').value),
-          oven2 = parseInt(document.getElementById('c2_no').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("c2_popup_oven").style.visibility = 'hidden';
+
+function oven_check(ovenId1, ovenId2) {
+    const oven1 = parseInt(document.getElementById(ovenId1).value),
+          oven2 = parseInt(document.getElementById(ovenId2).value),
+          number = ovenId2.slice(1,2);
+    if (oven1 == 84 && oven2 == 1 || oven1 == 85 && oven2 == 2) {
+        document.getElementById("c" + number + "_popup_oven").style.visibility = 'hidden';
+        document.getElementById("comment_skip_id").style.visibility = 'hidden';
+    } else if (oven2 == parseInt(oven1) + 2) {
+        document.getElementById("c" + number + "_popup_oven").style.visibility = 'hidden';
         document.getElementById("comment_skip_id").style.visibility = 'hidden';
     }  
     else if (oven1 >= oven2) {
-        document.getElementById("c2_popup_oven").style.visibility = 'visible';
+        document.getElementById("c" + number + "_popup_oven").style.visibility = 'visible';
         document.getElementById("comment_skip_id").style.visibility = 'hidden';
     }
     else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("c2_popup_oven").style.visibility = 'visible';
+        document.getElementById("c" + number + "_popup_oven").style.visibility = 'visible';
         document.getElementById("comment_skip_id").style.visibility = 'hidden';
     }
     else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("c2_popup_oven").style.visibility = 'hidden';
+        document.getElementById("c" + number + "_popup_oven").style.visibility = 'hidden';
         document.getElementById("comment_skip_id").style.visibility = 'visible';
         document.getElementById("comment_skip_id").innerHTML = ' Please change Oven No. for SECOND oven or click here to comment below what oven(s) were skipped.';
     } 
-    
+
     document.getElementById("comment_skip_id").onclick = function() {
         comment_skipped()
     };
     function comment_skipped() {
         for (let x = parseInt(oven1)+2; x < parseInt(oven2); x+=2) {
             document.getElementById("comments").value += ' Oven #' + x + ' was skipped.'
-        }
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-}
-function c3_check() {
-    const oven1 = parseInt(document.getElementById('c2_no').value),
-          oven2 = parseInt(document.getElementById('c3_no').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("c3_popup_oven").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-    else if (oven1 >= oven2) {
-        document.getElementById("c3_popup_oven").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("c3_popup_oven").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("c3_popup_oven").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").innerHTML = ' Please change Oven No. for SECOND oven or click here to comment below what oven(s) were skipped.';
-    } 
-    
-    document.getElementById("comment_skip_id").onclick = function() {
-        comment_skipped()
-    };
-    function comment_skipped() {
-        for (let x = parseInt(oven1)+2; x < parseInt(oven2); x+=2) {
-            document.getElementById("comments").innerHTML += ' Oven #' + x + ' was skipped.'
-        }
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-}
-function c4_check() {
-    const oven1 = parseInt(document.getElementById('c3_no').value),
-          oven2 = parseInt(document.getElementById('c4_no').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("c4_popup_oven").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-    else if (oven1 >= oven2) {
-        document.getElementById("c4_popup_oven").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("c4_popup_oven").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("c4_popup_oven").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").innerHTML = ' Please change Oven No. for SECOND oven or click here to comment below what oven(s) were skipped.';
-    } 
-    document.getElementById("comment_skip_id").onclick = function() {
-        comment_skipped()
-    };
-    function comment_skipped() {
-        for (let x = parseInt(oven1)+2; x < parseInt(oven2); x+=2) {
-            document.getElementById("comments").innerHTML += ' Oven #' + x + ' was skipped.'
-        }
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-}
-function c5_check() {
-    const oven1 = parseInt(document.getElementById('c4_no').value),
-          oven2 = parseInt(document.getElementById('c5_no').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("c5_popup_oven").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-    else if (oven1 >= oven2) {
-        document.getElementById("c5_popup_oven").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("c5_popup_oven").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("c5_popup_oven").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").innerHTML = ' Please change Oven No. for SECOND oven or click here to comment below what oven(s) were skipped.';
-    } 
-    document.getElementById("comment_skip_id").onclick = function() {
-        comment_skipped()
-    };
-    function comment_skipped() {
-        for (let x = parseInt(oven1)+2; x < parseInt(oven2); x+=2) {
-            document.getElementById("comments").innerHTML += ' Oven #' + x + ' was skipped.'
         }
         document.getElementById("comment_skip_id").style.visibility = 'hidden';
     }  
