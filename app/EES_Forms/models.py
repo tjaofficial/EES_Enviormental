@@ -9,7 +9,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 position_choices = (
     ('SGI Technician', 'SGI Technician'),
     ('SGI Admin', 'SGI Admin'),
-    ('SGI Quality Control', 'SGI Quality Control'),
     ('EES Coke Personnel', 'EES Coke Employees')
 )
 truck_choices = (
@@ -387,7 +386,8 @@ class user_profile_model(models.Model):
     cert_date = models.DateField(
         auto_now_add=False,
         auto_now=False,
-        blank=True
+        blank=True,
+        null=True,
     )
     profile_picture = models.ImageField(
         blank=True,

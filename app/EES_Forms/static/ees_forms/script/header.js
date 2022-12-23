@@ -7,19 +7,21 @@ document.getElementById('exitModal').addEventListener('click', (elem)=>{toggleDi
 
 
 function toggleDisplayed(elemClicked){
-  elemEffected = elemClicked.dataset.controls;
-  elem = document.getElementById(elemEffected);
-  const hiddenClassName = elem.id+"_hidden";
-  const shownClassName = elem.id+"_shown";
-  if(elementDisplayed(elem)){
-    elem.classList.remove(shownClassName);
-    elem.classList.add(hiddenClassName);
-    elem.dataset.displayed = 'False';
-  }
-  else{
-    elem.classList.remove(hiddenClassName);
-    elem.classList.add(shownClassName); 
-    elem.dataset.displayed = 'True';
+  if (!document.getElementById('hide_menu').value) {
+    elemEffected = elemClicked.dataset.controls;
+    elem = document.getElementById(elemEffected);
+    const hiddenClassName = elem.id+"_hidden";
+    const shownClassName = elem.id+"_shown";
+    if(elementDisplayed(elem)){
+      elem.classList.remove(shownClassName);
+      elem.classList.add(hiddenClassName);
+      elem.dataset.displayed = 'False';
+    }
+    else{
+      elem.classList.remove(hiddenClassName);
+      elem.classList.add(shownClassName); 
+      elem.dataset.displayed = 'True';
+    }
   }
 }
 

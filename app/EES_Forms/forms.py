@@ -201,7 +201,7 @@ class user_profile_form(forms.ModelForm):
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'profile_picture': forms.FileInput(attrs={'style': 'width: fit-content;'}),
             'phone': forms.TextInput(attrs={'type': 'tel', 'style': 'width: 150px;', 'placeholder': '+10005557777'}),
-            'position': forms.Select(attrs={'style': 'width: 100px;'}),
+            'position': forms.Select(attrs={'oninput': 'cert_date1()', 'style': 'width: 100px;'}),
         }
 
 

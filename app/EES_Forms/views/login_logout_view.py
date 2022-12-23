@@ -41,7 +41,7 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username.lower(), password=password)
         
         if user is not None:
             login(request, user)
@@ -66,8 +66,7 @@ def login_view(request):
             login_error["message"] = 'Incorrect username or password'
 
     return render(request, "ees_forms/ees_login.html", {
-        "now": now,
-        "login_error": login_error, 'access': access
+        "now": now, "login_error": login_error, 'access': access
     })
 
 def valid_account_logout(request):
