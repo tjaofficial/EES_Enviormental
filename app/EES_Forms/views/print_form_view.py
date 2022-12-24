@@ -997,7 +997,7 @@ def form_PDF(request, formDate, formName):
                     [subTitle],
                     [date],
                     ['','','','','','','',''],
-                    ['',Paragraph('<para align=left><b>Truck:</b> ' + roads_choices(data.truck_sel) + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
+                    ['',Paragraph('<para align=left><b>Truck:</b> ' + road_choices(data.truck_sel) + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
                     ['','MIN/SEC','0','15','30','45','',''],
                     ['','0',readings.TRead1,readings.TRead2,readings.TRead3,readings.TRead4,'',''],
                     ['','1',readings.TRead5,readings.TRead6,readings.TRead7,readings.TRead8,'',''],
