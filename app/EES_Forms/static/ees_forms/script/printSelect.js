@@ -2,7 +2,7 @@ document.getElementById('type').addEventListener("change", selectItemLis);
 selectItemLis();
 
 function selectItemLis() {
-    formList = ['a1','a2','a3','a4','a5','b','c','d','e','g1','g2','h','i','l','m','o','p',]
+    formList = ['a1','a2','a3','a4','a5','b','c','d','e','g1','g2','h','i','l','m','o','p', 'spill_kits']
     console.log('CHECK 1')
     const start = document.getElementById('type').value;
     if(start == 'single'){
@@ -29,7 +29,7 @@ function selectItemLis() {
 
 function selectFormLis() {
     const form = document.getElementById('forms').value;
-        console.log(form)
+        console.log(form + ' this is input')
         for(i=0; i < formList.length; i++){
             const formName = formList[i]
             if(formName == form){
