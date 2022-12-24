@@ -83,7 +83,28 @@ def road_choices(input):
     else:
         answer = parking_lots[input]
     return answer
+
+def truck_choices(input):
+    truck_choices = {
+        '#5': 'Truck #5',
+        '#6': 'Truck #6',
+        '#7': 'Truck #7',
+        '#9': 'Truck #9',
+        'contractor': 'Contractor',
+        'dozer': 'Dozer',
+    }
+    return truck_choices[input]
         
+def area_choices(input):
+    area_choices = {
+        'panther eagle': 'Panther Eagle',
+        'kepler': 'Kepler',
+        'rock lick': 'Rock Lick',
+        'mcclure': 'McClure',
+        'elk valley': 'Elk Valley',
+    }
+    return area_choices[input]
+    
 def emptyInputs(input):
     if not input:
         this = 'N/A'
@@ -997,14 +1018,14 @@ def form_PDF(request, formDate, formName):
                     [subTitle],
                     [date],
                     ['','','','','','','',''],
-                    ['',Paragraph('<para align=left><b>Truck:</b> ' + road_choices(data.truck_sel) + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
+                    ['',Paragraph('<para align=left><b>Truck:</b> ' + truck_choices(data.truck_sel) + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
                     ['','MIN/SEC','0','15','30','45','',''],
                     ['','0',readings.TRead1,readings.TRead2,readings.TRead3,readings.TRead4,'',''],
                     ['','1',readings.TRead5,readings.TRead6,readings.TRead7,readings.TRead8,'',''],
                     ['','2',readings.TRead9,readings.TRead10,readings.TRead11,readings.TRead12,'',''],
                     ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',data.average_t,''],
                     ['','','','','','','',''],
-                    ['',Paragraph('<para align=left><b>Area:</b> ' + data.area_sel + '</para>', styles['Normal']),'',startStopArea,'','','',''],
+                    ['',Paragraph('<para align=left><b>Area:</b> ' + area_choices(data.area_sel) + '</para>', styles['Normal']),'',startStopArea,'','','',''],
                     ['','MIN/SEC','0','15','30','45','',''],
                     ['','0',readings.ARead1,readings.ARead2,readings.ARead3,readings.ARead4,'',''],
                     ['','1',readings.ARead5,readings.ARead6,readings.ARead7,readings.ARead8,'',''],
