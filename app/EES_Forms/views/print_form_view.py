@@ -159,12 +159,12 @@ def form_PDF(request, formDate, formName):
             formList.append(str(allForms).replace('-',''))
         print(formList)
     elif formName == 'monthly':
-        formList = []
+        formList = ['G2', 'Spill Kits']
     elif formName == 'tanks':
         formList = []
     elif formName == 'waste':
         formList = []
-
+    print(formList)
     elems = []
     for item in formList:
         if item in ('N') or item[0] == 'F':
@@ -254,6 +254,7 @@ def form_PDF(request, formDate, formName):
         if goNext:
             continue
         print(formsAndData)
+        print('PENIS AND BALLS')
         for alpha in list(formsAndData):
             print(len(formsAndData[alpha]))
             if len(formsAndData[alpha]) == 2:
@@ -270,9 +271,9 @@ def form_PDF(request, formDate, formName):
             subTitle = 'Facility Name: EES Coke Battery LLC'
             #always the same on all A-forms
             marginSet = 0.4
-            
+            print('we made it to data')
             dataList = []
-            
+            print(item)
             #create a stream
             stream = io.BytesIO()
             if item == 'A1':
@@ -2107,7 +2108,8 @@ def form_PDF(request, formDate, formName):
                     ('ALIGN', (3,15), (4,16), 'CENTER'),
                     ('VALIGN', (3,15), (4,16), 'MIDDLE'),
                 ]
-            elif item.lower() == 'spill_kits':
+            elif item.replace(' ','_').lower() == 'spill_kits':
+                print('made it here')
                 title = ModelForms.header + ' - ' + ModelForms.title
                 tableData = [
                     [title],
@@ -2169,13 +2171,13 @@ def form_PDF(request, formDate, formName):
                     ('GRID', (0,30),(-1,35), 0.5,  colors.black),
                     ('ALIGN', (0,30),(-1,35), 'CENTER'),
                 ]
-                
+                print(style)
             heightGroup = ('A5', 'G1', 'G2', 'H')
             if item in heightGroup:
                 dataList.append([tableData, tableColWidths, style, tableRowHeights],)
             else:
                 dataList.append([tableData, tableColWidths, style, None],)
-
+                
             pdf = SimpleDocTemplate(stream, pagesize=letter, topMargin=marginSet*inch, bottomMargin=0.3*inch, title=documentTitle)
 
             if item in heightGroup:
