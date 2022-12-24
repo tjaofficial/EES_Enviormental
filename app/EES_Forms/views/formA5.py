@@ -288,7 +288,7 @@ def formA5(request, selector):
                     'describe_background_start': "Skies",
                     'describe_background_stop': "Same",
                     #'sky_conditions': weather['description'],
-                    'wind_speed_stop': 'TDB',
+                    'wind_speed_stop': 'TBD',
                     #'wind_direction': wind_direction,
                     'ambient_temp_stop': 'TBD',
                     #'humidity': weather['humidity'],
@@ -316,14 +316,15 @@ def formA5(request, selector):
                 print(A.date)
 
                 if not existing:
+                    print(A.wind_speed_stop)
                     if A.wind_speed_stop == 'TBD':
                         if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
                             A.wind_speed_stop = 'same'
                         else:
                             A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
-                    if A.wind_temp_stop == 'TBD':
+                    if A.ambient_temp_stop == 'TBD':
                         if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
-                            A.wind_temp_stop = 'same'
+                            A.ambient_temp_stop = 'same'
                         else:
                             A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
 
