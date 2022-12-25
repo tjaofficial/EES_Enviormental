@@ -1942,6 +1942,48 @@ class spill_kits_form(ModelForm):
             'skut27_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             
         }
+class quarterly_trucks_form(ModelForm):
+    class Meta:
+        model = quarterly_trucks_model
+        fields = ('__all__')
+        widgets = {
+            'quarter': forms.Select(attrs={'style':'width: 50px; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
+            'date': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'observer_5_1': forms.TextInput(attrs={'style':'width: 150px;'}),
+            'date_5_1': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_5_1': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_5_1': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'observer_6_2': forms.TextInput(attrs={'style':'width: 150px;'}),
+            'date_6_2': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_6_2': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_6_2': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'observer_7_3': forms.TextInput(attrs={'style':'width: 150px;'}) ,
+            'date_7_3': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_7_3': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_7_3': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'observer_9_4': forms.TextInput(attrs={'style':'width: 150px;'}),
+            'date_9_4': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_9_4': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_9_4': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+        }
+        
+
         
 class sop_form(ModelForm):
     class Meta:

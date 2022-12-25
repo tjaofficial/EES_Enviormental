@@ -137,6 +137,7 @@ def search_forms_view(request, access_page):
                 # THESE ARE FORMS USING DATE
                 database = apps.get_model('EES_Forms', access_page).objects.all().order_by('-date')
                 for x in ModelForms:
+                    print('CHECK 1')
                     if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
                         print(access_page)
                         if x.frequency[0] == 'W':
@@ -148,6 +149,8 @@ def search_forms_view(request, access_page):
                                 weekend = False
                         elif x.frequency[0] == 'M':
                             att_check = 6
+                        elif x.frequency[0] == 'Q':
+                            att_check = 7
                         else:
                             # THESE ARE DAILY FORMS
                             att_check = 1
@@ -187,6 +190,9 @@ def search_forms_view(request, access_page):
             elif att_check == 6:
                 for x in database:
                     mainList.append([access_page, x.date, x, 'Monthly'])
+            elif att_check == 7:
+                for x in database:
+                    mainList.append([access_page, x.date, x, 'Quarterly'])
                     
                     
             try:

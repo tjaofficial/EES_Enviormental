@@ -60,6 +60,8 @@ urlpatterns = [
     path("Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
     path("Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
+    path("Quarterly/quarterly_trucks/<str:selector>", views.quarterly_trucks, name="quarterly_trucks"),
+    
 
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("pt_admin1", views.pt_admin1_view, name="pt_admin1"),

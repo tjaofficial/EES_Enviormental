@@ -11,6 +11,7 @@ from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 
 
+
 from .daily_battery_profile_view import *
 from .weekly_forms_view import *
 from .method303_rolling_avg_view import *
@@ -36,5 +37,6 @@ from .formO import *
 from .formP import *
 from .con_dashboard_view import *
 from .spill_kits_view import *
+from .quarterly_trucks_view import *
 from .weekly_enviornmental_inspections import *
 

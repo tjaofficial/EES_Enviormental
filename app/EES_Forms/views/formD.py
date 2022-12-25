@@ -42,7 +42,7 @@ def formD(request, selector):
             form = database_model
             existing = True
             search = True
-            unlock = False
+            unlock = True
         elif len(submitted_forms) > 0:
             database_form = submitted_forms[0]
             #print(database_form.whatever().values())

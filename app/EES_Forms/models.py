@@ -6,6 +6,12 @@ from django.urls import reverse
 import datetime
 from phonenumber_field.modelfields import PhoneNumberField
 
+quarter_choices = (
+    ('1', '1st'),
+    ('2', '2nd'),
+    ('3', '3rd'),
+    ('4', '4th')
+)
 position_choices = (
     ('SGI Technician', 'SGI Technician'),
     ('SGI Admin', 'SGI Admin'),
@@ -194,7 +200,7 @@ frequent_choices = (
     ('Daily', 'Daily'),
     ('Weekly', 'Weekly'),
     ('Monthly', 'Monthly'),
-    ('Quaterly', 'Quaterly '),
+    ('Quarterly', 'Quarterly '),
     ('Semi-Annual', 'Semi-Annual'),
     ('Annual', 'Annual')
 )
@@ -5285,6 +5291,243 @@ class spill_kits_model(models.Model):
             'skut25_comment' : self.skut25_comment,
             'skut26_comment' : self.skut26_comment,
             'skut27_comment' : self.skut27_comment,
+        }
+
+class quarterly_trucks_model(models.Model):
+    quarter = models.CharField(
+        choices=quarter_choices,
+        max_length=4,
+    )
+    date = models.DateField(
+        auto_now_add=False,
+        auto_now=False
+    )
+    
+    observer_5_1 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    date_5_1 = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_5_1 = models.TimeField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True,
+    )
+    comments_5_1 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    rear_gate_5_1 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_interior_5_1 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_exterior_5_1 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    exhaust_5_1 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    
+    observer_6_2 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    date_6_2 = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_6_2 = models.TimeField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True,
+    )
+    comments_6_2 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    rear_gate_6_2 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_interior_6_2 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_exterior_6_2 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    exhaust_6_2 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    
+    observer_7_3 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    date_7_3 = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_7_3 = models.TimeField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True,
+    )
+    comments_7_3 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    rear_gate_7_3 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_interior_7_3 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_exterior_7_3 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    exhaust_7_3 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    
+    observer_9_4 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    date_9_4 = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True
+    )
+    time_9_4 = models.TimeField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+        null=True,
+    )
+    comments_9_4 = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    rear_gate_9_4 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_interior_9_4 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    box_exterior_9_4 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    exhaust_9_4 = models.CharField(
+        choices=yes_no_choices,
+        max_length=4,
+        blank=True,
+        null=True
+    )
+    
+    def __str__(self):
+        return str(self.date)
+
+    def whatever(self):
+        return{
+            'observer_5_1': self.observer_5_1,
+            'date_5_1': self.date_5_1,
+            'time_5_1': self.time_5_1,
+            'comments_5_1': self.comments_5_1,
+            'rear_gate_5_1': self.rear_gate_5_1,
+            'box_interior_5_1': self.box_interior_5_1,
+            'box_exterior_5_1': self.box_exterior_5_1,
+            'exhaust_5_1': self.exhaust_5_1,
+            'observer_6_2': self.observer_6_2,
+            'date_6_2': self.date_6_2,
+            'time_6_2': self.time_6_2,
+            'comments_6_2': self.comments_6_2,
+            'rear_gate_6_2': self.rear_gate_6_2,
+            'box_interior_6_2': self.box_interior_6_2,
+            'box_exterior_6_2': self.box_exterior_6_2,
+            'exhaust_6_2': self.exhaust_6_2,
+            'observer_7_3': self.observer_7_3,
+            'date_7_3': self.date_7_3,
+            'time_7_3': self.time_7_3,
+            'comments_7_3': self.comments_7_3,
+            'rear_gate_7_3': self.rear_gate_7_3,
+            'box_interior_7_3': self.box_interior_7_3,
+            'box_exterior_7_3': self.box_exterior_7_3,
+            'exhaust_7_3': self.exhaust_7_3,
+            'observer_9_4': self.observer_9_4,
+            'date_9_4': self.date_9_4,
+            'time_9_4': self.time_9_4,
+            'comments_9_4': self.comments_9_4,
+            'rear_gate_9_4': self.rear_gate_9_4,
+            'box_interior_9_4': self.box_interior_9_4,
+            'box_exterior_9_4': self.box_exterior_9_4,
+            'exhaust_9_4': self.exhaust_9_4,
         }
 
 class sop_model(models.Model):

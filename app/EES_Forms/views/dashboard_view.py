@@ -18,10 +18,26 @@ def IncompleteForms(request):
         reads = formA5_readings_model.objects.all()
         today_str = str(today)
         now = datetime.datetime.now()
-
+        print('CHECK 1')
         weekday_fri = today + datetime.timedelta(days=4 - todays_num)
         weekend_fri = weekday_fri + datetime.timedelta(days=7)
 
+        def what_quarter(input):
+            if input.month in {1,2,3}:
+                return 1
+            if input.month in {4,5,6}:
+                return 2
+            if input.month in {7,8,9}:
+                return 3
+            if input.month in {10,11,12}:
+                return 4
+            
+        print(what_quarter(today))
+        def monthDayAdjust(input):
+            if len(str(input)) == 1:
+                return '0'+str(input)
+            else:
+                return str(input)
     # ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
     # ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
         if Forms.objects.count() <= 5:
@@ -337,6 +353,18 @@ def IncompleteForms(request):
                 due_date=today,
                 date_submitted=today - datetime.timedelta(days=1),
                 submitted=False,)
+            quarterly_trucks = Forms(
+                form="Quarterly Trucks",
+                frequency="Quarterly",
+                day_freq='Everyday',
+                weekdays_only=False,
+                weekend_only=False,
+                link="quarterly_trucks",
+                header="Quarterly Trucks Form",
+                title="Inspection Check List",
+                due_date=today,
+                date_submitted=today - datetime.timedelta(days=1),
+                submitted=False,)
 
             A1.save()
             A2.save()
@@ -364,6 +392,7 @@ def IncompleteForms(request):
             O.save()
             P.save()
             spill_kits.save()
+            quarterly_trucks.save()
 
     # --------------------------------------------Closest Oven Due-----------------
     # --------------------------------------------Closest Oven Due-----------------
@@ -508,16 +537,41 @@ def IncompleteForms(request):
     # ------------------------------------------------------Form Data-------------
         for forms in sub_forms:
             if forms.frequency == 'Monthly':
+                print('CHECK 2.1')
                 last_day = calendar.monthrange(today.year, today.month)[1]
                 forms.due_date = str(today.year) + '-' + str(today.month) + '-' + str(last_day)
                 A = forms.date_submitted
                 B = forms.due_date
                 if A.year != today.year or A.month != today.month:
                     forms.submitted = False
-                    forms.save()
                 elif A.day > last_day:
                     forms.submitted = False
-                    forms.save()
+                forms.save()
+            elif forms.frequency == 'Quarterly':
+                print('CHECK 2.2')
+                if what_quarter(today) == 1:
+                    monthDue = 3
+                    yearDue = today.year
+                    dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+                elif what_quarter(today) == 2:
+                    monthDue = 6
+                    yearDue = today.year
+                    dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+                elif what_quarter(today) == 3:
+                    monthDue = 9
+                    yearDue = today.year
+                    dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+                elif what_quarter(today) == 4:
+                    monthDue = 12
+                    yearDue = today.year
+                    dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+                dateBuild = str(yearDue) + '-' + monthDayAdjust(monthDue) + '-' + monthDayAdjust(dayDue)
+                forms.due_date = datetime.datetime.strptime(dateBuild, "%Y-%m-%d").date()
+                A = forms.date_submitted
+                B = forms.due_date
+                if what_quarter(A) != what_quarter(B):
+                    forms.submitted = False
+                forms.save()
             elif forms.frequency == 'Weekly':
                 if todays_num in {0, 1, 2, 3, 4}:
                     forms.due_date = weekday_fri
@@ -526,21 +580,18 @@ def IncompleteForms(request):
                     forms.due_date = weekend_fri
                     start_sat = today - datetime.timedelta(days= todays_num - 5)
                 A = forms.date_submitted
-                if forms.day_freq == 'Weekends':
-                    if A != today:
-                        forms.submitted = False
-                        forms.save()   
-                else:
-                    if A < start_sat or A > forms.due_date:
-                        forms.submitted = False
-                        forms.save()
+                if forms.day_freq == 'Weekends' and A != today:
+                    forms.submitted = False   
+                elif A < start_sat or A > forms.due_date:
+                    forms.submitted = False
+                forms.save()
             elif forms.frequency == 'Daily':
                 forms.due_date = today
                 
                 A = forms.date_submitted
                 if today != A:
                     forms.submitted = False
-                    forms.save()
+                forms.save()
         
         all_forms = Forms.objects.all().order_by('form')
         
