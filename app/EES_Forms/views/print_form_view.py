@@ -2173,6 +2173,7 @@ def form_PDF(request, formDate, formName):
                 ]
                 print(style)
             elif item.replace(' ','_').lower() == 'quarterly_trucks':
+                title = Paragraph('<para fontSize=20 align=center font=Times-Bold leading=25><b>' + ModelForms.header + '<br/>' + ModelForms.title + ' - Form (' + ModelForms.form + ')</b></para>', styles['Normal'])
                 tableData = [
                     [title],
                     [subTitle],
@@ -2180,37 +2181,33 @@ def form_PDF(request, formDate, formName):
                     ['Truck 5', '', '', '', '', ''],
                     #truck 5 start (0,4)
                     [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_5_1 + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + str(data.date_5_1) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_5_1) + '</para>', styles['Normal']), ''],
-                    ['', '', '', '', '', ''],
-                    [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_5_1 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_5_1 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_5_1 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>4) Exhaust Position Satisfactory:&#160;</b>' + data.exhaust_5_1 + '</para>', styles['Normal']), '', '', '', '', ''],
+                    [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_5_1 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_5_1 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_5_1 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>4) Exhaust Position Satisfactory:&#160;</b>' + data.exhaust_5_1 + '</para>', styles['Normal']), ''],
                     [Paragraph('<para><b>Comments:&#160;</b>' + data.comments_5_1 + '</para>', styles['Normal']), '', '', '', '', ''],
                     ['', '', '', '', '', ''],
                     ['Truck 6', '', '', '', '', ''],
-                    #truck 6 start (0,13)
-                    [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_6_2 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>Date:&#160;</b>' + str(data.date_6_2) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_6_2) + '</para>', styles['Normal']), '', '', '', ''],
-                    [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_6_2 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_6_2 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_6_2 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>4) Exhaust Position Satisfactory:&#160;</b>' + data.exhaust_6_2 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>Comments:&#160;</b>' + data.comments_6_2 + '</para>', styles['Normal']), '', '', '', '', ''],
+                    #truck 6 start (0,12)
+                    [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_6_2 + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + str(data.date_6_2) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_6_2) + '</para>', styles['Normal']), '', '', ''],
+                    [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_6_2 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_6_2 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_6_2 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>4) Exhaust Position Satisfactory:&#160;</b>' + data.exhaust_6_2 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>Comments:&#160;</b>' + data.comments_6_2 + '</para>', styles['Normal']), ''],
                     ['', '', '', '', '', ''],
                     ['Truck 7', '', '', '', '', ''],
-                    #truck 7 start (0,22)
-                    [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_7_3 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>Date:&#160;</b>' + str(data.date_7_3) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_7_3) + '</para>', styles['Normal']), '', '', '', ''],
-                    [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_7_3 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_7_3 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_7_3 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>4) Exhaust Position Satisfactory:&#160;</b>' + data.exhaust_7_3 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>Comments:&#160;</b>' + data.comments_7_3 + '</para>', styles['Normal']), '', '', '', '', ''],
+                    #truck 7 start (0,20)
+                    [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_7_3 + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + str(data.date_7_3) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_7_3) + '</para>', styles['Normal']), '', '', ''],
+                    [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_7_3 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_7_3 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_7_3 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>4) Exhaust Position Satisfactory:&#160;</b>' + data.exhaust_7_3 + '</para>', styles['Normal']), ''],
+                    [Paragraph('<para><b>Comments:&#160;</b>' + data.comments_7_3 + '</para>', styles['Normal']), ''],
                     ['', '', '', '', '', ''],
                     ['Truck 9', '', '', '', '', ''],
-                    #truck 9 start (0,31)
-                    [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_9_4 + '</para>', styles['Normal']), '', '', '', '', ''],
-                    [Paragraph('<para><b>Date:&#160;</b>' + str(data.date_9_4) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_9_4) + '</para>', styles['Normal']), '', '', '', ''],
+                    #truck 9 start (0,28)
+                    [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_9_4 + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + str(data.date_9_4) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_9_4) + '</para>', styles['Normal']), '', '', ''],
                     [Paragraph('<para><b>1) Condition of Rear Gate Satisfactory:&#160;</b>' + data.rear_gate_9_4 + '</para>', styles['Normal']), '', '', '', '', ''],
                     [Paragraph('<para><b>2) Condition of Box Interior Satisfactory:&#160;</b>' + data.box_interior_9_4 + '</para>', styles['Normal']), '', '', '', '', ''],
                     [Paragraph('<para><b>3) Condition of Box Exterior Satisfactory:&#160;</b>' + data.box_exterior_9_4 + '</para>', styles['Normal']), '', '', '', '', ''],
@@ -2219,24 +2216,24 @@ def form_PDF(request, formDate, formName):
                     ['', '', '', '', '', ''],
                 ]
                 
-                tableColWidths = (100,120,100,90,80,80)
+                tableColWidths = (120,120,100,90,50,20)
 
                 style = [
                     #Top header and info
                     ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
                     ('FONT', (0,1), (-1,1), 'Times-Bold', 15),
-                    ('BOTTOMPADDING',(0,2), (-1,2), 25),
+                    ('BOTTOMPADDING',(0,2), (-1,2), 15),
                     ('SPAN', (0,0), (-1,0)),
                     ('SPAN', (0,1), (-1,1)),
                     ('SPAN', (2,2), (3,2)),
                     ('ALIGN', (0,0), (-1,2), 'CENTER'),
                     
                     #truck 5
-                    ('BOX',(0,3), (-3,10), 0.5,colors.black),
+                    ('BOX',(0,3), (-3,9), 0.5,colors.black),
                     ('FONT', (0,3), (0,3), 'Times-Bold', 15),
                     ('SPAN', (0,3), (-3,3)),
                     ('ALIGN', (0,3), (-3,3), 'LEFT'),
-                    #('SPAN', (0,4), (1,4)),
+                    ('SPAN', (0,5), (1,5)),
                     ('SPAN', (2,4), (3,4)),
                     ('SPAN', (4,4), (5,4)),
                     ('SPAN', (4,5), (5,5)),
@@ -2246,47 +2243,46 @@ def form_PDF(request, formDate, formName):
                     ('SPAN', (0,9), (3,9)),
                     
                     #truck 6
-                    ('BOX',(0,12), (-3,19), 0.5,colors.black),
-                    ('FONT', (0,12), (0,12), 'Times-Bold', 15),
-                    ('SPAN', (0,12), (-3,12)),
-                    ('ALIGN', (0,12), (-3,12), 'LEFT'),
+                    ('BOX',(0,11), (-3,17), 0.5,colors.black),
+                    ('FONT', (0,11), (0,11), 'Times-Bold', 15),
+                    ('SPAN', (0,11), (-3,11)),
+                    ('ALIGN', (0,11), (-3,11), 'LEFT'),
                     ('SPAN', (0,13), (1,13)),
-                    ('SPAN', (2,13), (3,13)),
-                    ('SPAN', (4,13), (5,13)),
-                    ('SPAN', (4,14), (5,14)),
+                    ('SPAN', (2,12), (3,12)),
+                    ('SPAN', (4,12), (5,12)),
+                    ('SPAN', (0,14), (3,14)),
                     ('SPAN', (0,15), (2,15)),
                     ('SPAN', (0,16), (3,16)),
                     ('SPAN', (0,17), (3,17)),
                     ('SPAN', (0,18), (3,18)),
-                    ('SPAN', (0,19), (3,19)),
                     
                     #truck 7
-                    ('BOX',(0,21), (-3,28), 0.5,colors.black),
-                    ('FONT', (0,21), (0,21), 'Times-Bold', 15),
-                    ('SPAN', (0,21), (-3,21)),
-                    ('ALIGN', (0,21), (-3,21), 'LEFT'),
-                    ('SPAN', (0,22), (1,22)),
-                    ('SPAN', (2,22), (3,22)),
-                    ('SPAN', (4,22), (5,22)),
-                    ('SPAN', (4,23), (5,23)),
-                    ('SPAN', (0,24), (2,24)),
+                    ('BOX',(0,19), (-3,25), 0.5,colors.black),
+                    ('FONT', (0,19), (0,19), 'Times-Bold', 15),
+                    ('SPAN', (0,19), (-3,19)),
+                    ('ALIGN', (0,19), (-3,19), 'LEFT'),
+                    ('SPAN', (0,21), (1,21)),
+                    ('SPAN', (2,20), (3,20)),
+                    ('SPAN', (4,20), (5,20)),
+                    ('SPAN', (0,22), (3,22)),
+                    ('SPAN', (0,23), (2,23)),
+                    ('SPAN', (0,24), (3,24)),
                     ('SPAN', (0,25), (3,25)),
                     ('SPAN', (0,26), (3,26)),
-                    ('SPAN', (0,27), (3,27)),
-                    ('SPAN', (0,28), (3,28)),
-                    
-                    
+                 
                     #truck 9
-                    ('BOX',(0,30), (-3,37), 0.5,colors.black),
-                    ('FONT', (0,30), (0,30), 'Times-Bold', 15),
-                    ('SPAN', (0,30), (-3,30)),
-                    ('ALIGN', (0,30), (-3,30), 'LEFT'),
-                    ('SPAN', (0,31), (1,31)),
-                    ('SPAN', (2,31), (3,31)),
+                    ('BOX',(0,27), (-3,33), 0.5,colors.black),
+                    ('FONT', (0,27), (0,27), 'Times-Bold', 15),
+                    ('SPAN', (0,27), (-3,27)),
+                    ('ALIGN', (0,27), (-3,27), 'LEFT'),
+                    ('SPAN', (0,29), (1,29)),
+                    ('SPAN', (2,28), (3,28)),
                     ('SPAN', (4,31), (5,31)),
                     ('SPAN', (4,32), (5,32)),
-                    ('SPAN', (0,33), (2,33)),
-                    ('SPAN', (0,34), (3,34)),
+                    ('SPAN', (0,30), (2,30)),
+                    ('SPAN', (0,31), (3,31)),
+                    ('SPAN', (0,32), (3,32)),
+                    ('SPAN', (0,33), (3,33)),
                 ]
             
             heightGroup = ('A5', 'G1', 'G2', 'H')
