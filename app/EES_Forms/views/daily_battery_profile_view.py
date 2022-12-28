@@ -38,9 +38,13 @@ def daily_battery_profile_view(request, access_page, date):
             form = daily_battery_profile_form(request.POST, instance=todays_log)
         else:
             form = daily_battery_profile_form(request.POST)
-        if form.is_valid():
-            form.save()
+        #print(len(request.POST['inop_numbs'].replace(' ', ''). split(',')))
+        
 
+        if form.is_valid():
+            A = form.save(commit=False)
+            A.inop_ovens = len(request.POST['inop_numbs'].replace(' ', ''). split(','))
+            A.save()
             return redirect('IncompleteForms')
 
     return render(request, "ees_forms/Bat_Info.html", {

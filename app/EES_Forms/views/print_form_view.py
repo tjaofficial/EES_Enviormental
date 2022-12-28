@@ -30,12 +30,18 @@ def date_change(date):
     return parsed
 
 def time_change(time):
+    print(time)
+    print(str(time))
     if str(time) not in {'None', '', 'No'}:
         hourNum = int(str(time)[0:2])
         minNum = str(time)[3:5]
         timeLabel = 'AM'
         if hourNum > 12:
             newHourNum = str(hourNum - 12)
+            timeLabel = 'PM'
+            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+        elif hourNum == 12:
+            newHourNum = str(time)[0:2]
             timeLabel = 'PM'
             newTime = newHourNum + ':' + minNum + ' ' + timeLabel
         elif hourNum == 00:
@@ -111,6 +117,16 @@ def emptyInputs(input):
         return this
     else:
         return input
+    
+def quarterParse(input):
+    if input == 1:
+        return '1st Quarter'
+    elif input == 2:
+        return '2nd Quarter'
+    elif input == 3:
+        return '3rd Quarter'
+    elif input == 4:
+        return '4th Quarter'
     
 class PageNumCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
@@ -292,6 +308,7 @@ def form_PDF(request, formDate, formName):
                         styles['Normal'])
                 comments = Paragraph('<b>Comments:</b>    ' + readings.comments,
                         styles['Normal'])
+                print(data.start)
                 tableData = [
                         [title],
                         [subTitle],
@@ -2177,7 +2194,7 @@ def form_PDF(request, formDate, formName):
                 tableData = [
                     [title],
                     [subTitle],
-                    ['', '', Paragraph('<para>' + str(data.date.year) + '&#160;&#160;-&#160;&#160;' + str(data.quarter) + '</para>', styles['Normal']), '', '', ''],
+                    ['', '', Paragraph('<para>' + str(data.date.year) + '&#160;&#160;-&#160;&#160;' + quarterParse(int(data.quarter)) + '</para>', styles['Normal']), '', '', ''],
                     ['Truck 5', '', '', '', '', ''],
                     #truck 5 start (0,4)
                     [Paragraph('<para><b>Observer:&#160;</b>' + data.observer_5_1 + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + str(data.date_5_1) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + time_change(data.time_5_1) + '</para>', styles['Normal']), ''],
@@ -2303,8 +2320,9 @@ def form_PDF(request, formDate, formName):
             
             elems.append(table)
             elems.append(PageBreak())
-        
+                    
     try:
+        print('whatsup')
         pdf.build(elems, canvasmaker=PageNumCanvas)
         
             # get buffer

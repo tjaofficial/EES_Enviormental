@@ -28,11 +28,13 @@ def printSelect(request):
     
     if request.method == "POST":
         if request.POST['forms'] != '':
-            if len(request.POST['forms']) > 1 and len(request.POST['forms']) <= 2:
+            if 1 <= len(request.POST['forms']) <= 2:
                 formCheck = 'form' + request.POST['forms'].capitalize() + '_model'
             elif len(request.POST['forms']) > 2:
                 formCheck = request.POST['forms'] + '_model'
                 print(formCheck)
+            else:
+                print('something is wrong')
             mainModel = apps.get_model('EES_Forms', formCheck)
                 
             try:
