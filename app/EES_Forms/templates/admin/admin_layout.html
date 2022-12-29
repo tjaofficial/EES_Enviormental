@@ -11,6 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script defer src="{% static 'ees_forms/script/admin_dashboard.js' %}"></script>
         <script defer src="{% static 'ees_forms/script/admin_header.js' %}"></script>
+        <script defer src="{% static 'ees_forms/script/admin_sidebar.js' %}"></script>
         <link href="{% static 'ees_forms/style/admin_layout.css' %}" rel="stylesheet" />
         <link href="{% static 'ees_forms/style/admin_form.css' %}" rel="stylesheet" />
     </head>
@@ -118,9 +119,9 @@
                         </ul>
                     </li>
                     {% elif admin %}
-                        <li><a href=#>Client Data</a>
-                            <ul>
-                                <li><a href=#>DTE EES Coke Battery</a>
+                        <li><a id='sbClient' href=#>Clients</a>
+                            <ul id='sbClientList' style='display:block;'>
+                                <li><a id='sbClient1' href=#>DTE EES Coke Battery</a>
                                     <ul>
                                         <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
                                         <li><a href="{% url 'archive' %}">Archive</a></li>
