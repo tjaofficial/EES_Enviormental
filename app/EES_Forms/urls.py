@@ -16,6 +16,7 @@ urlpatterns = [
     path("profile/<str:access_page>", views.profile, name="profile"),
     path('about', views.about_view, name='about'),
     path('safety', views.safety_view, name='safety'),
+    path('settings', views.settings_view, name='settings'),
     
 
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),

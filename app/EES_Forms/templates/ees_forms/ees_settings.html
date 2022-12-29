@@ -1,0 +1,126 @@
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%} {% load static %}
+<link href="{% static 'ees_forms/style/settings.css' %}" rel="stylesheet">
+<center>
+    <div class='table2Style'>
+        <div class='tableHeader'>
+            Settings
+        </div>
+        <div id="pusht_travels" style="text-align: center; margin: auto; padding: 10px;">  
+            <form method="POST" action="">
+                {% csrf_token %}
+                <table style="margin: auto; border-collapse: collapse; text-align: left;">
+                    <tr>
+                        <th colspan="2" class='sectionHeader'>
+                            Battery Information/Specifics
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Facility Name:
+                        </th>
+                        <td class='answer'>
+                            {{data.facility_name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Facility Address:
+                        </th>
+                        <td class='answer'>
+                            {{data.address}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            City/District:
+                        </th>
+                        <td class='answer'>
+                            {{data.district}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            State:
+                        </th>
+                        <td class='answer'>
+                            {{data.state}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            County:
+                        </th>
+                        <td class='answer'>
+                            {{data.county}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Establishment Number:
+                        </th>
+                        <td class='answer'>
+                            {{data.estab_num}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Battery Number:
+                        </th>
+                        <td class='answer'>
+                            {{data.bat_num}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                        Equipment Location:
+                        </th>
+                        <td class='answer'>
+                            {{data.equip_location}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                        Total Number of Ovens:
+                        </th>
+                        <td class='answer'>
+                            {{data.total_ovens}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Height of Battery:
+                        </th>
+                        <td class='answer'>
+                            {{data.bat_height}} {{data.bat_height_label}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Battery Main:
+                        </th>
+                        <td class='answer'>
+                            {{data.bat_main}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            Lids Per Oven:
+                        </th>
+                        <td class='answer'>
+                            {{data.bat_lids}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class='sectionHeader' style='padding-top: 2rem;'>
+                            Personalize Safety Page
+                        </th>
+                    </tr>
+                </table>
+                <input type="submit" name="save_settings">
+            </form>
+        </div>
+    </div>
+</center>
+
+{% endblock %}

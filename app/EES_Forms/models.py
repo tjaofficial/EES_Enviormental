@@ -15,7 +15,7 @@ quarter_choices = (
 position_choices = (
     ('SGI Technician', 'SGI Technician'),
     ('SGI Admin', 'SGI Admin'),
-    ('EES Coke Personnel', 'EES Coke Employees')
+    ('EES Coke Employees', 'EES Coke Employees')
 )
 truck_choices = (
     ('#5', 'Truck #5'),
@@ -32,7 +32,14 @@ area_choices = (
     ('mcclure', 'McClure'),
     ('elk valley', 'Elk Valley'),
 )
-
+heightLabel = (
+    ('ft', 'Feet'),
+    ('m', 'Meters')
+)
+batteryMain_choices = (
+    ('single','Single'),
+    ('double','Double')
+)
 crew_choices = (
     ('A', 'A'),
     ('B', 'B'),
@@ -365,23 +372,28 @@ class daily_battery_profile_model(models.Model):
         return str(self.date_save)
 
 class bat_info_model(models.Model):
-    bat_num = models.CharField(max_length=30)
-    total_ovens = models.CharField(max_length=30)
+    bat_num = models.IntegerField()
+    total_ovens = models.IntegerField()
     facility_name = models.CharField(max_length=30)
-    County = models.CharField(max_length=30)
-    estab_num = models.CharField(max_length=30)
+    county = models.CharField(max_length=30)
+    estab_num = models.CharField(max_length=10)
     equip_location = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
+    address = models.CharField(max_length=30)
+    state = models.CharField(max_length=30)
     district = models.CharField(max_length=30)
-    process_equip1 = models.CharField(max_length=30)
-    process_equip2 = models.CharField(max_length=30)
-    op_mode1 = models.CharField(max_length=30)
-    op_mode2 = models.CharField(max_length=30)
-    emission_point = models.CharField(max_length=30)
-    bat_height = models.CharField(max_length=10)
-
+    bat_height = models.IntegerField()
+    bat_height_label = models.CharField(
+        max_length=10,
+        choices=heightLabel
+    )
+    bat_main = models.CharField(
+        max_length=10,
+        choices=batteryMain_choices
+    )
+    bat_lids = models.IntegerField()
+    
     def __str__(self):
-        return self.name
+        return self.facility_name
 
 
 class user_profile_model(models.Model):
@@ -408,6 +420,11 @@ class user_profile_model(models.Model):
         choices=position_choices,
         null=False,
         blank=False,
+    )
+    facility_name = models.CharField(
+        max_length=75,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):

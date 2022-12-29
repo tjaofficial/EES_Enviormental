@@ -193,7 +193,8 @@ class user_profile_form(forms.ModelForm):
             'cert_date',
             'profile_picture',
             'phone',
-            'position'
+            'position',
+            'facility_name'
         )
         exclude = ['user']
 
@@ -202,6 +203,7 @@ class user_profile_form(forms.ModelForm):
             'profile_picture': forms.FileInput(attrs={'style': 'width: fit-content;'}),
             'phone': forms.TextInput(attrs={'type': 'tel', 'style': 'width: 150px;', 'placeholder': '+10005557777'}),
             'position': forms.Select(attrs={'oninput': 'cert_date1()', 'style': 'width: 100px;'}),
+            'facility_name': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;'})
         }
 
 
@@ -214,12 +216,22 @@ class pt_admin1_form(ModelForm):
 class bat_info_form(ModelForm):
     class Meta:
         model = bat_info_model
-        fields = ('bat_num', 'total_ovens', 'facility_name')
+        fields = ('bat_num', 'total_ovens', 'facility_name', 'county', 'estab_num', 'equip_location', 'address', 'state', 'district', 'bat_height', 'bat_height_label', 'bat_main', 'bat_lids',)
 
         widgets = {
-            'bat_num': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'5'}),
-            'total_ovens': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'85'}),
-            'facility_name': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'value':'EES Coke Battery LLC'}),
+            'bat_num': forms.NumberInput(attrs={'type': 'number','style': ''}),
+            'total_ovens': forms.NumberInput(attrs={'type': 'number','style': ''}),
+            'facility_name': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'county': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'estab_num': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'equip_location': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'address': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'state': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'district': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'bat_height': forms.NumberInput(attrs={'type': 'number','style': 'width: 3rem;font-size: 1rem; border-radius: 15px;'}),
+            'bat_height_label': forms.Select(attrs={'style':'width: 6rem; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
+            'bat_main': forms.Select(attrs={'style':'width: 6rem; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
+            'bat_lids': forms.NumberInput(attrs={'type': 'number','style': 'width: 6rem;font-size: 1rem; border-radius: 15px;'}),
         }
 
 
