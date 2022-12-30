@@ -20,6 +20,7 @@ urlpatterns = [
     
 
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
+    path("signature",views.signature,name="signature"),
 
     path("Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
     path("schedule_view", views.schedule_view, name="Schedule"),

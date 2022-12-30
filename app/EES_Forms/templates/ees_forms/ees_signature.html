@@ -1,0 +1,94 @@
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%} {% load static %}
+<script src="{% static 'ees_forms/script/atrament.min.js' %}"></script>
+
+<style>
+    section{
+        width: 80%;
+        max-width: 1000;
+        margin: auto;
+        margin-top: 50px;
+    }
+    .signature_container{
+        width: 100%;
+        max-width: 1500px;
+        aspect-ratio: 16/9;
+        background-color: white;
+        border-radius: 20px;
+        
+        display: block;
+        position: relative;
+    }
+
+    canvas{
+        height: 100%;
+        width: 100%;
+    }
+
+</style>
+<section>
+    <div class="signature_container">
+        <div class="signature_underlay">
+
+        </div>
+        <canvas id="signature_canvas">
+
+        </canvas>
+    </div>
+    <form id="form_container">
+        <input id="form_name" type="text"/>
+        <input id="form_date" type="hidden" value=""/>
+        <input id="form_canvas" type="hidden" value=""/>
+        <input type="submit">
+    </form>
+    
+</section>
+
+<script defer>
+    var tDate = new Date
+    const today = (`${tDate.getYear()+1900}-${tDate.getMonth()+1}-${tDate.getDate()}`)
+    const form = document.querySelector("#form_container")
+    form.addEventListener("submit",(e)=>preSubmit(e))
+    const canvas = document.querySelector("#signature_canvas");
+    
+    const formDate = document.querySelector("#form_date");
+    formDate.value = today
+    const canvasHeight = canvas.clientHeight
+    const canvasWidth = canvas.clientWidth
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    
+
+
+    const sketchpad = new Atrament(canvas, {
+        color: 'black',
+
+    });
+    sketchpad.smoothing = 0.2;
+    var ctx = canvas.getContext("2d");
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.moveTo(20, canvasHeight-100);
+    ctx.lineTo(canvasWidth-20, canvasHeight-100);
+    ctx.stroke();
+    ctx.font = "16px Arial";
+    ctx.fillText(today, canvasWidth-100, canvasHeight-50);
+  
+
+    function preSubmit(event){
+        
+        const canvas = document.querySelector("#signature_canvas");
+        const form_canvas = document.querySelector("#form_canvas")
+        const pngLink = canvas.toDataURL();
+
+        form_canvas.value = pngLink
+        
+        event.preventDefault()
+
+    }
+
+
+
+</script>
+
+{%endblock%}
