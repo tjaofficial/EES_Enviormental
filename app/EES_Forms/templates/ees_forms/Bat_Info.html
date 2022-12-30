@@ -13,6 +13,12 @@
                 <h1>Battery Information</h1><br>
                 <form method="POST" action="">
                     {% csrf_token %}
+                    Facility: {{ form.facility }}<br>
+                    {% comment %} <select id='fuckThis'>
+                        {% for option in options %}
+                        <option value
+                        {% endfor %}
+                    </select> {% endcomment %}
                     Foreman: {{ form.foreman }}<br>
                     Crew: {{ form.crew }}<br><br>
                     Inoperable Oven Number(s): {{ form.inop_numbs }}<br><br>
