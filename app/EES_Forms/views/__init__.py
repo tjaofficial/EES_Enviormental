@@ -9,6 +9,7 @@ from .client_view import client_dashboard_view
 from .formA1_view import formA1
 from .print_form_view import form_PDF
 from .printSelect_view import printSelect
+from .signature_view import signature
 
 
 
