@@ -23,6 +23,16 @@
     canvas{
         height: 100%;
         width: 100%;
+        border: 2px black solid;
+        border-radius: 15px;
+    }
+    .input_button {
+        margin: auto;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        padding: 6px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
 </style>
@@ -35,16 +45,17 @@
 
         </canvas>
     </div>
-    <form id="form_container">
-        <input id="form_name" type="text"/>
-        <input id="form_date" type="hidden" value=""/>
-        <input id="form_canvas" type="hidden" value=""/>
-        <input type="submit">
+    <form method='POST' id="form_container">
+        {% csrf_token %}
+        <center style="font-size:1.2rem; padding-top: 15px;">Print Supervisor Name: {{ data.supervisor }}</center>
+        {{ data.sign_date }}
+        {{ data.canvas }}
+        <center style='padding-top:15px;'><input class='input_button' type="submit"></center>
     </form>
     
 </section>
 
-<script defer>
+<script>
     var tDate = new Date
     const today = (`${tDate.getYear()+1900}-${tDate.getMonth()+1}-${tDate.getDate()}`)
     const form = document.querySelector("#form_container")
@@ -82,9 +93,6 @@
         const pngLink = canvas.toDataURL();
 
         form_canvas.value = pngLink
-        
-        event.preventDefault()
-
     }
 
 

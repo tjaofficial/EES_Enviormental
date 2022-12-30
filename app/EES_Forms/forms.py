@@ -2012,7 +2012,11 @@ class signature_form(ModelForm):
     class Meta:
         model = signature_model
         fields = ('__all__')
-        widgets = {}
+        widgets = {
+            'supervisor': forms.TextInput(attrs={'type': 'text', 'id': 'form_name', 'style': 'font-size: 1.2rem;width: 13rem;border-radius: 1rem; text-align: center;'}),
+            'sign_date': forms.DateInput(attrs={'type': 'hidden', 'id': 'form_date', 'style': ''}),
+            'canvas': forms.TextInput(attrs={'type': 'hidden', 'id': 'form_canvas', 'style': ''}),
+        }
         
         
         

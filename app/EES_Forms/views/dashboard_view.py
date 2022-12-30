@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model
+from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model
 from django.contrib.auth.decorators import login_required
 import datetime
 import requests
@@ -21,7 +21,16 @@ def IncompleteForms(request):
         print('CHECK 1')
         weekday_fri = today + datetime.timedelta(days=4 - todays_num)
         weekend_fri = weekday_fri + datetime.timedelta(days=7)
+        signatures = signature_model.objects.all().order_by('-sign_date')
+        sigExisting = False
 
+        print(signatures[0].sign_date)
+        print(today)
+            
+        if len(signatures) > 0:
+            if signatures[0].sign_date == today:
+                sigExisting = True
+                print(sigExisting)
         def what_quarter(input):
             if input.month in {1,2,3}:
                 return 1
@@ -689,6 +698,7 @@ def IncompleteForms(request):
             'saturday': saturday, 
             'sorting_array': sorting_array,
             "form_checkAll2": form_checkAll2,
+            'sigExisting': sigExisting,
         })
     elif request.user.groups.filter(name='SGI Admin'):
         return redirect('admin_dashboard')
