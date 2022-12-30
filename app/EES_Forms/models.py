@@ -367,6 +367,7 @@ class daily_battery_profile_model(models.Model):
     inop_numbs = models.CharField(max_length=50)
     date_save = models.DateField(auto_now_add=True, auto_now=False)
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
+    facility = models.CharField(max_length=30)
 
     def __str__(self):
         return str(self.date_save)
@@ -5563,3 +5564,17 @@ class sop_model(models.Model):
     
     def __str__(self):
         return str(self.name)
+    
+    
+class signature_model(models.Model):
+    supervisor = models.CharField(
+        max_length=30
+    )
+    sign_date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
+    canvas = models.CharField(
+        max_length=100000
+    )

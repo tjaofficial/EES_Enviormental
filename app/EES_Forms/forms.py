@@ -178,9 +178,10 @@ class CreateUserForm(UserCreationForm):
 class daily_battery_profile_form(ModelForm):
     class Meta:
         model = daily_battery_profile_model
-        fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs')
-
+        fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs', 'facility')
+        
         widgets = {
+            'facility': forms.Select(attrs={}),
             'inop_ovens': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px;'}),
             'inop_numbs': forms.TextInput(attrs={'class': 'input', 'style': 'width:150px;'})
         }
@@ -2007,6 +2008,11 @@ class sop_form(ModelForm):
             'pdf_link' : forms.TextInput(attrs={'oninput': 'pdf_link_change()' , 'type':'text', 'style':'width:150px; display:none;'}),
         }
         
+class signature_form(ModelForm):
+    class Meta:
+        model = signature_model
+        fields = ('__all__')
+        widgets = {}
         
         
         
