@@ -161,6 +161,8 @@
         <div style="width:100%;overflow: scroll;">
             <div id="topBar">
                 <!--<div style="color: white;">DTE - EES Coke</div>-->
+                {% if selector %}
+                {% else %}
                 <form method='POST' action=''>
                     {% csrf_token %}
                     <select name='facilitySelect'>
@@ -170,8 +172,9 @@
                         {% endfor %}
                     </select>
                 
-                    <input type="submit" value="Select" class="submit_button"/>
+                    <input type="submit" value="Select" />
                 </form>
+                {% endif %}
                 <div id='drop_down' class="drop_down" data-controls="profileDropdown">
                     <a id='name_click'>
                     {{ request.user.first_name }} {{ request.user.last_name }}

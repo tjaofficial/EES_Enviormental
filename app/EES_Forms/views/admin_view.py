@@ -268,7 +268,11 @@ def admin_dashboard_view(request, facility):
                     emypty_dp_today = False
                     today = todays_log.date_save
                     if len(formA1) > 0:
-                        most_recent_A1 = formA1[0].form.date
+                        newA1 = formA1.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                        if len(newA1) > 0:
+                            most_recent_A1 = newA1[0].form.date
+                        else:
+                            most_recent_A1 = ''
                         if most_recent_A1 == today:
                             A1data = formA1[0]
                             form_enteredA1 = True
@@ -360,10 +364,8 @@ def admin_dashboard_view(request, facility):
                 'unlock': unlock,
             })
     if request.method == 'POST':
-        print('CHECK 1')
         answer = request.POST
         if answer['facilitySelect'] != '':
-            print('CHECK 2')
             return redirect('admin_dashboard', answer['facilitySelect'])
         
     return render(request, "admin/admin_dashboard.html", {

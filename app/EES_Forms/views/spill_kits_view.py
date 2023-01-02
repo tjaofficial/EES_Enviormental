@@ -9,7 +9,7 @@ lock = login_required(login_url='Login')
 
 
 @lock
-def spill_kits(request, facility, access_page):
+def spill_kits(request, facility, selector):
     formName = "spill_kits"
     existing = False
     unlock = False
@@ -35,10 +35,10 @@ def spill_kits(request, facility, access_page):
     
     if count_bp != 0:
         todays_log = daily_prof[0]
-        if access_page != 'form':
+        if selector != 'form':
             print('CHECK 1')
             for x in org:
-                if str(x.date) == str(access_page):
+                if str(x.date) == str(selector):
                     database_model = x
             data = database_model
 
@@ -258,5 +258,5 @@ def spill_kits(request, facility, access_page):
         return redirect(batt_prof)
 
     return render(request, 'Monthly/spillkits.html', {
-        'facility': facility, 'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
+        'facility': facility, 'sk_form': data, 'selector': selector, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
     })

@@ -11,7 +11,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formH(request, facility, access_page):
+def formH(request, facility, selector):
     formName = "H"
     existing = False
     unlock = False
@@ -87,13 +87,13 @@ def formH(request, facility, access_page):
     
     if count_bp != 0:
         todays_log = daily_prof[0]
-        if access_page != 'form' and access_page != 'formL':
+        if selector != 'form' and selector != 'formL':
             for x in org:
-                if str(x.date) == str(access_page):
+                if str(x.date) == str(selector):
                     database_model = x
             data = database_model
             for x in org2:
-                if str(x.form.date) == str(access_page):
+                if str(x.form.date) == str(selector):
                     database_model2 = x
             readings_form = database_model2
             profile_form = ''
@@ -101,7 +101,7 @@ def formH(request, facility, access_page):
             search = True
         # ------check if database is empty----------
         elif len(org) > 0 or len(org2) > 0:
-            if access_page != 'formL':
+            if selector != 'formL':
                 database_form = org[0]
                 database_form2 = org2[0]
                 # -------check if there is a daily battery profile
@@ -319,5 +319,5 @@ def formH(request, facility, access_page):
 
         return redirect(batt_prof)
     return render(request, "Weekly/formH.html", {
-        'facility': facility, 'selector': access_page, 'weather': weather2, "exist_canvas": exist_canvas, "admin": admin, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'access_page': access_page, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
+        'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "admin": admin, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
     })

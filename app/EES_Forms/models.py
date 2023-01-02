@@ -433,7 +433,7 @@ class user_profile_model(models.Model):
 
 
 class formA1_model(models.Model):
-
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )

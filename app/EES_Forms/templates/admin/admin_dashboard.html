@@ -72,7 +72,7 @@
                                 <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">N/A</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>

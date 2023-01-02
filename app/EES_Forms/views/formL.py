@@ -9,7 +9,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formL(request, facility, access_page):
+def formL(request, facility, selector):
     formName = "L"
     existing = False
     unlock = False
@@ -38,9 +38,9 @@ def formL(request, facility, access_page):
     if count_bp != 0:
         todays_log = daily_prof[0]
         # -------check if access is for Form or Edit
-        if access_page not in ('form', 'edit'):
+        if selector not in ('form', 'edit'):
             for x in week_start_dates:
-                if str(x.week_start) == str(access_page):
+                if str(x.week_start) == str(selector):
                     database_model = x
                     filled_in = True
             data = database_model
@@ -75,25 +75,25 @@ def formL(request, facility, access_page):
                 new_saturday = ''
                 new_sunday = ''
                 # ---------- FORM ----------- FORM -------------- FORM ----------
-                if access_page == 'form':
+                if selector == 'form':
                     if this_week_saturday == last_saturday:
                         existing = True
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
-                elif access_page == "edit":
+                elif selector == "edit":
                     if this_week_saturday == last_saturday:
                         existing = True
                         filled_in = False
             # ------check if today is a Saturday
             elif today_number == 5:
                 # ---------- FORM ----------- FORM -------------- FORM ----------
-                if access_page == 'form':
+                if selector == 'form':
                     if this_week_saturday == today:
                         existing = True
                     else:
                         new_saturday = True
                         new_sunday = ''
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
-                elif access_page == "edit":
+                elif selector == "edit":
                     if this_week_saturday == today:
                         existing = True
                         filled_in = False
@@ -102,7 +102,7 @@ def formL(request, facility, access_page):
             # ----if today is a Sunday-------
             else:
                 # ---------- FORM ----------- FORM -------------- FORM ----------
-                if access_page == 'form':
+                if selector == 'form':
                     sunday_last_sat = today - datetime.timedelta(days=1)
                     if this_week_saturday == sunday_last_sat:
                         existing = True
@@ -111,7 +111,7 @@ def formL(request, facility, access_page):
                         new_saturday = ''
                         
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
-                elif access_page == "edit":
+                elif selector == "edit":
                     sunday_last_sat = today - datetime.timedelta(days=1)
                     if this_week_saturday == sunday_last_sat:
                         existing = True
@@ -251,5 +251,5 @@ def formL(request, facility, access_page):
         return redirect(batt_prof)
 
     return render(request, "Daily/formL.html", {
-        'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
+        'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "selector": selector, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
     })

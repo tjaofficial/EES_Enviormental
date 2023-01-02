@@ -54,14 +54,14 @@ urlpatterns = [
     path("<str:facility>/Weekly/formF7/<str:selector>", views.formF7, name="formF7"),
     path("<str:facility>/Weekly/formG1/<str:selector>", views.formG1, name="formG1"),
     path("<str:facility>/Monthly/formG2/<str:selector>", views.formG2, name="formG2"),
-    path("<str:facility>/Weekly/formH/<str:access_page>", views.formH, name="formH"),
+    path("<str:facility>/Weekly/formH/<str:selector>", views.formH, name="formH"),
     path("<str:facility>/Daily/formI/<str:selector>", views.formI, name="formI"),
-    path("<str:facility>/Daily/formL/<str:access_page>", views.formL, name="formL"),
+    path("<str:facility>/Daily/formL/<str:selector>", views.formL, name="formL"),
     path("<str:facility>/Daily/formM/<str:selector>", views.formM, name="formM"),
     path("<str:facility>/Monthly/formN/<str:selector>", views.formN, name="formN"),
     path("<str:facility>/Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("<str:facility>/Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
-    path("<str:facility>/Monthly/spill_kits/<str:access_page>", views.spill_kits, name="spill_kits"),
+    path("<str:facility>/Monthly/spill_kits/<str:selector>", views.spill_kits, name="spill_kits"),
     path("<str:facility>/Quarterly/quarterly_trucks/<str:selector>", views.quarterly_trucks, name="quarterly_trucks"),
     
 
