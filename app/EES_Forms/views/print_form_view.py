@@ -155,7 +155,7 @@ class PageNumCanvas(canvas.Canvas):
         self.drawRightString(200*mm, 10*mm, page)
 
 @lock
-def form_PDF(request, formDate, formName):
+def form_PDF(request, facility, formDate, formName):
     if formDate[0:6] == 'single':
         formTag = formDate[0:6]
         formDate = formDate[7:]

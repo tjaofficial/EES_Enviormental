@@ -10,7 +10,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formO(request, selector, weekend_day):
+def formO(request, facility, selector, weekend_day):
     formName = "O"
     existing = False
     unlock = False
@@ -109,11 +109,11 @@ def formO(request, selector, weekend_day):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = '../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
     return render(request, "Weekly/formO.html", {
-        'data': data, "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
+        'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

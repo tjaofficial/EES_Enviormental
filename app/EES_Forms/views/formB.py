@@ -11,7 +11,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formB(request, selector):
+def formB(request, facility, selector):
     formName = "B"
     existing = False
     unlock = False
@@ -205,11 +205,11 @@ def formB(request, selector):
                 else:
                     done.submitted = False
                     done.save()
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
     return render(request, "Daily/formB.html", {
-        'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq,
+        'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
     })

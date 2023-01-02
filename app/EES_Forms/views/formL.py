@@ -9,7 +9,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formL(request, access_page):
+def formL(request, facility, access_page):
     formName = "L"
     existing = False
     unlock = False
@@ -237,19 +237,19 @@ def formL(request, access_page):
                     done.date_submitted = todays_log.date_save
                     done.save()
 
-                    return redirect('IncompleteForms')
+                    return redirect('IncompleteForms', facility)
                 else:
                     done = Forms.objects.filter(form='L')[0]
                     done.submitted = False
                     done.date_submitted = todays_log.date_save - datetime.timedelta(days=1)
                     done.save()
 
-                    return redirect('IncompleteForms')
+                    return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, "Daily/formL.html", {
-        'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
+        'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "access_page": access_page, 'profile': profile, 'opened': opened, 'formName': formName, 'admin': admin, "client": client, 'unlock': unlock
     })

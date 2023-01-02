@@ -7,23 +7,23 @@ lock = login_required(login_url='Login')
 profile = user_profile_model.objects.all()
 
 @lock
-def about_view(request):
+def about_view(request, facility):
     profile = user_profile_model.objects.all()
 
     return render(request, 'ees_forms/ees_about.html', {
-        'profile': profile,
+        'profile': profile, 'facility': facility
     })
 
 @lock
-def safety_view(request):
+def safety_view(request, facility):
     profile = user_profile_model.objects.all()
 
     return render(request, 'ees_forms/ees_safety.html', {
-        'profile': profile,
+        'profile': profile, 'facility': facility
     })
 
 @lock
-def settings_view(request):
+def settings_view(request, facility):
     existing = False
     userName = request.user.get_username()
     userProfFaci = user_profile_model.objects.get(user__username=userName).facility_name
@@ -66,8 +66,8 @@ def settings_view(request):
         print(data.errors)
         if A_valid:
             data.save()
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     
     return render(request, 'ees_forms/ees_settings.html', {
-        'data': data,
+        'data': data, 'facility': facility
     })

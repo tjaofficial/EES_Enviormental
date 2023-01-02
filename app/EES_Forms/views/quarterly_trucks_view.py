@@ -7,7 +7,7 @@ from ..forms import quarterly_trucks_form
 lock = login_required(login_url='Login')
 
 @lock
-def quarterly_trucks(request, selector):
+def quarterly_trucks(request, facility, selector):
     formName = "quarterly_trucks"
     existing = False
     unlock = False
@@ -132,12 +132,12 @@ def quarterly_trucks(request, selector):
                 else:
                     done.submitted = False
                     done.save()
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
             
     return render(request, 'Quarterly/quarterly_trucks.html', {
-        "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'formName': formName, 'selector': selector, 'data': data
+        'facility': facility, "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'formName': formName, 'selector': selector, 'data': data
     })

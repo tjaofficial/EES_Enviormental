@@ -6,7 +6,7 @@ import datetime
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
-def profile(request, access_page):
+def profile(request, facility, access_page):
     profile = user_profile_model.objects.all()
     existing = False
     today = datetime.date.today()
@@ -45,5 +45,5 @@ def profile(request, access_page):
             return redirect('../profile/main')
 
     return render(request, "ees_forms/profile.html", {
-        "back": back, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile': profile,
+        'facility': facility, "back": back, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile': profile,
     })

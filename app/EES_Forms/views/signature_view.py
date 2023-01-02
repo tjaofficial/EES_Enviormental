@@ -3,7 +3,7 @@ from ..models import signature_model, daily_battery_profile_model
 from ..forms import signature_form
 import datetime
 
-def signature(request):
+def signature(request, facility):
     existing = False
     unlock = False
     client = False
@@ -47,7 +47,7 @@ def signature(request):
         if A_valid:
             data.save()
             
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/ees_signature.html", {
-        'unlock': unlock, 'client': client, 'admin': admin, 'data': data
+        'facility': facility, 'unlock': unlock, 'client': client, 'admin': admin, 'data': data
     })

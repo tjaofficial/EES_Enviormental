@@ -8,10 +8,10 @@ lock = login_required(login_url='Login')
 
 
 @lock
-def admin_data_view(request):
+def admin_data_view(request, facility):
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
 
     return render(request, "ees_forms/admin_data.html", {
-        "back": back, "today": today, 'profile': profile,
+        'facility': facility, "back": back, "today": today, 'profile': profile,
     })

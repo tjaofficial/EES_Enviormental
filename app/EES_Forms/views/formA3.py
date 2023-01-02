@@ -10,7 +10,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formA3(request, selector):
+def formA3(request, facility, selector):
     formName = "A3"
     existing = False
     unlock = False
@@ -143,7 +143,7 @@ def formA3(request, selector):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
             print(form)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
@@ -151,5 +151,5 @@ def formA3(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA3.html", {
-        "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json,
+        "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
     })

@@ -11,7 +11,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formE(request, selector):
+def formE(request, facility, selector):
     formName = "E"
     existing = False
     unlock = False
@@ -105,12 +105,12 @@ def formE(request, selector):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, "Daily/formE.html", {
-        "client": client, 'unlock': unlock, 'admin': admin, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search
+        "client": client, 'unlock': unlock, 'admin': admin, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
     })

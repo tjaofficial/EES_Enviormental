@@ -9,7 +9,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formN(request, selector):
+def formN(request, facility, selector):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -44,5 +44,5 @@ def formN(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formN.html", {
-        'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
+        'facility': facility, 'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
     })

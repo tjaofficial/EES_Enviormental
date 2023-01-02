@@ -15,7 +15,7 @@
                     Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
                 {% endfor %}
 
-                <a href="{% url 'pt_admin1' %}">
+                <a href="{% url 'pt_admin1' facility%}">
                     <h4>View All</h4>
                 </a>
             </div>
@@ -109,7 +109,7 @@
             </div>
             <div class="card2_Form">
                 {% if not sigExisting %}
-                <a href={% url 'signature'%}>
+                <a href={% url 'signature' facility %}>
                     <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
                         <p style="font-size: 28px; margin-top: -8px;">
                             Tap to Sign

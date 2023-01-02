@@ -5,13 +5,13 @@
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
 <div>
-    <a href="{% if client %}{% url 'c_dashboard' %}{% else %}{% url 'IncompleteForms' %}{% endif %}"><svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg></a>
+    {% include "ees_forms/backArrow.html" %}
 </div>
 {% if searched %}
     {% if access_page == 'search' %}
     <div class="card" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
         <div style="">
-                <a style="display: flex;" href="{% url 'archive' %}">
+                <a style="display: flex;" href="{% url 'archive' facility %}">
                     <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
                 </a>
         
@@ -44,7 +44,7 @@
     <div class="card" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
         {% if att_check != 5 %}
                 <div style="">
-                    <a style="display: flex;" href="{% url 'archive' %}">
+                    <a style="display: flex;" href="{% url 'archive' facility %}">
                         <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
                     </a>
                     <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Select Date Below:</h2>

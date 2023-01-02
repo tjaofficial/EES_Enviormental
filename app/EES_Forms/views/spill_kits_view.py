@@ -9,7 +9,7 @@ lock = login_required(login_url='Login')
 
 
 @lock
-def spill_kits(request, access_page):
+def spill_kits(request, facility, access_page):
     formName = "spill_kits"
     existing = False
     unlock = False
@@ -251,12 +251,12 @@ def spill_kits(request, access_page):
                     done.submitted = False
                     done.save()
                     
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, 'Monthly/spillkits.html', {
-        'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
+        'facility': facility, 'sk_form': data, 'selector': access_page, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
     })

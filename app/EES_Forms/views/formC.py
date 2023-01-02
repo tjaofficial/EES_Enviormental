@@ -9,7 +9,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formC(request, selector):
+def formC(request, facility, selector):
     formName = "C"
     existing = False
     unlock = False
@@ -39,9 +39,9 @@ def formC(request, selector):
         if same_user:
             cert_date = request.user.user_profile_model.cert_date
         else:
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     else:
-        return redirect('IncompleteForms')
+        return redirect('IncompleteForms', facility)
 
     if count_bp != 0:
         todays_log = daily_prof[0]
@@ -189,12 +189,12 @@ def formC(request, selector):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, "Daily/formC.html", {
-        "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName
+        "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

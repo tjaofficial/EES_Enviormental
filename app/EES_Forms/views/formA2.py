@@ -10,7 +10,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formA2(request, selector):
+def formA2(request, facility, selector):
     unlock = False
     client = False
     search = False
@@ -131,7 +131,7 @@ def formA2(request, selector):
                     done.submitted = True
                     done.date_submitted = todays_log.date_save
                     done.save()
-                    return redirect('IncompleteForms')
+                    return redirect('IncompleteForms', facility)
                 else:
                     finder = issues_model.objects.filter(date=A.date, form='A-2')
                     if finder:
@@ -148,5 +148,5 @@ def formA2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {
-        "search": search, "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json,
+        "search": search, "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
     })

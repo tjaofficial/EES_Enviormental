@@ -11,7 +11,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formH(request, access_page):
+def formH(request, facility, access_page):
     formName = "H"
     existing = False
     unlock = False
@@ -45,9 +45,9 @@ def formH(request, access_page):
             if same_user:
                 cert_date = request.user.user_profile_model.cert_date
             else:
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
         else:
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
@@ -313,11 +313,11 @@ def formH(request, access_page):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
     return render(request, "Weekly/formH.html", {
-        'selector': access_page, 'weather': weather2, "exist_canvas": exist_canvas, "admin": admin, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'access_page': access_page, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
+        'facility': facility, 'selector': access_page, 'weather': weather2, "exist_canvas": exist_canvas, "admin": admin, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'access_page': access_page, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
     })

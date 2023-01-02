@@ -7,7 +7,7 @@ from django.core.exceptions import FieldError
 lock = login_required(login_url='Login')
 
 @lock
-def printSelect(request):
+def printSelect(request, facility):
     unlock = False
     client = False
     admin = False
@@ -59,5 +59,5 @@ def printSelect(request):
         return redirect(craftUrl)
     
     return render(request, "shared/printSelect.html", {
-        'selectList': selectList, 'admin': admin, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
+        'facility': facility, 'selectList': selectList, 'admin': admin, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
     })

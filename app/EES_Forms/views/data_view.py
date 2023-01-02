@@ -6,7 +6,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
 
 
-def pt_admin1_view(request):
+def pt_admin1_view(request, facility):
     unlock = False
     client = False
     admin = False
@@ -129,11 +129,11 @@ def pt_admin1_view(request):
     od_recent = overdue_closest(all_ovens_EXP)
 
     return render(request, "ees_forms/PushTravels.html", {
-        "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens_EXP, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 'allForms': allForms
+        'facility': facility, "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens_EXP, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 'allForms': allForms
     })
 
 
-def pt_mth_input(request):
+def pt_mth_input(request, facility):
     submitted_ordered = formA5_readings_model.objects.all()
     now = datetime.datetime.now()
     today = datetime.date.today()
@@ -247,11 +247,11 @@ def pt_mth_input(request):
     sort = sorted(new_A5_list, key=func, reverse=True)
 
     return render(request, "ees_forms/pt_mth_input.html", {
-        "now": now, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort': sort, 'profile': profile,
+        'facility': facility, "now": now, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort': sort, 'profile': profile,
     })
 
 
-def method303_rolling_avg(request):
+def method303_rolling_avg(request, facility):
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
     todays_log = daily_prof[0]
     now = datetime.datetime.now()
@@ -284,5 +284,5 @@ def method303_rolling_avg(request):
     list_of_records = form_compile(daily_prof)
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile,
+        'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile,
     })

@@ -1,33 +1,28 @@
-{% extends "ees_forms/layout.html" %}
+{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
+<head>
+    <link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div id="page">
+        <div id="login" class="login__container">
+            <h2>MethodPlus+</h2>
+            <h3>Login</h3>
+            {% if login_error.error %}
+                <div class="login__error">{{ login_error.message }}</div>
+            {% endif %}
+            <form name="login" action="" method="POST">
+                {% csrf_token %}
+                <lable class="login__lable" for="username">Username</lable>
+                <input class="login__input" id="username" type="text" name="username">
 
-{% block list%}
-{% load static %}
-
-
-    <head>
-     <link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
-    </head>
-        <body>
-            <div id="page">
-                <div id="login" class="login__container">
-                    <h2>MethodPlus+</h2>
-                    <h3>Login</h3>
-                    {% if login_error.error %}
-                        <div class="login__error">{{ login_error.message }}</div>
-                    {% endif %}
-                    <form name="login" action="" method="POST">
-                        {% csrf_token %}
-                        <lable class="login__lable" for="username">Username</lable>
-                        <input class="login__input" id="username" type="text" name="username">
-
-                        <lable class="login__lable" for="password"> Password </lable>
-                        <input class="login__input" id="password" type="password" name="password">
-                        
-                        <input class="login__button" type="submit" value="Login">
-                    </form>
-                    
-                </div>
-            </div>
-        </body>
+                <lable class="login__lable" for="password"> Password </lable>
+                <input class="login__input" id="password" type="password" name="password">
+                
+                <input class="login__button" type="submit" value="Login">
+            </form>
+            
+        </div>
+    </div>
+</body>
 
 {% endblock %}

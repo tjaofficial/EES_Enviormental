@@ -11,7 +11,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formG1(request, selector):
+def formG1(request, facility, selector):
     formName = "G1"
     existing = False
     unlock = False
@@ -43,9 +43,9 @@ def formG1(request, selector):
             if same_user:
                 cert_date = request.user.user_profile_model.cert_date
             else:
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
         else:
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
@@ -275,7 +275,7 @@ def formG1(request, selector):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
             else:
                 print(form.errors)
                 print(readings.errors)
@@ -285,12 +285,12 @@ def formG1(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formG1.html", {
-        "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
     })
 
 
 @lock
-def formG2(request, selector):
+def formG2(request, facility, selector):
     formName = "G2"
     existing = False
     unlock = False
@@ -322,9 +322,9 @@ def formG2(request, selector):
             if same_user:
                 cert_date = request.user.user_profile_model.cert_date
             else:
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
         else:
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
     
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
@@ -552,7 +552,7 @@ def formG2(request, selector):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
             else:
                 print(form.errors)
     else:
@@ -561,5 +561,5 @@ def formG2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formG2.html", {
-        "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms
+from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model
 from ..forms import formA1_form, formA1_readings_form
 
 
@@ -10,7 +10,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formA1(request, selector):
+def formA1(request, facility, selector):
     formName = "A1"
     existing = False
     unlock = False
@@ -159,14 +159,14 @@ def formA1(request, selector):
                 done.date_submitted = todays_log.date_save
                 done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, "Daily/formA1.html", {
-        "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock
+        "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock, 'facility': facility
     })
 
 

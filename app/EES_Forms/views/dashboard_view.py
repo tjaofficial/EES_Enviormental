@@ -9,7 +9,7 @@ lock = login_required(login_url='Login')
 
 
 @lock
-def IncompleteForms(request):
+def IncompleteForms(request, facility):
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser or request.user.groups.filter(name='SGI Quality Control'):
         profile = user_profile_model.objects.all()
         today = datetime.date.today()
@@ -699,6 +699,7 @@ def IncompleteForms(request):
             'sorting_array': sorting_array,
             "form_checkAll2": form_checkAll2,
             'sigExisting': sigExisting,
+            'facility': facility
         })
     elif request.user.groups.filter(name='SGI Admin'):
         return redirect('admin_dashboard')

@@ -1,7 +1,4 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list%}
-{% load static %}
+{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
 
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/bat_info.js' %}"></script>
@@ -13,12 +10,7 @@
                 <h1>Battery Information</h1><br>
                 <form method="POST" action="">
                     {% csrf_token %}
-                    Facility: {{ form.facility }}<br>
-                    {% comment %} <select id='fuckThis'>
-                        {% for option in options %}
-                        <option value
-                        {% endfor %}
-                    </select> {% endcomment %}
+                    {{ form.facility }}
                     Foreman: {{ form.foreman }}<br>
                     Crew: {{ form.crew }}<br><br>
                     Inoperable Oven Number(s): {{ form.inop_numbs }}<br><br>
@@ -29,7 +21,7 @@
                 <br>
                 {% if access_page == 'login' or access_page == 'edit' %}
                 <p>
-                    Don't have this information yet? <a href="{% url 'IncompleteForms'  %}">Skip To Forms</a>
+                    Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}">Skip To Forms</a>
                 </p>
                 {% endif %}
             </div>

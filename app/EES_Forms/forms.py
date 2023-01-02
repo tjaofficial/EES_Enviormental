@@ -181,7 +181,7 @@ class daily_battery_profile_form(ModelForm):
         fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs', 'facility')
         
         widgets = {
-            'facility': forms.Select(attrs={}),
+            'facility': forms.TextInput(attrs={'type': 'hidden'}),
             'inop_ovens': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px;'}),
             'inop_numbs': forms.TextInput(attrs={'class': 'input', 'style': 'width:150px;'})
         }

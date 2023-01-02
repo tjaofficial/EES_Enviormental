@@ -10,7 +10,7 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
-def formA5(request, selector):
+def formA5(request, facility, selector):
     formName = "A5"
     existing = False
     unlock = False
@@ -363,12 +363,12 @@ def formA5(request, selector):
                     done.date_submitted = todays_log.date_save
                     done.save()
 
-                return redirect('IncompleteForms')
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, "Daily/formA5.html", {
-        'weather': weather2, "admin": admin, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock,
+        'weather': weather2, "admin": admin, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
     })

@@ -8,7 +8,7 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
-def formI(request, selector):
+def formI(request, facility, selector):
     formName = "I"
     existing = False
     unlock = False
@@ -167,12 +167,12 @@ def formI(request, selector):
                     done.date_submitted = todays_log.date_save
                     done.save()
 
-                    return redirect('IncompleteForms')
+                    return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
     return render(request, "Daily/formI.html", {
-        "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
+        'facility': facility, "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })
