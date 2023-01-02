@@ -21,9 +21,9 @@ def login_view(request):
     login_error = {"error":False, "message":''}
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            return redirect('admin_dashboard')
+            return redirect('admin_dashboard', 'admin')
         elif request.user.groups.filter(name='SGI Admin'):
-            return redirect('admin_dashboard')
+            return redirect('admin_dashboard', 'admin')
         elif request.user.groups.filter(name='EES Coke Employees'):
             return redirect('c_dashboard')
         elif request.user.groups.filter(name='SGI Technician'):
@@ -31,7 +31,7 @@ def login_view(request):
                 todays_log = daily_prof[0]
                 if now.month == todays_log.date_save.month:
                     if now.day == todays_log.date_save.day:
-                        return redirect('IncompleteForms')
+                        return redirect('facilitySelect')
                 batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                 return redirect(batt_prof) 
@@ -49,9 +49,9 @@ def login_view(request):
         if user is not None:
             login(request, user)
             if request.user.is_superuser:
-                return redirect('admin_dashboard')
+                return redirect('admin_dashboard', 'admin')
             elif request.user.groups.filter(name='SGI Admin'):
-                return redirect('admin_dashboard')
+                return redirect('admin_dashboard', 'admin')
             elif request.user.groups.filter(name='EES Coke Employees'):
                 return redirect('c_dashboard')
             elif request.user.groups.filter(name='SGI Technician'):

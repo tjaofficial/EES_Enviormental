@@ -4,7 +4,7 @@ from .views.login_logout_view import PasswordsChangeView
 
 urlpatterns = [
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
-    path("admin_dashboard", views.admin_dashboard_view, name='admin_dashboard'),
+    path("<str:facility>/admin_dashboard", views.admin_dashboard_view, name='admin_dashboard'),
 
     path("Register", views.register_view, name="Register"),
     path("Login", views.login_view, name="Login"),

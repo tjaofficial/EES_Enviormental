@@ -27,10 +27,10 @@
                 <ul>
                     <li><a href=#>Admin</a>
                         <ul>
-                            <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' %}{% endif %}">Dashboard</a></li>
+                            <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' facility %}{% endif %}">Dashboard</a></li>
                             {% if client %}{% elif admin %}<li><a href="{% url 'Register' %}">Register New Profile</a></li>{% endif %}
-                            <li><a href="{% url 'Contacts' %}">Profiles/Contacts</a></li>
-                            <li><a href="{% url 'PrintSelect' %}">Print Forms</a></li>
+                            <li><a href="{% url 'Contacts'  facility %}">Profiles/Contacts</a></li>
+                            <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
                         </ul>
                     </li>
                     <li><a href=#>Daily Reports</a>
@@ -103,19 +103,19 @@
                     </li>{% endif %}
                     <li><a href=#>Schedule</a>
                         <ul>
-                            <li><a href="{% url 'Schedule' %}">Calendar</a></li>
-                            {% if client %}{% elif admin %}<li><a href="{% url 'Add Event' %}">Add Events</a></li>{% endif %}
+                            <li><a href="{% url 'Schedule' facility %}">Calendar</a></li>
+                            {% if client %}{% elif admin %}<li><a href="{% url 'Add Event' facility %}">Add Events</a></li>{% endif %}
                         </ul
                     </li>
                     {% if client %}
                     <li><a href=#>Records/Data</a>
                         <ul>
-                            <li><a href="{% url 'archive' %}">Archive</a></li>
-                            <li><a href="{% url 'Corrective-Action' %}">Corrective Actions</a></li>
+                            <li><a href="{% url 'archive' facility %}">Archive</a></li>
+                            <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
                             <li><a href=#>Weekly Reports</a></li>
-                            <li><a href="{% url 'rolling_avg' %}">Rolling Averages</a></li>
-                            <li><a href="{% url 'Sop' %}">SOP's</a></li>
-                            <li><a href="{% url 'pt_admin1' %}">90 Day Push/Travel Evaluation</a></li>
+                            <li><a href="{% url 'rolling_avg' facility %}">Rolling Averages</a></li>
+                            <li><a href="{% url 'Sop' facility %}">SOP's</a></li>
+                            <li><a href="{% url 'pt_admin1' facility %}">90 Day Push/Travel Evaluation</a></li>
                         </ul>
                     </li>
                     {% elif admin %}
@@ -123,11 +123,11 @@
                             <ul id='sbClientList' style='display:block;'>
                                 <li><a id='sbClient1' href=#>DTE EES Coke Battery</a>
                                     <ul>
-                                        <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-                                        <li><a href="{% url 'archive' %}">Archive</a></li>
-                                        <li><a href="{% url 'Corrective-Action' %}">Corrective Actions</a></li>
+                                        <li><a href="{% url 'admin_dashboard' facility%}">Dashboard</a></li>
+                                        <li><a href="{% url 'archive' facility %}">Archive</a></li>
+                                        <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
                                         <li><a href=#>Weekly Reports</a></li>
-                                        <li><a href="{% url 'rolling_avg' %}">Data Records</a></li>
+                                        <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -137,7 +137,7 @@
             </div>
         </div>
         <div id="profileDropdown" class="profileDropdown profileDropdown_hidden" data-displayed="False">
-            <a href="{% url 'settings' %}">
+            <a href="{% url 'settings' facility %}">
                 <div class="sidebar_item">
                     <div class="sidebar_svg">
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="calendar-week" class="svg-inline--fa fa-calendar-week fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -151,7 +151,7 @@
                 <div class="sidebar_item">
                     <div class="sidebar_svg">
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="calendar-week" class="svg-inline--fa fa-calendar-week fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path fill="currentColor" d="M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm64-192c0-8.8 7.2-16 16-16h288c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-64zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z"></path>]
+                            <path fill="currentColor" d="M0 464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V192H0v272zm64-192c0-8.8 7.2-16 16-16h288c8.8 0 16 7.2 16 16v64c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16v-64zM400 64h-48V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H160V16c0-8.8-7.2-16-16-16h-32c-8.8 0-16 7.2-16 16v48H48C21.5 64 0 85.5 0 112v48h448v-48c0-26.5-21.5-48-48-48z"></path>
                         </svg> 
                     </div>
                     Logout
@@ -160,7 +160,18 @@
         </div>
         <div style="width:100%;overflow: scroll;">
             <div id="topBar">
-                <div style="color: white;">DTE - EES Coke</div>
+                <!--<div style="color: white;">DTE - EES Coke</div>-->
+                <form method='POST' action=''>
+                    {% csrf_token %}
+                    <select name='facilitySelect'>
+                        <option value=''>-------</option>
+                        {% for option in options %}
+                            <option value="{{option.facility_name}}">{{option.facility_name}}</option>
+                        {% endfor %}
+                    </select>
+                
+                    <input type="submit" value="Select" class="submit_button"/>
+                </form>
                 <div id='drop_down' class="drop_down" data-controls="profileDropdown">
                     <a id='name_click'>
                     {{ request.user.first_name }} {{ request.user.last_name }}
