@@ -55,7 +55,7 @@ def admin_dashboard_view(request, facility):
 
     daily_forms_comp = []
     for forms in Forms.objects.filter(frequency = 'Daily'):
-        if forms.submitted:
+        if forms.submitted and forms.facilityChoice.facility_name == facility:
             daily_forms_comp.append(forms.form)
     if todays_num in {0, 1, 2, 3, 4}:
         daily_count_total = 11
@@ -66,7 +66,7 @@ def admin_dashboard_view(request, facility):
 
     weekly_forms_comp = []
     for forms in Forms.objects.all():
-        if forms.frequency in {"Daily", "Weekly"}:
+        if forms.frequency in {"Daily", "Weekly"} and forms.facilityChoice.facility_name == facility:
             if forms.submitted:
                 weekly_forms_comp.append(forms.form)
     weekly_count_total = 60
@@ -76,7 +76,7 @@ def admin_dashboard_view(request, facility):
     monthly_forms_total = []
     monthly_forms_comp = []
     for forms in Forms.objects.all():
-        if forms.frequency in {"Monthly"}:
+        if forms.frequency in {"Monthly"} and forms.facilityChoice.facility_name == facility:
             monthly_forms_total.append(forms.form)
             if forms.submitted:
                 weekly_forms_comp.append(forms.form)
@@ -87,7 +87,7 @@ def admin_dashboard_view(request, facility):
     annually_forms_total = [1]
     annually_forms_comp = []
     for forms in Forms.objects.all():
-        if forms.frequency in {"Annually"}:
+        if forms.frequency in {"Annually"} and forms.facilityChoice.facility_name == facility:
             annually_forms_total.append(forms.form)
             if forms.submitted:
                 weekly_forms_comp.append(forms.form)

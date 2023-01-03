@@ -7,34 +7,34 @@
                 <div class="skillBar progress_bar_div">
                     <p>Daily Progress</p>
                     <div class="container">
-                        <div class="skills daily"></div>
+                        {% if facility != 'admin' %}<div class="skills daily"></div>{% else %}{% endif %}
                     </div>
                 </div>
                 <div class="skillBar progress_bar_div">
                     <p>Weekly Progress</p>
                     <div class="container">
-                        <div class="skills weekly"></div>
+                        {% if facility != 'admin' %}<div class="skills weekly"></div>{% else %}{% endif %}
                     </div>
                 </div>
 
                 <div class="skillBar progress_bar_div">
                     <p>Monthly Progress</p>
                     <div class="container">
-                        <div class="skills monthly"></div>
+                        {% if facility != 'admin' %}<div class="skills monthly"></div>{% else %}{% endif %}
                     </div>
                 </div>
 
                 <!-- <div class="skillBar progress_bar_div">
                     <p>Quarterly Progress</p>
                     <div class="container">
-                        <div class="skills quarterly"></div>
+                        {% if facility != 'admin' %}<div class="skills quarterly"></div>{% else %}{% endif %}
                     </div>
                 </div> -->
 
                 <div class="skillBar progress_bar_div">
                     <p>Annually Progress</p>
                     <div class="container">
-                        <div class="skills annually"></div>
+                        {% if facility != 'admin' %}<div class="skills annually"></div>{% else %}{% endif %}
                     </div>
                 </div>
             </div>
