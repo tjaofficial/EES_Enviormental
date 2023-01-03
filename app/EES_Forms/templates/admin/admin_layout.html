@@ -25,16 +25,16 @@
             </div>
             <div class='menuItems'>
                 <ul>
-                    <li><a href=#>Admin</a>
-                        <ul>
+                    <li><a id='adminLabel' href=#>Admin</a>
+                        <ul id='adminGroup' style='display:block;'>
                             <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' facility %}{% endif %}">Dashboard</a></li>
                             {% if client %}{% elif admin %}<li><a href="{% url 'Register' facility %}">Register New Profile</a></li>{% endif %}
                             <li><a href="{% url 'Contacts'  facility %}">Profiles/Contacts</a></li>
                             <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
                         </ul>
                     </li>
-                    <li><a href=#>Daily Reports</a>
-                        <ul>
+                    <li><a id='reportsLabel' href=#>Daily Reports</a>
+                        <ul id='reportsGroup' style='display:block;'>
                             <li>
                                 {% if form_enteredA1 %}
                                     <a class="no_link_css" href="Daily/formA1/{{ date }}">
@@ -101,15 +101,15 @@
                             <li><a href=#>Anually</a></li>
                         </ul
                     </li>{% endif %}
-                    <li><a href=#>Schedule</a>
-                        <ul>
+                    <li><a id='calendarLabel' href=#>Schedule</a>
+                        <ul id='calendarGroup' style='display: block;'>
                             <li><a href="{% url 'Schedule' facility %}">Calendar</a></li>
                             {% if client %}{% elif admin %}<li><a href="{% url 'Add Event' facility %}">Add Events</a></li>{% endif %}
                         </ul
                     </li>
                     {% if client %}
                     <li><a href=#>Records/Data</a>
-                        <ul>
+                        <ul style='display: block;'>
                             <li><a href="{% url 'archive' facility %}">Archive</a></li>
                             <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
                             <li><a href=#>Weekly Reports</a></li>
@@ -119,17 +119,12 @@
                         </ul>
                     </li>
                     {% elif admin %}
-                        <li><a id='sbClient' href=#>Clients</a>
-                            <ul id='sbClientList' style='display:block;'>
-                                <li><a id='sbClient1' href=#>DTE EES Coke Battery</a>
-                                    <ul>
-                                        <li><a href="{% url 'admin_dashboard' facility%}">Dashboard</a></li>
-                                        <li><a href="{% url 'archive' facility %}">Archive</a></li>
-                                        <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
-                                        <li><a href=#>Weekly Reports</a></li>
-                                        <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li>
-                                    </ul>
-                                </li>
+                        <li><a id='sbClient' href=#>{{facility}}</a>
+                            <ul id='sbClientGroup' style="display: block;">
+                                <li><a href="{% url 'archive' facility %}">Archive</a></li>
+                                <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
+                                <li><a href=#>Weekly Reports</a></li>
+                                <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li>
                             </ul>
                         </li>
                     {% endif %}

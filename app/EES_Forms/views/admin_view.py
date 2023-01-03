@@ -82,8 +82,6 @@ def admin_dashboard_view(request, facility):
                 weekly_forms_comp.append(forms.form)
     monthly_count_total = len(monthly_forms_total)
     monthly_count_comp = len(monthly_forms_comp)
-    print(monthly_count_total)
-    print(monthly_count_comp)
     if monthly_count_total > 0:
         monthly_percent = (monthly_count_comp / monthly_count_total) * 100
     else:
@@ -107,107 +105,114 @@ def admin_dashboard_view(request, facility):
 
     def all_ovens(reads):
         A = []
+        
         for items in reads:
-            date = items.form.date
+            if items.form.facilityChoice == facility:
+                date = items.form.date
 
-            year = date.year
-            month = date.month
-            day = date.day
+                year = date.year
+                month = date.month
+                day = date.day
 
-            form_date = datetime.datetime(year, month, day)
-            added_date = form_date + datetime.timedelta(days=91)
-            due_date = added_date - datetime.datetime.now()
+                form_date = datetime.datetime(year, month, day)
+                added_date = form_date + datetime.timedelta(days=91)
+                due_date = added_date - datetime.datetime.now()
 
-            if len(str(items.o1)) == 1:
-                oven1 = "0" + str(items.o1)
-            else:
-                oven1 = items.o1
-            A.append((oven1, items.form.date, added_date.date, due_date.days))
+                if len(str(items.o1)) == 1:
+                    oven1 = "0" + str(items.o1)
+                else:
+                    oven1 = items.o1
+                A.append((oven1, items.form.date, added_date.date, due_date.days))
 
-            if len(str(items.o2)) == 1:
-                oven2 = "0" + str(items.o2)
-            else:
-                oven2 = items.o2
-            A.append((oven2, items.form.date, added_date.date, due_date.days))
+                if len(str(items.o2)) == 1:
+                    oven2 = "0" + str(items.o2)
+                else:
+                    oven2 = items.o2
+                A.append((oven2, items.form.date, added_date.date, due_date.days))
 
-            if len(str(items.o3)) == 1:
-                oven3 = "0" + str(items.o3)
-            else:
-                oven3 = items.o3
-            A.append((oven3, items.form.date, added_date.date, due_date.days))
+                if len(str(items.o3)) == 1:
+                    oven3 = "0" + str(items.o3)
+                else:
+                    oven3 = items.o3
+                A.append((oven3, items.form.date, added_date.date, due_date.days))
 
-            if len(str(items.o4)) == 1:
-                oven4 = "0" + str(items.o4)
-            else:
-                oven4 = items.o4
-            A.append((oven4, items.form.date, added_date.date, due_date.days))
+                if len(str(items.o4)) == 1:
+                    oven4 = "0" + str(items.o4)
+                else:
+                    oven4 = items.o4
+                A.append((oven4, items.form.date, added_date.date, due_date.days))
 
         return A
 
     hello = all_ovens(reads)
-    func = lambda x: (x[0], x[1])
-    sort = sorted(hello, key=func, reverse=True)
+    if hello:
+        func = lambda x: (x[0], x[1])
+        sort = sorted(hello, key=func, reverse=True)
 
-    def final(sort):
-        B = []
-        i = 1
-        for new in sort:
-            B.append(new)
+        def final(sort):
+            B = []
+            i = 1
+            for new in sort:
+                B.append(new)
 
-        for x in sort:
-            for y in range(i, len(sort)):
-                tree = sort[y]
-                if tree[0] == x[0]:
-                    if tree in B:
-                        B.remove(tree)
-            i += 1
-        return B
-    cool = final(sort)
+            for x in sort:
+                for y in range(i, len(sort)):
+                    tree = sort[y]
+                    if tree[0] == x[0]:
+                        if tree in B:
+                            B.remove(tree)
+                i += 1
+            return B
+        cool = final(sort)
 
-    def overdue_30(cool):
-        C = []
-        for x in cool:
-            if x[3] <= 30:
-                C.append(x)
-        return C
+        def overdue_30(cool):
+            C = []
+            for x in cool:
+                if x[3] <= 30:
+                    C.append(x)
+            return C
 
-    def overdue_10(cool):
-        D = []
-        for x in cool:
-            if x[3] <= 10:
-                D.append(x)
-        return D
+        def overdue_10(cool):
+            D = []
+            for x in cool:
+                if x[3] <= 10:
+                    D.append(x)
+            return D
 
-    def overdue_5(cool):
-        E = []
-        for x in cool:
-            if x[3] <= 5:
-                E.append(x)
-        return E
+        def overdue_5(cool):
+            E = []
+            for x in cool:
+                if x[3] <= 5:
+                    E.append(x)
+            return E
 
-    def overdue_closest(cool):
-        F = []
+        def overdue_closest(cool):
+            F = []
 
-        func2 = lambda R: (R[3])
-        sort2 = sorted(cool, key=func2)
-        most_recent = sort2[0][3]
+            func2 = lambda R: (R[3])
+            sort2 = sorted(cool, key=func2)
+            most_recent = sort2[0][3]
 
-        for x in sort2:
-            if x[3] == most_recent:
-                F.append(x)
-        return F
+            for x in sort2:
+                if x[3] == most_recent:
+                    F.append(x)
+            return F
 
-    if len(cool) >= 4:
-        od_30 = overdue_30(cool)
-        od_10 = overdue_10(cool)
-        od_5 = overdue_5(cool)
-        od_recent = overdue_closest(cool)
+        if len(cool) >= 4:
+            od_30 = overdue_30(cool)
+            od_10 = overdue_10(cool)
+            od_5 = overdue_5(cool)
+            od_recent = overdue_closest(cool)
+        else:
+            od_recent = ''
+            od_30 = ''
+            od_10 = ''
+            od_5 = ''
     else:
         od_recent = ''
-        od_30 = ''
         od_10 = ''
         od_5 = ''
-
+        od_30 = ''
     # ----CONTACTS-----------------
 
     Users = User.objects.all()
@@ -369,6 +374,10 @@ def admin_dashboard_view(request, facility):
             todays_log = ''
 
         if emypty_dp_today:
+            if request.method == 'POST':
+                answer = request.POST
+                if answer['facilitySelect'] != '':
+                    return redirect('admin_dashboard', answer['facilitySelect'])
             return render(request, "admin/admin_dashboard.html", {
                 'facility': facility, 
                 'ca_forms': ca_forms, 
@@ -386,6 +395,7 @@ def admin_dashboard_view(request, facility):
                 'admin': admin, 
                 "client": client, 
                 'unlock': unlock,
+                'options': options,
             })
     if request.method == 'POST':
         answer = request.POST
