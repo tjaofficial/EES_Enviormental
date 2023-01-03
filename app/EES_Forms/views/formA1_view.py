@@ -25,7 +25,7 @@ def formA1(request, facility, selector):
         admin = True
     now = datetime.datetime.now()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA1_model.objects.all().order_by('-date')
     org2 = formA1_readings_model.objects.all().order_by('-form')
 
@@ -111,6 +111,7 @@ def formA1(request, facility, selector):
                     'observer': full_name,
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
+                    'facility_name': facility,
                 }
                 readings = formA1_readings_form()
 
@@ -125,11 +126,14 @@ def formA1(request, facility, selector):
 
             A_valid = form.is_valid()
             B_valid = reads.is_valid()
-
+            finalFacility = options
+            
             if A_valid and B_valid:
-                A = form.save()
+                A = form.save(commit=False)
                 B = reads.save(commit=False)
                 B.form = A
+                A.facilityChoice = finalFacility
+                A.save()
                 B.save()
 
                 finder = issues_model.objects.filter(date=A.date, form='A-1')
@@ -166,7 +170,7 @@ def formA1(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA1.html", {
-        "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock, 'facility': facility
+        'options': options, "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'readings': readings, 'formName': formName, 'selector': selector, "client": client, 'unlock': unlock, 'facility': facility
     })
 
 

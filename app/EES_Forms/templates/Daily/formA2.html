@@ -30,7 +30,7 @@
                                 <th class="boxTitle" colspan="6" style="text-align: center;">Method 303 Doors - Form (A-2)</th>
                             </tr>
                             <tr>
-                                <th colspan="6" style="text-align: center;">Facility Name: EES Coke Battery LLC</th>
+                                <th colspan="6" style="text-align: center;">Facility Name: {{ facility }}</th>
                             </tr>
                             <tr>
                                 <td style="height: 25px" > </td>
@@ -40,8 +40,8 @@
                             </tr>
                             <tr>
                                 <th colspan="6">
-                                    Battery No. 5 &nbsp; &nbsp; &nbsp; 
-                                    Total No. Ovens: 85 &nbsp; &nbsp; &nbsp;
+                                    Battery No. {{ options.bat_num }} &nbsp; &nbsp; &nbsp; 
+                                    Total No. Ovens: {{ options.total_ovens }} &nbsp; &nbsp; &nbsp;
                                     Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }} </br>
                                     Inoperable Oven Number(s)&nbsp; &nbsp;{{ data.inop_numbs }}
                                 </th>

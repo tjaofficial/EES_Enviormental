@@ -282,7 +282,11 @@ def admin_dashboard_view(request, facility):
                         A1data = ""
 
                     if len(formA2) > 0:
-                        most_recent_A2 = formA2[0].date
+                        newA2 = formA2.filter(facilityChoice__facility_name=facility).order_by('-date')
+                        if len(newA2) > 0:
+                            most_recent_A2 = newA2[0].date
+                        else:
+                            most_recent_A2 = ''
                         if most_recent_A2 == today:
                             A2data = formA2[0]
                             if A2data.p_leak_data and A2data.c_leak_data:
@@ -302,7 +306,11 @@ def admin_dashboard_view(request, facility):
                         coke = ""
 
                     if len(formA3) > 0:
-                        most_recent_A3 = formA3[0].date
+                        newA3 = formA3.filter(facilityChoice__facility_name=facility).order_by('-date')
+                        if len(newA3) > 0:
+                            most_recent_A3 = formA3[0].date
+                        else:
+                            most_recent_A3 = ''
                         if most_recent_A3 == today:
                             A3data = formA3[0]
                             if A3data.l_leak_json and A3data.om_leak_json:
@@ -322,7 +330,11 @@ def admin_dashboard_view(request, facility):
                         offtakes = ""
 
                     if len(formA4) > 0:
-                        most_recent_A4 = formA4[0].date
+                        newA4 = formA4.filter(facilityChoice__facility_name=facility).order_by('-date')
+                        if len(newA4) > 0:
+                            most_recent_A4 = formA4[0].date
+                        else:
+                            most_recent_A4 = ''
                         if most_recent_A4 == today:
                             A4data = formA4[0]
                             form_enteredA4 = True
@@ -332,7 +344,11 @@ def admin_dashboard_view(request, facility):
                         A4data = ""
 
                     if len(formA5) > 0:
-                        most_recent_A5 = formA5[0].form.date
+                        newA5 = formA5.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                        if len(newA5) > 0:
+                            most_recent_A5 = formA5[0].form.date
+                        else:
+                            most_recent_A5 = ''
                         if most_recent_A5 == today:
                             A5data = formA5[0]
                             form_enteredA5 = True

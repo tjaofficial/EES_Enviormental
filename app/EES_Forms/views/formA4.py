@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA4_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA4_model, bat_info_model
 from ..forms import formA4_form
 
 lock = login_required(login_url='Login')
@@ -24,7 +24,7 @@ def formA4(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA4_model.objects.all().order_by('-date')
     
     count_bp = daily_battery_profile_model.objects.count()
@@ -88,6 +88,7 @@ def formA4(request, facility, selector):
                     'observer': full_name,
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
+                    'facility_name': facility,
                 }
 
             data = formA4_form(initial=initial_data)
@@ -97,8 +98,12 @@ def formA4(request, facility, selector):
                 form = formA4_form(request.POST, instance=database_form)
             else:
                 form = formA4_form(request.POST)
+            finalFacility = options
+            
             if form.is_valid():
-                A = form.save()
+                A = form.save(commit=False)
+                A.facilityChoice = finalFacility
+                A.save()
                 if A.notes.lower() != 'no ve' or A.oven_leak_1:
                     finder = issues_model.objects.filter(date=A.date, form='A-4')
                     if finder:
@@ -120,5 +125,5 @@ def formA4(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA4.html", {
-        "search": search, 'existing': existing, "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
+        'options': options, "search": search, 'existing': existing, "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
     })

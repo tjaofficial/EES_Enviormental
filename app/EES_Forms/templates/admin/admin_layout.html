@@ -165,14 +165,12 @@
                 {% else %}
                 <form method='POST' action=''>
                     {% csrf_token %}
-                    <select name='facilitySelect'>
+                    <select name='facilitySelect' class='facilitySelectInput' onchange="this.form.submit()">
                         <option value=''>-------</option>
                         {% for option in options %}
-                            <option value="{{option.facility_name}}">{{option.facility_name}}</option>
+                            <option value="{{option.facility_name}}"{% if facility == option.facility_name %} selected{% else %}{% endif %}>{{option.facility_name}}</option>
                         {% endfor %}
                     </select>
-                
-                    <input type="submit" value="Select" />
                 </form>
                 {% endif %}
                 <div id='drop_down' class="drop_down" data-controls="profileDropdown">

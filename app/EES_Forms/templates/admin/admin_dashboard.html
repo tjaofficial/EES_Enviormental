@@ -72,7 +72,7 @@
                                 <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -81,6 +81,7 @@
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-2 - Doors</div>
                         <div class="grid-double">
+                            {% if A2data %}
                             <div class="dataHold2" style="margin-top:0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
                                     <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
@@ -100,7 +101,7 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                    <p class="miniFont" style="text-align:center;">No Ovens Found Leaking</p>
                                 {% endif %}
                             </div>
                             <div class="dataHold2" style="margin-top:0.3rem;">
@@ -122,9 +123,12 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                    <p class="miniFont" style="text-align:center;">No Ovens Found Leaking</p>
                                 {% endif %}
                             </div>
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-2 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
@@ -132,6 +136,7 @@
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
                         <div class="grid-double">
+                            {% if A3data %}
                             <div class="dataHold2" style="margin-top: 0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
                                     <p class="dataFont" style="font-size:.74rem;">List of Leaking Lids</p>
@@ -151,7 +156,7 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                    <p class="miniFont" style="text-align:center;">No Lids Found Leaking</p>
                                 {% endif %}
                             </div>
                             <div class="dataHold2" style="margin-top: 0.3rem;">
@@ -173,9 +178,12 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                    <p class="miniFont" style="text-align:center;">No Standpipes Found Leaking</p>
                                 {% endif %}
                             </div>
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-3 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
@@ -183,6 +191,7 @@
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-4 - Collection Main</div>
                         <div class="dataHold">
+                            {% if A4data %}
                             <div class="dataSingle"> 
                                 <p class="dataFont">Pressures</p>
                             </div>
@@ -220,6 +229,9 @@
                                     {{ A4data.notes }}
                                 </p>
                             </div>
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-4 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
@@ -227,6 +239,7 @@
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-5 - Push Travels</div>
                         <div class="dataHold">
+                            {% if A5data %}
                             <div class="dataSingle"> 
                                 <p class="dataFont">Push Travels</p>
                             </div>
@@ -251,6 +264,9 @@
                                 </div>
                             {% else %}
                                 <p class="miniFont" style="text-align:center;">N/A</p>
+                            {% endif %}
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-5 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA3_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA3_model, bat_info_model
 from ..forms import formA3_form
 import json
 
@@ -26,6 +26,7 @@ def formA3(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
     count_bp = daily_battery_profile_model.objects.count()
     org = formA3_model.objects.all().order_by('-date')
@@ -115,6 +116,7 @@ def formA3(request, facility, selector):
                     'inop_ovens': todays_log.inop_ovens,
                     'inop_numbs': todays_log.inop_numbs,
                     'notes': 'N/A',
+                    'facility_name': facility,
                 }
 
             data = formA3_form(initial=initial_data)
@@ -125,9 +127,12 @@ def formA3(request, facility, selector):
                 form = formA3_form(request.POST, instance=database_form)
             else:
                 form = formA3_form(request.POST)
-
+            finalFacility = options
+            
             if form.is_valid():
-                A = form.save()
+                A = form.save(commit=False)
+                A.facilityChoice = finalFacility
+                A.save()
 
                 if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
                     finder = issues_model.objects.filter(date=A.date, form='A-3')
@@ -151,5 +156,5 @@ def formA3(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA3.html", {
-        "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
+        'options': options, "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
     })

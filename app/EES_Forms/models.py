@@ -582,6 +582,7 @@ class formA1_readings_model(models.Model):
 
 
 class formA2_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -658,6 +659,7 @@ class formA2_model(models.Model):
 
 
 class formA3_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -736,6 +738,7 @@ class formA3_model(models.Model):
 
 
 class formA4_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -840,6 +843,7 @@ class formA4_model(models.Model):
 
 # ----------------------------------------------------------------------FORM A5 - DATA---------------<
 class formA5_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,

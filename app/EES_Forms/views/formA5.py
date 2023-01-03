@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model, issues_model
+from ..models import user_profile_model, daily_battery_profile_model, Forms, formA5_model, formA5_readings_model, issues_model, bat_info_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
 import json
@@ -26,7 +26,7 @@ def formA5(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA5_model.objects.all().order_by('-date')
     org2 = formA5_readings_model.objects.all().order_by('-form')
     
@@ -264,12 +264,12 @@ def formA5(request, facility, selector):
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'estab': "EES COKE BATTERY",
-                    'county': "Wayne",
-                    'estab_no': "P0408",
-                    'equip_loc': "Zug Island",
-                    'district': "Detroit",
-                    'city': "River Rouge",
+                    'estab': options.facility_name,
+                    'county': options.county,
+                    'estab_no': options.estab_num,
+                    'equip_loc': options.equip_location,
+                    'district': options.district,
+                    'city': options.district,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "Coke Battery / Door Machine / Hot Car",
@@ -278,8 +278,8 @@ def formA5(request, facility, selector):
                     'op_mode2': "normal",
                     'emission_point_start': "Above hot car",
                     'emission_point_stop': "Above door machine hood",
-                    'height_above_ground': "45",
-                    'height_rel_observer': "45",
+                    'height_above_ground': options.bat_height,
+                    'height_rel_observer': options.bat_height,
                     'plume_type': 'N/A',
                     'water_drolet_present': "No",
                     'water_droplet_plume': "N/A",
@@ -309,7 +309,7 @@ def formA5(request, facility, selector):
                 
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
-
+            finalFacility = options
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
@@ -327,6 +327,8 @@ def formA5(request, facility, selector):
                             A.ambient_temp_stop = 'same'
                         else:
                             A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                    A.facilityChoice = finalFacility
+                    
 
                 A.save()
 

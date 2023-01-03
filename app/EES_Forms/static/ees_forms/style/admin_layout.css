@@ -543,3 +543,12 @@ li {
     text-decoration: none;
     color: #001011;
 }
+.facilitySelectInput{
+    background-color: #253544;
+    color: white;
+    font-size: 18px;
+    border: 0px solid #424242;
+    border-radius: 1rem;
+    padding: 6px 28px;
+    box-shadow: inset black 0px 0px 20px 0px;
+}
