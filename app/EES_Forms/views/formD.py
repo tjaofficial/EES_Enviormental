@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model, bat_info_model
 from ..forms import formD_form
 
 lock = login_required(login_url='Login')
@@ -24,6 +24,7 @@ def formD(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
     last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
@@ -127,7 +128,10 @@ def formD(request, facility, selector):
                 form = formD_form(request.POST)
             A_valid = form.is_valid()
             if A_valid:
+                form.save(commit=False)
+                form.facilityChoice = options
                 form.save()
+                
                 new_latest_form = formD_model.objects.all().order_by('-week_start')[0]
                 filled_out = True
                 done = Forms.objects.filter(form='D')[0]

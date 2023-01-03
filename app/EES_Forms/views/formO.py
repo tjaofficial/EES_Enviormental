@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model, bat_info_model
 from ..forms import formO_form
 import calendar
 
@@ -28,7 +28,7 @@ def formO(request, facility, selector, weekend_day):
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
     full_name = request.user.get_full_name()
-
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     month_name = calendar.month_name[today.month]
 
     org = formO_model.objects.all().order_by('-date')
@@ -93,7 +93,9 @@ def formO(request, facility, selector, weekend_day):
                 data = formO_form(request.POST)
             A_valid = data.is_valid()
             if A_valid:
-                A = data.save()
+                A = data.save(commit=False)
+                A.facilityChoice = options
+                A.save()
 
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
                     finder = issues_model.objects.filter(date=A.date, form='O')

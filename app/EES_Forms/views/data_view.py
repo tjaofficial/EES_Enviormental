@@ -251,7 +251,7 @@ def pt_mth_input(request, facility):
     })
 
 
-def method303_rolling_avg(request, facility):
+def method303_rolling_avg(request, facilit):
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
     todays_log = daily_prof[0]
     now = datetime.datetime.now()

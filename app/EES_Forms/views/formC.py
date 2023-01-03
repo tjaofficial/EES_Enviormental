@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms, bat_info_model
 from ..forms import SubFormC1, FormCReadForm
 
 lock = login_required(login_url='Login')
@@ -25,7 +25,7 @@ def formC(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formC_model.objects.all().order_by('-date')
     org2 = formC_readings_model.objects.all().order_by('-form')
     
@@ -170,9 +170,11 @@ def formC(request, facility, selector):
             B_valid = CData.is_valid()
 
             if A_valid and B_valid:
-                A = CData.save()
+                A = CData.save(commit=False)
+                A.facilityChoice = options
                 B = CReadings.save(commit=False)
                 B.form = A
+                A.save()
                 B.save()
 
                 if B.form.average_t > 5 or B.form.average_p > 5 or A.comments not in {'-', 'n/a', 'N/A'}:

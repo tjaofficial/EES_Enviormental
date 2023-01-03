@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, formB_model
+from ..models import user_profile_model, daily_battery_profile_model, formB_model, bat_info_model
 from ..forms import Forms, formB_form
 import requests
 import json
@@ -26,6 +26,7 @@ def formB(request, facility, selector):
         admin = True
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     today = datetime.date.today()
     last_monday = today - datetime.timedelta(days=today.weekday())
@@ -190,6 +191,8 @@ def formB(request, facility, selector):
                 data = formB_form(request.POST)
             A_valid = data.is_valid()
             if A_valid:
+                data.save(commit=False)
+                data.facilityChoice = options
                 data.save()
 
                 filled_out = True

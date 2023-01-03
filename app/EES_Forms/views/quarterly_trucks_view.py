@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms
+from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms, bat_info_model
 from ..forms import quarterly_trucks_form
 
 lock = login_required(login_url='Login')
@@ -26,6 +26,7 @@ def quarterly_trucks(request, facility, selector):
     today = datetime.date.today()
     full_name = request.user.get_full_name()
     submitted_forms = quarterly_trucks_model.objects.all().order_by('-date')
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     
     def what_quarter(input):
         if input.month in {1,2,3}:
@@ -117,7 +118,10 @@ def quarterly_trucks(request, facility, selector):
             A_valid = data.is_valid()
             print(data.errors)
             if A_valid:
+                data.save(commit=False)
+                data.facilityChoice = options
                 data.save()
+                
                 new_latest_form = quarterly_trucks_model.objects.all().order_by('-date')[0]
                 filled_out = True
                 done = Forms.objects.filter(form='Quarterly Trucks')[0]

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formE_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formE_model, bat_info_model
 from ..forms import formE_form
 import json
 
@@ -27,7 +27,7 @@ def formE(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formE_model.objects.all().order_by('-date')
     
     count_bp = daily_battery_profile_model.objects.count()
@@ -95,7 +95,10 @@ def formE(request, facility, selector):
             A_valid = check.is_valid()
 
             if A_valid:
-                A = check.save()
+                A = check.save(commit=False)
+                A.facilityChoice = options
+                A.save()
+                
                 if A.leaks == "Yes":
                     issue_page = '../../issues_view/E/' + str(database_form.date) + '/form'
 

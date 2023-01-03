@@ -23,7 +23,6 @@ def printSelect(request, facility):
     selectList = []
     for line in formList:
         selectList.append([line.form, line.form.replace(' ', '_').replace('-','').lower()])
-        print(selectList)
         
     
     
@@ -34,7 +33,6 @@ def printSelect(request, facility):
                     formCheck = 'form' + request.POST['forms'].capitalize() + '_model'
                 elif len(request.POST['forms']) > 2:
                     formCheck = request.POST['forms'] + '_model'
-                    print(formCheck)
                 else:
                     print('something is wrong')
                 mainModel = apps.get_model('EES_Forms', formCheck)

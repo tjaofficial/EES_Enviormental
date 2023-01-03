@@ -425,8 +425,7 @@ def admin_dashboard_view(request, facility):
 
 
 @lock
-def register_view(request):
-    facility = 'admin'
+def register_view(request, facility):
     options = bat_info_model.objects.all()
     unlock = False
     client = False
@@ -468,5 +467,5 @@ def register_view(request):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-                'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 
-            })
+        'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 
+    })

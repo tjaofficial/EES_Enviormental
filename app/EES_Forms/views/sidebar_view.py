@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model
 from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
@@ -26,11 +26,11 @@ def corrective_action_view(request, facility):
         admin = True
 
     profile = user_profile_model.objects.all()
-
+    options = bat_info_model.objects.all()
     ca_forms = issues_model.objects.all().order_by('-id')
 
     return render(request, "ees_forms/corrective_actions.html", {
-        'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
 
 @lock
@@ -44,7 +44,7 @@ def calendar_view(request, facility, year, month):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-    
+    options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     month = month.title()
     month_number = list(calendar.month_name).index(month)
@@ -71,12 +71,13 @@ def calendar_view(request, facility, year, month):
     html_cal = calend.formatmonth(year, month_number, year, withyear=True)
 
     return render(request, "ees_forms/schedule.html", {
-        'facility': facility, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'options': options, 'facility': facility, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
 
 @lock
 def schedule_view(request, facility):
     admin = False
+    options = bat_info_model.objects.all()
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
     today_year = int(datetime.date.today().year)
@@ -85,7 +86,7 @@ def schedule_view(request, facility):
     return redirect('schedule/' + str(today_year) + '/' + str(today_month))
 
     return render(request, "ees_forms/scheduling.html", {
-        'facility': facility, 'today_year': today_year, 'today_month': today_month, 'admin': admin,
+        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'admin': admin,
     })
 
 @lock
@@ -99,11 +100,11 @@ def archive_view(request, facility):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-
+    options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
 
     return render(request, 'ees_forms/ees_archive.html', {
-        'facility': facility, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'options': options, 'facility': facility, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
 
 @lock
@@ -120,7 +121,7 @@ def search_forms_view(request, facility, access_page):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-
+    options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     if access_page != 'search':
         chk_database = apps.get_model('EES_Forms', access_page).objects.count()
@@ -234,11 +235,11 @@ def search_forms_view(request, facility, access_page):
                 otherForms.append([x.form.replace(' ', '_'), x.form.replace(' ', '_').lower() + '_model', x])
 
         return render(request, 'ees_forms/search_forms.html', {
-            'facility': facility, 'unlock': unlock, 'admin': admin, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'facility': facility, 'unlock': unlock, 'admin': admin, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
 
 @lock
@@ -256,6 +257,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
+    options = bat_info_model.objects.all()
 
     if access_page == 'form':
         data = Forms.objects.all()
@@ -397,7 +399,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/issues_template.html", {
-        'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "admin": admin
+        'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "admin": admin
     })
 
 @lock
@@ -411,7 +413,7 @@ def event_add_view(request, facility):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-        
+    options = bat_info_model.objects.all()    
     today = datetime.date.today()
     profile = user_profile_model.objects.all()
     today_year = int(today.year)
@@ -429,7 +431,7 @@ def event_add_view(request, facility):
             return redirect(cal_link)
 
     return render(request, "ees_forms/event_add.html", {
-        'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'admin': admin, "client": client, 'unlock': unlock, 
+        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'admin': admin, "client": client, 'unlock': unlock, 
     })
 
 @lock
@@ -438,6 +440,7 @@ def event_detail_view(request, facility, access_page, event_id):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     admin = False
+    options = bat_info_model.objects.all()
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
         
@@ -472,11 +475,12 @@ def event_detail_view(request, facility, access_page, event_id):
                 return redirect('../../event_detail/' + str(event_id) + '/view')
 
     return render(request, "ees_forms/event_detail.html", {
-        'facility': facility, 'context': context, "admin": admin, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+        'options': options, 'facility': facility, 'context': context, "admin": admin, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })
 
 @lock
 def shared_contacts_view(request, facility):
+    options = bat_info_model.objects.all()
     unlock = False
     client = False
     admin = False
@@ -541,13 +545,14 @@ def shared_contacts_view(request, facility):
     
     
     return render(request, "shared/contacts.html", {
-        'facility': facility, 'profile': profile, 'organized_list': organized_list, 'admin': admin, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
+        'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'admin': admin, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
     })
     
 def sop_view(request, facility):
     unlock = False
     client = False
     admin = False
+    options = bat_info_model.objects.all()
     if request.user.groups.filter(name='SGI Technician'):
         unlock = True
     if request.user.groups.filter(name='EES Coke Employees'):
@@ -569,5 +574,5 @@ def sop_view(request, facility):
                 print('NOT SAVED')
             
     return render(request, 'shared/sops.html', {
-        'facility': facility, 'sops': sops, 'sopForm': sopForm, 'admin': admin, "client": client, 'unlock': unlock
+        'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'admin': admin, "client": client, 'unlock': unlock
     })

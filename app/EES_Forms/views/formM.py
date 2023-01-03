@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model
 from ..forms import formM_form, formM_readings_form
 
 lock = login_required(login_url='Login')
@@ -25,6 +25,7 @@ def formM(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
     today_number = today.weekday()
     
@@ -150,9 +151,11 @@ def formM(request, facility, selector):
             B_valid = reads.is_valid()
 
             if A_valid and B_valid:
-                A = form.save()
+                A = form.save(commit=False)
                 B = reads.save(commit=False)
+                A.facilityChoice = options
                 B.form = A
+                A.save()
                 B.save()
 
                 if int(B.pav_total) > 5 or int(B.unp_total) > 5 or int(B.par_total) > 5 or A.comments not in {'-', 'n/a', 'N/A'}:

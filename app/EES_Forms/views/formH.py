@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formH_model, formH_readings_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formH_model, formH_readings_model, bat_info_model
 from ..forms import formH_form, user_profile_form, formH_readings_form
 import requests
 import json
@@ -27,7 +27,7 @@ def formH(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formH_model.objects.all().order_by('-date')
     org2 = formH_readings_model.objects.all().order_by('-form')
     
@@ -292,7 +292,7 @@ def formH(request, facility, selector):
                 print('CHECK 2')
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
-                
+                A.facilityChoice = options
                 if not existing:
                     if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
                         A.wind_speed_stop = 'same'

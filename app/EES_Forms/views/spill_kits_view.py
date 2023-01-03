@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from ..forms import spill_kits_form
-from ..models import daily_battery_profile_model, Forms, spill_kits_model
+from ..models import daily_battery_profile_model, Forms, spill_kits_model, bat_info_model
 import datetime
 import calendar
 
 lock = login_required(login_url='Login')
-
 
 @lock
 def spill_kits(request, facility, selector):
@@ -22,7 +21,7 @@ def spill_kits(request, facility, selector):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     sk_form = spill_kits_form()
@@ -233,7 +232,10 @@ def spill_kits(request, facility, selector):
                 form = spill_kits_form(request.POST)
                 
             if form.is_valid():
+                form.save(commit=False)
+                form.facilityChoice = options
                 form.save()
+                
                 new_latest_form = spill_kits_model.objects.filter(month=month_name)[0]
                 filled_out = True
                 done = Forms.objects.filter(form='Spill Kits')[0]

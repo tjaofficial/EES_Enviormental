@@ -1062,7 +1062,7 @@ class pt_admin1_model(models.Model):
 
 
 class formB_model(models.Model):
-
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     week_start = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -1812,6 +1812,7 @@ class formB_model(models.Model):
 
 
 class formD_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     today = datetime.date.today()
     last_friday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
@@ -2104,6 +2105,7 @@ class formD_model(models.Model):
 
 # ------------------------FORM E---------------<
 class formE_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -3237,6 +3239,7 @@ class formF7_model(models.Model):
 
 
 class formG1_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3458,6 +3461,7 @@ class formG1_readings_model(models.Model):
 
 
 class formG2_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3561,6 +3565,7 @@ class formG2_readings_model(models.Model):
 
 
 class formH_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3691,6 +3696,7 @@ class formH_readings_model(models.Model):
 
 
 class formI_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     week_start = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3766,6 +3772,7 @@ class formI_model(models.Model):
 
 
 class formL_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     today = datetime.date.today()
 
     week_start = models.DateField(
@@ -4017,6 +4024,7 @@ class formL_model(models.Model):
 
 
 class formM_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -4203,6 +4211,7 @@ class formM_readings_model(models.Model):
 
 
 class formO_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -4265,6 +4274,7 @@ class formO_model(models.Model):
 
 
 class formP_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -4402,6 +4412,7 @@ class Event(models.Model):
 
 
 class spill_kits_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
         max_length=150
     )
@@ -5316,6 +5327,7 @@ class spill_kits_model(models.Model):
         }
 
 class quarterly_trucks_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     quarter = models.CharField(
         choices=quarter_choices,
         max_length=4,

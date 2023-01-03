@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, formG1_model, formG1_readings_model, formG2_model, user_profile_model, daily_battery_profile_model, formG2_readings_model
+from ..models import Forms, formG1_model, formG1_readings_model, formG2_model, user_profile_model, daily_battery_profile_model, formG2_readings_model, bat_info_model
 from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readings_form, user_profile_form
 import requests
 import json
@@ -27,7 +27,7 @@ def formG1(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formG1_model.objects.all().order_by('-date')
     org2 = formG1_readings_model.objects.all().order_by('-form')
     
@@ -252,7 +252,7 @@ def formG1(request, facility, selector):
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
-                
+                A.facilityChoice = options
                 if not existing:
                     if A.wind_speed_stop == 'TBD':
                         if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
@@ -529,7 +529,7 @@ def formG2(request, facility, selector):
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
-                
+                A.facilityChoice = options
                 if not existing:
                     if A.wind_speed_stop == 'TBD':
                         if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):

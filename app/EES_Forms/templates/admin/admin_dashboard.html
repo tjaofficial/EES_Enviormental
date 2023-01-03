@@ -1,4 +1,5 @@
 {% extends "admin/admin_layout.html" %}{% block list%}
+
 <body>
     <div class="grid-dashboard" style="overflow: scroll;">
         <div id="progress" class="card skinny">
@@ -41,8 +42,9 @@
         <div id="fromAInfo" class="card longest">
             <div class="card-title">Todays Forms</div>
             <div class="nested">
-                <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{ date }}" {% else %} {% endif %}>
-                    <div class="inner-card">
+                <a class="no_link_css"  {% if form_enteredA1 %} href="Daily/formA1/{{ date }}" {% else %} {% endif %}>
+                    <div id='A1card' class="inner-card">
+                        {% if form_enteredA1 %}<p id='A1overlay'>Click for<br> Form A-1</p>{% else%}{% endif %}
                         <div class="card-title inner_font">Form A-1 - Charges</div>
                         <div class="dataHold">
                             {% if A1data %}
@@ -78,7 +80,8 @@
                     </div>
                 </a>
                 <a class="no_link_css" {% if form_enteredA2 %} href="Daily/formA2/{{ date }}" {% else %} {% endif %}>
-                    <div class="inner-card">
+                    <div id='A2card' class="inner-card">
+                        {% if form_enteredA2 %}<p id='A2overlay'>Click for<br> Form A-2</p>{% else%}{% endif %}
                         <div class="card-title inner_font">Form A-2 - Doors</div>
                         <div class="grid-double">
                             {% if A2data %}
@@ -133,7 +136,8 @@
                     </div>
                 </a>
                 <a class="no_link_css" {% if form_enteredA3 %} href="Daily/formA3/{{ date }}" {% else %} {% endif %}>
-                    <div class="inner-card">
+                    <div id='A3card' class="inner-card">
+                        {% if form_enteredA3 %}<p id='A3overlay'>Click for<br> Form A-3</p>{% else%}{% endif %}
                         <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
                         <div class="grid-double">
                             {% if A3data %}
@@ -188,7 +192,8 @@
                     </div>
                 </a>
                 <a class="no_link_css" {% if form_enteredA4 %} href="Daily/formA4/{{ date }}" {% else %} {% endif %}>
-                    <div class="inner-card">
+                    <div id='A4card' class="inner-card">
+                        {% if form_enteredA4 %}<p id='A4overlay'>Click for<br> Form A-4</p>{% else%}{% endif %}
                         <div class="card-title inner_font">Form A-4 - Collection Main</div>
                         <div class="dataHold">
                             {% if A4data %}
@@ -236,7 +241,8 @@
                     </div>
                 </a>
                 <a class="no_link_css" {% if form_enteredA5 %} href="Daily/formA5/{{ date }}" {% else %} {% endif %}>
-                    <div class="inner-card">
+                    <div id='A5card' class="inner-card">
+                        {% if form_enteredA5 %}<p id='A5overlay'>Click for<br> Form A-5</p>{% else%}{% endif %}
                         <div class="card-title inner_font">Form A-5 - Push Travels</div>
                         <div class="dataHold">
                             {% if A5data %}

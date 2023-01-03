@@ -28,7 +28,7 @@
                     <li><a href=#>Admin</a>
                         <ul>
                             <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' facility %}{% endif %}">Dashboard</a></li>
-                            {% if client %}{% elif admin %}<li><a href="{% url 'Register' %}">Register New Profile</a></li>{% endif %}
+                            {% if client %}{% elif admin %}<li><a href="{% url 'Register' facility %}">Register New Profile</a></li>{% endif %}
                             <li><a href="{% url 'Contacts'  facility %}">Profiles/Contacts</a></li>
                             <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
                         </ul>
@@ -161,7 +161,7 @@
         <div style="width:100%;overflow: scroll;">
             <div id="topBar">
                 <!--<div style="color: white;">DTE - EES Coke</div>-->
-                {% if selector %}
+                {% if selector or facility == 'register' %}
                 {% else %}
                 <form method='POST' action=''>
                     {% csrf_token %}

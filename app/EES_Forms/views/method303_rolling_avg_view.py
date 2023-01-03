@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formA1_readings_model, formA2_model, formA3_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formA1_readings_model, formA2_model, formA3_model, bat_info_model
 import datetime
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
 
 
-def method303_rolling_avg(request):
+def method303_rolling_avg(request, facility):
     unlock = False
     client = False
     admin = False
@@ -16,7 +16,7 @@ def method303_rolling_avg(request):
         client = True
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
         admin = True
-        
+    options = bat_info_model.objects.all()
     now = datetime.datetime.now()
     today = datetime.date.today()
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
@@ -64,5 +64,5 @@ def method303_rolling_avg(request):
     list_of_records = form_compile(daily_prof)
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'options': options, 'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
