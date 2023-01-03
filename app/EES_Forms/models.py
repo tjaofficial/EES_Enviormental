@@ -232,8 +232,32 @@ weekend_choices = (
 
 # Create your models here.
 
+class bat_info_model(models.Model):
+    bat_num = models.IntegerField()
+    total_ovens = models.IntegerField()
+    facility_name = models.CharField(max_length=30)
+    county = models.CharField(max_length=30)
+    estab_num = models.CharField(max_length=10)
+    equip_location = models.CharField(max_length=30)
+    address = models.CharField(max_length=30)
+    state = models.CharField(max_length=30)
+    district = models.CharField(max_length=30)
+    bat_height = models.IntegerField()
+    bat_height_label = models.CharField(
+        max_length=10,
+        choices=heightLabel
+    )
+    bat_main = models.CharField(
+        max_length=10,
+        choices=batteryMain_choices
+    )
+    bat_lids = models.IntegerField()
+    
+    def __str__(self):
+        return self.facility_name
 
 class Forms(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     form = models.CharField(max_length=30)
     frequency = models.CharField(max_length=30, choices=frequent_choices)
     day_freq = models.CharField(max_length=30, choices=days_choices, null=True)
@@ -372,29 +396,7 @@ class daily_battery_profile_model(models.Model):
     def __str__(self):
         return str(self.date_save)
 
-class bat_info_model(models.Model):
-    bat_num = models.IntegerField()
-    total_ovens = models.IntegerField()
-    facility_name = models.CharField(max_length=30)
-    county = models.CharField(max_length=30)
-    estab_num = models.CharField(max_length=10)
-    equip_location = models.CharField(max_length=30)
-    address = models.CharField(max_length=30)
-    state = models.CharField(max_length=30)
-    district = models.CharField(max_length=30)
-    bat_height = models.IntegerField()
-    bat_height_label = models.CharField(
-        max_length=10,
-        choices=heightLabel
-    )
-    bat_main = models.CharField(
-        max_length=10,
-        choices=batteryMain_choices
-    )
-    bat_lids = models.IntegerField()
-    
-    def __str__(self):
-        return self.facility_name
+
 
 
 class user_profile_model(models.Model):

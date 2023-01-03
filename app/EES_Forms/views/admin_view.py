@@ -82,7 +82,12 @@ def admin_dashboard_view(request, facility):
                 weekly_forms_comp.append(forms.form)
     monthly_count_total = len(monthly_forms_total)
     monthly_count_comp = len(monthly_forms_comp)
-    monthly_percent = (monthly_count_comp / monthly_count_total) * 100
+    print(monthly_count_total)
+    print(monthly_count_comp)
+    if monthly_count_total > 0:
+        monthly_percent = (monthly_count_comp / monthly_count_total) * 100
+    else:
+        monthly_percent = 0
 
     annually_forms_total = [1]
     annually_forms_comp = []
@@ -93,7 +98,10 @@ def admin_dashboard_view(request, facility):
                 weekly_forms_comp.append(forms.form)
     annually_count_total = len(annually_forms_total)
     annually_count_comp = len(annually_forms_comp)
-    annually_percent = (annually_count_comp / annually_count_total) * 100
+    if annually_count_total > 0:
+        annually_percent = (annually_count_comp / annually_count_total) * 100
+    else:
+        annually_percent = 0
 
     # -------90 DAY PUSH ----------------
 
