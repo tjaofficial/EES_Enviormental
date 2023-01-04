@@ -47,4 +47,4 @@ const config = {
 
 const myChart = new Chart(document.getElementById('myChart'), config);
 
-var height = chart.canvas.style.height = '128px';
+var height = myChart.canvas.style.height = '325px';

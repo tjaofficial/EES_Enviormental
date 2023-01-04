@@ -229,6 +229,7 @@ class bat_info_form(ModelForm):
             'address': forms.TextInput(attrs={'type': 'text','style': ''}),
             'state': forms.TextInput(attrs={'type': 'text','style': ''}),
             'district': forms.TextInput(attrs={'type': 'text','style': ''}),
+            'city': forms.TextInput(attrs={'type': 'text','style': ''}),
             'bat_height': forms.NumberInput(attrs={'type': 'number','style': 'width: 3rem;font-size: 1rem; border-radius: 15px;'}),
             'bat_height_label': forms.Select(attrs={'style':'width: 6rem; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
             'bat_main': forms.Select(attrs={'style':'width: 6rem; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),

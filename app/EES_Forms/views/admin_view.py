@@ -33,7 +33,7 @@ def admin_dashboard_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     emypty_dp_today = True
-    recent_logs = formA1_readings_model.objects.all().order_by('-form')[:7]
+    recent_logs = formA1_readings_model.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
     year = str(now.year)
     if len(str(now.month)) == 1:
         month = "0" + str(now.month)
@@ -54,9 +54,10 @@ def admin_dashboard_view(request, facility):
     # -------PROGRESS PERCENTAGES -----------------
 
     daily_forms_comp = []
-    for forms in Forms.objects.filter(frequency = 'Daily'):
-        if forms.submitted and forms.facilityChoice.facility_name == facility:
-            daily_forms_comp.append(forms.form)
+    if today == daily_prof[0].date_save:
+        for forms in Forms.objects.filter(frequency = 'Daily'):
+            if forms.submitted and forms.facilityChoice.facility_name == facility:
+                daily_forms_comp.append(forms.form)
     if todays_num in {0, 1, 2, 3, 4}:
         daily_count_total = 11
     else:
@@ -66,7 +67,7 @@ def admin_dashboard_view(request, facility):
 
     weekly_forms_comp = []
     for forms in Forms.objects.all():
-        if forms.frequency in {"Daily", "Weekly"} and forms.facilityChoice.facility_name == facility:
+        if forms.frequency == "Weekly" and forms.facilityChoice.facility_name == facility:
             if forms.submitted:
                 weekly_forms_comp.append(forms.form)
     weekly_count_total = 60
@@ -231,12 +232,14 @@ def admin_dashboard_view(request, facility):
 
     # ----ISSUES/CORRECTIVE ACTIONS----------
 
-    ca_forms = issues_model.objects.all().order_by('-id')
+    ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
 
     # ----WEATHER TAB-----------
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
-
-    city = 'Dearborn'
+    try:
+        city = options.filter(facility_name=facility)[0].city
+    except IndexError as e:
+        city = 'Novi'
 
     city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
 

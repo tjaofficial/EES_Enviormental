@@ -102,6 +102,11 @@ def archive_view(request, facility):
         admin = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
+    
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('archive', answer['facilitySelect'])
 
     return render(request, 'ees_forms/ees_archive.html', {
         'options': options, 'facility': facility, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
@@ -136,7 +141,7 @@ def search_forms_view(request, facility, access_page):
         else:
             try:
                 # THESE ARE FORMS USING DATE
-                database = apps.get_model('EES_Forms', access_page).objects.all().order_by('-date')
+                database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
                 for x in ModelForms:
                     print('CHECK 1')
                     if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
@@ -159,7 +164,7 @@ def search_forms_view(request, facility, access_page):
                         print('no match')
             except FieldError as e:
                 # THESE ARE FORMS USING WEEK
-                database = apps.get_model('EES_Forms', access_page).objects.all().order_by('-week_start')
+                database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
                 for x in ModelForms:
                     if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
                         # FORMS THAT ARE SINGLE DIDGITS
@@ -200,7 +205,7 @@ def search_forms_view(request, facility, access_page):
                 Model2 = apps.get_model('EES_Forms', access_page[0:7] + 'readings_model')
                 readingsData = True
                 if len(Model2.objects.all()) > 0:
-                    database2 = Model2.objects.all().order_by('-form')
+                    database2 = Model2.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
                 else:
                     database2 = 'empty'
             except LookupError:
@@ -208,7 +213,7 @@ def search_forms_view(request, facility, access_page):
                     Model2 = apps.get_model('EES_Forms', access_page[0:6] + 'readings_model')
                     readingsData = True
                     if len(Model2.objects.all()) > 0:
-                        database2 = Model2.objects.all().order_by('-form')
+                        database2 = Model2.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
                     else:
                         database2 = 'empty'
                 except LookupError:
@@ -225,7 +230,7 @@ def search_forms_view(request, facility, access_page):
 
         form_list = Forms.objects.filter(Q(form__icontains=searched) | Q(frequency__icontains=searched) | Q(title__icontains=searched))
 
-        forms = form_list.order_by('form')
+        forms = form_list.filter(facilityChoice__facility_name=facility).order_by('form')
         letterForms = []
         otherForms = []
         for x in forms:

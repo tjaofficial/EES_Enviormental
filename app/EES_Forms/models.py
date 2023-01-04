@@ -241,6 +241,7 @@ class bat_info_model(models.Model):
     equip_location = models.CharField(max_length=30)
     address = models.CharField(max_length=30)
     state = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
     district = models.CharField(max_length=30)
     bat_height = models.IntegerField()
     bat_height_label = models.CharField(
@@ -4339,6 +4340,7 @@ class formP_model(models.Model):
 
 
 class issues_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     form = models.CharField(max_length=30)
     issues = models.CharField(max_length=300)
     notified = models.CharField(max_length=30)

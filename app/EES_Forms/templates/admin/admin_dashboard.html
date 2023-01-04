@@ -281,9 +281,13 @@
         </div>
         <div id="latestActivity3" class="card halfs">
             <div class="card-title">7 Day - Total Charges Graph</div>
+            {% if facility != 'admin' %}
             <div id='canvasHolder'>
-                <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%"></canvas>
+                <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%" style='margin-left: -20px;'></canvas>
             </div>
+            {% else %}
+            NO FACILITY SELECTED
+            {% endif %}
             <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
                 {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
             </div>
@@ -331,20 +335,24 @@
             <div class="card-title">Latest Issues/Corrective Actions</div>
             <div class="ca_holder">
                 <ul>
-                {% for x in ca_forms %}
-                    <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                        <li class="sideAlign">
-                            <div class="ca_indie">
-                                <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
-                                    {{ x.date }} - {{ x.form }}
+                {% if facility != 'admin' %}
+                    {% for x in ca_forms %}
+                        <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                            <li class="sideAlign">
+                                <div class="ca_indie">
+                                    <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
+                                        {{ x.date }} - {{ x.form }}
+                                    </div>
+                                    <div style="text-align: left; width: 100%; font-size:.6rem; padding-left: 0.4rem;">
+                                        {{ x.issues }}
+                                    </div>
                                 </div>
-                                <div style="text-align: left; width: 100%; font-size:.6rem; padding-left: 0.4rem;">
-                                    {{ x.issues }}
-                                </div>
-                            </div>
-                        </li>
-                    </a>
-                {% endfor %}
+                            </li>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                NO FACILITY SELECTED
+                {% endif %}
                 </ul>    
             </div>
             <div class="ca_footer">
@@ -357,6 +365,7 @@
         <div id="battery_weather" class="card quarters">
             <div class="card-title">Todays Battery/Weather Info.</div>
             <div style="overflow: scroll;" class="grid-battery-weather battery_info center bat_weather_class">
+                {% if facility != 'admin' %}
                 <p class="weather_battery_font">
                     <span>
                         Observer:
@@ -413,6 +422,9 @@
                     <br>
                     {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
                 </p>
+                {% else %}
+                NO FACILITY SELECTED
+                {% endif %}
             </div>
         </div>
         <div id="latestActivity4" class="card custom">
@@ -449,7 +461,7 @@
             </div>
         </div>
         <div id="observers" class="card custom2">
-            <div class="card-title">Observers</div>
+            <div class="card-title">Contacts</div>
             <div class="grid-observers">
                 <div class="grid-observ_header">
                     <p></p>

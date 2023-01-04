@@ -7,11 +7,15 @@
 </div>
 <center>
     <div class="card" style="min-width: 400px; min-height: 500px;">
+        {% if facility != 'admin' %}
         <form action="search_forms/search" method="POST" style="padding: 2rem; ">
             {% csrf_token %}
             <input type='search' placeholder="Search Forms" name="searched" required="True">
             <button type="submit" >Search</button>
         </form>
+        {% else %}
+        NO FACILITY SELECTED
+        {% endif %}
     </div>
 </center>
 
