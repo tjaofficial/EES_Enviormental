@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..forms import CreateUserForm, user_profile_form
+from ..forms import CreateUserForm, user_profile_form, bat_info_form
 from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model
 import datetime
 from django.contrib import messages
@@ -461,26 +461,42 @@ def register_view(request, facility):
     if admin:
         form = CreateUserForm()
         profile_form = user_profile_form()
+        
+        data = bat_info_form()
 
         if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            profile_form = user_profile_form(request.POST)
-            if form.is_valid() and profile_form.is_valid():
-                user = form.save()
+            try:
+                print('made it here')
+                check_1 = request.POST['create_user']
+                form = CreateUserForm(request.POST)
+                profile_form = user_profile_form(request.POST)
+                if form.is_valid() and profile_form.is_valid():
+                    user = form.save()
+                    profile = profile_form.save(commit=False)
+                    profile.user = user
 
-                profile = profile_form.save(commit=False)
-                profile.user = user
+                    profile.save()
 
-                profile.save()
+                    group = Group.objects.get(name=profile.position)
+                    user.groups.add(group)
 
-                group = Group.objects.get(name=profile.position)
-                user.groups.add(group)
-
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + user)
-                return redirect('admin_dashboard')
-            else:
-                messages.error(request, "The Information Entered Was Invalid.")
+                    user = form.cleaned_data.get('username')
+                    messages.success(request, 'Account was created for ' + user)
+                    return redirect('admin_dashboard', facility)
+                else:
+                    messages.error(request, "The Information Entered Was Invalid.")
+            except:
+                check_2 = request.POST['create_client']
+                form = bat_info_form(request.POST)
+                profile_form = ''
+                print(form.errors)
+                print('wtf')
+                if form.is_valid():
+                    form.save()
+                    
+                    messages.success(request, 'Account was created for new client')
+                    return redirect('admin_dashboard', facility)
+                
     elif request.user.groups.filter(name='EES Coke Employees'):
         return redirect('c_dashboard')
     elif request.user.groups.filter(name='SGI Technician'):
@@ -488,5 +504,5 @@ def register_view(request, facility):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 
+        'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 'data': data
     })

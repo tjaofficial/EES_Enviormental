@@ -1,0 +1,52 @@
+#card{
+    background-color: #ffffff;
+    /* height: 48rem; */
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 2px 2px 17px 0px #8080804a;
+    border: #0000004f solid 1px;
+    width: 742px;
+}
+.tabs{
+    background-color: #6c7d88;
+    /* height: 3.5rem;*/
+    width: 100%;
+    text-align: center;
+    padding: 19px 0;
+    font-weight: bolder;
+}
+.tabContainer{
+    background-color: rgb(55, 55, 55);
+    height: 3.5rem;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    display: flex;
+    /* width: 738px; */
+}
+.dataCont{
+    background-color: white;
+    border-radius: 20px;
+    margin: auto;
+    padding: 22px;
+    text-align: center;
+    /* width: 30%; */
+}
+.topLeftCont{
+    border-top-left-radius: 13px;
+}
+.topRightCont{
+    border-top-right-radius: 13px;
+}
+.tabs:hover{
+    background-color: white;
+    /* height: 3.5rem;*/
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 19px 0;
+    font-weight: bolder;
+}
+.start{
+    color: black;
+    background-color: white;
+}
