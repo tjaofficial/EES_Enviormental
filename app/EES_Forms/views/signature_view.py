@@ -45,6 +45,8 @@ def signature(request, facility):
         A_valid = data.is_valid()
         
         if A_valid:
+            data.save(commit=False)
+            data.facilityChoice = facility
             data.save()
             
             return redirect('IncompleteForms', facility)

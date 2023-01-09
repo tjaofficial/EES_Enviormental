@@ -466,7 +466,6 @@ def register_view(request, facility):
 
         if request.method == 'POST':
             try:
-                print('made it here')
                 check_1 = request.POST['create_user']
                 form = CreateUserForm(request.POST)
                 profile_form = user_profile_form(request.POST)
@@ -486,16 +485,21 @@ def register_view(request, facility):
                 else:
                     messages.error(request, "The Information Entered Was Invalid.")
             except:
-                check_2 = request.POST['create_client']
-                form = bat_info_form(request.POST)
-                profile_form = ''
-                print(form.errors)
-                print('wtf')
-                if form.is_valid():
-                    form.save()
-                    
-                    messages.success(request, 'Account was created for new client')
-                    return redirect('admin_dashboard', facility)
+                try:
+                    check_2 = request.POST['create_client']
+                    form = bat_info_form(request.POST)
+                    profile_form = ''
+                    print(form.errors)
+                    print('wtf')
+                    if form.is_valid():
+                        form.save()
+                        
+                        messages.success(request, 'Account was created for new client')
+                        return redirect('admin_dashboard', facility)
+                except:
+                    answer = request.POST
+                    if answer['facilitySelect'] != '':
+                        return redirect('Register', answer['facilitySelect'])
                 
     elif request.user.groups.filter(name='EES Coke Employees'):
         return redirect('c_dashboard')

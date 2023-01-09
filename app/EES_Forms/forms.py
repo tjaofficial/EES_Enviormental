@@ -217,7 +217,7 @@ class pt_admin1_form(ModelForm):
 class bat_info_form(ModelForm):
     class Meta:
         model = bat_info_model
-        fields = ('bat_num', 'total_ovens', 'facility_name', 'county', 'estab_num', 'equip_location', 'address', 'state', 'district', 'bat_height', 'bat_height_label', 'bat_main', 'bat_lids',)
+        fields = ('bat_num', 'total_ovens', 'facility_name', 'county', 'estab_num', 'equip_location', 'address', 'state', 'district', 'bat_height', 'bat_height_label', 'bat_main', 'bat_lids', 'city')
 
         widgets = {
             'bat_num': forms.NumberInput(attrs={'type': 'number','style': ''}),

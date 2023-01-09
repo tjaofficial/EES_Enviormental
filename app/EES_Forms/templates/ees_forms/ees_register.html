@@ -10,7 +10,7 @@
             <div id='tab2' class='tabs topRightCont'>Client</div>
         </div>
         <div id="login" class='dataCont' style='display: block;'>
-            <h1>Register New Observer</h1>
+            <h1>Register New Observer/Supervisor</h1>
             </br>
             <form method="POST" action="">
                 {% csrf_token %}
@@ -64,7 +64,15 @@
                     </tr>
                     <tr>
                         <th class='label'>
-                            City/District:
+                            City:
+                        </th>
+                        <td class='answer'>
+                            {{data.city}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            District:
                         </th>
                         <td class='answer'>
                             {{data.district}}

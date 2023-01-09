@@ -4414,7 +4414,6 @@ class Event(models.Model):
         if str(self.end_time) <= str(self.start_time):
             raise ValidationError('Ending times must after starting times')
 
-
 class spill_kits_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
@@ -5584,9 +5583,9 @@ class sop_model(models.Model):
     
     def __str__(self):
         return str(self.name)
-    
-    
+      
 class signature_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     supervisor = models.CharField(
         max_length=30
     )
