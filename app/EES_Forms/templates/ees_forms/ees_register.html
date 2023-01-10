@@ -4,6 +4,7 @@
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
 <body>
+    {% if access_page == 'form' %}
     <div id='card'>
         <div class='tabContainer'>
             <div id='tab1' class='tabs topLeftCont start'>Observer/Supervisor</div>
@@ -159,5 +160,34 @@
             {% endfor%}
         </div>
     </div>
+    {% else %}
+    <div id='card2'>
+        <div id="login" class='dataCont' style='display: block;'>
+            <h1>Edit {{ userInfo.first_name }}'s Profile</h1>
+            </br>
+            <form method="POST" action="">
+                {% csrf_token %}
+                
+                {{ userData1.username.label }}: {{ userData1.username }}<br><br>
+                {{ userData1.email.label }}: {{ userData1.email }}<br><br>
+                {{ userData1.first_name.label }}: {{ userData1.first_name }}<br><br>
+                {{ userData1.last_name.label }}: {{ userData1.last_name }}<br><br>
+                {{ userData2.phone.label }}: {{ userData2.phone }}<br><br>
+                Work {{ userData2.position.label }}: {{ userData2.position }}<br><br>
+                <div id='certDateDiv' style='display: none;'>
+                    {{ userData2.cert_date.label }}: {{ userData2.cert_date }}
+                <br><br></div>
+                <div id='facilityNameDiv' style='display: none;'>
+                    {{ userData2.facility_name.label }}: {{ userData2.facility_name }}
+                <br><br></div>
+                <input type="submit" name="edit_user">
+            </form>
+
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor%}
+        </div>
+    </div>
+    {% endif %}
 </body>
 {% endblock %}

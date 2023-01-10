@@ -7,6 +7,15 @@
     border: #0000004f solid 1px;
     width: 742px;
 }
+#card2{
+    background-color: #ffffff;
+    /* height: 48rem; */
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 2px 2px 17px 0px #8080804a;
+    border: #0000004f solid 1px;
+    width: 742px;
+}
 .tabs{
     background-color: #6c7d88;
     /* height: 3.5rem;*/

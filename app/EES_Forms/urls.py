@@ -1,17 +1,16 @@
 from django.urls import path
 from . import views
-from .views.login_logout_view import PasswordsChangeView
 
 urlpatterns = [
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
     path("<str:facility>/admin_dashboard", views.admin_dashboard_view, name='admin_dashboard'),
 
-    path("<str:facility>/Register", views.register_view, name="Register"),
+    path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("Login", views.login_view, name="Login"),
     path("no_registration", views.valid_account_logout, name="no_registration"),
     path("Logout", views.logout_view, name="Logout"),
     path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
-    path("password", PasswordsChangeView.as_view(), name='PasswordChange'),
+    path("<str:facility>/password", views.change_password, name='PasswordChange'),
 
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     path('<str:facility>/about', views.about_view, name='about'),

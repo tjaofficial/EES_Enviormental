@@ -6,7 +6,8 @@ import datetime
 from ..models import user_profile_model, daily_battery_profile_model
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 
 profile = user_profile_model.objects.all()
 
@@ -93,12 +94,18 @@ def profile_redirect(request, facility):
 
     })
 
-
-class PasswordsChangeView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    template_name = 'ees_forms/ees_password.html'
-
-    def get_success_url(self):
-        return reverse('profile', kwargs={'access_page': 'success'})
-
-    # success_url = reverse_lazy('profile')
+def change_password(request, facility):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            # messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile_redirect', facility)
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'ees_forms/ees_password.html', {
+        'form': form, 'facility': facility
+    })

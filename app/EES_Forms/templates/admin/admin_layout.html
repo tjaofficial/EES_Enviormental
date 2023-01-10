@@ -28,7 +28,7 @@
                     <li><a id='adminLabel' href=#>Admin</a>
                         <ul id='adminGroup' style='display:block;'>
                             <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif admin %}{% url 'admin_dashboard' facility %}{% endif %}">Dashboard</a></li>
-                            {% if client %}{% elif admin %}<li><a href="{% url 'Register' facility %}">Register New Profile</a></li>{% endif %}
+                            {% if client %}{% elif admin %}<li><a href="{% url 'Register' facility 'form'%}">Register New Profile</a></li>{% endif %}
                             <li><a href="{% url 'Contacts'  facility %}">Profiles/Contacts</a></li>
                             <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
                         </ul>

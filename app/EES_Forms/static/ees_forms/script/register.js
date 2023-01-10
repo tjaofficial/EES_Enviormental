@@ -17,7 +17,7 @@ function cert_date1() {
         document.getElementById('facilityNameDiv').style.display = 'none';
     }
 }
-
+cert_date1();
 document.getElementById("tab1").addEventListener("click", changeTab1);
 document.getElementById("tab2").addEventListener("click", changeTab2);
 
