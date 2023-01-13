@@ -13,7 +13,6 @@ lock = login_required(login_url='Login')
 def IncompleteForms(request, facility):
     if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser or request.user.groups.filter(name='SGI Quality Control'):
         profile = user_profile_model.objects.all()
-        prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
         today = datetime.date.today()
         todays_num = today.weekday()
         sub_forms = Forms.objects.all()
@@ -702,7 +701,6 @@ def IncompleteForms(request, facility):
             "form_checkAll2": form_checkAll2,
             'sigExisting': sigExisting,
             'facility': facility,
-            'prof_pic': prof_pic
         })
     elif request.user.groups.filter(name='SGI Admin'):
         return redirect('admin_dashboard')

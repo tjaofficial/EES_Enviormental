@@ -11,7 +11,6 @@ lock = login_required(login_url='Login')
 @lock
 def daily_battery_profile_view(request, facility, access_page, date):
     profile = user_profile_model.objects.all()
-    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     now = datetime.datetime.now()
     form = daily_battery_profile_form
     options = bat_info_model.objects.all()
@@ -52,13 +51,12 @@ def daily_battery_profile_view(request, facility, access_page, date):
             return redirect('IncompleteForms', facility)
 
     return render(request, "ees_forms/Bat_Info.html", {
-        'prof_pic': prof_pic, 'options': options, 'form': form, 'now': now, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
+        'options': options, 'form': form, 'now': now, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
     })
 
 @lock
 def facility_select_view(request):
     profile = user_profile_model.objects.all()
-    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     loginPage = True
     now = datetime.datetime.now()
     options = bat_info_model.objects.all()
@@ -78,5 +76,5 @@ def facility_select_view(request):
             return redirect(batt_prof)
 
     return render(request, "ees_forms/facility_select.html", {
-        'prof_pic': prof_pic, 'options': options, 'now': now, 'loginPage': loginPage, 'profile': profile, 
+        'options': options, 'now': now, 'loginPage': loginPage, 'profile': profile, 
     })
