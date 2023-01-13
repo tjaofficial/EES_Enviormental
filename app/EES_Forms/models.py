@@ -414,7 +414,8 @@ class user_profile_model(models.Model):
     profile_picture = models.ImageField(
         blank=True,
         null=True,
-        upload_to='images/profile_pics')
+        upload_to='images/profile_pics'
+    )
     phone = PhoneNumberField(
         null=False,
         blank=False,

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form
 from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, User
 import datetime
@@ -7,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.models import Group
 import json
 import requests
+import os
 
 lock = login_required(login_url='Login')
 
@@ -449,8 +451,9 @@ def admin_dashboard_view(request, facility):
 def register_view(request, facility, access_page):
     options = bat_info_model.objects.all()
     user_profiles = user_profile_model.objects.all()
-    userData1 = ''
+    media = settings.MEDIA_ROOT
     userData2 = ''
+    pic = ''
     userInfo = ''
     form = ''
     profile_form = ''
@@ -470,18 +473,13 @@ def register_view(request, facility, access_page):
             if len(user_profiles.filter(user__email__exact=access_page)) > 0:
                 userProfileInfo = user_profiles.filter(user__email__exact=access_page)[0]
                 userInfo = User.objects.all().filter(email__exact=access_page)[0]
+                pic = userProfileInfo.profile_picture
                 initial_data = {
-                    'username': userInfo.username,
-                    'email': userInfo.email,
-                    'first_name': userInfo.first_name,
-                    'last_name': userInfo.last_name,
-                    
                     'cert_date': userProfileInfo.cert_date,
                     'phone': userProfileInfo.phone,
                     'position': userProfileInfo.position,
                     'profile_picture': userProfileInfo.profile_picture,
                 }
-                userData1 = CreateUserForm(initial=initial_data)
                 userData2 = user_profile_form(initial=initial_data)
         else:
             form = CreateUserForm()
@@ -526,15 +524,11 @@ def register_view(request, facility, access_page):
                     try:
                         check_3 = request.POST['edit_user']
                         print('CHECK 3')
-                        A = user_profile_form(request.POST, instance=userProfileInfo)
-                        B = User(request.POST, instance=userInfo)
-                        print(A.errors)
-                        print(B.errors)
-                        if A.is_valid() and B.is_valid():
+                        A = user_profile_form(request.POST, request.FILES, instance=userProfileInfo)
+                        if A.is_valid():
                             A.save()
-                            B.save()
                             
-                            return redirect('Contacts', facility)
+                            # return redirect('Contacts', facility)
                     except:
                         answer = request.POST
                         print('TOO FAR')
@@ -548,5 +542,5 @@ def register_view(request, facility, access_page):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 'data': data, 'userData1': userData1, 'userData2': userData2, 'userInfo': userInfo
+        'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 'data': data, 'userData2': userData2, 'userInfo': userInfo
     })

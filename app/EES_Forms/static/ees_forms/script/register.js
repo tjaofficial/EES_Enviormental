@@ -1,3 +1,7 @@
+
+//document.getElementById('id_password1').autocomplete = false;
+//document.getElementById('id_password2').required = false;
+
 function cert_date1() {
     const position = document.getElementById('id_position').value;
     if (position == 'SGI Technician') {
