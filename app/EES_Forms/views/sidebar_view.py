@@ -9,6 +9,7 @@ from django.apps import apps
 from ..utils import Calendar
 from django.contrib.auth.decorators import login_required
 import os
+from django.conf import settings
 
 lock = login_required(login_url='Login')
 
@@ -26,11 +27,12 @@ def corrective_action_view(request, facility):
         admin = True
 
     profile = user_profile_model.objects.all()
+    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     options = bat_info_model.objects.all()
     ca_forms = issues_model.objects.all().order_by('-id')
 
     return render(request, "ees_forms/corrective_actions.html", {
-        'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'prof_pic': prof_pic, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
 
 @lock
@@ -46,6 +48,7 @@ def calendar_view(request, facility, year, month):
         admin = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
+    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     month = month.title()
     month_number = list(calendar.month_name).index(month)
     month_number = int(month_number)
@@ -71,11 +74,12 @@ def calendar_view(request, facility, year, month):
     html_cal = calend.formatmonth(year, month_number, year, withyear=True)
 
     return render(request, "ees_forms/schedule.html", {
-        'options': options, 'facility': facility, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'prof_pic': prof_pic, 'options': options, 'facility': facility, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
 
 @lock
 def schedule_view(request, facility):
+    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     admin = False
     options = bat_info_model.objects.all()
     if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
@@ -86,7 +90,7 @@ def schedule_view(request, facility):
     return redirect('schedule/' + str(today_year) + '/' + str(today_month))
 
     return render(request, "ees_forms/scheduling.html", {
-        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'admin': admin,
+        'prof_pic': prof_pic, 'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'admin': admin,
     })
 
 @lock
@@ -102,6 +106,7 @@ def archive_view(request, facility):
         admin = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
+    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     
     if request.method == 'POST':
         answer = request.POST
@@ -109,7 +114,7 @@ def archive_view(request, facility):
             return redirect('archive', answer['facilitySelect'])
 
     return render(request, 'ees_forms/ees_archive.html', {
-        'options': options, 'facility': facility, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'prof_pic': prof_pic, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
     })
 
 @lock
@@ -128,6 +133,7 @@ def search_forms_view(request, facility, access_page):
         admin = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
+    prof_pic = settings.MEDIA_ROOT2 + '/images/profile_pics/' + str(user_profile_model.objects.all().filter(user__exact=request.user)[0].profile_picture)[20:]
     if access_page != 'search':
         chk_database = apps.get_model('EES_Forms', access_page).objects.count()
         mainList = []
@@ -240,11 +246,11 @@ def search_forms_view(request, facility, access_page):
                 otherForms.append([x.form.replace(' ', '_'), x.form.replace(' ', '_').lower() + '_model', x])
 
         return render(request, 'ees_forms/search_forms.html', {
-            'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'prof_pic': prof_pic, 'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'prof_pic': prof_pic, 'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
 
 @lock
