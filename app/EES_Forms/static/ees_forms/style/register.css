@@ -36,7 +36,7 @@
     background-color: white;
     border-radius: 20px;
     margin: auto;
-    padding: 22px;
+    /* padding: 22px; */
     text-align: center;
     /* width: 30%; */
 }
@@ -58,4 +58,15 @@
 .start{
     color: black;
     background-color: white;
+}
+.cardHeader{
+    padding: 15px;
+    color: white;
+    background-color: #253544;
+    border-radius: 13px 13px 0px 0px;
+}
+.formCont{
+    background-color: #80808026;
+    border-radius: 12px;
+    padding: 20px;
 }

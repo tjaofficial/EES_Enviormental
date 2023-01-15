@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from ..models import user_profile_model, Forms
 from ..forms import user_profile_form
 import datetime
+import os
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-
+lock = login_required(login_url='Login')
 
 def profile(request, facility, access_page):
     profile = user_profile_model.objects.all()
@@ -47,3 +49,15 @@ def profile(request, facility, access_page):
     return render(request, "ees_forms/profile.html", {
         'facility': facility, "back": back, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile': profile,
     })
+
+@lock
+def delete_prof_pic_view(request, facility, profile_pic_id):
+    prof = user_profile_model.objects.get(pk=profile_pic_id)
+    
+    if os.path.exists("./media/" + str(prof.profile_picture)):
+        os.remove("./media/" + str(prof.profile_picture))
+        print('IT DOES EXIST')
+    else:
+        print("The file does not exist")
+    prof.profile_picture.delete()
+    return redirect('Contacts', facility)

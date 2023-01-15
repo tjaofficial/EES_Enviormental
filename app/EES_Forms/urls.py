@@ -13,6 +13,7 @@ urlpatterns = [
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
 
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
+    path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
     path('<str:facility>/about', views.about_view, name='about'),
     path('<str:facility>/safety', views.safety_view, name='safety'),
     path('<str:facility>/settings', views.settings_view, name='settings'),

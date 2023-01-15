@@ -452,6 +452,7 @@ def register_view(request, facility, access_page):
     options = bat_info_model.objects.all()
     user_profiles = user_profile_model.objects.all()
     media = settings.MEDIA_ROOT
+    userProfileInfo = ''
     userData2 = ''
     pic = ''
     userInfo = ''
@@ -542,5 +543,5 @@ def register_view(request, facility, access_page):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 'data': data, 'userData2': userData2, 'userInfo': userInfo
+        'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 'data': data, 'userData2': userData2, 'userInfo': userInfo
     })

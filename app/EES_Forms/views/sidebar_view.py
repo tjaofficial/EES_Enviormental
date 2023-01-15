@@ -546,9 +546,9 @@ def shared_contacts_view(request, facility):
     
     organized_list = []
     for index, user in enumerate(profile):
-        organized_list.append((index, user))
+        organized_list.append((user.id, user))
     
-    
+    print(organized_list)
     
     return render(request, "shared/contacts.html", {
         'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'admin': admin, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date

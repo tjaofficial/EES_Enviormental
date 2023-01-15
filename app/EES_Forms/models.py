@@ -426,7 +426,7 @@ class user_profile_model(models.Model):
         null=False,
         blank=False,
     )
-    facility_name = models.CharField(
+    company = models.CharField(
         max_length=75,
         null=True,
         blank=True,

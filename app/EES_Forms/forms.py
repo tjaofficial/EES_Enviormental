@@ -195,7 +195,7 @@ class user_profile_form(forms.ModelForm):
             'profile_picture',
             'phone',
             'position',
-            'facility_name'
+            'company'
         )
         exclude = ['user']
 
@@ -204,7 +204,7 @@ class user_profile_form(forms.ModelForm):
             'profile_picture': forms.FileInput(attrs={'style': 'width: fit-content;'}),
             'phone': forms.TextInput(attrs={'type': 'tel', 'style': 'width: 150px;', 'placeholder': '+10005557777'}),
             'position': forms.Select(attrs={'oninput': 'cert_date1()', 'style': 'width: 100px;'}),
-            'facility_name': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;'})
+            'company': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;'})
         }
 
 

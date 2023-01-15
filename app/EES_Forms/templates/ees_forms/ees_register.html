@@ -163,33 +163,38 @@
     {% else %}
     <div id='card2'>
         <div id="login" class='dataCont' style='display: block;'>
-            <h1>Edit {{ userInfo.first_name }}'s Profile</h1>
-            </br>
-            <form method="POST" action="" enctype="multipart/form-data">
+            <div class='cardHeader'>
+                <h1>Edit {{ userInfo.first_name }}'s Profile</h1>
+            </div>
+            <form method="POST" action="" enctype="multipart/form-data" style='padding:22px;'>
                 {% csrf_token %}
                 {% if pic %}
                 <div style="text-align: center; width: 300px; height: 300px; margin: auto;">
                     <img class="prof_pic_view" style='height:100%;width:100%;' src="../../../media/{{pic}}"/>
                     <br><br>
                 </div>
-                <br><br>
+                <br>
+                <div>
+                    <a style='color:red; font-size:10px;' href={% url 'DeleteProf' facility userProfileInfo.id %}>delete</a>
+                </div>
+                <br>
                 {% else %}
                 <div style="text-align: center; ">
                     <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
                     </svg>
-                    <br><br>
+                    <br>
                 </div>
                 {% endif %}
-                {{ userData2.profile_picture }}<br><br>
-                {{ userData2.phone.label }}: {{ userData2.phone }}<br><br>
-                Work {{ userData2.position.label }}: {{ userData2.position }}<br><br>
-                <div id='certDateDiv' style='display: none;'>
-                    {{ userData2.cert_date.label }}: {{ userData2.cert_date }}
-                <br><br></div>
-                <div id='facilityNameDiv' style='display: none;'>
-                    {{ userData2.facility_name.label }}: {{ userData2.facility_name }}
-                <br><br></div>
+                <div class='formCont'>
+                    {{ userData2.profile_picture }}<br><br>
+                    {{ userData2.phone.label }}: {{ userData2.phone }}<br><br>
+                    Work {{ userData2.position.label }}: {{ userData2.position }}<br><br>
+                    <div id='certDateDiv' style='display: none;'>
+                        {{ userData2.cert_date.label }}: {{ userData2.cert_date }}
+                    </div>
+                </div>
+                <br>
                 <input type="submit" name="edit_user">
             </form>
 
