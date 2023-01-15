@@ -10,6 +10,16 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formN(request, facility, selector):
+    unlock = False
+    client = False
+    search = False
+    admin = False
+    if request.user.groups.filter(name='SGI Technician'):
+        unlock = True
+    if request.user.groups.filter(name='EES Coke Employees'):
+        client = True
+    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+        admin = True
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -44,5 +54,5 @@ def formN(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formN.html", {
-        'facility': facility, 'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
+        "client": client, 'unlock': unlock, 'admin': admin, 'search': search, 'facility': facility, 'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
     })

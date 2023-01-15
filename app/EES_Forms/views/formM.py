@@ -61,7 +61,6 @@ def formM(request, facility, selector):
             form2 = database_model2
             existing = True
             search = True
-            unlock = False
         elif len(org) > 0 or len(org2) > 0:
             database_form = org[0]
             database_form2 = org2[0]

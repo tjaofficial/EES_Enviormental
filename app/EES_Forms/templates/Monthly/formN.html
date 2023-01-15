@@ -1,10 +1,12 @@
-{% extends "ees_forms/layout.html" %}
-{% load static %}
-{% block list%}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% block list%}{% load static %}
 <body>
     <head>
         <script defer src="{% static 'ees_forms/script/formN.js' %}"></script>
         <link href="{% static 'ees_forms/style/formN_modal.css' %}" rel="stylesheet">
+        {% if not unlock %}
+            <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+        {% endif %}
     </head>
     <div id="paperSize">
         <div>
