@@ -168,10 +168,11 @@
             <form method="POST" action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% if pic %}
-                <div style="text-align: center; ">
-                    <img class="prof_pic_view" src="../../../media/{{pic}}"/>
+                <div style="text-align: center; width: 300px; height: 300px; margin: auto;">
+                    <img class="prof_pic_view" style='height:100%;width:100%;' src="../../../media/{{pic}}"/>
                     <br><br>
                 </div>
+                <br><br>
                 {% else %}
                 <div style="text-align: center; ">
                     <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
