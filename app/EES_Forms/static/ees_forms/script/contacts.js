@@ -6,7 +6,7 @@ function getid(obj) {
     const image = document.getElementById("image" + obj.id).innerHTML;
     phoneHandler(phone)
     
-    document.getElementById("replaceContent").innerHTML = "<div class='contact_data_cont'><div class='contact_image' style='text-align: center;'>"+ image + "</div><div class='contact_data_cont_inner'><p>"+name+"</p><div class='contact_data'><p>Phone: "+phoneHandler(phone)+"</p><p>Email: "+email+"</p><p>Certification Date: "+cert_date+"</p></div></div></div><a href='../../ees_forms/admin/Register/"+email+"'><div id='edit'>Edit</div></a>";
+    document.getElementById("replaceContent").innerHTML = "<div class='contact_data_cont'><div class='contact_image' style='text-align: center;'>"+ image + "</div><div class='contact_data_cont_inner'><p>" + name + "</p><div class='contact_data'><p>Phone: " + phoneHandler(phone) + "</p><p>Email: " + email + "</p><p>Certification Date: " + cert_date + "</p></div></div></div><a href='../../ees_forms/admin/Register/" + email + "'><div id='edit'>Edit</div></a>";
 }
 
 function phoneHandler(fullNumber){

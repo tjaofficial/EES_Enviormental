@@ -280,17 +280,6 @@ li {
     grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
     margin: .4rem 2rem;
 }
-.contactFont{
-    font-size: .7rem;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.contactHeader{
-    font-size: 0.9rem;
-    font-weight:900;
-    display: flex;
-}
 .center{
     justify-content: center;
 }
@@ -418,58 +407,6 @@ li {
 .no_link_css{
     color:inherit; 
     text-decoration: none;
-}
-.contact_list_cont{
-    margin: 0rem 1rem;
-    height: 45rem;
-    overflow: scroll;
-}
-.contact_singles {
-    display: grid;
-    grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
-    height: 5rem;
-}
-.contact_singles:hover {
-    background-color: #dfe5e9;
-}
-.contact_icon_cont{
-    max-width: 100%;
-    height: auto;
-    align-items: center;
-    display: flex;
-    margin-left: 16px;
-}
-.contact_icon_color{
-    color: gray;
-}
-.contact_list_font{
-    font-size: .9rem;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.card.contact_data_card{
-    grid-row: span 14;
-    grid-column: span 2;
-    padding: 32px;
-}
-.contact_image{
-    background-color: gray;
-    width: 100%;
-    height: 300px;
-    margin: auto;
-    border-radius: 15px;
-}
-.contact_data_cont_inner{
-    font-size: 26px;
-    margin-top: 30px;
-    color: #565656;
-    margin-left: -6px;
-}
-.contact_data{
-    font-size: 18px;
-    margin: auto;
-    width: 93%;
 }
 .eventAdd{
     background-color: white;

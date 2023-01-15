@@ -528,7 +528,7 @@ def register_view(request, facility, access_page):
                         if A.is_valid():
                             A.save()
                             
-                            # return redirect('Contacts', facility)
+                            return redirect('Contacts', facility)
                     except:
                         answer = request.POST
                         print('TOO FAR')
