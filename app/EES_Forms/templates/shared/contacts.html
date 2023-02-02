@@ -18,7 +18,7 @@
                 <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
                 <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
                 <p id="userID{{ person.0 }}" hidden=true>{{ person.1.user.id }}</p>
-                <p id="phone{{ person.0 }}" hidden=true>{{ person.1.phone }}</p>
+                <p id="phone{{ person.0 }}" hidden=true>{{ person.3 }}</p>
                 <p id="cert_date{{ person.0 }}" hidden=true>{{ person.1.cert_date }}</p>
                 <p id="image{{ person.0 }}" hidden=true>
                     {% if person.1.profile_picture %}
@@ -40,7 +40,7 @@
                     {% endif %}
                 </span>
                 <p class="contact_list_font">{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
-                <p class="contact_list_font center">{{ person.1.phone }}</p>
+                <p class="contact_list_font center">{{ person.3 }}</p>
                 <p class="contact_list_font center">{{ person.1.user.email }}</p>
                 <p class="contact_list_font center">{{ person.1.cert_date }}</p>
             </div>

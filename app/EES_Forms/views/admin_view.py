@@ -478,10 +478,14 @@ def register_view(request, facility, access_page):
                 if userProfileInfo.phone:
                     print(userProfileInfo.phone)
                     number = userProfileInfo.phone[2:];
-                    first = number[0:3];
+                    first = number[:3];
                     middle = number[3:6];
                     end = number[6:]
-                    parseNumber = '(' + first + ') ' + middle + '-'+ end
+                    parseNumber = '(' + first + ')' + middle + '-'+ end
+                    print(parseNumber)
+                    print(first)
+                    print(middle)
+                    print(end)
                 else:
                     parseNumber = ''
                 
@@ -502,8 +506,12 @@ def register_view(request, facility, access_page):
             data = bat_info_form()
 
         if request.method == 'POST':
-            try:
-                check_1 = request.POST['create_user']
+            print(request.POST)
+            # try:
+            check_1 = request.POST.get('create_user', False)
+            check_2 = request.POST.get('create_client', False)
+            check_3 = request.POST.get('edit_user', False)
+            if check_1:
                 print('CHECK 1')
                 form = CreateUserForm(request.POST)
                 profile_form = user_profile_form(request.POST)
@@ -522,36 +530,30 @@ def register_view(request, facility, access_page):
                     return redirect('admin_dashboard', facility)
                 else:
                     messages.error(request, "The Information Entered Was Invalid.")
-            except:
-                try:
-                    check_2 = request.POST['create_client']
-                    form = bat_info_form(request.POST)
-                    profile_form = ''
-                    print(form.errors)
-                    print('wtf')
-                    if form.is_valid():
-                        form.save()
-                        
-                        messages.success(request, 'Account was created for new client')
-                        return redirect('admin_dashboard', facility)
-                except:
-                    try:
-                        check_3 = request.POST['edit_user']
-                        print('CHECK 3')
-                        finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
-                        A = user_profile_form(request.POST, request.FILES, instance=userProfileInfo)
-                        print(A.phone)
-                        A.phone = finalPhone
-                        print(A.errors)
-                        if A.is_valid():
-                            A.save(commit=False)
-
-                            #return redirect('Contacts', facility)
-                    except:
-                        answer = request.POST
-                        print('TOO FAR')
-                        if answer['facilitySelect'] != '':
-                            return redirect('Register', answer['facilitySelect'])
+            elif check_2:
+                form = bat_info_form(request.POST)
+                profile_form = ''
+                print(form.errors)
+                print('wtf')
+                if form.is_valid():
+                    form.save()
+                    
+                    messages.success(request, 'Account was created for new client')
+                    return redirect('admin_dashboard', facility)
+            elif check_3:
+                print('CHECK 3')
+                print(check_3)
+                finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+                print(filter(str.isdigit, request.POST['phone']))
+                new_data = request.POST.copy()
+                new_data['phone'] = finalPhone
+                A = user_profile_form(new_data, request.FILES, instance=userProfileInfo)
+                #print(A.errors)
+                if A.is_valid():
+                    A.save()
+                    return redirect('Contacts', facility)
+            else:
+                print('TOO FAR')
                 
     elif request.user.groups.filter(name='EES Coke Employees'):
         return redirect('c_dashboard')

@@ -497,6 +497,14 @@ def event_detail_view(request, facility, access_page, event_id):
         'options': options, 'facility': facility, 'context': context, "admin": admin, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })
 
+def handlePhone(number):
+    number = number[2:]
+    first = number[:3]
+    middle = number[3:6]
+    end = number[6:]
+    parsedNumber = '(' + first +')'+ middle + '-' + end
+    return parsedNumber
+    
 @lock
 def shared_contacts_view(request, facility):
     options = bat_info_model.objects.all()
@@ -565,9 +573,9 @@ def shared_contacts_view(request, facility):
             for item in certList:
                 certList[i] = certList[i].strip()
                 i += 1
-            organized_list.append((user.id, user, certList))
+            organized_list.append((user.id, user, certList, handlePhone(user.phone)))
         else:
-            organized_list.append((user.id, user))
+            organized_list.append((user.id, user, 'N/A' , handlePhone(user.phone)))
     
     print(organized_list)
     
