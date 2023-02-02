@@ -55,7 +55,6 @@ def formB(request, facility, selector):
             data = database_model
             existing = True
             search = True
-            unlock = False
         elif len(week_start_dates) > 0:
             database_form = week_start_dates[0]
             if database_form.week_start == last_monday:
