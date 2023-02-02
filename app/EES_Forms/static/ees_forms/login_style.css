@@ -1,5 +1,4 @@
 #page{
-    background-color: white;
     height: 100%;
     width: 100%;
 }
@@ -11,9 +10,35 @@
     margin: auto;
     text-align: center;
     height: auto;
-    margin-top: 100px;
+    margin-top: 11rem;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 2px 2px 17px 0px #8080804a;
+    border: #0000004f solid 1px;
+    width: 742px;
 }
 
 #change_password ul{
     height: auto;
+}
+.passChange{
+    margin: 30px 0px;
+}
+.cardHeader{
+    padding: 15px;
+    color: white;
+    background-color: #253544;
+    border-radius: 13px 13px 0px 0px;
+    font-size: .8rem;
+    font-family: sans-serif;
+}
+li{
+    margin: auto;
+    width: 31rem;
+    text-align: left;
+    font-size: .9rem;
+}
+ul{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
