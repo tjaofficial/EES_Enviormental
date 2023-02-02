@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import datetime
 from .models import *
-from phonenumber_field.formfields import PhoneNumberField
 
 now = datetime.datetime.now()
 
