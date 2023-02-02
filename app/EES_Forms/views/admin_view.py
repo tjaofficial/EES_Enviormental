@@ -513,8 +513,12 @@ def register_view(request, facility, access_page):
             check_3 = request.POST.get('edit_user', False)
             if check_1:
                 print('CHECK 1')
+                finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+                print(finalPhone)
+                new_data = request.POST.copy()
+                new_data['phone'] = finalPhone
                 form = CreateUserForm(request.POST)
-                profile_form = user_profile_form(request.POST)
+                profile_form = user_profile_form(new_data)
                 if form.is_valid() and profile_form.is_valid():
                     user = form.save()
                     profile = profile_form.save(commit=False)
