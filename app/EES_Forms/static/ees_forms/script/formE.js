@@ -20,7 +20,7 @@ function updateEventListeners(){
     const resultElement = document.querySelectorAll("[data-dynamicInputs]");
 
     for(let i=0; i<resultElement.length; i++){
-        resultElement[i].addEventListener('input', handle_Table_Input)
+        resultElement[i].addEventListener('change', handle_Table_Input)
         resultElement[i].addEventListener('change', update_Temp_Save)
         
     }

@@ -977,7 +977,7 @@ class formE_form(ModelForm):
             'foreman' : forms.TextInput(attrs={'style':'width: 80px;'}),
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'leaks' : forms.Select(attrs={'onchange': 'no_leaks()', 'style': 'width: 40px;'}),
+            'leaks' : forms.Select(attrs={'onchange': 'no_leaks()', 'style': 'width: 50px;'}),
             'goose_neck_data' : forms.NumberInput(attrs={'id': "gooseNeckData", 'type': "hidden", 'value': "{}", 'data-resulttable': ""})
             
         }
