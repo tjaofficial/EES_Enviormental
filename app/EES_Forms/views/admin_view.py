@@ -519,7 +519,8 @@ def register_view(request, facility, access_page):
                 print(finalPhone)
                 new_data = request.POST.copy()
                 new_data['phone'] = finalPhone
-                form = CreateUserForm(request.POST)
+                new_data['username'] = request.POST['username'].lower()
+                form = CreateUserForm(new_data)
                 profile_form = user_profile_form(new_data)
                 if form.is_valid() and profile_form.is_valid():
                     user = form.save()

@@ -3,7 +3,7 @@ function htmlList(list) {
     list = list.replace('[','').replace(']','')
     list = list.split(',')
     let htmlCode = "<ul>"
-    for (i=1; i<list.length; i++){
+    for (let i=0; i<list.length; i++){
         htmlCode += "<li style='list-style-type: disc; display: list-item;list-style-position: inside;margin: 0px;'>" + list[i].replace("'","").replace("'","") + "</li>"
     }
     htmlCode += '</ul>'
