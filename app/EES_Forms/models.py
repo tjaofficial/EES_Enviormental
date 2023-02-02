@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 import datetime
-from phonenumber_field.modelfields import PhoneNumberField
 
 quarter_choices = (
     ('1', '1st'),
