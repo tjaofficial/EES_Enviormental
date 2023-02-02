@@ -22,7 +22,8 @@ def daily_battery_profile_view(request, facility, access_page, date):
         todays_log = daily_prof[0]
         if now.month == todays_log.date_save.month:
             if now.day == todays_log.date_save.day:
-                existing = True
+                if now.year == todays_log.date_save.year:
+                    existing = True
     
     if existing:
         initial_data = {
@@ -34,7 +35,9 @@ def daily_battery_profile_view(request, facility, access_page, date):
             'date_save': todays_log.date_save,
         }
     else:
-        initial_data = {'facility': facility}
+        initial_data = {
+            'facility': facility
+        }
 
     form = daily_battery_profile_form(initial=initial_data)
     if request.method == 'POST':
@@ -42,7 +45,6 @@ def daily_battery_profile_view(request, facility, access_page, date):
             form = daily_battery_profile_form(request.POST, instance=todays_log)
         else:
             form = daily_battery_profile_form(request.POST)
-        #print(len(request.POST['inop_numbs'].replace(' ', ''). split(',')))
         
         if form.is_valid():
             A = form.save(commit=False)
