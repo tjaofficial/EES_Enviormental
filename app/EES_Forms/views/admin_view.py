@@ -471,15 +471,28 @@ def register_view(request, facility, access_page):
 
     if admin:
         if access_page != 'form':
-            if len(user_profiles.filter(user__email__exact=access_page)) > 0:
-                userProfileInfo = user_profiles.filter(user__email__exact=access_page)[0]
-                userInfo = User.objects.all().filter(email__exact=access_page)[0]
+            if len(user_profiles.filter(user__id__exact=access_page)) > 0:
+                userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
+                userInfo = User.objects.all().filter(id__exact=access_page)[0]
                 pic = userProfileInfo.profile_picture
+                if userProfileInfo.phone:
+                    print(userProfileInfo.phone)
+                    number = userProfileInfo.phone[2:];
+                    first = number[0:3];
+                    middle = number[3:6];
+                    end = number[6:]
+                    parseNumber = '(' + first + ') ' + middle + '-'+ end
+                else:
+                    parseNumber = ''
+                
+                
+                
                 initial_data = {
                     'cert_date': userProfileInfo.cert_date,
-                    'phone': userProfileInfo.phone,
+                    'phone': parseNumber,
                     'position': userProfileInfo.position,
                     'profile_picture': userProfileInfo.profile_picture,
+                    'certs': userProfileInfo.certs,
                 }
                 userData2 = user_profile_form(initial=initial_data)
         else:
@@ -525,11 +538,15 @@ def register_view(request, facility, access_page):
                     try:
                         check_3 = request.POST['edit_user']
                         print('CHECK 3')
+                        finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
                         A = user_profile_form(request.POST, request.FILES, instance=userProfileInfo)
+                        print(A.phone)
+                        A.phone = finalPhone
+                        print(A.errors)
                         if A.is_valid():
-                            A.save()
-                            
-                            return redirect('Contacts', facility)
+                            A.save(commit=False)
+
+                            #return redirect('Contacts', facility)
                     except:
                         answer = request.POST
                         print('TOO FAR')

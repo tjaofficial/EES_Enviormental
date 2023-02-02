@@ -4,7 +4,7 @@
 <body>
     <div class="grid-dashboard">
         <div class="card contact_card">
-            <div class="card-title">Contacts</div>
+            <div class="cardHeader">Contacts</div>
             <div class="contact_list_cont">
             <div class="grid-observ_header">
                 <p></p>
@@ -17,6 +17,7 @@
             <div class="contact_singles" id="{{ person.0 }}" onmouseover="getid(this);">
                 <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
                 <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
+                <p id="userID{{ person.0 }}" hidden=true>{{ person.1.user.id }}</p>
                 <p id="phone{{ person.0 }}" hidden=true>{{ person.1.phone }}</p>
                 <p id="cert_date{{ person.0 }}" hidden=true>{{ person.1.cert_date }}</p>
                 <p id="image{{ person.0 }}" hidden=true>
@@ -28,6 +29,7 @@
                         </svg>
                     {% endif %}
                 </p>
+                <p id="certs{{ person.0 }}" hidden=true>{{ person.2 }}</p>
                 <span class="contact_icon_cont contact_icon_color">
                     {% if person.1.profile_picture %}
                         <img style="width: 40px; border-radius: 25px" src="../../../media/{{ person.1.profile_picture }}"/>
@@ -47,6 +49,7 @@
             </div>
         </div>
         <div class="card contact_data_card" id='replaceContent'>
+            <div class='cardHeader'>Profile</div>
             {% comment %} <div class='contact_data_cont'>
                 <div class='contact_image'>
                     <img />

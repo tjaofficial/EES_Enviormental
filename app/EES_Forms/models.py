@@ -276,6 +276,7 @@ class Forms(models.Model):
 
 
 class formC_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(auto_now_add=False, auto_now=False)
     truck_sel = models.CharField(max_length=30, choices=truck_choices)
     area_sel = models.CharField(max_length=30, choices=area_choices)
@@ -416,7 +417,8 @@ class user_profile_model(models.Model):
         null=True,
         upload_to='images/profile_pics'
     )
-    phone = PhoneNumberField(
+    phone = models.CharField(
+        max_length=75,
         null=False,
         blank=False,
     )
@@ -428,6 +430,11 @@ class user_profile_model(models.Model):
     )
     company = models.CharField(
         max_length=75,
+        null=True,
+        blank=True,
+    )
+    certs = models.CharField(
+        max_length=300,
         null=True,
         blank=True,
     )
@@ -3951,72 +3958,72 @@ class formL_model(models.Model):
         null=True
     )
     v_comments_0 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     v_comments_1 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     v_comments_2 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     v_comments_3 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     v_comments_4 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     v_comments_5 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     v_comments_6 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_0 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_1 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_2 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_3 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_4 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_5 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )
     m_comments_6 = models.CharField(
-        max_length=30,
+        max_length=300,
         blank=True,
         null=True
     )

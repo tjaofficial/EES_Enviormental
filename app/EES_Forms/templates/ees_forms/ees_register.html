@@ -186,12 +186,17 @@
                     <br>
                 </div>
                 {% endif %}
+                
                 <div class='formCont'>
                     {{ userData2.profile_picture }}<br><br>
                     {{ userData2.phone.label }}: {{ userData2.phone }}<br><br>
                     Work {{ userData2.position.label }}: {{ userData2.position }}<br><br>
                     <div id='certDateDiv' style='display: none;'>
-                        {{ userData2.cert_date.label }}: {{ userData2.cert_date }}
+                        {{ userData2.cert_date.label }}: {{ userData2.cert_date }}<br><br>
+                    </div>
+                    <div id='certs'>
+                        Certifications: {{ userData2.certs }}<br>
+                        <p>(Separate each certification with a comma ",")</p>
                     </div>
                 </div>
                 <br>

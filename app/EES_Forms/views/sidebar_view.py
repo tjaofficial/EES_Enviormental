@@ -131,6 +131,7 @@ def search_forms_view(request, facility, access_page):
     profile = user_profile_model.objects.all()
     if access_page != 'search':
         chk_database = apps.get_model('EES_Forms', access_page).objects.count()
+        print(apps.get_model('EES_Forms', access_page).objects.all())
         mainList = []
         # DATE - DAILY = 1, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}"
         # DATE - WEEKLY = 4, href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}{% if weekend %}/{% if x.weekend_day == 5 %}Saturday{% else %}Sunday{% endif %}{% else %}{% endif %}"
@@ -143,40 +144,52 @@ def search_forms_view(request, facility, access_page):
             try:
                 # THESE ARE FORMS USING DATE
                 database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
-                for x in ModelForms:
-                    print('CHECK 1')
-                    if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
-                        print(access_page)
-                        if x.frequency[0] == 'W':
-                            # THESE ARE WEEKLY FORMS
-                            att_check = 4
-                            if x.weekend_only:
-                                weekend = True
+                print('BY DATE')
+                print(database.count())
+                if database.count() == 0:
+                    att_check = 5
+                    database = ''
+                else:
+                    for x in ModelForms:
+                        print('CHECK 1')
+                        if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
+                            print(access_page)
+                            if x.frequency[0] == 'W':
+                                # THESE ARE WEEKLY FORMS
+                                att_check = 4
+                                if x.weekend_only:
+                                    weekend = True
+                                else:
+                                    weekend = False
+                            elif x.frequency[0] == 'M':
+                                att_check = 6
+                            elif x.frequency[0] == 'Q':
+                                att_check = 7
                             else:
-                                weekend = False
-                        elif x.frequency[0] == 'M':
-                            att_check = 6
-                        elif x.frequency[0] == 'Q':
-                            att_check = 7
+                                # THESE ARE DAILY FORMS
+                                att_check = 1
                         else:
-                            # THESE ARE DAILY FORMS
-                            att_check = 1
-                    else:
-                        print('no match')
+                            print('no match')
             except FieldError as e:
                 # THESE ARE FORMS USING WEEK
                 database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
-                for x in ModelForms:
-                    if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
-                        # FORMS THAT ARE SINGLE DIDGITS
-                        if x.frequency[0] == 'D':
-                            # THESE ARE DAILY FORMS
-                            att_check = 3
+                print('BY WEEK START')
+                print(database.count())
+                if database.count() == 0:
+                    att_check = 5
+                    database = ''
+                else:
+                    for x in ModelForms:
+                        if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
+                            # FORMS THAT ARE SINGLE DIDGITS
+                            if x.frequency[0] == 'D':
+                                # THESE ARE DAILY FORMS
+                                att_check = 3
+                            else:
+                                # THESE ARE WEEKLY FORMS
+                                att_check = 2
                         else:
-                            # THESE ARE WEEKLY FORMS
-                            att_check = 2
-                    else:
-                        print('Error - EES_00006')
+                            print('Error - EES_00006')
 
             if att_check == 1:
                 for x in database:
@@ -546,7 +559,15 @@ def shared_contacts_view(request, facility):
     
     organized_list = []
     for index, user in enumerate(profile):
-        organized_list.append((user.id, user))
+        if user.certs:
+            certList = user.certs.split(',')
+            i = 0
+            for item in certList:
+                certList[i] = certList[i].strip()
+                i += 1
+            organized_list.append((user.id, user, certList))
+        else:
+            organized_list.append((user.id, user))
     
     print(organized_list)
     

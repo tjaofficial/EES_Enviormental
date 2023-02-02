@@ -195,16 +195,18 @@ class user_profile_form(forms.ModelForm):
             'profile_picture',
             'phone',
             'position',
-            'company'
+            'company',
+            'certs'
         )
         exclude = ['user']
 
         widgets = {
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'profile_picture': forms.FileInput(attrs={'style': 'width: fit-content;'}),
-            'phone': forms.TextInput(attrs={'type': 'tel', 'style': 'width: 150px;', 'placeholder': '+10005557777'}),
-            'position': forms.Select(attrs={'oninput': 'cert_date1()', 'style': 'width: 100px;'}),
-            'company': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;'})
+            'phone': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;', 'placeholder': '+10005557777'}),
+            'position': forms.Select(attrs={'oninput': 'cert_date1()', 'style': 'width: 160px;'}),
+            'company': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;'}),
+            'certs': forms.TextInput(attrs={'type': 'text', 'style': 'width: 300px;'}),
         }
 
 

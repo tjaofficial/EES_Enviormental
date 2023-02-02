@@ -4,12 +4,13 @@
     left: 18rem;
 }
 .contact_data_cont{
-    height: 43rem;
+    height: 41rem;
+    padding: 32px 15px 0px 15px
 }
 .contact_list_cont{
-    margin: 0rem 1rem;
     height: 45rem;
     overflow: scroll;
+    padding: 15px 32px;
 }
 .contact_singles {
     display: grid;
@@ -38,7 +39,7 @@
 .card.contact_data_card{
     grid-row: span 14;
     grid-column: span 2;
-    padding: 32px;
+    /* padding: 32px; */
 }
 .contact_image{
     background-color: gray;
@@ -68,4 +69,17 @@
     font-size: 0.9rem;
     font-weight:900;
     display: flex;
+}
+.cardHeader{
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 1rem;
+    background-color: #253544;
+    color: white;
+    border-radius: 13px 13px 0px 0px;
+    text-align: center;
+    font-family: sans-serif;
+}
+.categoryStyle{
+    padding-bottom: 7px;
 }
