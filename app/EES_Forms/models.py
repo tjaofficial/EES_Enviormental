@@ -116,12 +116,11 @@ paved_roads = (
     ('p6', 'Coke Plant Mech Road'),
     ('p7', 'North Gate Area'),
     ('p8', 'Compund Road'),
-    ('p9', 'D-4 Blast Furnace Road'),
-    ('p10', 'Gap Gate Road'),
-    ('p11', '#3 Ore Dock Road'),
-    ('p12', 'River Road'),
-    ('p13', 'Weigh Station Road'),
-    ('p14', 'Zug Island Road')
+    ('p9', 'Gap Gate Road'),
+    ('p10', '#3 Ore Dock Road'),
+    ('p11', 'River Road'),
+    ('p12', 'Weigh Station Road'),
+    ('p13', 'Zug Island Road')
 )
 unpaved_roads = (
     ('unp1', 'North Gate Truck Turn'),
@@ -130,7 +129,8 @@ unpaved_roads = (
     ('unp4', 'Taj Mahal Road'),
     ('unp5', 'PECS Approach'),
     ('unp6', 'No. 2 Boilerhouse Road'),
-    ('unp7', 'Bypass Route')
+    ('unp7', 'D-4 Blast Furnace Road'),
+    ('unp8', 'Bypass Route')
 )
 parking_lots = (
     ('par1', 'Gap Gate Parking'),
