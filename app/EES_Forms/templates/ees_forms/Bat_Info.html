@@ -1,30 +1,31 @@
 {% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
-
+<link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/bat_info.js' %}"></script>
 
 <body>
     <div class="forms">
-        <div class="card" style="padding-top: 2rem; padding-bottom: 2rem;">
-            <div id="login">
-                <h1>Battery Information</h1><br>
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    {{ form.facility }}
-                    Foreman: {{ form.foreman }}<br>
-                    Crew: {{ form.crew }}<br><br>
-                    Inoperable Oven Number(s): {{ form.inop_numbs }}<br><br>
-
-                    <input type="submit" name="submit_bat_info">
-                </form>
-                
-                <br>
-                {% if access_page == 'login' or access_page == 'edit' %}
-                <p>
-                    Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}">Skip To Forms</a>
-                </p>
-                {% endif %}
+        <div class="batProfCont" style="padding-bottom: 2rem;">
+            <div class='batInfoHeader'>
+                <h1>Battery Information</h1>
             </div>
+            <form style='margin-top: 28px;' method="POST" action="">
+                {% csrf_token %}
+                {{ form.facility }}
+                Foreman: {{ form.foreman }}<br>
+                Crew: {{ form.crew }}<br><br>
+                Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br>
+                <p style='font-size: .7rem;'>* separate each oven with a comma *</p><br>
+
+                <input type="submit" name="submit_bat_info">
+            </form>
+            
+            <br>
+            {% if access_page == 'login' or access_page == 'edit' %}
+            <p>
+                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}">Skip To Forms</a>
+            </p>
+            {% endif %}
         </div>
     </div>
 </body>

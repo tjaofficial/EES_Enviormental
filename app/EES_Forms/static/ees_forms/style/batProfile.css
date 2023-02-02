@@ -1,0 +1,15 @@
+.batProfCont{
+    font-family: Arial, Helvetica, sans-serif;
+    width: 600px;
+    background-color: white;
+    box-shadow: #0000007d 4px 7px 12px 3px;
+    margin: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+}
+.batInfoHeader{
+    padding: 15px;
+    color: white;
+    background-color: #253544;
+    border-radius: 13px 13px 0px 0px;
+}
