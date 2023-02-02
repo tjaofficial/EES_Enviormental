@@ -56,10 +56,12 @@ def admin_dashboard_view(request, facility):
     # -------PROGRESS PERCENTAGES -----------------
 
     daily_forms_comp = []
-    if today == daily_prof[0].date_save:
-        for forms in Forms.objects.filter(frequency = 'Daily'):
-            if forms.submitted and forms.facilityChoice.facility_name == facility:
-                daily_forms_comp.append(forms.form)
+    if len(daily_prof) > 0:
+        if today == daily_prof[0].date_save:
+            for forms in Forms.objects.filter(frequency = 'Daily'):
+                if forms.submitted and forms.facilityChoice.facility_name == facility:
+                    daily_forms_comp.append(forms.form)
+    
     if todays_num in {0, 1, 2, 3, 4}:
         daily_count_total = 11
     else:
