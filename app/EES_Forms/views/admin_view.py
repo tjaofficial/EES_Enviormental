@@ -18,6 +18,7 @@ def admin_dashboard_view(request, facility):
     unlock = False
     client = False
     admin = False
+
     if request.user.groups.filter(name='SGI Technician'):
         unlock = True
         return redirect('IncompleteForms', facility)
