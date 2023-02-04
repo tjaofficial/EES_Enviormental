@@ -245,12 +245,12 @@ def formH(request, facility, selector):
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'estab': "EES COKE BATTERY",
-                    'county': "Wayne",
-                    'estab_no': "P0408",
-                    'equip_loc': "Zug Island",
-                    'district': "Detroit",
-                    'city': "River Rouge",
+                    'estab': options.facility_name,
+                    'county': options.county,
+                    'estab_no': options.estab_num,
+                    'equip_loc': options.equip_location,
+                    'district': options.district,
+                    'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "-",

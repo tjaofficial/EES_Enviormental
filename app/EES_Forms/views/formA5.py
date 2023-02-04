@@ -269,7 +269,7 @@ def formA5(request, facility, selector):
                     'estab_no': options.estab_num,
                     'equip_loc': options.equip_location,
                     'district': options.district,
-                    'city': options.district,
+                    'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "Coke Battery / Door Machine / Hot Car",
