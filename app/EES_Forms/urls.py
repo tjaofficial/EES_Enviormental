@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("", views.landing_page, name="landing"),
+    
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
     path("<str:facility>/admin_dashboard", views.admin_dashboard_view, name='admin_dashboard'),
 

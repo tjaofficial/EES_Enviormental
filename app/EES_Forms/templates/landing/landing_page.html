@@ -1,0 +1,141 @@
+{% extends 'landing/landing_layout.html' %}{% load static %}
+{% block body %}
+<script defer="" src="{% static 'landing/script/landing_page.js' %}"></script>
+<link href="{% static 'landing/style/landing_page.css' %}" rel="stylesheet">
+<div class='topCont'>
+    <div class="headerSpace"></div>
+    <div class='topSection'>
+        <div id='cover1' style='display:flex;'>
+            <div>
+                <div class='coverTitle'>MethodPlus+</div>
+                <div class='coverBody'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </div>
+            </div>
+            <div class='coverMedia'>
+                <img src=''/>
+            </div>
+        </div>
+        <div id='cover2' style='display:none;'>
+            <div>
+                <div class='coverTitle'>DATA AT YOUR FINGER TIPS</div>
+                <div class='coverBody'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </div>
+            </div>
+            <div class='coverMedia'>
+                <img src=''/>
+            </div>
+        </div>
+        <div id='cover3' style='display:none;'>
+            <div>
+                <div class='coverTitle'>EASY AND AFFORDABLE</div>
+                <div class='coverBody'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </div>
+            </div>
+            <div class='coverMedia'>
+                <img src=''/>
+            </div>
+        </div>
+    </div> 
+
+    <div class='dotHolder'>
+        <div id='dot1' class='selectedDot'></div>
+        <div id='dot2' class='unselectedDot'></div>
+        <div id='dot3' class='unselectedDot'></div>
+    </div>
+</div>
+<center>
+    <div class='sectionA'>
+        <div class='categ1'>
+            Exceptional features saves your valuable time & money
+        </div>
+        <div class='buttonShadow'><div class='button'>SEE PLANS & PRICING</div></div>
+        <hr style='width:60%;'>
+        <div style="display:flex;padding: 0px 10rem;padding-bottom: 6rem;padding-top: 2rem;">
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 352C293.2 352 319.2 334.5 334.4 318.1C343.3 308.4 358.5 307.7 368.3 316.7C378 325.7 378.6 340.9 369.6 350.6C347.7 374.5 309.7 400 256 400C202.3 400 164.3 374.5 142.4 350.6C133.4 340.9 133.1 325.7 143.7 316.7C153.5 307.7 168.7 308.4 177.6 318.1C192.8 334.5 218.8 352 256 352zM217.6 228.8L217.6 228.8L217.4 228.5C217.2 228.3 217 228 216.7 227.6C216 226.8 215.1 225.7 213.9 224.3C211.4 221.4 207.9 217.7 203.7 213.1C194.9 206.2 184.8 200 176 200C167.2 200 157.1 206.2 148.3 213.1C144.1 217.7 140.6 221.4 138.1 224.3C136.9 225.7 135.1 226.8 135.3 227.6C134.1 228 134.8 228.3 134.6 228.5L134.4 228.8L134.4 228.8C132.3 231.6 128.7 232.7 125.5 231.6C122.2 230.5 120 227.4 120 224C120 206.1 126.7 188.4 136.6 175.2C146.4 162.2 160.5 152 176 152C191.5 152 205.6 162.2 215.4 175.2C225.3 188.4 232 206.1 232 224C232 227.4 229.8 230.5 226.5 231.6C223.3 232.7 219.7 231.6 217.6 228.8V228.8zM377.6 228.8L377.4 228.5C377.2 228.3 377 228 376.7 227.6C376 226.8 375.1 225.7 373.9 224.3C371.4 221.4 367.9 217.7 363.7 213.1C354.9 206.2 344.8 200 336 200C327.2 200 317.1 206.2 308.3 213.1C304.1 217.7 300.6 221.4 298.1 224.3C296.9 225.7 295.1 226.8 295.3 227.6C294.1 228 294.8 228.3 294.6 228.5L294.4 228.8L294.4 228.8C292.3 231.6 288.7 232.7 285.5 231.6C282.2 230.5 280 227.4 280 224C280 206.1 286.7 188.4 296.6 175.2C306.4 162.2 320.5 152 336 152C351.5 152 365.6 162.2 375.4 175.2C385.3 188.4 392 206.1 392 224C392 227.4 389.8 230.5 386.5 231.6C383.3 232.7 379.7 231.6 377.6 228.8L377.6 228.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>
+                </svg><br>
+                <h class='perkHeader'>Easy & Affordable</h>
+                <p class='perkPara'>Ready made digital forms make it EASY for Observers, Clients, and Supervisors to view, edit, and collect data from the field. </p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464zM256 336c-18 0-32 14-32 32s13.1 32 32 32c17.1 0 32-14 32-32S273.1 336 256 336zM289.1 128h-51.1C199 128 168 159 168 198c0 13 11 24 24 24s24-11 24-24C216 186 225.1 176 237.1 176h51.1C301.1 176 312 186 312 198c0 8-4 14.1-11 18.1L244 251C236 256 232 264 232 272V288c0 13 11 24 24 24S280 301 280 288V286l45.1-28c21-13 34-36 34-60C360 159 329 128 289.1 128z"/>
+                </svg><br>
+                <h class='perkHeader'>Great Support</h>
+                <p class='perkPara'>Need help? Call or email our support team who will be able to promptly assist you!</p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/>
+                </svg><br>
+                <h class='perkHeader'>Time Saving</h>
+                <p class='perkPara'>No need to make another spreadsheet or transfer data. Save time by easily searching and viewing all your data in one spot.</p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.7 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0zm0 66.8V444.8C394 378 431.1 230.1 432 141.4L256 66.8l0 0z"/>
+                </svg><br>
+                <h class='perkHeader'>Always Secured</h>
+                <p class='perkPara'></p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M272 96c-78.6 0-145.1 51.5-167.7 122.5c33.6-17 71.5-26.5 111.7-26.5h88c8.8 0 16 7.2 16 16s-7.2 16-16 16H288 216s0 0 0 0c-16.6 0-32.7 1.9-48.3 5.4c-25.9 5.9-49.9 16.4-71.4 30.7c0 0 0 0 0 0C38.3 298.8 0 364.9 0 440v16c0 13.3 10.7 24 24 24s24-10.7 24-24V440c0-48.7 20.7-92.5 53.8-123.2C121.6 392.3 190.3 448 272 448l1 0c132.1-.7 239-130.9 239-291.4c0-42.6-7.5-83.1-21.1-119.6c-2.6-6.9-12.7-6.6-16.2-.1C455.9 72.1 418.7 96 376 96L272 96z"/>
+                </svg><br>
+                <h class='perkHeader'>Zero Carbon Footprint</h>
+                <p class='perkPara'></p>
+            </div>
+        </div>
+    </div>
+</center>
+<center>
+    <div>
+        <div class='categ1'>
+            Exceptional features saves your valuable time & money
+        </div>
+        <div class='button'>SEE PLANS & PRICING</div>
+        <hr style='width:60%;'>
+        <div style="display:flex;padding: 0px 10rem;padding-bottom: 6rem;">
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 352C293.2 352 319.2 334.5 334.4 318.1C343.3 308.4 358.5 307.7 368.3 316.7C378 325.7 378.6 340.9 369.6 350.6C347.7 374.5 309.7 400 256 400C202.3 400 164.3 374.5 142.4 350.6C133.4 340.9 133.1 325.7 143.7 316.7C153.5 307.7 168.7 308.4 177.6 318.1C192.8 334.5 218.8 352 256 352zM217.6 228.8L217.6 228.8L217.4 228.5C217.2 228.3 217 228 216.7 227.6C216 226.8 215.1 225.7 213.9 224.3C211.4 221.4 207.9 217.7 203.7 213.1C194.9 206.2 184.8 200 176 200C167.2 200 157.1 206.2 148.3 213.1C144.1 217.7 140.6 221.4 138.1 224.3C136.9 225.7 135.1 226.8 135.3 227.6C134.1 228 134.8 228.3 134.6 228.5L134.4 228.8L134.4 228.8C132.3 231.6 128.7 232.7 125.5 231.6C122.2 230.5 120 227.4 120 224C120 206.1 126.7 188.4 136.6 175.2C146.4 162.2 160.5 152 176 152C191.5 152 205.6 162.2 215.4 175.2C225.3 188.4 232 206.1 232 224C232 227.4 229.8 230.5 226.5 231.6C223.3 232.7 219.7 231.6 217.6 228.8V228.8zM377.6 228.8L377.4 228.5C377.2 228.3 377 228 376.7 227.6C376 226.8 375.1 225.7 373.9 224.3C371.4 221.4 367.9 217.7 363.7 213.1C354.9 206.2 344.8 200 336 200C327.2 200 317.1 206.2 308.3 213.1C304.1 217.7 300.6 221.4 298.1 224.3C296.9 225.7 295.1 226.8 295.3 227.6C294.1 228 294.8 228.3 294.6 228.5L294.4 228.8L294.4 228.8C292.3 231.6 288.7 232.7 285.5 231.6C282.2 230.5 280 227.4 280 224C280 206.1 286.7 188.4 296.6 175.2C306.4 162.2 320.5 152 336 152C351.5 152 365.6 162.2 375.4 175.2C385.3 188.4 392 206.1 392 224C392 227.4 389.8 230.5 386.5 231.6C383.3 232.7 379.7 231.6 377.6 228.8L377.6 228.8zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>
+                </svg><br>
+                <h class='perkHeader'>Easy & Affordable</h>
+                <p class='perkPara'>Ready made digital forms make it EASY for Observers, Clients, and Supervisors to view, edit, and collect data from the field. </p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464zM256 336c-18 0-32 14-32 32s13.1 32 32 32c17.1 0 32-14 32-32S273.1 336 256 336zM289.1 128h-51.1C199 128 168 159 168 198c0 13 11 24 24 24s24-11 24-24C216 186 225.1 176 237.1 176h51.1C301.1 176 312 186 312 198c0 8-4 14.1-11 18.1L244 251C236 256 232 264 232 272V288c0 13 11 24 24 24S280 301 280 288V286l45.1-28c21-13 34-36 34-60C360 159 329 128 289.1 128z"/>
+                </svg><br>
+                <h class='perkHeader'>Great Support</h>
+                <p class='perkPara'>Need help? Call or email our support team who will be able to promptly assist you!</p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M232 120C232 106.7 242.7 96 256 96C269.3 96 280 106.7 280 120V243.2L365.3 300C376.3 307.4 379.3 322.3 371.1 333.3C364.6 344.3 349.7 347.3 338.7 339.1L242.7 275.1C236 271.5 232 264 232 255.1L232 120zM256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0zM48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48C141.1 48 48 141.1 48 256z"/>
+                </svg><br>
+                <h class='perkHeader'>Time Saving</h>
+                <p class='perkPara'>No need to make another spreadsheet or transfer data. Save time by easily searching and viewing all your data in one spot.</p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.7 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0zm0 66.8V444.8C394 378 431.1 230.1 432 141.4L256 66.8l0 0z"/>
+                </svg><br>
+                <h class='perkHeader'>Always Secured</h>
+                <p class='perkPara'></p>
+            </div>
+            <div class='perkCont'>
+                <svg class='icons' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M272 96c-78.6 0-145.1 51.5-167.7 122.5c33.6-17 71.5-26.5 111.7-26.5h88c8.8 0 16 7.2 16 16s-7.2 16-16 16H288 216s0 0 0 0c-16.6 0-32.7 1.9-48.3 5.4c-25.9 5.9-49.9 16.4-71.4 30.7c0 0 0 0 0 0C38.3 298.8 0 364.9 0 440v16c0 13.3 10.7 24 24 24s24-10.7 24-24V440c0-48.7 20.7-92.5 53.8-123.2C121.6 392.3 190.3 448 272 448l1 0c132.1-.7 239-130.9 239-291.4c0-42.6-7.5-83.1-21.1-119.6c-2.6-6.9-12.7-6.6-16.2-.1C455.9 72.1 418.7 96 376 96L272 96z"/>
+                </svg><br>
+                <h class='perkHeader'>Zero Carbon Footprint</h>
+                <p class='perkPara'></p>
+            </div>
+        </div>
+    </div>
+</center>
+{% endblock %}

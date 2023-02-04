@@ -1,0 +1,13 @@
+.landBody{
+    background-color: #e6e4de;
+    margin: 0px;
+    font-family: sans-serif;
+}
+.topCont{
+    /* background-color: #7aa0a9; */
+    background-image: radial-gradient(closest-corner at 70% 50%, #d0e4e8 2%, #7aa0a9 60%);
+    height: 42rem;
+}
+.headerSpace{
+    height: 5rem;
+}
