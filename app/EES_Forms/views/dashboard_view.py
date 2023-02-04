@@ -25,9 +25,6 @@ def IncompleteForms(request, facility):
         signatures = signature_model.objects.all().order_by('-sign_date')
         sigExisting = False
 
-        print(signatures[0].sign_date)
-        print(today)
-            
         if len(signatures) > 0:
             if signatures[0].sign_date == today:
                 sigExisting = True
