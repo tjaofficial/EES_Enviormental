@@ -4,6 +4,7 @@ from ..forms import spill_kits_form
 from ..models import daily_battery_profile_model, Forms, spill_kits_model, bat_info_model
 import datetime
 import calendar
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 
@@ -14,13 +15,13 @@ def spill_kits(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -260,5 +261,5 @@ def spill_kits(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, 'Monthly/spillkits.html', {
-        'facility': facility, 'sk_form': data, 'selector': selector, 'admin': admin, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
+        'facility': facility, 'sk_form': data, 'selector': selector, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
     })

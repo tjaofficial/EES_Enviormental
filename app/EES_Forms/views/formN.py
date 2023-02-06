@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formM_model
 import calendar
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,13 +14,13 @@ def formN(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -54,5 +55,5 @@ def formN(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formN.html", {
-        "client": client, 'unlock': unlock, 'admin': admin, 'search': search, 'facility': facility, 'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
+        "client": client, 'unlock': unlock, 'supervisor': supervisor, 'search': search, 'facility': facility, 'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
     })

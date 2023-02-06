@@ -4,6 +4,7 @@ import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA3_model, bat_info_model
 from ..forms import formA3_form
 import json
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -16,13 +17,13 @@ def formA3(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -156,5 +157,5 @@ def formA3(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA3.html", {
-        'options': options, "unlock": unlock,"search": search, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
+        'options': options, "unlock": unlock,"search": search, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
     })

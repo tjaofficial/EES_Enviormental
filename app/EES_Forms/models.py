@@ -13,9 +13,9 @@ quarter_choices = (
     ('4', '4th')
 )
 position_choices = (
-    ('SGI Technician', 'SGI Technician'),
-    ('SGI Admin', 'SGI Admin'),
-    ('EES Coke Employees', 'EES Coke Employees')
+    ('observer', 'Observer'),
+    ('supervisor', 'Supervisor'),
+    ('client', 'Client')
 )
 truck_choices = (
     ('#5', 'Truck #5'),

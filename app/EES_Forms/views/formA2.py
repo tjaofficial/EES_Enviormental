@@ -4,6 +4,7 @@ import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA2_model, bat_info_model
 from ..forms import formA2_form
 import json
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -14,13 +15,13 @@ def formA2(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     formName = "A2"
     existing = False
     now = datetime.datetime.now()
@@ -153,5 +154,5 @@ def formA2(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {
-        'options': options, "search": search, "unlock": unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
+        'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
     })

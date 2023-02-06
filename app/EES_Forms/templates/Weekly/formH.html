@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/sup_layout.html" %}
 {% block list%}{% load static %}
 {% include "ees_forms/drawing_modal.html" %}
     <style>
@@ -677,7 +677,7 @@
                         </div>
                         <br><br><br><br>
                         <div style="text-align: left;">
-                            {% if admin or client %} {% elif unlock and not search %}
+                            {% if supervisor or client %} {% elif unlock and not search %}
                                 <br /><br /><br />
                                 <input type="submit" value="Submit Form" class="submit_button" />
                             {% endif %}

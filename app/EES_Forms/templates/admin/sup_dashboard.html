@@ -1,7 +1,7 @@
-{% extends "admin/admin_layout.html" %}{% load static %}{% block list%}
-<link href="{% static 'ees_forms/style/adminDash.css' %}" rel="stylesheet" />
+{% extends "admin/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/supDash.css' %}" rel="stylesheet" />
 <body>
-    {% if facility == 'admin' %}
+    {% if facility == 'supervisor' %}
         <div class='mainAppCont'>
             <a class='appCont grid-item addOns' href="{% url 'Schedule' facility %}"> 
                     <div class='appHeader'>SCHEDULE</div>
@@ -142,7 +142,7 @@
                                 <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -198,7 +198,7 @@
                                 {% endif %}
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-2 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-2 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -254,7 +254,7 @@
                                 {% endif %}
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-3 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-3 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -303,7 +303,7 @@
                                 </p>
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-4 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-4 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -340,7 +340,7 @@
                                 <p class="miniFont" style="text-align:center;">N/A</p>
                             {% endif %}
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">{% if facility == 'admin' %}NO FACILITY SELECTED{% else %}NO FORM A-5 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-5 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -349,7 +349,7 @@
         </div>
         <div id="latestActivity3" class="card halfs">
             <div class="card-title">7 Day - Total Charges Graph</div>
-            {% if facility != 'admin' %}
+            {% if facility != 'supervisor' %}
             <div id='canvasHolder'>
                 <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%" style='margin-left: -20px;'></canvas>
             </div>
@@ -403,7 +403,7 @@
             <div class="card-title">Latest Issues/Corrective Actions</div>
             <div class="ca_holder">
                 <ul>
-                {% if facility != 'admin' %}
+                {% if facility != 'supervisor' %}
                     {% for x in ca_forms %}
                         <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
                             <li class="sideAlign">
@@ -434,7 +434,7 @@
         <div id="battery_weather" class="card quarters">
             <div class="card-title">Todays Battery/Weather Info.</div>
             <div style="overflow: scroll;" class="grid-battery-weather battery_info center bat_weather_class">
-                {% if facility != 'admin' %}
+                {% if facility != 'supervisor' %}
                 <p class="weather_battery_font">
                     <span>
                         Observer:

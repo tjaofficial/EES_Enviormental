@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/sup_layout.html" %}
 {% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
 <div>
@@ -16,7 +16,7 @@
                             </button>
                         </a>
                     </div>
-                    {% if admin %}
+                    {% if supervisor %}
                     <div style="width: 100%; text-align: right;">
                         <a href="../../add_event">
                             <button>

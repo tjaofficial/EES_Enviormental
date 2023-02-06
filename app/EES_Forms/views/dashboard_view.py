@@ -5,13 +5,14 @@ from django.conf import settings
 import datetime
 import requests
 import calendar
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 
 
 @lock
 def IncompleteForms(request, facility):
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser or request.user.groups.filter(name='SGI Quality Control'):
+    if request.user.groups.filter(name=OBSER_VAR) or request.user.is_superuser:
         profile = user_profile_model.objects.all()
         today = datetime.date.today()
         todays_num = today.weekday()
@@ -699,7 +700,7 @@ def IncompleteForms(request, facility):
             'sigExisting': sigExisting,
             'facility': facility,
         })
-    elif request.user.groups.filter(name='SGI Admin'):
-        return redirect('admin_dashboard')
-    elif request.user.groups.filter(name='EES Coke Employees'):
+    elif request.user.groups.filter(name=SUPER_VAR):
+        return redirect('sup_dashboard', facility)
+    elif request.user.groups.filter(name=CLIENT_VAR):
         return redirect('c_dashboard')

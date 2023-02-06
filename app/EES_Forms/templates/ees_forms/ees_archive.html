@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,admin/sup_layout.html" %}
 {% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
 {% comment %} <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet"> {% endcomment %}
@@ -10,7 +10,7 @@
 </div>
 <center>
     <div class="container" style="min-width: 400px; min-height: 500px;">
-        {% if facility != 'admin' %}
+        {% if facility != 'supervisor' %}
         <form action="search_forms/search" method="POST" class='archiveHeader'>
             {% csrf_token %}
             <input class='searchInput' type='search' placeholder="Type Search Here" name="searched" required="True">

@@ -10,6 +10,7 @@ from ..utils import Calendar
 from django.contrib.auth.decorators import login_required
 import os
 from django.conf import settings
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 
@@ -18,33 +19,33 @@ lock = login_required(login_url='Login')
 def corrective_action_view(request, facility):
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
 
     profile = user_profile_model.objects.all()
     options = bat_info_model.objects.all()
     ca_forms = issues_model.objects.all().order_by('-id')
 
     return render(request, "ees_forms/corrective_actions.html", {
-        'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock
 def calendar_view(request, facility, year, month):
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     month = month.title()
@@ -72,35 +73,35 @@ def calendar_view(request, facility, year, month):
     html_cal = calend.formatmonth(year, month_number, year, withyear=True)
 
     return render(request, "ees_forms/schedule.html", {
-        'options': options, 'facility': facility, "admin": admin, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
 
 @lock
 def schedule_view(request, facility):
-    admin = False
+    supervisor = False
     options = bat_info_model.objects.all()
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     today_year = int(datetime.date.today().year)
     today_month = str(calendar.month_name[datetime.date.today().month])
 
     return redirect('schedule/' + str(today_year) + '/' + str(today_month))
 
     return render(request, "ees_forms/scheduling.html", {
-        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'admin': admin,
+        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'supervisor': supervisor,
     })
 
 @lock
 def archive_view(request, facility):
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     
@@ -110,7 +111,7 @@ def archive_view(request, facility):
             return redirect('archive', answer['facilitySelect'])
 
     return render(request, 'ees_forms/ees_archive.html', {
-        'options': options, 'facility': facility, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock
@@ -120,13 +121,13 @@ def search_forms_view(request, facility, access_page):
     weekend = False
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     if access_page != 'search':
@@ -254,24 +255,24 @@ def search_forms_view(request, facility, access_page):
                 otherForms.append([x.form.replace(' ', '_'), x.form.replace(' ', '_').lower() + '_model', x])
 
         return render(request, 'ees_forms/search_forms.html', {
-            'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'options': options, 'facility': facility, 'unlock': unlock, 'admin': admin, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
 
 @lock
 def issues_view(request, facility, form_name, form_date, access_page):
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     print(str(form_date))
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -418,20 +419,20 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/issues_template.html", {
-        'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "admin": admin
+        'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
     })
 
 @lock
 def event_add_view(request, facility):
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     options = bat_info_model.objects.all()    
     today = datetime.date.today()
     profile = user_profile_model.objects.all()
@@ -450,7 +451,7 @@ def event_add_view(request, facility):
             return redirect(cal_link)
 
     return render(request, "ees_forms/event_add.html", {
-        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'admin': admin, "client": client, 'unlock': unlock, 
+        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'supervisor': supervisor, "client": client, 'unlock': unlock, 
     })
 
 @lock
@@ -458,14 +459,14 @@ def event_detail_view(request, facility, access_page, event_id):
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-    admin = False
+    supervisor = False
     options = bat_info_model.objects.all()
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
         
     context = {}
-    if admin:
-        context['parent_template'] = 'admin/admin_layout.html'
+    if supervisor:
+        context['parent_template'] = 'admin/sup_layout.html'
     else:
         context['parent_template'] = 'ees_forms/layout.html'
 
@@ -494,7 +495,7 @@ def event_detail_view(request, facility, access_page, event_id):
                 return redirect('../../event_detail/' + str(event_id) + '/view')
 
     return render(request, "ees_forms/event_detail.html", {
-        'options': options, 'facility': facility, 'context': context, "admin": admin, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+        'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })
 
 def handlePhone(number):
@@ -510,13 +511,13 @@ def shared_contacts_view(request, facility):
     options = bat_info_model.objects.all()
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     Users = User.objects.all()
     profile = user_profile_model.objects.order_by('user')
     
@@ -580,20 +581,21 @@ def shared_contacts_view(request, facility):
     print(organized_list)
     
     return render(request, "shared/contacts.html", {
-        'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'admin': admin, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
+        'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
     })
     
+@lock
 def sop_view(request, facility):
     unlock = False
     client = False
-    admin = False
+    supervisor = False
     options = bat_info_model.objects.all()
-    if request.user.groups.filter(name='SGI Technician'):
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     sops = sop_model.objects.all().order_by('name')
     sopForm = sop_form()
     
@@ -609,5 +611,5 @@ def sop_view(request, facility):
                 print('NOT SAVED')
             
     return render(request, 'shared/sops.html', {
-        'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'admin': admin, "client": client, 'unlock': unlock
+        'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

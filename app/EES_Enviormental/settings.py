@@ -165,7 +165,9 @@ else:
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
-
+CLIENT_VAR = 'client'
+OBSER_VAR = 'observer'
+SUPER_VAR = 'supervisor'
 
 #STATIC_URL = '/static/'
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formA1_readings_model, formA2_model, formA3_model, bat_info_model
 import datetime
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
@@ -9,13 +10,13 @@ profile = user_profile_model.objects.all()
 def method303_rolling_avg(request, facility):
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     options = bat_info_model.objects.all()
     now = datetime.datetime.now()
     today = datetime.date.today()
@@ -64,5 +65,5 @@ def method303_rolling_avg(request, facility):
     list_of_records = form_compile(daily_prof)
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        'options': options, 'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "admin": admin, "unlock": unlock, 
+        'options': options, 'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form
 from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, User
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
 from django.contrib.auth.models import Group
@@ -13,19 +14,19 @@ import os
 lock = login_required(login_url='Login')
 
 @lock
-def admin_dashboard_view(request, facility):
+def sup_dashboard_view(request, facility):
     options = bat_info_model.objects.all()
     unlock = False
     client = False
-    admin = False
+    supervisor = False
 
-    if request.user.groups.filter(name='SGI Technician'):
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
         return redirect('IncompleteForms', facility)
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')
@@ -281,7 +282,7 @@ def admin_dashboard_view(request, facility):
 
     wind_direction = toTextualDescription(degree)
 
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         if count_bp != 0:
             todays_log = daily_prof[0]
             if now.month == todays_log.date_save.month:
@@ -385,8 +386,8 @@ def admin_dashboard_view(request, facility):
             if request.method == 'POST':
                 answer = request.POST
                 if answer['facilitySelect'] != '':
-                    return redirect('admin_dashboard', answer['facilitySelect'])
-            return render(request, "admin/admin_dashboard.html", {
+                    return redirect('sup_dashboard', answer['facilitySelect'])
+            return render(request, "admin/sup_dashboard.html", {
                 'facility': facility, 
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
@@ -400,7 +401,7 @@ def admin_dashboard_view(request, facility):
                 'monthly_percent': monthly_percent, 
                 'annually_percent': annually_percent, 
                 'daily_percent': daily_percent, 
-                'admin': admin, 
+                'supervisor': supervisor, 
                 "client": client, 
                 'unlock': unlock,
                 'options': options,
@@ -408,9 +409,9 @@ def admin_dashboard_view(request, facility):
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
-            return redirect('admin_dashboard', answer['facilitySelect'])
+            return redirect('sup_dashboard', answer['facilitySelect'])
         
-    return render(request, "admin/admin_dashboard.html", {
+    return render(request, "admin/sup_dashboard.html", {
         'facility': facility, 
         'form_enteredA5': form_enteredA5, 
         'form_enteredA4': form_enteredA4, 
@@ -443,7 +444,7 @@ def admin_dashboard_view(request, facility):
         'monthly_percent': monthly_percent, 
         'annually_percent': annually_percent, 
         'daily_percent': daily_percent, 
-        'admin': admin, 
+        'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
         'options': options,
@@ -464,15 +465,15 @@ def register_view(request, facility, access_page):
     data = ''
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=CLIENT_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=OBSER_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
 
-    if admin:
+    if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
             if len(user_profiles.filter(user__id__exact=access_page)) > 0:
                 userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
@@ -533,7 +534,7 @@ def register_view(request, facility, access_page):
 
                     user = form.cleaned_data.get('username')
                     messages.success(request, 'Account was created for ' + user)
-                    return redirect('admin_dashboard', facility)
+                    return redirect('sup_dashboard', facility)
                 else:
                     messages.error(request, "The Information Entered Was Invalid.")
             elif check_2:
@@ -545,7 +546,7 @@ def register_view(request, facility, access_page):
                     form.save()
                     
                     messages.success(request, 'Account was created for new client')
-                    return redirect('admin_dashboard', facility)
+                    return redirect('sup_dashboard', facility)
             elif check_3:
                 print('CHECK 3')
                 print(check_3)
@@ -561,12 +562,12 @@ def register_view(request, facility, access_page):
             else:
                 print('TOO FAR')
                 
-    elif request.user.groups.filter(name='EES Coke Employees'):
+    elif request.user.groups.filter(name=CLIENT_VAR):
         return redirect('c_dashboard')
-    elif request.user.groups.filter(name='SGI Technician'):
+    elif request.user.groups.filter(name=OBSER_VAR):
         return redirect('IncompleteForms', facility)
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'admin': admin, "client": client, 'unlock': unlock, 'data': data, 'userData2': userData2, 'userInfo': userInfo
+        'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'userData2': userData2, 'userInfo': userInfo
     })

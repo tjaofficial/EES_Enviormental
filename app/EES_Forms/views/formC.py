@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms, bat_info_model
 from ..forms import SubFormC1, FormCReadForm
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -15,13 +16,13 @@ def formC(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -198,5 +199,5 @@ def formC(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formC.html", {
-        "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
+        "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

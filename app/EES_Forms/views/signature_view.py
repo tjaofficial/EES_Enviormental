@@ -2,18 +2,19 @@ from django.shortcuts import render, redirect
 from ..models import signature_model, daily_battery_profile_model
 from ..forms import signature_form
 import datetime
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 def signature(request, facility):
     existing = False
     unlock = False
     client = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     
     count_bp = daily_battery_profile_model.objects.count()
 
@@ -51,5 +52,5 @@ def signature(request, facility):
             
             return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/ees_signature.html", {
-        'facility': facility, 'unlock': unlock, 'client': client, 'admin': admin, 'data': data
+        'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'data': data
     })
