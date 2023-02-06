@@ -399,8 +399,6 @@ class daily_battery_profile_model(models.Model):
         return str(self.date_save)
 
 
-
-
 class user_profile_model(models.Model):
     user = models.OneToOneField(
         User,
@@ -438,7 +436,7 @@ class user_profile_model(models.Model):
         null=True,
         blank=True,
     )
-
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.user.username
 

@@ -4,11 +4,13 @@
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
 <body>
-    {% if access_page == 'form' %}
+    <input id='access_page' type='hidden' value={{access_page}} />
+    {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
     <div id='card'>
         <div class='tabContainer'>
             <div id='tab1' class='tabs topLeftCont start'>Observer/Supervisor</div>
-            <div id='tab2' class='tabs topRightCont'>Client</div>
+            <div id='tab2' class='tabs middleCont'>Facility</div>
+            <div id='tab3' class='tabs topRightCont'>Client</div>
         </div>
         <div id="login" class='dataCont' style='display: block;'>
             <h1>Register New Observer/Supervisor</h1>
@@ -26,8 +28,8 @@
                 <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
                 {{ profile_form.cert_date }}
                 <br><br></div>
-                <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facility_name.label }}:
-                {{ profile_form.facility_name }}
+                <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice.label }}:
+                {{ profile_form.facilityChoice }}
                 <br><br></div>
                 <input type="submit" name="create_user">
             </form>
@@ -36,8 +38,8 @@
                 <p>{{message}}</p>
             {% endfor%}
         </div>
-        <div id="newClient" class='dataCont' style='display: none;'>
-            <center><h1>Register New Client</h1></center>
+        <div id="newFacility" class='dataCont' style='display: none;'>
+            <center><h1>Register New Facility</h1></center>
             </br>
             <form method="POST" action="">
                 {% csrf_token %}
@@ -152,6 +154,31 @@
                         </td>
                     </tr>
                 </table><br>
+                <center><input type="submit" name="create_facility"></center>
+            </form>
+
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor%}
+        </div>
+        <div id="newClient" class='dataCont' style='display: none;'>
+            <h1>Register New Client</h1>
+            </br>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% for field in form%}
+                    {{ field.label }}:
+                    {{ field }}<br><br>
+                {% endfor %}
+                {{ profile_form.phone.label }}:
+                {{ profile_form.phone }}<br><br>
+                Work {{ profile_form.position.label }}:
+                {{ profile_form.position }}<br><br>
+                <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
+                {{ profile_form.cert_date }}
+                <br><br></div>
+                {{ profile_form.facilityChoice.label }}: {{ profile_form.facilityChoice }}
+                <br><br>
                 <center><input type="submit" name="create_client"></center>
             </form>
 

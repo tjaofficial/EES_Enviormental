@@ -3,7 +3,7 @@ from django.http import HttpResponseNotFound
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model
+from ..models import user_profile_model, daily_battery_profile_model, bat_info_model
 from ..forms import CreateUserForm, user_profile_form
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
@@ -50,10 +50,11 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-            if request.user.is_superuser:
-                return redirect('admin_dashboard', 'admin')
-            elif request.user.groups.filter(name='SGI Admin'):
-                return redirect('admin_dashboard', 'admin')
+            if request.user.is_superuser or request.user.groups.filter(name='SGI Admin'):
+                if len(bat_info_model.objects.all()) > 0:
+                    return redirect('admin_dashboard', 'admin')
+                else:
+                    return redirect('Register', 'admin', 'facility')
             elif request.user.groups.filter(name='EES Coke Employees'):
                 return redirect('c_dashboard')
             elif request.user.groups.filter(name='SGI Technician'):

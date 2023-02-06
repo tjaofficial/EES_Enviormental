@@ -207,7 +207,8 @@ class user_profile_form(forms.ModelForm):
             'phone',
             'position',
             'company',
-            'certs'
+            'certs',
+            'facilityChoice'
         )
         exclude = ['user']
 

@@ -473,7 +473,7 @@ def register_view(request, facility, access_page):
         admin = True
 
     if admin:
-        if access_page != 'form':
+        if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
             if len(user_profiles.filter(user__id__exact=access_page)) > 0:
                 userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
                 userInfo = User.objects.all().filter(id__exact=access_page)[0]
@@ -492,8 +492,6 @@ def register_view(request, facility, access_page):
                 else:
                     parseNumber = ''
                 
-                
-                
                 initial_data = {
                     'cert_date': userProfileInfo.cert_date,
                     'phone': parseNumber,
@@ -501,7 +499,7 @@ def register_view(request, facility, access_page):
                     'profile_picture': userProfileInfo.profile_picture,
                     'certs': userProfileInfo.certs,
                 }
-                userData2 = user_profile_form(initial=initial_data)
+                userData2 = user_profile_form(initial=initial_data)   
         else:
             form = CreateUserForm()
             profile_form = user_profile_form()
@@ -512,7 +510,7 @@ def register_view(request, facility, access_page):
             print(request.POST)
             # try:
             check_1 = request.POST.get('create_user', False)
-            check_2 = request.POST.get('create_client', False)
+            check_2 = request.POST.get('create_facility', False)
             check_3 = request.POST.get('edit_user', False)
             if check_1:
                 print('CHECK 1')
