@@ -1,24 +1,27 @@
-{% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
-<head>
-    <link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
-</head>
-<body>
-    <div id="page">
-        <div id="login" class="login__container">
-            <h2>MethodPlus+</h2>
-            <h3>Login</h3>
-            {% if login_error.error %}
-                <div class="login__error">{{ login_error.message }}</div>
-            {% endif %}
-            <form name="login" action="" method="POST">
-                {% csrf_token %}
-                <lable class="login__lable" for="username">Username</lable>
-                <input class="login__input" id="username" type="text" name="username">
+{% extends 'landing/landing_layout.html' %}{% load static %}
+{% block body %}
 
-                <lable class="login__lable" for="password"> Password </lable>
-                <input class="login__input" id="password" type="password" name="password">
-                
-                <input class="login__button" type="submit" value="Login">
+    <link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
+    <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
+
+    <div class='topCont' style='height:100%;'>
+        <div id="login" class="regCont">
+            <form id='signup' name="login" action="" method="POST">
+                {% csrf_token %}
+                <div class='regHeader'>
+                    <h2 class='methodPlus' style='margin:auto; text-align: center; font-size: 47px;'>MethodPlus+</h2>
+                </div>
+                <hr>
+                <div class='regBody'>
+                {% if login_error.error %}
+                    <div class="login__error">{{ login_error.message }}</div>
+                {% endif %}
+                    <input id="username" type="text" name="username" placeholder='Username'>
+                    <input  id="password" type="password" name="password" placeholder='Password'>
+                    
+                    <input id="submit" type="submit" value="Login">
+                </div>
+                <p style='text-align:center;'>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
             </form>
             
         </div>

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model
+from ..forms import CreateUserForm, user_profile_form
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -108,4 +109,11 @@ def change_password(request, facility):
         form = PasswordChangeForm(request.user)
     return render(request, 'ees_forms/ees_password.html', {
         'form': form, 'facility': facility
+    })
+
+def landingRegister(request):
+    userForm = CreateUserForm()
+    profileForm = user_profile_form()
+    return render(request, 'landing/landing_register.html',{
+        'userForm': userForm, 'profileForm': profileForm
     })

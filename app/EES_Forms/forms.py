@@ -169,9 +169,20 @@ class FormCReadForm(ModelForm):
 
 
 class CreateUserForm(UserCreationForm):
+    password1 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    password2 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+        
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'E-mail'}),
+            'password1': forms.TextInput(attrs={'type': 'password', 'placeholder': 'Password'}),
+            'password2': forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+        }
 
 
 class daily_battery_profile_form(ModelForm):

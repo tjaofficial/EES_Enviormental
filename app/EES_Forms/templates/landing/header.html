@@ -34,15 +34,22 @@
     }
     .push {
         margin-left: auto;
+        padding-right: 20px;
+    }
+    .login{
+        background-color: #4b78ad;
+        padding: 10px 20px;
+        border-radius: 7px;
+        text-shadow: none;
     }
 </style>
 <div class='mainCont'>
     <div id='logoBrand' style='width: 18rem;'>MethodPlus+</div>
     <div class='navBar push'>
-        <div class='navTab'>HOME</div>
+        <a style='text-decoration: none;' href="{% url 'landing' %}"><div class='navTab'>HOME</div></a>
         <div class='navTab'>FEATURES</div>
         <div class='navTab'>CONTACT</div>
         <div class='navTab'>PRICING</div>
-        <div class='navTab'>MORE</div>
+        <a style='text-decoration: none;' href="{% url 'Login' %}"><div class='navTab login'>LOGIN</div></a>
     </div>
 </div>

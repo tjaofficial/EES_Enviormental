@@ -238,10 +238,22 @@ li {
   border-radius: 2rem;
   height: 10px;
 }
-.weekly {width: {{ weekly_percent }}%; background-color: #F55667;}
-.monthly {width: {{ monthly_percent }}%; background-color: #348EFA;}
-.quarterly {width: 0%; background-color: #4ACFAE;}
-.annually {width: {{ annually_percent }}%; background-color: #FCB050;}
+/* .weekly {
+    width: {{ weekly_percent }}%; 
+    background-color: #F55667;
+}
+.monthly {
+    width: {{ monthly_percent }}%; 
+    background-color: #348EFA;
+}
+.quarterly {
+    width: 0%; 
+    background-color: #4ACFAE;
+}
+.annually {
+    width: {{ annually_percent }}%; 
+    background-color: #FCB050;
+} */
 .grid-observ_singles{
     display: grid;
     grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
