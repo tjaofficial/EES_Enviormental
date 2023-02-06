@@ -1,6 +1,5 @@
 from ..models import Forms
-from django.conf import settings
-from django.shortcuts import HttpResponse, redirect
+from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from django.core.exceptions import FieldError
@@ -173,7 +172,6 @@ def form_PDF(request, facility, formDate, formName):
         formList = []
         for allForms in Forms.objects.all():
             formList.append(str(allForms).replace('-',''))
-        print(formList)
     elif formName == 'monthly':
         formList = ['G2', 'Spill Kits']
     elif formName == 'tanks':
@@ -184,6 +182,7 @@ def form_PDF(request, facility, formDate, formName):
     elems = []
     for item in formList:
         if item in ('N') or item[0] == 'F':
+            print('Skipped Form and Continued')
             continue
         goNext = False
         if len(item) > 1 and len(item) <= 3:
@@ -198,31 +197,24 @@ def form_PDF(request, facility, formDate, formName):
         ModelForms = Forms.objects.filter(form=reFormName)[0]
             
         mainModel = apps.get_model('EES_Forms', modelName)
-        
         #Pick the specific form date
         formsAndData = {}
         parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
         parseDateStart = parseDateStop - datetime.timedelta(days=6)
         try:
             org = mainModel.objects.all().order_by('-date')
-            print(item + ' WINS')
             for x in org:
                 if formName == 'weekly':
                     if parseDateStart <= x.date <= parseDateStop:
-                        print(x)
-                        print('<-------HERE')
                         formsAndData[str(x.date)] = [x]
-                        print(formsAndData)
                         continue
                 else:
                     if str(x.date) == str(formDate):
                         database_model = x
-                        print(database_model)
                         formsAndData[str(x.date)] = [database_model]
                         break
                     elif org[len(org)-1] == x:
                         database_model = ''
-                        print('FORM DOES NOT EXIST')
                         goNext = True
                         print('goNext1')
             if item in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
@@ -231,9 +223,7 @@ def form_PDF(request, facility, formDate, formName):
                 for x in org2:
                     if formName == 'weekly':
                         if parseDateStart <= x.form.date <= parseDateStop:
-                            print(list(formsAndData))
                             for pairs in list(formsAndData):
-                                print(pairs)
                                 xDate = str(x.form.date)
                                 if xDate == pairs:
                                     formsAndData[pairs].append(x)
@@ -267,29 +257,30 @@ def form_PDF(request, facility, formDate, formName):
                         goNext = True
                         print('goNext2')
                     data = database_model
+        print('Form ' + item + ' includes these:' + str(list(formsAndData)))    
         if goNext:
             continue
-        print(formsAndData)
-        print('PENIS AND BALLS')
+        print('Processing Forms that were found for ' + item + '...')
         for alpha in list(formsAndData):
-            print(len(formsAndData[alpha]))
+            #print(len(formsAndData[alpha]))
             if len(formsAndData[alpha]) == 2:
-                print('CHECK 1')
+                print(item + ' is a double database...')
                 data = formsAndData[alpha][0]
                 readings = formsAndData[alpha][1]
             else:
                 data = formsAndData[alpha][0]
+                print(item + ' is a single database...')
             
             styles = getSampleStyleSheet()
             fileName = 'form' + formName + '_' + formDate + ".pdf"
             documentTitle = 'form' + formName + '_' + formDate
             title = ModelForms.header + ' ' + ModelForms.title + ' - Form (' + ModelForms.form + ')'
-            subTitle = 'Facility Name: EES Coke Battery LLC'
+            subTitle = 'Facility Name: ' + facility
             #always the same on all A-forms
             marginSet = 0.4
-            print('we made it to data')
+            print('...Creating PDF for ' + item + '...')
             dataList = []
-            print(item)
+            print('STARTING...')
             #create a stream
             stream = io.BytesIO()
             if item == 'A1':
@@ -2320,19 +2311,20 @@ def form_PDF(request, facility, formDate, formName):
             
             elems.append(table)
             elems.append(PageBreak())
-                    
+            print('FINISHED...')
+            print('PDFs for ' + item + ' has been created. Moving to next form')
+    
+    print('Finished creating PDFs...')        
     try:
-        print('whatsup')
-        pdf.build(elems, canvasmaker=PageNumCanvas)
         
+        pdf.build(elems, canvasmaker=PageNumCanvas)
             # get buffer
         stream.seek(0)
         pdf_buffer = stream.getbuffer()
-
+        print(pdf_buffer)
         response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
+        print('Starting to Compile...')
     except UnboundLocalError as e:
-        #PrintSelect = '../../PrintSelect'
-        #return redirect(PrintSelect)
-        return HttpResponseNotFound("hello")
+        return HttpResponseNotFound("No Forms Found")
    
     return response
