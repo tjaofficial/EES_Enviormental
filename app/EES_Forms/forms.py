@@ -510,17 +510,8 @@ class formA4_form(ModelForm):
             'main_3': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'main_4': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'suction_main': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'oven_leak_1': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'time_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'date_temp_seal_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'time_temp_seal_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'temp_seal_by_leak_1': forms.TextInput(attrs={'type': 'text', 'style': 'width:150px;'}),
-            'date_init_repair_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'time_init_repair_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'date_comp_repair_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'time_comp_repair_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'comp_by_leak_1': forms.TextInput(attrs={'type': 'text', 'style': 'width:150px;'}),
-            'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
+            'notes': forms.Textarea(attrs={'rows': 7, 'cols': 125}),
+            'leak_data': forms.TextInput(attrs={'id': "collection", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
         }
 
 

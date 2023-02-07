@@ -118,6 +118,7 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
+    console.log(tableHTML)
     document.getElementById(`${input_ID}_ctableBody`).innerHTML = tableHTML;
 }
 
@@ -139,6 +140,7 @@ function handle_Table_Input(event){
     const resultKeyAttr = elem.dataset.resultkey;
     const elemValue = elem.value; 
     const input_Target = elem.dataset.targetinput;
+    console.log(input_Target)
 
     if(parseInt(resultInputAttr) === -1){
         addToResultArray(input_Target, resultKeyAttr, elemValue);
@@ -163,7 +165,6 @@ function addToResultArray(target, key, value){
     targeted_input_DOM.value = JSON.stringify(parsed_Result);
     createHTMLString(parsed_Result, target);
     intiateResultEventListeners();
-
 }
 
 function updateResultArray(target, array_Position, key, value){
@@ -175,8 +176,7 @@ function updateResultArray(target, array_Position, key, value){
         let changed_Object = result_Array[array_Position];
         if(value){
             changed_Object[key] = value;
-        }
-        else{
+        } else {
             delete changed_Object[key];
         }
 
@@ -191,11 +191,6 @@ function updateResultArray(target, array_Position, key, value){
         createHTMLString(parsed_Result, target);
         intiateResultEventListeners();
     }
-    
-    
-
-    
-
 }
 
 //createHTMLString(pushResultDataJSON);

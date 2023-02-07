@@ -785,67 +785,17 @@ class formA4_model(models.Model):
     main_4 = models.CharField(
         max_length=30
     )
+    leak_data = models.CharField(
+        max_length=1000,
+        blank=True,
+        null=True
+    )
     suction_main = models.CharField(
         max_length=30
     )
-    oven_leak_1 = models.CharField(
-        max_length=2,
-        blank=True,
-        null=True,
+    notes = models.CharField(
+        max_length=600
     )
-    time_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    date_temp_seal_leak_1 = models.DateField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    time_temp_seal_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    temp_seal_by_leak_1 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-    )
-    date_init_repair_leak_1 = models.DateField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    time_init_repair_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    date_comp_repair_leak_1 = models.DateField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    time_comp_repair_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    comp_by_leak_1 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-    )
-    notes = models.CharField(max_length=600)
 
     def __str__(self):
         return str(self.date)

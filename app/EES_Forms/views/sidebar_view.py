@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 import os
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-
+from .print_form_view import date_change
 lock = login_required(login_url='Login')
 
 
@@ -337,13 +337,9 @@ def issues_view(request, facility, form_name, form_date, access_page):
     elif access_page == 'issue':
         org = issues_model.objects.filter(date__exact=form_date)
         database_form = org[0]
-        print(org[0].form)
         print('CHECK 1')
         for entry in org:
-            if str(form_date) == str(entry.date):
-                print('CHECK 2')
-                print(form_name)
-                print(entry.form)
+            if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
                 if form_name == entry.form:
                     print('CHECK 3')
                     picker = entry
@@ -356,8 +352,10 @@ def issues_view(request, facility, form_name, form_date, access_page):
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
         for entry in org:
-            if str(form_date) == str(entry.date):
+            if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
+                print('check 1')
                 if form_name == entry.form:
+                    print('check 2')
                     picker = entry
                     link = ''
 
