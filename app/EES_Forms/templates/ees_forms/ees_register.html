@@ -23,8 +23,12 @@
                 {% endfor %}
                 {{ profile_form.phone.label }}:
                 {{ profile_form.phone }}<br><br>
-                Work {{ profile_form.position.label }}:
-                {{ profile_form.position }}<br><br>
+                Work Position:
+                <select name="position" oninput="cert_date1()" style="width: 160px;" required id="id_position">
+                    <option value="" selected="">---------</option>
+                    <option value="observer">Observer</option>
+                    <option value="supervisor">Supervisor</option>
+                </select><br><br>
                 <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
                 {{ profile_form.cert_date }}
                 <br><br></div>
@@ -166,20 +170,31 @@
             </br>
             <form method="POST" action="">
                 {% csrf_token %}
-                {% for field in form%}
-                    {{ field.label }}:
-                    {{ field }}<br><br>
-                {% endfor %}
-                {{ profile_form.phone.label }}:
-                {{ profile_form.phone }}<br><br>
-                Work {{ profile_form.position.label }}:
-                {{ profile_form.position }}<br><br>
-                <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
-                {{ profile_form.cert_date }}
-                <br><br></div>
-                {{ profile_form.facilityChoice.label }}: {{ profile_form.facilityChoice }}
+                Username:
+                <input type="text" name="username" placeholder="Username" maxlength="150" autofocus="" required="" id="id_2_username"><br><br>
+                Email address:
+                <input type="email" name="email" placeholder="E-mail" maxlength="254" id="id_2_email"><br><br>
+                Password1:
+                <input type="password" name="password1" placeholder="Password" maxlength="16" required="" id="id_2_password1"><br><br>
+                Password2:
+                <input type="password" name="password2" placeholder="Confirm Password" maxlength="16" required="" id="id_2_password2"><br><br>
+                First name:
+                <input type="text" name="first_name" placeholder="First Name" maxlength="150" id="id_2_first_name"><br><br>
+                Last name:
+                <input type="text" name="last_name" placeholder="Last Name" maxlength="150" id="id_2_last_name"><br><br>
+                Phone:
+                <input type="text" name="phone" style="width: 150px;" placeholder="(123)456-7890" maxlength="75" required="" id="id_2_phone"><br><br>
+                Work Position: Client
                 <br><br>
-                <center><input type="submit" name="create_client"></center>
+                Choose Facility:
+                <select name="facilityChoice" id="id_2_facilityChoice" required>
+                    <option value="" selected="">---------</option>
+                    {% for place in data2 %}
+                    <option value="{{place.id}}">{{place.facility_name}}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <input type="submit" name="create_client">
             </form>
 
             {% for message in messages %}

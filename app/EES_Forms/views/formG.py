@@ -209,12 +209,12 @@ def formG1(request, facility, selector):
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'estab': "EES COKE BATTERY",
-                    'county': "Wayne",
-                    'estab_no': "P0408",
-                    'equip_loc': "Zug Island",
-                    'district': "Detroit",
-                    'city': "River Rouge",
+                    'estab': options.facility_name,
+                    'county': options.county,
+                    'estab_no': options.estab_num,
+                    'equip_loc': options.equip_location,
+                    'district': options.district,
+                    'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "-",
@@ -307,7 +307,7 @@ def formG2(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formG2_model.objects.all().order_by('-date')
     org2 = formG2_readings_model.objects.all().order_by('-form')
     
@@ -486,12 +486,12 @@ def formG2(request, facility, selector):
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'estab': "EES COKE BATTERY",
-                    'county': "Wayne",
-                    'estab_no': "P0408",
-                    'equip_loc': "Zug Island",
-                    'district': "Detroit",
-                    'city': "River Rouge",
+                    'estab': options.facility_name,
+                    'county': options.county,
+                    'estab_no': options.estab_num,
+                    'equip_loc': options.equip_location,
+                    'district': options.district,
+                    'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "-",

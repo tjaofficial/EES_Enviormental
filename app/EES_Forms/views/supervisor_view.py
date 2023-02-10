@@ -463,6 +463,7 @@ def register_view(request, facility, access_page):
     form = ''
     profile_form = ''
     data = ''
+    data2 = bat_info_model.objects.all()
     unlock = False
     client = False
     supervisor = False
@@ -508,15 +509,13 @@ def register_view(request, facility, access_page):
             data = bat_info_form()
 
         if request.method == 'POST':
-            print(request.POST)
-            # try:
             check_1 = request.POST.get('create_user', False)
             check_2 = request.POST.get('create_facility', False)
             check_3 = request.POST.get('edit_user', False)
+            check_4 = request.POST.get('create_client', False)
             if check_1:
                 print('CHECK 1')
                 finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
-                print(finalPhone)
                 new_data = request.POST.copy()
                 new_data['phone'] = finalPhone
                 new_data['username'] = request.POST['username'].lower()
@@ -540,8 +539,6 @@ def register_view(request, facility, access_page):
             elif check_2:
                 form = bat_info_form(request.POST)
                 profile_form = ''
-                print(form.errors)
-                print('wtf')
                 if form.is_valid():
                     form.save()
                     
@@ -549,15 +546,35 @@ def register_view(request, facility, access_page):
                     return redirect('sup_dashboard', facility)
             elif check_3:
                 print('CHECK 3')
-                print(check_3)
                 finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
-                print(filter(str.isdigit, request.POST['phone']))
                 new_data = request.POST.copy()
                 new_data['phone'] = finalPhone
                 A = user_profile_form(new_data, request.FILES, instance=userProfileInfo)
-                #print(A.errors)
                 if A.is_valid():
                     A.save()
+                    return redirect('Contacts', facility)
+            elif check_4:
+                print('CHECK 4')
+                facility = bat_info_model.objects.all().filter(id=request.POST['facilityChoice'])[0]
+                finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+                new_data = request.POST.copy()
+                new_data['phone'] = finalPhone
+                new_data['position'] = 'client'
+                A = user_profile_form(new_data)
+                B = CreateUserForm(new_data)
+                if A.is_valid() and B.is_valid():
+                    user = B.save()
+                    profile = A.save(commit=False)
+                    profile.user = user
+                    
+                    profile.save()
+                    
+                    group = Group.objects.get(name=profile.position)
+                    user.groups.add(group)
+
+                    user = B.cleaned_data.get('username')
+                    messages.success(request, 'Account was created for ' + user)
+
                     return redirect('Contacts', facility)
             else:
                 print('TOO FAR')
@@ -569,5 +586,5 @@ def register_view(request, facility, access_page):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'userData2': userData2, 'userInfo': userInfo
+        'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
     })
