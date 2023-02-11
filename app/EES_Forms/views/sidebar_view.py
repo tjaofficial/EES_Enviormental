@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model
 from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
@@ -131,109 +131,121 @@ def search_forms_view(request, facility, access_page):
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     if access_page != 'search':
-        chk_database = apps.get_model('EES_Forms', access_page).objects.count()
-        print(apps.get_model('EES_Forms', access_page).objects.all())
-        mainList = []
-        # DATE - DAILY = 1, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}"
-        # DATE - WEEKLY = 4, href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}{% if weekend %}/{% if x.weekend_day == 5 %}Saturday{% else %}Sunday{% endif %}{% else %}{% endif %}"
-        # WEEK - DAILY = 3, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}"
-        # WEEK - WEEKLY = 2, href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}"
-        if chk_database == 0:
-            att_check = 5
-            database = ''
-        else:
-            try:
-                # THESE ARE FORMS USING DATE
-                database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
-                print('BY DATE')
-                print(database.count())
-                if database.count() == 0:
-                    att_check = 5
-                    database = ''
-                else:
-                    for x in ModelForms:
-                        print('CHECK 1')
-                        if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
-                            print(access_page)
-                            if x.frequency[0] == 'W':
-                                # THESE ARE WEEKLY FORMS
-                                att_check = 4
-                                if x.weekend_only:
-                                    weekend = True
-                                else:
-                                    weekend = False
-                            elif x.frequency[0] == 'M':
-                                att_check = 6
-                            elif x.frequency[0] == 'Q':
-                                att_check = 7
-                            else:
-                                # THESE ARE DAILY FORMS
-                                att_check = 1
-                        else:
-                            print('no match')
-            except FieldError as e:
-                # THESE ARE FORMS USING WEEK
-                database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
-                print('BY WEEK START')
-                print(database.count())
-                if database.count() == 0:
-                    att_check = 5
-                    database = ''
-                else:
-                    for x in ModelForms:
-                        if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
-                            # FORMS THAT ARE SINGLE DIDGITS
-                            if x.frequency[0] == 'D':
-                                # THESE ARE DAILY FORMS
-                                att_check = 3
-                            else:
-                                # THESE ARE WEEKLY FORMS
-                                att_check = 2
-                        else:
-                            print('Error - EES_00006')
-
-            if att_check == 1:
-                for x in database:
-                    mainList.append([access_page, x.date, x, 'Daily'])
-            elif att_check == 2:
-                for x in database:
-                    mainList.append([access_page, x.week_start, x, 'Weekly'])
-            elif att_check == 3:
-                for x in database:
-                    mainList.append([access_page, x.week_start, x, 'Daily'])
-            elif att_check == 4:
-                if not weekend:
-                    for x in database:
-                        mainList.append([access_page, x.date, x, 'Weekly'])
-                else:
-                    for x in database:
-                        mainList.append([access_page, x.date, x, 'Weekly', '/' + x.weekend_day])
-            elif att_check == 6:
-                for x in database:
-                    mainList.append([access_page, x.date, x, 'Monthly'])
-            elif att_check == 7:
-                for x in database:
-                    mainList.append([access_page, x.date, x, 'Quarterly'])
-                    
-                    
-            try:
-                Model2 = apps.get_model('EES_Forms', access_page[0:7] + 'readings_model')
-                readingsData = True
-                if len(Model2.objects.all()) > 0:
-                    database2 = Model2.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
-                else:
-                    database2 = 'empty'
-            except LookupError:
+        if access_page != 'formN_model':
+            chk_database = apps.get_model('EES_Forms', access_page).objects.count()
+            print(apps.get_model('EES_Forms', access_page).objects.all())
+            mainList = []
+            # DATE - DAILY = 1, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}"
+            # DATE - WEEKLY = 4, href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}{% if weekend %}/{% if x.weekend_day == 5 %}Saturday{% else %}Sunday{% endif %}{% else %}{% endif %}"
+            # WEEK - DAILY = 3, href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}"
+            # WEEK - WEEKLY = 2, href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}"
+            if chk_database == 0:
+                att_check = 5
+                database = ''
+            else:
                 try:
-                    Model2 = apps.get_model('EES_Forms', access_page[0:6] + 'readings_model')
+                    # THESE ARE FORMS USING DATE
+                    database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
+                    print('BY DATE')
+                    print(database.count())
+                    if database.count() == 0:
+                        att_check = 5
+                        database = ''
+                    else:
+                        for x in ModelForms:
+                            print('CHECK 1')
+                            if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
+                                print(access_page)
+                                if x.frequency[0] == 'W':
+                                    # THESE ARE WEEKLY FORMS
+                                    att_check = 4
+                                    if x.weekend_only:
+                                        weekend = True
+                                    else:
+                                        weekend = False
+                                elif x.frequency[0] == 'M':
+                                    att_check = 6
+                                elif x.frequency[0] == 'Q':
+                                    att_check = 7
+                                else:
+                                    # THESE ARE DAILY FORMS
+                                    att_check = 1
+                            else:
+                                print('no match')
+                except FieldError as e:
+                    # THESE ARE FORMS USING WEEK
+                    database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
+                    print('BY WEEK START')
+                    print(database.count())
+                    if database.count() == 0:
+                        att_check = 5
+                        database = ''
+                    else:
+                        for x in ModelForms:
+                            if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
+                                # FORMS THAT ARE SINGLE DIDGITS
+                                if x.frequency[0] == 'D':
+                                    # THESE ARE DAILY FORMS
+                                    att_check = 3
+                                else:
+                                    # THESE ARE WEEKLY FORMS
+                                    att_check = 2
+                            else:
+                                print('Error - EES_00006')
+
+                if att_check == 1:
+                    for x in database:
+                        mainList.append([access_page, x.date, x, 'Daily'])
+                elif att_check == 2:
+                    for x in database:
+                        mainList.append([access_page, x.week_start, x, 'Weekly'])
+                elif att_check == 3:
+                    for x in database:
+                        mainList.append([access_page, x.week_start, x, 'Daily'])
+                elif att_check == 4:
+                    if not weekend:
+                        for x in database:
+                            mainList.append([access_page, x.date, x, 'Weekly'])
+                    else:
+                        for x in database:
+                            mainList.append([access_page, x.date, x, 'Weekly', '/' + x.weekend_day])
+                elif att_check == 6:
+                    for x in database:
+                        mainList.append([access_page, x.date, x, 'Monthly'])
+                elif att_check == 7:
+                    for x in database:
+                        mainList.append([access_page, x.date, x, 'Quarterly'])
+                        
+                        
+                try:
+                    Model2 = apps.get_model('EES_Forms', access_page[0:7] + 'readings_model')
                     readingsData = True
                     if len(Model2.objects.all()) > 0:
                         database2 = Model2.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
                     else:
                         database2 = 'empty'
                 except LookupError:
-                    readingsData = False
-                    database2 = ''
+                    try:
+                        Model2 = apps.get_model('EES_Forms', access_page[0:6] + 'readings_model')
+                        readingsData = True
+                        if len(Model2.objects.all()) > 0:
+                            database2 = Model2.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                        else:
+                            database2 = 'empty'
+                    except LookupError:
+                        readingsData = False
+                        database2 = ''
+        else:
+            mainList=''
+            database=''
+            database2=''
+            att_check=''
+            queryN = formM_model.objects.all().filter(facilityChoice__facility_name=facility)
+            monthList = []
+            for month in queryN:
+                if month.date.month not in monthList:
+                    monthList.append((month.date.month, month.date.year, calendar.month_name[month.date.month],))
+            print(monthList)
 
     if request.method == "POST":
         searched = request.POST['searched']
@@ -259,7 +271,7 @@ def search_forms_view(request, facility, access_page):
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'monthList': monthList, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
 
 @lock

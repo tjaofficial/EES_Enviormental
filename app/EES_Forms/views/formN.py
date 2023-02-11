@@ -26,26 +26,25 @@ def formN(request, facility, selector):
     now = datetime.datetime.now()
     today = datetime.date.today()
     month_name = calendar.month_name[today.month]
-    form_pull = formM_model.objects.all()
+    form_pull = formM_model.objects.all().filter(date__month=today.month)
     count_bp = daily_battery_profile_model.objects.count()
-
+    if selector != 'form':
+        form_pull = formM_model.objects.all().filter(date__month=selector)
+    
     paved_loc = []
     for x in form_pull:
         if x.paved:
-            if x.date.month == today.month:
-                paved_loc.append((x.paved, x.date))
+            paved_loc.append((x.paved, x.date))
     
     unpaved_loc = []
     for x in form_pull:
         if x.unpaved:
-            if x.date.month == today.month:
-                unpaved_loc.append((x.unpaved, x.date))
+            unpaved_loc.append((x.unpaved, x.date))
                 
     parking_loc = []
     for x in form_pull:
         if x.parking:
-            if x.date.month == today.month:
-                parking_loc.append((x.parking, x.date))
+            parking_loc.append((x.parking, x.date))
 
     if count_bp != 0:
         todays_log = daily_prof[0]
