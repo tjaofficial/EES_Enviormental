@@ -30,6 +30,7 @@ def formN(request, facility, selector):
     count_bp = daily_battery_profile_model.objects.count()
     if selector != 'form':
         form_pull = formM_model.objects.all().filter(date__month=selector)
+        month_name = calendar.month_name[int(selector)]
     
     paved_loc = []
     for x in form_pull:
