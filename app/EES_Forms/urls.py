@@ -14,6 +14,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="Logout"),
     path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
+    path("adminDash", views.adminDash, name="adminDash"),
 
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),

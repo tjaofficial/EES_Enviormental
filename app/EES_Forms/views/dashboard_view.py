@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model
+from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import datetime
@@ -621,7 +621,23 @@ def IncompleteForms(request, facility):
         for forms in all_forms:
             if (forms.day_freq in {'Everyday', todays_num}) or (todays_num in {5, 6} and forms.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and forms.day_freq == 'Weekdays'):
                 if forms.submitted == False:
-                    all_incomplete_forms.append(forms)
+                    if forms.form[0] == 'G':
+                        if len(all_forms.filter(form='G-2')) > 0:
+                            g2_form = all_forms.filter(form='G-2')[0]
+                            if g2_form.submitted == False:
+                                all_incomplete_forms.append(forms)
+                            else:
+                                start_day = weekday_fri - datetime.timedelta(days=6)
+                                if forms.form[2] == '1':
+                                    if start_day <= g2_form.date_submitted <= weekday_fri:
+                                        continue
+                                    else:
+                                        all_incomplete_forms.append(forms)
+                                elif forms.form[2] == '2':
+                                    if len(formG2_model.objects.all().filter(date__month=today.month)) == 0:
+                                        all_incomplete_forms.append(forms)
+                    else:
+                        all_incomplete_forms.append(forms)
                     if forms.frequency == 'Daily':
                         daily_incomplete_forms.append(forms)
                     elif forms.frequency == 'Weekly':

@@ -282,6 +282,8 @@ def sup_dashboard_view(request, facility):
 
     wind_direction = toTextualDescription(degree)
 
+# ----OTHER-----------
+
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         if count_bp != 0:
             todays_log = daily_prof[0]

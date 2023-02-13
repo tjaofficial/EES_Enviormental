@@ -11,6 +11,7 @@ from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 from .signature_view import signature
 from .landing_view import *
+from .admin_view import *
 
 
 from .daily_battery_profile_view import *

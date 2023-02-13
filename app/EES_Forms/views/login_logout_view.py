@@ -23,7 +23,9 @@ def login_view(request):
     existing = False
     login_error = {"error":False, "message":''}
     if request.user.is_authenticated:
-        if request.user.is_superuser or request.user.groups.filter(name=SUPER_VAR):
+        if request.user.is_superuser:
+            return redirect('adminDash')
+        elif request.user.groups.filter(name=SUPER_VAR):
             return redirect('sup_dashboard', SUPER_VAR)
         elif request.user.groups.filter(name=CLIENT_VAR):
             return redirect('c_dashboard')
@@ -49,9 +51,11 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-            if request.user.is_superuser or request.user.groups.filter(name=SUPER_VAR):
+            if request.user.is_superuser:
+                return redirect('adminDash')
+            elif request.user.groups.filter(name=SUPER_VAR):
                 if len(bat_info_model.objects.all()) > 0:
-                    return redirect('Register', SUPER_VAR, 'facility')
+                    return redirect('sup_dashboard', SUPER_VAR)
                 else:
                     return redirect('Register', SUPER_VAR, 'facility')
             elif request.user.groups.filter(name=CLIENT_VAR):

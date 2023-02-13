@@ -1,0 +1,55 @@
+{% extends 'landing/landing_layout.html' %}{% load static %}
+{% block body %}
+<div class='topCont'>
+    <div class="headerSpace"></div>
+    <div class='topSection'>
+        <div id='cover1' style='display:flex;'>
+            <div>
+                <div class='coverTitle'>MethodPlus+</div>
+                <div class='coverBody'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </div>
+                <center>
+                    <a style='text-decoration: none;' href="{% url 'register' %}"><div class='buttonShadow'>
+                        <div class='button'>
+                            GET STARTED
+                        </div>
+                    </div></a>
+                </center>
+            </div>
+            <div class='coverMedia'>
+                <img src=''/>
+            </div>
+        </div>
+        <div id='cover2' style='display:none;'>
+            <div>
+                <div class='coverTitle'>DATA AT YOUR FINGER TIPS</div>
+                <div class='coverBody'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </div>
+            </div>
+            <div class='coverMedia'>
+                <img src=''/>
+            </div>
+        </div>
+        <div id='cover3' style='display:none;'>
+            <div>
+                <div class='coverTitle'>EASY AND AFFORDABLE</div>
+                <div class='coverBody'>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                </div>
+            </div>
+            <div class='coverMedia'>
+                <img src=''/>
+            </div>
+        </div>
+    </div> 
+
+    <div class='dotHolder'>
+        <div id='dot1' class='selectedDot'></div>
+        <div id='dot2' class='unselectedDot'></div>
+        <div id='dot3' class='unselectedDot'></div>
+    </div>
+</div>
+
+{% endblock %}
