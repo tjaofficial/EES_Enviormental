@@ -87,7 +87,9 @@ def formA5(request, facility, selector):
     
     if count_bp != 0:
         todays_log = daily_prof[0]
-        if selector != 'form' and selector != 'new':
+        if selector == 'new':
+            existing = False
+        elif selector != 'form' and selector != 'new':
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
@@ -100,23 +102,20 @@ def formA5(request, facility, selector):
             existing = True
             search = True
         elif len(org) > 0 and len(org2) > 0:
-            if selector == 'new':
-                existing = False
-            else:
-                database_form = org[0]
-                database_form2 = org2[0]
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        if str(todays_log.date_save) == str(database_form.date):
-                            existing = True
-                    else:
-                        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                        return redirect(batt_prof)
+            database_form = org[0]
+            database_form2 = org2[0]
+            if now.month == todays_log.date_save.month:
+                if now.day == todays_log.date_save.day:
+                    if str(todays_log.date_save) == str(database_form.date):
+                        existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
                     return redirect(batt_prof)
+            else:
+                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+                return redirect(batt_prof)
 
         if search:
             database_form = ''
@@ -296,6 +295,7 @@ def formA5(request, facility, selector):
                 }
                 if selector == 'new':
                     initial_data['date'] = ''
+                    initial_data['observer'] = ''
                 data = formA5_form(initial=initial_data)
                 profile_form = user_profile_form()
                 readings_form = formA5_readings_form()

@@ -389,7 +389,7 @@ def sup_dashboard_view(request, facility):
                 answer = request.POST
                 if answer['facilitySelect'] != '':
                     return redirect('sup_dashboard', answer['facilitySelect'])
-            return render(request, "admin/sup_dashboard.html", {
+            return render(request, "supervisor/sup_dashboard.html", {
                 'facility': facility, 
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
@@ -413,7 +413,7 @@ def sup_dashboard_view(request, facility):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
         
-    return render(request, "admin/sup_dashboard.html", {
+    return render(request, "supervisor/sup_dashboard.html", {
         'facility': facility, 
         'form_enteredA5': form_enteredA5, 
         'form_enteredA4': form_enteredA4, 
