@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
+def showName(code):
+    for pair in paved_roads:
+        if pair[0] == code:
+            return pair[1]
 
 @lock
 def formM(request, facility, selector):
@@ -17,6 +21,7 @@ def formM(request, facility, selector):
     client = False
     search = False
     supervisor = False
+    THEmonth = False
     if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
     if request.user.groups.filter(name=CLIENT_VAR):
@@ -71,6 +76,7 @@ def formM(request, facility, selector):
                         existing = True
         if search:
             database_form = ''
+            THEmonth = form.date.month
         else:
             if existing:
                 initial_data = {
@@ -184,5 +190,5 @@ def formM(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formM.html", {
-        'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName,
+        'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
     })
