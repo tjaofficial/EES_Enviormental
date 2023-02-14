@@ -122,6 +122,7 @@ def search_forms_view(request, facility, access_page):
     unlock = False
     client = False
     supervisor = False
+    monthList =''
     if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
     if request.user.groups.filter(name=CLIENT_VAR):
@@ -182,8 +183,10 @@ def search_forms_view(request, facility, access_page):
                         database = ''
                     else:
                         for x in ModelForms:
+                            print(x)
                             if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
                                 # FORMS THAT ARE SINGLE DIDGITS
+                                print('it does)')
                                 if x.frequency[0] == 'D':
                                     # THESE ARE DAILY FORMS
                                     att_check = 3
@@ -192,7 +195,7 @@ def search_forms_view(request, facility, access_page):
                                     att_check = 2
                             else:
                                 print('Error - EES_00006')
-
+                print(att_check)
                 if att_check == 1:
                     for x in database:
                         mainList.append([access_page, x.date, x, 'Daily'])

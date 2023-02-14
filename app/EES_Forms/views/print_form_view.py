@@ -194,7 +194,7 @@ def form_PDF(request, facility, formDate, formName):
         else:
             reFormName = item
             modelName = 'form' + item + '_model'
-        ModelForms = Forms.objects.filter(form=reFormName)[0]
+        ModelForms = Forms.objects.filter(form=reFormName, facilityChoice__facility_name=facility)[0]
             
         mainModel = apps.get_model('EES_Forms', modelName)
         #Pick the specific form date
@@ -202,7 +202,7 @@ def form_PDF(request, facility, formDate, formName):
         parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
         parseDateStart = parseDateStop - datetime.timedelta(days=6)
         try:
-            org = mainModel.objects.all().order_by('-date')
+            org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
             for x in org:
                 if formName == 'weekly':
                     if parseDateStart <= x.date <= parseDateStop:
@@ -219,7 +219,7 @@ def form_PDF(request, facility, formDate, formName):
                         print('goNext1')
             if item in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
                 readingsModel = apps.get_model('EES_Forms', 'form' + item + '_readings_model')
-                org2 = readingsModel.objects.all().order_by('-form')
+                org2 = readingsModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-form')
                 for x in org2:
                     if formName == 'weekly':
                         if parseDateStart <= x.form.date <= parseDateStop:
@@ -239,7 +239,7 @@ def form_PDF(request, facility, formDate, formName):
                             database_model2 = ''
         except FieldError as e:
             print('Check A - Form ' + item)
-            org = mainModel.objects.all().order_by('-week_start')
+            org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
             for r in org:
                 if formName == 'weekly':
                     if parseDateStart <= r.week_start <= parseDateStop:
@@ -249,14 +249,16 @@ def form_PDF(request, facility, formDate, formName):
                 else:
                     if str(r.week_start) == str(formDate):
                         database_model = r
+                        formsAndData[str(r.week_start)] = [database_model]
                         print('Check B - Form Exist')
                         break
-                    elif org[len(org)-1] == r:
+                    elif r == org[len(org)-1]:
                         database_model = ''
                         print('FORM DOES NOT EXIST')
                         goNext = True
-                        print('goNext2')
-                    data = database_model
+                        print('goNext2')  
+        
+        data = database_model
         print('Form ' + item + ' includes these:' + str(list(formsAndData)))    
         if goNext:
             continue
@@ -1837,7 +1839,7 @@ def form_PDF(request, facility, formDate, formName):
                 tableData = [
                     [title],
                     [subTitle],
-                    ['', Paragraph('<para align=center><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal']), '', '', '', ''],
+                    ['', Paragraph('<para align=center><b>Week of:&#160;</b>' + date_change(data.week_start) + '&#160;&#160;to&#160;&#160;' + date_change(data.week_end) + '</para>', styles['Normal']), '', '', '', ''],
                     ['', '', '', '', '', ''],
                     ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                     [Paragraph('<para align=center><b>Sampling Time</b></para>', styles['Normal']), time_change(data.time_0), time_change(data.time_1), time_change(data.time_2), time_change(data.time_3), time_change(data.time_4)],
