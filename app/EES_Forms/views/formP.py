@@ -52,7 +52,6 @@ def formP(request, facility, selector, weekend_day):
             data = database_model
             existing = True
             search = True
-            unlock = False
         elif len(org) > 0:
             database_form = org[0]
             if database_form.date == today:
