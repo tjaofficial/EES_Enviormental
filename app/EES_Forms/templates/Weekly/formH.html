@@ -32,16 +32,14 @@
     <div id="paperSize">    
         <div>
             {% include "ees_forms/backArrow.html" %}
-            {% if selector == 'form' or selector == 'formL'%}
-            {% else %}
-            <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-                <button style='height:25px;'>PRINT</button>
-            </a>
-            {% endif %}
         </div>
         <form action="" method="POST">
             {% csrf_token %}
             <div class="card" id="card_fitter">
+                {% if selector == 'form' or selector == 'formL'%}
+                {% else %}
+                {% include "ees_forms/print_button.html" %}
+                {% endif %}
                 <div class="paper_fitter" style="padding: 3rem;">
                     <div id="ptInfo">
                         <div id="ptInfoInner">
