@@ -276,6 +276,7 @@ class bat_info_model(models.Model):
         choices=batteryMain_choices
     )
     bat_lids = models.IntegerField()
+    formsList = models.CharField(max_length=300)
     
     def __str__(self):
         return self.facility_name
