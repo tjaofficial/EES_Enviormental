@@ -456,6 +456,7 @@
                     <br>
                     {% if todays_log.foreman %}{{ todays_log.crew }}{% else %}N/A{% endif %}
                 </p>
+                {% if weather.city %}
                 <p class="weather_battery_font">
                     <span>
                         City:
@@ -491,6 +492,16 @@
                     <br>
                     {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
                 </p>
+                {% else %}
+                <br>
+                <p class="weather_battery_font">
+                    <span>
+                        Invalid City:
+                    </span>
+                    <br>
+                    {{weather.error}}
+                </p>
+                {% endif %}
                 {% else %}
                 NO FACILITY SELECTED
                 {% endif %}

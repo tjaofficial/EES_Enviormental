@@ -38,6 +38,7 @@ urlpatterns = [
     path("<str:facility>/Sop", views.sop_view, name="Sop"),
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
+    path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
 
 
     path("<str:facility>/Daily/formA1/<str:selector>", views.formA1, name="formA1"),

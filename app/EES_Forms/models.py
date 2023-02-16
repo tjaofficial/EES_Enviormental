@@ -231,8 +231,31 @@ weekend_choices = (
 # -all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
 # Create your models here.
+class company_model(models.Model):
+    company_name = models.CharField(
+        max_length=60
+    )
+    address = models.CharField(
+        max_length=60
+    )
+    city = models.CharField(
+        max_length=20
+    )
+    state = models.CharField(
+        max_length=2
+    )
+    zipcode = models.CharField(
+        max_length=5
+    )
+    phone = models.CharField(
+        max_length=14
+    )
+    
+    def __str__(self):
+        return self.company_name
 
 class bat_info_model(models.Model):
+    company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
     bat_num = models.IntegerField()
     total_ovens = models.IntegerField()
     facility_name = models.CharField(max_length=30)
@@ -426,17 +449,13 @@ class user_profile_model(models.Model):
         null=False,
         blank=False,
     )
-    company = models.CharField(
-        max_length=75,
-        null=True,
-        blank=True,
-    )
     certs = models.CharField(
         max_length=300,
         null=True,
         blank=True,
     )
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.user.username
 
@@ -5556,3 +5575,4 @@ class signature_model(models.Model):
     
     def __str__(self):
         return str(self.sign_date)
+    

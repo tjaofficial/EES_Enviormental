@@ -12,6 +12,7 @@ from .printSelect_view import printSelect
 from .signature_view import signature
 from .landing_view import *
 from .admin_view import *
+from .sup_facility import *
 
 
 from .daily_battery_profile_view import *

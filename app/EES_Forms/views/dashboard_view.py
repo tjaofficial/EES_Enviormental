@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model
+from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model, bat_info_model
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import datetime
@@ -25,6 +25,7 @@ def IncompleteForms(request, facility):
         weekend_fri = weekday_fri + datetime.timedelta(days=7)
         signatures = signature_model.objects.all().order_by('-sign_date')
         sigExisting = False
+        facilityData = bat_info_model.objects.all().filter(facility_name=facility)[0]
 
         if len(signatures) > 0:
             if signatures[0].sign_date == today:
@@ -505,42 +506,47 @@ def IncompleteForms(request, facility):
 
         url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
 
-        city = 'Dearborn'
+        city = facilityData.city
+        try:
+            city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
 
-        city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
+            weather = {
+                'city': city,
+                'temperature': city_weather['main']['temp'],
+                'description': city_weather['weather'][0]['description'],
+                'icon': city_weather['weather'][0]['icon'],
+                'wind_speed': city_weather['wind']['speed'],
+                'wind_direction': city_weather['wind']['deg'],
+                'humidity': city_weather['main']['humidity'],
+            }
 
-        weather = {
-            'city': city,
-            'temperature': city_weather['main']['temp'],
-            'description': city_weather['weather'][0]['description'],
-            'icon': city_weather['weather'][0]['icon'],
-            'wind_speed': city_weather['wind']['speed'],
-            'wind_direction': city_weather['wind']['deg'],
-            'humidity': city_weather['main']['humidity'],
-        }
+            degree = weather['wind_direction']
 
-        degree = weather['wind_direction']
-
-        def toTextualDescription(degree):
-            if degree > 337.5:
+            def toTextualDescription(degree):
+                if degree > 337.5:
+                    return 'N'
+                if degree > 292.5:
+                    return 'NW'
+                if degree > 247.5:
+                    return 'W'
+                if degree > 202.5:
+                    return 'SW'
+                if degree > 157.5:
+                    return 'S'
+                if degree > 122.5:
+                    return 'SE'
+                if degree > 67.5:
+                    return 'E'
+                if degree > 22.5:
+                    return 'NE'
                 return 'N'
-            if degree > 292.5:
-                return 'NW'
-            if degree > 247.5:
-                return 'W'
-            if degree > 202.5:
-                return 'SW'
-            if degree > 157.5:
-                return 'S'
-            if degree > 122.5:
-                return 'SE'
-            if degree > 67.5:
-                return 'E'
-            if degree > 22.5:
-                return 'NE'
-            return 'N'
 
-        wind_direction = toTextualDescription(degree)
+            wind_direction = toTextualDescription(degree)
+        except:
+            weather = {
+                'error': "Please inform Supervisor '" + city + "' is not a valid city.",
+                'city': False
+            }
 
     # ------------------------------------------------------Form Data-------------
         for forms in sub_forms:
@@ -709,7 +715,6 @@ def IncompleteForms(request, facility):
             'todays_num': todays_num, 
             'weekend_list': weekend_list, 
             'weather': weather, 
-            'wind_direction': wind_direction, 
             'saturday': saturday, 
             'sorting_array': sorting_array,
             "form_checkAll2": form_checkAll2,

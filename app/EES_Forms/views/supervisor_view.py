@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, User
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
@@ -242,45 +242,50 @@ def sup_dashboard_view(request, facility):
 
     # ----WEATHER TAB-----------
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
-    try:
+    if facility == 'supervisor':
+        city = False
+    else:
         city = options.filter(facility_name=facility)[0].city
-    except IndexError as e:
-        city = 'Novi'
+        
+    try:
+        city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
+        weather = {
+            'city': city,
+            'temperature': city_weather['main']['temp'],
+            'description': city_weather['weather'][0]['description'],
+            'icon': city_weather['weather'][0]['icon'],
+            'wind_speed': city_weather['wind']['speed'],
+            'wind_direction': city_weather['wind']['deg'],
+            'humidity': city_weather['main']['humidity'],
+        }
 
-    city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
+        degree = weather['wind_direction']
 
-    weather = {
-        'city': city,
-        'temperature': city_weather['main']['temp'],
-        'description': city_weather['weather'][0]['description'],
-        'icon': city_weather['weather'][0]['icon'],
-        'wind_speed': city_weather['wind']['speed'],
-        'wind_direction': city_weather['wind']['deg'],
-        'humidity': city_weather['main']['humidity'],
-    }
-
-    degree = weather['wind_direction']
-
-    def toTextualDescription(degree):
-        if degree > 337.5:
+        def toTextualDescription(degree):
+            if degree > 337.5:
+                return 'N'
+            if degree > 292.5:
+                return 'NW'
+            if degree > 247.5:
+                return 'W'
+            if degree > 202.5:
+                return 'SW'
+            if degree > 157.5:
+                return 'S'
+            if degree > 122.5:
+                return 'SE'
+            if degree > 67.5:
+                return 'E'
+            if degree > 22.5:
+                return 'NE'
             return 'N'
-        if degree > 292.5:
-            return 'NW'
-        if degree > 247.5:
-            return 'W'
-        if degree > 202.5:
-            return 'SW'
-        if degree > 157.5:
-            return 'S'
-        if degree > 122.5:
-            return 'SE'
-        if degree > 67.5:
-            return 'E'
-        if degree > 22.5:
-            return 'NE'
-        return 'N'
 
-    wind_direction = toTextualDescription(degree)
+        wind_direction = toTextualDescription(degree)
+    except:
+        weather = {
+            'error': "'" + city + "' is not valid. Click here to change.",
+            'city': False
+        }
 
 # ----OTHER-----------
 
@@ -397,7 +402,6 @@ def sup_dashboard_view(request, facility):
                 'Users': Users, 
                 'profile': profile, 
                 'weather': weather, 
-                'wind_direction': wind_direction, 
                 'od_recent': od_recent, 
                 'weekly_percent': weekly_percent, 
                 'monthly_percent': monthly_percent, 
@@ -429,7 +433,6 @@ def sup_dashboard_view(request, facility):
         'offtakes': offtakes, 
         'ca_forms': ca_forms, 
         'weather': weather, 
-        'wind_direction': wind_direction, 
         'todays_log': todays_log, 
         'todays_obser': todays_obser, 
         'Users': Users, 
