@@ -9,6 +9,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.contrib.auth.models import Group
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 profile = user_profile_model.objects.all()
@@ -118,6 +119,20 @@ def change_password(request, facility):
 def landingRegister(request):
     userForm = CreateUserForm()
     profileForm = user_profile_form()
+    
+    if request.method == 'POST':
+        new_data = request.POST.copy()
+        new_data['username'] = request.POST['username'].lower()
+        form = CreateUserForm(new_data)
+        if form.is_valid():
+            user = form.save()
+            
+            group = Group.objects.get(name=SUPER_VAR)
+            user.groups.add(group)
+
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            return redirect('sup_dashboard', SUPER_VAR)
     return render(request, 'landing/landing_register.html',{
         'userForm': userForm, 'profileForm': profileForm
     })
