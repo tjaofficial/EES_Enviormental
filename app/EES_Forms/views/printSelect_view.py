@@ -3,22 +3,23 @@ from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from ..models import Forms, bat_info_model
 from django.core.exceptions import FieldError
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 
 @lock
 def printSelect(request, facility):
     options = bat_info_model.objects.all()
+    alertMessage = ''
     unlock = False
     client = False
-    admin = False
-    alertMessage = ''
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     formList = Forms.objects.all().order_by('form')
     selectList = []
     for line in formList:
@@ -64,5 +65,5 @@ def printSelect(request, facility):
             
     
     return render(request, "shared/printSelect.html", {
-        'options': options, 'facility': facility, 'selectList': selectList, 'admin': admin, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
+        'options': options, 'facility': facility, 'selectList': selectList, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
     })

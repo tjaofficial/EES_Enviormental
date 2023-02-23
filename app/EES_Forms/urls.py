@@ -2,15 +2,19 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    
+    
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
-    path("<str:facility>/admin_dashboard", views.admin_dashboard_view, name='admin_dashboard'),
+    path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
 
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
-    path("Login", views.login_view, name="Login"),
+    path("login", views.login_view, name="Login"),
+    path("register", views.landingRegister, name="register"),
     path("no_registration", views.valid_account_logout, name="no_registration"),
-    path("Logout", views.logout_view, name="Logout"),
+    path("logout", views.logout_view, name="Logout"),
     path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
+    path("adminDash", views.adminDash, name="adminDash"),
 
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
@@ -35,6 +39,7 @@ urlpatterns = [
     path("<str:facility>/Sop", views.sop_view, name="Sop"),
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
+    path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
 
 
     path("<str:facility>/Daily/formA1/<str:selector>", views.formA1, name="formA1"),

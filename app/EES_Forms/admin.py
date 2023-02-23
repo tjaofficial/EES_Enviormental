@@ -49,6 +49,7 @@ admin.site.register(sop_model)
 admin.site.register(issues_model)
 admin.site.register(bat_info_model)
 admin.site.register(signature_model)
+admin.site.register(company_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']

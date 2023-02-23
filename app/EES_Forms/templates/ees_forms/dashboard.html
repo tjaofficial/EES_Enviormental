@@ -58,6 +58,7 @@
             </div>
             <div class="card2_Form">
                 <table class="c_client_card_background c_font_color">
+                    {% if weather.city %}
                     <tr>
                         <td id="table_left">
                             City:
@@ -98,6 +99,15 @@
                             {{ weather.humidity|floatformat:"0" }}%
                         </td>
                     </tr>
+                    {% else %}
+                    <p class="weather_battery_font">
+                        <span>
+                            Invalid City:
+                        </span>
+                        <br><br>
+                        {{weather.error}}
+                    </p>
+                    {% endif %}
                 </table>
             </div>
         </div>

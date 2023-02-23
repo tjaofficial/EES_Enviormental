@@ -1,6 +1,7 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
     <link href="{% static 'ees_forms/style/formA2/formA2.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/print_button.css' %}" rel="stylesheet" />
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
@@ -13,24 +14,19 @@
     <div id="paperSize">
         <div>
             {% include "ees_forms/backArrow.html" %}
-            {% if selector == 'form' %}
-            {% else %}
-            <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-                <button style='height:25px;'>PRINT</button>
-            </a>
-            {% endif %}
         </div>
         <div>
             <form action="" method="POST" style="width: fit-content; margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">
+                    {% include "ees_forms/print_button.html" %}
                     <div class="paper_fitter" style="padding: 3rem;">
                         <table style="border-collapse: collapse; margin: auto;">
                             <tr>
                                 <th class="boxTitle" colspan="6" style="text-align: center;">Method 303 Doors - Form (A-2)</th>
                             </tr>
                             <tr>
-                                <th colspan="6" style="text-align: center;">Facility Name: {% if existing %}{{data.facilityChoice.facility_name}}</th>
+                                <th colspan="6" style="text-align: center;">Facility Name: {% if existing %}{{data.facilityChoice.facility_name}}{% endif %}</th>
                             </tr>
                             <tr>
                                 <td style="height: 25px" > </td>
@@ -245,7 +241,7 @@
                                 {{ data.notes }}
                             </div>
                         </section>
-                        {% if admin or client %} {% elif unlock and not search %}
+                        {% if supervisor or client %} {% elif unlock and not search %}
                         <br><br><br>
                         <input type="submit" value="Submit Form" class="submit_button">
                         {% endif %}

@@ -169,9 +169,20 @@ class FormCReadForm(ModelForm):
 
 
 class CreateUserForm(UserCreationForm):
+    password1 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    password2 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+        
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'E-mail'}),
+            'password1': forms.TextInput(attrs={'type': 'password', 'placeholder': 'Password'}),
+            'password2': forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
+            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+        }
 
 
 class daily_battery_profile_form(ModelForm):
@@ -196,7 +207,8 @@ class user_profile_form(forms.ModelForm):
             'phone',
             'position',
             'company',
-            'certs'
+            'certs',
+            'facilityChoice'
         )
         exclude = ['user']
 
@@ -498,17 +510,8 @@ class formA4_form(ModelForm):
             'main_3': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'main_4': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'suction_main': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'oven_leak_1': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'time_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'date_temp_seal_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'time_temp_seal_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'temp_seal_by_leak_1': forms.TextInput(attrs={'type': 'text', 'style': 'width:150px;'}),
-            'date_init_repair_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'time_init_repair_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'date_comp_repair_leak_1': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'time_comp_repair_leak_1': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 120px;'}),
-            'comp_by_leak_1': forms.TextInput(attrs={'type': 'text', 'style': 'width:150px;'}),
-            'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
+            'notes': forms.Textarea(attrs={'rows': 7, 'cols': 125}),
+            'leak_data': forms.TextInput(attrs={'id': "collection", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
         }
 
 
@@ -1383,15 +1386,15 @@ class formG2_form(ModelForm):
             'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
-            'wind_speed_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
-            'ambient_temp_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'humidity': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
-            'sky_conditions': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
+            'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
             'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),

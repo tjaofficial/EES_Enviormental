@@ -1,14 +1,16 @@
-{% extends "admin/admin_layout.html" %}
+{% extends "supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
 <body>
-    {% if access_page == 'form' %}
+    <input id='access_page' type='hidden' value={{access_page}} />
+    {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
     <div id='card'>
         <div class='tabContainer'>
             <div id='tab1' class='tabs topLeftCont start'>Observer/Supervisor</div>
-            <div id='tab2' class='tabs topRightCont'>Client</div>
+            <div id='tab2' class='tabs middleCont'>Facility</div>
+            <div id='tab3' class='tabs topRightCont'>Client</div>
         </div>
         <div id="login" class='dataCont' style='display: block;'>
             <h1>Register New Observer/Supervisor</h1>
@@ -21,13 +23,17 @@
                 {% endfor %}
                 {{ profile_form.phone.label }}:
                 {{ profile_form.phone }}<br><br>
-                Work {{ profile_form.position.label }}:
-                {{ profile_form.position }}<br><br>
+                Work Position:
+                <select name="position" oninput="cert_date1()" style="width: 160px;" required id="id_position">
+                    <option value="" selected="">---------</option>
+                    <option value="observer">Observer</option>
+                    <option value="supervisor">Supervisor</option>
+                </select><br><br>
                 <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
                 {{ profile_form.cert_date }}
                 <br><br></div>
-                <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facility_name.label }}:
-                {{ profile_form.facility_name }}
+                <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice.label }}:
+                {{ profile_form.facilityChoice }}
                 <br><br></div>
                 <input type="submit" name="create_user">
             </form>
@@ -36,8 +42,8 @@
                 <p>{{message}}</p>
             {% endfor%}
         </div>
-        <div id="newClient" class='dataCont' style='display: none;'>
-            <center><h1>Register New Client</h1></center>
+        <div id="newFacility" class='dataCont' style='display: none;'>
+            <center><h1>Register New Facility</h1></center>
             </br>
             <form method="POST" action="">
                 {% csrf_token %}
@@ -151,8 +157,62 @@
                             {{data.bat_lids}}
                         </td>
                     </tr>
+                    <tr>
+                        <th class='label'>
+                            Inspections:
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class='label'>
+                            
+                        </th><br>
+                        <td class='answer'>
+                            <input type="checkbox" name="choice1" value="Method 303">
+                            <label for="choice1"> Method 303</label><br>
+                            <input type="checkbox" name="choice2" value="Method 9">
+                            <label for="choice2"> Method 9</label><br>
+                            <input type="checkbox" name="choice3" value="Method 9B">
+                            <label for="choice3"> Method 9B</label><br><br>
+                        </td>
+                    </tr>
                 </table><br>
-                <center><input type="submit" name="create_client"></center>
+                <center><input type="submit" name="create_facility"></center>
+            </form>
+
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor%}
+        </div>
+        <div id="newClient" class='dataCont' style='display: none;'>
+            <h1>Register New Client</h1>
+            </br>
+            <form method="POST" action="">
+                {% csrf_token %}
+                Username:
+                <input type="text" name="username" placeholder="Username" maxlength="150" autofocus="" required="" id="id_2_username"><br><br>
+                Email address:
+                <input type="email" name="email" placeholder="E-mail" maxlength="254" id="id_2_email"><br><br>
+                Password1:
+                <input type="password" name="password1" placeholder="Password" maxlength="16" required="" id="id_2_password1"><br><br>
+                Password2:
+                <input type="password" name="password2" placeholder="Confirm Password" maxlength="16" required="" id="id_2_password2"><br><br>
+                First name:
+                <input type="text" name="first_name" placeholder="First Name" maxlength="150" id="id_2_first_name"><br><br>
+                Last name:
+                <input type="text" name="last_name" placeholder="Last Name" maxlength="150" id="id_2_last_name"><br><br>
+                Phone:
+                <input type="text" name="phone" style="width: 150px;" placeholder="(123)456-7890" maxlength="75" required="" id="id_2_phone"><br><br>
+                Work Position: Client
+                <br><br>
+                Choose Facility:
+                <select name="facilityChoice" id="id_2_facilityChoice" required>
+                    <option value="" selected="">---------</option>
+                    {% for place in data2 %}
+                    <option value="{{place.id}}">{{place.facility_name}}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <input type="submit" name="create_client">
             </form>
 
             {% for message in messages %}

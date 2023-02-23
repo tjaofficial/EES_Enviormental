@@ -1,0 +1,44 @@
+.mainAppCont{
+    margin: 0px 13px 13px 13px;
+}
+.appCont{
+    width: 21rem;
+    margin: auto;
+    height: 20rem;
+    text-decoration: none;
+    padding: 53px 37px;
+}
+.appHeader{
+    margin-bottom: 1rem;
+    color: #6c6c6c;
+}
+.appIcon{
+    margin: auto;
+    width: 10rem;
+}
+.icon{
+    fill: #787878;
+}
+.appRow{
+    display: flex;
+}
+.mainAppCont {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 88px 10px;
+    column-gap: 50px;
+    row-gap: 50px;
+  }
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    font-size: 30px;
+    text-align: center;
+    border-radius: 48px;
+  }
+
+.addOns{
+    background-image: linear-gradient(#d2e9ff 16%, white);
+    box-shadow: dimgrey 0px 0px 20px -5px;
+    border: none;
+}

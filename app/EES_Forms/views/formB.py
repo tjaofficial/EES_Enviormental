@@ -5,6 +5,7 @@ from ..models import user_profile_model, daily_battery_profile_model, formB_mode
 from ..forms import Forms, formB_form
 import requests
 import json
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -17,13 +18,13 @@ def formB(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
@@ -213,5 +214,5 @@ def formB(request, facility, selector):
 
         return redirect(batt_prof)
     return render(request, "Daily/formB.html", {
-        'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'admin': admin, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
+        'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
     })

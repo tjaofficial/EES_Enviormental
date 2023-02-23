@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA4_model, bat_info_model
 from ..forms import formA4_form
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+import json
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,14 +15,14 @@ def formA4(request, facility, selector):
     existing = False
     unlock = False
     client = False
-    admin = False
     search = False
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser:
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -56,6 +58,11 @@ def formA4(request, facility, selector):
                 return redirect(batt_prof)
         if search:
             database_form = ''
+            collect_Raw_JSON = json.loads(data.leak_data)
+            if len(collect_Raw_JSON) > 0:
+                collect_json = collect_Raw_JSON['data']
+            else:
+                collect_json = ''
         else:
             if existing:
                 initial_data = {
@@ -70,17 +77,8 @@ def formA4(request, facility, selector):
                     'main_3': database_form.main_3,
                     'main_4': database_form.main_4,
                     'suction_main': database_form.suction_main,
-                    'oven_leak_1': database_form.oven_leak_1,
-                    'time_leak_1': database_form.time_leak_1,
-                    'date_temp_seal_leak_1': database_form.date_temp_seal_leak_1,
-                    'time_temp_seal_leak_1': database_form.time_temp_seal_leak_1,
-                    'temp_seal_by_leak_1': database_form.temp_seal_by_leak_1,
-                    'date_init_repair_leak_1': database_form.date_init_repair_leak_1,
-                    'time_init_repair_leak_1': database_form.time_init_repair_leak_1,
-                    'date_comp_repair_leak_1': database_form.date_comp_repair_leak_1,
-                    'time_comp_repair_leak_1': database_form.time_comp_repair_leak_1,
-                    'comp_by_leak_1': database_form.comp_by_leak_1,
                     'notes': database_form.notes,
+                    'leak_data': database_form.leak_data,
                 }
             else:
                 initial_data = {
@@ -92,6 +90,7 @@ def formA4(request, facility, selector):
                 }
 
             data = formA4_form(initial=initial_data)
+            collect_json = ''
             
         if request.method == "POST":
             if existing:
@@ -103,15 +102,21 @@ def formA4(request, facility, selector):
             if form.is_valid():
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
+                
+                if A.leak_data == '{"data":[]}':
+                    A.leak_data = "{}"
+                    
                 A.save()
-                if A.notes.lower() != 'no ve' or A.oven_leak_1:
+                if A.notes.lower() != 'no ve' or A.leak_data != "{}":
                     finder = issues_model.objects.filter(date=A.date, form='A-4')
                     if finder:
                         issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/issue'
                     else:
                         issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-                    
+                
                     return redirect(issue_page)
+                elif issues_model.objects.filter(date=A.date, form='A-4'):
+                    issues_model.objects.filter(date=A.date, form='A-4')[0].delete()
                 
                 done = Forms.objects.filter(form='A-4')[0]
                 done.submitted = True
@@ -125,5 +130,5 @@ def formA4(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA4.html", {
-        'options': options, "search": search, 'existing': existing, "client": client, "admin": admin, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
+        'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
     })

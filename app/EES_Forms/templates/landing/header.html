@@ -1,0 +1,55 @@
+<style>
+    .mainCont{
+        background-color: #2e3e41;
+        width: 900px;
+        height: 4rem;
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+        box-shadow: -2px 5px 20px -13px #000000bd;
+        position: fixed;
+        left: 50%;
+        margin-left: -450px;
+        border-bottom: solid #192324 2px;
+        border-left: solid #192324 1px;
+        border-right: solid #192324 1px;
+        display: flex;
+        z-index: 1;
+    }
+    .navBar{
+        display: flex;
+        align-items: center;
+    }
+    #logoBrand{
+        color: white;
+        margin: auto;
+        font-size: 30px;
+        font-family: cursive;
+    }
+    .navTab{
+        padding-right: 48px;
+        color: white;
+        text-shadow: -1px 1px 1px #222222;
+        font-family: sans-serif;
+        font-size: 13px;
+    }
+    .push {
+        margin-left: auto;
+        padding-right: 20px;
+    }
+    .login{
+        background-color: #4b78ad;
+        padding: 10px 20px;
+        border-radius: 7px;
+        text-shadow: none;
+    }
+</style>
+<div class='mainCont'>
+    <div id='logoBrand' style='width: 18rem;'>MethodPlus+</div>
+    <div class='navBar push'>
+        <a style='text-decoration: none;' href="{% url 'landing' %}"><div class='navTab'>HOME</div></a>
+        <div class='navTab'>FEATURES</div>
+        <div class='navTab'>CONTACT</div>
+        <div class='navTab'>PRICING</div>
+        <a style='text-decoration: none;' href="{% url 'Login' %}"><div class='navTab login'>LOGIN</div></a>
+    </div>
+</div>

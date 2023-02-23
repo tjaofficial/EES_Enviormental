@@ -1,7 +1,6 @@
 {% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
 <link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
-<script defer src="{% static 'ees_forms/script/bat_info.js' %}"></script>
 
 <body>
     <div class="forms">
@@ -15,7 +14,8 @@
                 Foreman: {{ form.foreman }}<br>
                 Crew: {{ form.crew }}<br><br>
                 Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br>
-                <p style='font-size: .7rem;'>* separate each oven with a comma *</p><br>
+                <p style='font-size: .7rem;'>* separate each oven with a comma *</p>
+                <p style='font-size: .7rem;'>* if there are NO inoperable ovens please type '-' *</p><br>
 
                 <input type="submit" name="submit_bat_info">
             </form>

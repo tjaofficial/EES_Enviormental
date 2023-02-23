@@ -1,0 +1,33 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<div style='margin:auto; width:44%;max-width:775px;'>
+    <div class="card" style=''>
+        <div class="cardHeader">Facilities</div>
+        <div class="contact_list_cont">
+            {% comment %} <p></p>
+            <p class="contactHeader">Facility Name</p>
+            <p class="contactHeader center">Forms</p>
+            <p class="contactHeader center">EXTRA</p> {% endcomment %}
+            <table style='margin:auto;width:100%;'>
+                <tr>
+                    <th style="width: 30%;">Company</th>
+                    <th style="width: 30%;">Forms</th>
+                    <th style="width: 40%;">EXTRAs</th>
+                </tr>
+                {% for facilityData in facilities %}
+                    <tr>
+                        <td>{{facilityData.facility_name}}</td>
+                        <td>*form they need*</td>
+                        <td>Edit</td>
+                    </tr>
+                    {% for form in formsList %}
+                        <tr>
+                            <td>{{form.0}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

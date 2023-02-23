@@ -3,11 +3,13 @@ from django.http import HttpResponseNotFound
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model
+from ..models import user_profile_model, daily_battery_profile_model, bat_info_model
+from ..forms import CreateUserForm, user_profile_form
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 profile = user_profile_model.objects.all()
 
@@ -22,12 +24,12 @@ def login_view(request):
     login_error = {"error":False, "message":''}
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            return redirect('admin_dashboard', 'admin')
-        elif request.user.groups.filter(name='SGI Admin'):
-            return redirect('admin_dashboard', 'admin')
-        elif request.user.groups.filter(name='EES Coke Employees'):
+            return redirect('adminDash')
+        elif request.user.groups.filter(name=SUPER_VAR):
+            return redirect('sup_dashboard', SUPER_VAR)
+        elif request.user.groups.filter(name=CLIENT_VAR):
             return redirect('c_dashboard')
-        elif request.user.groups.filter(name='SGI Technician'):
+        elif request.user.groups.filter(name=OBSER_VAR):
             if count_bp != 0:
                 todays_log = daily_prof[0]
                 if now.month == todays_log.date_save.month:
@@ -50,12 +52,15 @@ def login_view(request):
         if user is not None:
             login(request, user)
             if request.user.is_superuser:
-                return redirect('admin_dashboard', 'admin')
-            elif request.user.groups.filter(name='SGI Admin'):
-                return redirect('admin_dashboard', 'admin')
-            elif request.user.groups.filter(name='EES Coke Employees'):
+                return redirect('adminDash')
+            elif request.user.groups.filter(name=SUPER_VAR):
+                if len(bat_info_model.objects.all()) > 0:
+                    return redirect('sup_dashboard', SUPER_VAR)
+                else:
+                    return redirect('Register', SUPER_VAR, 'facility')
+            elif request.user.groups.filter(name=CLIENT_VAR):
                 return redirect('c_dashboard')
-            elif request.user.groups.filter(name='SGI Technician'):
+            elif request.user.groups.filter(name=OBSER_VAR):
                 return redirect('facilitySelect')
                 # if count_bp != 0:
                 #     todays_log = daily_prof[0]
@@ -108,4 +113,11 @@ def change_password(request, facility):
         form = PasswordChangeForm(request.user)
     return render(request, 'ees_forms/ees_password.html', {
         'form': form, 'facility': facility
+    })
+
+def landingRegister(request):
+    userForm = CreateUserForm()
+    profileForm = user_profile_form()
+    return render(request, 'landing/landing_register.html',{
+        'userForm': userForm, 'profileForm': profileForm
     })

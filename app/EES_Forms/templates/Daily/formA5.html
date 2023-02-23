@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
 {% include "ees_forms/drawing_modal.html" %}
     <style>
@@ -31,16 +31,11 @@
     <div id="paperSize">    
         <div>
             {% include "ees_forms/backArrow.html" %}
-            {% if selector == 'form' %}
-            {% else %}
-            <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-                <button style='height:25px;'>PRINT</button>
-            </a>
-            {% endif %}
         </div>
         <form action="" method="POST" style="margin-bottom: 100px;">
             {% csrf_token %}
             <div class="card" id="card_fitter">
+                {% include "ees_forms/print_button.html" %}
                 <div class="paper_fitter" style="padding: 3rem;">
                     <div id="ptInfo">
                         <div id="ptInfoInner">
@@ -690,7 +685,7 @@
                             </a>
                             Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
                         </span>
-                        {% if admin or client %} {% elif unlock and not search %}
+                        {% if supervisor or client %} {% elif unlock and not search %}
                         <br><br><br>
                         <input type="submit" value="Submit Form" class="submit_button" />
                         {% endif %}

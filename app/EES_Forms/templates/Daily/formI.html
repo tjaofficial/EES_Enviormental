@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/style/formI.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
@@ -10,16 +10,11 @@
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div>
         {% include "ees_forms/backArrow.html" %}
-        {% if selector == 'form' %}
-        {% else %}
-        <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-            <button style='height:25px;'>PRINT</button>
-        </a>
-        {% endif %}
     </div>
     <form action="" method="POST" style="width: fit-content; margin: auto;">
         {% csrf_token %}
         <div class="card" id="card_fitter">
+            {% include "ees_forms/print_button.html" %}
             <div class="paper_fitter">
                 <table style="border-collapse: collapse; margin: auto;">
                 <tr>
@@ -145,7 +140,7 @@
                             </tr>
                             <tr>
                                 <td colspan="6" style="text-align: right;">
-                                    {% if admin or client or search%}
+                                    {% if supervisor or client or search%}
                                     {% elif filled_in == True %}
                                         <a href="../../Daily/formI/edit">
                                             Edit
@@ -170,7 +165,7 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if admin or client %}
+                {% if supervisor or client %}
                 {% elif unlock and not search or submit or partial %}
                 <br><br><br>
                 <input type="submit" value="Submit Form" class="submit_button">

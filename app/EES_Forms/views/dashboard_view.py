@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model
+from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model, bat_info_model
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 import datetime
 import requests
 import calendar
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 
 
 @lock
 def IncompleteForms(request, facility):
-    if request.user.groups.filter(name='SGI Technician') or request.user.is_superuser or request.user.groups.filter(name='SGI Quality Control'):
+    if request.user.groups.filter(name=OBSER_VAR) or request.user.is_superuser:
         profile = user_profile_model.objects.all()
         today = datetime.date.today()
         todays_num = today.weekday()
@@ -24,10 +25,8 @@ def IncompleteForms(request, facility):
         weekend_fri = weekday_fri + datetime.timedelta(days=7)
         signatures = signature_model.objects.all().order_by('-sign_date')
         sigExisting = False
+        facilityData = bat_info_model.objects.all().filter(facility_name=facility)[0]
 
-        print(signatures[0].sign_date)
-        print(today)
-            
         if len(signatures) > 0:
             if signatures[0].sign_date == today:
                 sigExisting = True
@@ -507,42 +506,47 @@ def IncompleteForms(request, facility):
 
         url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
 
-        city = 'Dearborn'
+        city = facilityData.city
+        try:
+            city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
 
-        city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
+            weather = {
+                'city': city,
+                'temperature': city_weather['main']['temp'],
+                'description': city_weather['weather'][0]['description'],
+                'icon': city_weather['weather'][0]['icon'],
+                'wind_speed': city_weather['wind']['speed'],
+                'wind_direction': city_weather['wind']['deg'],
+                'humidity': city_weather['main']['humidity'],
+            }
 
-        weather = {
-            'city': city,
-            'temperature': city_weather['main']['temp'],
-            'description': city_weather['weather'][0]['description'],
-            'icon': city_weather['weather'][0]['icon'],
-            'wind_speed': city_weather['wind']['speed'],
-            'wind_direction': city_weather['wind']['deg'],
-            'humidity': city_weather['main']['humidity'],
-        }
+            degree = weather['wind_direction']
 
-        degree = weather['wind_direction']
-
-        def toTextualDescription(degree):
-            if degree > 337.5:
+            def toTextualDescription(degree):
+                if degree > 337.5:
+                    return 'N'
+                if degree > 292.5:
+                    return 'NW'
+                if degree > 247.5:
+                    return 'W'
+                if degree > 202.5:
+                    return 'SW'
+                if degree > 157.5:
+                    return 'S'
+                if degree > 122.5:
+                    return 'SE'
+                if degree > 67.5:
+                    return 'E'
+                if degree > 22.5:
+                    return 'NE'
                 return 'N'
-            if degree > 292.5:
-                return 'NW'
-            if degree > 247.5:
-                return 'W'
-            if degree > 202.5:
-                return 'SW'
-            if degree > 157.5:
-                return 'S'
-            if degree > 122.5:
-                return 'SE'
-            if degree > 67.5:
-                return 'E'
-            if degree > 22.5:
-                return 'NE'
-            return 'N'
 
-        wind_direction = toTextualDescription(degree)
+            wind_direction = toTextualDescription(degree)
+        except:
+            weather = {
+                'error': "Please inform Supervisor '" + city + "' is not a valid city.",
+                'city': False
+            }
 
     # ------------------------------------------------------Form Data-------------
         for forms in sub_forms:
@@ -623,7 +627,23 @@ def IncompleteForms(request, facility):
         for forms in all_forms:
             if (forms.day_freq in {'Everyday', todays_num}) or (todays_num in {5, 6} and forms.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and forms.day_freq == 'Weekdays'):
                 if forms.submitted == False:
-                    all_incomplete_forms.append(forms)
+                    if forms.form[0] == 'G':
+                        if len(all_forms.filter(form='G-2')) > 0:
+                            g2_form = all_forms.filter(form='G-2')[0]
+                            if g2_form.submitted == False:
+                                all_incomplete_forms.append(forms)
+                            else:
+                                start_day = weekday_fri - datetime.timedelta(days=6)
+                                if forms.form[2] == '1':
+                                    if start_day <= g2_form.date_submitted <= weekday_fri:
+                                        continue
+                                    else:
+                                        all_incomplete_forms.append(forms)
+                                elif forms.form[2] == '2':
+                                    if len(formG2_model.objects.all().filter(date__month=today.month)) == 0:
+                                        all_incomplete_forms.append(forms)
+                    else:
+                        all_incomplete_forms.append(forms)
                     if forms.frequency == 'Daily':
                         daily_incomplete_forms.append(forms)
                     elif forms.frequency == 'Weekly':
@@ -695,14 +715,13 @@ def IncompleteForms(request, facility):
             'todays_num': todays_num, 
             'weekend_list': weekend_list, 
             'weather': weather, 
-            'wind_direction': wind_direction, 
             'saturday': saturday, 
             'sorting_array': sorting_array,
             "form_checkAll2": form_checkAll2,
             'sigExisting': sigExisting,
             'facility': facility,
         })
-    elif request.user.groups.filter(name='SGI Admin'):
-        return redirect('admin_dashboard')
-    elif request.user.groups.filter(name='EES Coke Employees'):
+    elif request.user.groups.filter(name=SUPER_VAR):
+        return redirect('sup_dashboard', facility)
+    elif request.user.groups.filter(name=CLIENT_VAR):
         return redirect('c_dashboard')

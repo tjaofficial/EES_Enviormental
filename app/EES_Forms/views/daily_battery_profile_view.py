@@ -48,7 +48,10 @@ def daily_battery_profile_view(request, facility, access_page, date):
         
         if form.is_valid():
             A = form.save(commit=False)
-            A.inop_ovens = len(request.POST['inop_numbs'].replace(' ', ''). split(','))
+            if A.inop_numbs == '-':
+                A.inop_ovens = 0
+            else:
+                A.inop_ovens = len(request.POST['inop_numbs'].replace(' ', ''). split(','))
             A.save()
             return redirect('IncompleteForms', facility)
 

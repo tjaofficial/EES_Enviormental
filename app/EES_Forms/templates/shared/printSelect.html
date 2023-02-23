@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
@@ -9,7 +9,7 @@
     </div>
     <center>
         <div class="card" style="min-width: 400px; min-height: 500px;">
-            {% if facility == 'admin' %}
+            {% if facility == 'supervisor' %}
             <p>Please Select a Facility First</p>
             {% else %}
             <form action="" method="POST" style="padding: 2rem; ">

@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from EES_Forms import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ees_forms/', include("EES_Forms.urls"))
+    path('ees_forms/', include("EES_Forms.urls")),
+    path("", views.landing_page, name="landing"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

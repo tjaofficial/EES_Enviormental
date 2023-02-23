@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formI_model, bat_info_model
 from ..forms import formI_form
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -14,21 +15,21 @@ def formI(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
-    last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
-    one_week = datetime.timedelta(days=6)
-    end_week = last_saturday + one_week
+    last_monday = today - datetime.timedelta(days=today.weekday())
+    one_week = datetime.timedelta(days=4)
+    end_week = last_monday + one_week
     today_number = today.weekday()
     week_start_dates = formI_model.objects.all().order_by('-week_start')
     opened = True
@@ -58,7 +59,7 @@ def formI(request, facility, selector):
             home = []
 
             for x in formI_model.objects.all():
-                if x.week_start == last_saturday:
+                if x.week_start == last_monday:
                     home.append((x.time_4, 4))
                     home.append((x.time_3, 3))
                     home.append((x.time_2, 2))
@@ -77,15 +78,15 @@ def formI(request, facility, selector):
                 # --------FORM------------FORM----------FORM-------------
                 if selector == 'form':
                     print(week)
-                    print(last_saturday)
-                    if week == last_saturday:
+                    print(last_monday)
+                    if week == last_monday:
                         if filled_in or partial_form:
                             data = database_model
                             submit = False
                             existing = True
                 # --------EDIT------------EDIT----------EDIT-------------
                 elif selector == 'edit':
-                    if week == last_saturday:
+                    if week == last_monday:
                         filled_in = False
                         existing = True
             elif today_number == 5:
@@ -130,7 +131,7 @@ def formI(request, facility, selector):
                 data = formI_form(initial=initial_data)
         else:
             initial_data = {
-                'week_start': last_saturday,
+                'week_start': last_monday,
                 'week_end': end_week
             }
             data = formI_form(initial=initial_data)
@@ -150,7 +151,7 @@ def formI(request, facility, selector):
 
                 B = []
                 for x in formI_model.objects.all():
-                    if x.week_start == last_saturday:
+                    if x.week_start == last_monday:
                         B.append((4, x.time_4, x.obser_4))
                         B.append((3, x.time_3, x.obser_3))
                         B.append((2, x.time_2, x.obser_2))
@@ -177,5 +178,5 @@ def formI(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formI.html", {
-        'facility': facility, "search": search, 'admin': admin, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
+        'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })

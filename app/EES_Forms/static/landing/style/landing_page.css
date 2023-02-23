@@ -1,0 +1,100 @@
+.topSection{
+    padding: 2rem 17rem;
+    /* max-height: 28rem; */
+    height: 27rem;
+}
+/* #cover1{
+    display:flex;
+}
+#cover2{
+    display:flex;
+}
+#cover3{
+    display:flex;
+} */
+.coverMedia{
+    width: 145rem;
+}
+.coverTitle{
+    color: white;
+    font-size: 3rem;
+    font-family: sans-serif;
+    font-weight: 100;
+    padding-top: 7rem;
+}
+.coverBody{
+    padding-top: 41px;
+    font-family: sans-serif;
+    text-align: justify;
+    font-weight: 400;
+    color: #334143;
+    height: 7rem;
+}
+.unselectedDot{
+    position: relative;
+    background-color: #c1d5da;
+    height: 20px;
+    width: 20px;
+    margin-right: 7px;
+    border-radius: 20px;
+}
+.selectedDot{
+    position: relative;
+    background-color: #29333691;
+    height: 20px;
+    width: 20px;
+    margin-right: 7px;
+    border-radius: 20px;
+}
+.dotHolder{
+    display: flex;
+    width: 5%;
+    margin: auto;
+}
+.perkCont{
+    width: 15rem;
+    margin: 0px auto;
+}
+.perkHeader{
+    font-size: 22px;
+    font-weight: bolder;
+}
+.perkPara{
+    font-size: 13px;
+    font-weight: 100;
+}
+.categ1{
+    font-weight: bolder;
+    font-size: 29px;
+    padding: 6rem 0px 0px 0px;
+}
+.icons{
+    width:105px;
+    margin: 2rem 0px;
+}
+.button{
+    background-color: #fff024;
+    margin: auto;
+    width: 13rem;
+    padding: 20px 0px;
+    font-size: 15px;
+    color: #b07000;
+    border-radius: 6px;
+    border: #e98400a8 solid 1px;
+    box-shadow: inset #e99c00 0px 0px 20px 0px;
+    text-shadow: -1px 1px 1px white;
+}
+.buttonShadow{
+    margin: auto;
+    width: 210px;
+    border-radius: 6px;
+    box-shadow: #0000006b 1px 2px 3px 0px;
+    position: relative;
+    left: 50%;
+    margin-left: -105px;
+    top: 36px;
+}
+.sectionA{
+    box-shadow: #0000004f -1px 19px 14px -20px;
+    background-color: white;
+}

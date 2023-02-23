@@ -1,0 +1,12 @@
+{% load static %}
+<html>
+    <head>
+        <link href="{% static 'landing/style/landing_layout.css' %}" rel="stylesheet">
+    </head>
+    
+    <body class='landBody'>
+        {% include "landing/header.html" %}
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
     <style>
         #boxc1{
@@ -37,20 +37,16 @@
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div>
         {% include "ees_forms/backArrow.html" %}
-        {% if selector == 'form' %}
-        {% else %}
-            <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-                <button style='height:25px;'>PRINT</button>
-            </a>
-        {% endif %}
-</div>
+    </div>
     
     <form action="" method=POST>
         {% csrf_token %}
         <div class="card" id="card_fitter">
+            {% include "ees_forms/print_button.html" %}
             <div class="paper_fitter">
                 <div style="width:100%; text-align: right;">
-                    <a href="../../Monthly/formN/form">
+                    
+                    <a href={% if search %}"../../Monthly/formN/{{THEmonth}}"{% elif unlock and not search %}"../../Monthly/formN/form"{% endif %}>
                         Form N - List
                     </a>
                 </div>
@@ -115,7 +111,12 @@
                     </tr> 
                     <tr>
                         <td colspan="5" class="formM_box1">
-                            PAVED: {{ form.paved }}&nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
+                            PAVED:  {% for pair in paved_roads %}
+                                        {% if pair.0 == form.paved %}
+                                            {{ pair.1 }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    &nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
                             <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
                         </td>
                     </tr>
@@ -182,7 +183,12 @@
                     </tr> 
                     <tr>
                         <td colspan="5" class="formM_box1">
-                            UNPAVED: {{ form.unpaved }} &nbsp; &nbsp; &nbsp; &nbsp;
+                            UNPAVED: {% for pair in unpaved_roads %}
+                                        {% if pair.0 == form.unpaved %}
+                                            {{ pair.1 }}
+                                        {% endif %}
+                                    {% endfor %} 
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
                             <span class="unp_popup_class" id="unp_timePopup">Please Change Time</span>
                         </td>
@@ -254,7 +260,12 @@
                     </tr> 
                     <tr>
                         <td colspan="5" class="formM_box1">
-                            PARKING LOT: {{ form.parking }} &nbsp; &nbsp; &nbsp; &nbsp;
+                            PARKING LOT: {% for pair in parking_lots %}
+                                            {% if pair.0 == form.parking %}
+                                                {{ pair.1 }}
+                                            {% endif %}
+                                        {% endfor %} 
+                                        &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
                             <span class="par_popup_class" id="par_timePopup">Please Change Time</span>
                         </td>
@@ -359,7 +370,7 @@
                         </td>
                     </tr>
                 </table>
-                {% if admin or client %}{% elif unlock and not search %}
+                {% if supervisor or client %}{% elif unlock and not search %}
                 <br><br><br>
                 <input type="submit" value="Submit Form" class="submit_button" />
                 {% endif %}

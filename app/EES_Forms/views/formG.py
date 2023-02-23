@@ -5,6 +5,7 @@ from ..models import Forms, formG1_model, formG1_readings_model, formG2_model, u
 from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readings_form, user_profile_form
 import requests
 import json
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -17,13 +18,13 @@ def formG1(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -208,12 +209,12 @@ def formG1(request, facility, selector):
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'estab': "EES COKE BATTERY",
-                    'county': "Wayne",
-                    'estab_no': "P0408",
-                    'equip_loc': "Zug Island",
-                    'district': "Detroit",
-                    'city': "River Rouge",
+                    'estab': options.facility_name,
+                    'county': options.county,
+                    'estab_no': options.estab_num,
+                    'equip_loc': options.equip_location,
+                    'district': options.district,
+                    'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "-",
@@ -285,7 +286,7 @@ def formG1(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formG1.html", {
-        'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
     })
 
 
@@ -296,17 +297,17 @@ def formG2(request, facility, selector):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formG2_model.objects.all().order_by('-date')
     org2 = formG2_readings_model.objects.all().order_by('-form')
     
@@ -485,12 +486,12 @@ def formG2(request, facility, selector):
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'estab': "EES COKE BATTERY",
-                    'county': "Wayne",
-                    'estab_no': "P0408",
-                    'equip_loc': "Zug Island",
-                    'district': "Detroit",
-                    'city': "River Rouge",
+                    'estab': options.facility_name,
+                    'county': options.county,
+                    'estab_no': options.estab_num,
+                    'equip_loc': options.equip_location,
+                    'district': options.district,
+                    'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
                     'process_equip1': "-",
@@ -561,5 +562,5 @@ def formG2(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formG2.html", {
-        "exist_canvas": exist_canvas, 'weather': weather2, "admin": admin, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
+        "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

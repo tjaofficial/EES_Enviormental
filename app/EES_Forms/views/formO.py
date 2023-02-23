@@ -4,6 +4,7 @@ import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model, bat_info_model
 from ..forms import formO_form
 import calendar
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -16,13 +17,13 @@ def formO(request, facility, selector, weekend_day):
     unlock = False
     client = False
     search = False
-    admin = False
-    if request.user.groups.filter(name='SGI Technician'):
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
-    if request.user.groups.filter(name='EES Coke Employees'):
+    if request.user.groups.filter(name=CLIENT_VAR):
         client = True
-    if request.user.groups.filter(name='SGI Admin') or request.user.is_superuser:
-        admin = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
@@ -51,7 +52,6 @@ def formO(request, facility, selector, weekend_day):
             data = database_model
             existing = True
             search = True
-            unlock = False
         elif len(org) > 0:
             database_form = org[0]
             if database_form.date == today:
@@ -117,5 +117,5 @@ def formO(request, facility, selector, weekend_day):
 
         return redirect(batt_prof)
     return render(request, "Weekly/formO.html", {
-        'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'admin': admin, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
+        'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

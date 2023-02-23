@@ -1,8 +1,8 @@
-from .login_logout_view import login_view, logout_view, profile_redirect, change_password, valid_account_logout
+from .login_logout_view import login_view, logout_view, profile_redirect, change_password, valid_account_logout, landingRegister
 from .header_view import about_view, safety_view, settings_view
 from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view
 from .dashboard_view import IncompleteForms
-from .admin_view import admin_dashboard_view, register_view
+from .supervisor_view import sup_dashboard_view, register_view
 from .data_view import pt_admin1_view, pt_mth_input
 from .crud_sop_view import delete_sop_view, update_sop_view
 from .client_view import client_dashboard_view
@@ -11,6 +11,9 @@ from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 from .signature_view import signature
 from .billing import billing
+from .landing_view import *
+from .admin_view import *
+from .sup_facility import *
 
 
 from .daily_battery_profile_view import *

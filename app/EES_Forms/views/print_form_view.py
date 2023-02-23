@@ -1,6 +1,5 @@
 from ..models import Forms
-from django.conf import settings
-from django.shortcuts import HttpResponse, redirect
+from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from django.core.exceptions import FieldError
@@ -30,9 +29,7 @@ def date_change(date):
     return parsed
 
 def time_change(time):
-    print(time)
-    print(str(time))
-    if str(time) not in {'None', '', 'No'}:
+    if time:
         hourNum = int(str(time)[0:2])
         minNum = str(time)[3:5]
         timeLabel = 'AM'
@@ -50,6 +47,9 @@ def time_change(time):
         else:
             newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
         return newTime
+    else:
+        print('hello')
+        return '-'
 
 def road_choices(input):
     paved_roads = {
@@ -173,7 +173,6 @@ def form_PDF(request, facility, formDate, formName):
         formList = []
         for allForms in Forms.objects.all():
             formList.append(str(allForms).replace('-',''))
-        print(formList)
     elif formName == 'monthly':
         formList = ['G2', 'Spill Kits']
     elif formName == 'tanks':
@@ -184,6 +183,7 @@ def form_PDF(request, facility, formDate, formName):
     elems = []
     for item in formList:
         if item in ('N') or item[0] == 'F':
+            print('Skipped Form and Continued')
             continue
         goNext = False
         if len(item) > 1 and len(item) <= 3:
@@ -195,45 +195,37 @@ def form_PDF(request, facility, formDate, formName):
         else:
             reFormName = item
             modelName = 'form' + item + '_model'
-        ModelForms = Forms.objects.filter(form=reFormName)[0]
+        ModelForms = Forms.objects.filter(form=reFormName, facilityChoice__facility_name=facility)[0]
             
         mainModel = apps.get_model('EES_Forms', modelName)
-        
         #Pick the specific form date
         formsAndData = {}
         parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
         parseDateStart = parseDateStop - datetime.timedelta(days=6)
         try:
-            org = mainModel.objects.all().order_by('-date')
-            print(item + ' WINS')
+            org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
             for x in org:
                 if formName == 'weekly':
                     if parseDateStart <= x.date <= parseDateStop:
-                        print(x)
-                        print('<-------HERE')
                         formsAndData[str(x.date)] = [x]
-                        print(formsAndData)
                         continue
                 else:
                     if str(x.date) == str(formDate):
                         database_model = x
-                        print(database_model)
                         formsAndData[str(x.date)] = [database_model]
                         break
                     elif org[len(org)-1] == x:
                         database_model = ''
-                        print('FORM DOES NOT EXIST')
                         goNext = True
                         print('goNext1')
             if item in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
+                print('made it here')
                 readingsModel = apps.get_model('EES_Forms', 'form' + item + '_readings_model')
-                org2 = readingsModel.objects.all().order_by('-form')
+                org2 = readingsModel.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
                 for x in org2:
                     if formName == 'weekly':
                         if parseDateStart <= x.form.date <= parseDateStop:
-                            print(list(formsAndData))
                             for pairs in list(formsAndData):
-                                print(pairs)
                                 xDate = str(x.form.date)
                                 if xDate == pairs:
                                     formsAndData[pairs].append(x)
@@ -249,7 +241,7 @@ def form_PDF(request, facility, formDate, formName):
                             database_model2 = ''
         except FieldError as e:
             print('Check A - Form ' + item)
-            org = mainModel.objects.all().order_by('-week_start')
+            org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
             for r in org:
                 if formName == 'weekly':
                     if parseDateStart <= r.week_start <= parseDateStop:
@@ -259,41 +251,44 @@ def form_PDF(request, facility, formDate, formName):
                 else:
                     if str(r.week_start) == str(formDate):
                         database_model = r
+                        formsAndData[str(r.week_start)] = [database_model]
                         print('Check B - Form Exist')
                         break
-                    elif org[len(org)-1] == r:
+                    elif r == org[len(org)-1]:
                         database_model = ''
                         print('FORM DOES NOT EXIST')
                         goNext = True
-                        print('goNext2')
-                    data = database_model
+                        print('goNext2')  
+        
+        data = database_model
+        print('Form ' + item + ' includes these:' + str(list(formsAndData)))    
         if goNext:
             continue
-        print(formsAndData)
-        print('PENIS AND BALLS')
+        print('Processing Forms that were found for ' + item + '...')
         for alpha in list(formsAndData):
-            print(len(formsAndData[alpha]))
+            #print(len(formsAndData[alpha]))
             if len(formsAndData[alpha]) == 2:
-                print('CHECK 1')
+                print(item + ' is a double database...')
                 data = formsAndData[alpha][0]
                 readings = formsAndData[alpha][1]
             else:
                 data = formsAndData[alpha][0]
+                print(item + ' is a single database...')
             
             styles = getSampleStyleSheet()
             fileName = 'form' + formName + '_' + formDate + ".pdf"
             documentTitle = 'form' + formName + '_' + formDate
             title = ModelForms.header + ' ' + ModelForms.title + ' - Form (' + ModelForms.form + ')'
-            subTitle = 'Facility Name: EES Coke Battery LLC'
+            subTitle = 'Facility Name: ' + facility
             #always the same on all A-forms
             marginSet = 0.4
-            print('we made it to data')
+            print('...Creating PDF for ' + item + '...')
             dataList = []
-            print(item)
+            print('STARTING...')
             #create a stream
             stream = io.BytesIO()
             if item == 'A1':
-                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(data.date) + '</para>', styles['Normal'])
                 batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
                 startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.stop) + '</para>', styles['Normal'])
                 text1 = Paragraph(readings.c1_comments,
@@ -352,7 +347,7 @@ def form_PDF(request, facility, formDate, formName):
                     ('BOTTOMPADDING',(0,1), (-1,1), 25),
                 ]
             elif item in ('A2', 'A3'):
-                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(data.date) + '</para>', styles['Normal'])
                 batOvenInop = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Total No. Ovens:</b>&#160;&#160;85&#160;&#160;&#160;&#160;&#160;<b>Total No. Inoperable Ovens:</b>&#160;&#160;' + str(data.inop_ovens) + '&#160;(' + str(data.inop_numbs) + ')'  + '</para>', styles['Normal'])
                 crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
                 if item == 'A2':
@@ -685,7 +680,7 @@ def form_PDF(request, facility, formDate, formName):
 
                     tableColWidths=(40,65,40,55,40,40,50,40,55,40,35,35)
             elif item == 'A4':
-                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(data.date) + '</para>', styles['Normal'])
                 batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
                 startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.main_start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.main_stop) + '</para>', styles['Normal'])
                 tableData = [
@@ -705,7 +700,7 @@ def form_PDF(request, facility, formDate, formName):
                 ]
                 tableColWidths = (120,70,70,70,70,70,70,70)
                 
-                if data.oven_leak_1:
+                if data.leak_data != "{}":
                     tableData.append(['', 'Here is some information', '', '', '', '', '', ''],)
                     spaced = 1
                 else:
@@ -770,8 +765,8 @@ def form_PDF(request, facility, formDate, formName):
                     [subTitle],
                     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                     [Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>COUNTY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.county + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT NO.</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab_no + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.date) + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.cert_date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.cert_date) + '</para>', styles['Normal']), '', ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
@@ -952,7 +947,7 @@ def form_PDF(request, facility, formDate, formName):
                     [title2],
                     [subTitle],
                     #grid start (0,4)
-                    [Paragraph('<para><b>Week of:</b>  ' + str(data.week_end) + '</para>', styles['Normal']), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                    [Paragraph('<para><b>Week of:</b>  ' + date_change(data.week_end) + '</para>', styles['Normal']), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                     ['Inspectors Initials', data.observer_0, data.observer_1, data.observer_2, data.observer_3, data.observer_4],
                     ['Time', time_change(data.time_0), time_change(data.time_1), time_change(data.time_2), time_change(data.time_3), time_change(data.time_4)],
                     ['Weather Conditions', data.weather_0, data.weather_1, data.weather_2, data.weather_3, data.weather_4],
@@ -1021,14 +1016,14 @@ def form_PDF(request, facility, formDate, formName):
                     count = 14
                 else:
                     count = 0
-                date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + str(data.date) + '</para>', styles['Normal'])
+                date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(data.date) + '</para>', styles['Normal'])
                 startStopTruck = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.truck_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.truck_stop_time)+ '</para>', styles['Normal'])
                 startStopArea = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.area_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.area_stop_time)+ '</para>', styles['Normal'])
                 if data.sto_start_time:
                     startStopSto = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.sto_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.sto_stop_time)+ '</para>', styles['Normal'])
                 if data.salt_start_time:
                     startStopSalt = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(data.salt_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(data.salt_stop_time)+ '</para>', styles['Normal'])
-                observerCert = Paragraph('<para align=center><b>Observer:</b>&#160;' + data.observer + '&#160;&#160;&#160;&#160;<b>Certified Date:</b>&#160;' + str(data.cert_date) + '</para>', styles['Normal'])
+                observerCert = Paragraph('<para align=center><b>Observer:</b>&#160;' + data.observer + '&#160;&#160;&#160;&#160;<b>Certified Date:</b>&#160;' + date_change(data.cert_date) + '</para>', styles['Normal'])
                 comments = Paragraph('<para align=left><b>Comments:</b>    ' + data.comments + '</para>', styles['Normal'])
                 
                 tableData = [
@@ -1170,7 +1165,7 @@ def form_PDF(request, facility, formDate, formName):
                 tableData = [
                     [title],
                     [subTitle],
-                    ['', '', Paragraph('<para><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal']), '', '', ''],
+                    ['', '', Paragraph('<para><b>Week of:&#160;</b>' + date_change(data.week_start) + '&#160;&#160;to&#160;&#160;' + date_change(data.week_end) + '</para>', styles['Normal']), '', '', ''],
                     ['Truck 1', '', '', '', '', ''],
                     [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(data.observer1) + '</para>', styles['Normal']), '', '', '', '', ''],
                     [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(data.truck_id1) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(data.contents1) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(data.date1)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(data.time1)) + '</para>', styles['Normal']), '', ''],
@@ -1276,7 +1271,7 @@ def form_PDF(request, facility, formDate, formName):
                 ]
             elif item == 'E':
                 count = 0
-                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + str(data.date) + '</para>', styles['Normal'])
+                inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(data.date) + '</para>', styles['Normal'])
                 batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + data.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + data.foreman + '</para>', styles['Normal'])
                 startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(data.start_time) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(data.end_time) + '</para>', styles['Normal'])
                 tableData = [
@@ -1376,8 +1371,8 @@ def form_PDF(request, facility, formDate, formName):
                     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                     # Top Data - (0, 3)
                     [Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>COUNTY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.county + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT NO.</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab_no + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.date) + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.cert_date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.cert_date) + '</para>', styles['Normal']), '', ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
@@ -1554,8 +1549,8 @@ def form_PDF(request, facility, formDate, formName):
                     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                     # Top Data - (0, 3)
                     [Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>COUNTY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.county + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT NO.</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab_no + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.date) + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.cert_date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.cert_date) + '</para>', styles['Normal']), '', ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
@@ -1675,7 +1670,7 @@ def form_PDF(request, facility, formDate, formName):
                 ]
             elif item == 'H':
                 marginSet = 0.3
-                startStop = Paragraph('<para fontSize=10 align=center><b>Start:</b>&#160;' + str(readings.comb_start) + '&#160;&#160;&#160; <b>Stop:</b>&#160;' + time_change(readings.comb_stop) + '</para>', styles['Normal'])
+                startStop = Paragraph('<para fontSize=10 align=center><b>Start:</b>&#160;' + time_change(readings.comb_start) + '&#160;&#160;&#160; <b>Stop:</b>&#160;' + time_change(readings.comb_stop) + '</para>', styles['Normal'])
                 bottomHeader = Paragraph('<para fontSize=10 align=center><b>Method 9 Observation</b></para>', styles['Normal'])
                 title = Paragraph('<para align=center><b>' + ModelForms.header + ' Visible Emission Observation Form</b><br/><b>' + ModelForms.title + ' - Form (' + ModelForms.form + ')</b></para>', styles['Normal'])
                 if readings.comb_formL:
@@ -1697,8 +1692,8 @@ def form_PDF(request, facility, formDate, formName):
                     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                     # Top Data - (0, 3)
                     [Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>COUNTY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.county + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT NO.</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab_no + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.date) + '</para>', styles['Normal']), '', ''],
-                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + str(data.cert_date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.date) + '</para>', styles['Normal']), '', ''],
+                    [Paragraph('<para fontSize=7><b><sup>CITY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.city + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>OBSERVER</sup></b>&#160;&#160;</para><para fontSize=7>' + data.observer + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>CERTIFIED DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.cert_date) + '</para>', styles['Normal']), '', ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip1 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode1 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>BACKGROUND COLOR</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.background_color_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.background_color_stop + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>SKY CONDITION</b><br/></para><para fontSize=7>' + data.sky_conditions + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>PROCESS EQUIPMENT</b><br/></para><para fontSize=7>' + data.process_equip2 + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>OPERATING MODE</b><br/></para><para fontSize=7>' + data.op_mode2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND SPEED</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.wind_speed_start + 'mph&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.wind_speed_stop + suffix + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>WIND DIRECTION</b><br/></para><para fontSize=7>' + data.wind_direction + '</para>', styles['Normal']), ''],
                     [Paragraph('<para fontSize=7><b>DESCRIBE EMISSION POINT</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.emission_point_start + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.emission_point_stop + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b>AMBIENT TEMP</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + data.ambient_temp_start + '<sup>o</sup>&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + data.ambient_temp_stop + suffix2 + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b>HUMIDITY</b><br/></para><para fontSize=7>' + data.humidity + '%</para>', styles['Normal']), ''],
@@ -1846,7 +1841,7 @@ def form_PDF(request, facility, formDate, formName):
                 tableData = [
                     [title],
                     [subTitle],
-                    ['', Paragraph('<para align=center><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal']), '', '', '', ''],
+                    ['', Paragraph('<para align=center><b>Week of:&#160;</b>' + date_change(data.week_start) + '&#160;&#160;to&#160;&#160;' + date_change(data.week_end) + '</para>', styles['Normal']), '', '', '', ''],
                     ['', '', '', '', '', ''],
                     ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                     [Paragraph('<para align=center><b>Sampling Time</b></para>', styles['Normal']), time_change(data.time_0), time_change(data.time_1), time_change(data.time_2), time_change(data.time_3), time_change(data.time_4)],
@@ -1880,7 +1875,7 @@ def form_PDF(request, facility, formDate, formName):
                 tableData = [
                     [title],
                     [subTitle],
-                    [Paragraph('<para align=center><b>Week of:&#160;</b>' + str(data.week_start) + '&#160;&#160;to&#160;&#160;' + str(data.week_end) + '</para>', styles['Normal'])],
+                    [Paragraph('<para align=center><b>Week of:&#160;</b>' + date_change(data.week_start) + '&#160;&#160;to&#160;&#160;' + date_change(data.week_end) + '</para>', styles['Normal'])],
                     ['', '', '', '', ''],
                     [Paragraph('<para align=center><b>Observer</b></para>', styles['Normal']), Paragraph('<para align=center><b>Day/Time</b></para>', styles['Normal']), Paragraph('<para align=center><b>Location</b></para>', styles['Normal']), Paragraph('<para align=center><b>Visible Emissions</b></para>', styles['Normal']), Paragraph('<para align=center><b>Comments</b></para>', styles['Normal'])],
                     [data.obser_0, 'Saturday/' + time_change(data.time_0), 'Coal Bin Vents', data.vents_0, Paragraph('<para>' + data.v_comments_0 + '</para>', styles['Normal'])],
@@ -2320,19 +2315,20 @@ def form_PDF(request, facility, formDate, formName):
             
             elems.append(table)
             elems.append(PageBreak())
-                    
+            print('FINISHED...')
+            print('PDFs for ' + item + ' has been created. Moving to next form')
+    
+    print('Finished creating PDFs...')        
     try:
-        print('whatsup')
-        pdf.build(elems, canvasmaker=PageNumCanvas)
         
+        pdf.build(elems, canvasmaker=PageNumCanvas)
             # get buffer
         stream.seek(0)
         pdf_buffer = stream.getbuffer()
-
+        print(pdf_buffer)
         response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
+        print('Starting to Compile...')
     except UnboundLocalError as e:
-        #PrintSelect = '../../PrintSelect'
-        #return redirect(PrintSelect)
-        return HttpResponseNotFound("hello")
+        return HttpResponseNotFound("No Forms Found")
    
     return response

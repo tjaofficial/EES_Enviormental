@@ -380,6 +380,7 @@ li {
     align-items: center;
     padding-left: 2rem;
     position: fixed;
+    z-index: 1;
 }
 .sideAlign{
     padding: 0px;
@@ -435,7 +436,7 @@ li {
     background-color: #dfe5e9;
     border-radius: 1rem;
     box-shadow: 1px 3px 7px 0px #9898a6;
-    z-index: 1;
+    z-index: 2;
 }
 .profileDropdown a:hover {
     text-decoration: underline;

@@ -13,9 +13,9 @@ quarter_choices = (
     ('4', '4th')
 )
 position_choices = (
-    ('SGI Technician', 'SGI Technician'),
-    ('SGI Admin', 'SGI Admin'),
-    ('EES Coke Employees', 'EES Coke Employees')
+    ('observer', 'Observer'),
+    ('supervisor', 'Supervisor'),
+    ('client', 'Client')
 )
 truck_choices = (
     ('#5', 'Truck #5'),
@@ -231,8 +231,31 @@ weekend_choices = (
 # -all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
 # Create your models here.
+class company_model(models.Model):
+    company_name = models.CharField(
+        max_length=60
+    )
+    address = models.CharField(
+        max_length=60
+    )
+    city = models.CharField(
+        max_length=20
+    )
+    state = models.CharField(
+        max_length=2
+    )
+    zipcode = models.CharField(
+        max_length=5
+    )
+    phone = models.CharField(
+        max_length=14
+    )
+    
+    def __str__(self):
+        return self.company_name
 
 class bat_info_model(models.Model):
+    company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
     bat_num = models.IntegerField()
     total_ovens = models.IntegerField()
     facility_name = models.CharField(max_length=30)
@@ -253,6 +276,7 @@ class bat_info_model(models.Model):
         choices=batteryMain_choices
     )
     bat_lids = models.IntegerField()
+    formsList = models.CharField(max_length=300)
     
     def __str__(self):
         return self.facility_name
@@ -399,8 +423,6 @@ class daily_battery_profile_model(models.Model):
         return str(self.date_save)
 
 
-
-
 class user_profile_model(models.Model):
     user = models.OneToOneField(
         User,
@@ -428,17 +450,13 @@ class user_profile_model(models.Model):
         null=False,
         blank=False,
     )
-    company = models.CharField(
-        max_length=75,
-        null=True,
-        blank=True,
-    )
     certs = models.CharField(
         max_length=300,
         null=True,
         blank=True,
     )
-
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.user.username
 
@@ -787,67 +805,17 @@ class formA4_model(models.Model):
     main_4 = models.CharField(
         max_length=30
     )
+    leak_data = models.CharField(
+        max_length=1000,
+        blank=True,
+        null=True
+    )
     suction_main = models.CharField(
         max_length=30
     )
-    oven_leak_1 = models.CharField(
-        max_length=2,
-        blank=True,
-        null=True,
+    notes = models.CharField(
+        max_length=600
     )
-    time_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    date_temp_seal_leak_1 = models.DateField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    time_temp_seal_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    temp_seal_by_leak_1 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-    )
-    date_init_repair_leak_1 = models.DateField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    time_init_repair_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    date_comp_repair_leak_1 = models.DateField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    time_comp_repair_leak_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True,
-    )
-    comp_by_leak_1 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-    )
-    notes = models.CharField(max_length=600)
 
     def __str__(self):
         return str(self.date)
@@ -5608,3 +5576,4 @@ class signature_model(models.Model):
     
     def __str__(self):
         return str(self.sign_date)
+    

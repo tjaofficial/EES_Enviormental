@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,admin/admin_layout.html" %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/formL.js' %}"></script>
@@ -10,22 +10,12 @@
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div>
         {% include "ees_forms/backArrow.html" %}
-        {% if selector == 'form' %}
-        {% elif selector %}
-            <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-                <button style='height:25px;'>PRINT</button>
-            </a>
-        {% elif selector %}
-            <a href="../../printIndex/{{formName}}/{{selector}}" target="_blank" style='position: absolute;right: 553px;top: 143px;'>
-                <button style='height:25px;'>PRINT</button>
-            </a>
-        {% endif %} 
     </div>
     <form action="" method="POST">
         {% csrf_token %}
         <div class="card" id="card_fitter">
+            {% include "ees_forms/print_button.html" %}
             <div class="paper_fitter">
-           
                 <table style="border-collapse: collapse; margin: auto;">
                 <tr>
                     <th id="boxTitle" colspan="5" style="text-align: center;">
@@ -348,7 +338,7 @@
                             <tr>
                                 <td colspan="4" style="height: 25px;" ></td>
                                 <td style="text-align: right;">
-                                    {% if admin or client %}
+                                    {% if supervisor or client %}
                                     {% elif filled_in == True %}
                                         <a href="../../Daily/formL/edit">
                                             Edit
@@ -371,7 +361,7 @@
                         </table>
                     </div>
                 </div>
-                {% if admin or client or search or filled_in == True %}
+                {% if supervisor or client or search or filled_in == True %}
                 {% elif unlock and not search %}
                     <br><br><br>
                     <input type="submit" value="Submit Form" class="submit_button" />
