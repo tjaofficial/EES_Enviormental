@@ -1,0 +1,243 @@
+
+{% block list%} {% load static %}
+
+
+<style>
+form{
+  margin:0px;
+}
+input{
+    display: block;
+    box-sizing: border-box;
+    border:none;
+    height:100%;
+    width:100%;
+}
+input[type=text]:focus{
+
+  outline:none;
+}
+
+.tempInputStyle{
+    
+    height: 2rem;
+    border:1px solid black;
+    border-radius: 5px;
+    padding:0.5rem;
+    width:30rem
+
+}
+#postButton,
+#subButton{
+    height: 2rem;
+    border:1px solid black;
+    border-radius: 5px;
+    width:30rem;
+    margin-top:10px;
+}
+
+
+</style>
+<div id="clientToken"style="display:none;" data-client_token={{client_token}}></div>
+
+<!-- Information form-->
+<div id="iForm" style="margin: auto;display: block; width: 32rem;">
+  <div style="border-radius: 10px; box-shadow: 6px 6px 13px 11px #0000000a; padding:6px; margin-bottom: 10px;">
+    <h2 style="text-align: center">Billing Address</h2>
+    <form action="/" id="Customer_Info_Form" method="post">
+      <input type="hidden" id="planId" value="{{pId}}"/>
+    <label for="nameOnCard">Name On Card</label>
+    <div class="tempInputStyle">
+      <input type="text" id="nameOnCard" placeholder="Jane Doe"/>
+    </div>
+    <label for="address1">Address 1</label>
+    <div class="tempInputStyle">
+      <input type="text" id="address1" placeholder="Line 1"/>
+    </div>
+    <label for="address2">Address 2</label>
+    <div class="tempInputStyle">
+      <input type="text" id="address2" placeholder="Line 2"/>
+    </div>
+    <label for="city">City</label>
+    <div class="tempInputStyle">
+      <input type="text" id="city" placeholder="City"/>
+    </div>
+    <label for="state">State</label>
+    <div class="tempInputStyle">
+      <input type="text" id="state" placeholder="MI"/>
+    </div>
+    <label for="postalCode">Zip Code</label>
+    <div class="tempInputStyle">
+      <input type="text" id="postalCode" placeholder="11111"/>
+    </div>
+
+
+  </form>
+  </div>
+  <div style="border-radius: 10px; box-shadow: 6px 6px 13px 11px #0000000a; padding:6px; margin-bottom: 10px;">
+    <h2 style="text-align: center"> Card Infromation</h2>
+    <form action="/" id="Payment_Method_Form" method="post">
+
+      <label for="card-number">Card Number</label>
+      <div id="card-number" class="tempInputStyle"></div>
+
+      <label for="cvv">CVV</label>
+      <div id="cvv" class="tempInputStyle"></div>
+
+      <label for="expiration-date">Expiration Date</label>
+      <div id="expiration-date" class="tempInputStyle"></div>
+      </div>
+      <input id="subButton" type="submit" value="Review Subscription" disabled />
+    </form>
+  
+  </div>
+
+
+  <!-- Review Form -->
+  <div id="iReview" style="margin: auto; display: none;">
+        <p id="rNameOnCard" class="reviewInfo">Name on Card: </p>
+        <p id="rAddress1" class="reviewInfo">Address 1: </p>
+        <p id="rAddress2" class="reviewInfo">Address 2: </p>
+        <p id="rCity" class="reviewInfo">City: </p>
+        <p id="rState" class="reviewInfo">State: </p>
+        <p id="rZip" class="reviewInfo">Zip Code: </p>
+        <p id="rCardNumber" class="reviewInfo">Card Number: </p>
+        <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
+        
+      <form action="/ees_forms/billing/reciept" method="post">
+        {% csrf_token %}
+        <input id="pPayNonce" type="hidden" name="payNonce"/>
+        <input id="pPlanId" type="hidden" name="planId"/>
+        <input id="pNameOnCard" type="hidden" name="nameOnCard"/>
+        <input id="pAddress1" type="hidden" name="address1"/>
+        <input id="pAddress2" type="hidden" name="address2"/>
+        <input id="pCity" type="hidden" name="city"/>
+        <input id="pState" type="hidden" name="state"/>
+        <input id="pZipCode" type="hidden" name="zipCode"/>
+        <input id="postButton" type="submit" value="Confirm Subscription"/>
+      </form>
+
+  </div>
+  
+
+  <script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>
+  <script src="https://js.braintreegateway.com/web/3.90.0/js/hosted-fields.min.js"></script>
+  <script>
+    const form = document.querySelector('#Payment_Method_Form');
+    const submit = document.querySelector('input[type="submit"]');
+    const clientTokenElem = document.querySelector("#clientToken")
+    const clientToken = clientTokenElem.dataset.client_token;
+    
+    braintree.client.create({
+      authorization: clientToken
+    }, function (clientErr, clientInstance) {
+      if (clientErr) {
+        console.error(clientErr);
+        return;
+      }
+
+      // This example shows Hosted Fields, but you can also use this
+      // client instance to create additional components here, such as
+      // PayPal or Data Collector.
+
+      braintree.hostedFields.create({
+        client: clientInstance,
+        styles: {
+          'input': {
+            'font-size': '14px',
+            'height': '30px'
+          },
+          'input.invalid': {
+            'color': 'red'
+          },
+          'input.valid': {
+            'color': 'green'
+          }
+        },
+        fields: {
+          number: {
+            container: '#card-number',
+            placeholder: '4111 1111 1111 1111'
+          },
+          cvv: {
+            container: '#cvv',
+            placeholder: '123'
+          },
+          expirationDate: {
+            container: '#expiration-date',
+            placeholder: '10/2022'
+          },
+        }
+      }, function (hostedFieldsErr, hostedFieldsInstance) {
+        if (hostedFieldsErr) {
+          console.error(hostedFieldsErr);
+          return;
+        }
+
+        submit.removeAttribute('disabled');
+
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+            if (tokenizeErr) {
+              console.error(tokenizeErr);
+              return;
+            }
+            console.dir(payload)
+            //Get the form values
+            const planId = document.querySelector("#planId").value
+            const nameOnCard = document.querySelector("#nameOnCard").value
+            const address1 = document.querySelector("#address1").value
+            const address2 = document.querySelector("#address2").value
+
+            const city = document.querySelector("#city").value
+            const state = document.querySelector("#state").value
+            const postalCode = document.querySelector("#postalCode").value
+            const cardNumber = "************"+payload.details.lastFour
+            const expirationDate = payload.details.expirationMonth + "/"+ payload.details.expirationYear 
+
+            //set the form values for review
+            document.querySelector("#rNameOnCard").innerHTML += nameOnCard
+            document.querySelector("#rAddress1").innerHTML += address1
+            document.querySelector("#rAddress2").innerHTML += address2
+            document.querySelector("#rCity").innerHTML += city
+            document.querySelector("#rState").innerHTML += state
+            document.querySelector("#rZip").innerHTML += postalCode
+            document.querySelector("#rCardNumber").innerHTML += cardNumber
+            document.querySelector("#rExpiration").innerHTML += expirationDate
+            //Set the form values for post
+            document.querySelector("#pPayNonce").value = payload.nonce
+            document.querySelector("#pPlanId").value = planId
+            document.querySelector("#rNameOnCard").value = nameOnCard
+            document.querySelector("#pAddress1").value = address1
+            document.querySelector("#pAddress2").value = address2
+
+            document.querySelector("#pCity").value = city
+            document.querySelector("#pState").value = state
+            document.querySelector("#pZipCode").value = postalCode
+
+            //Show Review
+            showFrom("review")
+            
+
+            console.log('Got a nonce: ' + payload.nonce);
+          });
+        }, false);
+      });
+    });
+
+    function showFrom(form){
+      if(form == "review"){
+        document.querySelector("#iForm").style.display = "none"
+        document.querySelector("#iReview").style.display = "block"
+      }
+      else{
+        document.querySelector("#iForm").style.display = "block"
+        document.querySelector("#iReview").style.display = "none"
+      }
+    }
+  </script>
+
+
+{%endblock%}

@@ -1,0 +1,35 @@
+
+{% block list%} {% load static %}
+
+
+<style>
+
+</style>
+<div style="display:flex; flex-direction: row;">
+{%for plan in plans%}
+<div style="width:20rem; border:solid 1px black; margin:2rem; border-radius: 1rem; padding:5rem">
+    <h1>{{plan.name}}</h1>
+    {%for line in plan.description%}
+        <p>{{line}}</p>
+    {% endfor %}
+    <p>${{plan.price}} / Month</p>
+
+    <form method="post" autocomplete="off" action="/ees_forms/billing/customer">
+        {% csrf_token %}
+        <input type="hidden" value={{plan.pid}} name="planId">
+        <input type="submit" placeholder="Select">
+    </form>
+</div>
+
+{% endfor %}
+</div>
+
+
+  <script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>
+  <script src="https://js.braintreegateway.com/web/3.90.0/js/hosted-fields.min.js"></script>
+  <script>
+
+  </script>
+
+
+{%endblock%}

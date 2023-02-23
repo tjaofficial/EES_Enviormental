@@ -21,6 +21,7 @@ urlpatterns = [
     path("facility/", views.facility_select_view, name="facilitySelect"),
     path("<str:facility>/daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("<str:facility>/signature",views.signature,name="signature"),
+    path("billing/<str:step>",views.billing,name="billing"),
 
     path("<str:facility>/Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
     path("<str:facility>/schedule_view", views.schedule_view, name="Schedule"),
