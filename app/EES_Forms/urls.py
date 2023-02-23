@@ -10,11 +10,14 @@ urlpatterns = [
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
+    path("register_company", views.registerCompany, name="companyReg"),
     path("no_registration", views.valid_account_logout, name="no_registration"),
     path("logout", views.logout_view, name="Logout"),
     path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
     path("adminDash", views.adminDash, name="adminDash"),
+    
+    path("billing/<str:step>", views.billing, name="billing"),
 
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
@@ -25,7 +28,6 @@ urlpatterns = [
     path("facility/", views.facility_select_view, name="facilitySelect"),
     path("<str:facility>/daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("<str:facility>/signature",views.signature,name="signature"),
-    path("billing/<str:step>",views.billing,name="billing"),
 
     path("<str:facility>/Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
     path("<str:facility>/schedule_view", views.schedule_view, name="Schedule"),

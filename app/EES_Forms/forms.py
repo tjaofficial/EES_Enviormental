@@ -2023,7 +2023,20 @@ class signature_form(ModelForm):
             'sign_date': forms.DateInput(attrs={'type': 'hidden', 'id': 'form_date', 'style': ''}),
             'canvas': forms.TextInput(attrs={'type': 'hidden', 'id': 'form_canvas', 'style': ''}),
         }
-        
+     
+class company_form(ModelForm):
+    class Meta:
+        model = company_model
+        fields = ('__all__')
+        widgets = {
+            'company_name': forms.TextInput(attrs={'placeholder':'Company Name', 'style':'width: 250px;'}),
+            'address': forms.TextInput(attrs={'placeholder':'Street Address', 'style':'width: 250px;'}),
+            'city': forms.TextInput(attrs={'placeholder':'City', 'style':'width: 250px;'}),
+            'state': forms.TextInput(attrs={'placeholder':'State', 'style':'width: 250px;'}),
+            'zipcode': forms.TextInput(attrs={'placeholder':'Zipcode', 'style':'width: 250px;'}),
+            'phone': forms.TextInput(attrs={'placeholder':'Phone', 'style':'width: 250px;'}),
+            'customerID': forms.TextInput(attrs={'style':'width: 250px;'}),
+        }   
         
         
         

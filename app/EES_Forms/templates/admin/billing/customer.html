@@ -1,7 +1,5 @@
-
-{% block list%} {% load static %}
-
-
+{% extends 'landing/landing_layout.html' %}{% load static %}
+{% block body %}
 <style>
 form{
   margin:0px;
@@ -35,89 +33,148 @@ input[type=text]:focus{
     width:30rem;
     margin-top:10px;
 }
+.optionsCont{
+  background: #fff;
+  box-shadow: 0px 0px 0px 5px rgb(255 255 255 / 40%), 0px 4px 20px rgb(0 0 0 / 33%);
+  border-radius: 5px;
+  margin:2rem; 
+  padding:3rem
+}
+#submit {
+  height: 4rem;
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px 0;
+  color: #fff;
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-align: center;
+  text-decoration: none;
+      background: -moz-linear-gradient(
+      top,
+      #b9c5dd 0%,
+      #a4b0cb);
+  background: -webkit-gradient(
+      linear, left top, left bottom, 
+      from(#b9c5dd),
+      to(#a4b0cb));
+  border-radius: 5px;
+  border: 1px solid #737b8d;
+  box-shadow:
+      0px 5px 5px rgba(000,000,000,0.1),
+      inset 0px 1px 0px rgba(255,255,255,0.5);
+  text-shadow:
+      0px 1px 3px rgba(000,000,000,0.3),
+      0px 0px 0px rgba(255,255,255,0);
+  display: table;
+  position: static;
+  clear: both;
+}
+
+#submit:hover {
+  background: -moz-linear-gradient(
+      top,
+      #a4b0cb 0%,
+      #b9c5dd);
+  background: -webkit-gradient(
+      linear, left top, left bottom, 
+      from(#a4b0cb),
+      to(#b9c5dd));
+}
+.infoCont{
+  height: 21rem;
+}
+.topSection2{
+  width: 89rem;
+  margin: auto;
+  position: relative;
+  margin-top: 6rem;
+}
 
 
 </style>
 <div id="clientToken"style="display:none;" data-client_token={{client_token}}></div>
+<div class='topCont' style="height:100%;padding-bottom: 110px;">
+    <div class="headerSpace"></div>
+    <div class='topSection2'>
+        <!-- Information form-->
+        <div id="iForm" style="margin: auto;display: block; width: 41rem;">
+            <div class="optionsCont" style="margin-bottom: 10px;">
+                <h2 style="text-align: center">Billing Address</h2>
+                <form action="/" id="Customer_Info_Form" method="post">
+                    <input type="hidden" id="planId" value="{{pId}}"/>
+                    <label for="nameOnCard">Name On Card</label>
+                    <div class="tempInputStyle">
+                      <input type="text" id="nameOnCard" placeholder="Jane Doe"/>
+                    </div>
+                    <label for="address1">Address 1</label>
+                    <div class="tempInputStyle">
+                      <input type="text" id="address1" placeholder="Line 1"/>
+                    </div>
+                    <label for="address2">Address 2</label>
+                    <div class="tempInputStyle">
+                      <input type="text" id="address2" placeholder="Line 2"/>
+                    </div>
+                    <label for="city">City</label>
+                    <div class="tempInputStyle">
+                      <input type="text" id="city" placeholder="City"/>
+                    </div>
+                    <label for="state">State</label>
+                    <div class="tempInputStyle">
+                      <input type="text" id="state" placeholder="MI"/>
+                    </div>
+                    <label for="postalCode">Zip Code</label>
+                    <div class="tempInputStyle">
+                      <input type="text" id="postalCode" placeholder="11111"/>
+                    </div>
+                </form>
+            </div>
+            <div class="optionsCont" style="margin-bottom: 10px;">
+                <h2 style="text-align: center"> Card Infromation</h2>
+                <form action="/" id="Payment_Method_Form" method="post">
 
-<!-- Information form-->
-<div id="iForm" style="margin: auto;display: block; width: 32rem;">
-  <div style="border-radius: 10px; box-shadow: 6px 6px 13px 11px #0000000a; padding:6px; margin-bottom: 10px;">
-    <h2 style="text-align: center">Billing Address</h2>
-    <form action="/" id="Customer_Info_Form" method="post">
-      <input type="hidden" id="planId" value="{{pId}}"/>
-    <label for="nameOnCard">Name On Card</label>
-    <div class="tempInputStyle">
-      <input type="text" id="nameOnCard" placeholder="Jane Doe"/>
+                    <label for="card-number">Card Number</label>
+                    <div id="card-number" class="tempInputStyle"></div>
+
+                    <label for="cvv">CVV</label>
+                    <div id="cvv" class="tempInputStyle"></div>
+
+                    <label for="expiration-date">Expiration Date</label>
+                    <div id="expiration-date" class="tempInputStyle"></div>
+                    </div>
+                    <input id="submit" type="submit" value="Review Subscription" disabled />
+                </form>
+            </div>
+
+
+          <!-- Review Form -->
+          <div id="iReview" style="margin: auto; display: none;">
+                <p id="rNameOnCard" class="reviewInfo">Name on Card: </p>
+                <p id="rAddress1" class="reviewInfo">Address 1: </p>
+                <p id="rAddress2" class="reviewInfo">Address 2: </p>
+                <p id="rCity" class="reviewInfo">City: </p>
+                <p id="rState" class="reviewInfo">State: </p>
+                <p id="rZip" class="reviewInfo">Zip Code: </p>
+                <p id="rCardNumber" class="reviewInfo">Card Number: </p>
+                <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
+                
+              <form action="/ees_forms/billing/reciept" method="post">
+                {% csrf_token %}
+                <input id="pPayNonce" type="hidden" name="payNonce"/>
+                <input id="pPlanId" type="hidden" name="planId"/>
+                <input id="pNameOnCard" type="hidden" name="nameOnCard"/>
+                <input id="pAddress1" type="hidden" name="address1"/>
+                <input id="pAddress2" type="hidden" name="address2"/>
+                <input id="pCity" type="hidden" name="city"/>
+                <input id="pState" type="hidden" name="state"/>
+                <input id="pZipCode" type="hidden" name="zipCode"/>
+                <input id="postButton" type="submit" value="Confirm Subscription"/>
+              </form>
+
+        </div>
     </div>
-    <label for="address1">Address 1</label>
-    <div class="tempInputStyle">
-      <input type="text" id="address1" placeholder="Line 1"/>
-    </div>
-    <label for="address2">Address 2</label>
-    <div class="tempInputStyle">
-      <input type="text" id="address2" placeholder="Line 2"/>
-    </div>
-    <label for="city">City</label>
-    <div class="tempInputStyle">
-      <input type="text" id="city" placeholder="City"/>
-    </div>
-    <label for="state">State</label>
-    <div class="tempInputStyle">
-      <input type="text" id="state" placeholder="MI"/>
-    </div>
-    <label for="postalCode">Zip Code</label>
-    <div class="tempInputStyle">
-      <input type="text" id="postalCode" placeholder="11111"/>
-    </div>
-
-
-  </form>
-  </div>
-  <div style="border-radius: 10px; box-shadow: 6px 6px 13px 11px #0000000a; padding:6px; margin-bottom: 10px;">
-    <h2 style="text-align: center"> Card Infromation</h2>
-    <form action="/" id="Payment_Method_Form" method="post">
-
-      <label for="card-number">Card Number</label>
-      <div id="card-number" class="tempInputStyle"></div>
-
-      <label for="cvv">CVV</label>
-      <div id="cvv" class="tempInputStyle"></div>
-
-      <label for="expiration-date">Expiration Date</label>
-      <div id="expiration-date" class="tempInputStyle"></div>
-      </div>
-      <input id="subButton" type="submit" value="Review Subscription" disabled />
-    </form>
-  
-  </div>
-
-
-  <!-- Review Form -->
-  <div id="iReview" style="margin: auto; display: none;">
-        <p id="rNameOnCard" class="reviewInfo">Name on Card: </p>
-        <p id="rAddress1" class="reviewInfo">Address 1: </p>
-        <p id="rAddress2" class="reviewInfo">Address 2: </p>
-        <p id="rCity" class="reviewInfo">City: </p>
-        <p id="rState" class="reviewInfo">State: </p>
-        <p id="rZip" class="reviewInfo">Zip Code: </p>
-        <p id="rCardNumber" class="reviewInfo">Card Number: </p>
-        <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
-        
-      <form action="/ees_forms/billing/reciept" method="post">
-        {% csrf_token %}
-        <input id="pPayNonce" type="hidden" name="payNonce"/>
-        <input id="pPlanId" type="hidden" name="planId"/>
-        <input id="pNameOnCard" type="hidden" name="nameOnCard"/>
-        <input id="pAddress1" type="hidden" name="address1"/>
-        <input id="pAddress2" type="hidden" name="address2"/>
-        <input id="pCity" type="hidden" name="city"/>
-        <input id="pState" type="hidden" name="state"/>
-        <input id="pZipCode" type="hidden" name="zipCode"/>
-        <input id="postButton" type="submit" value="Confirm Subscription"/>
-      </form>
-
-  </div>
+</div>
   
 
   <script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>

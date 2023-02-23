@@ -1,13 +1,22 @@
-
-{% block list%} {% load static %}
+{% extends 'landing/landing_layout.html' %}{% load static %}
+{% block body %}
 
 
 <style>
-
+    .topSection2{
+        width: 89rem;
+        margin: auto;
+        position: relative;
+        margin-top: 6rem;
+    }
 </style>
-
-<div>
-    {{information}}
+<div class='topCont' style="height:100%;">
+    <div class="headerSpace"></div>
+    <div class='topSection2'>
+        <div>
+            {{information}}
+        </div>
+    </div>
 </div>
 
 <script>

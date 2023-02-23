@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
-from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, bat_info_model
-from ..forms import CreateUserForm, user_profile_form
+from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model
+from ..forms import CreateUserForm, user_profile_form, company_form
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -13,7 +13,7 @@ from django.contrib.auth.models import Group
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 profile = user_profile_model.objects.all()
-
+lock = login_required(login_url='Login')
 
 def login_view(request):
     loginPage = True
@@ -121,18 +121,55 @@ def landingRegister(request):
     profileForm = user_profile_form()
     
     if request.method == 'POST':
+        finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
         new_data = request.POST.copy()
+        new_data['phone'] = finalPhone
         new_data['username'] = request.POST['username'].lower()
+        new_data['position'] = SUPER_VAR
         form = CreateUserForm(new_data)
-        if form.is_valid():
+        profile_form = user_profile_form(new_data)
+        if form.is_valid()and profile_form.is_valid():
             user = form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            
+            profile.save()
             
             group = Group.objects.get(name=SUPER_VAR)
             user.groups.add(group)
 
             user = form.cleaned_data.get('username')
+            
+            new_user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1'],
+            )
+            login(request, new_user)
             messages.success(request, 'Account was created for ' + user)
-            return redirect('sup_dashboard', SUPER_VAR)
+            return redirect('companyReg')
     return render(request, 'landing/landing_register.html',{
         'userForm': userForm, 'profileForm': profileForm
+    })
+    
+@lock    
+def registerCompany(request):
+    userProf = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
+    companyForm = company_form()
+    print(userProf.company)
+    if request.method == 'POST':
+        finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+        new_data = request.POST.copy()
+        new_data['phone'] = finalPhone
+        form = company_form(new_data)
+        if form.is_valid():
+            form.save()
+            
+            
+            companySel = company_model.objects.get(company_name=request.POST['company_name'])
+            userProf.company = companySel
+            userProf.save()
+            print(userProf.company)
+            return redirect('billing', 'subscriptions')
+    return render(request, 'landing/registerCompany.html',{
+        'companyForm': companyForm,
     })

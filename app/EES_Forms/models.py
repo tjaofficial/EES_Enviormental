@@ -250,7 +250,11 @@ class company_model(models.Model):
     phone = models.CharField(
         max_length=14
     )
-    
+    customerID = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )              
     def __str__(self):
         return self.company_name
 
@@ -455,8 +459,18 @@ class user_profile_model(models.Model):
         null=True,
         blank=True,
     )
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
-    company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(
+        bat_info_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
+    company = models.ForeignKey(
+        company_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     def __str__(self):
         return self.user.username
 

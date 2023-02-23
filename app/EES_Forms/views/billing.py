@@ -2,16 +2,14 @@
 from django.http import HttpResponseServerError
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..models import user_profile_model
+from ..models import user_profile_model, company_model
 import braintree
 import os
 
 lock = login_required(login_url='Login')
 
 @lock
-def billing(request,
- step):
-
+def billing(request, step):
     user = request.user
     userProfile = user_profile_model.objects.all().filter(user__username=request.user.username)
     print(userProfile)
@@ -24,16 +22,11 @@ def billing(request,
     gateway = braintree.BraintreeGateway(
         braintree.Configuration(
             braintree.Environment.Sandbox,
-            merchant_id=os.environ.get("BRAINTREE_MERCHANT_ID"),
-            public_key=os.environ.get("BRAINTREE_PUBLIC_KEY"),
-            private_key=os.environ.get("BRAINTREE_PRIVATE_KEY")
+            merchant_id=os.environ.get('BRAINTREE_MERCHANT_ID'),
+            public_key=os.environ.get('BRAINTREE_PUBLIC_KEY'),
+            private_key=os.environ.get('BRAINTREE_PRIVATE_KEY')
         )
     )
-
-
-
-
-
 
     if step == "subscriptions":
         plans = gateway.plan.all()
@@ -153,9 +146,13 @@ def billing(request,
         })
 
         if not createCustomerResult.is_success:
-            print("ERROR: Issue with creating costumer")
-        
+            for i in createCustomerResult.errors.deep_errors:
+                print(i)
+            #print("ERROR: Issue with creating costumer")
+        print(createCustomerResult)
         vaultCustomerId = createCustomerResult.customer.id
+        userComp = company_model.objects.all().filter(company_name=userProfile.company.company_name)[0]
+        userComp.customerID = vaultCustomerId
 
         #store the customer ID to th client that it is assocatited with
 
