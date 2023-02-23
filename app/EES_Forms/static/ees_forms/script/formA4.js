@@ -133,25 +133,25 @@ function createHTMLString(dataJSON, input_ID){
 function htmlLayout(empty, data, target){
     const htmlStr= `<tr>
                         <td class="rowsMiddle" colspan="1">
-                            <input type="number" style="width:50px; text-align: center;" ${!empty? 'value="'+data.oven+'"': ''} data-resultKey="oven" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="number" style="width:50px; text-align: center;" ${!empty? 'value="'+data.oven+'"': ''} data-resultKey="oven" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                         <td class="rowsMiddle" colspan="1">
-                            <input type="time" style="width: 120px;" value="${!empty && data.time ? data.time : ''}" data-resultKey="time" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="time" style="width: 120px;" value="${!empty && data.time ? data.time : ''}" data-resultKey="time" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                         <td class="rowsMiddle" colspan="1">
-                            <input type="datetime-local" style="" value="${!empty && data.tempSealed ? data.tempSealed : ''}" data-resultKey="tempSealed" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="datetime-local" style="" value="${!empty && data.tempSealed ? data.tempSealed : ''}" data-resultKey="tempSealed" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                         <td class="rowsMiddle">
-                            <input type="text" style="width:120px; text-align: center;" value="${!empty && data.tempSealedBy ? data.tempSealedBy : ''}" data-resultKey="tempSealedBy" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="text" style="width:120px; text-align: center;" value="${!empty && data.tempSealedBy ? data.tempSealedBy : ''}" data-resultKey="tempSealedBy" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                         <td class="rowsMiddle">
-                            <input type="datetime-local" style="" value="${!empty && data.repairInit ? data.repairInit : ''}" data-resultKey="repairInit" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="datetime-local" style="" value="${!empty && data.repairInit ? data.repairInit : ''}" data-resultKey="repairInit" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                         <td class="rowsMiddle">
-                            <input type="datetime-local" style="" value="${!empty && data.repairComplete ? data.repairComplete : ''}" data-resultKey="repairComplete" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="datetime-local" style="" value="${!empty && data.repairComplete ? data.repairComplete : ''}" data-resultKey="repairComplete" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                         <td class="rowsMiddle">
-                            <input type="text" style="width:120px; text-align: center;" value="${!empty && data.repairBy ? data.repairBy : ''}" data-resultKey="repairBy" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}/>
+                            <input type="text" style="width:120px; text-align: center;" value="${!empty && data.repairBy ? data.repairBy : ''}" data-resultKey="repairBy" data-resultInput="${empty? -1: i}" data-targetinput="collection" data-targetinput="${target}"/>
                         </td>
                     </tr>`;
     return htmlStr;
