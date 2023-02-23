@@ -18,7 +18,9 @@ def billing(request, step):
     #need to get customer id when one is present
     #MOCK DB VALUES
     customerId = None
-
+    print(os.environ.get('BRAINTREE_MERCHANT_ID'))
+    print(os.environ.get('BRAINTREE_PUBLIC_KEY'))
+    print(os.environ.get('BRAINTREE_PRIVATE_KEY'))
     gateway = braintree.BraintreeGateway(
         braintree.Configuration(
             braintree.Environment.Sandbox,
@@ -70,7 +72,7 @@ def billing(request, step):
         template = "admin/billing/review.html"
         pVars = {}
 
-    if step == "reciept":
+    if step == "receipt":
         if request.method != 'POST':
             pass
             #return redirect('billing', step = "subscriptions")
@@ -153,6 +155,7 @@ def billing(request, step):
         vaultCustomerId = createCustomerResult.customer.id
         userComp = company_model.objects.all().filter(company_name=userProfile.company.company_name)[0]
         userComp.customerID = vaultCustomerId
+        userComp.save()
 
         #store the customer ID to th client that it is assocatited with
 
@@ -169,7 +172,7 @@ def billing(request, step):
         #on success and active 
 
 
-        template = "admin/billing/reciept.html"
+        template = "admin/billing/receipt.html"
         pVars = {'information':"Congrats the sub was created"}
 
 

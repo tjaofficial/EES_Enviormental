@@ -159,7 +159,7 @@ input[type=text]:focus{
                 <p id="rCardNumber" class="reviewInfo">Card Number: </p>
                 <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
                 
-              <form action="/ees_forms/billing/reciept" method="post">
+              <form action="/ees_forms/billing/receipt" method="post">
                 {% csrf_token %}
                 <input id="pPayNonce" type="hidden" name="payNonce"/>
                 <input id="pPlanId" type="hidden" name="planId"/>

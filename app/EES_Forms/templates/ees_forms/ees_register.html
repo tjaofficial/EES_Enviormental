@@ -184,6 +184,7 @@
             {% endfor%}
         </div>
         <div id="newClient" class='dataCont' style='display: none;'>
+            {% if facilityLink %}
             <h1>Register New Client</h1>
             </br>
             <form method="POST" action="">
@@ -218,6 +219,10 @@
             {% for message in messages %}
                 <p>{{message}}</p>
             {% endfor%}
+            {% else %}
+            <h1>No Facility in database</h1>
+            <p>There must be a Facility for a Client to be added to. Please select the "Facility" tab and add a new facility. </p>
+            {% endif %}
         </div>
     </div>
     {% else %}

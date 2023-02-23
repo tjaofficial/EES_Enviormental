@@ -469,6 +469,7 @@ def register_view(request, facility, access_page):
     profile_form = ''
     data = ''
     data2 = bat_info_model.objects.all()
+    facilityLink = False
     unlock = False
     client = False
     supervisor = False
@@ -481,21 +482,22 @@ def register_view(request, facility, access_page):
 
     if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
+            #"if there are no facilities linked to the request.user's company then we should get back false or "
+            userProf = user_profiles.filter(user__username=request.user.username)[0]
+            userFacility = options.filter(company__company_name=userProf.company.company_name)
+            if len(userFacility) > 0:
+                facilityLink == True
+            
             if len(user_profiles.filter(user__id__exact=access_page)) > 0:
                 userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
                 userInfo = User.objects.all().filter(id__exact=access_page)[0]
                 pic = userProfileInfo.profile_picture
                 if userProfileInfo.phone:
-                    print(userProfileInfo.phone)
                     number = userProfileInfo.phone[2:];
                     first = number[:3];
                     middle = number[3:6];
                     end = number[6:]
                     parseNumber = '(' + first + ')' + middle + '-'+ end
-                    print(parseNumber)
-                    print(first)
-                    print(middle)
-                    print(end)
                 else:
                     parseNumber = ''
                 
@@ -545,9 +547,12 @@ def register_view(request, facility, access_page):
                 form = bat_info_form(request.POST)
                 profile_form = ''
                 if form.is_valid():
+                    form.save(commit=False)
+                    form.company = userProf.company
+                    
                     form.save()
                     
-                    messages.success(request, 'Account was created for new client')
+                    messages.success(request, 'Facility Created')
                     return redirect('sup_dashboard', facility)
             elif check_3:
                 print('CHECK 3')
@@ -571,6 +576,7 @@ def register_view(request, facility, access_page):
                     user = B.save()
                     profile = A.save(commit=False)
                     profile.user = user
+                    profile.company = userProf.company
                     
                     profile.save()
                     
@@ -591,5 +597,5 @@ def register_view(request, facility, access_page):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
+        'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
     })
