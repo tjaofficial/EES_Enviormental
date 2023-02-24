@@ -97,10 +97,10 @@ def billing(request, step):
         userPhone = userProfile.phone
         
         createCustomerResult = gateway.customer.create({
-            #'company': ,    # str - Company name. Maximum 255 characters.
+            'company': userProfile.company.company_name,    # str - Company name. Maximum 255 characters.
             'credit_card':{ # A credit or debit payment method.
                 'billing_address': { # A billing address associated with a specific credit card. The maximum number of addresses per customer is 50. - 
-                    #'company':  ,   # str - Company name. Maximum 255 characters.
+                    'company': userProfile.company.company_name,   # str - Company name. Maximum 255 characters.
                     'country_code_alpha2': 'US',    # str - The ISO 3166-1 alpha-2 country code specified in an address. The gateway only accepts specific alpha-2 values.
                     #'country_code_alpha3': ,    # str - The ISO 3166-1 alpha-3 country code specified in an address. The gateway only accepts specific alpha-3 values.
                     #'country_code_numeric': ,    # str - The ISO 3166-1 numeric country code specified in an address. The gateway only accepts specific numeric values.

@@ -1,6 +1,6 @@
 {% extends 'landing/landing_layout.html' %}{% load static %}
 {% block body %}
-<div class='topCont'>
+<div class='topCont' style="height:100%;">
     <div class="headerSpace"></div>
     <div class='topSection'>
         <div id='cover1' style='display:flex;'>
@@ -9,12 +9,23 @@
                 <div class='coverBody'>
                    Somehow you logged in as an Admin logout and try signing in with a Observer or Supervisor Account
                 </div>
+                <br><br>
                 <center>
-                    <a style='text-decoration: none;' href="{% url 'register' %}"><div class='buttonShadow'>
-                        <div class='button'>
-                            GET STARTED
-                        </div>
-                    </div></a>
+                    <table>
+                        <tr>
+                            <td>{{customer.first_name}} {{customer.last_name}}</td>
+                            <td>{{customer.phone}}</td>
+                            <td>{{customer.merchant_id}}</td>
+                        </tr>
+                        <tr><td>{{search_results}}</td></tr>
+                        {% for x in search_results %}
+                        <tr>
+                            <td>{{x}}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </center>
             </div>
             <div class='coverMedia'>

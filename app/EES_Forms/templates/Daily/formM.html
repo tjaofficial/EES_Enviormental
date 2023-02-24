@@ -111,11 +111,15 @@
                     </tr> 
                     <tr>
                         <td colspan="5" class="formM_box1">
-                            PAVED:  {% for pair in paved_roads %}
+                            PAVED:{% if existing %} 
+                                         {% for pair in paved_roads %}
                                         {% if pair.0 == form.paved %}
                                             {{ pair.1 }}
                                         {% endif %}
                                     {% endfor %}
+                                    {% else %}
+                                    {{form.paved}}
+                                    {% endif %}
                                     &nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
                             <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
                         </td>
@@ -183,11 +187,15 @@
                     </tr> 
                     <tr>
                         <td colspan="5" class="formM_box1">
-                            UNPAVED: {% for pair in unpaved_roads %}
+                            UNPAVED:{% if existing %} 
+                                        {% for pair in unpaved_roads %}
                                         {% if pair.0 == form.unpaved %}
                                             {{ pair.1 }}
                                         {% endif %}
-                                    {% endfor %} 
+                                    {% endfor %}
+                                    {% else %}
+                                    {{form.unpaved}}
+                                    {% endif %} 
                                     &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
                             <span class="unp_popup_class" id="unp_timePopup">Please Change Time</span>
@@ -260,11 +268,15 @@
                     </tr> 
                     <tr>
                         <td colspan="5" class="formM_box1">
-                            PARKING LOT: {% for pair in parking_lots %}
+                            PARKING LOT:{% if existing %} 
+                                        {% for pair in parking_lots %}
                                             {% if pair.0 == form.parking %}
                                                 {{ pair.1 }}
                                             {% endif %}
-                                        {% endfor %} 
+                                        {% endfor %}
+                                        {% else %}
+                                        {{form.parking}}
+                                        {% endif %} 
                                         &nbsp; &nbsp; &nbsp; &nbsp;
                             Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
                             <span class="par_popup_class" id="par_timePopup">Please Change Time</span>
