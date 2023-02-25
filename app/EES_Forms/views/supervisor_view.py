@@ -37,7 +37,10 @@ def sup_dashboard_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     emypty_dp_today = True
-    recent_logs = formA1_readings_model.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
+    if facility != 'supervisor':
+        recent_logs = formA1_readings_model.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
+    else:
+        recent_logs = ''
     year = str(now.year)
     if len(str(now.month)) == 1:
         month = "0" + str(now.month)
