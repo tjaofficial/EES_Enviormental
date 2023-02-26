@@ -17,6 +17,9 @@ import datetime
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 def date_change(date):
+    if isinstance(date, str):
+        date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    
     if len(str(date.month)) == 2:
         month = str(date.month)
     else:
@@ -29,6 +32,8 @@ def date_change(date):
     return parsed
 
 def time_change(time):
+    if isinstance(time, str):
+        time = str(datetime.datetime.strptime(time, "%H:%M"))[11:]
     if time:
         hourNum = int(str(time)[0:2])
         minNum = str(time)[3:5]
@@ -52,6 +57,14 @@ def time_change(time):
         print('ERROR TIME ENTERED: ' + str(time))
         print('RETURNING: "-" and moving on...')
         return '-'
+
+def date_time_change(dateTime):
+    if isinstance(dateTime, str):
+        dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%dT%H:%M")
+        
+    date = date_change(dateTime.date())
+    time = time_change(dateTime.time())
+    return date + ', ' + time
 
 def road_choices(input):
     paved_roads = {
@@ -697,19 +710,23 @@ def form_PDF(request, facility, formDate, formName):
                     [batNumCrewForeman],
                     [startEnd],
                     ['', '', '', '', '', '', '', ''],
-                    ['', Paragraph('<para align=right><b>Colletions Main #1:</b></para>', styles['Normal']), '', '', data.main_1, '', '', ''],
-                    ['', Paragraph('<para align=right><b>Colletions Main #2:</b></para>', styles['Normal']), '', '', data.main_2, '', '', ''],
-                    ['', Paragraph('<para align=right><b>Colletions Main #3:</b></para>', styles['Normal']), '', '', data.main_3, '', '', ''],
-                    ['', Paragraph('<para align=right><b>Colletions Main #4:</b></para>', styles['Normal']), '', '', data.main_4, '', '', ''],
-                    ['', Paragraph('<para align=right><b>Suction Main Pressure:</b></para>', styles['Normal']), '', '', data.suction_main, '', '', ''],
+                    ['', '', '', Paragraph('<para align=right><b>Colletions Main #1:</b></para>', styles['Normal']), '', str(data.main_1) + ' INWC', '', ''],
+                    ['', '', '', Paragraph('<para align=right><b>Colletions Main #2:</b></para>', styles['Normal']), '', str(data.main_2) + ' INWC', '', ''],
+                    ['', '', '', Paragraph('<para align=right><b>Colletions Main #3:</b></para>', styles['Normal']), '', str(data.main_3) + ' INWC', '', ''],
+                    ['', '', '', Paragraph('<para align=right><b>Colletions Main #4:</b></para>', styles['Normal']), '', str(data.main_4) + ' INWC', '', ''],
+                    ['', '', '', Paragraph('<para align=right><b>Suction Main Pressure:</b></para>', styles['Normal']), '', str(data.suction_main) + ' INWC', '', ''],
                     ['', '', '', '', '', '', '', ''],
-                    ['', 'PUSH SIDE COLLECTION MAIN - Leak Observation Detail', '', '', '', '', '', ''],
+                    ['', 'PUSH SIDE COLLECTION MAIN - Leak Observation Detail', '', '', '', '', '', '', ''],
                 ]
-                tableColWidths = (120,70,70,70,70,70,70,70)
+                tableColWidths = (70,38,50,105,80,105,105,70,70)
                 
                 if data.leak_data != "{}":
-                    tableData.append(['', 'Here is some information', '', '', '', '', '', ''],)
-                    spaced = 1
+                    mainsLeaks = json.loads(data.leak_data)['data']
+                    tableData.append(['', Paragraph('<para align=center><b>Oven</b></para>', styles['Normal']), Paragraph('<para align=center><b>Time</b></para>', styles['Normal']), Paragraph('<para align=center><b>Temporarily Sealed</b></para>', styles['Normal']), Paragraph('<para align=center><b>By</b></para>', styles['Normal']), Paragraph('<para align=center><b>Final Repair Initiated</b></para>', styles['Normal']), Paragraph('<para align=center><b>Final Repair Completed</b></para>', styles['Normal']), Paragraph('<para align=center><b>By</b></para>', styles['Normal'])],)
+                    spaced = 0
+                    for leak in mainsLeaks:
+                        tableData.append(['', leak['oven'], time_change(leak['time']), date_time_change(leak['tempSealed']), leak['tempSealedBy'], date_time_change(leak['repairInit']), date_time_change(leak['repairComplete']), leak['repairBy'], ''],)
+                        spaced += 1
                 else:
                     tableData.append(['', 'N/A', '', '', '', '', '', ''],)
                     spaced = 1
@@ -735,23 +752,37 @@ def form_PDF(request, facility, formDate, formName):
                     ('ALIGN', (0,0), (-1,4), 'CENTER'),
                     
                     #pressures
-                    ('SPAN', (1,6), (3,6)), ('SPAN', (4,6), (5,6)),
-                    ('SPAN', (1,7), (3,7)), ('SPAN', (4,7), (5,7)),
-                    ('SPAN', (1,8), (3,8)), ('SPAN', (4,8), (5,8)),
-                    ('SPAN', (1,9), (3,9)), ('SPAN', (4,9), (5,9)),
-                    ('SPAN', (1,10), (3,10)), ('SPAN', (4,10), (5,10)),
+                    ('SPAN', (3,6), (4,6)), ('SPAN', (5,6), (5,6)),
+                    ('SPAN', (3,7), (4,7)), ('SPAN', (5,7), (5,7)),
+                    ('SPAN', (3,8), (4,8)), ('SPAN', (5,8), (5,8)),
+                    ('SPAN', (3,9), (4,9)), ('SPAN', (5,9), (5,9)),
+                    ('SPAN', (3,10), (4,10)), ('SPAN', (5,10), (5,10)),
+                    ('ALIGN', (5,6), (7,10), 'CENTER'),
                     
                     #leaks
-                    ('SPAN', (1,12), (5,12)),
-                    ('SPAN', (1,13), (5,13)),
-                    ('BOX', (1,12), (5,12), 1, colors.black),
-                    ('BOX', (1,13), (5,13), 1, colors.black),
-                    ('ALIGN', (1,12), (5,13), 'CENTER'),
-                    ('BACKGROUND', (1,12), (5,12),'(.6,.7,.8)'),
+                    ('SPAN', (1,12), (7,12)),
+                    ('VALIGN', (1,13), (7,13), 'MIDDLE'),
+                    ('BOX', (1,12), (7,12), 1, colors.black),
+                    ('BOX', (1,13), (7,13), 1, colors.black),
+                    ('ALIGN', (1,12), (7,13), 'CENTER'),
+                    ('BACKGROUND', (1,12), (7,12),'(.6,.7,.8)'),
                     
                     #notes
                     ('SPAN', (1,15), (5,15)),
                 ]
+                if data.leak_data != "{}":
+                    styleInsert = [
+                        ('ALIGN', (1,13), (7,13 + spaced), 'CENTER'),
+                        ('GRID', (1,13), (7,13 + spaced), 1, colors.black),
+                    ] 
+                else:
+                    styleInsert = [
+                        ('SPAN', (1,13), (7,13)),
+                    ]
+                
+                for lines in styleInsert:
+                    style.append(lines)
+                       
             elif item == 'A5':
                 marginSet = 0.3
                 o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + readings.o1 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.o1_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(readings.o1_stop) + '</para>', styles['Normal'])
