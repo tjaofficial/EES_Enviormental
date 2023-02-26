@@ -1,4 +1,21 @@
 
+document.getElementById("leaksYN").addEventListener('change', leak_appear);
+
+function leak_appear(){
+    const leaksYN = document.getElementById('leaksYN').value,
+    leakCont = document.getElementById('leakCont'),
+    leakCont2 = document.getElementById('leakCont2');
+    if (leaksYN == 'yes'){
+        leakCont.hidden = false;
+    } else if (leaksYN == 'no'){
+        leakCont.hidden = true;
+    }
+}
+
+leak_appear()
+
+
+
 /*****************************************
 Initial Page Load Setup
 *****************************************/

@@ -5,6 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
+from .print_form_view import time_change, date_change
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -42,6 +43,7 @@ def formA4(request, facility, selector):
             data = database_model
             existing = True
             search = True
+            print('CHECK 1')
         elif len(org) > 0:
             database_form = org[0]
             if now.month == todays_log.date_save.month:
@@ -58,13 +60,22 @@ def formA4(request, facility, selector):
                 return redirect(batt_prof)
         if search:
             database_form = ''
+            leaks = ''
             collect_Raw_JSON = json.loads(data.leak_data)
             if len(collect_Raw_JSON) > 0:
                 collect_json = collect_Raw_JSON['data']
             else:
                 collect_json = ''
+            
+            if data.leak_data == '{}':
+                leaks = 'no'
+            elif data.leak_data == '':
+                leaks = 'no data'
+            else:
+                leaks = 'yes'
         else:
             if existing:
+                print('CHECK 2')
                 initial_data = {
                     'date': database_form.date,
                     'observer': database_form.observer,
@@ -80,6 +91,10 @@ def formA4(request, facility, selector):
                     'notes': database_form.notes,
                     'leak_data': database_form.leak_data,
                 }
+                if initial_data['leak_data'] == '{}':
+                    leaks = 'no'
+                else:
+                    leaks = 'yes'
             else:
                 initial_data = {
                     'date': todays_log.date_save,
@@ -88,10 +103,12 @@ def formA4(request, facility, selector):
                     'foreman': todays_log.foreman,
                     'facility_name': facility,
                 }
+                leaks = 'no data'
 
             data = formA4_form(initial=initial_data)
             collect_json = ''
-            
+        print(leaks)
+        
         if request.method == "POST":
             if existing:
                 form = formA4_form(request.POST, instance=database_form)
@@ -130,5 +147,5 @@ def formA4(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA4.html", {
-        'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
+        'leaks': leaks,'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
     })

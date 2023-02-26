@@ -1,55 +1,58 @@
 #boxTitle {
-    font-size: 30px;
-  }
-  #boxa1 {
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 150px;
-    max-width: 150px;
-    height: 35px;
-  }
-  #boxa2 {
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 80px;
-    max-width: 80px;
-    height: 35px;
-  }
-  #boxa3 {
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 300px;
-    max-width: 300px;
-    height: 35px;
-  }
-  #formA5_box1 {
-    text-align: center;
-    border: 1px solid black;
-    width: 150px;
-    height: 35px;
-  }
-  .headerMiddle{
-    text-align: center;
-    border: 2px solid black;
-    min-width: 80px;
-  }
-  .mainHeader{
-    text-align: center;
-    border: 2px solid black;
-    padding: 5px 0 5px 0;
-  }
-  #A4ovens{
-    border: 1px solid black;
-    text-align: center;
-  }
-  .rowsMiddle{
-    text-align: center;
-    border: 2px solid black;
-    min-width: 80px;
-  }
-#collection_ctableBody{
-  
+  font-size: 30px;
+}
+#boxa1 {
+  align-content: center;
+  text-align: center;
+  border: 1px solid black;
+  min-width: 150px;
+  max-width: 150px;
+  height: 35px;
+}
+#boxa2 {
+  align-content: center;
+  text-align: center;
+  border: 1px solid black;
+  min-width: 80px;
+  max-width: 80px;
+  height: 35px;
+}
+#boxa3 {
+  align-content: center;
+  text-align: center;
+  border: 1px solid black;
+  min-width: 300px;
+  max-width: 300px;
+  height: 35px;
+}
+#formA5_box1 {
+  text-align: center;
+  border: 1px solid black;
+  width: 150px;
+  height: 35px;
+}
+.headerMiddle{
+  text-align: center;
+  border: 2px solid black;
+  min-width: 80px;
+}
+.mainHeader{
+  text-align: center;
+  border: 2px solid black;
+  padding: 5px 0 5px 0;
+}
+#A4ovens{
+  border: 1px solid black;
+  text-align: center;
+}
+.rowsMiddle{
+  text-align: center;
+  border: 2px solid black;
+  min-width: 80px;
+  padding: 0px 6px;
+}
+.boxa6{
+  border: 2px solid black;
+  padding: 0px 21px;
+  text-align: center;
 }

@@ -48,7 +48,9 @@ def time_change(time):
             newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
         return newTime
     else:
-        print('hello')
+        print('TIME_CHANGE ERROR: no time entered')
+        print('ERROR TIME ENTERED: ' + str(time))
+        print('RETURNING: "-" and moving on...')
         return '-'
 
 def road_choices(input):
@@ -209,10 +211,14 @@ def form_PDF(request, facility, formDate, formName):
                     if parseDateStart <= x.date <= parseDateStop:
                         formsAndData[str(x.date)] = [x]
                         continue
+                    else:
+                        database_model = ''
+                        continue
                 else:
                     if str(x.date) == str(formDate):
                         database_model = x
                         formsAndData[str(x.date)] = [database_model]
+                        
                         break
                     elif org[len(org)-1] == x:
                         database_model = ''
@@ -224,6 +230,7 @@ def form_PDF(request, facility, formDate, formName):
                 org2 = readingsModel.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
                 for x in org2:
                     if formName == 'weekly':
+                        print("Getting paired Readings Model...")
                         if parseDateStart <= x.form.date <= parseDateStop:
                             for pairs in list(formsAndData):
                                 xDate = str(x.form.date)
@@ -1878,20 +1885,20 @@ def form_PDF(request, facility, formDate, formName):
                     [Paragraph('<para align=center><b>Week of:&#160;</b>' + date_change(data.week_start) + '&#160;&#160;to&#160;&#160;' + date_change(data.week_end) + '</para>', styles['Normal'])],
                     ['', '', '', '', ''],
                     [Paragraph('<para align=center><b>Observer</b></para>', styles['Normal']), Paragraph('<para align=center><b>Day/Time</b></para>', styles['Normal']), Paragraph('<para align=center><b>Location</b></para>', styles['Normal']), Paragraph('<para align=center><b>Visible Emissions</b></para>', styles['Normal']), Paragraph('<para align=center><b>Comments</b></para>', styles['Normal'])],
-                    [data.obser_0, 'Saturday/' + time_change(data.time_0), 'Coal Bin Vents', data.vents_0, Paragraph('<para>' + data.v_comments_0 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_0, Paragraph('<para>' + data.m_comments_0 + '</para>', styles['Normal'])],
-                    [data.obser_1, 'Sunday/' + time_change(data.time_1), 'Coal Bin Vents', data.vents_1, Paragraph('<para>' + data.v_comments_1 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_1, Paragraph('<para>' + data.m_comments_1 + '</para>', styles['Normal'])],
-                    [data.obser_2, 'Monday/' + time_change(data.time_2), 'Coal Bin Vents', data.vents_2, Paragraph('<para>' + data.v_comments_2 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_2, Paragraph('<para>' + data.m_comments_2 + '</para>', styles['Normal'])],
-                    [data.obser_3, 'Tuesday/' + time_change(data.time_3), 'Coal Bin Vents', data.vents_3, Paragraph('<para>' + data.v_comments_3 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_3, Paragraph('<para>' + data.m_comments_3 + '</para>', styles['Normal'])],
-                    [data.obser_4, 'Wednesday/' + time_change(data.time_4), 'Coal Bin Vents', data.vents_4, Paragraph('<para>' + data.v_comments_4 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_4, Paragraph('<para>' + data.m_comments_4 + '</para>', styles['Normal'])],
-                    [data.obser_5, 'Thursday/' + time_change(data.time_5), 'Coal Bin Vents', data.vents_5, Paragraph('<para>' + data.v_comments_5 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_5, Paragraph('<para>' + data.m_comments_5 + '</para>', styles['Normal'])],
-                    [data.obser_6, 'Friday/' + time_change(data.time_6), 'Coal Bin Vents', data.vents_6, Paragraph('<para>' + data.v_comments_6 + '</para>', styles['Normal'])],
-                    ['', '', 'Mixer Building Bag House', data.mixer_6, Paragraph('<para>' + data.m_comments_6 + '</para>', styles['Normal'])],
+                    [data.obser_0, 'Saturday/' + time_change(data.time_0), 'Coal Bin Vents', data.vents_0, Paragraph('<para>' + emptyInputs(data.v_comments_0) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_0, Paragraph('<para>' + emptyInputs(data.m_comments_0) + '</para>', styles['Normal'])],
+                    [data.obser_1, 'Sunday/' + time_change(data.time_1), 'Coal Bin Vents', data.vents_1, Paragraph('<para>' + emptyInputs(data.v_comments_1) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_1, Paragraph('<para>' + emptyInputs(data.m_comments_1) + '</para>', styles['Normal'])],
+                    [data.obser_2, 'Monday/' + time_change(data.time_2), 'Coal Bin Vents', data.vents_2, Paragraph('<para>' + emptyInputs(data.v_comments_2) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_2, Paragraph('<para>' + emptyInputs(data.m_comments_2) + '</para>', styles['Normal'])],
+                    [data.obser_3, 'Tuesday/' + time_change(data.time_3), 'Coal Bin Vents', data.vents_3, Paragraph('<para>' + emptyInputs(data.v_comments_3) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_3, Paragraph('<para>' + emptyInputs(data.m_comments_3) + '</para>', styles['Normal'])],
+                    [data.obser_4, 'Wednesday/' + time_change(data.time_4), 'Coal Bin Vents', data.vents_4, Paragraph('<para>' + emptyInputs(data.v_comments_4) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_4, Paragraph('<para>' + emptyInputs(data.m_comments_4) + '</para>', styles['Normal'])],
+                    [data.obser_5, 'Thursday/' + time_change(data.time_5), 'Coal Bin Vents', data.vents_5, Paragraph('<para>' + emptyInputs(data.v_comments_5) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_5, Paragraph('<para>' + emptyInputs(data.m_comments_5) + '</para>', styles['Normal'])],
+                    [data.obser_6, 'Friday/' + time_change(data.time_6), 'Coal Bin Vents', data.vents_6, Paragraph('<para>' + emptyInputs(data.v_comments_6) + '</para>', styles['Normal'])],
+                    ['', '', 'Mixer Building Bag House', data.mixer_6, Paragraph('<para>' + emptyInputs(data.m_comments_6) + '</para>', styles['Normal'])],
                     ['Observe visual emissions areas once per day', '', '', '', ''],
                     ['If visual emission are observed perform a Method 9 Observation for 15 minutes MINIMUM', '', '', '', ''],
                     ['If average opacity > 10%, Contact and Notify Enviornmental Engineer', '', '', '', ''],
