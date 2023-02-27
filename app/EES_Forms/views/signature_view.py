@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import signature_model, daily_battery_profile_model
+from ..models import signature_model, daily_battery_profile_model, bat_info_model
 from ..forms import signature_form
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -15,7 +15,7 @@ def signature(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     count_bp = daily_battery_profile_model.objects.count()
 
     today = datetime.date.today()
@@ -32,6 +32,7 @@ def signature(request, facility):
             'supervisor': database_form.supervisor,
             'sign_date': database_form.sign_date,
             'canvas': database_form.canvas,
+            'facilityChoice': database_form.facilityChoice,
         }
         data = signature_form(initial=initial_data)
     else:
@@ -41,13 +42,12 @@ def signature(request, facility):
         if existing:
             data = signature_form(request.POST, instance=database_form)
         else:
-            data = signature_form(request.POST)
-        
+            dataCopy = request.POST.copy()
+            dataCopy['facilityChoice'] = options
+            data = signature_form(dataCopy)
         A_valid = data.is_valid()
         
         if A_valid:
-            data.save(commit=False)
-            data.facilityChoice = facility
             data.save()
             
             return redirect('IncompleteForms', facility)
