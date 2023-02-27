@@ -34,8 +34,15 @@ def formB(request, facility, selector):
     one_week = datetime.timedelta(days=4)
     end_week = last_monday + one_week
     freq = False
+    fridayDate = today + datetime.timedelta(days=(4 - today.weekday()))
     if 2 < today.month < 11:
         freq = True
+    elif today.month == 2 and fridayDate.month == (today.month + 1):
+        freq = True
+    elif today.month == 11 and fridayDate.month == (today.month + 1):
+        freq = True
+
+
     week_start_dates = formB_model.objects.all().order_by('-week_start')
 
     count_bp = daily_battery_profile_model.objects.count()

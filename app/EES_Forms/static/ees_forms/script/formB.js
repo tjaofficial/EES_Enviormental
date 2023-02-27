@@ -516,19 +516,6 @@ function auto_fill_section_3_each(surpressant_crust, item) {
     }
 }
 
-/*function section_1_require_all() {
-    list = [0,1,2,3,4];
-    list.forEach((item) => {
-        const fugitive_dust_observed = document.getElementById('id_fugitive_dust_observed_' + item).value;
-        const supressant_applied = document.getElementById('id_supressant_applied_' + item).value;
-        const supressant_active = document.getElementById('id_supressant_active_' + item).value;
-        const working_face_exceed = document.getElementById('id_working_face_exceed_' + item).value;
-        const spills = document.getElementById('id_spills_' + item).value;
-        const pushed_back = document.getElementById('id_pushed_back_' + item).value;
-    }
-}*/
-
-
 function section_2_require() {
     list = [0,1,2,3,4];
     list.forEach((item) => {
