@@ -25,11 +25,13 @@ def IncompleteForms(request, facility):
         weekend_fri = weekday_fri + datetime.timedelta(days=7)
         signatures = signature_model.objects.all().order_by('-sign_date')
         sigExisting = False
+        sigName = ''
         facilityData = bat_info_model.objects.all().filter(facility_name=facility)[0]
 
         if len(signatures) > 0:
             if signatures[0].sign_date == today:
                 sigExisting = True
+                sigName = signatures[0].supervisor
                 print(sigExisting)
         def what_quarter(input):
             if input.month in {1,2,3}:
@@ -720,6 +722,7 @@ def IncompleteForms(request, facility):
             "form_checkAll2": form_checkAll2,
             'sigExisting': sigExisting,
             'facility': facility,
+            'sigName': sigName,
         })
     elif request.user.groups.filter(name=SUPER_VAR):
         return redirect('sup_dashboard', facility)

@@ -5353,25 +5353,25 @@ class quarterly_trucks_model(models.Model):
         null=True
     )
     rear_gate_5_1 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_interior_5_1 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_exterior_5_1 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     exhaust_5_1 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
@@ -5400,25 +5400,25 @@ class quarterly_trucks_model(models.Model):
         null=True
     )
     rear_gate_6_2 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_interior_6_2 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_exterior_6_2 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     exhaust_6_2 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
@@ -5447,25 +5447,25 @@ class quarterly_trucks_model(models.Model):
         null=True
     )
     rear_gate_7_3 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_interior_7_3 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_exterior_7_3 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     exhaust_7_3 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
@@ -5494,25 +5494,25 @@ class quarterly_trucks_model(models.Model):
         null=True
     )
     rear_gate_9_4 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_interior_9_4 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     box_exterior_9_4 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
     )
     exhaust_9_4 = models.CharField(
-        choices=yes_no_choices,
+        choices=yes_no_na_choices,
         max_length=4,
         blank=True,
         null=True
