@@ -8,11 +8,13 @@
             <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
         {% endif %}
     </head>
+    <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div>
             {% include "ees_forms/backArrow.html" %}
         </div>
         <div class="card" id="card_fitter" style="width: 60%;">
+            {% include "ees_forms/print_button.html" %}
             <div class="paper_fitter" style="padding: 3rem; width: 100%;">
                 <div style="width:100%; text-align: right;">
                     {% if selector == 'form' %}

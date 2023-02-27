@@ -1,4 +1,4 @@
-from ..models import Forms
+from ..models import Forms, formM_model
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
@@ -13,6 +13,7 @@ from reportlab.pdfgen import canvas
 import json
 import io
 import datetime
+import calendar
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -197,11 +198,14 @@ def form_PDF(request, facility, formDate, formName):
     print(formList)
     elems = []
     for item in formList:
-        if item in ('N') or item[0] == 'F':
+        if item[0] == 'F':
             print('Skipped Form and Continued')
             continue
         goNext = False
-        if len(item) > 1 and len(item) <= 3:
+        if item in ['N']:
+            reFormName = 'N'
+            modelName = 'formM_model'
+        elif len(item) > 1 and len(item) <= 3:
             reFormName = item[0] + '-' + item[1]
             modelName = 'form' + item + '_model'
         elif len(item) > 3:
@@ -211,18 +215,39 @@ def form_PDF(request, facility, formDate, formName):
             reFormName = item
             modelName = 'form' + item + '_model'
         ModelForms = Forms.objects.filter(form=reFormName, facilityChoice__facility_name=facility)[0]
-            
+        
         mainModel = apps.get_model('EES_Forms', modelName)
         #Pick the specific form date
         formsAndData = {}
-        parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
-        parseDateStart = parseDateStop - datetime.timedelta(days=6)
+        if formName[-1] == 'N':
+            parseDateN = datetime.datetime.strptime(formDate, "%m-%Y")
+            daysInMonth = calendar.monthrange(parseDateN.year, parseDateN.month)
+            newDateN = str(parseDateN.year) + '-' + str(parseDateN.month) + '-' + '01'
+            print(daysInMonth[1] + 1)
+            print(newDateN)
+            parseDateStart = datetime.datetime.strptime(newDateN, "%Y-%m-%d").date()
+            parseDateStop = parseDateStart + datetime.timedelta(days=(daysInMonth[1] - 1))
+            print(parseDateStop)
+            print(parseDateStart)
+        else:
+            parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
+            parseDateStart = parseDateStop - datetime.timedelta(days=6)
+        database_model = ''
         try:
             org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
+            print(org)
             for x in org:
                 if formName == 'weekly':
                     if parseDateStart <= x.date <= parseDateStop:
                         formsAndData[str(x.date)] = [x]
+                        continue
+                    else:
+                        database_model = ''
+                        continue
+                elif formName[-1] == 'N':
+                    if parseDateStart <= x.date <= parseDateStop:
+                        formsAndData[str(x.date)] = [x]
+                        print(x)
                         continue
                     else:
                         database_model = ''
@@ -250,6 +275,13 @@ def form_PDF(request, facility, formDate, formName):
                                 if xDate == pairs:
                                     formsAndData[pairs].append(x)
                                     continue
+                    elif formName[-1] == 'N':
+                        if parseDateStart <= x.date <= parseDateStop:
+                            formsAndData[str(x.date)] = [x]
+                            continue
+                        else:
+                            database_model2 = ''
+                            continue
                     else:
                         if str(x.form.date) == str(formDate):
                             for pairs in list(formsAndData):
@@ -268,6 +300,13 @@ def form_PDF(request, facility, formDate, formName):
                         print(r)
                         print('<-------HERE')
                         formsAndData[str(r.week_start)] = [r]
+                elif formName[-1] == 'N':
+                    if parseDateStart <= x.date <= parseDateStop:
+                        formsAndData[str(x.date)] = [x]
+                        continue
+                    else:
+                        database_model = ''
+                        continue
                 else:
                     if str(r.week_start) == str(formDate):
                         database_model = r
@@ -285,8 +324,13 @@ def form_PDF(request, facility, formDate, formName):
         if goNext:
             continue
         print('Processing Forms that were found for ' + item + '...')
+        alphaStore = ''
         for alpha in list(formsAndData):
             #print(len(formsAndData[alpha]))
+            if alphaStore == '':
+                alphaStore += alpha[:7]
+            else:
+                continue
             if len(formsAndData[alpha]) == 2:
                 print(item + ' is a double database...')
                 data = formsAndData[alpha][0]
@@ -781,8 +825,7 @@ def form_PDF(request, facility, formDate, formName):
                     ]
                 
                 for lines in styleInsert:
-                    style.append(lines)
-                       
+                    style.append(lines)         
             elif item == 'A5':
                 marginSet = 0.3
                 o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + readings.o1 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(readings.o1_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(readings.o1_stop) + '</para>', styles['Normal'])
@@ -2065,6 +2108,139 @@ def form_PDF(request, facility, formDate, formName):
                     ('SPAN', (1,25), (6,25)),
                     ('SPAN', (1,27), (6,27)),
                 ]
+            elif item == 'N': 
+                dataN = formM_model.objects.all().filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
+                new = 'Fugitive Dust Inspection'
+                titleN = 'Method 9D Monthly Checklist - (N)'
+                subTitleN = 'Facility Name: ' + facility
+                dateN = str(parseDateN.month) + '-' + str(parseDateN.year)
+                tableData = [   
+                    [titleN],
+                    [subTitleN],
+                    [dateN],
+                    ['','','','','','','',''],
+                    ['','Paved Roads','','','Dates','','',''],
+                ]
+                
+                def roadFunc(allForms, typeRoad):
+                    paved_roads = {
+                        'p1': '#4 Booster Station',
+                        'p2': '#5 Battery Road',
+                        'p3': 'Coal Dump Horseshoe',
+                        'p4': 'Coal Handling Road (Partial)',
+                        'p5': 'Coke Plant Road',
+                        'p6': 'Coke Plant Mech Road',
+                        'p7': 'North Gate Area',
+                        'p8': 'Compund Road',
+                        'p9': 'D-4 Blast Furnace Road',
+                        'p10': 'Gap Gate Road',
+                        'p11': '#3 Ore Dock Road',
+                        'p12': 'River Road',
+                        'p13': 'Weigh Station Road',
+                        'p14': 'Zug Island Road'
+                    }
+                    unpaved_roads = {
+                        'unp1': 'North Gate Truck Turn',
+                        'unp2': 'Screening Station Road',
+                        'unp3': 'Coal Handling Road (Partial)',
+                        'unp4': 'Taj Mahal Road',
+                        'unp5': 'PECS Approach',
+                        'unp6': 'No. 2 Boilerhouse Road',
+                        'unp7': 'Bypass Route',
+                    }
+                    parking_lots = {
+                        'par1': 'Gap Gate Parking',
+                        'par2': 'Truck Garage Area',
+                        'par3': 'EES Coke Office Parking',
+                    }
+                    if typeRoad == 'paved':
+                        rangeSet = 14
+                        varSelect = 'p'
+                        sorter = paved_roads
+                    elif typeRoad == 'unpaved':
+                        rangeSet = 7
+                        varSelect = 'unp'
+                        sorter = unpaved_roads
+                    elif typeRoad == 'parking':
+                        rangeSet = 3
+                        varSelect = 'par'
+                        sorter = parking_lots
+                        
+                    dateList = []
+                    for paved in range(rangeSet):
+                        roadSelector = varSelect + str(paved + 1)
+                        road_string = sorter[roadSelector]
+                        rowList = ''
+                        for entry in allForms:
+                            if entry.paved == roadSelector:
+                                roadDate = '(' + str(entry.date.month) + '/' + str(entry.date.day) + ')'
+                                if rowList == '':
+                                    rowList += roadDate
+                                else:
+                                    rowList += ', ' + roadDate
+                        dateList.append((road_string, rowList))
+                        
+                    roadInsert = []
+                    for insert in dateList:
+                        roadInsert.append(['',insert[0],'','',insert[1],'','',''],)
+                    return roadInsert
+                
+                for line in roadFunc(dataN, 'paved'):
+                    tableData.append(line)
+                
+                tableData.append(['','Unpaved Roads','','','Dates','','',''])
+                
+                for line in roadFunc(dataN, 'unpaved'):
+                    tableData.append(line)
+                    
+                tableData.append(['','Parking Lots','','','Dates','','',''])
+                
+                for line in roadFunc(dataN, 'parking'):
+                    tableData.append(line)
+                    
+                tableColWidths = (60,50,40,60,70,70,70,60)
+                
+                style = [
+                    #Top header and info
+                    ('FONT', (0,0), (-1,0), 'Times-Bold', 18),
+                    ('FONT', (0,1), (-1,1), 'Times-Bold', 10),
+                    #('BOTTOMPADDING',(0,2), (-1,2), 5),
+                    ('SPAN', (0,0), (-1,0)),
+                    ('SPAN', (0,1), (-1,1)),
+                    ('SPAN', (0,2), (-1,2)),
+                    ('ALIGN', (0,0), (-1,2), 'CENTER'),
+                    #general
+                    ('GRID',(1,4), (6,30), 0.5,colors.black),
+                    #Table paved (1,4)
+                        #header
+                    ('SPAN', (1,4), (3,4)),
+                    ('SPAN', (4,4), (6,4)),
+                    ('BACKGROUND', (1,4), (6,4),'(.6,.7,.8)'),
+                    ('ALIGN', (1,4), (6,4), 'CENTER'),
+                    
+                    #Table unpaved (1,19)
+                        #header
+                    ('SPAN', (1,19), (3,19)),
+                    ('SPAN', (4,19), (6,19)),
+                    ('BACKGROUND', (1,19), (6,19),'(.6,.7,.8)'),
+                    ('ALIGN', (1,19), (6,19), 'CENTER'),
+                    
+                    #Table unpaved (1,27)
+                        #header
+                    ('SPAN', (1,27), (3,27)),
+                    ('SPAN', (4,27), (6,27)),
+                    ('BACKGROUND', (1,27), (6,27),'(.6,.7,.8)'),
+                    ('ALIGN', (1,27), (6,27), 'CENTER'),
+                    
+                ]
+                styleInsert = []
+                for i in range(30):
+                    mark = 4 + (i-1)
+                    styleInsert.append(('SPAN', (1,mark), (3,mark)))
+                    styleInsert.append(('SPAN', (4,mark), (6,mark)))
+                
+                for line in styleInsert:
+                    style.append(line)          
             elif item == 'O':
                 tableData = [
                     [title],
