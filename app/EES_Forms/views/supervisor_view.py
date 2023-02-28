@@ -485,12 +485,6 @@ def register_view(request, facility, access_page):
 
     if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
-            #"if there are no facilities linked to the request.user's company then we should get back false or "
-            userProf = user_profiles.filter(user__username=request.user.username)[0]
-            userFacility = options.filter(company__company_name=userProf.company.company_name)
-            if len(userFacility) > 0:
-                facilityLink == True
-            
             if len(user_profiles.filter(user__id__exact=access_page)) > 0:
                 userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
                 userInfo = User.objects.all().filter(id__exact=access_page)[0]
@@ -517,7 +511,12 @@ def register_view(request, facility, access_page):
             profile_form = user_profile_form()
             
             data = bat_info_form()
-
+            
+            #"if there are no facilities linked to the request.user's company then we should get back false or "
+            userProf = user_profiles.filter(user__username=request.user.username)[0]
+            userFacility = options.filter(company=userProf.company)
+            if len(userFacility) > 0:
+                facilityLink = True
         if request.method == 'POST':
             check_1 = request.POST.get('create_user', False)
             check_2 = request.POST.get('create_facility', False)
