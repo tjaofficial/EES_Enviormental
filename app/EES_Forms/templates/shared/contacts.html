@@ -13,6 +13,7 @@
                 <p class="contactHeader center">Email</p>
                 <p class="contactHeader center">Certification Date</p>
             </div>
+            <p id="facility" hidden=true>{{ facility }}</p>
             {% for person in organized_list %}
             <div class="contact_singles" id="{{ person.0 }}" onmouseover="getid(this);">
                 <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>

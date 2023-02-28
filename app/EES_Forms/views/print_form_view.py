@@ -230,6 +230,7 @@ def form_PDF(request, facility, formDate, formName):
             print(parseDateStop)
             print(parseDateStart)
         else:
+            parseDateN = ''
             parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             parseDateStart = parseDateStop - datetime.timedelta(days=6)
         database_model = ''
