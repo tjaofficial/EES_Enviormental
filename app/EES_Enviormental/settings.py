@@ -51,8 +51,6 @@ INSTALLED_APPS = [
 
 if(USE_S3): INSTALLED_APPS.append('storages')
 
-print(INSTALLED_APPS)
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

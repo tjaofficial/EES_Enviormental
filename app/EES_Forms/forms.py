@@ -58,7 +58,6 @@ class SubFormC1(ModelForm):
             cleaned_data = super().clean()
             start_time = cleaned_data.get("truck_start_time")
             end_time = cleaned_data.get("truck_stop_time")
-            print('chciken')
             if end_time < start_time:
                 raise forms.ValidationError("End time should be later than start time.")
 
@@ -2038,5 +2037,10 @@ class company_form(ModelForm):
             'customerID': forms.TextInput(attrs={'style':'width: 250px;'}),
         }   
         
+class facility_forms_form(ModelForm):
+    class Meta:
+        model = facility_forms_model
+        fields = ('__all__')
         
+
         

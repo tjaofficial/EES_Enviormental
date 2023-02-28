@@ -24,6 +24,7 @@ urlpatterns = [
     path('<str:facility>/about', views.about_view, name='about'),
     path('<str:facility>/safety', views.safety_view, name='safety'),
     path('<str:facility>/settings', views.settings_view, name='settings'),
+    path('<str:facility>/form_select', views.facilityForm, name='facilityForms'),
     
     path("facility/", views.facility_select_view, name="facilitySelect"),
     path("<str:facility>/daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),

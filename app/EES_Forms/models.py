@@ -5591,3 +5591,14 @@ class signature_model(models.Model):
     def __str__(self):
         return str(self.sign_date)
     
+class facility_forms_model(models.Model):
+    facilityChoice = models.OneToOneField(
+        bat_info_model,
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    formData = models.CharField(
+        max_length=10000,
+        blank=True,
+        null=True
+    )

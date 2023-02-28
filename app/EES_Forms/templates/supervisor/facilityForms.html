@@ -1,0 +1,28 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<div style='margin:auto; width:44%;max-width:775px;'>
+    <div class="card" style=''>
+        <div class="cardHeader">Select Forms</div>
+        <div class="contact_list_cont">
+            <form method='POST' action=''>
+                {% csrf_token %}
+                <table style='margin:auto;width:100%;'>
+                    <tr>
+                        <th style="width: 10%;"></th>
+                        <th style="width: 30%;">Form Type</th>
+                        <th style="width: 40%;">Description</th>
+                    </tr>
+                    {% for form in formList %}
+                    <tr>
+                        <td><input name="forms{{ forloop.counter }}" type="checkbox" value="{{form.header}}--{{form.title}}" {% for x in modelList %}{% if x == form.header|cut:" "|add:"--"|add:form.title|cut:" " %}checked{% else %}{% endif %}{% endfor %}/></td>
+                        <td>{{form.header}}</td>
+                        <td>{{form.title}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <input type='submit' value='Save'/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

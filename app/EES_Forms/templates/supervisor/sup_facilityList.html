@@ -18,7 +18,7 @@
                     <tr>
                         <td>{{facilityData.facility_name}}</td>
                         <td>*form they need*</td>
-                        <td>Edit</td>
+                        <td><a href="{% url 'facilityForms' facilityData.facility_name%}">Edit</a></td>
                     </tr>
                     {% for form in formsList %}
                         <tr>
