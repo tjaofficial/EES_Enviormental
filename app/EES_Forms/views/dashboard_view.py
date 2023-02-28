@@ -546,7 +546,7 @@ def IncompleteForms(request, facility):
             wind_direction = toTextualDescription(degree)
         except:
             weather = {
-                'error': "Please inform Supervisor '" + city + "' is not a valid city.",
+                'error': "Please inform Supervisor '" + str(city) + "' is not a valid city.",
                 'city': False
             }
 

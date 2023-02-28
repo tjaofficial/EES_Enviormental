@@ -286,7 +286,7 @@ def sup_dashboard_view(request, facility):
         wind_direction = toTextualDescription(degree)
     except:
         weather = {
-            'error': "'" + city + "' is not valid. Click here to change.",
+            'error': "'" + str(city) + "' is not valid. Click here to change.",
             'city': False
         }
 
