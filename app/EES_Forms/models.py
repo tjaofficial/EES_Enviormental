@@ -5602,3 +5602,5 @@ class facility_forms_model(models.Model):
         blank=True,
         null=True
     )
+    def __str__(self):
+        return str(self.facilityChoice)

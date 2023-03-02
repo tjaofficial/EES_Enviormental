@@ -19,7 +19,6 @@ def sup_dashboard_view(request, facility):
     unlock = False
     client = False
     supervisor = False
-
     if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
         return redirect('IncompleteForms', facility)
@@ -115,7 +114,6 @@ def sup_dashboard_view(request, facility):
 
     def all_ovens(reads):
         A = []
-        
         for items in reads:
             if items.form.facilityChoice == facility:
                 date = items.form.date

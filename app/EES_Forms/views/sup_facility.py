@@ -16,9 +16,15 @@ def facilityList(request, facility):
         supervisor = True
     userProfData = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
     facList = bat_info_model.objects.all().filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
+    facData = facility_forms_model.objects.all()
+    
+    newFacList = []
+    for line in facData:
+        facilityForms = line.formData[1:-1].replace("'", "").replace(" ", "").split(",")
+        newFacList.append((line.facilityChoice, facilityForms))
         
     return render(request, 'supervisor/sup_facilityList.html', {
-        'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': facList
+        'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': newFacList
     })
     
 def facilityForm(request, facility):
@@ -34,16 +40,17 @@ def facilityForm(request, facility):
         supervisor = True
     existing = False
     modelList = ''
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    specificFacility = bat_info_model.objects.all().filter(facility_name=facility)[0]
     formList = Forms.objects.all()
-    facilityForms = facility_forms_model.objects.all().filter(facilityChoice=options)
+    facilityFormsData = facility_forms_model.objects.all().filter(facilityChoice=specificFacility)
     
-    if len(facilityForms) > 0:
-        facilityForms = facilityForms[0].formData[1:-1].replace("'", "").replace(" ", "").split(",")
+    if len(facilityFormsData) > 0:
+        facilityFormsData = facilityFormsData[0].formData[1:-1].replace("'", "").replace(" ", "").split(",")
         existing = True
     
     if existing:
-        modelList = facilityForms
+        modelList = facilityFormsData
+        replaceModel = facility_forms_model.objects.get(facilityChoice=specificFacility)
     
     if request.method == 'POST':
         selectedList = []
@@ -51,14 +58,16 @@ def facilityForm(request, facility):
             selectedList.append(request.POST['forms' + str(item + 1)].replace(" ", "")) 
         dataCopy = request.POST.copy()
         dataCopy['formData'] = selectedList
-        dataCopy['facilityChoice'] = options
+        dataCopy['facilityChoice'] = specificFacility
         
-        form = facility_forms_form(dataCopy)
-        
+        if existing:
+            form = facility_forms_form(dataCopy, instance=replaceModel)
+        else:
+            form = facility_forms_form(dataCopy)
+            
         if form.is_valid():
             form.save()
-        
-        
+            return redirect('facilityForms', facility)
     return render (request, 'supervisor/facilityForms.html', {
         'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
     })

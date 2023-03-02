@@ -14,11 +14,11 @@
                     <th style="width: 30%;">Forms</th>
                     <th style="width: 40%;">EXTRAs</th>
                 </tr>
-                {% for facilityData in facilities %}
+                {% for info in facilities %}
                     <tr>
-                        <td>{{facilityData.facility_name}}</td>
-                        <td>*form they need*</td>
-                        <td><a href="{% url 'facilityForms' facilityData.facility_name%}">Edit</a></td>
+                        <td>{{info.0.facility_name}}</td>
+                        <td>{% for x in info.1 %}{{x}}, {% endfor %}</td>
+                        <td><a href="{% url 'facilityForms' info.0.facility_name %}">Edit</a></td>
                     </tr>
                     {% for form in formsList %}
                         <tr>

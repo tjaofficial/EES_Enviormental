@@ -29,7 +29,8 @@ def login_view(request):
         elif request.user.groups.filter(name=SUPER_VAR):
             return redirect('sup_dashboard', SUPER_VAR)
         elif request.user.groups.filter(name=CLIENT_VAR):
-            return redirect('c_dashboard')
+            facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
+            return redirect('c_dashboard', facility)
         elif request.user.groups.filter(name=OBSER_VAR):
             if count_bp != 0:
                 todays_log = daily_prof[0]
@@ -60,7 +61,8 @@ def login_view(request):
                 else:
                     return redirect('Register', SUPER_VAR, 'facility')
             elif request.user.groups.filter(name=CLIENT_VAR):
-                return redirect('c_dashboard')
+                facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
+                return redirect('c_dashboard', facility)
             elif request.user.groups.filter(name=OBSER_VAR):
                 return redirect('facilitySelect')
                 # if count_bp != 0:

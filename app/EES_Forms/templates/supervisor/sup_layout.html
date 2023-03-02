@@ -25,72 +25,13 @@
             </div>
             <div class='menuItems'>
                 <ul>
-                    <li><a id='adminLabel' href=#>Supervisor</a>
+                    <li><p id='adminLabel' style="color:white;" href=#>{% if client %}Directory{% elif supervisor %}Supervisor{% endif %}</p>
                         <ul id='adminGroup' style='display:block;'>
-                            <li><a href="{% if client %}{% url 'c_dashboard' %}{% elif supervisor %}{% url 'sup_dashboard' facility %}{% endif %}">Dashboard</a></li>
+                            <li><a href="{% if client %}{% url 'c_dashboard' facility %}{% elif supervisor %}{% url 'sup_dashboard' facility %}{% endif %}">Dashboard</a></li>
                             {% if client %}{% elif supervisor %}<li><a href="{% url 'Register' facility 'form'%}">Register New Profile</a></li>{% endif %}
                             <li><a href="{% url 'Contacts'  facility %}">Profiles/Contacts</a></li>
                             <li><a href="{% url 'facilityList' facility %}">Facilities</a></li>
                             <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
-                        </ul>
-                    </li>
-                    <li><a id='reportsLabel' href=#>Daily Reports</a>
-                        <ul id='reportsGroup' style='display:block;'>
-                            <li>
-                                {% if form_enteredA1 %}
-                                    <a class="no_link_css" href="Daily/formA1/{{ date }}">
-                                        Form A-1
-                                    </a>
-                                {% else %}
-                                    <a class="no_link_css" href=#>
-                                        Form A-1 (Not Submitted)
-                                    </a>
-                                {% endif %}
-                            </li>
-                            <li>
-                                {% if form_enteredA2 %}
-                                    <a class="no_link_css" href="Daily/formA2/{{ date }}">
-                                        Form A-2
-                                    </a>
-                                {% else %}
-                                    <a class="no_link_css" href=#>
-                                        Form A-2 (Not Submitted)
-                                    </a>
-                                {% endif %}
-                            </li>
-                            <li>
-                                {% if form_enteredA3 %}
-                                    <a class="no_link_css" href="Daily/formA3/{{ date }}">
-                                        Form A-3
-                                    </a>
-                                {% else %}
-                                    <a class="no_link_css" href=#>
-                                        Form A-3 (Not Submitted)
-                                    </a>
-                                {% endif %}
-                            </li>
-                            <li>
-                                {% if form_enteredA4 %}
-                                    <a class="no_link_css" href="Daily/formA4/{{ date }}">
-                                        Form A-4
-                                    </a>
-                                {% else %}
-                                    <a class="no_link_css" href=#>
-                                        Form A-4 (Not Submitted)
-                                    </a>
-                                {% endif %}
-                            </li>
-                            <li>
-                                {% if form_enteredA5 %}
-                                    <a class="no_link_css" href="Daily/formA5/{{ date }}">
-                                        Form A-5
-                                    </a>
-                                {% else %}
-                                    <a class="no_link_css" href=#>
-                                        Form A-5 (Not Submitted)
-                                    </a>
-                                {% endif %}
-                            </li>
                         </ul>
                     </li>
                     {% if unlock %}<li><a href=#>Completion Progress</a>
@@ -100,13 +41,13 @@
                             <li><a href=#>Monthly</a></li>
                             <li><a href=#>Quartery</a></li>
                             <li><a href=#>Anually</a></li>
-                        </ul
+                        </ul>
                     </li>{% endif %}
                     <li><a id='calendarLabel' href=#>Schedule</a>
                         <ul id='calendarGroup' style='display: block;'>
                             <li><a href="{% url 'Schedule' facility %}">Calendar</a></li>
                             {% if client %}{% elif supervisor %}<li><a href="{% url 'Add Event' facility %}">Add Events</a></li>{% endif %}
-                        </ul
+                        </ul>
                     </li>
                     {% if client %}
                     <li><a href=#>Records/Data</a>
@@ -157,7 +98,7 @@
         <div style="width:100%;overflow: scroll;">
             <div id="topBar">
                 <!--<div style="color: white;">DTE - EES Coke</div>-->
-                {% if selector or facility == 'register' %}
+                {% if selector or facility == 'register' or client %}
                 {% else %}
                 <form method='POST' action=''>
                     {% csrf_token %}
