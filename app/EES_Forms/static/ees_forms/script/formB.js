@@ -19,11 +19,12 @@ clean_up_submitted_form();
 function clean_up_submitted_form() {
     individual_day();
     month_select();
+
     if (month_select() == '1day') {
         section_1_hidden();
         section_2_hidden();
-        section_3_hidden();
     }
+    section_3_hidden();
     section_4_hidden();
 }
 
