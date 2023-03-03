@@ -245,9 +245,11 @@ def search_forms_view(request, facility, access_page):
             att_check=''
             queryN = formM_model.objects.all().filter(facilityChoice__facility_name=facility)
             monthList = []
+            eliminator =[]
             for month in queryN:
-                if month.date.month not in monthList:
+                if month.date.month not in eliminator:
                     monthList.append((month.date.month, month.date.year, calendar.month_name[month.date.month],))
+                    eliminator.append(month.date.month)
             print(monthList)
 
     if request.method == "POST":
