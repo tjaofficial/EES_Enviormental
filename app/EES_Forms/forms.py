@@ -48,8 +48,8 @@ class SubFormC1(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'comments': Textarea(attrs={'rows': 7, 'cols': 125}),
-            'average_t': forms.NumberInput(attrs={'oninput': 'truck_average()', 'id': 'average_t', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'average_p': forms.NumberInput(attrs={'oninput': 'area_average()', 'id': 'average_p', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'average_t': forms.NumberInput(attrs={'oninput': 'truck_average()', 'id': 'average_t', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+            'average_p': forms.NumberInput(attrs={'oninput': 'area_average()', 'id': 'average_p', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
             'average_storage': forms.NumberInput(attrs={'required': False, 'oninput': 'storage_average()', 'id': 'average_storage', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
             'average_salt': forms.NumberInput(attrs={'required': False, 'oninput': 'salt_average()', 'id': 'average_salt', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
         }
