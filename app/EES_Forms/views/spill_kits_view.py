@@ -227,14 +227,14 @@ def spill_kits(request, facility, selector):
             data = spill_kits_form(initial=initial_data)
         
         if request.method == "POST":
+            dataCopy = request.POST.copy()
+            dataCopy["facilityChoice"] = options
             if existing:
-                form = spill_kits_form(request.POST, instance=database_form)
+                form = spill_kits_form(dataCopy, instance=database_form)
             else:
-                form = spill_kits_form(request.POST)
+                form = spill_kits_form(dataCopy)
                 
             if form.is_valid():
-                form.save(commit=False)
-                form.facilityChoice = options
                 form.save()
                 
                 new_latest_form = spill_kits_model.objects.filter(month=month_name)[0]
