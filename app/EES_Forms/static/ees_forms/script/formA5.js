@@ -113,76 +113,38 @@ function averages_pt4() {
 }
 averages_pt4();
 
-
-function pt2_check() {
-    const oven1 = parseInt(document.getElementById('o1').value),
-          oven2 = parseInt(document.getElementById('o2').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("oven2_pop_id").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-    else if (oven1 >= oven2) {
-        document.getElementById("oven2_pop_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("oven2_pop_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("oven2_pop_id").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'visible';
-    }  
-}
-function pt3_check() {
-    const oven1 = parseInt(document.getElementById('o2').value),
-          oven2 = parseInt(document.getElementById('o3').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("oven3_pop_id").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-    else if (oven1 >= oven2) {
-        document.getElementById("oven3_pop_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("oven3_pop_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("oven3_pop_id").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").innerHTML = '<a id="exit_pop_id" class="exit_pop_class">X</a>Please change Oven No. for THIRD oven or comment below what oven(s) were skipped.';
-    }  
-}
-function pt4_check() {
-    const oven1 = parseInt(document.getElementById('o3').value),
-          oven2 = parseInt(document.getElementById('o4').value);
-    
-    if (oven2 == parseInt(oven1) + 2) {
-        document.getElementById("oven4_pop_id").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }  
-    else if (oven1 >= oven2) {
-        document.getElementById("oven4_pop_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 == parseInt(oven1) + 1) {
-        document.getElementById("oven4_pop_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").style.visibility = 'hidden';
-    }
-    else if (oven2 > parseInt(oven1) + 2) {
-        document.getElementById("oven4_pop_id").style.visibility = 'hidden';
-        document.getElementById("comment_skip_id").style.visibility = 'visible';
-        document.getElementById("comment_skip_id").innerHTML = '<a id="exit_pop_id" class="exit_pop_class">X</a>Please change Oven No. for FORTH oven or comment below what oven(s) were skipped.';
-        document.getElementById("exit_pop_id").onclick = function() {
-            exit_pop()
-        };
-    } 
+function isEven(n) {
+    return n % 2 == 0;
 }
 
+
+function pushTravelCheck(pushB) {
+    const pushA = pushB - 1
+    const ovenA = parseInt(document.getElementById('o' + pushA).value),
+          ovenB = parseInt(document.getElementById('o' + pushB).value);
+    const endingNumbers = [85, 84]
+    if (ovenB && 0 < ovenB < 86) {
+        if (isEven(ovenB) && isEven(ovenA) && ovenA < ovenB || !isEven(ovenB) && !isEven(ovenA) && ovenA < ovenB || ovenA == 85 && isEven(ovenB) || ovenA == 84 && !isEven(ovenB)) {
+            if (ovenB >= parseInt(ovenA) + 4 || ovenB >= parseInt(ovenA) + 4 || ovenA == 85 && ovenB >= 4 || ovenA == 84 && ovenB >= 3){
+                console.log('SKIPPED AN OVEN')
+                document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.visibility = 'hidden';
+                document.getElementById("comment_skip_id").style.visibility = 'visible';
+            } else {
+                console.log('EVERYTHING IS FINE')
+                document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.visibility = 'hidden';
+                document.getElementById("comment_skip_id").style.visibility = 'hidden';
+            }
+        } else {//if (!(parseInt(ovenA) in endingNumbers) && ovenA >= ovenB || ovenB == parseInt(ovenA) + 1 || ovenA == 85 && ovenB == 1 || ovenA == 84 && ovenB == 2) {
+            console.log('NEED TO CHANGE INPUT')
+            document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.visibility = 'visible';
+            document.getElementById("comment_skip_id").style.visibility = 'hidden';
+        }
+    } else {
+        console.log('no input')
+        document.getElementById("comment_skip_id").style.visibility = 'hidden';
+        document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.visibility = 'hidden';
+    }
+}
 
 
 function exit_pop() {

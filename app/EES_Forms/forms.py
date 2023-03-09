@@ -542,8 +542,6 @@ class formA5_form(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
         }
-
-
 class formA5_readings_form(ModelForm):
     class Meta:
         model = formA5_readings_model
@@ -665,9 +663,9 @@ class formA5_readings_form(ModelForm):
             'o4_highest_opacity' : forms.NumberInput(attrs={'oninput': 'averages_pt4()', 'id': 'o4_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
             'o4_average_6' : forms.NumberInput(attrs={'oninput': 'averages_pt4()', 'id': 'o4_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
             'o1' : forms.NumberInput(attrs={'id' : 'o1', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o2' : forms.NumberInput(attrs={'id' : 'o2', 'oninput': 'pt2_check()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o3' : forms.NumberInput(attrs={'id' : 'o3', 'oninput': 'pt3_check()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'o4' : forms.NumberInput(attrs={'id' : 'o4', 'oninput': 'pt4_check()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o2' : forms.NumberInput(attrs={'id' : 'o2', 'oninput': 'pushTravelCheck(2)', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o3' : forms.NumberInput(attrs={'id' : 'o3', 'oninput': 'pushTravelCheck(3)', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'o4' : forms.NumberInput(attrs={'id' : 'o4', 'oninput': 'pushTravelCheck(4)', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
             'o1_start' : forms.TimeInput(attrs={'id': 'o1_start', 'oninput': 'timecheck_pt1()', 'type':'time', 'style':'width: 120px;'}),
             'o1_stop' : forms.TimeInput(attrs={'id': 'o1_stop', 'oninput': 'timecheck_pt1()', 'type':'time', 'style':'width: 120px;'}),
             'o2_start' : forms.TimeInput(attrs={'id': 'o2_start', 'oninput': 'timecheck_pt2()', 'type':'time', 'style':'width: 120px;'}),
