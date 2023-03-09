@@ -29,7 +29,7 @@ def corrective_action_view(request, facility):
 
     profile = user_profile_model.objects.all()
     options = bat_info_model.objects.all()
-    ca_forms = issues_model.objects.all().order_by('-id')
+    ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
 
     return render(request, "ees_forms/corrective_actions.html", {
         'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
@@ -338,10 +338,12 @@ def issues_view(request, facility, form_name, form_date, access_page):
         form = issues_form(initial=initial_data)
         
         if request.method == "POST":
+            dataCopy = request.POST.copy()
+            dataCopy["facilityChoice"] = options.filter(facilityChoice__facility_name=facility)[0]
             if existing:
-                data = issues_form(request.POST, instance=database_form)
+                data = issues_form(dataCopy, instance=database_form)
             else:
-                data = issues_form(request.POST)
+                data = issues_form(dataCopy)
             if data.is_valid():
                 data.save()
 
