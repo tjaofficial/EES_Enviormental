@@ -22,7 +22,7 @@ from EES_Forms import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ees_forms/', include("EES_Forms.urls")),
+    path('', include("EES_Forms.urls")),
     path("", views.landing_page, name="landing"),
 ]
 
