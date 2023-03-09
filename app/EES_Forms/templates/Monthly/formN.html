@@ -338,7 +338,7 @@
                         <td class="roads_format">D-4 Blast Furnace Road</td>
                         <td class="date_format">
                             {% for x in unpaved_loc %}
-                                {% if 'p7' == x.0 %}
+                                {% if 'unp7' == x.0 %}
                                     <a href="../../Daily/formM/{{ x.1.year }}-{% if x.1.month < 10 %}0{{x.1.month}}{%else%}{{x.1.month}}{% endif %}-{% if x.1.day < 10 %}0{{x.1.day}}{%else%}{{x.1.day}}{% endif %}">    
                                         ({{ x.1.month }}/{{ x.1.day }})
                                     </a>,
