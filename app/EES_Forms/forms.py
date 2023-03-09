@@ -1481,8 +1481,8 @@ class formH_readings_form(ModelForm):
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
-            'comb_start' : forms.TimeInput(attrs={'id': 'comb_start', 'oninput': 'timecheck_combustion()', 'type':'time', 'style':'width: 120px;'}),
-            'comb_stop' : forms.TimeInput(attrs={'id': 'comb_stop', 'oninput': 'timecheck_combustion()', 'type':'time', 'style':'width: 120px;'}),
+            'comb_start' : forms.TimeInput(attrs={'id': 'comb_start', 'oninput': 'timecheck_combustion()', 'type':'time', 'style':'width: 120px;', 'required': True}),
+            'comb_stop' : forms.TimeInput(attrs={'id': 'comb_stop', 'oninput': 'timecheck_combustion()', 'type':'time', 'style':'width: 120px;', 'required': True}),
             'comb_read_1' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'comb_read_2' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'comb_read_3' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1543,7 +1543,7 @@ class formH_readings_form(ModelForm):
             'comb_read_58' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'comb_read_59' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'comb_read_60' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_average' : forms.NumberInput(attrs={'oninput': 'comb_averages()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'comb_average' : forms.NumberInput(attrs={'oninput': 'comb_averages()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
         }
         
 class formI_form(ModelForm):
