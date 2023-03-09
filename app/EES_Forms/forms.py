@@ -1436,13 +1436,13 @@ class formG2_readings_form(ModelForm):
             'PEC_oven_a' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
             'PEC_oven_b' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
             'PEC_oven_c' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
-            'PEC_start_a' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
-            'PEC_start_b' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
-            'PEC_start_c' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
-            'PEC_average_a' : forms.NumberInput(attrs={'oninput': 'avg_a()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_average_b' : forms.NumberInput(attrs={'oninput': 'avg_b()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_average_c' : forms.NumberInput(attrs={'oninput': 'avg_c()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_average_main' : forms.NumberInput(attrs={'oninput': 'main_avg()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_start_a' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
+            'PEC_start_b' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
+            'PEC_start_c' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
+            'PEC_average_a' : forms.NumberInput(attrs={'oninput': 'avg_a()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+            'PEC_average_b' : forms.NumberInput(attrs={'oninput': 'avg_b()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+            'PEC_average_c' : forms.NumberInput(attrs={'oninput': 'avg_c()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+            'PEC_average_main' : forms.NumberInput(attrs={'oninput': 'main_avg()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
         }
         
 class formH_form(ModelForm):

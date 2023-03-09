@@ -146,7 +146,6 @@ function pushTravelCheck(pushB) {
     }
 }
 
-
 function exit_pop() {
     document.getElementById("comment_skip_id").style.visibility = 'hidden';
 }
