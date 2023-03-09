@@ -179,7 +179,7 @@ function month_select() {
     if (freq == 'True') {
         auto_fill_section_1();
         auto_fill_section_2();
-        auto_fill_section_3()
+        //auto_fill_section_3()
         return '5days';
     } else {
         return '1day';
