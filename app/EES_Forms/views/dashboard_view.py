@@ -552,15 +552,17 @@ def IncompleteForms(request, facility):
 
     # ------------------------------------------------------Form Data-------------
         for forms in sub_forms:
+            forms.submitted = True
             if forms.frequency == 'Monthly':
                 print('CHECK 2.1')
                 last_day = calendar.monthrange(today.year, today.month)[1]
-                forms.due_date = str(today.year) + '-' + str(today.month) + '-' + str(last_day)
-                A = forms.date_submitted
-                B = forms.due_date
-                if A.year != today.year or A.month != today.month:
+                dateBuildMonthly = str(today.year) + '-' + str(today.month) + '-' + str(last_day)
+                forms.due_date = datetime.datetime.strptime(dateBuildMonthly, "%Y-%m-%d").date()
+                subDate = forms.date_submitted
+                dueDate = forms.due_date
+                if subDate.year != dueDate.year or subDate.month != dueDate.month:
                     forms.submitted = False
-                elif A.day > last_day:
+                elif subDate.day > last_day:
                     forms.submitted = False
                 forms.save()
             elif forms.frequency == 'Quarterly':
@@ -603,7 +605,6 @@ def IncompleteForms(request, facility):
                 forms.save()
             elif forms.frequency == 'Daily':
                 forms.due_date = today
-                
                 A = forms.date_submitted
                 if today != A:
                     forms.submitted = False
