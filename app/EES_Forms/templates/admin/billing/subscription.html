@@ -87,7 +87,7 @@
                         <p>${{plan.price}} / Month</p>
                     </div>
                     <div>
-                        <form method="post" autocomplete="off" action="/ees_forms/billing/customer">
+                        <form method="post" autocomplete="off" action="/billing/customer">
                             {% csrf_token %}
                             <input type="hidden" value={{plan.pid}} name="planId">
                             <input id="submit" type="submit" value="Select">

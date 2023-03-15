@@ -4,6 +4,7 @@ from django.apps import apps
 from ..models import Forms, bat_info_model
 from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from EES_Forms.views.supervisor_view import getCompanyFacilities
 
 lock = login_required(login_url='Login')
 
@@ -25,7 +26,7 @@ def printSelect(request, facility):
     for line in formList:
         selectList.append([line.form, line.form.replace(' ', '_').replace('-','').lower()])
         
-    
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     
     if request.method == "POST":
         try:
@@ -65,5 +66,5 @@ def printSelect(request, facility):
             
     
     return render(request, "shared/printSelect.html", {
-        'options': options, 'facility': facility, 'selectList': selectList, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
+        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'selectList': selectList, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
     })

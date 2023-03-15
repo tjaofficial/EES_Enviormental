@@ -10,6 +10,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
+from EES_Forms.views.supervisor_view import getCompanyFacilities
 import json
 import io
 import datetime

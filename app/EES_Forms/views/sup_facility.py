@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms
 from ..forms import facility_forms_form
+from EES_Forms.views.supervisor_view import getCompanyFacilities
 
 def facilityList(request, facility):
     unlock = False
@@ -17,6 +18,7 @@ def facilityList(request, facility):
     userProfData = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
     facList = bat_info_model.objects.all().filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
     facData = facility_forms_model.objects.all()
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     
     newFacList = []
     for line in facData:
@@ -24,7 +26,7 @@ def facilityList(request, facility):
         newFacList.append((line.facilityChoice, facilityForms))
         
     return render(request, 'supervisor/sup_facilityList.html', {
-        'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': newFacList
+        'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': newFacList
     })
     
 def facilityForm(request, facility):
@@ -43,7 +45,7 @@ def facilityForm(request, facility):
     specificFacility = bat_info_model.objects.all().filter(facility_name=facility)[0]
     formList = Forms.objects.all()
     facilityFormsData = facility_forms_model.objects.all().filter(facilityChoice=specificFacility)
-    
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     if len(facilityFormsData) > 0:
         facilityFormsData = facilityFormsData[0].formData[1:-1].replace("'", "").replace(" ", "").split(",")
         existing = True
@@ -69,5 +71,5 @@ def facilityForm(request, facility):
             form.save()
             return redirect('facilityForms', facility)
     return render (request, 'supervisor/facilityForms.html', {
-        'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
+        'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
     })

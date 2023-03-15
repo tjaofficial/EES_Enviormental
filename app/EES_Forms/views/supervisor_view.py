@@ -13,9 +13,15 @@ import os
 
 lock = login_required(login_url='Login')
 
+def getCompanyFacilities(username):
+    thisProfileData = user_profile_model.objects.all().filter(user__username=username)[0]
+    sortedFacilityData = bat_info_model.objects.all().filter(company__company_name=thisProfileData.company.company_name)
+    
+    return sortedFacilityData
 @lock
 def sup_dashboard_view(request, facility):
     options = bat_info_model.objects.all()
+    
     unlock = False
     client = False
     supervisor = False
@@ -222,9 +228,12 @@ def sup_dashboard_view(request, facility):
         od_5 = ''
         od_30 = ''
     # ----CONTACTS-----------------
-
+    # def grabCompanyFacilities():
+    #     Users = User.objects.all()
     Users = User.objects.all()
     profile = user_profile_model.objects.all()
+    
+    sortedFacilityData = getCompanyFacilities(request.user.username)
 
     # ----USER ON SCHEDULE----------
     todays_obser = 'Schedule Not Updated'
@@ -412,6 +421,7 @@ def sup_dashboard_view(request, facility):
                 "client": client, 
                 'unlock': unlock,
                 'options': options,
+                'sortedFacilityData': sortedFacilityData,
             })
     if request.method == 'POST':
         answer = request.POST
@@ -454,12 +464,14 @@ def sup_dashboard_view(request, facility):
         "client": client, 
         'unlock': unlock, 
         'options': options,
+        'sortedFacilityData': sortedFacilityData, 
     })
 
 
 @lock
 def register_view(request, facility, access_page):
     options = bat_info_model.objects.all()
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     user_profiles = user_profile_model.objects.all()
     media = settings.MEDIA_ROOT
     userProfileInfo = ''
@@ -547,10 +559,10 @@ def register_view(request, facility, access_page):
                 form = bat_info_form(request.POST)
                 profile_form = ''
                 if form.is_valid():
-                    form.save(commit=False)
-                    form.company = userProf.company
+                    A = form.save(commit=False)
+                    A.company = userProf.company
                     
-                    form.save()
+                    A.save()
                     
                     messages.success(request, 'Facility Created')
                     return redirect('sup_dashboard', facility)
@@ -597,5 +609,5 @@ def register_view(request, facility, access_page):
     else:
         return redirect('no_registration')
     return render(request, "ees_forms/ees_register.html", {
-        'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
+        'sortedFacilityData': sortedFacilityData, 'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
     })

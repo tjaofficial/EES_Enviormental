@@ -12,6 +12,7 @@ import os
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from .print_form_view import date_change
+from EES_Forms.views.supervisor_view import getCompanyFacilities
 lock = login_required(login_url='Login')
 
 
@@ -30,9 +31,9 @@ def corrective_action_view(request, facility):
     profile = user_profile_model.objects.all()
     options = bat_info_model.objects.all()
     ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
-
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     return render(request, "ees_forms/corrective_actions.html", {
-        'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock
@@ -71,9 +72,9 @@ def calendar_view(request, facility, year, month):
     calend = Calendar()
     calend.setfirstweekday(6)
     html_cal = calend.formatmonth(year, month_number, year, withyear=True)
-
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     return render(request, "ees_forms/schedule.html", {
-        'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
 
 @lock
@@ -104,14 +105,14 @@ def archive_view(request, facility):
         supervisor = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
-    
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
             return redirect('archive', answer['facilitySelect'])
 
     return render(request, 'ees_forms/ees_archive.html', {
-        'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock
@@ -131,6 +132,7 @@ def search_forms_view(request, facility, access_page):
         supervisor = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     if access_page != 'search':
         if access_page != 'formN_model':
             chk_database = apps.get_model('EES_Forms', access_page).objects.count()
@@ -272,11 +274,11 @@ def search_forms_view(request, facility, access_page):
                 otherForms.append([x.form.replace(' ', '_'), x.form.replace(' ', '_').lower() + '_model', x])
 
         return render(request, 'ees_forms/search_forms.html', {
-            'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'monthList': monthList, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'sortedFacilityData': sortedFacilityData, 'monthList': monthList, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
 
 @lock
@@ -295,7 +297,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     options = bat_info_model.objects.all()
-
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     if access_page == 'form':
         data = Forms.objects.all()
         today = datetime.date.today()
@@ -436,7 +438,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/issues_template.html", {
-        'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
+        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
     })
 
 @lock
@@ -455,7 +457,7 @@ def event_add_view(request, facility):
     profile = user_profile_model.objects.all()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     form_var = events_form()
 
     if request.method == "POST":
@@ -468,7 +470,7 @@ def event_add_view(request, facility):
             return redirect(cal_link)
 
     return render(request, "ees_forms/event_add.html", {
-        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'supervisor': supervisor, "client": client, 'unlock': unlock, 
+        'sortedFacilityData': sortedFacilityData,'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'supervisor': supervisor, "client": client, 'unlock': unlock, 
     })
 
 @lock
@@ -538,6 +540,8 @@ def shared_contacts_view(request, facility):
     Users = User.objects.all()
     profile = user_profile_model.objects.order_by('user')
     
+    
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     form_enteredA1 = False
     form_enteredA2 = False
     form_enteredA3 = False
@@ -598,7 +602,7 @@ def shared_contacts_view(request, facility):
     print(organized_list)
     
     return render(request, "shared/contacts.html", {
-        'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
+        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
     })
     
 @lock

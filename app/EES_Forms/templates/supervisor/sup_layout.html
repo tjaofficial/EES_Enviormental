@@ -104,8 +104,8 @@
                     {% csrf_token %}
                     <select name='facilitySelect' class='facilitySelectInput' onchange="this.form.submit()">
                         <option value='supervisor'>Supervisor</option>
-                        {% for option in options %}
-                            <option value="{{option.facility_name}}"{% if facility == option.facility_name %} selected{% else %}{% endif %}>{{option.facility_name}}</option>
+                        {% for item in sortedFacilityData %}
+                            <option value="{{item.facility_name}}"{% if facility == item.facility_name %} selected{% else %}{% endif %}>{{item.facility_name}}</option>
                         {% endfor %}
                     </select>
                 </form>
