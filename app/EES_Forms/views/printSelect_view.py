@@ -37,8 +37,9 @@ def printSelect(request, facility):
             newFormList.append(searchName)
         formList = Forms.objects.all().order_by('form')
         selectList = []
+        print(newFormList)
         for x in formList:
-            if x.title.replace(' ', '') in newFormList:
+            if x.title in newFormList:
                 selectList.append([x.form, x.form.replace(' ', '_').replace('-','').lower()])
 
     if request.method == "POST":

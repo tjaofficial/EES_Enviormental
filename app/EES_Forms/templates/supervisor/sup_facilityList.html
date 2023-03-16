@@ -11,20 +11,21 @@
             <table style='margin:auto;width:100%;'>
                 <tr>
                     <th style="width: 30%;">Company</th>
-                    <th style="width: 30%;">Forms</th>
-                    <th style="width: 40%;">EXTRAs</th>
+                    <th style="width: 50%;">Forms</th>
+                    <th style="width: 10%;">EXTRAs</th>
                 </tr>
                 {% for info in facilities %}
-                    <tr>
-                        <td>{{info.0.facility_name}}</td>
-                        <td>{% for x in info.1 %}{{x}}, {% endfor %}</td>
-                        <td><a href="{% url 'facilityForms' info.0.facility_name %}">Edit</a></td>
-                    </tr>
-                    {% for form in formsList %}
-                        <tr>
-                            <td>{{form.0}}</td>
-                        </tr>
-                    {% endfor %}
+                <tr>
+                    <td colspan=3 style='height:20px;'></td>
+                </tr>
+                <tr>
+                    <td style='vertical-align: top;'>{{info.0.facility_name}}</td>
+                    <td>{% for x in info.1 %}{{x}},<br> {% endfor %}</td>
+                    <td><a href="{% url 'facilityForms' info.0.facility_name %}">Edit</a></td>
+                </tr>
+                <tr>
+                    <td colspan=3 style='height:20px;border-bottom: black 1px solid;'></td>
+                </tr>
                 {% endfor %}
             </table>
         </div>

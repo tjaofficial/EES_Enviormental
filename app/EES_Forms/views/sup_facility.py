@@ -3,6 +3,7 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms
 from ..forms import facility_forms_form
 from EES_Forms.views.supervisor_view import getCompanyFacilities
+import ast
 
 def facilityList(request, facility):
     unlock = False
@@ -21,9 +22,17 @@ def facilityList(request, facility):
     sortedFacilityData = getCompanyFacilities(request.user.username)
     
     newFacList = []
-    for line in facData:
-        facilityForms = line.formData[1:-1].replace("'", "").replace(" ", "").split(",")
-        newFacList.append((line.facilityChoice, facilityForms))
+    for facil in facList:
+        print(facil)
+        found = False
+        for line in facData:
+            if facil == line.facilityChoice:
+                facilityForms = ast.literal_eval(line.formData)
+                found = True
+        if found:
+            newFacList.append((facil, facilityForms))
+        else:
+            newFacList.append((facil, []))
         
     return render(request, 'supervisor/sup_facilityList.html', {
         'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': newFacList
@@ -56,8 +65,13 @@ def facilityForm(request, facility):
     
     if request.method == 'POST':
         selectedList = []
-        for item in range((len(request.POST) - 1)):
-            selectedList.append(request.POST['forms' + str(item + 1)].replace(" ", "")) 
+        for item in range(len(formList)-1):
+            label = 'forms' + str(item + 1)
+            try:
+                selectedList.append(request.POST[label.replace(" ", "")]) 
+            except:
+                continue
+        print(selectedList)
         dataCopy = request.POST.copy()
         dataCopy['formData'] = selectedList
         dataCopy['facilityChoice'] = specificFacility
@@ -69,7 +83,7 @@ def facilityForm(request, facility):
             
         if form.is_valid():
             form.save()
-            return redirect('facilityForms', facility)
+            return redirect('facilityList', facility)
     return render (request, 'supervisor/facilityForms.html', {
         'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
     })
