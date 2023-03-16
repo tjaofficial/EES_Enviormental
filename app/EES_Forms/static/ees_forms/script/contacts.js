@@ -25,7 +25,7 @@ function getid(obj) {
     // for (i=1; i<certs.length; i++){
 
     // }
-    document.getElementById("replaceContent").innerHTML = "<div class='cardHeader'>" + name + "</div><div class='contact_data_cont'><div class='contact_image' style='text-align: center;'>"+ image + "</div><div class='contact_data_cont_inner'><div class='contact_data'><p class='categoryStyle'>Phone: " + phoneHandler(phone) + "</p><p class='categoryStyle'>Email: " + email + "</p><p class='categoryStyle'>Smoke Certification: " + cert_date + "</p><p style=''>Certifications:<br> " + htmlList(certs) + "</p></div></div></div><a href='../../ees_forms/" + facility + "/Register/" + userID + "'><div id='edit'>Edit</div></a>";
+    document.getElementById("replaceContent").innerHTML = "<div class='cardHeader'>" + name + "</div><div class='contact_data_cont'><div class='contact_image' style='text-align: center;'>"+ image + "</div><div class='contact_data_cont_inner'><div class='contact_data'><p class='categoryStyle'>Phone: " + phoneHandler(phone) + "</p><p class='categoryStyle'>Email: " + email + "</p><p class='categoryStyle'>Smoke Certification: " + cert_date + "</p><p style=''>Certifications:<br> " + htmlList(certs) + "</p></div></div></div><a href='../../" + facility + "/Register/" + userID + "'><div id='edit'>Edit</div></a>";
 }
 
 function phoneHandler(fullNumber){
