@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
-from ..models import Forms, bat_info_model
+from ..models import Forms, bat_info_model, facility_forms_model
 from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from EES_Forms.views.supervisor_view import getCompanyFacilities
+import ast
 
 lock = login_required(login_url='Login')
 
@@ -21,13 +22,25 @@ def printSelect(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    formList = Forms.objects.all().order_by('form')
-    selectList = []
-    for line in formList:
-        selectList.append([line.form, line.form.replace(' ', '_').replace('-','').lower()])
-        
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    
+    facilityForms = facility_forms_model.objects.all().filter(facilityChoice__facility_name=facility)
+    if len(facilityForms) == 0:
+        selectList = []
+        print('No facility forms have been assigned/No facility has been selected')
+    else:
+        print('something is in here')
+        facilityForms = facilityForms[0]
+        parseList = ast.literal_eval(facilityForms.formData)
+        newFormList = []
+        for theForm in parseList:
+            searchName = theForm.split('--')[1]
+            newFormList.append(searchName)
+        formList = Forms.objects.all().order_by('form')
+        selectList = []
+        for x in formList:
+            if x.title.replace(' ', '') in newFormList:
+                selectList.append([x.form, x.form.replace(' ', '_').replace('-','').lower()])
+
     if request.method == "POST":
         try:
             if request.POST['forms'] != '':

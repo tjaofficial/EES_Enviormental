@@ -10,7 +10,7 @@ urlpatterns = [
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
 
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
-        path("<str:facility>/account", views.sup_account_view, name="account"),
+        path("<str:facility>/account", views.sup_account_view, name="Account"),
     path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
     path("register_company", views.registerCompany, name="companyReg"),
