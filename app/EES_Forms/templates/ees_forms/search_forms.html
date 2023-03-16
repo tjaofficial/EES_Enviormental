@@ -21,7 +21,7 @@
             {% for letterF in letterForms %}
             <!--delete laterr-->{% if letterF.0.0 != 'F' %}
                 <li style="text-align: left;">
-                    <a style="font-size: 1.4rem;" href="../../../ees_forms/{{facility}}/search_forms/{{letterF.1 }}">
+                    <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{letterF.1 }}">
                         Form {{ letterF.2.form }} - {{ letterF.2.title }}
                     </a>
                 </li>
@@ -29,7 +29,7 @@
             {% endfor %}
             {% for otherF in otherForms %}
                 <li style="text-align: left;">
-                    <a style="font-size: 1.4rem;" href="../../../ees_forms/{{facility}}/search_forms/{{otherF.1}}">
+                    <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{otherF.1}}">
                         {{ otherF.2.form }} {{ otherF.2.title }}
                     </a>
                 </li>
