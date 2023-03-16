@@ -1,0 +1,113 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<div style='margin:auto; width:44%;max-width:775px;'>
+    <div class="card" style=''>
+        <div class="cardHeader">Account Information</div>
+        <div class="contact_list_cont">
+            <table style='margin:auto;width:100%;'>
+                <tr>
+                    <th colspan=2 style="width: 30%;">Supervisor Account</th>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Name:</td>
+                    <td style="width: 30%;">{{accountData.user.first_name}} {{accountData.user.last_name}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Username:</td>
+                    <td style="width: 30%;">{{accountData.user.username}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Phone:</td>
+                    <td style="width: 30%;">{{accountData.phone}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Account Email:</td>
+                    <td style="width: 30%;">{{accountData.user.email}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Password Change:</td>
+                    <td style="width: 30%;">change assword</td>
+                </tr>
+            </table>
+            <table style='margin:auto;width:100%;'>
+                <tr>
+                    <th colspan=2 style="width: 30%;">Company Account</th>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Company Name:</td>
+                    <td style="width: 30%;">{{accountData.company.company_name}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Company Address:</td>
+                    <td style="width: 30%;">{{accountData.company.address}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;"></td>
+                    <td style="width: 30%;">{{accountData.company.city}}, {{accountData.company.state}} {{accountData.company.zipcode}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Company Phone:</td>
+                    <td style="width: 30%;">{{accountData.company.phone}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;"></td>
+                    <td style="width: 30%;"></td>
+                </tr>
+            </table>
+            <table style='margin:auto;width:100%;'>
+                <tr>
+                    <th colspan=2 style="width: 30%;">Subscription Information</th>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Subscription:</td>
+                    <td style="width: 30%;">Supervisor Account + 3 Extra Registrations</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Monthly Amount:</td>
+                    <td style="width: 30%;">${{cardSubscription.price}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Status:</td>
+                    <td style="width: 30%;">{{cardSubscription.status}}</td>
+                    <tr>
+                        <td style="width: 30%;">Next Billing Date:</td>
+                        <td style="width: 30%;">{{cardSubscription.next_billing_date}}</td>
+                    </tr>
+                </tr>
+            </table>
+            <table style='margin:auto;width:100%;'>
+                <tr>
+                    <th colspan=2 style="width: 30%;">Payment Information</th>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Name on Card:</td>
+                    <td style="width: 30%;">{{cardSubscription.cardholder}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Card Number:</td>
+                    <td style="width: 30%;">**** **** **** {{cardSubscription.last_4}}</td>
+                </tr>
+                <tr>
+                    <th colspan=2 style="width: 30%;">Change Card</th>
+                </tr>
+            </table>
+            <table style='margin:auto;width:100%;'>
+                <tr>
+                    <th colspan=2 style="width: 30%;"></th>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Add/Remove Observer:</td>
+                    <td style="width: 30%;"></td>
+                </tr>
+                <tr>
+                    <td style="width: 30%;">Cancel Account:</td>
+                    <td style="width: 30%;">By cancelling your account you remove access to MethodPlus+ from all other registered accounts. Client will not be affected and may continue accessing their collected data.</td>
+                </tr>
+                <tr>
+                    <th colspan=2 style="width: 30%;">Change Card</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

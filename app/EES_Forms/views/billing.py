@@ -18,9 +18,6 @@ def billing(request, step):
     #need to get customer id when one is present
     #MOCK DB VALUES
     customerId = None
-    print(os.environ.get('BRAINTREE_MERCHANT_ID'))
-    print(os.environ.get('BRAINTREE_PUBLIC_KEY'))
-    print(os.environ.get('BRAINTREE_PRIVATE_KEY'))
     gateway = braintree.BraintreeGateway(
         braintree.Configuration(
             braintree.Environment.Sandbox,
