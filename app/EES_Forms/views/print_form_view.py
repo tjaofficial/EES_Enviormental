@@ -220,8 +220,8 @@ def form_PDF(request, facility, formDate, formName):
         mainModel = apps.get_model('EES_Forms', modelName)
         #Pick the specific form date
         formsAndData = {}
-        if formName[-1] == 'N':
-            parseDateN = datetime.datetime.strptime(formDate, "%m-%Y")
+        if reFormName[-1] == 'N':
+            parseDateN = datetime.datetime.strptime(formDate, "%Y-%m-%d")
             daysInMonth = calendar.monthrange(parseDateN.year, parseDateN.month)
             newDateN = str(parseDateN.year) + '-' + str(parseDateN.month) + '-' + '01'
             print(daysInMonth[1] + 1)
@@ -230,6 +230,8 @@ def form_PDF(request, facility, formDate, formName):
             parseDateStop = parseDateStart + datetime.timedelta(days=(daysInMonth[1] - 1))
             print(parseDateStop)
             print(parseDateStart)
+            print('--------')
+            print(parseDateN)
         else:
             parseDateN = ''
             parseDateStop = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
@@ -2111,6 +2113,7 @@ def form_PDF(request, facility, formDate, formName):
                     ('SPAN', (1,27), (6,27)),
                 ]
             elif item == 'N': 
+                print(formM_model.objects.all()[0].date.year)
                 dataN = formM_model.objects.all().filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
                 new = 'Fugitive Dust Inspection'
                 titleN = 'Method 9D Monthly Checklist - (N)'
@@ -2174,7 +2177,14 @@ def form_PDF(request, facility, formDate, formName):
                         road_string = sorter[roadSelector]
                         rowList = ''
                         for entry in allForms:
-                            if entry.paved == roadSelector:
+                            if typeRoad == 'paved':
+                                entrySel = entry.paved
+                            elif typeRoad == 'unpaved':
+                                entrySel = entry.unpaved
+                            elif typeRoad == 'parking':
+                                entrySel = entry.parking
+                                
+                            if entrySel == roadSelector:
                                 roadDate = '(' + str(entry.date.month) + '/' + str(entry.date.day) + ')'
                                 if rowList == '':
                                     rowList += roadDate
