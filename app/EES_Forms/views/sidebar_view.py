@@ -341,7 +341,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
         
         if request.method == "POST":
             dataCopy = request.POST.copy()
-            dataCopy["facilityChoice"] = options.filter(facilityChoice__facility_name=facility)[0]
+            dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
             if existing:
                 data = issues_form(dataCopy, instance=database_form)
             else:
