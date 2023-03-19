@@ -52,7 +52,7 @@ def facilityForm(request, facility):
     existing = False
     modelList = ''
     specificFacility = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    formList = Forms.objects.all()
+    formList = Forms.objects.all().order_by('form')
     facilityFormsData = facility_forms_model.objects.all().filter(facilityChoice=specificFacility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if len(facilityFormsData) > 0:

@@ -20,7 +20,7 @@
         <div style="padding: 15px 32px;">
             <table style='margin:auto;width:100%;'>
                 <tr class='tableSpacer'>
-                    <th colspan=2 style="width: 30%;">Supervisor Account</th>
+                    <th colspan=2 style="width: 30%;">My Account</th>
                 </tr>
                 <tr class='tableSpacer'>
                     <td class="labelClass">Name:</td>
@@ -40,12 +40,16 @@
                 </tr>
                 <tr class='tableSpacer'>
                     <td class="labelClass">Password Change:</td>
-                    <td class="labelClass2">change assword</td>
+                    <td class="labelClass2">
+                        <a href={% url 'PasswordChange' facility %}>
+                            Change password
+                        </a>
+                    </td>
                 </tr>
             </table>
             <table style='margin:auto;width:100%;'>
                 <tr class='tableSpacer'>
-                    <th colspan=2 class='headerSpacer' style="width: 30%;">Company Account</th>
+                    <th colspan=2 class='headerSpacer' style="width: 30%;">Company Settings</th>
                 </tr>
                 <tr class='tableSpacer'>
                     <td class="labelClass">Company Name:</td>

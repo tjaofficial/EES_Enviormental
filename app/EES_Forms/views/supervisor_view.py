@@ -633,49 +633,52 @@ def sup_account_view(request, facility):
     accountData = user_profile_model.objects.all().get(user__username=request.user.username)
     print(accountData)
     
-    customerId = accountData.company.customerID
-    gateway = braintree.BraintreeGateway(
-        braintree.Configuration(
-            braintree.Environment.Sandbox,
-            merchant_id=os.environ.get('BRAINTREE_MERCHANT_ID'),
-            public_key=os.environ.get('BRAINTREE_PUBLIC_KEY'),
-            private_key=os.environ.get('BRAINTREE_PRIVATE_KEY')
+    try:
+        customerId = accountData.company.customerID
+        gateway = braintree.BraintreeGateway(
+            braintree.Configuration(
+                braintree.Environment.Sandbox,
+                merchant_id=os.environ.get('BRAINTREE_MERCHANT_ID'),
+                public_key=os.environ.get('BRAINTREE_PUBLIC_KEY'),
+                private_key=os.environ.get('BRAINTREE_PRIVATE_KEY')
+            )
         )
-    )
-    customer = gateway.customer.find(customerId)
-    dateStart = "1900-01-01"
-    dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
-    for card in customer.credit_cards:
-        for sub in card.subscriptions:
-            if sub.status == 'Active':
-                finished = True
-                cardSubscription = {
-                    'first_billing_date': sub.first_billing_date,
-                    'billing_day_of_month': sub.billing_day_of_month,
-                    'billing_period_start_date': sub.billing_period_start_date,
-                    'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
-                    'next_billing_date': sub.next_billing_date,
-                    'plan_id': sub.plan_id,
-                    'price': sub.price,
-                    'status': sub.status,
-                    'last_4': card.last_4,
-                    'card_type': card.card_type,
-                    'cardholder': card.cardholder_name,
-                }
-                break
-        if finished:
-            break    
-            # .transactions[0] #this is a list# 
-                # id
-                # amount
-                # plan_id
-                # .credit_card_details
-                    # token
-                    # last_4
-                    # card_type
-        #     print(sub.first_billing_date)
-        #     break
-        # break
+        customer = gateway.customer.find(customerId)
+        dateStart = "1900-01-01"
+        dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
+        for card in customer.credit_cards:
+            for sub in card.subscriptions:
+                if sub.status == 'Active':
+                    finished = True
+                    cardSubscription = {
+                        'first_billing_date': sub.first_billing_date,
+                        'billing_day_of_month': sub.billing_day_of_month,
+                        'billing_period_start_date': sub.billing_period_start_date,
+                        'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
+                        'next_billing_date': sub.next_billing_date,
+                        'plan_id': sub.plan_id,
+                        'price': sub.price,
+                        'status': sub.status,
+                        'last_4': card.last_4,
+                        'card_type': card.card_type,
+                        'cardholder': card.cardholder_name,
+                    }
+                    break
+            if finished:
+                break    
+                # .transactions[0] #this is a list# 
+                    # id
+                    # amount
+                    # plan_id
+                    # .credit_card_details
+                        # token
+                        # last_4
+                        # card_type
+            #     print(sub.first_billing_date)
+            #     break
+            # break
+    except:
+        cardSubscription = ''
     return render(request, 'supervisor/sup_account.html',{
         'supervisor': supervisor, 
         "client": client, 
