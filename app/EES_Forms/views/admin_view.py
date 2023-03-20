@@ -12,8 +12,8 @@ def adminDash(request):
             private_key=os.environ.get('BRAINTREE_PRIVATE_KEY')
         )
     )
-    customer = gateway.customer.find("226064165")
-    print(customer)
+    # customer = gateway.customer.find("226064165")
+    # print(customer)
     
     search_results = gateway.subscription.search(
         braintree.SubscriptionSearch.status == braintree.Subscription.Status.Active
@@ -30,6 +30,6 @@ def adminDash(request):
     # )
     
     return render(request, 'admin/admin_dashboard.html', {
-        'customer': customer, 'search_results': search_results
+        'search_results': search_results
     })
     

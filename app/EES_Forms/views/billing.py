@@ -166,6 +166,9 @@ def billing(request, step):
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
         
+        for x in addSubsriptionResult:
+            print(x)
+            break
         #on success and active 
 
 

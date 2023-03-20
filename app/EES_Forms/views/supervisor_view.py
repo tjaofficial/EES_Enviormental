@@ -644,6 +644,7 @@ def sup_account_view(request, facility):
             )
         )
         customer = gateway.customer.find(customerId)
+        print(customer)
         dateStart = "1900-01-01"
         dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
         for card in customer.credit_cards:

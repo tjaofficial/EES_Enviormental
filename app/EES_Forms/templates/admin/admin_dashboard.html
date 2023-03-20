@@ -1,6 +1,7 @@
-{% extends 'landing/landing_layout.html' %}{% load static %}
+{% extends 'admin/admin_layout.html' %}{% load static %}
 {% block body %}
-<div class='topCont' style="height:100%;">
+<link href="{% static 'admin/style/adminDash.css' %}" rel="stylesheet">
+<div class='topCont dataBG' style="height:100%;">
     <div class="headerSpace"></div>
     <div class='topSection'>
         <div id='cover1' style='display:flex;'>
@@ -8,6 +9,9 @@
                 <div class='coverTitle'>THIS IS AN UNFINISHED ADMIN DASHBOARD</div>
                 <div class='coverBody'>
                    Somehow you logged in as an Admin logout and try signing in with a Observer or Supervisor Account
+                </div>
+                <div class='adminCard'>
+                    Hello
                 </div>
                 <br><br>
                 <center>

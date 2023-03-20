@@ -1,0 +1,15 @@
+{% load static %}
+<html>
+    <head>
+        <link href="{% static 'admin/style/adminLayout.css' %}" rel="stylesheet">
+    </head>
+    
+    <body class='adminBody'>
+        {% include "admin/admin_sidebar.html" %}
+        <div class='dataCont'>
+            {% include "admin/admin_header.html" %}
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
