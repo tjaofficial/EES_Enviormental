@@ -15,7 +15,7 @@
             </div>
             <p id="facility" hidden=true>{{ facility }}</p>
             {% for person in organized_list %}
-            <div class="contact_singles" id="{{ person.0 }}" onmouseover="getid(this);">
+            <div class="contact_singles" id="{{ person.0 }}" onclick="getid(this);">
                 <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
                 <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
                 <p id="userID{{ person.0 }}" hidden=true>{{ person.1.user.id }}</p>
