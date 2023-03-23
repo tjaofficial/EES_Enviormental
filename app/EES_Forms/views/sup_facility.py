@@ -65,13 +65,12 @@ def facilityForm(request, facility):
     
     if request.method == 'POST':
         selectedList = []
-        for item in range(len(formList)-1):
+        for item in range(len(formList)):
             label = 'forms' + str(item + 1)
             try:
                 selectedList.append(request.POST[label.replace(" ", "")]) 
             except:
                 continue
-        print(selectedList)
         dataCopy = request.POST.copy()
         dataCopy['formData'] = selectedList
         dataCopy['facilityChoice'] = specificFacility
