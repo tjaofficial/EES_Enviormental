@@ -15,7 +15,9 @@ import os
 lock = login_required(login_url='Login')
 
 def getCompanyFacilities(username):
+    print(username)
     thisProfileData = user_profile_model.objects.all().filter(user__username=username)[0]
+    print(thisProfileData.company)
     sortedFacilityData = bat_info_model.objects.all().filter(company__company_name=thisProfileData.company.company_name)
     
     return sortedFacilityData
@@ -516,6 +518,7 @@ def register_view(request, facility, access_page):
                     'position': userProfileInfo.position,
                     'profile_picture': userProfileInfo.profile_picture,
                     'certs': userProfileInfo.certs,
+                    'company': userProfileInfo.company
                 }
                 userData2 = user_profile_form(initial=initial_data)   
         else:
@@ -573,6 +576,7 @@ def register_view(request, facility, access_page):
                 finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
                 new_data = request.POST.copy()
                 new_data['phone'] = finalPhone
+                new_data['company'] = userProfileInfo.company
                 A = user_profile_form(new_data, request.FILES, instance=userProfileInfo)
                 if A.is_valid():
                     A.save()
