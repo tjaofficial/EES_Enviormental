@@ -14,6 +14,7 @@ def facilityList(request, facility):
         return redirect('IncompleteForms', facility)
     if request.user.groups.filter(name=CLIENT_VAR):
         client = True
+        return redirect('c_dashboard', facility)
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
     userProfData = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
