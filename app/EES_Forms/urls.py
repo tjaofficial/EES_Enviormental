@@ -3,12 +3,12 @@ from . import views
 
 urlpatterns = [
     
-    
+    ##---MAIN DASHBOARDS----
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
     path("adminDash", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
-
+    ##---REGISTRATION-----
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("<str:facility>/account", views.sup_account_view, name="Account"),
     path("login", views.login_view, name="Login"),
@@ -18,7 +18,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="Logout"),
     path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
-    
+    ##---BILLING
     path("billing/<str:step>", views.billing, name="billing"),
 
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),

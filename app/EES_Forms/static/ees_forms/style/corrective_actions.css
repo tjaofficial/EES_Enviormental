@@ -1,15 +1,24 @@
 .CR_main {
     text-align: left;
-    width:700px;
     margin: auto; 
     font-size: 25px;
+    max-height: 570px;
+    overflow: scroll;
+}
+.CR_tiles:hover {
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+    margin: auto; 
+    margin-bottom: 15px; 
+    box-shadow: inset #0000007d 3px 3px 9px 4px; 
+    background-color: #9eaebe;
 }
 .CR_tiles {
     padding-top: 10px; 
     padding-bottom: 10px; 
     margin: auto; 
-    margin-bottom: 8px; 
-    box-shadow: inset #0000007d 3px 3px 9px 0px; 
+    margin-bottom: 15px; 
+    box-shadow: #000000 2px 2px 9px -2px;
     background-color: #9eaebe;
 }
 .CR_dateHeader {
@@ -26,4 +35,10 @@
 }
 .CR_body {
     text-align: center;
+    background-color: #253544;
+    width: 45rem;
+    margin: auto;
+    padding: 27px;
+    border-radius: 16px;
+    color: white;
 }
