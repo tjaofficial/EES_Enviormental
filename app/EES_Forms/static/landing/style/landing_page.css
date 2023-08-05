@@ -1,7 +1,11 @@
 .topSection{
-    padding: 2rem 17rem;
+    /* padding: 2rem 17rem; */
     /* max-height: 28rem; */
     height: 27rem;
+}
+.cover{
+    width: 64rem;
+    margin: auto;
 }
 /* #cover1{
     display:flex;
@@ -13,7 +17,7 @@
     display:flex;
 } */
 .coverMedia{
-    width: 145rem;
+    /* width: 145rem; */
 }
 .coverTitle{
     color: white;
@@ -23,12 +27,11 @@
     padding-top: 7rem;
 }
 .coverBody{
-    padding-top: 41px;
+    margin-top: 41px;
     font-family: sans-serif;
     text-align: justify;
     font-weight: 400;
     color: #334143;
-    height: 7rem;
 }
 .unselectedDot{
     position: relative;
@@ -48,8 +51,8 @@
 }
 .dotHolder{
     display: flex;
-    width: 5%;
-    margin: auto;
+    padding-top: 5rem;
+    justify-content: center;
 }
 .perkCont{
     width: 15rem;
@@ -73,28 +76,43 @@
     margin: 2rem 0px;
 }
 .button{
-    background-color: #fff024;
     margin: auto;
-    width: 13rem;
-    padding: 20px 0px;
-    font-size: 15px;
-    color: #b07000;
-    border-radius: 6px;
-    border: #e98400a8 solid 1px;
-    box-shadow: inset #e99c00 0px 0px 20px 0px;
-    text-shadow: -1px 1px 1px white;
+    width: 8rem;
+    padding: 11px 0px;
+    background-color: #e1ecf4;
+    border-radius: 3px;
+    border: 1px solid #7aa7c7;
+    color: #39739d;
+    cursor: pointer;
+    font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+    font-size: 13px;
+    font-weight: 400;
 }
 .buttonShadow{
     margin: auto;
-    width: 210px;
+    /* width: 210px;
     border-radius: 6px;
     box-shadow: #0000006b 1px 2px 3px 0px;
     position: relative;
     left: 50%;
     margin-left: -105px;
-    top: 36px;
+    top: 36px; */
 }
 .sectionA{
     box-shadow: #0000004f -1px 19px 14px -20px;
     background-color: white;
 }
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    background-color: #2196F3;
+    padding: 10px;
+    width: 43rem;
+  }
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 14px;
+    font-size: 30px;
+    text-align: center;
+  }

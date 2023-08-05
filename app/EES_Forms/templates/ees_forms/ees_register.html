@@ -14,7 +14,7 @@
         </div>
         <div id="login" class='dataCont' style='display: block;'>
             <h1>Register New Observer/Supervisor</h1>
-            </br>
+            <br>
             <form method="POST" action="">
                 {% csrf_token %}
                 {% for field in form%}
@@ -44,7 +44,7 @@
         </div>
         <div id="newFacility" class='dataCont' style='display: none;'>
             <center><h1>Register New Facility</h1></center>
-            </br>
+            <br>
             <form method="POST" action="">
                 {% csrf_token %}
                 <table style="margin: auto; border-collapse: collapse; text-align: left;">
@@ -186,7 +186,7 @@
         <div id="newClient" class='dataCont' style='display: none;'>
             {% if facilityLink %}
                 <h1>Register New Client</h1>
-                </br>
+                <br>
                 <form method="POST" action="">
                     {% csrf_token %}
                     Username:
@@ -243,7 +243,7 @@
                 </div>
                 <br>
                 <div>
-                    <a style='color:red; font-size:10px;' href={% url 'DeleteProf' facility userProfileInfo.id %}>delete</a>
+                    <a style='color:red; font-size:10px;' href="{% url 'DeleteProf' facility userProfileInfo.id %}">delete</a>
                 </div>
                 <br>
                 {% else %}

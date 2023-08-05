@@ -11,22 +11,32 @@
                    Somehow you logged in as an Admin logout and try signing in with a Observer or Supervisor Account
                 </div>
                 <div class='adminCard'>
-                    Hello
+                    Hello<br>
+                    "{{customer.first_name}}"<br>
+                    {{search_result.Subscription}}
                 </div>
                 <br><br>
                 <center>
                     <table>
                         <tr>
-                            <td>{{customer.first_name}} {{customer.last_name}}</td>
-                            <td>{{customer.phone}}</td>
-                            <td>{{customer.merchant_id}}</td>
+                            <td>Subscription ID:</td>
+                            <td>Status:</td>
+                            <td>Plan ID:</td>
                         </tr>
-                        <tr><td>{{search_results}}</td></tr>
+                        <tr><td></td></tr>
+                        {% for x in search_results %}
+                        <tr>
+                            <td class="center">{{x.id}}</td>
+                            <td class="center">{{x.status}}</td>
+                            <td class="center">{{x.plan_id}}</td>
+                            <td class="center">{{x.price}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table><br>
+                    <table>    
                         {% for x in search_results %}
                         <tr>
                             <td>{{x}}</td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         {% endfor %}
                     </table>

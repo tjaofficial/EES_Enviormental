@@ -18,7 +18,9 @@ def adminDash(request):
     search_results = gateway.subscription.search(
         braintree.SubscriptionSearch.status == braintree.Subscription.Status.Active
     )
-    print(search_results)
+    for x in search_results:
+        print(x.id)
+        
     # search_results = gateway.subscription.search(
     #     braintree.SubscriptionSearch.status.in_list(
     #         braintree.Subscription.Status.Active,
