@@ -3,21 +3,15 @@
 <body>
     <head>
         <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
+        <link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
         <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
         <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
         <script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
     </head>
-    {% if unlock %}
     <div>
         {% include "ees_forms/backArrow.html" %}
     </div>
-    {% endif %}
-    <div style="text-align: center;padding-top: 50px;">
-        <div style='display:inline-flex;'>
-            <div>
-                <button id="addBtn">Add SOP</button>
-            </div>
-        </div>
+    <div class="CR_body">
         <div id="addModal" class="modalAdd">
             <div class="modal-content">
                 <span class="closeAdd">&times;</span>
@@ -39,16 +33,23 @@
                 </div>
             </div>
         </div>
-        
-        
         <div>
-            Corrective Action Forms - By Date
+            <div style="margin-bottom: 15px;">
+                Corrective Action Forms - By Date
+            </div>
+            <div style='display:inline-flex;'>
+                <div>
+                    <button id="addBtn">Add SOP</button>
+                </div>
+            </div>
+            
+            
         </div>
         <br>
-        <div style="text-align: left; width:700px;margin: auto; font-size: 25px;">
+        <div class="CR_main">
             <ul style="text-align: center;">
             {% for x in sops %}
-                <div class="card" style="width: 80%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
+                <div class="card" style="width: 94%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
                     <a href='../media/SOPs/{{ x.pdf_link }}' target="_blank">
                         <div style="width: 100%; text-align: left;font-size: 20px;">
                             {{ x.name }} - {{ x.revision_date }}

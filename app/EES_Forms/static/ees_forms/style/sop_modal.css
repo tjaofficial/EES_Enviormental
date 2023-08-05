@@ -86,3 +86,11 @@
   #pdf_link {
     display: none;
   }
+
+  .sop_tiles{
+    width: 80%;
+    padding-top: 10px; 
+    padding-bottom: 10px; 
+    display: inline-flex; 
+    margin: 8px;
+  }
