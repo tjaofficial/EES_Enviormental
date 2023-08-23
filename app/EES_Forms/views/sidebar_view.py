@@ -108,6 +108,7 @@ def archive_view(request, facility):
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if request.method == 'POST':
         answer = request.POST
+        print(answer)
         if answer['facilitySelect'] != '':
             return redirect('archive', answer['facilitySelect'])
 
