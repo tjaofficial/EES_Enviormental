@@ -6,6 +6,8 @@ from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from EES_Forms.views.supervisor_view import getCompanyFacilities
 import ast
+from ..utils import Calendar
+import datetime
 
 lock = login_required(login_url='Login')
 
@@ -16,12 +18,14 @@ def printSelect(request, facility):
     unlock = False
     client = False
     supervisor = False
+    
     if request.user.groups.filter(name=OBSER_VAR):
         unlock = True
     if request.user.groups.filter(name=CLIENT_VAR):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
+    
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = facility_forms_model.objects.all().filter(facilityChoice__facility_name=facility)
     if len(facilityForms) == 0:
@@ -43,6 +47,13 @@ def printSelect(request, facility):
                 selectList.append([x.form, x.form.replace(' ', '_').replace('-','').lower()])
 
     if request.method == "POST":
+        print(request.POST["monthSel"])
+        inputDate = datetime.datetime.strptime(request.POST["monthSel"], "%Y-%m").date()
+        if request.POST['type'] == 'single':
+            return redirect("CalSelect", facility, request.POST['type'], request.POST['forms'], inputDate.year, inputDate.month)
+        elif request.POST['type'] == "group":
+            return redirect("CalSelect", facility, request.POST['type'], request.POST['formGroups'])
+            
         try:
             if request.POST['forms'] != '':
                 if 1 <= len(request.POST['forms']) <= 2:

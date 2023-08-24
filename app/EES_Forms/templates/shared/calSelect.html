@@ -1,0 +1,34 @@
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/printSelect.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<script defer src="{% static 'ees_forms/script/printSelect.js' %}"></script>
+<body>
+    <div>
+        {% include "ees_forms/backArrow.html" %}
+    </div>
+    <div class="card" style="min-width: 400px; min-height: 500px;">
+        <div id='selDate'>
+            <div style="width: 300px; text-align: left;">
+                <a href="../../../../calSelect/{{type}}/{{forms}}/{{prev_year}}/{{prev_month}}">
+                   <button>
+                        Previous Month
+                    </button>
+                </a>
+            </div>
+            <div style="width: 300px; text-align: right; margin-right: 25px;">
+                <a href="../../../../calSelect/{{type}}/{{forms}}/{{next_year}}/{{next_month}}"> 
+                    <button>
+                        Next Month
+                    </button>    
+                </a>
+            </div>
+            <div class="calendar">
+                {{ html_cal|safe }}
+            </div>
+        </div>
+        <button id='printButton' type="submit">Print</button>
+    </div>
+</body>
+{% endblock %}

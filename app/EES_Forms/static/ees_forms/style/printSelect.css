@@ -1,0 +1,39 @@
+.calendar {
+    width: fit-content;
+    margin: auto;
+    font-size: 13px;
+  }
+  
+  .calendar tr {
+    border: 1px solid black;
+      text-align: right;
+      vertical-align: top;
+  }
+  .calendar td {
+    border: 1px solid black;
+      text-align: right;
+      vertical-align: top;
+  }
+  
+  .calendar th {
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+      border: 1px solid black;
+    
+  }
+  
+  .calendar td {
+    width: 200px;
+    height: 50px;
+    padding: 5px 8px 0px 0px;
+  }
+  
+  .month {
+    font-size: 16px;
+  }
+  
+  .date {
+    font-size: 16px;
+      
+  }

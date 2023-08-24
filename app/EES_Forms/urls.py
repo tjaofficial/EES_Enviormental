@@ -91,6 +91,7 @@ urlpatterns = [
     # path('pdf_view', views.render_pdf_view, name="pdf_view"),
     path('<str:facility>/printIndex/<str:formName>/<str:formDate>', views.form_PDF, name='printIndex'),
     path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
+    path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
     #path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
     #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
 ]
