@@ -41,7 +41,7 @@ def calSelect(request, facility, type, forms, year, month):
     date = datetime.datetime.now()
     calend = Calendar2()
     calend.setfirstweekday(6)
-    html_cal = calend.formatmonth(year, month, year, forms, withyear=True)
+    html_cal = calend.formatmonth(year, month, year, forms, facility, withyear=True)
     
     if request.method == "POST":
         typeFormDate = '/' + request.POST['type'] + '-' + request.POST['formDate']

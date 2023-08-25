@@ -1,0 +1,14 @@
+.card {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 830px;
+    background-color: white;
+    box-shadow: #0000007d 4px 7px 12px 3px;
+    margin: 2rem;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}
+.calendar td {
+    width: 202px;
+    height: 85px;
+    padding: 5px 8px 0px 0px;
+}

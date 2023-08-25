@@ -141,7 +141,7 @@ class Calendar2(HTMLCalendar):
         forms_html = "<ul>"
         for form in forms_from_day:
             if form.date.year == year:
-                forms_html += "<a href='../../../../printIndex/" + selectedForm + "/single-" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>this one</a><br>"
+                forms_html += "<a href='../../../../printIndex/" + selectedForm + "/single-" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
         forms_html += "</ul>"
         
         if day == 0:
@@ -159,14 +159,14 @@ class Calendar2(HTMLCalendar):
         
         
  
-    def formatmonth(self, theyear, themonth, year, forms, withyear=True):
+    def formatmonth(self, theyear, themonth, year, forms, facility, withyear=True):
         """
         Return a formatted month as a table.
         """
         selectedForm = forms
         forms = forms.upper()
         forms = "form"+forms+"_model"
-        chk_database = apps.get_model('EES_Forms', forms).objects.filter(date__year=year, date__month=themonth)
+        chk_database = apps.get_model('EES_Forms', forms).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
         print(chk_database.filter(date__day=12))
         print("<--------------------------")
         events = Event.objects.filter(date__month=themonth)
