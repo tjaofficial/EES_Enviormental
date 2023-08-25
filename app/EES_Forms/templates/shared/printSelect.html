@@ -9,7 +9,7 @@
         {% include "ees_forms/backArrow.html" %}
     </div>
     <center>
-        <div class="card" style="min-width: 400px; min-height: 500px;">
+        <div class="card" style="min-width: 400px; ">
             {% if facility == 'supervisor' %}
             <p>Please Select a Facility First</p>
             {% else %}
@@ -47,7 +47,7 @@
                     </select>
                 </div>
                 {% comment %} <input id='formDate' name='formDate' type='date'/> <br> {% endcomment %}
-                <input id='monthSel' name='monthSel' type='month'/> <br>
+                Choose Month/Year: <input id='monthSel' name='monthSel' type='month'/> <br>
                 <input id='select' name='select' type='submit' value="Select Date"/>
             </form>
             {% endif %}
