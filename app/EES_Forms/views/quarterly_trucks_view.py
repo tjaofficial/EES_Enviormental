@@ -55,7 +55,7 @@ def quarterly_trucks(request, facility, selector):
             database_form = submitted_forms[0]
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
+                    if what_quarter(todays_log.date_save) == what_quarter(database_form.date):
                         existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
