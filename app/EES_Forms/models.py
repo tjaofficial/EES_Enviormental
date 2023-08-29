@@ -227,6 +227,10 @@ weekend_choices = (
     ('5', 'Saturday'),
     ('6', 'Sunday'),
 )
+spill_kit_choices = (
+    ("oil XL cart","PIG Spill Kit in Extra-Large Response Chest"),
+    ("universal drum","PIG Spill Kit in Overpack Salvage Drum")
+)
 # -all_users = User.objects.all()
 # -all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
@@ -5031,6 +5035,33 @@ class spill_kits_model(models.Model):
         blank=True,
         null=True,
     )
+    skut22_tag_on = models.CharField(
+        max_length=3,
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
+    )
+    skut22_serial = models.CharField(
+        max_length=7,
+        blank=True,
+        null=True,
+    )
+    skut22_complete = models.CharField(
+        max_length=3,
+        choices=yes_no_choices,
+        blank=True,
+        null=True,
+    )
+    skut22_report = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True,
+    )
+    skut22_comment = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+    )
 
     skut23_tag_on = models.CharField(
         max_length=3,
@@ -5144,33 +5175,6 @@ class spill_kits_model(models.Model):
         null=True,
     )
 
-    skut27_tag_on = models.CharField(
-        max_length=3,
-        choices=yes_no_choices,
-        blank=True,
-        null=True,
-    )
-    skut27_serial = models.CharField(
-        max_length=7,
-        blank=True,
-        null=True,
-    )
-    skut27_complete = models.CharField(
-        max_length=3,
-        choices=yes_no_choices,
-        blank=True,
-        null=True,
-    )
-    skut27_report = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-    )
-    skut27_comment = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-    )
 
     def __str__(self):
         return str(self.month)
@@ -5201,11 +5205,12 @@ class spill_kits_model(models.Model):
             'sk19_tag_on': self.sk19_tag_on,
             'sk20_tag_on': self.sk20_tag_on,
             'sk21_tag_on': self.sk21_tag_on,
+            'skut22_tag_on': self.skut22_tag_on,
             'skut23_tag_on': self.skut23_tag_on,
             'skut24_tag_on': self.skut24_tag_on,
             'skut25_tag_on': self.skut25_tag_on,
             'skut26_tag_on': self.skut26_tag_on,
-            'skut27_tag_on': self.skut27_tag_on,
+            
             'sk1_serial' : self.sk1_serial,
             'sk2_serial' : self.sk2_serial,
             'sk3_serial' : self.sk3_serial,
@@ -5228,11 +5233,11 @@ class spill_kits_model(models.Model):
             'sk20_serial' : self.sk20_serial,
             'sk21_serial' : self.sk21_serial,
             
+            'skut22_serial' : self.skut22_serial,
             'skut23_serial' : self.skut23_serial,
             'skut24_serial' : self.skut24_serial,
             'skut25_serial' : self.skut25_serial,
             'skut26_serial' : self.skut26_serial,
-            'skut27_serial' : self.skut27_serial,
             
             'sk1_complete' : self.sk1_complete,
             'sk2_complete' : self.sk2_complete,
@@ -5256,11 +5261,11 @@ class spill_kits_model(models.Model):
             'sk20_complete' : self.sk20_complete,
             'sk21_complete' : self.sk21_complete,
             
+            'skut22_complete' : self.skut22_complete,
             'skut23_complete' : self.skut23_complete,
             'skut24_complete' : self.skut24_complete,
             'skut25_complete' : self.skut25_complete,
             'skut26_complete' : self.skut26_complete,
-            'skut27_complete' : self.skut27_complete,
             
             'sk1_report' : self.sk1_report,
             'sk2_report' : self.sk2_report,
@@ -5284,11 +5289,11 @@ class spill_kits_model(models.Model):
             'sk20_report' : self.sk20_report,
             'sk21_report' : self.sk21_report,
             
+            'skut22_report' : self.skut22_report,
             'skut23_report' : self.skut23_report,
             'skut24_report' : self.skut24_report,
             'skut25_report' : self.skut25_report,
             'skut26_report' : self.skut26_report,
-            'skut27_report' : self.skut27_report,
             
             'sk1_comment' : self.sk1_comment,
             'sk2_comment' : self.sk2_comment,
@@ -5312,11 +5317,11 @@ class spill_kits_model(models.Model):
             'sk20_comment' : self.sk20_comment,
             'sk21_comment' : self.sk21_comment,
             
+            'skut22_comment' : self.skut22_comment,
             'skut23_comment' : self.skut23_comment,
             'skut24_comment' : self.skut24_comment,
             'skut25_comment' : self.skut25_comment,
             'skut26_comment' : self.skut26_comment,
-            'skut27_comment' : self.skut27_comment,
         }
 
 class quarterly_trucks_model(models.Model):
@@ -5604,3 +5609,15 @@ class facility_forms_model(models.Model):
     )
     def __str__(self):
         return str(self.facilityChoice)
+    
+class spill_kit_inventory_model(models.Model):
+    spill_kit_submitted = models.ForeignKey(spill_kits_model, blank=True, null=True, on_delete=models.CASCADE)
+    date = models.DateField(auto_now=False, auto_now_add=False)
+    inspector = models.CharField(max_length=40)
+    skID = models.IntegerField()
+    type = models.CharField(max_length=50, choices=spill_kit_choices)
+    counted_items = models.CharField(max_length=300)
+    missing_items = models.CharField(max_length=300)
+    
+    def __str__(self):
+        return str(self.date) + str(self.skID)

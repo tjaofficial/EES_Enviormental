@@ -1817,33 +1817,33 @@ class spill_kits_form(ModelForm):
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'month' : forms.TextInput(attrs={'type':'text', 'style':'width: 70px; text-align: center;'}),
             
-            'sk1_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk2_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk3_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk4_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk5_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk6_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk7_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk8_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk9_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk10_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk11_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk12_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk13_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk14_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk15_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk16_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk17_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk18_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk19_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk20_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'sk21_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk1_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk2_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk3_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk4_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk5_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk6_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk7_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk8_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk9_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk10_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk11_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk12_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk13_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk14_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk15_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk16_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk17_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk18_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk19_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk20_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
+            'sk21_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK()', 'style':'width: 50px;', 'required': all_spks}),
             
-            'skut23_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'skut24_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'skut25_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'skut26_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'skut27_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
+            'skut22_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySKUT()', 'style':'width: 50px;', 'required': all_spks}),
+            'skut23_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySKUT()', 'style':'width: 50px;', 'required': all_spks}),
+            'skut24_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySKUT()', 'style':'width: 50px;', 'required': all_spks}),
+            'skut25_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySKUT()', 'style':'width: 50px;', 'required': all_spks}),
+            'skut26_tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySKUT()', 'style':'width: 50px;', 'required': all_spks}),
             
             'sk1_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             'sk2_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
@@ -1867,11 +1867,11 @@ class spill_kits_form(ModelForm):
             'sk20_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             'sk21_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             
+            'skut22_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             'skut23_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             'skut24_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             'skut25_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             'skut26_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
-            'skut27_serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;', 'required': all_spks}),
             
             'sk1_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             'sk2_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
@@ -1895,11 +1895,11 @@ class spill_kits_form(ModelForm):
             'sk20_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             'sk21_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             
+            'skut22_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             'skut23_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             'skut24_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             'skut25_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             'skut26_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
-            'skut27_complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;', 'required': all_spks}),
             
             'sk1_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'sk2_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
@@ -1923,11 +1923,11 @@ class spill_kits_form(ModelForm):
             'sk20_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'sk21_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             
+            'skut22_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut23_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut24_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut25_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut26_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
-            'skut27_report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             
             'sk1_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'sk2_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
@@ -1951,11 +1951,11 @@ class spill_kits_form(ModelForm):
             'sk20_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'sk21_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             
+            'skut22_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut23_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut24_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut25_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut26_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
-            'skut27_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             
         }
 class quarterly_trucks_form(ModelForm):
@@ -2040,5 +2040,16 @@ class facility_forms_form(ModelForm):
         model = facility_forms_model
         fields = ('__all__')
         
-
+class spill_kit_inventory_form(ModelForm):
+    class Meta:
+        model = spill_kit_inventory_model
+        fields = ('__all__')
+        widgets = {
+            "date": forms.DateInput(attrs={'type': 'date'}),
+            "inspector": forms.TextInput(attrs={}),
+            "skID": forms.NumberInput(attrs={'type': 'number'}),
+            "type": forms.Select(attrs={"id": "skType", "onchange": "selectType()"}),
+            "counted_items": forms.NumberInput(attrs={'type': 'number'}),
+            "missing_items": forms.NumberInput(attrs={'type': 'number'}),
+        }
         

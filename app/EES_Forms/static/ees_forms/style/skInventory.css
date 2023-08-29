@@ -1,0 +1,33 @@
+.inventoryHeader{
+    margin-bottom: 27px;
+    font-size: 30px;
+}
+.tableCont{
+
+}
+.tableCont table, th, td{
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+.tableCont th, td{
+    padding: 5px;
+}
+.inventoryInfo{
+
+}
+.headerCont{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+.iCount{
+    width: 50px;
+    text-align: center;
+}
+.iCountContain{
+    text-align: center;
+}
+.miss{
+    background-color: gray;
+    color: white;
+}

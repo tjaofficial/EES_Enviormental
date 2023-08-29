@@ -51,6 +51,7 @@ admin.site.register(bat_info_model)
 admin.site.register(signature_model)
 admin.site.register(company_model)
 admin.site.register(facility_forms_model)
+admin.site.register(spill_kit_inventory_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']
