@@ -187,3 +187,18 @@ class Calendar2(HTMLCalendar):
         a('</table>')
         a('\n')
         return ''.join(v)
+
+def stringToDate(date):
+    if isinstance(date, str):
+        date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    
+    if len(str(date.month)) == 2:
+        month = str(date.month)
+    else:
+        month = '0'+str(date.month)
+    if len(str(date.day)) == 2:
+        day = str(date.day)
+    else:
+        day = '0'+str(date.day)
+    parsed = str(date.year) + '-' + month + '-' + day
+    return parsed

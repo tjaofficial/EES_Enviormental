@@ -11,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
 from EES_Forms.views.supervisor_view import getCompanyFacilities
+from ..models import spill_kit_inventory_model
 import json
 import io
 import datetime
@@ -171,6 +172,15 @@ class PageNumCanvas(canvas.Canvas):
         self.setFont("Helvetica", 9)
         self.drawRightString(200*mm, 10*mm, page)
 
+def inventoryResponse(tagOn, sk):
+    database = spill_kit_inventory_model.objects.filter(skID=sk)
+    if tagOn == "No" and len(database) > 0:
+        return "Yes"
+    elif tagOn == "No" and len(database) == 0:
+        return "No"
+    else:
+        return "N/A"      
+      
 @lock
 def form_PDF(request, facility, formDate, formName):
     if formDate[0:6] == 'single':
@@ -2356,37 +2366,37 @@ def form_PDF(request, facility, formDate, formName):
                     ['', '', '', '', '', ''],
                     [Paragraph('<para align=center><b>Inspector Names:&#160;</b>' + data.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:&#160;</b>' + date_change(data.date) +'</para>', styles['Normal']), '', '', '', ''],
                     ['', '', '', '', '', ''],
-                    [Paragraph('<para align=center><b>Spill Kit #</b></para>', styles['Normal']), Paragraph('<para align=center><b>Tag On?</b></para>', styles['Normal']), Paragraph('<para align=center><b>Tag Serial #</b></para>', styles['Normal']), Paragraph('<para align=center><b>Complete Kit?</b></para>', styles['Normal']), Paragraph('<para align=center><b>Incident Report</b></para>', styles['Normal']), Paragraph('<para align=center><b>Comments</b></para>', styles['Normal'])],
-                    ['1', str(data.sk1_tag_on), str(data.sk1_serial), str(data.sk1_complete), str(data.sk1_report), data.sk1_comment],
-                    ['2', str(data.sk2_tag_on), str(data.sk2_serial), str(data.sk2_complete), str(data.sk2_report), data.sk2_comment],
-                    ['3', str(data.sk3_tag_on), str(data.sk3_serial), str(data.sk3_complete), str(data.sk3_report), data.sk3_comment],
-                    ['4', str(data.sk4_tag_on), str(data.sk4_serial), str(data.sk4_complete), str(data.sk4_report), data.sk4_comment],
-                    ['5', str(data.sk5_tag_on), str(data.sk5_serial), str(data.sk5_complete), str(data.sk5_report), data.sk5_comment],
-                    ['6', str(data.sk6_tag_on), str(data.sk6_serial), str(data.sk6_complete), str(data.sk6_report), data.sk6_comment],
-                    ['7', str(data.sk7_tag_on), str(data.sk7_serial), str(data.sk7_complete), str(data.sk7_report), data.sk7_comment],
-                    ['8', str(data.sk8_tag_on), str(data.sk8_serial), str(data.sk8_complete), str(data.sk8_report), data.sk8_comment],
-                    ['9', str(data.sk9_tag_on), str(data.sk9_serial), str(data.sk9_complete), str(data.sk9_report), data.sk9_comment],
-                    ['10', str(data.sk10_tag_on), str(data.sk10_serial), str(data.sk10_complete), str(data.sk10_report), data.sk10_comment],
-                    ['11', str(data.sk11_tag_on), str(data.sk11_serial), str(data.sk11_complete), str(data.sk11_report), data.sk11_comment],
-                    ['12', str(data.sk12_tag_on), str(data.sk12_serial), str(data.sk12_complete), str(data.sk12_report), data.sk12_comment],
-                    ['13', str(data.sk13_tag_on), str(data.sk13_serial), str(data.sk13_complete), str(data.sk13_report), data.sk13_comment],
-                    ['14', str(data.sk14_tag_on), str(data.sk14_serial), str(data.sk14_complete), str(data.sk14_report), data.sk14_comment],
-                    ['15', str(data.sk15_tag_on), str(data.sk15_serial), str(data.sk15_complete), str(data.sk15_report), data.sk15_comment],
-                    ['16', str(data.sk16_tag_on), str(data.sk16_serial), str(data.sk16_complete), str(data.sk16_report), data.sk16_comment],
-                    ['17', str(data.sk17_tag_on), str(data.sk17_serial), str(data.sk17_complete), str(data.sk17_report), data.sk17_comment],
-                    ['18', str(data.sk18_tag_on), str(data.sk18_serial), str(data.sk18_complete), str(data.sk18_report), data.sk18_comment],
-                    ['19', str(data.sk19_tag_on), str(data.sk19_serial), str(data.sk19_complete), str(data.sk19_report), data.sk19_comment],
-                    ['20', str(data.sk20_tag_on), str(data.sk20_serial), str(data.sk20_complete), str(data.sk20_report), data.sk20_comment],
-                    ['21', str(data.sk21_tag_on), str(data.sk21_serial), str(data.sk21_complete), str(data.sk21_report), data.sk21_comment],
+                    [Paragraph('<para align=center><b>Spill Kit #</b></para>', styles['Normal']), Paragraph('<para align=center><b>Tag On?</b></para>', styles['Normal']), Paragraph('<para align=center><b>Inventory</b></para>', styles['Normal']), Paragraph('<para align=center><b>Tag Serial #</b></para>', styles['Normal']), Paragraph('<para align=center><b>Complete Kit?</b></para>', styles['Normal']), Paragraph('<para align=center><b>Incident Report</b></para>', styles['Normal']), Paragraph('<para align=center><b>Comments</b></para>', styles['Normal'])],
+                    ['1', str(data.sk1_tag_on), inventoryResponse(str(data.sk1_tag_on), 1), str(data.sk1_serial), str(data.sk1_complete), str(data.sk1_report), data.sk1_comment],
+                    ['2', str(data.sk2_tag_on), inventoryResponse(str(data.sk2_tag_on), 2), str(data.sk2_serial), str(data.sk2_complete), str(data.sk2_report), data.sk2_comment],
+                    ['3', str(data.sk3_tag_on), inventoryResponse(str(data.sk3_tag_on), 3), str(data.sk3_serial), str(data.sk3_complete), str(data.sk3_report), data.sk3_comment],
+                    ['4', str(data.sk4_tag_on), inventoryResponse(str(data.sk4_tag_on), 4), str(data.sk4_serial), str(data.sk4_complete), str(data.sk4_report), data.sk4_comment],
+                    ['5', str(data.sk5_tag_on), inventoryResponse(str(data.sk5_tag_on), 5), str(data.sk5_serial), str(data.sk5_complete), str(data.sk5_report), data.sk5_comment],
+                    ['6', str(data.sk6_tag_on), inventoryResponse(str(data.sk6_tag_on), 6), str(data.sk6_serial), str(data.sk6_complete), str(data.sk6_report), data.sk6_comment],
+                    ['7', str(data.sk7_tag_on), inventoryResponse(str(data.sk7_tag_on), 7), str(data.sk7_serial), str(data.sk7_complete), str(data.sk7_report), data.sk7_comment],
+                    ['8', str(data.sk8_tag_on), inventoryResponse(str(data.sk8_tag_on), 8), str(data.sk8_serial), str(data.sk8_complete), str(data.sk8_report), data.sk8_comment],
+                    ['9', str(data.sk9_tag_on), inventoryResponse(str(data.sk9_tag_on), 9), str(data.sk9_serial), str(data.sk9_complete), str(data.sk9_report), data.sk9_comment],
+                    ['10', str(data.sk10_tag_on), inventoryResponse(str(data.sk10_tag_on), 10), str(data.sk10_serial), str(data.sk10_complete), str(data.sk10_report), data.sk10_comment],
+                    ['11', str(data.sk11_tag_on), inventoryResponse(str(data.sk11_tag_on), 11), str(data.sk11_serial), str(data.sk11_complete), str(data.sk11_report), data.sk11_comment],
+                    ['12', str(data.sk12_tag_on), inventoryResponse(str(data.sk12_tag_on), 12), str(data.sk12_serial), str(data.sk12_complete), str(data.sk12_report), data.sk12_comment],
+                    ['13', str(data.sk13_tag_on), inventoryResponse(str(data.sk13_tag_on), 13), str(data.sk13_serial), str(data.sk13_complete), str(data.sk13_report), data.sk13_comment],
+                    ['14', str(data.sk14_tag_on), inventoryResponse(str(data.sk14_tag_on), 14), str(data.sk14_serial), str(data.sk14_complete), str(data.sk14_report), data.sk14_comment],
+                    ['15', str(data.sk15_tag_on), inventoryResponse(str(data.sk15_tag_on), 15), str(data.sk15_serial), str(data.sk15_complete), str(data.sk15_report), data.sk15_comment],
+                    ['16', str(data.sk16_tag_on), inventoryResponse(str(data.sk16_tag_on), 16), str(data.sk16_serial), str(data.sk16_complete), str(data.sk16_report), data.sk16_comment],
+                    ['17', str(data.sk17_tag_on), inventoryResponse(str(data.sk17_tag_on), 17), str(data.sk17_serial), str(data.sk17_complete), str(data.sk17_report), data.sk17_comment],
+                    ['18', str(data.sk18_tag_on), inventoryResponse(str(data.sk18_tag_on), 18), str(data.sk18_serial), str(data.sk18_complete), str(data.sk18_report), data.sk18_comment],
+                    ['19', str(data.sk19_tag_on), inventoryResponse(str(data.sk19_tag_on), 19), str(data.sk19_serial), str(data.sk19_complete), str(data.sk19_report), data.sk19_comment],
+                    ['20', str(data.sk20_tag_on), inventoryResponse(str(data.sk20_tag_on), 20), str(data.sk20_serial), str(data.sk20_complete), str(data.sk20_report), data.sk20_comment],
+                    ['21', str(data.sk21_tag_on), inventoryResponse(str(data.sk21_tag_on), 21), str(data.sk21_serial), str(data.sk21_complete), str(data.sk21_report), data.sk21_comment],
                     ['', '', '', '', '', ''],
                     ['#2 Boilerhouse', '', '', '', '', ''],
-                    ['UT-23', str(data.skut23_tag_on), str(data.skut23_serial), str(data.skut23_complete), str(data.skut23_report), data.skut23_comment],
-                    ['UT-24', str(data.skut24_tag_on), str(data.skut24_serial), str(data.skut24_complete), str(data.skut24_report), data.skut24_comment],
-                    ['UT-25', str(data.skut25_tag_on), str(data.skut25_serial), str(data.skut25_complete), str(data.skut25_report), data.skut25_comment],
-                    ['UT-26', str(data.skut26_tag_on), str(data.skut26_serial), str(data.skut26_complete), str(data.skut26_report), data.skut26_comment],
-                    ['UT-27', str(data.skut27_tag_on), str(data.skut27_serial), str(data.skut27_complete), str(data.skut27_report), data.skut27_comment],
+                    ['UT-23', str(data.skut22_tag_on), inventoryResponse(str(data.skut22_tag_on), 22), str(data.skut22_serial), str(data.skut22_complete), str(data.skut22_report), data.skut22_comment],
+                    ['UT-24', str(data.skut23_tag_on), inventoryResponse(str(data.skut23_tag_on), 23), str(data.skut23_serial), str(data.skut23_complete), str(data.skut23_report), data.skut23_comment],
+                    ['UT-25', str(data.skut24_tag_on), inventoryResponse(str(data.skut24_tag_on), 24), str(data.skut24_serial), str(data.skut24_complete), str(data.skut24_report), data.skut24_comment],
+                    ['UT-26', str(data.skut25_tag_on), inventoryResponse(str(data.skut25_tag_on), 25), str(data.skut25_serial), str(data.skut25_complete), str(data.skut25_report), data.skut25_comment],
+                    ['UT-27', str(data.skut26_tag_on), inventoryResponse(str(data.skut26_tag_on), 26), str(data.skut26_serial), str(data.skut26_complete), str(data.skut26_report), data.skut26_comment],
                 ]
-                tableColWidths = (50,80,80,80,80,80)
+                tableColWidths = (50,80,80,80,80,80,80)
 
                 style = [
                     #Top header and info

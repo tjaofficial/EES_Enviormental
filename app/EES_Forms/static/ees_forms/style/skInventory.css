@@ -2,8 +2,8 @@
     margin-bottom: 27px;
     font-size: 30px;
 }
-.tableCont{
-
+.table{
+    border-collapse: collapse;
 }
 .tableCont table, th, td{
     border-collapse: collapse;

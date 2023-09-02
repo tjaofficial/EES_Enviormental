@@ -2046,8 +2046,8 @@ class spill_kit_inventory_form(ModelForm):
         fields = ('__all__')
         widgets = {
             "date": forms.DateInput(attrs={'type': 'date'}),
-            "inspector": forms.TextInput(attrs={}),
-            "skID": forms.NumberInput(attrs={'type': 'number'}),
+            "inspector": forms.TextInput(attrs={'type': 'text'}),
+            "skID": forms.NumberInput(attrs={'type': 'number', 'style': 'width:50px; text-align:center'}),
             "type": forms.Select(attrs={"id": "skType", "onchange": "selectType()"}),
             "counted_items": forms.NumberInput(attrs={'type': 'number'}),
             "missing_items": forms.NumberInput(attrs={'type': 'number'}),

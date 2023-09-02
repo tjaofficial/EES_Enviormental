@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from ..models import issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, bat_info_model
 import datetime
@@ -15,11 +15,11 @@ def client_dashboard_view(request, facility):
     client = False
     admin = False
     if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
+        return redirect('facilitySelect')
     if request.user.groups.filter(name=CLIENT_VAR):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        admin = True
+        return redirect('sup_dashboard', SUPER_VAR)
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')

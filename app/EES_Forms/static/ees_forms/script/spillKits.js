@@ -1,4 +1,5 @@
 const spill_kits_group = ['_tag_on', '_serial', '_complete', '_report', '_comment'];
+const selector = document.getElementById("selector").dataset.selector;
 function rows_true() {
     for(var i = 1; i <= 21; i++){
         const tag_on = document.getElementById('id_sk' + i + '_tag_on').value;
@@ -25,12 +26,26 @@ function rows_true() {
 
 function showInventorySK() {
     const month = document.getElementById("linkMonth").dataset.month;
+    const iList = JSON.parse(document.getElementById('iColor').dataset.inventory);
+
     for(var i=1; i<=21; i++) {
-        const tagOn = document.getElementById('id_sk' + String(i) + '_tag_on').value;
-        if(tagOn == "No") {
+        if (selector == "form"){
+            var tagOn = document.getElementById('id_sk' + String(i) + '_tag_on').value;
+        } else {
+            var tagOn = document.getElementById('tagOn'+String(i)).firstChild.nodeValue.trim();
+        }
+        if (String(tagOn) == "No" && iList[i]) {
+            console.log("CHECK 1")
+            var linkSel = iList[i][1];
+            console.log(linkSel)
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/"+linkSel+"'>Complete</a>"
+            document.getElementById("kit" + String(i)).style.backgroundColor = "green"
+        } else if (String(tagOn) == "No") {
+            console.log("CHECK 2")
             document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/form'>Incomplete</a>"
             document.getElementById("kit" + String(i)).style.backgroundColor = "yellow"
         } else {
+            console.log("CHECK 3")
             document.getElementById("kit" + String(i)).innerHTML = "N/A"
             document.getElementById("kit" + String(i)).style.backgroundColor = "white"
         }
@@ -39,12 +54,23 @@ function showInventorySK() {
 showInventorySK();
 function showInventorySKUT() {
     const month = document.getElementById("linkMonth").dataset.month;
+    const iList = JSON.parse(document.getElementById('iColor').dataset.inventory);
+
     for(var i=22; i<=26; i++) {
-        const tagOn = document.getElementById('id_skut' + String(i) + '_tag_on').value;
-        if(tagOn == "No") {
-            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/form'>Incomplete</a>"
+        if (selector == "form"){
+            var tagOn = document.getElementById('id_skut' + String(i) + '_tag_on').value;
+        } else {
+            var tagOn = document.getElementById("tagOn" + String(i)).firstChild.nodeValue.trim();
+        }
+        if(String(tagOn) == "No" && iList[i-1]) {
+            var linkSel = iList[i-1][1];
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i+1)+"/"+linkSel+"'>Complete</a>"
+            document.getElementById("kit" + String(i)).style.backgroundColor = "green"
+        } else if (String(tagOn) == "No") {
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i+1)+"/form'>Incomplete</a>"
             document.getElementById("kit" + String(i)).style.backgroundColor = "yellow"
         } else {
+            console.log("CHECK 3")
             document.getElementById("kit" + String(i)).innerHTML = "N/A"
             document.getElementById("kit" + String(i)).style.backgroundColor = "white"
         }
@@ -52,18 +78,26 @@ function showInventorySKUT() {
 }
 showInventorySKUT();
 
-function iChangeColor() {
-    const month = document.getElementById("linkMonth").dataset.month;
-    const iList = document.getElementById('iColor').dataset.inventory;
-    for(var i=1; i<=21; i++) {
-        for(var q=0; q<iList.length; q++){
-            let skID = iList[q];
-                if (skID == i) {
-                    document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/form'>Completed</a>"
-                    document.getElementById("kit" + String(i)).style.backgroundColor = "green"
-                }
+// function iChangeColor() {
+//     const month = document.getElementById("linkMonth").dataset.month;
+//     const iList = JSON.parse(document.getElementById('iColor').dataset.inventory);
 
-        }
-    }
-}
-iChangeColor();
+//     console.log(iList)
+//     for(var i=1; i<=26; i++) {
+//         if (iList[i]) {
+//             let skID = iList[i][0];
+//             if (selector == "form"){
+//                 var linkSel = "form";
+//             } else {
+//                 var linkSel = iList[i][1];
+//             }
+//             if (skID == i) {
+//                 console.log("CHECK 4")
+//                 document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/"+linkSel+"'>Completed</a>"
+//                 document.getElementById("kit" + String(i)).style.backgroundColor = "green"
+//             }
+//         }
+//     }
+
+// }
+// iChangeColor();

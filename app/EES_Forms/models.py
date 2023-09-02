@@ -5611,7 +5611,6 @@ class facility_forms_model(models.Model):
         return str(self.facilityChoice)
     
 class spill_kit_inventory_model(models.Model):
-    spill_kit_submitted = models.ForeignKey(spill_kits_model, blank=True, null=True, on_delete=models.CASCADE)
     date = models.DateField(auto_now=False, auto_now_add=False)
     inspector = models.CharField(max_length=40)
     skID = models.IntegerField()
@@ -5620,4 +5619,4 @@ class spill_kit_inventory_model(models.Model):
     missing_items = models.CharField(max_length=300)
     
     def __str__(self):
-        return str(self.date) + str(self.skID)
+        return str(self.date) + ' - ' + str(self.skID)
