@@ -1,9 +1,9 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%} {% load static %}
-<script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
-<link href="{% static 'ees_forms/formA1_style.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/formA1.css' %}" rel="stylesheet" />
 
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
@@ -170,7 +170,7 @@
                 <td></td>
               </tr>
               <tr>
-                <td style="height: 40px">LC #: {{ readings.larry_car }}</td>
+                <td style="height: 40px">Larry Car Number: {{ readings.larry_car }}</td>
               </tr>
               <tr style="font-size: 20px">
                 <td>Comments:</td>
@@ -178,7 +178,10 @@
               <tr style="font-size: 20px; text-align: center">
                 <td colspan="6">
                   {{ readings.comments }}
-                  <span class="comment_skip_class" id="comment_skip_id"> </span>
+                  <span class="comment_skip_class" id="comment_skip_id1" data-inputValue1='' data-inputValue2=''>></span>
+                  <span class="comment_skip_class" id="comment_skip_id2" data-inputValue1='' data-inputValue2=''>></span>
+                  <span class="comment_skip_class" id="comment_skip_id3" data-inputValue1='' data-inputValue2=''>></span>
+                  <span class="comment_skip_class" id="comment_skip_id4" data-inputValue1='' data-inputValue2=''>></span>
                 </td>
               </tr>
               <tr>
@@ -187,7 +190,7 @@
             </table>
             {% if supervisor or client %} {% elif unlock and not search %}
             <br /><br /><br />
-            <input type="submit" value="Submit Form" class="submit_button" />
+            <input id='submitButton' type="submit" value="Submit Form" class="submit_button" />
             {% endif %}
           </div>
         </div>
