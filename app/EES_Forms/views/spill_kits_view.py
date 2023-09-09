@@ -277,7 +277,7 @@ def spill_kits(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Monthly/spillKits_form.html", {
+    return render(request, "Monthly/spillkits_form.html", {
         'iFormList': iFormList, 'month': month, 'facility': facility, 'sk_form': data, 'selector': selector, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
     })
 
