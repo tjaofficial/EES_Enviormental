@@ -82,10 +82,14 @@ def facility_select_view(request):
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
         
+    if len(user_profile_model.objects.filter(user=request.user)) > 0:
+        profileComapny = user_profile_model.objects.filter(user=request.user)[0].company
+        profileFacs = bat_info_model.objects.filter(company=profileComapny)
+
     profile = user_profile_model.objects.all()
+    
     loginPage = True
     now = datetime.datetime.now()
-    options = bat_info_model.objects.all()
     count_bp = daily_battery_profile_model.objects.count()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
 
@@ -102,5 +106,5 @@ def facility_select_view(request):
             return redirect(batt_prof)
 
     return render(request, "ees_forms/facility_select.html", {
-        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': options, 'now': now, 'loginPage': loginPage, 'profile': profile, 
+        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': profileFacs, 'now': now, 'loginPage': loginPage, 'profile': profile, 
     })
