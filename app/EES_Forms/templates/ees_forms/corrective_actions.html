@@ -9,6 +9,43 @@
 </div>
 <div class='CR_body'>
     <div>
+        Corrective Action Search
+    </div>
+    <br>
+    <div class='CR_main'>
+        <form method="GET" action="./Corrective-Action" style="text-align: center;">
+            <div class="CR_dataCont">
+                <div class="inputCont">
+                    Search Form Name <br>
+                    <input type="search" name="issueForm" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                </div>
+                <div class="inputCont">
+                    Search Month/Year<br>
+                    <input type="month" name="issueMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
+                </div>
+                <div class="inputCont">
+                    Search Date<br>
+                    <input type="date" name="issueDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
+                </div>
+                <div class="inputCont">
+                    Search Issue Description<br>
+                    <input type="search" name="issue_contains" placeholder="Issue Contains..." value="{% if varPull.3 %}{{varPull.3}}{% endif %}"/>
+                </div>
+            </div>
+            <div class="CR_dataCont">
+                <div class="inputCont">
+                    Personnel Notified<br>
+                    <input type="search" name="notified" placeholder="Personnel Name" value="{% if varPull.4 %}{{varPull.4}}{% endif %}"/>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <input type='submit' value="Search" class='button'>
+            </div>
+        </form>
+    </div>
+</div><br>
+<div class='CR_body'>
+    <div>
         Corrective Action Forms - By Date
     </div>
     <br>

@@ -27,13 +27,80 @@ def corrective_action_view(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
+    
+    issueForm_query = request.GET.get('issueForm')
+    issueMonth_query = request.GET.get('issueMonth')
+    issueDate_query = request.GET.get('issueDate')
+    issue_contains_query = request.GET.get('issue_contains')
+    notified_query = request.GET.get('notified')
+    ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
+    
+    varPull = [
+        issueForm_query,
+        issueMonth_query,
+        issueDate_query,
+        issue_contains_query,
+        notified_query
+    ]
 
+    def issueFormFunc(issueForm_query, ca_forms):
+        if issueForm_query != "" and issueForm_query is not None:
+            ca_forms = ca_forms.filter(form__icontains=issueForm_query)
+            return ca_forms
+        else:
+            return "none"
+    
+    def issueMonthFunc(issueMonth_query, ca_forms):
+        if issueMonth_query != "" and issueMonth_query is not None:
+            issueMonth_query = datetime.datetime.strptime(issueMonth_query, "%Y-%m").date()
+            ca_forms = ca_forms.filter(date__month=issueMonth_query.month, date__year=issueMonth_query.year)
+            return ca_forms
+        else:
+            return "none"
+    
+    def issueDateFunc(issueDate_query, ca_forms):
+        if issueDate_query != "" and issueDate_query is not None:
+            issueDate_query = datetime.datetime.strptime(issueDate_query, "%Y-%m-%d").date()
+            ca_forms = ca_forms.filter(date__year=issueDate_query.year, date__month=issueDate_query.month, date__day=issueDate_query.day)
+            return ca_forms
+        else:
+            return "none"
+    
+    def issue_containsFunc(issue_contains_query, ca_forms):
+        if issue_contains_query != "" and issue_contains_query is not None:
+            ca_forms = ca_forms.filter(issues__icontains=issue_contains_query)
+            return ca_forms
+        else:
+            return "none"
+    
+    def notifiedfunc(notified_query, ca_forms):
+        if notified_query != "" and notified_query is not None:
+            print(ca_forms)
+            ca_forms = ca_forms.filter(notified__icontains=notified_query)
+            return ca_forms
+        else:
+            return "none"
+    
+    searchList = [
+        issueFormFunc(issueForm_query, ca_forms),
+        issueMonthFunc(issueMonth_query, ca_forms),
+        issueDateFunc(issueDate_query, ca_forms),
+        issue_containsFunc(issue_contains_query, ca_forms),
+        notifiedfunc(notified_query, ca_forms)
+    ]
+    
+    notEmpty = False
+    for x in searchList:
+        if x != 'none':
+            ca_forms = x
+            print(ca_forms)
+            notEmpty = True
+    
     profile = user_profile_model.objects.all()
     options = bat_info_model.objects.all()
-    ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
     sortedFacilityData = getCompanyFacilities(request.user.username)
     return render(request, "ees_forms/corrective_actions.html", {
-        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        "varPull": varPull, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock

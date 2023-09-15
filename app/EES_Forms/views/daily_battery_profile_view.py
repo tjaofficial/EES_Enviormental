@@ -5,9 +5,9 @@ from ..models import daily_battery_profile_model, user_profile_model, bat_info_m
 from ..forms import daily_battery_profile_form
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from .supervisor_view import getCompanyFacilities
 
 lock = login_required(login_url='Login')
-
 
 @lock
 def daily_battery_profile_view(request, facility, access_page, date):
@@ -82,9 +82,7 @@ def facility_select_view(request):
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
         
-    if len(user_profile_model.objects.filter(user=request.user)) > 0:
-        profileComapny = user_profile_model.objects.filter(user=request.user)[0].company
-        profileFacs = bat_info_model.objects.filter(company=profileComapny)
+    profileFacs = getCompanyFacilities(request.user.username)
 
     profile = user_profile_model.objects.all()
     

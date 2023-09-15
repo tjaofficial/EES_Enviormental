@@ -15,9 +15,7 @@ import os
 lock = login_required(login_url='Login')
 
 def getCompanyFacilities(username):
-    print(username)
     thisProfileData = user_profile_model.objects.all().filter(user__username=username)[0]
-    print(thisProfileData.company)
     sortedFacilityData = bat_info_model.objects.all().filter(company__company_name=thisProfileData.company.company_name)
     
     return sortedFacilityData
@@ -470,7 +468,6 @@ def sup_dashboard_view(request, facility):
         'options': options,
         'sortedFacilityData': sortedFacilityData, 
     })
-
 
 @lock
 def register_view(request, facility, access_page):
