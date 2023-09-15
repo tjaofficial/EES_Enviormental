@@ -51,18 +51,23 @@
     <br>
     <div class='CR_main'>
         <ul style="text-align: center;">
-        {% for x in ca_forms %}
-            <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                <div class="card CR_tiles" style="{% if client and not x.viewed %} background-color: #ebee17;{% endif %}">
-                    <div class='CR_dateHeader'>
-                         {{ x.date }} - {{ x.form }}
+        {% if ca_forms == "empty" %}
+            No Results Found For:<br>
+            "{% if varPull.0 %}{{varPull.0}}, {% endif %}{% if varPull.1 %}{{varPull.1}}, {% endif %}{% if varPull.2 %}{{varPull.2}}, {% endif %}{% if varPull.3 %}{{varPull.3}}, {% endif %}{% if varPull.4 %}{{varPull.4}}{% endif %}"
+        {% else %}
+            {% for x in ca_forms %}
+                <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                    <div class="card CR_tiles" style="{% if client and not x.viewed %} background-color: #ebee17;{% endif %}">
+                        <div class='CR_dateHeader'>
+                            {{ x.date }} - {{ x.form }}
+                        </div>
+                        <div class='CR_paragraph'>
+                            {{ x.issues }}
+                        </div>
                     </div>
-                    <div class='CR_paragraph'>
-                        {{ x.issues }}
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
+                </a>
+            {% endfor %}
+        {% endif %}
         </ul>    
     </div>
 </div>

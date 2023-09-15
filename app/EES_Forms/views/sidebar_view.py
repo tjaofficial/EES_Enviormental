@@ -45,15 +45,23 @@ def corrective_action_view(request, facility):
 
     def issueFormFunc(issueForm_query, ca_forms):
         if issueForm_query != "" and issueForm_query is not None:
+            #print("Pre-Form-Search")
+            #print(ca_forms)
             ca_forms = ca_forms.filter(form__icontains=issueForm_query)
+            #print("Post-Form-Search")
+            #print(ca_forms)
             return ca_forms
         else:
             return "none"
     
     def issueMonthFunc(issueMonth_query, ca_forms):
         if issueMonth_query != "" and issueMonth_query is not None:
+            #print("Pre-Month-Search")
+            #print(ca_forms)
             issueMonth_query = datetime.datetime.strptime(issueMonth_query, "%Y-%m").date()
             ca_forms = ca_forms.filter(date__month=issueMonth_query.month, date__year=issueMonth_query.year)
+            #print("Post-Month-Search")
+            #print(ca_forms)
             return ca_forms
         else:
             return "none"
@@ -75,8 +83,11 @@ def corrective_action_view(request, facility):
     
     def notifiedfunc(notified_query, ca_forms):
         if notified_query != "" and notified_query is not None:
-            print(ca_forms)
+            #print("Pre-Notified-Search")
+            #print(ca_forms)
             ca_forms = ca_forms.filter(notified__icontains=notified_query)
+            #print("Post-Notified-Search")
+            #print(ca_forms)
             return ca_forms
         else:
             return "none"
@@ -89,12 +100,48 @@ def corrective_action_view(request, facility):
         notifiedfunc(notified_query, ca_forms)
     ]
     
+    filterReturn = []
     notEmpty = False
+    inputsUsedCount = 0
     for x in searchList:
         if x != 'none':
-            ca_forms = x
-            print(ca_forms)
+            inputsUsedCount += 1
+            for y in x:
+                filterReturn.append(y)
             notEmpty = True
+    #print(filterReturn)
+
+    unisonResults = []
+    usedItems = []
+    for i in range(len(filterReturn)):
+        result = filterReturn[i]
+        count = 0
+        #print("<------USE")
+        #print(i)
+        if result not in usedItems:
+            for z in range(len(filterReturn)):
+                result2 = filterReturn[z]
+                #print("<------Compared")
+                #print(z)
+                if result == result2:
+                    count += 1
+                    #print("<---------------------COUNT")
+                    if count == inputsUsedCount:
+                        if result2 not in unisonResults:
+                            unisonResults.append(result2)
+                            #print("Adding " + str(result2) + " to the unison list")
+            #print("------END LOOP-------")
+            usedItems.append(result)
+        else:
+            #print("------END LOOP-------")
+            continue
+    
+    #print(unisonResults)
+    if notEmpty:
+        if unisonResults:
+            ca_forms = unisonResults
+        else:
+            ca_forms = "empty"
     
     profile = user_profile_model.objects.all()
     options = bat_info_model.objects.all()
