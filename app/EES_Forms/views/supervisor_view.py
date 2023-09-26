@@ -561,13 +561,17 @@ def register_view(request, facility, access_page):
                 form = bat_info_form(request.POST)
                 profile_form = ''
                 if form.is_valid():
-                    A = form.save(commit=False)
-                    A.company = userProf.company
-                    
-                    A.save()
-                    
-                    messages.success(request, 'Facility Created')
-                    return redirect('sup_dashboard', facility)
+                    facilityModel = bat_info_model.objects.filter(facility_name=form['facility_name'])
+                    if len(facilityModel) == 0:    
+                        A = form.save(commit=False)
+                        A.company = userProf.company
+                        
+                        A.save()
+                        
+                        messages.success(request, 'Facility Created')
+                        return redirect('sup_dashboard', facility)
+                    else:
+                        print('need error message response for matching Facility names, choose different name')
             elif check_3:
                 print('CHECK 3')
                 finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))

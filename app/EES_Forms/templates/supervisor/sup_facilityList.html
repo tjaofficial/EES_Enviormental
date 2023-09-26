@@ -2,7 +2,12 @@
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
 <div style='margin:auto; width:44%;max-width:775px;'>
     <div class="card" style=''>
-        <div class="cardHeader">Facilities</div>
+        <div class="cardHeader">
+            Facilities
+            <div style="text-align: right;font-size: 14px;">
+                <a href="{% url 'Register' facility 'form' %}">Add Facility</a>
+            </div>
+        </div>
         <div class="contact_list_cont">
             {% comment %} <p></p>
             <p class="contactHeader">Facility Name</p>

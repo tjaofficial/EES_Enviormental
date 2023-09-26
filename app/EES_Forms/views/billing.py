@@ -11,7 +11,7 @@ lock = login_required(login_url='Login')
 @lock
 def billing(request, step):
     user = request.user
-    userProfile = user_profile_model.objects.all().filter(user__username=request.user.username)
+    userProfile = user_profile_model.objects.filter(user__username=request.user.username)
     print(userProfile)
     if len(userProfile)>0: 
         userProfile = userProfile[0]
@@ -145,12 +145,28 @@ def billing(request, step):
         })
 
         if not createCustomerResult.is_success:
+            print(createCustomerResult)
             for i in createCustomerResult.errors.deep_errors:
-                print(i)
+                print(i.code)
+                #---------------------------------------
+                #---------------------------------------
+                # Need to setup somthing to catch the error codes
+                # given from Braintree. If there is an error the
+                # submission wont process (obviously) and wont
+                # create the next variable reliant on success.
+                #---------------------------------------
+                #---------------------------------------
+                if i.code == "81724":
+                    print("Duplicate card exists.")
             #print("ERROR: Issue with creating costumer")
-        print(createCustomerResult)
+        
         vaultCustomerId = createCustomerResult.customer.id
-        userComp = company_model.objects.all().filter(company_name=userProfile.company.company_name)[0]
+            
+        userComp = company_model.objects.filter(company_name=userProfile.company.company_name)
+        if len(userComp) > 0:
+            userComp = userComp[0]
+        else:
+            print("No Compnay has been entered for user profile information")
         userComp.customerID = vaultCustomerId
         userComp.save()
 
