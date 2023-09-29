@@ -309,8 +309,6 @@ function total_leaking_doors() {
 }
 total_leaking_doors()
 
-
-
 function l_equation() {
     const l_leaks = document.getElementById('l_leaks2').value,
           l_inops = document.getElementById('inop_ovens').value,

@@ -360,54 +360,62 @@ class formA2_form(ModelForm):
                 'oninput': 'total_traverse()',
                 'id': 'id_p_traverse_time_min',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;'
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
             }),
             'p_traverse_time_sec': forms.NumberInput(attrs={
                 'oninput': 'total_traverse()',
                 'id': 'id_p_traverse_time_sec',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;'
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
             }),
             'c_traverse_time_min': forms.NumberInput(attrs={
                 'oninput': 'total_traverse()',
                 'id': 'id_c_traverse_time_min',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;'
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
             }),
             'c_traverse_time_sec': forms.NumberInput(attrs={
                 'oninput': 'total_traverse()',
                 'id': 'id_c_traverse_time_sec',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;'
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
             }),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'inop_ovens': forms.NumberInput(attrs={'id': 'inop_ovens', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
+            'inop_ovens': forms.NumberInput(attrs={'oninput': 'inoperable_ovens()', 'id': 'inop_ovens', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'inop_numbs': forms.TextInput(attrs={'onchange': 'pc_doors_not_observed()', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
             'crew': forms.Select(attrs={'style': 'width:40px;'}),
             'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
-            'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_start', 'type': 'time', 'style': 'width: 120px;'}),
-            'p_stop': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_stop', 'type': 'time', 'style': 'width: 120px;'}),
+            'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_start', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
+            'p_stop': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_stop', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
             'c_start': forms.TimeInput(attrs={
                 'oninput': 'timecheck_cokeDoors()',
                 'id': 'c_start',
                 'id': 'c_start', 'type': 'time',
-                'style': 'width: 120px;'
+                'style': 'width: 120px;', 
+                'required': True
             }),
             'c_stop': forms.TimeInput(attrs={
                 'oninput': 'timecheck_cokeDoors()',
                 'id': 'c_start',
                 'id': 'c_stop',
                 'type': 'time',
-                'style': 'width: 120px;'
+                'style': 'width: 120px;',
+                'required': True
             }),
-            'p_temp_block_from': forms.TextInput(attrs={
+            'p_temp_block_from': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'p_temp_block_from',
                 'class': 'input',
                 'type': 'text',
                 'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()'
+                'oninput': 'pc_doors_not_observed()',
+                'min': "1",
+                'max': "85"
             }),
             'p_temp_block_to': forms.TextInput(attrs={
                 'onchange': 'equation()',
@@ -415,7 +423,9 @@ class formA2_form(ModelForm):
                 'class': 'input',
                 'type': 'text',
                 'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()'
+                'oninput': 'pc_doors_not_observed()',
+                'min': "1",
+                'max': "85"
             }),
             'c_temp_block_from': forms.TextInput(attrs={
                 'onchange': 'equation()',
@@ -423,7 +433,9 @@ class formA2_form(ModelForm):
                 'class': 'input',
                 'type': 'text',
                 'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()'
+                'oninput': 'pc_doors_not_observed()',
+                'min': "1",
+                'max': "85"
             }),
             'c_temp_block_to': forms.TextInput(attrs={
                 'onchange': 'equation()',
@@ -431,27 +443,43 @@ class formA2_form(ModelForm):
                 'class': 'input',
                 'type': 'text',
                 'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()'
+                'oninput': 'pc_doors_not_observed()',
+                'min': "1",
+                'max': "85"
             }),
-            'total_traverse_time': forms.NumberInput(attrs={'id': 'total_traverse_time', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'allowed_traverse_time': forms.NumberInput(attrs={'id': 'allowed_traverse_time', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
+            'total_traverse_time': forms.NumberInput(attrs={
+                'id': 'total_traverse_time', 
+                'class': 'input', 
+                'type': 'number', 
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
+            }),
+            'allowed_traverse_time': forms.NumberInput(attrs={
+                'id': 'allowed_traverse_time', 
+                'class': 'input', 
+                'type': 'number', 
+                'style': 'width:50px; text-align: center;', 
+                'min': '0'
+            }),
             'valid_run': forms.CheckboxInput(attrs={'style': 'width: 50px;'}),
-            'leaking_doors': forms.NumberInput(attrs={'onchange': 'equation()', 'id': 'leaking_doors', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
+            'leaking_doors': forms.NumberInput(attrs={'onchange': 'equation()', 'id': 'leaking_doors', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'min': '0'}),
             'doors_not_observed': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'doors_not_observed',
                 'class': 'input',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;'
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
             }),
             'inop_doors_eq': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'inop_doors_eq',
                 'class': 'input',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;'
+                'style': 'width:50px; text-align: center;',
+                'min': '0'
             }),
-            'percent_leaking': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'percent_leaking': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;', 'min': '0'}),
             'notes': Textarea(attrs={'rows': 7, 'style': 'width: 805px;'}),
             'p_leak_data': forms.TextInput(attrs={'id': "pushSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
             'c_leak_data': forms.TextInput(attrs={'id': "cokeSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
@@ -477,20 +505,20 @@ class formA3_form(ModelForm):
             'om_leaks2': forms.NumberInput(attrs={'onchange': 'om_equation()', 'id': 'om_leaks2', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'l_leak_json': forms.TextInput(attrs={'id': 'lids', 'type': "hidden", 'value': '{}', 'data-resulttable': ""}),
             'l_leaks2': forms.NumberInput(attrs={'onchange': 'l_equation()', 'id': 'l_leaks2', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'om_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True}),
-            'om_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True}),
-            'l_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True}),
-            'l_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True}),
-            'om_allowed_traverse_time': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True}),
-            'l_allowed_traverse_time': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True}),
+            'om_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
+            'om_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
+            'l_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
+            'l_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
+            'om_allowed_traverse_time': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
+            'l_allowed_traverse_time': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
             'om_valid_run': forms.CheckboxInput(attrs={'style': 'width: 50px;', 'required': True}),
             'l_valid_run': forms.CheckboxInput(attrs={'style': 'width: 50px;', 'required': True}),
-            'om_leaks': forms.NumberInput(attrs={'id': 'om_leaks', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'l_leaks': forms.NumberInput(attrs={'id': 'l_leaks', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'om_not_observed': forms.NumberInput(attrs={'id': 'om_not_observed', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'l_not_observed': forms.NumberInput(attrs={'id': 'l_not_observed', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'om_percent_leaking': forms.TextInput(attrs={'id': 'om_percent_leaking', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'l_percent_leaking': forms.TextInput(attrs={'id': 'l_percent_leaking', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'om_leaks': forms.NumberInput(attrs={'id': 'om_leaks', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'min': "0"}),
+            'l_leaks': forms.NumberInput(attrs={'id': 'l_leaks', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'min': "0"}),
+            'om_not_observed': forms.NumberInput(attrs={'id': 'om_not_observed', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'min': "0"}),
+            'l_not_observed': forms.NumberInput(attrs={'id': 'l_not_observed', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'min': "0"}),
+            'om_percent_leaking': forms.TextInput(attrs={'id': 'om_percent_leaking', 'type': 'float', 'style': 'width: 50px; text-align: center;', 'min': "0"}),
+            'l_percent_leaking': forms.TextInput(attrs={'id': 'l_percent_leaking', 'type': 'float', 'style': 'width: 50px; text-align: center;', 'min': "0"}),
             'one_pass': forms.CheckboxInput(attrs={'onchange': 'one_pass_func()', 'style': 'width: 20px;', 'initial': 'false'}),
             'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
         }
@@ -2001,8 +2029,6 @@ class quarterly_trucks_form(ModelForm):
             'box_exterior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
             'exhaust_9_4': forms.Select(attrs={'style':'width: 50px;'}),
         }
-        
-
         
 class sop_form(ModelForm):
     class Meta:

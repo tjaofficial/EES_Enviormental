@@ -507,7 +507,9 @@ def issues_view(request, facility, form_name, form_date, access_page):
         form = issues_form(initial=initial_data)
 
         if request.method == "POST":
-            data = issues_form(request.POST, instance=picker)
+            dataCopy = request.POST.copy()
+            dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
+            data = issues_form(dataCopy, instance=picker)
             if data.is_valid():
                 data.save()
 
@@ -539,10 +541,12 @@ def issues_view(request, facility, form_name, form_date, access_page):
         form = issues_form(initial=initial_data)
 
         if request.method == "POST":
+            dataCopy = request.POST.copy()
+            dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
             if existing:
-                data = issues_form(request.POST, instance=database_form)
+                data = issues_form(dataCopy, instance=database_form)
             else:
-                data = issues_form(request.POST)
+                data = issues_form(dataCopy)
             if data.is_valid():
                 data.save()
 
