@@ -702,6 +702,8 @@ def IncompleteForms(request, facility):
         form_checkAll = ["", ]
         form_checkAll2 = ["", ]
         form_checkDaily2 = ["", ]
+        
+        inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
 
         return render(request, "ees_forms/dashboard.html", {
             'form_checkDaily2': form_checkDaily2, 
@@ -724,6 +726,7 @@ def IncompleteForms(request, facility):
             'sigExisting': sigExisting,
             'facility': facility,
             'sigName': sigName,
+            'inopNumbsParse': inopNumbsParse
         })
     elif request.user.groups.filter(name=SUPER_VAR):
         return redirect('sup_dashboard', facility)

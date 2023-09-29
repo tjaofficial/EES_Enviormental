@@ -32,7 +32,7 @@
                 Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
                 Inoperable Ovens:&nbsp;&nbsp;{{ todays_log.inop_ovens }}</br></br>
                 Inoperable Oven Number(s):</br>
-                {{ todays_log.inop_numbs }}</br>
+                {{ inopNumbsParse }}</br>
                 <br>
                 
                 <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
