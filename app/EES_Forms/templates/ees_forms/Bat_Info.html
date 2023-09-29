@@ -23,7 +23,7 @@
             <br>
             {% if access_page == 'login' or access_page == 'edit' %}
             <p>
-                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}">Skip To Forms</a>
+                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
             </p>
             {% endif %}
         </div>
