@@ -164,9 +164,17 @@ class Calendar2(HTMLCalendar):
         Return a formatted month as a table.
         """
         selectedForm = forms
-        forms = forms.upper()
-        forms = "form"+forms+"_model"
-        chk_database = apps.get_model('EES_Forms', forms).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+        
+        
+        if len(forms) > 2:
+            forms += "_model"
+            chk_database = apps.get_model('EES_Forms', forms).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+        else:
+            forms = forms.upper()
+            forms = "form"+forms+"_model"
+            chk_database = apps.get_model('EES_Forms', forms).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+        
+        
         print(chk_database.filter(date__day=12))
         print("<--------------------------")
         events = Event.objects.filter(date__month=themonth)
