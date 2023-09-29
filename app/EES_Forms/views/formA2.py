@@ -100,13 +100,14 @@ def formA2(request, facility, selector):
                     'percent_leaking': database_form.percent_leaking,
                 }
             else:
+                inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
                 initial_data = {
                     'date': todays_log.date_save,
                     'observer': full_name,
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
                     'inop_ovens': todays_log.inop_ovens,
-                    'inop_numbs': todays_log.inop_numbs,
+                    'inop_numbs': inopNumbsParse,
                     'notes': 'N/A',
                     'facility_name': facility,
                 }

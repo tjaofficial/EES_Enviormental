@@ -6,6 +6,7 @@ from ..forms import daily_battery_profile_form
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from .supervisor_view import getCompanyFacilities
+import re
 
 lock = login_required(login_url='Login')
 
@@ -63,7 +64,12 @@ def daily_battery_profile_view(request, facility, access_page, date):
                 A.inop_ovens = 0
             else:
                 A.inop_ovens = len(request.POST['inop_numbs'].replace(' ', ''). split(','))
-                A.inop_numbs = request.POST['inop_numbs'].replace('-', '')
+                
+                newList = []
+                for x in request.POST['inop_numbs'].split(','):
+                    x = re.sub("[^0-9]", "", x)
+                    newList.append(x)
+                A.inop_numbs = newList
             A.save()
             return redirect('IncompleteForms', facility)
 
