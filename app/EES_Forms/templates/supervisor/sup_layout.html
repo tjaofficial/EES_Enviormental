@@ -30,7 +30,7 @@
                             <li><a href="{% if client %}{% url 'c_dashboard' facility %}{% elif supervisor %}{% url 'sup_dashboard' facility %}{% endif %}">Dashboard</a></li>
                             {% if client %}{% elif supervisor %}<li><a href="{% url 'Register' facility 'form'%}">Register New Profile</a></li>{% endif %}
                             <li><a href="{% url 'Contacts'  facility %}">Profiles/Contacts</a></li>
-                            {% if supervisor %}<li><a href="{% url 'facilityList' facility %}">Facilities</a></li>{% endif %}
+                            {% if supervisor %}<li><a href="{% url 'facilityList' facility %}">Client Forms</a></li>{% endif %}
                             <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
                         </ul>
                     </li>

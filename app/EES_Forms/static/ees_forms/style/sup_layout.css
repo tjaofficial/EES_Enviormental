@@ -241,6 +241,9 @@ li {
     font-size: 0.9rem;
     font-weight: 100;
 }
+.menuItems{
+    margin-top: 67px;
+}
 .menuItems a{
     color: white;
     text-decoration: none;
@@ -353,7 +356,7 @@ li {
     width:20rem;
     background-color: #28333e;
     display: table;
-    min-height: 1080px;
+    /* min-height: 1080px; */
     min-width: 273.578px;
     margin: 0px;
 }
@@ -364,6 +367,7 @@ li {
     box-shadow: 0px -10px 14px 0px;
     align-items: center;
     display: flex;
+    position: fixed;
 }
 #topBar{
    /* width:auto; 
