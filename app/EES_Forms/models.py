@@ -5620,3 +5620,16 @@ class spill_kit_inventory_model(models.Model):
     
     def __str__(self):
         return str(self.date) + ' - ' + str(self.skID)
+    
+class formSubmissionRecords_model(models.Model):
+    formID = models.IntegerField()
+    dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
+    dueDate = models.DateField(auto_now=False, auto_now_add=False)
+    facilityChoice = models.OneToOneField(
+        bat_info_model,
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    submitted = models.BooleanField(default=False)
+    def __str__(self):
+        return str(self.facilityChoice.facility_name) + " - " + str(self.formID)

@@ -28,8 +28,9 @@ def facilityList(request, facility):
         found = False
         for line in facData:
             if facil == line.facilityChoice:
-                facilityForms = ast.literal_eval(line.formData)
-                found = True
+                if line.formData:
+                    facilityForms = ast.literal_eval(line.formData)
+                    found = True
         if found:
             newFacList.append((facil, facilityForms))
         else:
@@ -52,30 +53,38 @@ def facilityForm(request, facility):
         supervisor = True
     existing = False
     modelList = ''
-    specificFacility = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
-    facilityFormsData = facility_forms_model.objects.all().filter(facilityChoice=specificFacility)
+    facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if len(facilityFormsData) > 0:
-        facilityFormsData = facilityFormsData[0].formData[1:-1].replace("'", "").replace(" ", "").split(",")
+        if facilityFormsData[0].formData:
+            facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])
         existing = True
     
     if existing:
         modelList = facilityFormsData
         replaceModel = facility_forms_model.objects.get(facilityChoice=specificFacility)
-    
+    for x in modelList:
+        for forms in formList:
+            print(isinstance(forms.id, int))
+            #print(isinstance(x[0], int))
+            #if forms.id == x[0]:
+                #print("it match tho")
     if request.method == 'POST':
+        
         selectedList = []
         for item in range(len(formList)):
             label = 'forms' + str(item + 1)
+            formIDLabel = 'formID' + str(item + 1)
             try:
-                selectedList.append(request.POST[label.replace(" ", "")]) 
+                selectedList.append((int(request.POST[label.replace(" ", "")]),request.POST[formIDLabel.replace(" ", "")])) 
             except:
                 continue
         dataCopy = request.POST.copy()
         dataCopy['formData'] = selectedList
         dataCopy['facilityChoice'] = specificFacility
-        
+        print(dataCopy)
         if existing:
             form = facility_forms_form(dataCopy, instance=replaceModel)
         else:
