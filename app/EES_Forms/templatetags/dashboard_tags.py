@@ -8,4 +8,3 @@ def appending(var_list, form_letter):
         var_list.append(form_letter)
     
     
-    

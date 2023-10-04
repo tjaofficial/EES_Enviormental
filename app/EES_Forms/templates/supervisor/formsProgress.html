@@ -1,0 +1,81 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% load sup_tags %}{% block list%}
+<link href="{% static 'ees_forms/style/formsProgress.css' %}" rel="stylesheet" />
+<body>
+    <div class="pageHeader">
+        <h1>Form Progress Report</h1>
+        <a href="{% url 'facilityList' facility %}">add/remove forms</a>
+    </div>
+    <div id="mainBody">
+        <div class="sections snap" id="DailyProg">
+            <h1 class="secHeader">Daily Forms Progress</h1>
+            <div class="formsList">
+                {% if not finalList.Daily|is_string %}
+                    {% for form in finalList.Daily %}
+                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                        {{ form.0 }} - {{ form.1 }}
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    {{finalList.Daily}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="sections snap" id="WeeklyProg">
+            <h1 class="secHeader">Weekly Forms Progress</h1>
+            <div class="formsList">
+                {% if not finalList.Weekly|is_string %}
+                    {% for form in finalList.Weekly %}
+                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                        {{ form.0 }} - {{ form.1 }}
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    {{finalList.Weekly}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="sections snap" id="MonthlyProg">
+            <h1 class="secHeader">Monthly Forms Progress</h1>
+            <div class="formsList">
+                {% if not finalList.Monthly|is_string %}
+                    {% for form in finalList.Monthly %}
+                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                        {{ form.0 }} - {{ form.1 }}
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    {{finalList.Monthly}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="sections snap" id="QuarterlyProg">
+            <h1 class="secHeader">Quarterly Forms Progress</h1>
+            <div class="formsList">
+                {% if not finalList.Quarterly|is_string %}
+                    {% for form in finalList.Quarterly %}
+                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                        {{ form.0 }} - {{ form.1 }}
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    {{finalList.Quarterly}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="sections snap" id="AnnuallyProg">
+            <h1 class="secHeader">Annually Forms Progress</h1>
+            <div class="formsList">
+                {% if not finalList.Annually|is_string %}
+                    {% for form in finalList.Annually %}
+                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                        {{ form.0 }} - {{ form.1 }}
+                        <br>
+                    {% endfor %}
+                {% else %}
+                    {{finalList.Annually}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}

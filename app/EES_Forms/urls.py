@@ -8,6 +8,7 @@ urlpatterns = [
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
     path("adminDash", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
+    
     ##---REGISTRATION-----
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("<str:facility>/account", views.sup_account_view, name="Account"),
@@ -45,6 +46,7 @@ urlpatterns = [
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
     path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
+    path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
 
 
     path("<str:facility>/Daily/formA1/<str:selector>", views.formA1, name="formA1"),

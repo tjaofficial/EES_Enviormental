@@ -753,3 +753,41 @@ def sop_view(request, facility):
     return render(request, 'shared/sops.html', {
         'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })
+    
+def formsProgress(request, facility, section):
+    unlock = False
+    client = False
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
+        unlock = True
+        return redirect('IncompleteForms', facility)
+    if request.user.groups.filter(name=CLIENT_VAR):
+        client = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
+        
+    allForms = Forms.objects.filter(facilityChoice__facility_name=facility).order_by('form')
+    finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
+    
+    for form in allForms:
+        print(form.frequency)
+        formTitle = form.header + ' - ' + form.title
+        if form.frequency == 'Daily':
+            finalList['Daily'].append((form.form, formTitle, form.submitted))
+        elif form.frequency == 'Weekly':
+            finalList['Weekly'].append((form.form, formTitle, form.submitted))
+        elif form.frequency == 'Monthly':
+            finalList['Monthly'].append((form.form, formTitle, form.submitted))
+        elif form.frequency == 'Quarterly':
+            finalList['Quarterly'].append((form.form, formTitle, form.submitted))
+        elif form.frequency == 'Anually':
+            finalList['Annually'].append((form.form, formTitle, form.submitted))
+    for each in finalList:
+        if len(finalList[each]) == 0:
+            finalList[each] = 'No weekly forms added'
+                 
+    print(finalList)
+    
+    return render(request, 'supervisor/formsProgress.html', {
+        'finalList': finalList, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock
+    })

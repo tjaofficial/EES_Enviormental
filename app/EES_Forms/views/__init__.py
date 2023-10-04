@@ -1,6 +1,6 @@
 from .login_logout_view import login_view, logout_view, profile_redirect, change_password, valid_account_logout, landingRegister, registerCompany
 from .header_view import about_view, safety_view, settings_view
-from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view
+from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view, formsProgress
 from .dashboard_view import IncompleteForms
 from .supervisor_view import sup_dashboard_view, register_view, sup_account_view
 from .data_view import pt_admin1_view, pt_mth_input

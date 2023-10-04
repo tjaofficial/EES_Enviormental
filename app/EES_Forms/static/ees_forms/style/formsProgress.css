@@ -1,0 +1,36 @@
+.sections{
+    width: 50rem;
+    background-color: #253544;
+    border-radius: 25px;
+    padding: 17px;
+    color: white;
+    margin: auto;
+    margin-bottom: 10px;
+}
+.secHeader{
+    margin-bottom: 10px;
+}
+.formsList{
+    padding: 10px 10px 10px 80px;
+    font-size: 25px;
+    margin: auto;
+    background-color: #606e7b;
+    border-radius: 25px;
+}
+.formsList input{
+    height: 20px;
+    width: 20px;
+}
+#mainBody{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+.snap{
+    scroll-snap-align: start;
+    scroll-margin: 100px;
+}
+.pageHeader{
+    padding: 26px;
+    text-align: center;
+}
