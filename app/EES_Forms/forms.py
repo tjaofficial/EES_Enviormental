@@ -2082,3 +2082,14 @@ class spill_kit_inventory_form(ModelForm):
             "missing_items": forms.NumberInput(attrs={'type': 'number'}),
         }
         
+class formSubmissionRecords_form(ModelForm):
+    class Meta:
+        model = formSubmissionRecords_model
+        fields = ('__all__')
+        widgets = {
+            'formID': forms.NumberInput(attrs={'type': 'number'}),
+            'dateSubmitted': forms.DateInput(attrs={'type': 'date'}),
+            'dueDate': forms.DateInput(attrs={'type': 'date'}),
+            'facilityChoice': forms.Select(attrs={}),
+            'submitted': forms.CheckboxInput(attrs={})
+        }

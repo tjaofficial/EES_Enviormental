@@ -5625,11 +5625,11 @@ class formSubmissionRecords_model(models.Model):
     formID = models.IntegerField()
     dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
     dueDate = models.DateField(auto_now=False, auto_now_add=False)
-    facilityChoice = models.OneToOneField(
+    facilityChoice = models.ForeignKey(
         bat_info_model,
         on_delete=models.CASCADE, 
         null=True
     )
     submitted = models.BooleanField(default=False)
     def __str__(self):
-        return str(self.facilityChoice.facility_name) + " - " + str(self.formID)
+        return str(self.formID) + " - " + str(self.facilityChoice.facility_name)

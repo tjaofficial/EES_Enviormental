@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model
 from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
@@ -9,6 +9,7 @@ from django.apps import apps
 from ..utils import Calendar
 from django.contrib.auth.decorators import login_required
 import os
+import ast
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from .print_form_view import date_change
@@ -755,6 +756,7 @@ def sop_view(request, facility):
     })
     
 def formsProgress(request, facility, section):
+    existsing = False
     unlock = False
     client = False
     supervisor = False
@@ -766,28 +768,61 @@ def formsProgress(request, facility, section):
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
         
-    allForms = Forms.objects.filter(facilityChoice__facility_name=facility).order_by('form')
+    allForms = Forms.objects.all().order_by('form')
+    clientForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    formSubmissions = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    
+    if len(clientForms) > 0:
+        clientForms = ast.literal_eval(clientForms[0].formData)
+        existing = True
+    else:
+        clientForms = 'none'
+    print(clientForms)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
     
-    for form in allForms:
-        print(form.frequency)
-        formTitle = form.header + ' - ' + form.title
-        if form.frequency == 'Daily':
-            finalList['Daily'].append((form.form, formTitle, form.submitted))
-        elif form.frequency == 'Weekly':
-            finalList['Weekly'].append((form.form, formTitle, form.submitted))
-        elif form.frequency == 'Monthly':
-            finalList['Monthly'].append((form.form, formTitle, form.submitted))
-        elif form.frequency == 'Quarterly':
-            finalList['Quarterly'].append((form.form, formTitle, form.submitted))
-        elif form.frequency == 'Anually':
-            finalList['Annually'].append((form.form, formTitle, form.submitted))
+    
+    for formInfo in clientForms:
+        print("Cross Reference " + str(formInfo[0]) + "...")
+        for x in allForms:
+            print("With " + str(x.id) + "...")
+            for submissions in formSubmissions:
+                if formInfo[0] == x.id and submissions.formID == x.id:
+                    print("Found a MATCH! Adding to finalList.")
+                    formTitle = x.header + ' - ' + x.title
+                    if x.frequency == 'Daily':
+                        finalList['Daily'].append((formInfo[1], formTitle, submissions.submitted))
+                    elif x.frequency == 'Weekly':
+                        finalList['Weekly'].append((formInfo[1], formTitle, submissions.submitted))
+                    elif x.frequency == 'Monthly':
+                        finalList['Monthly'].append((formInfo[1], formTitle, submissions.submitted))
+                    elif x.frequency == 'Quarterly':
+                        finalList['Quarterly'].append((formInfo[1], formTitle, submissions.submitted))
+                    elif x.frequency == 'Anually':
+                        finalList['Annually'].append((formInfo[1], formTitle, submissions.submitted))
+    
+    # if existing:
+    #     for form in allForms:
+    #         formTitle = form.header + ' - ' + form.title
+    #         if form.frequency == 'Daily':
+    #             finalList['Daily'].append((form.form, formTitle, form.submitted))
+    #         elif form.frequency == 'Weekly':
+    #             finalList['Weekly'].append((form.form, formTitle, form.submitted))
+    #         elif form.frequency == 'Monthly':
+    #             finalList['Monthly'].append((form.form, formTitle, form.submitted))
+    #         elif form.frequency == 'Quarterly':
+    #             finalList['Quarterly'].append((form.form, formTitle, form.submitted))
+    #         elif form.frequency == 'Anually':
+    #             finalList['Annually'].append((form.form, formTitle, form.submitted))
+       
     for each in finalList:
         if len(finalList[each]) == 0:
             finalList[each] = 'No weekly forms added'
-                 
+        else:
+            def myFunc(e):
+                return e[0]
+            finalList[each].sort(key=myFunc)
+                
     print(finalList)
-    
     return render(request, 'supervisor/formsProgress.html', {
         'finalList': finalList, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

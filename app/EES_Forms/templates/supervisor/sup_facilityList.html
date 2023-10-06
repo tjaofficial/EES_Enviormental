@@ -24,8 +24,10 @@
                     <td colspan=3 style='height:20px;'></td>
                 </tr>
                 <tr>
-                    <td style='vertical-align: top;'>{{info.0.facility_name}}</td>
-                    <td>{% for x in info.1 %}{{x}},<br> {% endfor %}</td>
+                    <td style='vertical-align: top;'>
+                        {{info.0.facility_name}}<br>
+                    </td>
+                    <td>{% for x in info.1 %}{{x.1}} - {{x.2}}<br> {% endfor %}</td>
                     <td><a href="{% url 'facilityForms' info.0.facility_name %}">Edit</a></td>
                 </tr>
                 <tr>
