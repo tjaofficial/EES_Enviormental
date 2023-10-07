@@ -53,6 +53,9 @@ def facilityList(request, facility):
             labelList.sort(key=myFunc)
             
             finalList.append((newFac[0], labelList))
+        else:
+            finalList.append((newFac[0], newFac[1]))
+    print(finalList)
     return render(request, 'supervisor/sup_facilityList.html', {
         'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': finalList
     })
@@ -76,54 +79,76 @@ def facilityForm(request, facility):
     formList = Forms.objects.all().order_by('form')
     facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    
+    def doesSubExist(facilityLog, value, selector, delete):
+        if selector == "formID":
+            if not formSubmissionRecords_model.objects.filter(formID=value, facilityChoice=facilityLog).exists():
+                newSub = formSubmissionRecords_model(
+                    formID = value,
+                    dateSubmitted = today - datetime.timedelta(days=9000),
+                    dueDate = today - datetime.timedelta(days=5000),
+                    facilityChoice = facilityLog,
+                    submitted = False
+                )
+                newSub.save()
+            elif delete:
+                toBeDeleted = formSubmissionRecords_model.objects.get(formID=value, facilityChoice=facilityLog)
+                toBeDeleted.delete()
+        elif selector =="list":   
+            for x in value:
+                if not formSubmissionRecords_model.objects.filter(formID=x[0], facilityChoice=facilityLog).exists():
+                    newSub = formSubmissionRecords_model(
+                        formID = x[0],
+                        dateSubmitted = today - datetime.timedelta(days=9000),
+                        dueDate = today - datetime.timedelta(days=5000),
+                        facilityChoice = facilityLog,
+                        submitted = False
+                    )
+                    newSub.save()
+                elif delete:
+                    toBeDeleted = formSubmissionRecords_model.objects.get(formID=x[0], facilityChoice=facilityLog)
+                    toBeDeleted.delete()
+        
     if len(facilityFormsData) > 0:
         if facilityFormsData[0].formData:
             facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])
+        else:
+            facilityFormsData = []
         existing = True
     
     if existing:
         modelList = facilityFormsData
         replaceModel = facility_forms_model.objects.get(facilityChoice=specificFacility)
-    # for x in modelList:
-    #     for forms in formList:
-    #         print(isinstance(forms.id, int))
-            #print(isinstance(x[0], int))
-            #if forms.id == x[0]:
-                #print("it match tho")
-                
 
     if request.method == 'POST':
-        existingSub = formSubmissionRecords_model.objects.filter(facilityChoice=specificFacility)
-        existingSub.delete()
-        
         selectedList = []
-        print(len(formList))
-        print(request.POST)
+        ## Builds the new list of forms selected and created a submission record
         for item in range(len(formList)):
             formIDlabel = 'forms' + str(item + 1)
             formOrgLabel = 'formID' + str(item + 1)
             try:
-                
                 formID = int(request.POST[formIDlabel.replace(" ", "")])
                 fromOrg = request.POST[formOrgLabel.replace(" ", "")].upper()
                 
                 selectedList.append((formID,fromOrg))    
-                    
-                newSub = formSubmissionRecords_model(
-                    formID = formID,
-                    dateSubmitted = today - datetime.timedelta(days=9000),
-                    dueDate = today - datetime.timedelta(days=5000),
-                    facilityChoice = specificFacility,
-                    submitted = False
-                )
-                newSub.save()
+                
+                doesSubExist(specificFacility, formID, "formID", False)
             except:
                 continue
         
+        ## Removes records for forms that arent selected anymore
+        if existing:
+            oldForms = []
+            for transfer in modelList:
+                oldForms.append(transfer)
+            different = set(oldForms).difference(selectedList)
+            
+            doesSubExist(specificFacility, different, "list", True)
+                
         dataCopy = request.POST.copy()
         dataCopy['formData'] = selectedList
         dataCopy['facilityChoice'] = specificFacility
-        print(dataCopy)
+
         if existing:
             form = facility_forms_form(dataCopy, instance=replaceModel)
         else:
