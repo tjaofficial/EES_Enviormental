@@ -139,8 +139,6 @@ def formA1(request, facility, selector):
                 B.save()
                 formLabels = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
                 for label in formLabels:
-                    print(label)
-                    print(formName)
                     if label[0] == formName:
                         theLabel = label[1]
                     finder = issues_model.objects.filter(date=A.date, form=theLabel)
@@ -152,7 +150,7 @@ def formA1(request, facility, selector):
                 for x in sec:
                     if 10 <= x:
                         if finder:
-                            issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/issue'
+                            issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/resubmit'
                         else:
                             issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
 
@@ -160,7 +158,7 @@ def formA1(request, facility, selector):
                     else:
                         if B.total_seconds >= 55:
                             if finder:
-                                issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/issue'
+                                issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/resubmit'
                             else:
                                 issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
 

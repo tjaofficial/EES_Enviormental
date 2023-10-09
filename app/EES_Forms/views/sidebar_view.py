@@ -414,18 +414,24 @@ def issues_view(request, facility, form_name, form_date, access_page):
     todays_log = daily_prof[0]
     options = bat_info_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    
+    if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
+        facilityForms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
+    if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
+        facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    
+    for thisOne in facilityForms:
+        if thisOne[1] == form_name:
+            formID = thisOne[0]
+    
     if access_page == 'form':
-        if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
-            facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
-        if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
-            facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
             
         today = datetime.date.today()
         if today.weekday() == 5:
             day = 'saturday'
         elif today.weekday() == 6:
             day = 'sunday'
-        for facForms in facilityFroms:
+        for facForms in facilityForms:
             for facSubs in facilitySubs:
                 if facSubs.formID.id == facForms[0]:
                     formLabel = facForms[1]
@@ -435,7 +441,6 @@ def issues_view(request, facility, form_name, form_date, access_page):
                             link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page + '/' + day
                         else:
                             link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page
-                    
                     
         existing = False
         picker = 'n/a'
@@ -473,10 +478,11 @@ def issues_view(request, facility, form_name, form_date, access_page):
             if data.is_valid():
                 data.save()
 
-                updateSubmissionForm(facility, formLabel, True, todays_log.date_save)
+                updateSubmissionForm(facility, formID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
+        print(form_date)
         org = issues_model.objects.filter(date__exact=form_date)
         database_form = org[0]
         print('CHECK 1')
@@ -490,7 +496,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
                     if client:
                         entry.viewed = True
                         entry.save()
-    elif access_page == 'edit':
+    elif access_page == 'edit' or access_page == 'resubmit':
         org = issues_model.objects.all().order_by('-date')
         database_form = org[0]
         for entry in org:
@@ -518,8 +524,13 @@ def issues_view(request, facility, form_name, form_date, access_page):
             data = issues_form(dataCopy, instance=picker)
             if data.is_valid():
                 data.save()
-
-                return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
+                
+                if access_page == 'resubmit':
+                    updateSubmissionForm(facility, formID, True, picker.date)
+                    
+                    return redirect('IncompleteForms', facility)
+                else:
+                    return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
     else:
         existing = False
         picker = 'n/a'
@@ -556,7 +567,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
             if data.is_valid():
                 data.save()
 
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                updateSubmissionForm(facility, formID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/issues_template.html", {

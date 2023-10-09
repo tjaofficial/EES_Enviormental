@@ -576,16 +576,17 @@ def IncompleteForms(request, facility):
                 if forms[0] == sub.formID.id:
                     sub.submitted = True
                     if sub.formID.frequency == 'Monthly':
+                        print(sub.formID.header)
                         numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]
                         lastDayOfMonth = str(today.year) + '-' + str(today.month) + '-' + str(numbOfDaysInMonth)
                         sub.dueDate = datetime.datetime.strptime(lastDayOfMonth, "%Y-%m-%d").date()
-                        subDateSubmitted = sub.dateSubmitted
+                        print(sub.dueDate)
                         dueDate = sub.dueDate
-                        if subDateSubmitted.year != dueDate.year or subDateSubmitted.month != dueDate.month:
+                        if sub.dateSubmitted.year != dueDate.year or sub.dateSubmitted.month != dueDate.month:
                             sub.submitted = False
-                        elif subDateSubmitted.day > numbOfDaysInMonth:
+                        elif sub.dateSubmitted.day > numbOfDaysInMonth:
                             sub.submitted = False
-                        sub.formID.save()
+                        sub.save()
                     elif sub.formID.frequency == 'Quarterly':
                         if what_quarter(today) == 1:
                             monthDue = 3
@@ -609,7 +610,7 @@ def IncompleteForms(request, facility):
                         B = sub.dueDate
                         if what_quarter(A) != what_quarter(B):
                             sub.submitted = False
-                        sub.formID.save()
+                        sub.save()
                     elif sub.formID.frequency == 'Weekly':
                         if todays_num in {0, 1, 2, 3, 4}:
                             sub.dueDate = weekday_fri
@@ -622,16 +623,17 @@ def IncompleteForms(request, facility):
                             sub.submitted = False   
                         elif A < start_sat or A > sub.dueDate:
                             sub.submitted = False
-                        sub.formID.save()
+                        sub.save()
                     elif sub.formID.frequency == 'Daily':
                         sub.dueDate = today
                         A = sub.dateSubmitted
                         if today != A:
                             sub.submitted = False
-                        sub.formID.save()
+                        sub.save()
                         
                     if sub.formID.day_freq in {'Everyday', todays_num} or (todays_num in {5, 6} and sub.formID.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and sub.formID.day_freq == 'Weekdays'):
                         if sub.submitted == False:
+                            print(sub)
                             if sub.formID.id in {17,18}:
                                 if len(facilitySubs.filter(formID__id=18)) > 0:
                                     g2_form = facilitySubs.filter(formID__id=18)[0]

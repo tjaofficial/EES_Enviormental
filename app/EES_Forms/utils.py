@@ -217,3 +217,5 @@ def updateSubmissionForm(facility, formID, submitted, date):
         formSubmission.submitted = submitted
         formSubmission.dateSubmitted = date
         formSubmission.save()
+        print("YEAH IT SAVED")
+    print("NO IT DIDNT SAVE")    
