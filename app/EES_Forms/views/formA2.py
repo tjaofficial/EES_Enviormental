@@ -5,6 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -22,7 +23,7 @@ def formA2(request, facility, selector):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    formName = "A2"
+    formName = 2
     existing = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
@@ -134,10 +135,7 @@ def formA2(request, facility, selector):
                     return redirect(issue_page)
 
                 if A.leaking_doors == 0:
-                    done = Forms.objects.filter(form='A-2')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                     return redirect('IncompleteForms', facility)
                 else:
                     finder = issues_model.objects.filter(date=A.date, form='A-2')

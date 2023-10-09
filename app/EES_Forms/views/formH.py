@@ -6,6 +6,7 @@ from ..forms import formH_form, user_profile_form, formH_readings_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,7 +14,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formH(request, facility, selector):
-    formName = "H"
+    formName = 19
     existing = False
     unlock = False
     client = False
@@ -311,10 +312,7 @@ def formH(request, facility, selector):
                 B.form = A
                 B.save()
 
-                done = Forms.objects.filter(form='H')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:

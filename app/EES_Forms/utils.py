@@ -210,3 +210,10 @@ def stringToDate(date):
         day = '0'+str(date.day)
     parsed = str(date.year) + '-' + month + '-' + day
     return parsed
+
+def updateSubmissionForm(facility, formID, submitted, date):
+    if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID=formID).exists():
+        formSubmission = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID=formID)[0]
+        formSubmission.submitted = submitted
+        formSubmission.dateSubmitted = date
+        formSubmission.save()

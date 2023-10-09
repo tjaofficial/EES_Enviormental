@@ -6,6 +6,7 @@ from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readi
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,7 +14,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formG1(request, facility, selector):
-    formName = "G1"
+    formName = 17
     existing = False
     unlock = False
     client = False
@@ -271,10 +272,7 @@ def formG1(request, facility, selector):
                 B.form = A
                 B.save()
 
-                done = Forms.objects.filter(form='G-1')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
             else:
@@ -292,7 +290,7 @@ def formG1(request, facility, selector):
 
 @lock
 def formG2(request, facility, selector):
-    formName = "G2"
+    formName = 18
     existing = False
     unlock = False
     client = False
@@ -548,10 +546,7 @@ def formG2(request, facility, selector):
                 B.form = A
                 B.save()
 
-                done = Forms.objects.filter(form='G-2')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
             else:

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model
+from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model, facility_forms_model
 from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-
+from ..utils import updateSubmissionForm
+import ast
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -12,7 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA1(request, facility, selector):
-    formName = "A1"
+    formName = 1
     existing = False
     unlock = False
     client = False
@@ -136,8 +137,13 @@ def formA1(request, facility, selector):
                 A.facilityChoice = finalFacility
                 A.save()
                 B.save()
-
-                finder = issues_model.objects.filter(date=A.date, form='A-1')
+                formLabels = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
+                for label in formLabels:
+                    print(label)
+                    print(formName)
+                    if label[0] == formName:
+                        theLabel = label[1]
+                    finder = issues_model.objects.filter(date=A.date, form=theLabel)
             #     if B.comments not in {'-', 'n/a', 'N/A'}:
             #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
@@ -146,23 +152,21 @@ def formA1(request, facility, selector):
                 for x in sec:
                     if 10 <= x:
                         if finder:
-                            issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/issue'
+                            issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/issue'
                         else:
-                            issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                            issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
 
                         return redirect(issue_page)
                     else:
                         if B.total_seconds >= 55:
                             if finder:
-                                issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/issue'
+                                issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/issue'
                             else:
-                                issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                                issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
 
                             return redirect(issue_page)
-                done = Forms.objects.filter(form='A-1')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                        
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:

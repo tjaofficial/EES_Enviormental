@@ -5622,7 +5622,11 @@ class spill_kit_inventory_model(models.Model):
         return str(self.date) + ' - ' + str(self.skID)
     
 class formSubmissionRecords_model(models.Model):
-    formID = models.IntegerField()
+    formID = models.ForeignKey(
+        Forms,
+        on_delete=models.CASCADE, 
+        null=True
+    )
     dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
     dueDate = models.DateField(auto_now=False, auto_now_add=False)
     facilityChoice = models.ForeignKey(
@@ -5632,4 +5636,4 @@ class formSubmissionRecords_model(models.Model):
     )
     submitted = models.BooleanField(default=False)
     def __str__(self):
-        return str(self.formID) + " - " + str(self.facilityChoice.facility_name)
+        return str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)

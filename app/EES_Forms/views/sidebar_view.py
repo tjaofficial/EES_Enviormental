@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar
+from ..utils import Calendar, updateSubmissionForm
 from django.contrib.auth.decorators import login_required
 import os
 import ast
@@ -415,18 +415,26 @@ def issues_view(request, facility, form_name, form_date, access_page):
     options = bat_info_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if access_page == 'form':
-        data = Forms.objects.all()
+        if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
+            facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
+        if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
+            facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+            
         today = datetime.date.today()
         if today.weekday() == 5:
             day = 'saturday'
         elif today.weekday() == 6:
             day = 'sunday'
-        for x in data:
-            if x.form == form_name:
-                if x.form in {'O', 'P'}:
-                    link = x.frequency + '/' + x.link + '/' + access_page + '/' + day
-                else:
-                    link = x.frequency + '/' + x.link + '/' + access_page
+        for facForms in facilityFroms:
+            for facSubs in facilitySubs:
+                if facSubs.formID.id == facForms[0]:
+                    formLabel = facForms[1]
+                    formID = facForms[0]
+                    if facForms[1] == form_name:
+                        if facSubs.formID.id in {24,25}:
+                            link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page + '/' + day
+                        else:
+                            link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page
                     
                     
         existing = False
@@ -465,10 +473,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
             if data.is_valid():
                 data.save()
 
-                done = Forms.objects.filter(form=form_name)[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formLabel, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
@@ -551,10 +556,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
             if data.is_valid():
                 data.save()
 
-                done = Forms.objects.filter(form=form_name)[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/issues_template.html", {

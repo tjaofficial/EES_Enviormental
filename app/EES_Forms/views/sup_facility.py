@@ -82,33 +82,39 @@ def facilityForm(request, facility):
     
     def doesSubExist(facilityLog, value, selector, delete):
         if selector == "formID":
-            if not formSubmissionRecords_model.objects.filter(formID=value, facilityChoice=facilityLog).exists():
-                newSub = formSubmissionRecords_model(
-                    formID = value,
-                    dateSubmitted = today - datetime.timedelta(days=9000),
-                    dueDate = today - datetime.timedelta(days=5000),
-                    facilityChoice = facilityLog,
-                    submitted = False
-                )
-                newSub.save()
-            elif delete:
-                toBeDeleted = formSubmissionRecords_model.objects.get(formID=value, facilityChoice=facilityLog)
-                toBeDeleted.delete()
+            for formData in Forms.objects.all():
+                if formData.id == value:
+                    if not formSubmissionRecords_model.objects.filter(formID=formData, facilityChoice=facilityLog).exists():
+                        newSub = formSubmissionRecords_model(
+                            formID = formData,
+                            dateSubmitted = today - datetime.timedelta(days=9000),
+                            dueDate = today - datetime.timedelta(days=5000),
+                            facilityChoice = facilityLog,
+                            submitted = False
+                        )
+                        newSub.save()
+                    elif delete:
+                        toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
+                        toBeDeleted.delete()
+                    break
+                
         elif selector =="list":   
             for x in value:
-                if not formSubmissionRecords_model.objects.filter(formID=x[0], facilityChoice=facilityLog).exists():
-                    newSub = formSubmissionRecords_model(
-                        formID = x[0],
-                        dateSubmitted = today - datetime.timedelta(days=9000),
-                        dueDate = today - datetime.timedelta(days=5000),
-                        facilityChoice = facilityLog,
-                        submitted = False
-                    )
-                    newSub.save()
-                elif delete:
-                    toBeDeleted = formSubmissionRecords_model.objects.get(formID=x[0], facilityChoice=facilityLog)
-                    toBeDeleted.delete()
-        
+                for formData in Forms.objects.all():
+                    if formData.id == x[0]:
+                        if not formSubmissionRecords_model.objects.filter(formID=formData, facilityChoice=facilityLog).exists():
+                            newSub = formSubmissionRecords_model(
+                                formID = formData,
+                                dateSubmitted = today - datetime.timedelta(days=9000),
+                                dueDate = today - datetime.timedelta(days=5000),
+                                facilityChoice = facilityLog,
+                                submitted = False
+                            )
+                            newSub.save()
+                        elif delete:
+                            toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
+                            toBeDeleted.delete()
+                        break
     if len(facilityFormsData) > 0:
         if facilityFormsData[0].formData:
             facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])

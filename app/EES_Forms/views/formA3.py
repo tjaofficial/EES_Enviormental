@@ -5,6 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA3_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -12,7 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA3(request, facility, selector):
-    formName = "A3"
+    formName = 3
     existing = False
     unlock = False
     client = False
@@ -145,10 +146,7 @@ def formA3(request, facility, selector):
 
                     return redirect(issue_page)
 
-                done = Forms.objects.filter(form='A-3')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
             print(form)

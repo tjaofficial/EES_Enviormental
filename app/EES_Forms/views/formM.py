@@ -4,6 +4,7 @@ import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -15,7 +16,7 @@ def showName(code):
 
 @lock
 def formM(request, facility, selector):
-    formName = "M"
+    formName = 22
     existing = False
     unlock = False
     client = False
@@ -173,15 +174,9 @@ def formM(request, facility, selector):
 
                     return redirect(issue_page)
                 
-                done = Forms.objects.filter(form='M')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
-                done2 = Forms.objects.filter(form='N')[0]
-                done2.submitted = True
-                done2.date_submitted = todays_log.date_save
-                done2.save()
+                updateSubmissionForm(facility, 23, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:

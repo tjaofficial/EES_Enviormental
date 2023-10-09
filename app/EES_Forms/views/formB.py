@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, formB_model, bat_info_model
+from ..models import user_profile_model, daily_battery_profile_model, formB_model, bat_info_model, formSubmissionRecords_model
 from ..forms import Forms, formB_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,7 +14,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formB(request, facility, selector):
-    formName = "B"
+    formName = 6
     existing = False
     unlock = False
     client = False
@@ -208,13 +209,12 @@ def formB(request, facility, selector):
                 #        filled_out = False
                 #        break
                 if filled_out:
-                    done = Forms.objects.filter(form='B')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 else:
-                    done.submitted = False
-                    done.save()
+                    if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
+                        subForm = formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility)[0]
+                    subForm.submitted = False
+                    subForm.save()
             return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

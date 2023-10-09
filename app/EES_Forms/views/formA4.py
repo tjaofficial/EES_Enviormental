@@ -6,13 +6,14 @@ from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 from .print_form_view import time_change, date_change
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA4(request, facility, selector):
-    formName = "A4"
+    formName = 4
     existing = False
     unlock = False
     client = False
@@ -135,10 +136,7 @@ def formA4(request, facility, selector):
                 elif issues_model.objects.filter(date=A.date, form='A-4'):
                     issues_model.objects.filter(date=A.date, form='A-4')[0].delete()
                 
-                done = Forms.objects.filter(form='A-4')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:

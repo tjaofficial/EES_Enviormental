@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model, bat_info_model
 from ..forms import formO_form
+from ..utils import updateSubmissionForm
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -12,7 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formO(request, facility, selector, weekend_day):
-    formName = "O"
+    formName = 24
     existing = False
     unlock = False
     client = False
@@ -106,10 +107,7 @@ def formO(request, facility, selector, weekend_day):
 
                     return redirect(issue_page)
 
-                done = Forms.objects.filter(form='O')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:

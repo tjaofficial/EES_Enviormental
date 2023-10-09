@@ -4,13 +4,14 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formI_model, bat_info_model
 from ..forms import formI_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formI(request, facility, selector):
-    formName = "I"
+    formName = 20
     existing = False
     unlock = False
     client = False
@@ -166,10 +167,7 @@ def formI(request, facility, selector):
                             filled_in = False
 
                 if filled_in:
-                    done = Forms.objects.filter(form='I')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                     return redirect('IncompleteForms', facility)
     else:
