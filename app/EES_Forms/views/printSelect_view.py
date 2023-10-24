@@ -177,7 +177,10 @@ def printSelect(request, facility):
         
 
     if request.method == "POST":
-        print(request.POST["forms"])
+        answer = request.POST
+        for x in answer:
+            if x == 'facilitySelect':
+                return redirect('PrintSelect', answer['facilitySelect'])
         inputDate = datetime.datetime.strptime(request.POST["monthSel"], "%Y-%m").date()
         if request.POST['type'] == 'single':
             return redirect("CalSelect", facility, request.POST['type'], request.POST['forms'], inputDate.year, inputDate.month)

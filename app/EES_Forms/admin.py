@@ -59,7 +59,7 @@ admin.site.register(formSubmissionRecords_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']
-    change_list_template = 'admin/events/change_list.html'
+    change_list_template = 'supervisor/events/change_list.html'
  
     def changelist_view(self, request, extra_context=None):
         after_day = request.GET.get('date__gte', None)

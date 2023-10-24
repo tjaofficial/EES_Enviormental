@@ -126,12 +126,14 @@ class Calendar(HTMLCalendar):
         
         
  
-    def formatmonth(self, theyear, themonth, year, withyear=True):
+    def formatmonth(self, theyear, themonth, year, facility, withyear=True):
         """
         Return a formatted month as a table.
         """
- 
-        events = Event.objects.filter(date__month=themonth)
+        if facility == "supervisor":
+            events = Event.objects.filter(date__month=themonth, personal=True)
+        else:
+            events = Event.objects.filter(date__month=themonth, facilityChoice__facility_name=facility)
  
         v = []
         a = v.append

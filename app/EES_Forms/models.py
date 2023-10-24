@@ -4500,6 +4500,9 @@ class issues_model(models.Model):
 
 
 class Event(models.Model):
+    enteredBy = models.CharField(max_length=40, blank=True, null=True)
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    personal = models.BooleanField(default=False)
     cal_title_choices = (
         ('P', 'Primary'),
         ('BU', 'Back Up'),

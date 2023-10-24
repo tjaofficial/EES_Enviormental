@@ -52,6 +52,11 @@
                                     </a>
                                 </li>
                             {% endif %}
+                            <li>
+                                <a href="{% url 'Schedule' facility %}">
+                                    Calendar
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     {% if unlock %}<li><a href=#>Completion Progress</a>
@@ -63,12 +68,12 @@
                             <li><a href=#>Anually</a></li>
                         </ul>
                     </li>{% endif %}
-                    <li><a id='calendarLabel' href=#>Schedule</a>
+                    {% comment %} <li><a id='calendarLabel' href=#>Schedule</a>
                         <ul id='calendarGroup' style='display: block;'>
                             <li><a href="{% url 'Schedule' facility %}">Calendar</a></li>
                             {% if client %}{% elif supervisor %}<li><a href="{% url 'Add Event' facility %}">Add Events</a></li>{% endif %}
                         </ul>
-                    </li>
+                    </li> {% endcomment %}
                     {% if client %}
                         <li>
                             <a href=#>
@@ -96,6 +101,8 @@
                                     <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
                                     <li><a href=#>Weekly Reports</a></li>
                                     <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li>
+                                    <li><a href="{% url 'Schedule' facility %}">Schedule</a></li>
+                                    <li><a href="{% url 'Add Event' facility %}">Add Events</a></li>
                                 </ul>
                             </li>
                         {% endif %}
@@ -104,7 +111,7 @@
             </div>
         </div>
         <div id="profileDropdown" class="profileDropdown profileDropdown_hidden" data-displayed="False">
-            <a href="{% url 'Account' facility %}">
+            <a href="{% url 'Account' 'supervisor' %}">
                 <div class="sidebar_item">
                     <div class="sidebar_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">

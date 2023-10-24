@@ -147,6 +147,11 @@ def corrective_action_view(request, facility):
     profile = user_profile_model.objects.all()
     options = bat_info_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    if request.method == 'POST':
+        answer = request.POST
+        print(answer)
+        if answer['facilitySelect'] != '':
+            return redirect('Corrective-Action', answer['facilitySelect'])
     return render(request, "ees_forms/corrective_actions.html", {
         "varPull": varPull, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
@@ -186,8 +191,12 @@ def calendar_view(request, facility, year, month):
 
     calend = Calendar()
     calend.setfirstweekday(6)
-    html_cal = calend.formatmonth(year, month_number, year, withyear=True)
+    html_cal = calend.formatmonth(year, month_number, year, facility, withyear=True)
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "ees_forms/schedule.html", {
         'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
@@ -585,18 +594,33 @@ def event_add_view(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    options = bat_info_model.objects.all()    
+    options = bat_info_model.objects.all()  
+    if options.filter(facility_name=facility).exists():
+        finalFacility = options.filter(facility_name=facility)[0]
+    else:
+        print("MT")
     today = datetime.date.today()
     profile = user_profile_model.objects.all()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     sortedFacilityData = getCompanyFacilities(request.user.username)
     form_var = events_form()
+    fullName = request.user.first_name + " " + request.user.last_name
 
     if request.method == "POST":
+        answer = request.POST
+        for x in answer:
+            if x == 'facilitySelect':
+                return redirect('sup_dashboard', answer['facilitySelect'])
         request_form = events_form(request.POST)
         if request_form.is_valid():
-            request_form.save()
+            A = request_form.save(commit=False)
+            A.enteredBy = fullName
+            A.personal = True
+            if facility != "supervisor":
+                A.facilityChoice = finalFacility
+                A.personal = False
+            A.save()
 
             cal_link = 'schedule/' + str(today_year) + '/' + today_month
 
@@ -733,7 +757,10 @@ def shared_contacts_view(request, facility):
             organized_list.append((user.id, user, 'N/A' , handlePhone(user.phone)))
     
     print(organized_list)
-    
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "shared/contacts.html", {
         'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
     })

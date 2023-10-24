@@ -615,6 +615,11 @@ def register_view(request, facility, access_page):
         return redirect('IncompleteForms', facility)
     else:
         return redirect('no_registration')
+    
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "ees_forms/ees_register.html", {
         'sortedFacilityData': sortedFacilityData, 'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
     })

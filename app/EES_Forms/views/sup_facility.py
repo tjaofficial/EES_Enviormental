@@ -56,6 +56,10 @@ def facilityList(request, facility):
         else:
             finalList.append((newFac[0], newFac[1]))
     print(finalList)
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, 'supervisor/sup_facilityList.html', {
         'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': finalList
     })
@@ -127,6 +131,10 @@ def facilityForm(request, facility):
         replaceModel = facility_forms_model.objects.get(facilityChoice=specificFacility)
 
     if request.method == 'POST':
+        answer = request.POST
+        for x in answer:
+            if x == 'facilitySelect':
+                return redirect('sup_dashboard', answer['facilitySelect'])
         selectedList = []
         ## Builds the new list of forms selected and created a submission record
         for item in range(len(formList)):
