@@ -11,11 +11,13 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
 from EES_Forms.views.supervisor_view import getCompanyFacilities
-from ..models import spill_kit_inventory_model
+from ..models import spill_kit_inventory_model, facility_forms_model
+from ..utils import parseFormList
 import json
 import io
 import datetime
 import calendar
+import ast
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -183,6 +185,9 @@ def inventoryResponse(tagOn, sk):
       
 @lock
 def form_PDF(request, facility, formDate, formName):
+    facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    
+
     if formDate[0:6] == 'single':
         formTag = formDate[0:6]
         formDate = formDate[7:]
@@ -194,12 +199,23 @@ def form_PDF(request, facility, formDate, formName):
     
     if formTag == 'single' or formTag == '':
         formList = [formName]
-    elif formName == 'formA':
+    elif formName == 'Coke Battery Daily Packet':
         formList = ['A1', 'A2', 'A3', 'A4', 'A5']
-    elif formName == 'weekly':
+    elif formName == 'Facility Weekly Packet':
+        formList1 = ast.literal_eval(facilityForms[0].formData)
         formList = []
-        for allForms in Forms.objects.all():
-            formList.append(str(allForms).replace('-',''))
+        for fList in formList1:
+            if fList[0] == 23:
+                continue
+            else:
+                for pFormList in parseFormList:
+                    if fList[0] == pFormList[0]:
+                        if fList[0] == 26:
+                            formList.append('Spill Kits')
+                        elif fList[0] == 27:
+                            formList.append('Quarterly Trucks')
+                        else:
+                            formList.append(fList[1])
     elif formName == 'monthly':
         formList = ['G2', 'Spill Kits']
     elif formName == 'tanks':
@@ -209,13 +225,38 @@ def form_PDF(request, facility, formDate, formName):
     print(formList)
     elems = []
     for item in formList:
+        print(item)
+        try:
+            int(item)
+            print("This is a number: " + str(item))
+            ModelForms = Forms.objects.filter(form=item, facilityChoice__facility_name=facility)
+            if len(ModelForms) > 0:
+                ModelForms = ModelForms[0]
+                reFormName = item
+                modelName = 'form' + item + '_model'
+            else:
+                for newParse in parseFormList:
+                    if int(newParse[0]) == int(item):
+                        item = newParse[1]
+                        ModelForms = Forms.objects.filter(form=newParse[1], facilityChoice__facility_name=facility)
+                        print("Now it has been changed to: "+ item)
+                        break
+        except:
+            print("The '" + str(item) + "' form has been caught by the EXCEPTION")
         if item[0] == 'F':
             print('Skipped Form and Continued')
             continue
         goNext = False
-        if item in ['N']:
-            reFormName = 'N'
-            modelName = 'formM_model'
+        if item in ['N', "Q", "R"]:
+            if item == "N":
+                reFormName = 'N'
+                modelName = 'formM_model'
+            elif item == "Q":
+                reFormName = 'Quarterly Trucks'
+                modelName = 'quarterly_trucks_model'
+            elif item == "R":
+                reFormName = 'Spill Kits'
+                modelName = 'spill_kits_model'
         elif len(item) > 1 and len(item) <= 3:
             reFormName = item[0] + '-' + item[1]
             modelName = 'form' + item + '_model'
@@ -223,10 +264,16 @@ def form_PDF(request, facility, formDate, formName):
             modelName = item.replace(' ', '_').lower() + '_model'
             reFormName = item.replace('_', ' ').title()
         else:
+            print(item)
             reFormName = item
             modelName = 'form' + item + '_model'
-        ModelForms = Forms.objects.filter(form=reFormName, facilityChoice__facility_name=facility)[0]
+            ModelForms = Forms.objects.filter(form=reFormName, facilityChoice__facility_name=facility)
+            if len(ModelForms) > 0:
+                ModelForms = ModelForms[0]
+            else:
+                print("no modelForm")
         
+        ModelForms = Forms.objects.filter(form=reFormName, facilityChoice__facility_name=facility)[0]
         mainModel = apps.get_model('EES_Forms', modelName)
         #Pick the specific form date
         formsAndData = {}
@@ -248,10 +295,10 @@ def form_PDF(request, facility, formDate, formName):
             parseDateStart = parseDateStop - datetime.timedelta(days=6)
         database_model = ''
         try:
-            org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-date')
+            org = mainModel.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
             print(org)
             for x in org:
-                if formName == 'weekly':
+                if formName == 'Facility Weekly Packet':
                     if parseDateStart <= x.date <= parseDateStop:
                         formsAndData[str(x.date)] = [x]
                         continue
@@ -276,12 +323,14 @@ def form_PDF(request, facility, formDate, formName):
                         database_model = ''
                         goNext = True
                         print('goNext1')
+            print("-------This is MARKER 1")
+            print(formsAndData)
             if item in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
                 print('made it here')
                 readingsModel = apps.get_model('EES_Forms', 'form' + item + '_readings_model')
                 org2 = readingsModel.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
                 for x in org2:
-                    if formName == 'weekly':
+                    if formName == 'Facility Weekly Packet':
                         print("Getting paired Readings Model...")
                         if parseDateStart <= x.form.date <= parseDateStop:
                             for pairs in list(formsAndData):
@@ -307,9 +356,9 @@ def form_PDF(request, facility, formDate, formName):
                             database_model2 = ''
         except FieldError as e:
             print('Check A - Form ' + item)
-            org = mainModel.objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
+            org = mainModel.objects.filter(facilityChoice__facility_name=facility).order_by('-week_start')
             for r in org:
-                if formName == 'weekly':
+                if formName == 'Facility Weekly Packet':
                     if parseDateStart <= r.week_start <= parseDateStop:
                         print(r)
                         print('<-------HERE')
@@ -339,20 +388,26 @@ def form_PDF(request, facility, formDate, formName):
             continue
         print('Processing Forms that were found for ' + item + '...')
         alphaStore = ''
+        print(list(formsAndData))
         for alpha in list(formsAndData):
             #print(len(formsAndData[alpha]))
-            if alphaStore == '':
-                alphaStore += alpha[:7]
-            else:
-                continue
+            print("CHECK 1")
+            # if alphaStore == '':
+            #     print("CHECK 1.1")
+            #     alphaStore += alpha[:7]
+            #     print(alphaStore)
+            # else:
+            #     print("CHECK 1.2")
+            #     continue
             if len(formsAndData[alpha]) == 2:
+                doubleDB = True
                 print(item + ' is a double database...')
                 data = formsAndData[alpha][0]
                 readings = formsAndData[alpha][1]
             else:
                 data = formsAndData[alpha][0]
                 print(item + ' is a single database...')
-            
+            print(ModelForms)
             styles = getSampleStyleSheet()
             fileName = 'form' + formName + '_' + formDate + ".pdf"
             documentTitle = 'form' + formName + '_' + formDate
@@ -431,6 +486,7 @@ def form_PDF(request, facility, formDate, formName):
                 if item == 'A2':
                     if data.p_leak_data != '{}':
                         p_leaks = json.loads(data.p_leak_data)['data']
+                        print(p_leaks)
                     else:
                         p_leaks = ''
                     if data.c_leak_data != '{}':
@@ -469,7 +525,11 @@ def form_PDF(request, facility, formDate, formName):
                         pLen = len(p_leaks)
                         cLen = len(c_leaks)
                         for x in range(pLen):
-                            tableData.insert(9,['', '', p_leaks[x]['oven'], p_leaks[x]['location'], p_leaks[x]['zone'], '', '', '', '', '', '', ''],)
+                            try:
+                                tableData.insert(9,['', '', p_leaks[x]['oven'], p_leaks[x]['location'], p_leaks[x]['zone'], '', '', '', '', '', '', ''],)
+                            except:
+                                tableData.insert(9,['', '', p_leaks[x]['oven'], p_leaks[x]['location'], "N/A", '', '', '', '', '', '', ''],)
+                                print("The leaks were submitted without a zone being selected. Please revisit form and add 'Zone' to the specific leak")
                         if pLen < cLen:
                             for rest in range(cLen - pLen):
                                 tableData.insert((9 + pLen),['', '', '', '', '', '', '', '', '', '', '', ''],)
@@ -483,7 +543,10 @@ def form_PDF(request, facility, formDate, formName):
                         for y in range(cLen):
                             tableData[9 + y][7] = c_leaks[y]['oven']
                             tableData[9 + y][8] = c_leaks[y]['location']
-                            tableData[9 + y][9] = c_leaks[y]['zone']
+                            try:
+                                tableData[9 + y][9] = c_leaks[y]['zone']
+                            except:
+                                tableData[9 + y][9] = 'N/A'
                         
                     tableInsert = [
                         ['', '', '', '', '', '', '', '', '', '', '', ''],
@@ -2356,7 +2419,7 @@ def form_PDF(request, facility, formDate, formName):
                     ('ALIGN', (3,15), (4,16), 'CENTER'),
                     ('VALIGN', (3,15), (4,16), 'MIDDLE'),
                 ]
-            elif item.replace(' ','_').lower() == 'spill_kits':
+            elif item.replace(' ','_').lower() == 'spill_kits' or item == "R":
                 print('made it here')
                 title = ModelForms.header + ' - ' + ModelForms.title
                 tableData = [
@@ -2420,7 +2483,7 @@ def form_PDF(request, facility, formDate, formName):
                     ('ALIGN', (0,30),(-1,35), 'CENTER'),
                 ]
                 print(style)
-            elif item.replace(' ','_').lower() == 'quarterly_trucks':
+            elif item.replace(' ','_').lower() == 'quarterly_trucks' or item == "Q":
                 title = Paragraph('<para fontSize=20 align=center font=Times-Bold leading=25><b>' + ModelForms.header + '<br/>' + ModelForms.title + ' - Form (' + ModelForms.form + ')</b></para>', styles['Normal'])
                 tableData = [
                     [title],

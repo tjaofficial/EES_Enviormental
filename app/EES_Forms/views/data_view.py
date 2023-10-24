@@ -2,6 +2,7 @@ from django.shortcuts import render
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import formA3_model, formA2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, formA5_model, Forms
+from django.apps import apps
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
@@ -253,17 +254,27 @@ def pt_mth_input(request, facility):
 
 
 def method303_rolling_avg(request, facility):
+    unlock = False
+    client = False
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
+        unlock = True
+    if request.user.groups.filter(name=CLIENT_VAR):
+        client = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
     todays_log = daily_prof[0]
     now = datetime.datetime.now()
     today = datetime.date.today()
     A = []
-
+    print("hello")
     def form_compile(daily_prof):
         formA1 = formA1_readings_model.objects.all()
         formA2 = formA2_model.objects.all()
         formA3 = formA3_model.objects.all()
         i = 1
+        print("CHECK 1")
         for date_select in daily_prof:
             for logA1 in formA1:
                 if str(date_select.date_save) == str(logA1.form.date):
@@ -283,6 +294,49 @@ def method303_rolling_avg(request, facility):
         return A
 
     list_of_records = form_compile(daily_prof)
+    
+    # if request.method == "POST":
+    parseFromList = [
+        (1, "A1"),
+        (2, "A2"),
+        (3, "A3"),
+        (4, "A4"),
+        (5, "A5"),
+        (6, "B"),
+        (7, "C"),
+        (8, "D"),
+        (9, "E"),
+        (10, "F1"),
+        (11, "F2"),
+        (12, "F3"),
+        (13, "F4"),
+        (14, "F5"),
+        (15, "F6"),
+        (16, "F7"),
+        (17, "G1"),
+        (18, "G1"),
+        (19, "H"),
+        (20, "I"),
+        (21, "L"),
+        (22, "M"),
+        (23, "N"),
+        (24, "O"),
+        (25, "P"),
+        (26, "R"),
+        (27, "Q"),  
+    ]
+    for x in parseFromList:
+        modelName = "form"+x[1]+"_model"
+        formID = int(x[0])
+        print(modelName)
+        print("___________________________")
+        existingModelData = apps.get_model('EES_Forms', modelName).objects.all()
+        for y in existingModelData:
+            print(y)
+            break
+                
+            
+        
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
         'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile,

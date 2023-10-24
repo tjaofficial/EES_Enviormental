@@ -271,6 +271,27 @@ class formA1_form(ModelForm):
             'stop': forms.TimeInput(attrs={'id': 'main_stop', 'type': 'time', 'style': 'width: 120px;', "required": True}),
         }
 
+class form1_form(ModelForm):
+    class Meta:
+        model = form1_model
+        fields = (
+            'observer',
+            'date',
+            'crew',
+            'foreman',
+            'start',
+            'stop'
+        )
+        
+        widgets = {
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'crew': forms.Select(attrs={'style': 'width:40px;'}),
+            'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
+            'start': forms.TimeInput(attrs={'id': 'main_start', 'oninput': 'equal_start_stop()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'stop': forms.TimeInput(attrs={'id': 'main_stop', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+        }
+
 
 class formA1_readings_form(ModelForm):
     class Meta:
@@ -350,6 +371,84 @@ class formA1_readings_form(ModelForm):
                 'style': 'width: 60px; text-align: center;'}),
         }
 
+class form1_readings_form(ModelForm):
+    class Meta:
+        model = form1_readings_model
+        fields = (
+            'c1_no',
+            'c2_no',
+            'c3_no',
+            'c4_no',
+            'c5_no',
+            'c1_start',
+            'c2_start',
+            'c3_start',
+            'c4_start',
+            'c5_start',
+            'c1_stop',
+            'c2_stop',
+            'c3_stop',
+            'c4_stop',
+            'c5_stop',
+            'c1_sec',
+            'c2_sec',
+            'c3_sec',
+            'c4_sec',
+            'c5_sec',
+            'c1_comments',
+            'c2_comments',
+            'c3_comments',
+            'c4_comments',
+            'c5_comments',
+            'comments',
+            'larry_car',
+            'total_seconds'
+        )
+
+        widgets = {
+            'c1_no': forms.NumberInput(attrs={'oninput': 'check_oven_numb()', 'min': '1', 'max': '85', 'id': 'c1_no', 'type': 'number', 'style': 'width: 60px; text-align: center;'}),
+            'c1_sec': forms.NumberInput(attrs={'id': 'c1_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c1_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c2_no': forms.NumberInput(attrs={'oninput': 'check_oven_numb()', 'min': '1', 'max': '85', 'id': 'c2_no', 'type': 'number', 'style': 'width: 60px; text-align: center;'}),
+            'c2_sec': forms.NumberInput(attrs={'id': 'c2_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c2_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c3_no': forms.NumberInput(attrs={'oninput': 'check_oven_numb()', 'min': '1', 'max': '85', 'id': 'c3_no', 'type': 'number', 'style': 'width: 60px; text-align: center;'}),
+            'c3_sec': forms.NumberInput(attrs={'id': 'c3_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c3_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c4_no': forms.NumberInput(attrs={'oninput': 'check_oven_numb()', 'min': '1', 'max': '85', 'id': 'c4_no', 'type': 'number', 'style': 'width: 60px; text-align: center;'}),
+            'c4_sec': forms.NumberInput(attrs={'id': 'c4_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c4_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'c5_no': forms.NumberInput(attrs={'oninput': 'check_oven_numb()', 'min': '1', 'max': '85', 'id': 'c5_no', 'type': 'number', 'style': 'width: 60px; text-align: center;'}),
+            'c5_sec': forms.NumberInput(attrs={'id': 'c5_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
+            'c5_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
+            'comments': Textarea(attrs={'id': 'comments', 'rows': 7, 'cols': 125, 'oninput': 'check_oven_numb()'}),
+            'c1_start': forms.TimeInput(attrs={'id': 'c1_start', 'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c2_start': forms.TimeInput(attrs={'id': 'c2_start', 'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c3_start': forms.TimeInput(attrs={'id': 'c3_start', 'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c4_start': forms.TimeInput(attrs={'id': 'c4_start', 'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c5_start': forms.TimeInput(attrs={'id': 'c5_start', 'oninput': 'timecheck_c5()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c1_stop': forms.TimeInput(attrs={'id': 'c1_stop', 'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c2_stop': forms.TimeInput(attrs={'id': 'c2_stop', 'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c3_stop': forms.TimeInput(attrs={'id': 'c3_stop', 'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c4_stop': forms.TimeInput(attrs={'id': 'c4_stop', 'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'c5_stop': forms.TimeInput(attrs={
+                'id': 'c5_stop',
+                'oninput': 'timecheck_c5()',
+                'onchange': 'equal_start_stop()',
+                'type': 'time',
+                'style': 'width: 120px;',
+                "required": True}),
+            'larry_car': forms.Select(attrs={'style': 'width: 60px;'}),
+            'total_seconds': forms.NumberInput(attrs={
+                'id': 'total_seconds', 
+                'oninput': 'sumTime()',
+                'min': '0',
+                'readonly': True,
+                'type': 'number', 
+                'step': '0.5', 
+                'style': 'width: 60px; text-align: center;'}),
+        }
+        
 
 class formA2_form(ModelForm):
     class Meta:

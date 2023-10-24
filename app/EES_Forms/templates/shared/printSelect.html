@@ -30,7 +30,7 @@
                     <select name="forms" id="forms">
                         <option value="" selected>------</option>
                         {% for x in selectList %}
-                        <option value="{{x.1}}">{{x.0}}</option>
+                        <option value="{{x.0}}">{{x.1}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -39,8 +39,8 @@
                     <label for="formGroups">Choose Group:</label>
                     <select name="formGroups" id="formGroups">
                         <option value="" selected>------</option>
-                        <option value="formA">Form A</option>
-                        <option value="weekly">Weekly Packet</option>
+                        <option value="Coke Battery Daily Packet">Coke Battery Daily Packet</option>
+                        <option value="Facility Weekly Packet">Facility Weekly Packet</option>
                         <!--<option value="monthly">Monthly</option>
                         <option value="tanks">Monthly Tanks/Areas</option>
                         <option value="waste">Waste Weekly</option>-->
