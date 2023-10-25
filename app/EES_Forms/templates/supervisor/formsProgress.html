@@ -3,8 +3,10 @@
 <body>
     <div class="pageHeader">
         <h1>Form Progress Report</h1>
-        <a href="{% url 'facilityList' facility %}">add/remove forms</a>
-    </div>
+        {% if supervisor %}
+            <a href="{% url 'facilityList' facility %}">add/remove forms</a>
+        {% endif %}
+        </div>
     <div id="mainBody">
         <div class="sections snap" id="DailyProg">
             <h1 class="secHeader">Daily Forms Progress</h1>

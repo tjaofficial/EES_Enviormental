@@ -55,7 +55,6 @@ def facilityList(request, facility):
             finalList.append((newFac[0], labelList))
         else:
             finalList.append((newFac[0], newFac[1]))
-    print(finalList)
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':

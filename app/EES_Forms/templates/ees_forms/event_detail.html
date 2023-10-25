@@ -28,9 +28,11 @@
             Date: {{ my_event.date }}<br>
             Description: {{ my_event.notes }}<br>
             <br>
+            {% if supervisor %}
             <div>
                 <a href="../../event_detail/{{ event_id }}/edit">Edit</a>
             </div>
+            {% endif %}
         </div>
     </div>
     {% elif access_page == 'edit' %}

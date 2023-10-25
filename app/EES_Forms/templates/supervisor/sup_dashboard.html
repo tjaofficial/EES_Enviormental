@@ -304,7 +304,7 @@
                             <hr>
                             <div class="dataSingle"> 
                                 <p class="dataFont" style="padding-top:.24rem;">
-                                    Notes:</br>
+                                    Notes:<br>
                                     {{ A4data.notes }}
                                 </p>
                             </div>
@@ -324,27 +324,23 @@
                                 <p class="dataFont">Push Travels</p>
                             </div>
                             <hr>
-                            {% if A5data %}
-                                <div class="grid-dataMini3">
-                                    <p class="miniFont title number">1</p> 
-                                    <p class="miniFont">Oven #{{ A5data.o1 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o1_highest_opacity }}%</p> 
+                            <div class="grid-dataMini3">
+                                <p class="miniFont title number">1</p> 
+                                <p class="miniFont">Oven #{{ A5data.o1 }}</p> 
+                                <p class="miniFont title">{{ A5data.o1_highest_opacity }}%</p> 
 
-                                    <p class="miniFont title number">2</p> 
-                                    <p class="miniFont title">Oven #{{ A5data.o2 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o2_highest_opacity }}%</p> 
+                                <p class="miniFont title number">2</p> 
+                                <p class="miniFont title">Oven #{{ A5data.o2 }}</p> 
+                                <p class="miniFont title">{{ A5data.o2_highest_opacity }}%</p> 
 
-                                    <p class="miniFont title number">3</p> 
-                                    <p class="miniFont title">Oven #{{ A5data.o3 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o3_highest_opacity }}%</p> 
+                                <p class="miniFont title number">3</p> 
+                                <p class="miniFont title">Oven #{{ A5data.o3 }}</p> 
+                                <p class="miniFont title">{{ A5data.o3_highest_opacity }}%</p> 
 
-                                    <p class="miniFont title number">4</p> 
-                                    <p class="miniFont title">Oven #{{ A5data.o4 }}</p> 
-                                    <p class="miniFont title">{{ A5data.o4_highest_opacity }}%</p> 
-                                </div>
-                            {% else %}
-                                <p class="miniFont" style="text-align:center;">N/A</p>
-                            {% endif %}
+                                <p class="miniFont title number">4</p> 
+                                <p class="miniFont title">Oven #{{ A5data.o4 }}</p> 
+                                <p class="miniFont title">{{ A5data.o4_highest_opacity }}%</p> 
+                            </div>
                             {% else %}
                             <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-5 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}

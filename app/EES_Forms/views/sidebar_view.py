@@ -635,8 +635,14 @@ def event_detail_view(request, facility, access_page, event_id):
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-    supervisor = False
     options = bat_info_model.objects.all()
+    unlock = False
+    client = False
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
+        unlock = True
+    if request.user.groups.filter(name=CLIENT_VAR):
+        client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
         
@@ -671,7 +677,7 @@ def event_detail_view(request, facility, access_page, event_id):
                 return redirect('../../event_detail/' + str(event_id) + '/view')
 
     return render(request, "ees_forms/event_detail.html", {
-        'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+        'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, "unlock": unlock, "client": client, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })
 
 def handlePhone(number):
