@@ -756,7 +756,6 @@ def shared_contacts_view(request, facility):
         else:
             organized_list.append((user.id, user, 'N/A' , handlePhone(user.phone)))
     
-    print(organized_list)
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
@@ -826,19 +825,19 @@ def formsProgress(request, facility, section):
         for x in allForms:
             print("With " + str(x.id) + "...")
             for submissions in formSubmissions:
-                if formInfo[0] == x.id and submissions.formID == x.id:
-                    print("Found a MATCH! Adding to finalList.")
-                    formTitle = x.header + ' - ' + x.title
-                    if x.frequency == 'Daily':
-                        finalList['Daily'].append((formInfo[1], formTitle, submissions.submitted))
-                    elif x.frequency == 'Weekly':
-                        finalList['Weekly'].append((formInfo[1], formTitle, submissions.submitted))
-                    elif x.frequency == 'Monthly':
-                        finalList['Monthly'].append((formInfo[1], formTitle, submissions.submitted))
-                    elif x.frequency == 'Quarterly':
-                        finalList['Quarterly'].append((formInfo[1], formTitle, submissions.submitted))
-                    elif x.frequency == 'Anually':
-                        finalList['Annually'].append((formInfo[1], formTitle, submissions.submitted))
+                if formInfo[0] == x.id and submissions.formID.id == x.id:
+                        print("Found a MATCH! Adding to finalList.")
+                        formTitle = x.header + ' - ' + x.title
+                        if x.frequency == 'Daily':
+                            finalList['Daily'].append((formInfo[1], formTitle, submissions.submitted))
+                        elif x.frequency == 'Weekly':
+                            finalList['Weekly'].append((formInfo[1], formTitle, submissions.submitted))
+                        elif x.frequency == 'Monthly':
+                            finalList['Monthly'].append((formInfo[1], formTitle, submissions.submitted))
+                        elif x.frequency == 'Quarterly':
+                            finalList['Quarterly'].append((formInfo[1], formTitle, submissions.submitted))
+                        elif x.frequency == 'Anually':
+                            finalList['Annually'].append((formInfo[1], formTitle, submissions.submitted))
     
     # if existing:
     #     for form in allForms:
@@ -856,7 +855,7 @@ def formsProgress(request, facility, section):
        
     for each in finalList:
         if len(finalList[each]) == 0:
-            finalList[each] = 'No weekly forms added'
+            finalList[each] = 'No forms added'
         else:
             def myFunc(e):
                 return e[0]

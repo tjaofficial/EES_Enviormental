@@ -1,0 +1,42 @@
+.mainCont{
+    margin:auto; 
+    width:775px; 
+    max-width:775px;
+}
+.bottomOfPageMargin{
+    margin-bottom: 15px;
+}
+.rowCheckMark{
+    text-align: center;
+    padding: 6px 0px 6px 6px;
+}
+.rowFormLabel{
+    text-align: center;
+}
+.rowFormID{
+    text-align: center;
+}
+.rowFormType{
+    text-align: left;
+}
+.card.contact_data_card{
+    grid-row: span 14;
+    grid-column: span 2;
+    /* padding: 32px; */
+}
+.center{
+    text-align: center;
+}
+.cardHeader{
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 1rem;
+    background-color: #253544;
+    color: white;
+    border-radius: 13px 13px 0px 0px;
+    text-align: center;
+    font-family: sans-serif;
+}
+.categoryStyle{
+    padding-bottom: 7px;
+}

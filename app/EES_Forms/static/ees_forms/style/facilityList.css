@@ -1,0 +1,50 @@
+.mainCont{
+    margin:auto; 
+    width:775px ;
+    max-width:775px;
+    margin-bottom: 30px;
+}
+.cardHeader{
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 1rem;
+    background-color: #253544;
+    color: white;
+    border-radius: 13px 13px 0px 0px;
+    text-align: center;
+    font-family: sans-serif;
+}
+.standardTable{
+    margin:auto;
+    width:100%;
+}
+.underline{
+    text-decoration: underline;
+}
+.facilityFormCont{
+    margin: auto;
+}
+.facilityFormSec{
+    padding: 40px 0px;
+}
+.facilityFormHeader{
+    padding: 0px 0px 20px 0px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.center{
+    text-align: center;
+}
+.smallLink{
+    font-size: 14px;
+    text-decoration: underline;
+}
+.headerFont{
+    font-size: 14px;
+    font-weight: bold;
+}
+.contact_list_cont{
+    height: 45rem;
+    overflow: scroll;
+    padding: 15px 32px;
+}

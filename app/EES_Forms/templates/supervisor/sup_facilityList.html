@@ -1,40 +1,47 @@
 {% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
-<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
-<div style='margin:auto; width:44%;max-width:775px;'>
-    <div class="card" style=''>
+<link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
+<div class='mainCont'>
+    <div class="card">
         <div class="cardHeader">
             Facilities
-            <div style="text-align: right;font-size: 14px;">
+            {% comment %} <div style="text-align: right;font-size: 14px;">
                 <a href="{% url 'Register' facility 'form' %}">Add Facility</a>
-            </div>
+            </div> {% endcomment %}
         </div>
-        <div class="contact_list_cont">
-            {% comment %} <p></p>
-            <p class="contactHeader">Facility Name</p>
-            <p class="contactHeader center">Forms</p>
-            <p class="contactHeader center">EXTRA</p> {% endcomment %}
-            <table style='margin:auto;width:100%;'>
-                <tr>
-                    <th style="width: 30%;">Company</th>
-                    <th style="width: 50%;">Forms</th>
-                    <th style="width: 10%;">EXTRAs</th>
-                </tr>
-                {% for info in facilities %}
-                <tr>
-                    <td colspan=3 style='height:20px;'></td>
-                </tr>
-                <tr>
-                    <td style='vertical-align: top;'>
-                        {{info.0.facility_name}}<br>
-                    </td>
-                    <td>{% for x in info.1 %}{{x.0}}{{x.1}} - {{x.2}}<br> {% endfor %}</td>
-                    <td><a href="{% url 'facilityForms' info.0.facility_name %}">Edit</a></td>
-                </tr>
-                <tr>
-                    <td colspan=3 style='height:20px;border-bottom: black 1px solid;'></td>
-                </tr>
-                {% endfor %}
-            </table>
+        <div class="facilityFormCont center">
+            {% for info in facilities %}
+            <div class="facilityFormSec">
+                <div class="facilityFormHeader">
+                    {{info.0.facility_name}}
+                </div>
+                <div class="">
+                    <table class="standardTable">
+                        <tr>
+                            <th class="underline headerFont" style="width: 20%;">Label</th>
+                            <th class="underline headerFont" style="width: 60%;">Form Title</th>
+                            <th style="width: 20%;"></th>
+                        </tr>
+                        {% for x in info.1 %}
+                            <tr>
+                                <td class="center">{{x.1}}</td>
+                                <td class="">{{x.2}}</td>
+                                <td class="center smallLink">
+                                    <a href=#>
+                                        edit
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="smallLink" style="padding-top: 32px;">
+                    <a href="{% url 'facilityForms' info.0.facility_name %}">
+                        add/remove forms
+                    </a>
+                </div>
+            </div>
+            <hr style="width:80%;margin:auto;">
+            {% endfor %}
         </div>
     </div>
 </div>
