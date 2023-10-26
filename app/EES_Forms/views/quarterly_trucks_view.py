@@ -4,12 +4,13 @@ import datetime
 from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms, bat_info_model
 from ..forms import quarterly_trucks_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 
 @lock
 def quarterly_trucks(request, facility, selector):
-    formName = "quarterly_trucks"
+    formName = "27"
     existing = False
     unlock = False
     client = False
@@ -111,6 +112,8 @@ def quarterly_trucks(request, facility, selector):
                     'date': today,
                 }
             data = quarterly_trucks_form(initial=initial_data)
+            
+            
         if request.method == "POST":
             if existing:
                 data = quarterly_trucks_form(request.POST, instance=database_form)
@@ -125,18 +128,12 @@ def quarterly_trucks(request, facility, selector):
                 
                 new_latest_form = quarterly_trucks_model.objects.all().order_by('-date')[0]
                 filled_out = True
-                done = Forms.objects.filter(form='Quarterly Trucks')[0]
                 for items in new_latest_form.whatever().values():
                     if items is None or items == '':
                         filled_out = False  # -change this back to false
                         break
                 if filled_out:
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-                else:
-                    done.submitted = False
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

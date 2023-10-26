@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, facility_forms_model, formSubmissionRecords_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
@@ -66,57 +66,71 @@ def sup_dashboard_view(request, facility):
     today = datetime.date.today()
     todays_num = today.weekday()
     # -------PROGRESS PERCENTAGES -----------------
+    formSubRecords = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
 
-    daily_forms_comp = []
-    if len(daily_prof) > 0:
-        if today == daily_prof[0].date_save:
-            for forms in Forms.objects.filter(frequency = 'Daily'):
-                if forms.submitted and forms.facilityChoice.facility_name == facility:
-                    daily_forms_comp.append(forms.form)
+    def calculateProgessBar(formSubRecords, frequency):
+        print(frequency)
+        forms_comp = [] 
+        for formSub in formSubRecords.filter(submitted=True):
+            if formSub.formID.frequency == frequency:
+                forms_comp.append(formSub.formID.id)
+        count_comp = len(forms_comp)
+        print('Completed Forms: ' + str(count_comp))
+        count_total = len(formSubRecords.filter(formID__frequency=frequency))
+        print('Total ' + frequency + ' Forms: ' + str(count_total))
+        percent_completed = (count_comp / count_total) * 100
+        print(percent_completed)
+        return percent_completed 
     
-    if todays_num in {0, 1, 2, 3, 4}:
-        daily_count_total = 11
-    else:
-        daily_count_total = 8
-    daily_count_comp = len(daily_forms_comp)
-    daily_percent = (daily_count_comp / daily_count_total) * 100
-
-    weekly_forms_comp = []
-    for forms in Forms.objects.all():
-        if forms.frequency == "Weekly" and forms.facilityChoice.facility_name == facility:
-            if forms.submitted:
-                weekly_forms_comp.append(forms.form)
-    weekly_count_total = 60
-    weekly_count_comp = len(weekly_forms_comp)
-    weekly_percent = (weekly_count_comp / weekly_count_total) * 100
-
-    monthly_forms_total = []
-    monthly_forms_comp = []
-    for forms in Forms.objects.all():
-        if forms.frequency in {"Monthly"} and forms.facilityChoice.facility_name == facility:
-            monthly_forms_total.append(forms.form)
-            if forms.submitted:
-                weekly_forms_comp.append(forms.form)
-    monthly_count_total = len(monthly_forms_total)
-    monthly_count_comp = len(monthly_forms_comp)
-    if monthly_count_total > 0:
-        monthly_percent = (monthly_count_comp / monthly_count_total) * 100
-    else:
-        monthly_percent = 0
-
-    annually_forms_total = [1]
-    annually_forms_comp = []
-    for forms in Forms.objects.all():
-        if forms.frequency in {"Annually"} and forms.facilityChoice.facility_name == facility:
-            annually_forms_total.append(forms.form)
-            if forms.submitted:
-                weekly_forms_comp.append(forms.form)
-    annually_count_total = len(annually_forms_total)
-    annually_count_comp = len(annually_forms_comp)
-    if annually_count_total > 0:
-        annually_percent = (annually_count_comp / annually_count_total) * 100
-    else:
+    if facility != 'supervisor':
+        daily_percent = calculateProgessBar(formSubRecords, 'Daily')
+        weekly_percent = calculateProgessBar(formSubRecords, "Weekly")
+        monthly_percent = calculateProgessBar(formSubRecords, 'Monthly')
+        quarterly_percent = calculateProgessBar(formSubRecords, 'Quarterly')
         annually_percent = 0
+    else:
+        daily_percent = ''
+        weekly_percent = ''
+        monthly_percent = ''
+        quarterly_percent = ''
+        annually_percent = ''
+
+    # weekly_forms_comp = []
+    # for forms in Forms.objects.all():
+    #     if forms.frequency == "Weekly" and forms.facilityChoice.facility_name == facility:
+    #         if forms.submitted:
+    #             weekly_forms_comp.append(forms.form)
+    # weekly_count_total = 60
+    # weekly_count_comp = len(weekly_forms_comp)
+    # weekly_percent = (weekly_count_comp / weekly_count_total) * 100
+
+    # monthly_forms_total = []
+    # monthly_forms_comp = []
+    # for forms in Forms.objects.all():
+    #     if forms.frequency in {"Monthly"} and forms.facilityChoice.facility_name == facility:
+    #         monthly_forms_total.append(forms.form)
+    #         if forms.submitted:
+    #             weekly_forms_comp.append(forms.form)
+    # monthly_count_total = len(monthly_forms_total)
+    # monthly_count_comp = len(monthly_forms_comp)
+    # if monthly_count_total > 0:
+    #     monthly_percent = (monthly_count_comp / monthly_count_total) * 100
+    # else:
+    #     monthly_percent = 0
+
+    # annually_forms_total = [1]
+    # annually_forms_comp = []
+    # for forms in Forms.objects.all():
+    #     if forms.frequency in {"Annually"} and forms.facilityChoice.facility_name == facility:
+    #         annually_forms_total.append(forms.form)
+    #         if forms.submitted:
+    #             weekly_forms_comp.append(forms.form)
+    # annually_count_total = len(annually_forms_total)
+    # annually_count_comp = len(annually_forms_comp)
+    # if annually_count_total > 0:
+    #     annually_percent = (annually_count_comp / annually_count_total) * 100
+    # else:
+    #     annually_percent = 0
 
     # -------90 DAY PUSH ----------------
 
