@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model, bat_info_model
 from ..forms import formO_form
-from ..utils import updateSubmissionForm
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -14,17 +14,11 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formO(request, facility, selector, weekend_day):
     formName = 24
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()

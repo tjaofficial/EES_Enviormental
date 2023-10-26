@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required
 import os
 import ast
@@ -19,15 +19,9 @@ lock = login_required(login_url='Login')
 
 @lock
 def corrective_action_view(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     
     issueForm_query = request.GET.get('issueForm')
     issueMonth_query = request.GET.get('issueMonth')
@@ -158,15 +152,9 @@ def corrective_action_view(request, facility):
 
 @lock
 def calendar_view(request, facility, year, month):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     month = month.title()
@@ -218,15 +206,9 @@ def schedule_view(request, facility):
 
 @lock
 def archive_view(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
@@ -242,19 +224,13 @@ def archive_view(request, facility):
 
 @lock
 def search_forms_view(request, facility, access_page):
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     readingsData = False
     ModelForms = Forms.objects.all()
     weekend = False
-    unlock = False
-    client = False
-    supervisor = False
     monthList =''
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
@@ -408,15 +384,9 @@ def search_forms_view(request, facility, access_page):
 
 @lock
 def issues_view(request, facility, form_name, form_date, access_page):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     print(str(form_date))
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -585,15 +555,9 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
 @lock
 def event_add_view(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()  
     if options.filter(facility_name=facility).exists():
         finalFacility = options.filter(facility_name=facility)[0]
@@ -632,19 +596,13 @@ def event_add_view(request, facility):
 
 @lock
 def event_detail_view(request, facility, access_page, event_id):
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     options = bat_info_model.objects.all()
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
         
     context = {}
     if supervisor:
@@ -690,16 +648,10 @@ def handlePhone(number):
     
 @lock
 def shared_contacts_view(request, facility):
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     Users = User.objects.all()
     profile = user_profile_model.objects.order_by('user')
     
@@ -772,16 +724,10 @@ def shared_contacts_view(request, facility):
     
 @lock
 def sop_view(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     sops = sop_model.objects.all().order_by('name')
     sopForm = sop_form()
     
@@ -801,17 +747,12 @@ def sop_view(request, facility):
     })
     
 def formsProgress(request, facility, section):
-    existsing = False
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
         return redirect('IncompleteForms', facility)
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    existsing = False
         
     allForms = Forms.objects.all().order_by('form')
     clientForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)

@@ -5,7 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm
+from ..utils import updateSubmissionForm,setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,17 +13,11 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA2(request, facility, selector):
-    unlock = False
-    client = False
-    search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     formName = 2
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    search = False
     existing = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
@@ -50,11 +44,9 @@ def formA2(request, facility, selector):
                         existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                     return redirect(batt_prof)
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
         if search:
             database_form = ''
@@ -112,28 +104,22 @@ def formA2(request, facility, selector):
                     'notes': 'N/A',
                     'facility_name': facility,
                 }
-
             data = formA2_form(initial=initial_data)
             pSide_json = ''
             cSide_json = ''
-            
         if request.method == "POST":
             if existing:
                 form = formA2_form(request.POST, instance=database_form)
             else:
                 form = formA2_form(request.POST)
             finalFacility = options
-            
             if form.is_valid():
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
                 A.save()
-
                 if A.notes not in {'-', 'n/a', 'N/A'}:
                     issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
-
                     return redirect(issue_page)
-
                 if A.leaking_doors == 0:
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)
                     return redirect('IncompleteForms', facility)
@@ -143,13 +129,11 @@ def formA2(request, facility, selector):
                         issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/issue'
                     else:
                         issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
-
                     return redirect(issue_page)
             else:
                 print("Form not valid")
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {

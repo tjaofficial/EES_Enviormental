@@ -5,6 +5,7 @@ from datetime import datetime as dtime, date, time
 from django.db.models import Q
 from django.apps import apps
 import ast
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 #from .admin import EventAdmin
 
@@ -382,3 +383,16 @@ def updateSubmissionForm(facility, formID, submitted, date):
         formSubmission.save()
         print("YEAH IT SAVED")
     print("NO IT DIDNT SAVE")    
+
+def setUnlockClientSupervisor(requestUserData):
+    unlock = False
+    client = False
+    supervisor = False
+    if requestUserData.groups.filter(name=OBSER_VAR):
+        unlock = True
+    if requestUserData.groups.filter(name=CLIENT_VAR):
+        client = True
+    if requestUserData.groups.filter(name=SUPER_VAR) or requestUserData.is_superuser:
+        supervisor = True
+        
+    return (unlock, client, supervisor)

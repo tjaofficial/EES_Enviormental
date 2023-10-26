@@ -4,24 +4,19 @@ import datetime
 from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms, bat_info_model
 from ..forms import quarterly_trucks_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 
 @lock
 def quarterly_trucks(request, facility, selector):
     formName = "27"
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()

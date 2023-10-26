@@ -4,6 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formM_model
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -11,17 +12,11 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formN(request, facility, selector):
-    formName = "N"
-    unlock = False
-    client = False
+    formName = "23"
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()

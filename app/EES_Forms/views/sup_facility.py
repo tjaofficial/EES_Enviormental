@@ -6,21 +6,18 @@ from EES_Forms.views.supervisor_view import getCompanyFacilities
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
+from ..utils import setUnlockClientSupervisor
 lock = login_required(login_url='Login')
 
 @lock
 def facilityList(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
         return redirect('IncompleteForms', facility)
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
+    if client:
         return redirect('c_dashboard', facility)
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     userProfData = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
     facList = bat_info_model.objects.all().filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
     facData = facility_forms_model.objects.all()
@@ -65,16 +62,11 @@ def facilityList(request, facility):
 
 @lock    
 def facilityForm(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
         return redirect('IncompleteForms', facility)
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     existing = False
     modelList = ''
     today = datetime.date.today()

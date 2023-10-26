@@ -7,24 +7,18 @@ import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 import ast
-from ..utils import stringToDate
+from ..utils import stringToDate, setUnlockClientSupervisor, updateSubmissionForm
 
 lock = login_required(login_url='Login')
 
 @lock
 def spill_kits(request, facility, selector):
-    formName = "spill_kits"
+    formName = "26"
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -256,7 +250,6 @@ def spill_kits(request, facility, selector):
                 
                 new_latest_form = spill_kits_model.objects.filter(month=month_name)[0]
                 filled_out = True
-                done = Forms.objects.filter(form='Spill Kits')[0]
                 for items in new_latest_form.whatever().values():
                     print(items)
                     if items is None or items == '':
@@ -264,14 +257,9 @@ def spill_kits(request, facility, selector):
                         break
 
                 if filled_out:    
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-                else:
-                    done.submitted = False
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                     
-            return redirect('IncompleteForms', facility)
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

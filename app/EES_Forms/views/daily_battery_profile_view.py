@@ -6,21 +6,16 @@ from ..forms import daily_battery_profile_form
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from .supervisor_view import getCompanyFacilities
+from ..utils import setUnlockClientSupervisor
 import re
 
 lock = login_required(login_url='Login')
 
 @lock
 def daily_battery_profile_view(request, facility, access_page, date):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=CLIENT_VAR):
-        unlock = True
-    if request.user.groups.filter(name=OBSER_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
         
     profile = user_profile_model.objects.all()
     now = datetime.datetime.now()
@@ -79,15 +74,9 @@ def daily_battery_profile_view(request, facility, access_page, date):
 
 @lock
 def facility_select_view(request):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=CLIENT_VAR):
-        unlock = True
-    if request.user.groups.filter(name=OBSER_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
         
     profileFacs = getCompanyFacilities(request.user.username)
 

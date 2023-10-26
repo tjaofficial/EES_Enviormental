@@ -11,6 +11,7 @@ import braintree
 import json
 import requests
 import os
+from ..utils import setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 
@@ -22,18 +23,12 @@ def getCompanyFacilities(username):
 
 @lock
 def sup_dashboard_view(request, facility):
-    options = bat_info_model.objects.all()
-    
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
         return redirect('IncompleteForms', facility)
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    options = bat_info_model.objects.all()
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')
@@ -69,17 +64,13 @@ def sup_dashboard_view(request, facility):
     formSubRecords = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
 
     def calculateProgessBar(formSubRecords, frequency):
-        print(frequency)
         forms_comp = [] 
         for formSub in formSubRecords.filter(submitted=True):
             if formSub.formID.frequency == frequency:
                 forms_comp.append(formSub.formID.id)
         count_comp = len(forms_comp)
-        print('Completed Forms: ' + str(count_comp))
         count_total = len(formSubRecords.filter(formID__frequency=frequency))
-        print('Total ' + frequency + ' Forms: ' + str(count_total))
         percent_completed = (count_comp / count_total) * 100
-        print(percent_completed)
         return percent_completed 
     
     if facility != 'supervisor':
@@ -95,43 +86,7 @@ def sup_dashboard_view(request, facility):
         quarterly_percent = ''
         annually_percent = ''
 
-    # weekly_forms_comp = []
-    # for forms in Forms.objects.all():
-    #     if forms.frequency == "Weekly" and forms.facilityChoice.facility_name == facility:
-    #         if forms.submitted:
-    #             weekly_forms_comp.append(forms.form)
-    # weekly_count_total = 60
-    # weekly_count_comp = len(weekly_forms_comp)
-    # weekly_percent = (weekly_count_comp / weekly_count_total) * 100
-
-    # monthly_forms_total = []
-    # monthly_forms_comp = []
-    # for forms in Forms.objects.all():
-    #     if forms.frequency in {"Monthly"} and forms.facilityChoice.facility_name == facility:
-    #         monthly_forms_total.append(forms.form)
-    #         if forms.submitted:
-    #             weekly_forms_comp.append(forms.form)
-    # monthly_count_total = len(monthly_forms_total)
-    # monthly_count_comp = len(monthly_forms_comp)
-    # if monthly_count_total > 0:
-    #     monthly_percent = (monthly_count_comp / monthly_count_total) * 100
-    # else:
-    #     monthly_percent = 0
-
-    # annually_forms_total = [1]
-    # annually_forms_comp = []
-    # for forms in Forms.objects.all():
-    #     if forms.frequency in {"Annually"} and forms.facilityChoice.facility_name == facility:
-    #         annually_forms_total.append(forms.form)
-    #         if forms.submitted:
-    #             weekly_forms_comp.append(forms.form)
-    # annually_count_total = len(annually_forms_total)
-    # annually_count_comp = len(annually_forms_comp)
-    # if annually_count_total > 0:
-    #     annually_percent = (annually_count_comp / annually_count_total) * 100
-    # else:
-    #     annually_percent = 0
-
+    
     # -------90 DAY PUSH ----------------
 
     def all_ovens(reads):
@@ -485,6 +440,9 @@ def sup_dashboard_view(request, facility):
 
 @lock
 def register_view(request, facility, access_page):
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     user_profiles = user_profile_model.objects.all()
@@ -498,15 +456,6 @@ def register_view(request, facility, access_page):
     data = ''
     data2 = bat_info_model.objects.all()
     facilityLink = False
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=CLIENT_VAR):
-        unlock = True
-    if request.user.groups.filter(name=OBSER_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
 
     if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
@@ -640,17 +589,11 @@ def register_view(request, facility, access_page):
     
 @lock
 def sup_account_view(request, facility):
-    
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
         return redirect('IncompleteForms', facility)
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     
     facility = 'supervisor'
     sortedFacilityData = getCompanyFacilities(request.user.username)
