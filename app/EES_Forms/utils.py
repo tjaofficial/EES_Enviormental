@@ -190,13 +190,23 @@ class Calendar2(HTMLCalendar):
             print(forms)
             wPacketFormList = []
             for iForms in forms:
-                if iForms.date.day == day:
-                    wPacketFormList.append(iForms)
+                try:
+                    if iForms.date.day == day:
+                        wPacketFormList.append(iForms)
+                except:
+                    if iForms.week_start.day == day:
+                        wPacketFormList.append(iForms)
             for h in wPacketFormList:
-                if h.date.year == year:
-                    selectedFormDate = h
-                    forms_html += "<a href='../../../../printIndex/" + selectedForm + "/group-" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
-                    break
+                try:
+                    if h.date.year == year:
+                        selectedFormDate = h
+                        forms_html += "<a href='../../../../printIndex/" + selectedForm + "/group-" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        break
+                except:
+                    if h.week_start.year == year:
+                        selectedFormDate = h
+                        forms_html += "<a href='../../../../printIndex/" + selectedForm + "/group-" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
+                        break
             
         else:
             # selectedForm = selectedForm.upper()
