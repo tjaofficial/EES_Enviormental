@@ -20,6 +20,7 @@
     <script defer src="{% static 'ees_forms/script/formA5.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
     <link href="{% static 'ees_forms/style/formA5.css' %}" rel="stylesheet" />
+    <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
     <script defer src="{% static 'ees_forms/script/formA5_sketch.js' %}"></script>
     {% if not unlock %}
         <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
@@ -32,666 +33,668 @@
         <div>
             {% include "ees_forms/backArrow.html" %}
         </div>
-        <form action="" method="POST" style="margin-bottom: 100px;">
-            {% csrf_token %}
-            <div class="card" id="card_fitter">
-                {% include "ees_forms/print_button.html" %}
-                <div class="paper_fitter" style="padding: 3rem;">
-                    <div id="ptInfo">
-                        <div id="ptInfoInner">
-                            <div id="newName">
-                            <table style="border-collapse: collapse;">
+        <div class="mainCont">
+            <form action="" method="POST" style="margin-bottom: 100px;">
+                {% csrf_token %}
+                <div class="card" id="card_fitter">
+                    {% include "ees_forms/print_button.html" %}
+                    <div class="paper_fitter" style="padding: 3rem;">
+                        <div id="ptInfo">
+                            <div id="ptInfoInner">
+                                <div id="newName">
+                                <table style="border-collapse: collapse;">
+                                    <tr>
+                                        <th id="boxTitle" colspan="15" style="text-align: left;">Method 9B Visible Emission Observation Form - Push Travels - Form (A-5)</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="15" style="text-align: left;">Facility Name: {{facility}}</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px;" > </td>
+                                    </tr> 
+                                </table>
+                                    </div>
+                                <br><br>
+                                <div id="ptInfoInner2">
+                                <table style="border-collapse: collapse;">
+                                    <tr>
+                                        <th style="width: 240px;"></th>
+                                        <th style="width: 112px;"></th>
+                                        <th style="width: 80px;"></th>
+                                        <th style="width: 48px;"></th>
+                                        <th style="width: 200px;"></th>
+                                        <th style="width: 40px;"></th>
+                                        <th style="width: 200px;"></th>
+                                        <th style="width: 48px;"></th>
+                                        <th style="width: 220px;"></th>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="5" >
+                                            ESTABLISHMENT<br>{{ data.estab }}
+                                        </td>
+                                        <td id="boxa4" colspan="2" >
+                                            COUNTY <br>{{ data.county }}
+                                        </td>
+                                        <td id="boxa4" colspan="2" >
+                                            ESTABLISHMENT NO. <br>{{ data.estab_no }}
+                                        </td>
+                                    </tr>
                                 <tr>
-                                    <th id="boxTitle" colspan="15" style="text-align: left;">Method 9B Visible Emission Observation Form - Push Travels - Form (A-5)</th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <th colspan="15" style="text-align: left;">Facility Name: {{facility}}</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <td style="height: 25px;" > </td>
-                                </tr> 
-                            </table>
+                                        <td id="boxa4" colspan="5" >
+                                            EQUIPMENT LOCATION<br>{{ data.equip_loc }}
+                                    </td>
+                                        <td id="boxa4" colspan="2" >
+                                            DISTRICT <br>{{ data.district }}
+                                    </td>
+                                        <td id="boxa4" colspan="2" >
+                                            DATE <br>{{ data.date }}
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="1" >
+                                            CITY<br>{{ data.city }}
+                                        </td>
+                                        <td id="boxa4" colspan="6" >
+                                            OBSERVER<br>{{ data.observer }}
+                                        </td>
+                                        <td id="boxa4" colspan="2" >
+                                            CERTIFIED DATE<br>{{ data.cert_date }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="4" >
+                                            PROCESS EQUIPMENT<br>{{ data.process_equip1 }}
+                                        </td>
+                                        <td id="boxa4" colspan="2" >
+                                            OPERATING MODE<br>{{ data.op_mode1 }}</td>
+                                        <td id="boxa4" colspan="2" >
+                                            BACKGROUND COLOR<br>Start: {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.background_color_stop }}
+                                        </td>
+                                        <td id="boxa4" colspan="1" >
+                                            SKY CONDITION<br>{{ data.sky_conditions }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="4" >
+                                            PROCESS EQUIPMENT<br>{{ data.process_equip2 }}
+                                        </td>
+                                        <td id="boxa4" colspan="2">
+                                            OPERATING MODE<br>{{ data.op_mode2 }}
+                                        </td>
+                                        <td id="boxa4" colspan="2" >
+                                            WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }}mph
+                                        </td>
+                                        <td id="boxa4" colspan="1">
+                                            WIND DIRECTION<br>{{ data.wind_direction }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="6" >
+                                            DESCRIBE EMISSION POINT<br>Start: {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_point_stop }}
+                                        </td>
+                                        <td id="boxa4" colspan="2" >
+                                            AMBIENT TEMP<br>Start: {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop: {{ data.ambient_temp_stop }}<sup>o</sup>
+                                        </td>
+                                        <td id="boxa4" colspan="1" >
+                                            HUMIDITY<br>{{ data.humidity }}%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="2" >
+                                            HEIGHT ABOVE GROUND LEVEL<br>{{ data.height_above_ground }}ft.
+                                        </td>
+                                        <td id="boxa4" colspan="4" >
+                                            HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
+                                        </td>
+                                        <td id="sketchBox" colspan="3" rowspan="7" data-filledSketch = "{{exist_canvas}}" data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer" data-selector={{selector}}>
+                                            <div id='imgspinner' class="loader"></div>
+                                            {% if selector == 'form' %}
+                                                {{data.canvas}}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="2" >
+                                            DISTANCE FROM OBSERVER<br>{{ data.distance_from }}ft.
+                                        </td>
+                                        <td id="boxa4" colspan="4" >
+                                            DIRECTION FROM OBSERVER<br>{{ data.direction_from }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="6" >
+                                            DESCRIBE EMISSIONS<br>Start: {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_emissions_stop }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="3" >
+                                            EMISSIONS COLOR<br>Start: {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_color_stop }}
+                                        </td>
+                                        <td id="boxa4" colspan="3" >
+                                            PLUME TYPE:
+                                            {{ data.plume_type }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="3" >
+                                            WATER DROPLET PRESENT:<br>
+                                            {{ data.water_drolet_present }}
+                                        </td>
+                                        <td id="boxa4" colspan="3" >
+                                            IF WATER DROPLET PLUME:<br>
+                                            {{ data.water_droplet_plume }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="6" >
+                                            POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start: {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.plume_opacity_determined_stop }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="6" >
+                                            DESCRIBE BACKGROUND<br>Start: {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_background_stop }}
+                                        </td>
+                                    </tr>
+                                </table>
                                 </div>
-                            <br><br>
-                            <div id="ptInfoInner2">
-                             <table style="border-collapse: collapse;">
-                                 <tr>
-                                     <th style="width: 240px;"></th>
-                                     <th style="width: 112px;"></th>
-                                     <th style="width: 80px;"></th>
-                                     <th style="width: 48px;"></th>
-                                     <th style="width: 200px;"></th>
-                                     <th style="width: 40px;"></th>
-                                     <th style="width: 200px;"></th>
-                                     <th style="width: 48px;"></th>
-                                     <th style="width: 220px;"></th>
-                                 </tr>
-                                <tr>
-                                    <td id="boxa4" colspan="5" >
-                                        ESTABLISHMENT<br>{{ data.estab }}
-                                    </td>
-                                    <td id="boxa4" colspan="2" >
-                                        COUNTY <br>{{ data.county }}
-                                    </td>
-                                    <td id="boxa4" colspan="2" >
-                                        ESTABLISHMENT NO. <br>{{ data.estab_no }}
-                                    </td>
-                                </tr>
-                               <tr>
-                                    <td id="boxa4" colspan="5" >
-                                        EQUIPMENT LOCATION<br>{{ data.equip_loc }}
-                                   </td>
-                                    <td id="boxa4" colspan="2" >
-                                        DISTRICT <br>{{ data.district }}
-                                   </td>
-                                    <td id="boxa4" colspan="2" >
-                                        DATE <br>{{ data.date }}
-                                   </td>
-                                </tr>
-                                 <tr>
-                                    <td id="boxa4" colspan="1" >
-                                        CITY<br>{{ data.city }}
-                                     </td>
-                                    <td id="boxa4" colspan="6" >
-                                        OBSERVER<br>{{ data.observer }}
-                                     </td>
-                                    <td id="boxa4" colspan="2" >
-                                        CERTIFIED DATE<br>{{ data.cert_date }}
-                                     </td>
-                                </tr>
-                                  <tr>
-                                    <td id="boxa4" colspan="4" >
-                                        PROCESS EQUIPMENT<br>{{ data.process_equip1 }}
-                                      </td>
-                                    <td id="boxa4" colspan="2" >
-                                        OPERATING MODE<br>{{ data.op_mode1 }}</td>
-                                    <td id="boxa4" colspan="2" >
-                                        BACKGROUND COLOR<br>Start: {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.background_color_stop }}
-                                      </td>
-                                    <td id="boxa4" colspan="1" >
-                                        SKY CONDITION<br>{{ data.sky_conditions }}
-                                      </td>
-                                </tr>
-                                 <tr>
-                                    <td id="boxa4" colspan="4" >
-                                        PROCESS EQUIPMENT<br>{{ data.process_equip2 }}
-                                     </td>
-                                    <td id="boxa4" colspan="2">
-                                        OPERATING MODE<br>{{ data.op_mode2 }}
-                                     </td>
-                                    <td id="boxa4" colspan="2" >
-                                        WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }}mph
-                                    </td>
-                                    <td id="boxa4" colspan="1">
-                                        WIND DIRECTION<br>{{ data.wind_direction }}
-                                     </td>
-                                </tr>
-                                 <tr>
-                                    <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSION POINT<br>Start: {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_point_stop }}
-                                     </td>
-                                    <td id="boxa4" colspan="2" >
-                                        AMBIENT TEMP<br>Start: {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop: {{ data.ambient_temp_stop }}<sup>o</sup>
-                                     </td>
-                                    <td id="boxa4" colspan="1" >
-                                        HUMIDITY<br>{{ data.humidity }}%
-                                     </td>
-                                </tr>
-                                 <tr>
-                                    <td id="boxa4" colspan="2" >
-                                        HEIGHT ABOVE GROUND LEVEL<br>{{ data.height_above_ground }}ft.
-                                     </td>
-                                    <td id="boxa4" colspan="4" >
-                                        HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
-                                     </td>
-                                    <td id="sketchBox" colspan="3" rowspan="7" data-filledSketch = "{{exist_canvas}}" data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer" data-selector={{selector}}>
-                                        <div id='imgspinner' class="loader"></div>
-                                        {% if selector == 'form' %}
-                                            {{data.canvas}}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                  <tr>
-                                    <td id="boxa4" colspan="2" >
-                                        DISTANCE FROM OBSERVER<br>{{ data.distance_from }}ft.
-                                      </td>
-                                    <td id="boxa4" colspan="4" >
-                                        DIRECTION FROM OBSERVER<br>{{ data.direction_from }}
-                                    </td>
-                                </tr>
-                                  <tr>
-                                    <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSIONS<br>Start: {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_emissions_stop }}
-                                    </td>
-                                </tr>
-                                  <tr>
-                                    <td id="boxa4" colspan="3" >
-                                        EMISSIONS COLOR<br>Start: {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_color_stop }}
-                                    </td>
-                                    <td id="boxa4" colspan="3" >
-                                        PLUME TYPE:
-                                        {{ data.plume_type }}
-                                    </td>
-                                </tr>
-                                  <tr>
-                                    <td id="boxa4" colspan="3" >
-                                        WATER DROPLET PRESENT:<br>
-                                        {{ data.water_drolet_present }}
-                                    </td>
-                                    <td id="boxa4" colspan="3" >
-                                        IF WATER DROPLET PLUME:<br>
-                                        {{ data.water_droplet_plume }}
-                                    </td>
-                                </tr>
-                                 <tr>
-                                    <td id="boxa4" colspan="6" >
-                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start: {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.plume_opacity_determined_stop }}
-                                    </td>
-                                </tr>
-                                 <tr>
-                                    <td id="boxa4" colspan="6" >
-                                        DESCRIBE BACKGROUND<br>Start: {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_background_stop }}
-                                    </td>
-                                </tr>
-                            </table>
                             </div>
                         </div>
-                    </div>
-                    <br><br><br><br><br>
-                    <div id='pushTravels'>
-                        <div id="bothTables">
-                            <div>
+                        <br><br><br><br><br>
+                        <div id='pushTravels'>
+                            <div id="bothTables">
+                                <div>
 
 
 
-                              <table name="oven1" style="border-collapse: collapse;">
-                                    <tr>
-                                        <td colspan="6">
-                                            Oven No: {{ readings_form.o1 }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7">
-                                            Start Time: {{ readings_form.o1_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o1_stop }}
-                                            <span class="popuptext1" id="myPopup1">Please Change Time</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 5px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
-                                        <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o1_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_4_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o1_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_8_reads }}</td>
-                                    </tr>
-                                     <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
-                                        <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o1_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_12_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o1_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_16_reads }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_highest_opacity }}%
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr> 
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Instantaneous Over 20%?&nbsp; &nbsp;&nbsp; &nbsp;
-                                            {{ readings_form.o1_instant_over_20 }}
-                                        </td>
-                                    </tr>  
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6 }}%
-                                        </td>
-                                    </tr> 
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
-                                            &nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6_over_35 }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>    
-                            <br>
-                            <div id="ptTable"> 
-                                <table name="oven2" style="border-collapse: collapse;">
-                                     <tr>
-                                        <td colspan="6">
-                                            Oven No: {{ readings_form.o2 }}
-                                            <span class="oven2_pop_class" id="oven2_pop_id">Please Change Oven No.</span>
-                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7">
-                                            Start Time: {{ readings_form.o2_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o2_stop }}
-                                            <span class="popuptext2" id="myPopup2">Please Change Time</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 5px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
-                                        <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o2_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_4_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o2_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_8_reads }}</td>
-                                    </tr>
-                                     <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
-                                        <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o2_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_12_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o2_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_16_reads }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o2_highest_opacity }}%
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr> 
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Instantaneous Over 20%?&nbsp; &nbsp;
-                                            {{ readings_form.o2_instant_over_20 }}
-                                        </td>
-                                    </tr>  
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o2_average_6 }}%
-                                        </td>
-                                    </tr> 
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%&nbsp; &nbsp;
-                                            {{ readings_form.o2_average_6_over_35 }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div> 
-                        </div>
-                        <br><br><br><br>
-                        <div id="bothTables">
-                            <div>
-                                <table name="oven3" style="border-collapse: collapse;">
-                                     <tr>
-                                        <td colspan="6">
-                                            Oven No: {{ readings_form.o3 }}
-                                            <span class="oven1_pop_class" id="oven3_pop_id">Please Change Oven No.</span>
-                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7">
-                                            Start Time: {{ readings_form.o3_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o3_stop }}
-                                            <span class="popuptext1" id="myPopup3">Please Change Time</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 5px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
-                                        <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o3_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_4_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o3_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_8_reads }}</td>
-                                    </tr>
-                                     <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
-                                        <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o3_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_12_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o3_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_16_reads }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o3_highest_opacity }}%
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr> 
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Instantaneous Over 20%?
-                                            &nbsp; &nbsp;{{ readings_form.o3_instant_over_20 }}
-                                        </td>
-                                    </tr>  
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o3_average_6 }}%
-                                        </td>
-                                    </tr> 
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
-                                            &nbsp; &nbsp;{{ readings_form.o3_average_6_over_35 }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>    
-                            <br>
-                            <div id="ptTable"> 
-                                <table name="oven4" style="border-collapse: collapse;">
-                                     <tr>
-                                        <td colspan="6">
-                                            Oven No: {{ readings_form.o4 }}
-                                            <span class="oven2_pop_class" id="oven4_pop_id">Please Change Oven No.</span>
-                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7">
-                                            Start Time: {{ readings_form.o4_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o4_stop }}
-                                            <span class="popuptext2" id="myPopup4">Please Change Time</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 5px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
-                                        <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o4_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_4_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o4_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_8_reads }}</td>
-                                    </tr>
-                                     <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
-                                        <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o4_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_12_reads }}</td>
-                                    </tr>
-                                    <tr style="text-align: center;">
-                                        <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o4_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_16_reads }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o4_highest_opacity }}%
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr> 
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Instantaneous Over 20%?
-                                            &nbsp; &nbsp;{{ readings_form.o4_instant_over_20 }}
-                                        </td>
-                                    </tr>  
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o4_average_6 }}%
-                                        </td>
-                                    </tr> 
-                                    <tr>
-                                        <td style="height: 15px" > </td>
-                                    </tr> 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
-                                            &nbsp; &nbsp;{{ readings_form.o4_average_6_over_35 }}
-                                        </td>
-                                    </tr>
-                                </table>
+                                <table name="oven1" style="border-collapse: collapse;">
+                                        <tr>
+                                            <td colspan="6">
+                                                Oven No: {{ readings_form.o1 }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                Start Time: {{ readings_form.o1_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o1_stop }}
+                                                <span class="popuptext1" id="myPopup1">Please Change Time</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 5px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                            <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o1_1_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_2_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_3_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_4_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o1_5_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_6_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_7_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_8_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
+                                            <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o1_9_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_10_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_11_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_12_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o1_13_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_14_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_15_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o1_16_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Highest Instantaneous Opacity&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_highest_opacity }}%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr> 
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Instantaneous Over 20%?&nbsp; &nbsp;&nbsp; &nbsp;
+                                                {{ readings_form.o1_instant_over_20 }}
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6 }}%
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings Over 35%
+                                                &nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6_over_35 }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>    
+                                <br>
+                                <div id="ptTable"> 
+                                    <table name="oven2" style="border-collapse: collapse;">
+                                        <tr>
+                                            <td colspan="6">
+                                                Oven No: {{ readings_form.o2 }}
+                                                <span class="oven2_pop_class" id="oven2_pop_id">Please Change Oven No.</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                Start Time: {{ readings_form.o2_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o2_stop }}
+                                                <span class="popuptext2" id="myPopup2">Please Change Time</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 5px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                            <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o2_1_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_2_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_3_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_4_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o2_5_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_6_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_7_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_8_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
+                                            <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o2_9_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_10_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_11_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_12_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o2_13_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_14_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_15_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o2_16_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o2_highest_opacity }}%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr> 
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Instantaneous Over 20%?&nbsp; &nbsp;
+                                                {{ readings_form.o2_instant_over_20 }}
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o2_average_6 }}%
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings Over 35%&nbsp; &nbsp;
+                                                {{ readings_form.o2_average_6_over_35 }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div> 
                             </div>
-                        </div>    
-                    </div>
-                    <br><br>
-                    <div style="font-size: 20px; width: fit-content; margin: auto;">
-                        <div style="text-align: left;">
-                            Notes:
+                            <br><br><br><br>
+                            <div id="bothTables">
+                                <div>
+                                    <table name="oven3" style="border-collapse: collapse;">
+                                        <tr>
+                                            <td colspan="6">
+                                                Oven No: {{ readings_form.o3 }}
+                                                <span class="oven1_pop_class" id="oven3_pop_id">Please Change Oven No.</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                Start Time: {{ readings_form.o3_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o3_stop }}
+                                                <span class="popuptext1" id="myPopup3">Please Change Time</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 5px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                            <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o3_1_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_2_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_3_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_4_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o3_5_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_6_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_7_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_8_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
+                                            <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o3_9_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_10_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_11_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_12_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o3_13_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_14_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_15_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o3_16_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o3_highest_opacity }}%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr> 
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Instantaneous Over 20%?
+                                                &nbsp; &nbsp;{{ readings_form.o3_instant_over_20 }}
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o3_average_6 }}%
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings Over 35%
+                                                &nbsp; &nbsp;{{ readings_form.o3_average_6_over_35 }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>    
+                                <br>
+                                <div id="ptTable"> 
+                                    <table name="oven4" style="border-collapse: collapse;">
+                                        <tr>
+                                            <td colspan="6">
+                                                Oven No: {{ readings_form.o4 }}
+                                                <span class="oven2_pop_class" id="oven4_pop_id">Please Change Oven No.</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7">
+                                                Start Time: {{ readings_form.o4_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o4_stop }}
+                                                <span class="popuptext2" id="myPopup4">Please Change Time</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 5px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                            <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o4_1_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_2_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_3_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_4_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o4_5_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_6_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_7_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_8_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
+                                            <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">15</td>
+                                            <td id="boxa4">30</td>
+                                            <td id="boxa4">45</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">0</td>
+                                            <td id="boxa4">{{ readings_form.o4_9_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_10_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_11_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_12_reads }}</td>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td></td>
+                                            <td id="boxa4">1</td>
+                                            <td id="boxa4">{{ readings_form.o4_13_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_14_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_15_reads }}</td>
+                                            <td id="boxa4">{{ readings_form.o4_16_reads }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o4_highest_opacity }}%
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr> 
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Instantaneous Over 20%?
+                                                &nbsp; &nbsp;{{ readings_form.o4_instant_over_20 }}
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o4_average_6 }}%
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td style="height: 15px" > </td>
+                                        </tr> 
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="5">
+                                                Average Opacity of 6 Highest Readings Over 35%
+                                                &nbsp; &nbsp;{{ readings_form.o4_average_6_over_35 }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>    
                         </div>
-                        <br>
-                        {{ data.notes }}
-                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
-                        <span class="comment_skip_class" id="comment_skip_id">
-                            <a id="exit_pop_id" class='exit_pop_class'>
-                                X
-                            </a>
-                            Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
-                        </span>
-                        {% if supervisor or client %} {% elif unlock and not search %}
-                        <br><br><br>
-                        <input type="submit" value="Submit Form" class="submit_button" />
-                        {% endif %}
+                        <br><br>
+                        <div style="font-size: 20px; width: fit-content; margin: auto;">
+                            <div style="text-align: left;">
+                                Notes:
+                            </div>
+                            <br>
+                            {{ data.notes }}
+                            <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                            <span class="comment_skip_class" id="comment_skip_id">
+                                <a id="exit_pop_id" class='exit_pop_class'>
+                                    X
+                                </a>
+                                Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
+                            </span>
+                            {% if supervisor or client %} {% elif unlock and not search %}
+                            <br><br><br>
+                            <input type="submit" value="Submit Form" class="submit_button" />
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>    
+            </form> 
+        </div>   
 </div>
 {% endblock %}

@@ -1,15 +1,16 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%} {% load static %}
 {% if not unlock %}
-        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-    {% endif %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <body>
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div>
         {% include "ees_forms/backArrow.html" %}
     </div>
 
-    <form action="" method='POST'>
+    <form class="mainCont" action="" method='POST'>
         {% csrf_token %}
         <div class="card" id="card_fitter">
             {% include "ees_forms/print_button.html" %}

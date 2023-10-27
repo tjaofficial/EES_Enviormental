@@ -3,6 +3,7 @@
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
 <link href="{% static 'ees_forms/style/formE.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 {% if not unlock %}
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
@@ -12,7 +13,7 @@
         <div>
             {% include "ees_forms/backArrow.html" %}
         </div>
-        <div style="padding-top: 75px;">
+        <div class="mainCont" style="padding-top: 75px;">
             <form action="" method="POST">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">

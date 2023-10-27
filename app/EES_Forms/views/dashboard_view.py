@@ -21,7 +21,7 @@ def IncompleteForms(request, facility):
         sub_forms = Forms.objects.all()
         reads = formA5_readings_model.objects.all()
         today_str = str(today)
-        now = datetime.datetime.now()
+        now = datetime.datetime.now().date()
         weekday_fri = today + datetime.timedelta(days=4 - todays_num)
         weekend_fri = weekday_fri + datetime.timedelta(days=7)
         signatures = signature_model.objects.all().order_by('-sign_date')
@@ -490,16 +490,14 @@ def IncompleteForms(request, facility):
     # --------------------------------------------Battery Profile Data------------
     # --------------------------------------------Battery Profile Data------------
     # --------------------------------------------Battery Profile Data------------
-        daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+        daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
 
         profile_entered = False
 
-        if len(daily_prof) > 0:
+        if daily_prof.exists():
             todays_log = daily_prof[0]
-
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    profile_entered = True
+            if now == todays_log.date_save:
+                profile_entered = True
         else:
             todays_log = ''
 

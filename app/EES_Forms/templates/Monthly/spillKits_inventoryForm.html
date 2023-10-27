@@ -3,7 +3,7 @@
 
 <link href="{% static 'ees_forms/style/skInventory.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/spillKits_inventory.js' %}"></script>
-
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 {% if not unlock %}
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
@@ -28,7 +28,7 @@
             {% endif %}
         </div>
         <div>
-            <form action="" method="POST">
+            <form class="mainCont" action="" method="POST">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">
                     {% include "ees_forms/print_button.html" %}

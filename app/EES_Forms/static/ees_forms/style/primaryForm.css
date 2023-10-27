@@ -1,0 +1,12 @@
+.mainCont {
+    margin: auto;
+    /* max-width: 775px; */
+    margin-bottom: 30px;
+    font-family: sans-serif;
+}
+.card {
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 3px 2px 5px 0px #00000021;
+}

@@ -19,12 +19,12 @@ def formA2(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     search = False
     existing = False
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
-    org = formA2_model.objects.all().order_by('-date')
+    org = formA2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
 
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -35,15 +35,11 @@ def formA2(request, facility, selector):
             data = database_model
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
                 return redirect(batt_prof)

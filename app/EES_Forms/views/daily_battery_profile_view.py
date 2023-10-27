@@ -19,7 +19,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
     profile = user_profile_model.objects.all()
     now = datetime.datetime.now().date()
     form = daily_battery_profile_form
-    options = bat_info_model.objects.all()
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     existing = False
     todays_log = ''
@@ -40,7 +40,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
         }
     else:
         initial_data = {
-            'facilityChoice': options.filter(facility_name=facility)[0]
+            'facilityChoice': options
         }
 
     form = daily_battery_profile_form(initial=initial_data)
@@ -52,6 +52,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
         
         if form.is_valid():
             A = form.save(commit=False)
+            A.facilityChoice = options
             if A.inop_numbs == '-':
                 A.inop_ovens = 0
             else:
@@ -66,7 +67,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
             return redirect('IncompleteForms', facility)
 
     return render(request, "ees_forms/Bat_Info.html", {
-        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': options, 'form': form, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
+        'supervisor': supervisor, "client": client, 'unlock': unlock, 'form': form, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
     })
 
 @lock

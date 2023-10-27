@@ -25,7 +25,7 @@
         }
     
     </style>
-
+    <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
     <script defer src="{% static 'ees_forms/script/formM.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
@@ -38,354 +38,355 @@
     <div>
         {% include "ees_forms/backArrow.html" %}
     </div>
-    
     <form action="" method=POST>
-        {% csrf_token %}
-        <div class="card" id="card_fitter">
-            {% include "ees_forms/print_button.html" %}
-            <div class="paper_fitter">
-                <div style="width:100%; text-align: right;">
+        <div class="mainCont">
+            {% csrf_token %}
+            <div class="card" id="card_fitter">
+                {% include "ees_forms/print_button.html" %}
+                <div class="paper_fitter">
+                    <div style="width:100%; text-align: right;">
+                        
+                        <a href="{% if search %}../../Monthly/formN/{{THEmonth}}{% elif unlock and not search %}../../Monthly/formN/form{% endif %}">
+                            Form N - List
+                        </a>
+                    </div>
+                    <table style="border-collapse: collapse; margin: auto;">
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+            
+                        <tr>
+                            <th id="boxTitle" colspan="5">Method 9D Observation - (M)</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th colspan="2" style="text-align: center;">Facility Name: {{facility}}</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px" > </td>
+                        </tr> 
+                        <tr>
+                            <th>
+                                Date: {{ form.date }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px" > </td>
+                        </tr> 
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <!------Header Information------_________________________---------______________________---------------------------_________-------------->
+                        <tr>
+                            <th style="text-decoration: underline; text-align: left;" colspan="3">
+                                Observe one unpaved road, one paved road, one pile, and one paring lot per day
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th style="text-decoration: underline; text-align: left;" colspan="2"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </table>
                     
-                    <a href={% if search %}"../../Monthly/formN/{{THEmonth}}"{% elif unlock and not search %}"../../Monthly/formN/form"{% endif %}>
-                        Form N - List
-                    </a>
-                </div>
-                <table style="border-collapse: collapse; margin: auto;">
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-           
-                    <tr>
-                        <th id="boxTitle" colspan="5">Method 9D Observation - (M)</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th colspan="2" style="text-align: center;">Facility Name: {{facility}}</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <tr>
-                        <th>
-                            Date: {{ form.date }}
-                        </th>
-                    </tr>
-                    <tr>
-                        <td style="height: 25px" > </td>
-                    </tr> 
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <!------Header Information------_________________________---------______________________---------------------------_________-------------->
-                    <tr>
-                        <th style="text-decoration: underline; text-align: left;" colspan="3">
-                            Observe one unpaved road, one paved road, one pile, and one paring lot per day
-                        </th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th style="text-decoration: underline; text-align: left;" colspan="2"></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </table>
-                
-                
-                <table style="border-collapse: collapse; margin-left: 1rem; margin-right: 1rem;">
-                    <tr>
-                        <td style="height: 40px" > </td>
-                    </tr> 
-                    <tr>
-                        <td colspan="5" class="formM_box1">
-                            PAVED:{% if existing %} 
-                                         {% for pair in paved_roads %}
-                                        {% if pair.0 == form.paved %}
-                                            {{ pair.1 }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% else %}
-                                    {{form.paved}}
-                                    {% endif %}
-                                    &nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
-                            <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">MIN/SEC</td>
-                        <td id="boxc1">0</td>
-                        <td id="boxc1">15</td>
-                        <td id="boxc1">30</td>
-                        <td id="boxc1">45</td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">0</td>
-                        <td id="boxc1">
-                            {{ read.pav_1 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_2 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_3 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_4 }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">1</td>
-                        <td id="boxc1">
-                            {{ read.pav_5 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_6 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_7 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_8 }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">2</td>
-                        <td id="boxc1">
-                            {{ read.pav_9 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_10 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_11 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.pav_12 }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                        <td id="formM_box2">
-                            {{ read.pav_total }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 35px" > </td>
-                    </tr> 
-                    <tr>
-                        <td colspan="5" class="formM_box1">
-                            UNPAVED:{% if existing %} 
-                                        {% for pair in unpaved_roads %}
-                                        {% if pair.0 == form.unpaved %}
-                                            {{ pair.1 }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% else %}
-                                    {{form.unpaved}}
-                                    {% endif %} 
-                                    &nbsp; &nbsp; &nbsp; &nbsp;
-                            Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
-                            <span class="unp_popup_class" id="unp_timePopup">Please Change Time</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">MIN/SEC</td>
-                        <td id="boxc1">0</td>
-                        <td id="boxc1">15</td>
-                        <td id="boxc1">30</td>
-                        <td id="boxc1">45</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">0</td>
-                        <td id="boxc1">
-                            {{ read.unp_1 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_2 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_3 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_4 }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">1</td>
-                        <td id="boxc1">
-                            {{ read.unp_5 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_6 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_7 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_8 }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">2</td>
-                        <td id="boxc1">
-                            {{ read.unp_9 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_10 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_11 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.unp_12 }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                        <td id="formM_box2">
-                            {{ read.unp_total}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 40px" > </td>
-                    </tr> 
-                    <tr>
-                        <td colspan="5" class="formM_box1">
-                            PARKING LOT:{% if existing %} 
-                                        {% for pair in parking_lots %}
-                                            {% if pair.0 == form.parking %}
+                    
+                    <table style="border-collapse: collapse; margin-left: 1rem; margin-right: 1rem;">
+                        <tr>
+                            <td style="height: 40px" > </td>
+                        </tr> 
+                        <tr>
+                            <td colspan="5" class="formM_box1">
+                                PAVED:{% if existing %} 
+                                            {% for pair in paved_roads %}
+                                            {% if pair.0 == form.paved %}
                                                 {{ pair.1 }}
                                             {% endif %}
                                         {% endfor %}
                                         {% else %}
-                                        {{form.parking}}
+                                        {{form.paved}}
+                                        {% endif %}
+                                        &nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
+                                <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">MIN/SEC</td>
+                            <td id="boxc1">0</td>
+                            <td id="boxc1">15</td>
+                            <td id="boxc1">30</td>
+                            <td id="boxc1">45</td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">0</td>
+                            <td id="boxc1">
+                                {{ read.pav_1 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_2 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_3 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_4 }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">1</td>
+                            <td id="boxc1">
+                                {{ read.pav_5 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_6 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_7 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_8 }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">2</td>
+                            <td id="boxc1">
+                                {{ read.pav_9 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_10 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_11 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.pav_12 }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                            <td id="formM_box2">
+                                {{ read.pav_total }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 35px" > </td>
+                        </tr> 
+                        <tr>
+                            <td colspan="5" class="formM_box1">
+                                UNPAVED:{% if existing %} 
+                                            {% for pair in unpaved_roads %}
+                                            {% if pair.0 == form.unpaved %}
+                                                {{ pair.1 }}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                        {{form.unpaved}}
                                         {% endif %} 
                                         &nbsp; &nbsp; &nbsp; &nbsp;
-                            Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
-                            <span class="par_popup_class" id="par_timePopup">Please Change Time</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">MIN/SEC</td>
-                        <td id="boxc1">0</td>
-                        <td id="boxc1">15</td>
-                        <td id="boxc1">30</td>
-                        <td id="boxc1">45</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">0</td>
-                        <td id="boxc1">
-                            {{ read.par_1 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_2 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_3 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_4 }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">1</td>
-                        <td id="boxc1">
-                            {{ read.par_5 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_6 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_7 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_8 }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td id="boxc1">2</td>
-                        <td id="boxc1">
-                            {{ read.par_9 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_10 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_11 }}
-                        </td>
-                        <td id="boxc1">
-                            {{ read.par_12 }}
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
-                        <td id="formM_box2">
-                            {{ read.par_total }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 40px" > </td>
-                    </tr> 
-                    <tr style="text-align: center;">
-                        <td colspan="6" style="font-size: 25px;">
-                            Observer:{{ form.observer }} Certified Date:{{ form.cert_date }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 40px" > </td>
-                    </tr> 
-                    <tr style="text-align: center; font-size: 20px;">
-                        <td colspan="6">
-                            <strong>
-                                If 3-minute average opacity > 5%,
-                            </strong> <br>
-                            notify Enviornmental Engineer and contact Fugitive Dust Supplier for Dust Supression
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="height: 40px" > </td>
-                    </tr> 
-                    <tr style="font-size: 20px;">
-                        <td>
-                            Comments:
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr style="font-size: 20px;text-align: center;">
-                        <td colspan="6">
-                            {{ form.comments }}
-                        </td>
-                    </tr>
-                </table>
-                {% if supervisor or client %}{% elif unlock and not search %}
-                <br><br><br>
-                <input type="submit" value="Submit Form" class="submit_button" />
-                {% endif %}
+                                Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
+                                <span class="unp_popup_class" id="unp_timePopup">Please Change Time</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">MIN/SEC</td>
+                            <td id="boxc1">0</td>
+                            <td id="boxc1">15</td>
+                            <td id="boxc1">30</td>
+                            <td id="boxc1">45</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">0</td>
+                            <td id="boxc1">
+                                {{ read.unp_1 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_2 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_3 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_4 }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">1</td>
+                            <td id="boxc1">
+                                {{ read.unp_5 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_6 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_7 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_8 }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">2</td>
+                            <td id="boxc1">
+                                {{ read.unp_9 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_10 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_11 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.unp_12 }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                            <td id="formM_box2">
+                                {{ read.unp_total}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 40px" > </td>
+                        </tr> 
+                        <tr>
+                            <td colspan="5" class="formM_box1">
+                                PARKING LOT:{% if existing %} 
+                                            {% for pair in parking_lots %}
+                                                {% if pair.0 == form.parking %}
+                                                    {{ pair.1 }}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% else %}
+                                            {{form.parking}}
+                                            {% endif %} 
+                                            &nbsp; &nbsp; &nbsp; &nbsp;
+                                Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
+                                <span class="par_popup_class" id="par_timePopup">Please Change Time</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">MIN/SEC</td>
+                            <td id="boxc1">0</td>
+                            <td id="boxc1">15</td>
+                            <td id="boxc1">30</td>
+                            <td id="boxc1">45</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">0</td>
+                            <td id="boxc1">
+                                {{ read.par_1 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_2 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_3 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_4 }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">1</td>
+                            <td id="boxc1">
+                                {{ read.par_5 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_6 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_7 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_8 }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td id="boxc1">2</td>
+                            <td id="boxc1">
+                                {{ read.par_9 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_10 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_11 }}
+                            </td>
+                            <td id="boxc1">
+                                {{ read.par_12 }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                            <td id="formM_box2">
+                                {{ read.par_total }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 40px" > </td>
+                        </tr> 
+                        <tr style="text-align: center;">
+                            <td colspan="6" style="font-size: 25px;">
+                                Observer:{{ form.observer }} Certified Date:{{ form.cert_date }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 40px" > </td>
+                        </tr> 
+                        <tr style="text-align: center; font-size: 20px;">
+                            <td colspan="6">
+                                <strong>
+                                    If 3-minute average opacity > 5%,
+                                </strong> <br>
+                                notify Enviornmental Engineer and contact Fugitive Dust Supplier for Dust Supression
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height: 40px" > </td>
+                        </tr> 
+                        <tr style="font-size: 20px;">
+                            <td>
+                                Comments:
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style="font-size: 20px;text-align: center;">
+                            <td colspan="6">
+                                {{ form.comments }}
+                            </td>
+                        </tr>
+                    </table>
+                    {% if supervisor or client %}{% elif unlock and not search %}
+                    <br><br><br>
+                    <input type="submit" value="Submit Form" class="submit_button" />
+                    {% endif %}
+                </div>
             </div>
         </div>
     </form>  

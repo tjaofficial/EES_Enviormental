@@ -1,6 +1,7 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/style/formI.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/formI.js' %}"></script>
 {% if not unlock %}
@@ -11,168 +12,170 @@
     <div>
         {% include "ees_forms/backArrow.html" %}
     </div>
-    <form action="" method="POST" style="width: fit-content; margin: auto;">
-        {% csrf_token %}
-        <div class="card" id="card_fitter">
-            {% include "ees_forms/print_button.html" %}
-            <div class="paper_fitter">
-                <table style="border-collapse: collapse; margin: auto;">
-                <tr>
-                    <th id="boxTitle" colspan="5" style="text-align: center;">
-                        Quench Water Sampling Form - Form (I)
-                    </th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th colspan="3" style="text-align: center;">
-                        Facility Name: {{facility}}
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td style="height: 15px;" ></td>
-                </tr>
-                <tr>
-                    <th colspan="3" style="text-align: center;">
-                    Week Of:    
-                        {{ empty.week_start }} - {{ empty.week_end }}
-                                
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td style="height: 25px;" ></td>
-                </tr>
-            </table>
-                <div id="alltrucks" >
-                    <div id="formCspace">
-                        {% if opened %}
-                        <table style="border-collapse: collapse;">
-                            <tr style="height: 50px;">
-                                <th id="formI_box1">
+    <div class="mainCont">
+        <form action="" method="POST" style="width: fit-content; margin: auto;">
+            {% csrf_token %}
+            <div class="card" id="card_fitter">
+                {% include "ees_forms/print_button.html" %}
+                <div class="paper_fitter">
+                    <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <th id="boxTitle" colspan="5" style="text-align: center;">
+                            Quench Water Sampling Form - Form (I)
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: center;">
+                            Facility Name: {{facility}}
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td style="height: 15px;" ></td>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: center;">
+                        Week Of:    
+                            {{ empty.week_start }} - {{ empty.week_end }}
+                                    
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px;" ></td>
+                    </tr>
+                </table>
+                    <div id="alltrucks" >
+                        <div id="formCspace">
+                            {% if opened %}
+                            <table style="border-collapse: collapse;">
+                                <tr style="height: 50px;">
+                                    <th id="formI_box1">
 
-                                </th>
-                                <th id="formI_box1">
-                                    Monday
-                                </th>
-                                <th id="formI_box1">
-                                    Tuesday
-                                </th>
-                                <th id="formI_box1">
-                                    Wednesday
-                                </th>
-                                <th id="formI_box1">
-                                    Thursday
-                                </th>
-                                <th id="formI_box1">
-                                    Friday
-                                </th>
-                            </tr>
-                            <tr style="height: 50px;">
-                                <th id="formI_box1">
-                                    Sampling Time
-                                </th>
-                                <td id="formI_box1">
+                                    </th>
+                                    <th id="formI_box1">
+                                        Monday
+                                    </th>
+                                    <th id="formI_box1">
+                                        Tuesday
+                                    </th>
+                                    <th id="formI_box1">
+                                        Wednesday
+                                    </th>
+                                    <th id="formI_box1">
+                                        Thursday
+                                    </th>
+                                    <th id="formI_box1">
+                                        Friday
+                                    </th>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <th id="formI_box1">
+                                        Sampling Time
+                                    </th>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.time_0 }}
+                                        
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.time_1 }}
                                     
-                                        {{ empty.time_0 }}
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.time_2 }}
+                                        
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.time_3 }}
                                     
-                                </td>
-                                <td id="formI_box1">
-                                    
-                                        {{ empty.time_1 }}
-                                   
-                                </td>
-                                <td id="formI_box1">
-                                    
-                                        {{ empty.time_2 }}
-                                    
-                                </td>
-                                <td id="formI_box1">
-                                    
-                                        {{ empty.time_3 }}
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.time_4 }}
                                 
-                                </td>
-                                <td id="formI_box1">
+                                    </td>
+                                </tr>
+                                <tr style="height: 50px;">
+                                    <th id="formI_box1">
+                                        Inspector's<br>
+                                        Signature
+                                    </th>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.obser_0 }}
                                     
-                                        {{ empty.time_4 }}
-                              
-                                </td>
-                            </tr>
-                            <tr style="height: 50px;">
-                                <th id="formI_box1">
-                                    Inspector's<br>
-                                    Signature
-                                </th>
-                                <td id="formI_box1">
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.obser_1 }}
+                            
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.obser_2 }}
                                     
-                                        {{ empty.obser_0 }}
-                                  
-                                </td>
-                                <td id="formI_box1">
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.obser_3 }}
                                     
-                                        {{ empty.obser_1 }}
-                         
-                                </td>
-                                <td id="formI_box1">
+                                    </td>
+                                    <td id="formI_box1">
+                                        
+                                            {{ empty.obser_4 }}
                                     
-                                        {{ empty.obser_2 }}
-                                   
-                                </td>
-                                <td id="formI_box1">
-                                    
-                                        {{ empty.obser_3 }}
-                                 
-                                </td>
-                                <td id="formI_box1">
-                                    
-                                        {{ empty.obser_4 }}
-                                   
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="height: 10px;" ></td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" style="text-align: right;">
-                                    {% if supervisor or client or search%}
-                                    {% elif filled_in == True %}
-                                        <a href="../../Daily/formI/edit">
-                                            Edit
-                                        </a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="height: 25px;" ></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="text-align: center;">
-                                    *Collect 100 mL each day (Monday - Friday)
-                                </td>
-                            </tr>
-                        </table>
-                        {% else %}
-                        <div style="font-size: 2rem; padding: 3rem; text-align: center;">
-                            This is a Weekly form. <br>
-                            New form will be generated on Monday.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 10px;" ></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" style="text-align: right;">
+                                        {% if supervisor or client or search%}
+                                        {% elif filled_in == True %}
+                                            <a href="../../Daily/formI/edit">
+                                                Edit
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 25px;" ></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">
+                                        *Collect 100 mL each day (Monday - Friday)
+                                    </td>
+                                </tr>
+                            </table>
+                            {% else %}
+                            <div style="font-size: 2rem; padding: 3rem; text-align: center;">
+                                This is a Weekly form. <br>
+                                New form will be generated on Monday.
+                            </div>
+                            {% endif %}
                         </div>
-                        {% endif %}
                     </div>
+                    {% if supervisor or client %}
+                    {% elif unlock and not search or submit or partial %}
+                    <br><br><br>
+                    <input type="submit" value="Submit Form" class="submit_button">
+                    {% endif %}
                 </div>
-                {% if supervisor or client %}
-                {% elif unlock and not search or submit or partial %}
-                <br><br><br>
-                <input type="submit" value="Submit Form" class="submit_button">
-                {% endif %}
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </body>
     
 {% endblock %}

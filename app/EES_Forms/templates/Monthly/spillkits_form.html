@@ -12,6 +12,7 @@
         padding: .5rem;
     }
 </style>
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/spillKits.js' %}"></script>
 {% if not unlock %}
@@ -26,7 +27,7 @@
         <div>
             {% include "ees_forms/backArrow.html" %}
         </div>
-        <div>
+        <div class="mainCont">
             <form action="" method="POST" style="width: fit-content; margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">
