@@ -11,18 +11,22 @@
   }
   .calendar td {
     border: 1px solid black;
-      text-align: right;
-      vertical-align: top;
+    text-align: right;
+    vertical-align: top;
+    width: 200px;
+    height: 150px;
+    padding: 5px 8px 0px 0px;
+    font-size: 17px;
   }
-  
+  .calendar td ul{
+    font-size: 15px;
+  }
   .calendar th {
     padding: 10px;
     text-align: center;
     font-size: 18px;
-      border: 1px solid black;
-    
+    border: 1px solid black;
   }
-  
   .calendar td {
     width: 200px;
     height: 150px;
