@@ -16,12 +16,9 @@ def quarterly_trucks(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
     today = datetime.date.today()
-    full_name = request.user.get_full_name()
     submitted_forms = quarterly_trucks_model.objects.all().order_by('-date')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     
@@ -35,9 +32,7 @@ def quarterly_trucks(request, facility, selector):
         if input.month in {10,11,12}:
             return 4
     
-    count_bp = daily_battery_profile_model.objects.count()
-    
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in submitted_forms:

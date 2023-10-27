@@ -187,11 +187,10 @@ class CreateUserForm(UserCreationForm):
 class daily_battery_profile_form(ModelForm):
     class Meta:
         model = daily_battery_profile_model
-        fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs', 'facility')
+        fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs')
         
         widgets = {
             'foreman': forms.TextInput(attrs={'type': 'text', 'placeholder': 'Last Name', 'class': 'input', 'style': 'width:120px; text-align:center;'}),
-            'facility': forms.TextInput(attrs={'type': 'hidden'}),
             'inop_ovens': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px;'}),
             'inop_numbs': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Ex. 1,2,3,45', 'style': 'width:150px; text-align:center;'})
         }

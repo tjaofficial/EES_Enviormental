@@ -34,7 +34,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
     
     if existing:
         initial_data = {
-            'facility': todays_log.facility,
+            'facilityChoice': todays_log.facilityChoice,
             'foreman': todays_log.foreman,
             'crew': todays_log.crew,
             'inop_ovens': todays_log.inop_ovens,
@@ -43,7 +43,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
         }
     else:
         initial_data = {
-            'facility': facility
+            'facilityChoice': options.filter(facility_name=facility)[0]
         }
 
     form = daily_battery_profile_form(initial=initial_data)

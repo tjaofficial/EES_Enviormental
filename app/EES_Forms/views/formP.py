@@ -19,7 +19,7 @@ def formP(request, facility, selector, weekend_day):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
@@ -36,9 +36,7 @@ def formP(request, facility, selector, weekend_day):
     else:
         ss_filler = ''
 
-    count_bp = daily_battery_profile_model.objects.count()
-
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:

@@ -20,7 +20,7 @@ def formL(request, facility, selector):
     search = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
     last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
@@ -28,11 +28,10 @@ def formL(request, facility, selector):
     end_week = last_saturday + one_week
     today_number = today.weekday()
     opened = True
-    count_bp = daily_battery_profile_model.objects.count()
     week_start_dates = formL_model.objects.all().order_by('-week_start')
 
     # -----check if Daily Battery Profile
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         # -------check if access is for Form or Edit
         if selector not in ('form', 'edit'):

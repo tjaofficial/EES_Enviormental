@@ -21,7 +21,7 @@ def formB(request, facility, selector):
     existing = False
     search = False
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     today = datetime.date.today()
@@ -37,10 +37,7 @@ def formB(request, facility, selector):
     elif today.month == 11 and fridayDate.month == (today.month + 1):
         freq = True
 
-
     week_start_dates = formB_model.objects.all().order_by('-week_start')
-
-    count_bp = daily_battery_profile_model.objects.count()
 
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     city = 'Dearborn'
@@ -49,7 +46,7 @@ def formB(request, facility, selector):
         'wind_speed': round(city_weather['wind']['speed'], 0),
     }
     weather2 = json.dumps(weather)
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in week_start_dates:

@@ -425,10 +425,10 @@ class daily_battery_profile_model(models.Model):
     inop_numbs = models.CharField(max_length=50)
     date_save = models.DateField(auto_now_add=True, auto_now=False)
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
-    facility = models.CharField(max_length=30, blank=True)
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return str(self.date_save)
+        return str(self.date_save) + " - " +str(self.facilityChoice)
 
 
 class user_profile_model(models.Model):
@@ -4502,7 +4502,7 @@ class issues_model(models.Model):
 class Event(models.Model):
     enteredBy = models.CharField(max_length=40, blank=True, null=True)
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
-    personal = models.BooleanField(default=False)
+    personal = models.BooleanField()
     cal_title_choices = (
         ('P', 'Primary'),
         ('BU', 'Back Up'),

@@ -388,6 +388,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
     print(str(form_date))
+    print(form_name)
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
@@ -399,28 +400,25 @@ def issues_view(request, facility, form_name, form_date, access_page):
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     
-    for thisOne in facilityForms:
-        if thisOne[1] == form_name:
-            formID = thisOne[0]
+    # for thisOne in facilityForms:
+    #     if thisOne[1] == form_name:
+    #         formID = thisOne[0]
     
     if access_page == 'form':
-            
-        today = datetime.date.today()
-        if today.weekday() == 5:
-            day = 'saturday'
-        elif today.weekday() == 6:
-            day = 'sunday'
+        weekendNameDict = {5:'saturday', 6: 'sunday'}
+        today = datetime.date.today().weekday()
+        for dayNumber in weekendNameDict:
+            if today == dayNumber:
+                day = weekendNameDict[dayNumber]
         for facForms in facilityForms:
+            formID = int(facForms[0])
             for facSubs in facilitySubs:
-                if facSubs.formID.id == facForms[0]:
+                if formID == facSubs.formID.id and formID == int(form_name):
                     formLabel = facForms[1]
-                    formID = facForms[0]
-                    if facForms[1] == form_name:
-                        if facSubs.formID.id in {24,25}:
-                            link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page + '/' + day
-                        else:
-                            link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page
-                    
+                    if facSubs.formID.id in {24,25}:
+                        link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page + '/' + day
+                    else:
+                        link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page   
         existing = False
         picker = 'n/a'
         
@@ -442,7 +440,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
         else:             
             initial_data = {
                 'date': todays_log.date_save,
-                'form': form_name
+                'form': formLabel
             }
             picker = ''
         form = issues_form(initial=initial_data)

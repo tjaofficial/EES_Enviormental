@@ -21,16 +21,14 @@ def spill_kits(request, facility, selector):
     search = False
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     sk_form = spill_kits_form()
     full_name = request.user.get_full_name()
-    count_bp = daily_battery_profile_model.objects.count()
     today = datetime.date.today()
     org = spill_kits_model.objects.all().order_by('-date')
-    
     month_name = calendar.month_name[today.month]
     
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             print('CHECK 1')

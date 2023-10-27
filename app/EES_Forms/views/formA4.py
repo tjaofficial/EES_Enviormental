@@ -21,15 +21,12 @@ def formA4(request, facility, selector):
     search = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA4_model.objects.all().order_by('-date')
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
     full_name = request.user.get_full_name()
     
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:

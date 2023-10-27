@@ -382,7 +382,8 @@ def updateSubmissionForm(facility, formID, submitted, date):
         formSubmission.dateSubmitted = date
         formSubmission.save()
         print("YEAH IT SAVED")
-    print("NO IT DIDNT SAVE")    
+    else:
+        print("NO IT DIDNT SAVE")    
 
 def setUnlockClientSupervisor(requestUserData):
     unlock = False

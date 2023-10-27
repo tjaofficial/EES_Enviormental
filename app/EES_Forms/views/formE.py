@@ -22,15 +22,25 @@ def formE(request, facility, selector):
     search = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formE_model.objects.all().order_by('-date')
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
     full_name = request.user.get_full_name()
 
-    if count_bp != 0:
+    for x in daily_prof:
+        for y in bat_info_model.objects.all():
+            if x.facility == y.facility_name:
+                x.facilityChoice = y
+                x.save()
+                print('done')
+    # THIS IS TO TRANSITION THE MIGRATIONS NEED THIS TEMPORARILY ASK TOBE
+    # for z in daily_prof:
+    #     if "EES" in z.facility:
+    #         z.facilityChoice = options
+    #         z.save()
+
+
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
@@ -96,7 +106,7 @@ def formE(request, facility, selector):
                 A.save()
                 
                 if A.leaks == "Yes":
-                    issue_page = '../../issues_view/E/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
                 

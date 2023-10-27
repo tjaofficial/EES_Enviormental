@@ -18,12 +18,12 @@ def formN(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     search = False
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now()
     today = datetime.date.today()
     month_name = calendar.month_name[today.month]
     form_pull = formM_model.objects.all().filter(date__month=today.month)
-    count_bp = daily_battery_profile_model.objects.count()
+
     if selector != 'form':
         form_pull = formM_model.objects.all().filter(date__month=selector[0])
         month_name = calendar.month_name[int(selector[0])]
@@ -43,7 +43,7 @@ def formN(request, facility, selector):
         if x.parking:
             parking_loc.append((x.parking, x.date))
 
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

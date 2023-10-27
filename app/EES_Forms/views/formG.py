@@ -22,15 +22,11 @@ def formG1(request, facility, selector):
     search = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formG1_model.objects.all().order_by('-date')
     org2 = formG1_readings_model.objects.all().order_by('-form')
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
     full_name = request.user.get_full_name()
-
     exist_canvas = ''
     
     if unlock:
@@ -79,7 +75,7 @@ def formG1(request, facility, selector):
     weather['wind_direction'] = wind_direction
     weather2 = json.dumps(weather)
 
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             print(str(selector))
@@ -292,15 +288,11 @@ def formG2(request, facility, selector):
     search = False
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formG2_model.objects.all().order_by('-date')
     org2 = formG2_readings_model.objects.all().order_by('-form')
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
     full_name = request.user.get_full_name()
-    
     exist_canvas = ''
     
     if unlock:
@@ -349,7 +341,7 @@ def formG2(request, facility, selector):
     weather['wind_direction'] = wind_direction
     weather2 = json.dumps(weather)
 
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
