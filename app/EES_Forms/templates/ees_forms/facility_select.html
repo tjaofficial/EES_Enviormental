@@ -1,12 +1,13 @@
 {% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
 
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 
 <body>
-    <div class="forms">
-        <div class="card" style="padding-top: 2rem; padding-bottom: 2rem;">
-            <div id="login">
-                <h1>Select Client/Facility</h1><br>
+    <div class="mainCont" style="margin-top:6rem; width: 29rem;">
+        <div class="card">
+            <div class="cardHeader">Select Client/Facility</div>
+            <div class="contentCont">
                 <form method="POST" action="">
                     {% csrf_token %}
                     Facility: <select id='facility_id' name='facility'>

@@ -122,7 +122,7 @@ body {
   justify-content: center;
 }
 
-/* .card {
+.cardDash {
   font-family: Arial, Helvetica, sans-serif;
   width: 600px;
   background-color: white;
@@ -130,7 +130,7 @@ body {
   margin: 2rem;
   padding: 0 1rem;
   border-radius: 1rem;
-} */
+}
 .card_header {
   padding: 0 1rem;
   display: grid;

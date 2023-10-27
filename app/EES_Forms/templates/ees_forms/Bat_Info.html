@@ -1,14 +1,13 @@
 {% extends "ees_forms/layout.html" %}{% block list%}{% load static %}
 <link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 
 <body>
-    <div class="forms">
-        <div class="batProfCont" style="padding-bottom: 2rem;">
-            <div class='batInfoHeader'>
-                <h1>Battery Information</h1>
-            </div>
-            <form style='margin-top: 28px;' method="POST" action="">
+    <div class="mainCont" style="margin-top:6rem;width:34rem;">
+        <div class="card">
+            <div class='cardHeader'>Battery Information</div>
+            <form class="contentCont" method="POST" action="">
                 {% csrf_token %}
                 {{ form.facility }}
                 Foreman: {{ form.foreman }}<br>
@@ -18,14 +17,14 @@
                 <p style='font-size: .7rem;'>* if there are NO inoperable ovens please type '-' *</p><br>
 
                 <input type="submit" name="submit_bat_info">
+                <br><br>
+                {% if access_page == 'login' or access_page == 'edit' %}
+                <p>
+                    Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
+                </p>
+                {% endif %}
             </form>
             
-            <br>
-            {% if access_page == 'login' or access_page == 'edit' %}
-            <p>
-                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
-            </p>
-            {% endif %}
         </div>
     </div>
 </body>
