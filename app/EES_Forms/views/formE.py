@@ -20,25 +20,24 @@ def formE(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = formE_model.objects.all().order_by('-date')
+    org = formE_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
 
-    for x in daily_prof:
-        for y in bat_info_model.objects.all():
-            if x.facility == y.facility_name:
-                x.facilityChoice = y
-                x.save()
-                print('done')
     # THIS IS TO TRANSITION THE MIGRATIONS NEED THIS TEMPORARILY ASK TOBE
+    # for x in daily_prof:
+    #     for y in bat_info_model.objects.all():
+    #         if x.facility == y.facility_name:
+    #             x.facilityChoice = y
+    #             x.save()
+    #             print('done')
     # for z in daily_prof:
     #     if "EES" in z.facility:
     #         z.facilityChoice = options
     #         z.save()
-
 
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -49,19 +48,13 @@ def formE(request, facility, selector):
             form = database_model
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
         if search:
             database_form = ''
@@ -107,15 +100,12 @@ def formE(request, facility, selector):
                 
                 if A.leaks == "Yes":
                     issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
-
                     return redirect(issue_page)
                 
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
-
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
         return redirect(batt_prof)
 
     return render(request, "Daily/formE.html", {

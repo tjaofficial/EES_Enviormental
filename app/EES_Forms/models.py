@@ -4496,7 +4496,7 @@ class issues_model(models.Model):
     viewed = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.date)
+        return str(self.date) + " - " + str(self.facilityChoice)
 
 
 class Event(models.Model):

@@ -387,46 +387,42 @@ def issues_view(request, facility, form_name, form_date, access_page):
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
-    print(str(form_date))
-    print(form_name)
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    todays_log = daily_prof[0]
+    todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all()
+    issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sortedFacilityData = getCompanyFacilities(request.user.username)
     
+    if todays_log.exists():
+        todays_log = todays_log[0]
     if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilityForms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     
-    # for thisOne in facilityForms:
-    #     if thisOne[1] == form_name:
-    #         formID = thisOne[0]
-    
     if access_page == 'form':
-        weekendNameDict = {5:'saturday', 6: 'sunday'}
-        today = datetime.date.today().weekday()
-        for dayNumber in weekendNameDict:
-            if today == dayNumber:
-                day = weekendNameDict[dayNumber]
         for facForms in facilityForms:
-            formID = int(facForms[0])
+            formIDtemp = int(facForms[0])
             for facSubs in facilitySubs:
-                if formID == facSubs.formID.id and formID == int(form_name):
+                if formIDtemp == facSubs.formID.id and formIDtemp == int(form_name):
                     formLabel = facForms[1]
+                    formID = int(facForms[0])
                     if facSubs.formID.id in {24,25}:
+                        weekendNameDict = {5:'saturday', 6: 'sunday'}
+                        today = datetime.date.today().weekday()
+                        for dayNumber in weekendNameDict:
+                            if today == dayNumber:
+                                day = weekendNameDict[dayNumber]
                         link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page + '/' + day
                     else:
                         link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page   
         existing = False
         picker = 'n/a'
         
-        if issues_model.objects.count() != 0:
-            org = issues_model.objects.all().order_by('-date')
-            database_form = org[0]
+        if issueModel.exists():
+            database_form = issueModel[0]
             if todays_log.date_save == database_form.date:
-                if database_form.form == form_name:
+                if database_form.form == formLabel:
                     existing = True
         if existing:
             initial_data = {
