@@ -1,5 +1,6 @@
 {% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
 <div class='mainCont'>
     <div class="card">
         <div class="cardHeader">
@@ -8,7 +9,7 @@
                 <a href="{% url 'Register' facility 'form' %}">Add Facility</a>
             </div> {% endcomment %}
         </div>
-        <div class="facilityFormCont center">
+        <div class="contentCont center">
             {% for info in facilities %}
             <div class="facilityFormSec">
                 <div class="facilityFormHeader">

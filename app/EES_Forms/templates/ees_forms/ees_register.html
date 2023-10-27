@@ -2,227 +2,230 @@
 {% block list%}{% load static %}
 {% comment %} <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet"> {% endcomment %}
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
 <body>
     <input id='access_page' type='hidden' value={{access_page}} />
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
-    <div id='card'>
-        <div class='tabContainer'>
-            <div id='tab1' class='tabs topLeftCont start'>Observer/Supervisor</div>
-            <div id='tab2' class='tabs middleCont'>Facility</div>
-            <div id='tab3' class='tabs topRightCont'>Client</div>
-        </div>
-        <div id="login" class='dataCont' style='display: block;'>
-            <h1>Register New Observer/Supervisor</h1>
-            <br>
-            <form method="POST" action="">
-                {% csrf_token %}
-                {% for field in form%}
-                    {{ field.label }}:
-                    {{ field }}<br><br>
-                {% endfor %}
-                {{ profile_form.phone.label }}:
-                {{ profile_form.phone }}<br><br>
-                Work Position:
-                <select name="position" oninput="cert_date1()" style="width: 160px;" required id="id_position">
-                    <option value="" selected="">---------</option>
-                    <option value="observer">Observer</option>
-                    <option value="supervisor">Supervisor</option>
-                </select><br><br>
-                <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
-                {{ profile_form.cert_date }}
-                <br><br></div>
-                <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice.label }}:
-                {{ profile_form.facilityChoice }}
-                <br><br></div>
-                <input type="submit" name="create_user">
-            </form>
-
-            {% for message in messages %}
-                <p>{{message}}</p>
-            {% endfor%}
-        </div>
-        <div id="newFacility" class='dataCont' style='display: none;'>
-            <center><h1>Register New Facility</h1></center>
-            <br>
-            <form method="POST" action="">
-                {% csrf_token %}
-                <table style="margin: auto; border-collapse: collapse; text-align: left;">
-                    <tr>
-                        <th colspan="2" class='sectionHeader'>
-                            Battery Information/Specifics
-                        </th>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Facility Name:
-                        </th>
-                        <td class='answer'>
-                            {{data.facility_name}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Facility Address:
-                        </th>
-                        <td class='answer'>
-                            {{data.address}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            City:
-                        </th>
-                        <td class='answer'>
-                            {{data.city}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            District:
-                        </th>
-                        <td class='answer'>
-                            {{data.district}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            State:
-                        </th>
-                        <td class='answer'>
-                            {{data.state}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            County:
-                        </th>
-                        <td class='answer'>
-                            {{data.county}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Establishment Number:
-                        </th>
-                        <td class='answer'>
-                            {{data.estab_num}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Battery Number:
-                        </th>
-                        <td class='answer'>
-                            {{data.bat_num}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                        Equipment Location:
-                        </th>
-                        <td class='answer'>
-                            {{data.equip_location}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                        Total Number of Ovens:
-                        </th>
-                        <td class='answer'>
-                            {{data.total_ovens}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Height of Battery:
-                        </th>
-                        <td class='answer'>
-                            {{data.bat_height}} {{data.bat_height_label}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Battery Main:
-                        </th>
-                        <td class='answer'>
-                            {{data.bat_main}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Lids Per Oven:
-                        </th>
-                        <td class='answer'>
-                            {{data.bat_lids}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            Inspections:
-                        </th>
-                    </tr>
-                    <tr>
-                        <th class='label'>
-                            
-                        </th><br>
-                        <td class='answer'>
-                            <input type="checkbox" name="choice1" value="Method 303">
-                            <label for="choice1"> Method 303</label><br>
-                            <input type="checkbox" name="choice2" value="Method 9">
-                            <label for="choice2"> Method 9</label><br>
-                            <input type="checkbox" name="choice3" value="Method 9B">
-                            <label for="choice3"> Method 9B</label><br><br>
-                        </td>
-                    </tr>
-                </table><br>
-                <center><input type="submit" name="create_facility"></center>
-            </form>
-
-            {% for message in messages %}
-                <p>{{message}}</p>
-            {% endfor%}
-        </div>
-        <div id="newClient" class='dataCont' style='display: none;'>
-            {% if facilityLink %}
-                <h1>Register New Client</h1>
+    <div class="mainCont">
+        <div id='card' class="card">
+            <div class='tabContainer'>
+                <div id='tab1' class='cardHeader tabs topLeftCont start'>Observer/Supervisor</div>
+                <div id='tab2' class='cardHeader tabs middleCont'>Facility</div>
+                <div id='tab3' class='cardHeader tabs topRightCont'>Client</div>
+            </div>
+            <div id="login" class='contentCont' style='display: block;'>
+                <h1>Register New Observer/Supervisor</h1>
                 <br>
                 <form method="POST" action="">
                     {% csrf_token %}
-                    Username:
-                    <input type="text" name="username" placeholder="Username" maxlength="150" autofocus="" required="" id="id_2_username"><br><br>
-                    Email address:
-                    <input type="email" name="email" placeholder="E-mail" maxlength="254" id="id_2_email"><br><br>
-                    Password1:
-                    <input type="password" name="password1" placeholder="Password" maxlength="16" required="" id="id_2_password1"><br><br>
-                    Password2:
-                    <input type="password" name="password2" placeholder="Confirm Password" maxlength="16" required="" id="id_2_password2"><br><br>
-                    First name:
-                    <input type="text" name="first_name" placeholder="First Name" maxlength="150" id="id_2_first_name"><br><br>
-                    Last name:
-                    <input type="text" name="last_name" placeholder="Last Name" maxlength="150" id="id_2_last_name"><br><br>
-                    Phone:
-                    <input type="text" name="phone" style="width: 150px;" placeholder="(123)456-7890" maxlength="75" required="" id="id_2_phone"><br><br>
-                    Work Position: Client
-                    <br><br>
-                    Choose Facility:
-                    <select name="facilityChoice" id="id_2_facilityChoice" required>
+                    {% for field in form%}
+                        {{ field.label }}:
+                        {{ field }}<br><br>
+                    {% endfor %}
+                    {{ profile_form.phone.label }}:
+                    {{ profile_form.phone }}<br><br>
+                    Work Position:
+                    <select name="position" oninput="cert_date1()" style="width: 160px;" required id="id_position">
                         <option value="" selected="">---------</option>
-                        {% for place in data2 %}
-                        <option value="{{place.id}}">{{place.facility_name}}</option>
-                        {% endfor %}
-                    </select>
-                    <br><br>
-                    <input type="submit" name="create_client">
+                        <option value="observer">Observer</option>
+                        <option value="supervisor">Supervisor</option>
+                    </select><br><br>
+                    <div id='certDateDiv' style='display: none;'>{{ profile_form.cert_date.label }}:
+                    {{ profile_form.cert_date }}
+                    <br><br></div>
+                    <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice.label }}:
+                    {{ profile_form.facilityChoice }}
+                    <br><br></div>
+                    <input type="submit" name="create_user">
                 </form>
 
                 {% for message in messages %}
                     <p>{{message}}</p>
                 {% endfor%}
-            {% else %}
-                <h1>No Facility in database</h1>
-                <p>There must be a Facility for a Client to be added to. Please select the "Facility" tab and add a new facility. </p>
-            {% endif %}
+            </div>
+            <div id="newFacility" class='contentCont' style='display: none;'>
+                <center><h1>Register New Facility</h1></center>
+                <br>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <table style="margin: auto; border-collapse: collapse; text-align: left;">
+                        <tr>
+                            <th colspan="2" class='sectionHeader'>
+                                Battery Information/Specifics
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Facility Name:
+                            </th>
+                            <td class='answer'>
+                                {{data.facility_name}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Facility Address:
+                            </th>
+                            <td class='answer'>
+                                {{data.address}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                City:
+                            </th>
+                            <td class='answer'>
+                                {{data.city}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                District:
+                            </th>
+                            <td class='answer'>
+                                {{data.district}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                State:
+                            </th>
+                            <td class='answer'>
+                                {{data.state}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                County:
+                            </th>
+                            <td class='answer'>
+                                {{data.county}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Establishment Number:
+                            </th>
+                            <td class='answer'>
+                                {{data.estab_num}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Battery Number:
+                            </th>
+                            <td class='answer'>
+                                {{data.bat_num}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                            Equipment Location:
+                            </th>
+                            <td class='answer'>
+                                {{data.equip_location}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                            Total Number of Ovens:
+                            </th>
+                            <td class='answer'>
+                                {{data.total_ovens}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Height of Battery:
+                            </th>
+                            <td class='answer'>
+                                {{data.bat_height}} {{data.bat_height_label}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Battery Main:
+                            </th>
+                            <td class='answer'>
+                                {{data.bat_main}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Lids Per Oven:
+                            </th>
+                            <td class='answer'>
+                                {{data.bat_lids}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                Inspections:
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class='label'>
+                                
+                            </th><br>
+                            <td class='answer'>
+                                <input type="checkbox" name="choice1" value="Method 303">
+                                <label for="choice1"> Method 303</label><br>
+                                <input type="checkbox" name="choice2" value="Method 9">
+                                <label for="choice2"> Method 9</label><br>
+                                <input type="checkbox" name="choice3" value="Method 9B">
+                                <label for="choice3"> Method 9B</label><br><br>
+                            </td>
+                        </tr>
+                    </table><br>
+                    <center><input type="submit" name="create_facility"></center>
+                </form>
+
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor%}
+            </div>
+            <div id="newClient" class='contentCont' style='display: none;'>
+                {% if facilityLink %}
+                    <h1>Register New Client</h1>
+                    <br>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        Username:
+                        <input type="text" name="username" placeholder="Username" maxlength="150" autofocus="" required="" id="id_2_username"><br><br>
+                        Email address:
+                        <input type="email" name="email" placeholder="E-mail" maxlength="254" id="id_2_email"><br><br>
+                        Password1:
+                        <input type="password" name="password1" placeholder="Password" maxlength="16" required="" id="id_2_password1"><br><br>
+                        Password2:
+                        <input type="password" name="password2" placeholder="Confirm Password" maxlength="16" required="" id="id_2_password2"><br><br>
+                        First name:
+                        <input type="text" name="first_name" placeholder="First Name" maxlength="150" id="id_2_first_name"><br><br>
+                        Last name:
+                        <input type="text" name="last_name" placeholder="Last Name" maxlength="150" id="id_2_last_name"><br><br>
+                        Phone:
+                        <input type="text" name="phone" style="width: 150px;" placeholder="(123)456-7890" maxlength="75" required="" id="id_2_phone"><br><br>
+                        Work Position: Client
+                        <br><br>
+                        Choose Facility:
+                        <select name="facilityChoice" id="id_2_facilityChoice" required>
+                            <option value="" selected="">---------</option>
+                            {% for place in data2 %}
+                            <option value="{{place.id}}">{{place.facility_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <br><br>
+                        <input type="submit" name="create_client">
+                    </form>
+
+                    {% for message in messages %}
+                        <p>{{message}}</p>
+                    {% endfor%}
+                {% else %}
+                    <h1>No Facility in database</h1>
+                    <p>There must be a Facility for a Client to be added to. Please select the "Facility" tab and add a new facility. </p>
+                {% endif %}
+            </div>
         </div>
     </div>
     {% else %}

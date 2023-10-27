@@ -6,7 +6,7 @@ from ..forms import Forms, formB_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -22,7 +22,7 @@ def formB(request, facility, selector):
     search = False
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     today = datetime.date.today()
     last_monday = today - datetime.timedelta(days=today.weekday())
@@ -39,13 +39,10 @@ def formB(request, facility, selector):
 
     week_start_dates = formB_model.objects.all().order_by('-week_start')
 
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
-    city = 'Dearborn'
-    city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
-    weather = {
-        'wind_speed': round(city_weather['wind']['speed'], 0),
-    }
+    # Weather API Pull
+    weather = weatherDict(options.city)
     weather2 = json.dumps(weather)
+    
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -58,8 +55,7 @@ def formB(request, facility, selector):
         elif len(week_start_dates) > 0:
             database_form = week_start_dates[0]
             if database_form.week_start == last_monday:
-                existing = True
-                    
+                existing = True  
         if search:
             database_form = ''
         else:

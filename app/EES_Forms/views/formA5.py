@@ -6,7 +6,7 @@ from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -22,7 +22,7 @@ def formA5(request, facility, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = formA5_model.objects.all().order_by('-date')
     org2 = formA5_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
@@ -37,43 +37,8 @@ def formA5(request, facility, selector):
                 return redirect('IncompleteForms')
         else:
             return redirect('IncompleteForms')
-
-    
-    
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
-    city = 'Dearborn'
-    city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
-    weather = {
-        'city': city,
-        'temperature': round(city_weather['main']['temp'], 0),
-        'description': city_weather['weather'][0]['description'],
-        'icon': city_weather['weather'][0]['icon'],
-        'wind_speed': round(city_weather['wind']['speed'], 0),
-        'wind_direction': city_weather['wind']['deg'],
-        'humidity': city_weather['main']['humidity'],
-    }
-    degree = weather['wind_direction']
-    
-    def toTextualDescription(degree):
-        if degree > 337.5:
-            return 'N'
-        if degree > 292.5:
-            return 'NW'
-        if degree > 247.5:
-            return 'W'
-        if degree > 202.5:
-            return 'SW'
-        if degree > 157.5:
-            return 'S'
-        if degree > 122.5:
-            return 'SE'
-        if degree > 67.5:
-            return 'E'
-        if degree > 22.5:
-            return 'NE'
-        return 'N'
-    wind_direction = toTextualDescription(degree)
-    weather['wind_direction'] = wind_direction
+    #Weather API Pull
+    weather = weatherDict(options.city)
     weather2 = json.dumps(weather)
     
     if daily_prof.exists():
@@ -309,16 +274,17 @@ def formA5(request, facility, selector):
 
                 if not existing:
                     print(A.wind_speed_stop)
+                    print(weather['wind_speed'])
                     if A.wind_speed_stop == 'TBD':
-                        if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                        if int(A.wind_speed_start) == int(weather["wind_speed"]):
                             A.wind_speed_stop = 'same'
                         else:
-                            A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                            A.wind_speed_stop = weather['wind_speed']
                     if A.ambient_temp_stop == 'TBD':
-                        if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                        if int(A.ambient_temp_start) == int(weather['temperature']):
                             A.ambient_temp_stop = 'same'
                         else:
-                            A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                            A.ambient_temp_stop = weather['temperature']
                     A.facilityChoice = finalFacility
                     
 

@@ -11,7 +11,7 @@ import braintree
 import json
 import requests
 import os
-from ..utils import setUnlockClientSupervisor
+from ..utils import setUnlockClientSupervisor, weatherDict
 
 lock = login_required(login_url='Login')
 
@@ -28,7 +28,7 @@ def sup_dashboard_view(request, facility):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     if unlock:
         return redirect('IncompleteForms', facility)
-    options = bat_info_model.objects.all()
+    options = bat_info_model.objects.filter(facility_name=facility)
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')
@@ -39,8 +39,11 @@ def sup_dashboard_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
     emypty_dp_today = True
+    if options.exists():
+        options = options[0]
+    
     if facility != 'supervisor':
-        recent_logs = formA1_readings_model.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
+        recent_logs = formA1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
     else:
         recent_logs = ''
     year = str(now.year)
@@ -86,7 +89,6 @@ def sup_dashboard_view(request, facility):
         quarterly_percent = ''
         annually_percent = ''
 
-    
     # -------90 DAY PUSH ----------------
 
     def all_ovens(reads):
@@ -199,16 +201,10 @@ def sup_dashboard_view(request, facility):
         od_5 = ''
         od_30 = ''
     # ----CONTACTS-----------------
-    # def grabCompanyFacilities():
-    #     Users = User.objects.all()
-    Users = User.objects.all()
     profile = user_profile_model.objects.all()
-    
     sortedFacilityData = getCompanyFacilities(request.user.username)
-
     # ----USER ON SCHEDULE----------
     todays_obser = 'Schedule Not Updated'
-
     event_cal = Event.objects.all()
     today = datetime.date.today()
 
@@ -222,54 +218,12 @@ def sup_dashboard_view(request, facility):
     ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
 
     # ----WEATHER TAB-----------
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
+    # Weather API Pull
     if facility == 'supervisor':
-        city = False
+        weather = weatherDict(False)
     else:
-        city = options.filter(facility_name=facility)[0].city
-        
-    try:
-        city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
-        weather = {
-            'city': city,
-            'temperature': city_weather['main']['temp'],
-            'description': city_weather['weather'][0]['description'],
-            'icon': city_weather['weather'][0]['icon'],
-            'wind_speed': city_weather['wind']['speed'],
-            'wind_direction': city_weather['wind']['deg'],
-            'humidity': city_weather['main']['humidity'],
-        }
-
-        degree = weather['wind_direction']
-
-        def toTextualDescription(degree):
-            if degree > 337.5:
-                return 'N'
-            if degree > 292.5:
-                return 'NW'
-            if degree > 247.5:
-                return 'W'
-            if degree > 202.5:
-                return 'SW'
-            if degree > 157.5:
-                return 'S'
-            if degree > 122.5:
-                return 'SE'
-            if degree > 67.5:
-                return 'E'
-            if degree > 22.5:
-                return 'NE'
-            return 'N'
-
-        wind_direction = toTextualDescription(degree)
-    except:
-        weather = {
-            'error': "'" + str(city) + "' is not valid. Click here to change.",
-            'city': False
-        }
-
-# ----OTHER-----------
-
+        weather = weatherDict(options.city)
+    # ----OTHER-----------
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         if count_bp != 0:
             todays_log = daily_prof[0]
@@ -379,8 +333,7 @@ def sup_dashboard_view(request, facility):
                 'facility': facility, 
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
-                'todays_obser': todays_obser, 
-                'Users': Users, 
+                'todays_obser': todays_obser,
                 'profile': profile, 
                 'weather': weather, 
                 'od_recent': od_recent, 
@@ -391,7 +344,6 @@ def sup_dashboard_view(request, facility):
                 'supervisor': supervisor, 
                 "client": client, 
                 'unlock': unlock,
-                'options': options,
                 'sortedFacilityData': sortedFacilityData,
             })
     if request.method == 'POST':
@@ -417,7 +369,6 @@ def sup_dashboard_view(request, facility):
         'weather': weather, 
         'todays_log': todays_log, 
         'todays_obser': todays_obser, 
-        'Users': Users, 
         'profile': profile, 
         'A1data': A1data, 
         'A2data': A2data, 
@@ -434,7 +385,6 @@ def sup_dashboard_view(request, facility):
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
-        'options': options,
         'sortedFacilityData': sortedFacilityData, 
     })
 

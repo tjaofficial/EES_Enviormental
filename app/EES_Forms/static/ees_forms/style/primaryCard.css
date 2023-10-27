@@ -1,0 +1,26 @@
+.mainCont {
+    margin: auto;
+    max-width: 775px;
+    margin-bottom: 30px;
+}
+.card {
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 3px 2px 5px 0px #00000021;
+}
+.cardHeader {
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 1rem;
+    background-color: #253544;
+    color: white;
+    border-radius: 13px 13px 0px 0px;
+    text-align: center;
+    font-family: sans-serif;
+}
+.contentCont{
+    margin: auto;
+    text-align: center;
+    padding: 32px 0px;
+}

@@ -10,7 +10,10 @@
 .contact_list_cont{
     height: 45rem;
     overflow: scroll;
-    padding: 15px 32px;
+}
+#contact_list_cont{
+    padding-left: 23px;
+    padding-right: 23px;
 }
 .contact_singles {
     display: grid;
@@ -69,16 +72,6 @@
     font-size: 0.9rem;
     font-weight:900;
     display: flex;
-}
-.cardHeader{
-    font-size: 20px;
-    font-weight: bolder;
-    padding: 1rem;
-    background-color: #253544;
-    color: white;
-    border-radius: 13px 13px 0px 0px;
-    text-align: center;
-    font-family: sans-serif;
 }
 .categoryStyle{
     padding-bottom: 7px;

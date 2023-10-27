@@ -1,52 +1,53 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}{% block list%}{% load static %}
 <script defer src="{% static 'ees_forms/script/contacts.js' %}"></script>
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
 <body>
     <div class="grid-dashboard">
         <div class="card contact_card" style="margin-bottom: -25px;">
             <div class="cardHeader">Contacts</div>
-            <div class="contact_list_cont">
-            <div class="grid-observ_header">
-                <p></p>
-                <p class="contactHeader">Name</p>
-                <p class="contactHeader center">Phone</p>
-                <p class="contactHeader center">Email</p>
-                <p class="contactHeader center">Certification Date</p>
-            </div>
-            <p id="facility" hidden=true>{{ facility }}</p>
-            {% for person in organized_list %}
-            <div class="contact_singles" id="{{ person.0 }}" onclick="getid(this);">
-                <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
-                <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
-                <p id="userID{{ person.0 }}" hidden=true>{{ person.1.user.id }}</p>
-                <p id="phone{{ person.0 }}" hidden=true>{{ person.3 }}</p>
-                <p id="cert_date{{ person.0 }}" hidden=true>{{ person.1.cert_date }}</p>
-                <p id="image{{ person.0 }}" hidden=true>
-                    {% if person.1.profile_picture %}
-                    <img style="width: 300px; height: 300px; border-radius: 15px" src="../../../media/{{ person.1.profile_picture }}"/>
-                    {% else %}
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style='width: 213px; height: 300px;'>
-                            <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                        </svg>
-                    {% endif %}
-                </p>
-                <p id="certs{{ person.0 }}" hidden=true>{{ person.2 }}</p>
-                <span class="contact_icon_cont contact_icon_color">
-                    {% if person.1.profile_picture %}
-                        <img style="width: 40px; border-radius: 25px" src="../../../media/{{ person.1.profile_picture }}"/>
-                    {% else %}
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width: 39px;>
-                            <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                        </svg>
-                    {% endif %}
-                </span>
-                <p class="contact_list_font">{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
-                <p class="contact_list_font center">{{ person.3 }}</p>
-                <p class="contact_list_font center">{{ person.1.user.email }}</p>
-                <p class="contact_list_font center">{{ person.1.cert_date }}</p>
-            </div>
-            <hr />
-            {% endfor %}
+            <div id="contact_list_cont" class="contact_list_cont contentCont">
+                <div class="grid-observ_header">
+                    <p></p>
+                    <p class="contactHeader">Name</p>
+                    <p class="contactHeader center">Phone</p>
+                    <p class="contactHeader center">Email</p>
+                    <p class="contactHeader center">Certification Date</p>
+                </div>
+                <p id="facility" hidden=true>{{ facility }}</p>
+                {% for person in organized_list %}
+                    <div class="contact_singles" id="{{ person.0 }}" onclick="getid(this);">
+                        <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
+                        <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
+                        <p id="userID{{ person.0 }}" hidden=true>{{ person.1.user.id }}</p>
+                        <p id="phone{{ person.0 }}" hidden=true>{{ person.3 }}</p>
+                        <p id="cert_date{{ person.0 }}" hidden=true>{{ person.1.cert_date }}</p>
+                        <p id="image{{ person.0 }}" hidden=true>
+                            {% if person.1.profile_picture %}
+                            <img style="width: 300px; height: 300px; border-radius: 15px" src="../../../media/{{ person.1.profile_picture }}"/>
+                            {% else %}
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style='width: 213px; height: 300px;'>
+                                    <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
+                                </svg>
+                            {% endif %}
+                        </p>
+                        <p id="certs{{ person.0 }}" hidden=true>{{ person.2 }}</p>
+                        <span class="contact_icon_cont contact_icon_color">
+                            {% if person.1.profile_picture %}
+                                <img style="width: 40px; border-radius: 25px" src="../../../media/{{ person.1.profile_picture }}"/>
+                            {% else %}
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width: 39px;>
+                                    <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
+                                </svg>
+                            {% endif %}
+                        </span>
+                        <p class="contact_list_font">{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
+                        <p class="contact_list_font center">{{ person.3 }}</p>
+                        <p class="contact_list_font center">{{ person.1.user.email }}</p>
+                        <p class="contact_list_font center">{{ person.1.cert_date }}</p>
+                    </div>
+                <hr />
+                {% endfor %}
             </div>
         </div>
         <div class="card contact_data_card" id='replaceContent' style="margin-bottom: -25px;">

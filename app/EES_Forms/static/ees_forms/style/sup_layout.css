@@ -15,12 +15,12 @@ HTML{
 .highlight_dark:hover {
     background-color:#1c2630;
 }
-.card{
+/* .card{
     width: 100%;
     background-color: white;
     border-radius: 20px;
     box-shadow: 3px 2px 5px 0px #00000021;
-}
+} */
 .card.longest{
     grid-row: span 6;
     grid-column: span 8;

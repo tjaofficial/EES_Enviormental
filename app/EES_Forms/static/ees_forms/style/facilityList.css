@@ -1,28 +1,9 @@
-.mainCont{
-    margin:auto; 
-    width:775px ;
-    max-width:775px;
-    margin-bottom: 30px;
-}
-.cardHeader{
-    font-size: 20px;
-    font-weight: bolder;
-    padding: 1rem;
-    background-color: #253544;
-    color: white;
-    border-radius: 13px 13px 0px 0px;
-    text-align: center;
-    font-family: sans-serif;
-}
 .standardTable{
     margin:auto;
     width:100%;
 }
 .underline{
     text-decoration: underline;
-}
-.facilityFormCont{
-    margin: auto;
 }
 .facilityFormSec{
     padding: 40px 0px;

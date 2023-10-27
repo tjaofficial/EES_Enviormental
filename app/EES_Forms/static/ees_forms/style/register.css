@@ -1,12 +1,12 @@
-#card{
+/* #card{
     background-color: #ffffff;
-    /* height: 48rem; */
+    /* height: 48rem;
     margin: auto;
     border-radius: 15px;
     box-shadow: 2px 2px 17px 0px #8080804a;
     border: #0000004f solid 1px;
     width: 742px;
-}
+} */
 #card2{
     background-color: #ffffff;
     /* height: 48rem; */
@@ -32,14 +32,6 @@
     border-top-left-radius: 12px;
     display: flex;
     /* width: 738px; */
-}
-.dataCont{
-    background-color: white;
-    border-radius: 20px;
-    margin: auto;
-    /* padding: 22px; */
-    text-align: center;
-    /* width: 30%; */
 }
 .topLeftCont{
     border-top-left-radius: 13px;

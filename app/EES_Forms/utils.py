@@ -5,6 +5,8 @@ from datetime import datetime as dtime, date, time
 from django.db.models import Q
 from django.apps import apps
 import ast
+import requests
+import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 #from .admin import EventAdmin
@@ -397,3 +399,46 @@ def setUnlockClientSupervisor(requestUserData):
         supervisor = True
         
     return (unlock, client, supervisor)
+
+def weatherDict(city):
+    # request the API data and convert the JSON to Python data types
+    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
+    try:
+        city_weather = requests.get(url.format(city)).json()
+        weather = {
+            'city': city,
+            'temperature': round(city_weather['main']['temp'], 0),
+            'description': city_weather['weather'][0]['description'],
+            'icon': city_weather['weather'][0]['icon'],
+            'wind_speed': round(city_weather['wind']['speed'], 0),
+            'wind_direction': city_weather['wind']['deg'],
+            'humidity': city_weather['main']['humidity'],
+        }
+        degree = weather['wind_direction']
+        
+        def toTextualDescription(degree):
+            if degree > 337.5:
+                return 'N'
+            if degree > 292.5:
+                return 'NW'
+            if degree > 247.5:
+                return 'W'
+            if degree > 202.5:
+                return 'SW'
+            if degree > 157.5:
+                return 'S'
+            if degree > 122.5:
+                return 'SE'
+            if degree > 67.5:
+                return 'E'
+            if degree > 22.5:
+                return 'NE'
+            return 'N'
+        wind_direction = toTextualDescription(degree)
+        weather['wind_direction'] = wind_direction
+    except:
+        weather = {
+            'error': "Please inform Supervisor '" + str(city) + "' is not a valid city.",
+            'city': False
+        }
+    return weather

@@ -1,45 +1,47 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <div>
     {% include "ees_forms/backArrow.html" %}
 </div>
-<div style="margin: auto;width: fit-content;">
-    <div class="card" id="card_fitter" style="margin: 2rem; margin-top: .5rem; height: 69rem;">
-        <div class="paper_fitter" style="padding: 1rem; ">
-            <div class="container">
-                <div style="display: flex; margin-left: 25px;">
-                    <div style="width: 300px; text-align: left;">
-                        <a href="../../schedule/{{ prev_year }}/{{ prev_month }}">
-                           <button>
-                                Previous Month
-                            </button>
-                        </a>
-                    </div>
-                    {% if supervisor %}
-                    <div style="width: 100%; text-align: right;">
-                        <a href="../../add_event">
-                            <button>
-                                Add Event
-                            </button>
-                        </a>
-                    </div>
-                    {% else %}
-                    {% endif %}
-                    <div style="width: 300px; text-align: right; margin-right: 25px;">
-                        <a href="../../schedule/{{ next_year }}/{{ next_month }}"> 
-                            <button>
-                                Next Month
-                            </button>    
-                        </a>
-                    </div>
+<div class="mainCont" style="max-width:none;">
+    <div class="card" id="card_fitter">
+        <div class="headerCont">
+            <div class="cardHeader">{% if facility == "supervisor" %}Calendar{% else %}Schedule{% endif %}</div>
+            <div class="buttonInHeader" style="display: flex; margin-left: 25px;">
+                <div style="width: 300px; text-align: left;">
+                    <a href="../../schedule/{{ prev_year }}/{{ prev_month }}">
+                        <button>
+                            Previous Month
+                        </button>
+                    </a>
                 </div>
-                <div class="clearfix">
-                    <div class="calendar">
-                        {{ html_cal|safe }}
-                    </div>
-                </div>  
+                {% if supervisor %}
+                <div style="width: 100%; text-align: right;">
+                    <a href="../../add_event">
+                        <button>
+                            Add Event
+                        </button>
+                    </a>
+                </div>
+                {% else %}
+                {% endif %}
+                <div style="width: 300px; text-align: right; margin-right: 25px;">
+                    <a href="../../schedule/{{ next_year }}/{{ next_month }}"> 
+                        <button>
+                            Next Month
+                        </button>    
+                    </a>
+                </div>
             </div>
+        </div>
+        <div class="contentCont" style="padding: 20px 0px;">
+            <div class="clearfix">
+                <div class="calendar">
+                    {{ html_cal|safe }}
+                </div>
+            </div>  
         </div>
     </div>
 </div>
