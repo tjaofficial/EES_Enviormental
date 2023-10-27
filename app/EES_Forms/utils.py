@@ -442,3 +442,15 @@ def weatherDict(city):
             'city': False
         }
     return weather
+
+def calculateProgessBar(facility, frequency):
+    formSubRecords = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    forms_comp = [] 
+    for formSub in formSubRecords.filter(submitted=True):
+        if formSub.formID.frequency == frequency:
+            forms_comp.append(formSub.formID.id)
+    count_comp = len(forms_comp)
+    count_total = len(formSubRecords.filter(formID__frequency=frequency))
+    percent_completed = (count_comp / count_total) * 100
+    print(percent_completed)
+    return percent_completed 

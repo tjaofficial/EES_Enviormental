@@ -11,7 +11,7 @@ import braintree
 import json
 import requests
 import os
-from ..utils import setUnlockClientSupervisor, weatherDict
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar
 
 lock = login_required(login_url='Login')
 
@@ -28,16 +28,15 @@ def sup_dashboard_view(request, facility):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     if unlock:
         return redirect('IncompleteForms', facility)
-    options = bat_info_model.objects.filter(facility_name=facility)
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')
     formA4 = formA4_model.objects.all().order_by('-date')
     formA5 = formA5_readings_model.objects.all().order_by('-form')
     reads = formA5_readings_model.objects.all()
-    count_bp = daily_battery_profile_model.objects.count()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    now = datetime.datetime.now()
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    now = datetime.datetime.now().date()
+    options = bat_info_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
     if options.exists():
         options = options[0]
@@ -64,23 +63,11 @@ def sup_dashboard_view(request, facility):
     today = datetime.date.today()
     todays_num = today.weekday()
     # -------PROGRESS PERCENTAGES -----------------
-    formSubRecords = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-
-    def calculateProgessBar(formSubRecords, frequency):
-        forms_comp = [] 
-        for formSub in formSubRecords.filter(submitted=True):
-            if formSub.formID.frequency == frequency:
-                forms_comp.append(formSub.formID.id)
-        count_comp = len(forms_comp)
-        count_total = len(formSubRecords.filter(formID__frequency=frequency))
-        percent_completed = (count_comp / count_total) * 100
-        return percent_completed 
-    
     if facility != 'supervisor':
-        daily_percent = calculateProgessBar(formSubRecords, 'Daily')
-        weekly_percent = calculateProgessBar(formSubRecords, "Weekly")
-        monthly_percent = calculateProgessBar(formSubRecords, 'Monthly')
-        quarterly_percent = calculateProgessBar(formSubRecords, 'Quarterly')
+        daily_percent = calculateProgessBar(facility, 'Daily')
+        weekly_percent = calculateProgessBar(facility, "Weekly")
+        monthly_percent = calculateProgessBar(facility, 'Monthly')
+        quarterly_percent = calculateProgessBar(facility, 'Quarterly')
         annually_percent = 0
     else:
         daily_percent = ''
@@ -88,7 +75,6 @@ def sup_dashboard_view(request, facility):
         monthly_percent = ''
         quarterly_percent = ''
         annually_percent = ''
-
     # -------90 DAY PUSH ----------------
 
     def all_ovens(reads):
@@ -225,101 +211,100 @@ def sup_dashboard_view(request, facility):
         weather = weatherDict(options.city)
     # ----OTHER-----------
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        if count_bp != 0:
+        if daily_prof.exists():
             todays_log = daily_prof[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    emypty_dp_today = False
-                    today = todays_log.date_save
-                    if len(formA1) > 0:
-                        newA1 = formA1.filter(form__facilityChoice__facility_name=facility).order_by('-form')
-                        if len(newA1) > 0:
-                            most_recent_A1 = newA1[0].form.date
-                        else:
-                            most_recent_A1 = ''
-                        if most_recent_A1 == today:
-                            A1data = formA1[0]
-                            form_enteredA1 = True
-                        else:
-                            A1data = ""
+            if now == todays_log.date_save:
+                emypty_dp_today = False
+                today = todays_log.date_save
+                if len(formA1) > 0:
+                    newA1 = formA1.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                    if len(newA1) > 0:
+                        most_recent_A1 = newA1[0].form.date
+                    else:
+                        most_recent_A1 = ''
+                    if most_recent_A1 == today:
+                        A1data = formA1[0]
+                        form_enteredA1 = True
                     else:
                         A1data = ""
+                else:
+                    A1data = ""
 
-                    if len(formA2) > 0:
-                        newA2 = formA2.filter(facilityChoice__facility_name=facility).order_by('-date')
-                        if len(newA2) > 0:
-                            most_recent_A2 = newA2[0].date
+                if len(formA2) > 0:
+                    newA2 = formA2.filter(facilityChoice__facility_name=facility).order_by('-date')
+                    if len(newA2) > 0:
+                        most_recent_A2 = newA2[0].date
+                    else:
+                        most_recent_A2 = ''
+                    if most_recent_A2 == today:
+                        A2data = formA2[0]
+                        if A2data.p_leak_data and A2data.c_leak_data:
+                            push = json.loads(A2data.p_leak_data)
+                            coke = json.loads(A2data.c_leak_data)
                         else:
-                            most_recent_A2 = ''
-                        if most_recent_A2 == today:
-                            A2data = formA2[0]
-                            if A2data.p_leak_data and A2data.c_leak_data:
-                                push = json.loads(A2data.p_leak_data)
-                                coke = json.loads(A2data.c_leak_data)
-                            else:
-                                push = ""
-                                coke = ""
-                            form_enteredA2 = True
-                        else:
-                            A2data = ""
                             push = ""
                             coke = ""
+                        form_enteredA2 = True
                     else:
                         A2data = ""
                         push = ""
                         coke = ""
+                else:
+                    A2data = ""
+                    push = ""
+                    coke = ""
 
-                    if len(formA3) > 0:
-                        newA3 = formA3.filter(facilityChoice__facility_name=facility).order_by('-date')
-                        if len(newA3) > 0:
-                            most_recent_A3 = formA3[0].date
+                if len(formA3) > 0:
+                    newA3 = formA3.filter(facilityChoice__facility_name=facility).order_by('-date')
+                    if len(newA3) > 0:
+                        most_recent_A3 = formA3[0].date
+                    else:
+                        most_recent_A3 = ''
+                    if most_recent_A3 == today:
+                        A3data = formA3[0]
+                        if A3data.l_leak_json and A3data.om_leak_json:
+                            lids = json.loads(A3data.l_leak_json)
+                            offtakes = json.loads(A3data.om_leak_json)
                         else:
-                            most_recent_A3 = ''
-                        if most_recent_A3 == today:
-                            A3data = formA3[0]
-                            if A3data.l_leak_json and A3data.om_leak_json:
-                                lids = json.loads(A3data.l_leak_json)
-                                offtakes = json.loads(A3data.om_leak_json)
-                            else:
-                                lids = ""
-                                offtakes = ""
-                            form_enteredA3 = True
-                        else:
-                            A3data = ""
                             lids = ""
                             offtakes = ""
+                        form_enteredA3 = True
                     else:
                         A3data = ""
                         lids = ""
                         offtakes = ""
+                else:
+                    A3data = ""
+                    lids = ""
+                    offtakes = ""
 
-                    if len(formA4) > 0:
-                        newA4 = formA4.filter(facilityChoice__facility_name=facility).order_by('-date')
-                        if len(newA4) > 0:
-                            most_recent_A4 = formA4[0].date
-                        else:
-                            most_recent_A4 = ''
-                        if most_recent_A4 == today:
-                            A4data = formA4[0]
-                            form_enteredA4 = True
-                        else:
-                            A4data = ""
+                if len(formA4) > 0:
+                    newA4 = formA4.filter(facilityChoice__facility_name=facility).order_by('-date')
+                    if len(newA4) > 0:
+                        most_recent_A4 = formA4[0].date
+                    else:
+                        most_recent_A4 = ''
+                    if most_recent_A4 == today:
+                        A4data = formA4[0]
+                        form_enteredA4 = True
                     else:
                         A4data = ""
+                else:
+                    A4data = ""
 
-                    if len(formA5) > 0:
-                        newA5 = formA5.filter(form__facilityChoice__facility_name=facility).order_by('-form')
-                        if len(newA5) > 0:
-                            most_recent_A5 = formA5[0].form.date
-                        else:
-                            most_recent_A5 = ''
-                        if most_recent_A5 == today:
-                            A5data = formA5[0]
-                            form_enteredA5 = True
-                        else:
-                            A5data = ""
+                if len(formA5) > 0:
+                    newA5 = formA5.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                    if len(newA5) > 0:
+                        most_recent_A5 = formA5[0].form.date
+                    else:
+                        most_recent_A5 = ''
+                    if most_recent_A5 == today:
+                        A5data = formA5[0]
+                        form_enteredA5 = True
                     else:
                         A5data = ""
+                else:
+                    A5data = ""
         else:
             formA4 = ""
             todays_log = ''
