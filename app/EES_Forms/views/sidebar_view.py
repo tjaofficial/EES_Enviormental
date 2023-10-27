@@ -727,14 +727,37 @@ def sop_view(request, facility):
     
     if request.method == 'POST':
         form = sop_form(request.POST, request.FILES)
+        print(form)
+        print(request.POST)
+        print(request.FILES)
         if os.path.exists("./media/SOPs/" + request.POST['pdf_link']):
             ('EXISTS')
         else:
             if form.is_valid():
-                form.save()
+                A = form.save()
+                sop_file = request.FILES['pdf_file']
+                if settings.USE_S3:
+                    upload = sop_model(pdf_file=sop_file)
+                    upload.save()
+                    image_url = upload.file.url
+                name = request.POST['name']
+                revision_date = request.POST['revision_date']
                 print('SAVED')
             else:
                 print('NOT SAVED')
+                
+                
+        # sop_file = request.FILES['pdf_link']
+        # image_type = request.POST['image_type']
+        # if settings.USE_S3:
+        #     upload = Upload(file=sop_file)
+        #     upload.save()
+        #     image_url = upload.file.url
+        # else:
+        #     fs = FileSystemStorage()
+        #     filename = fs.save(sop_file.name, sop_file)
+        #     image_url = fs.url(filename)
+
             
     return render(request, 'shared/sops.html', {
         'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
