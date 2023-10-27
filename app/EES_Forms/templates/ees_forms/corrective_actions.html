@@ -57,7 +57,7 @@
         {% else %}
             {% for x in ca_forms %}
                 <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                    <div class="card CR_tiles" style="{% if client and not x.viewed %} background-color: #ebee17;{% endif %}">
+                    <div class="cardDash CR_tiles" style="{% if client and not x.viewed %} background-color: #ebee17;{% endif %}">
                         <div class='CR_dateHeader'>
                             {{ x.date }} - {{ x.form }}
                         </div>

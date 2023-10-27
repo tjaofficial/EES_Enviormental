@@ -21,7 +21,7 @@
                 <div class='modalContent'>
                     <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <center>
+                        <center style="color:black;">
                             Name: {{ sopForm.name }}<br><br>
                             Revision Date: {{ sopForm.revision_date }}<br><br>
                             File Upload: {{ sopForm.pdf_file }}<br><br>
@@ -49,7 +49,7 @@
         <div class="CR_main">
             <ul style="text-align: center;">
             {% for x in sops %}
-                <div class="card" style="width: 94%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
+                <div class="cardDash" style="width: 94%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
                     <a href='../media/SOPs/{{ x.pdf_link }}' target="_blank">
                         <div style="width: 100%; text-align: left;font-size: 20px;">
                             {{ x.name }} - {{ x.revision_date }}
