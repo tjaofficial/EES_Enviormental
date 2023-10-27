@@ -376,10 +376,6 @@ def stringToDate(date):
     return parsed
 
 def updateSubmissionForm(facility, formID, submitted, date):
-    print(facility)
-    print(formID)
-    print(submitted)
-    print(date)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID=formID).exists():
         formSubmission = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID=formID)[0]
         formSubmission.submitted = submitted

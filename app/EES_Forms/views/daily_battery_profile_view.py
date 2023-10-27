@@ -35,7 +35,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
             'foreman': todays_log.foreman,
             'crew': todays_log.crew,
             'inop_ovens': todays_log.inop_ovens,
-            'inop_numbs': todays_log.inop_numbs,
+            'inop_numbs': todays_log.inop_numbs[1:-1].replace("'", ""),
             'date_save': todays_log.date_save,
         }
     else:
