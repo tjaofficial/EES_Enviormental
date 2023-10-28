@@ -425,6 +425,7 @@ class daily_battery_profile_model(models.Model):
     inop_numbs = models.CharField(max_length=50)
     date_save = models.DateField(auto_now_add=True, auto_now=False)
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
+    facility = models.CharField(max_length=50, null=True, blank=True)
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
