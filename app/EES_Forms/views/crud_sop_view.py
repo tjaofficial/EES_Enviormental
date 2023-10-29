@@ -9,8 +9,8 @@ lock = login_required(login_url='Login')
 def delete_sop_view(request, facility, sop_id):
     sop = sop_model.objects.get(pk=sop_id)
     
-    if os.path.exists("./media/SOPs/" + sop.pdf_link):
-        os.remove("./media/SOPs/" + sop.pdf_link)
+    if os.path.exists("./media/SOPs/" + sop.pdf_url):
+        os.remove("./media/SOPs/" + sop.pdf_url)
         print('IT DOES EXIST')
     else:
         print("The file does not exist")
@@ -21,8 +21,8 @@ def delete_sop_view(request, facility, sop_id):
 def update_sop_view(request, facility, sop_id):
     sop = sop_model.objects.get(pk=sop_id)
     
-    if os.path.exists("./media/SOPs/" + sop.pdf_link):
-        os.remove("./media/SOPs/" + sop.pdf_link)
+    if os.path.exists("./media/SOPs/" + sop.pdf_url):
+        os.remove("./media/SOPs/" + sop.pdf_url)
         print('IT DOES EXIST')
     else:
         print("The file does not exist")
