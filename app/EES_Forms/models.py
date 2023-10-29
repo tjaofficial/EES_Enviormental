@@ -6875,7 +6875,7 @@ class sop_model(models.Model):
     )
     pdf_file = models.FileField(upload_to='media/SOPs/')
     pdf_url = models.CharField(
-        max_length=90,
+        max_length=1000000,
         blank=True
     )
     
