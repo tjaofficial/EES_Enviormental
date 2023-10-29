@@ -2135,7 +2135,7 @@ class sop_form(ModelForm):
         widgets = {
             'name' : forms.TextInput(attrs={'style':'width: 150px;'}),
             'revision_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'pdf_link' : forms.TextInput(attrs={'oninput': 'pdf_link_change()' , 'type':'text', 'style':'width:150px; display:none;'}),
+            'pdf_url' : forms.TextInput(attrs={'oninput': 'pdf_link_change()' , 'type':'text', 'style':'width:150px; display: none;', 'required':False}),
         }
         
 class signature_form(ModelForm):

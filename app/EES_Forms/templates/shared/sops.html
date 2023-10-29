@@ -25,7 +25,7 @@
                             Name: {{ sopForm.name }}<br><br>
                             Revision Date: {{ sopForm.revision_date }}<br><br>
                             File Upload: {{ sopForm.pdf_file }}<br><br>
-                            {{ sopForm.pdf_link }}
+                            {{ sopForm.pdf_url }}
                             <br>
                             <input type="submit" value="Save">
                         </center>  
@@ -57,7 +57,7 @@
                     </a>
                     <div style='text-align:right; margin:auto; margin-right:0;display: inline-flex;}'>
                         <div>
-                            <a style='color:red; font-size:10px;' href={% url 'DeleteSop' facility x.id %}>delete</a>
+                            <a style='color:red; font-size:10px;' href="{% url 'DeleteSop' facility x.id %}">delete</a>
                         </div>
                     </div>
                 </div>

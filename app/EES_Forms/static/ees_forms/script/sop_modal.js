@@ -24,12 +24,3 @@ window.onclick = function(event) {
   }
 }
 
-
-document.getElementById('id_pdf_file').onchange = function () {
-    const file = document.getElementById('id_pdf_file').value;
-    const split_array = String(file).split("\\")
-    const link = split_array[split_array.length - 1]
-    const final = link.replace(/ /g, '_')
-    document.getElementById('id_pdf_link').value = final;
-}
-

@@ -286,7 +286,7 @@ def spill_kits_inventory_form(request, facility, month, skNumber, selector):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     org = spill_kit_inventory_model.objects.all().order_by('-date')
     today = datetime.date.today()
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     full_name = request.user.get_full_name()
     skForm = spill_kit_inventory_form()
     attachedTo = spill_kits_model.objects.filter(month=month)
@@ -309,17 +309,12 @@ def spill_kits_inventory_form(request, facility, month, skNumber, selector):
             print(data)
         elif len(org) > 0:
             print('CHECK 2')
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    filterByskID = spill_kit_inventory_model.objects.filter(skID=skNumber).order_by('-date')
-                    if len(filterByskID) > 0:
-                        database_form = filterByskID[0]
-                        if todays_log.date_save.month == database_form.date.month:
-                            existing = True
-                else:
-                    batt_prof = '../../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                filterByskID = spill_kit_inventory_model.objects.filter(skID=skNumber).order_by('-date')
+                if len(filterByskID) > 0:
+                    database_form = filterByskID[0]
+                    if todays_log.date_save.month == database_form.date.month:
+                        existing = True
             else:
                 batt_prof = '../../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 

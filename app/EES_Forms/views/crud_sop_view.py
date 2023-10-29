@@ -6,7 +6,7 @@ import os
 lock = login_required(login_url='Login')
 
 @lock
-def delete_sop_view(request, sop_id):
+def delete_sop_view(request, facility, sop_id):
     sop = sop_model.objects.get(pk=sop_id)
     
     if os.path.exists("./media/SOPs/" + sop.pdf_link):
@@ -15,10 +15,10 @@ def delete_sop_view(request, sop_id):
     else:
         print("The file does not exist")
     sop.delete()
-    return redirect('Sop')
+    return redirect('Sop', facility)
 
 @lock
-def update_sop_view(request, sop_id):
+def update_sop_view(request, facility, sop_id):
     sop = sop_model.objects.get(pk=sop_id)
     
     if os.path.exists("./media/SOPs/" + sop.pdf_link):
@@ -27,5 +27,5 @@ def update_sop_view(request, sop_id):
     else:
         print("The file does not exist")
     sop.delete()
-    return redirect('Sop')
+    return redirect('Sop', facility)
     

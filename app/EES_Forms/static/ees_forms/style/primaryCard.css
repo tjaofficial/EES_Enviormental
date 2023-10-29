@@ -23,5 +23,8 @@
 .contentCont{
     margin: auto;
     text-align: center;
-    padding: 32px 0px;
+    padding: 32px 10px;
+}
+.marginTop{
+    margin-top: 25px;
 }
