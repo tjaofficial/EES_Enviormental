@@ -3,6 +3,7 @@ document.getElementById('button_profile').addEventListener('click', (elem)=>{tog
 document.getElementById('drop_down').addEventListener('click', (elem)=>{toggleDisplayed(elem.currentTarget)});
 document.getElementById('exitModal').addEventListener('click', (elem)=>{toggleDisplayed(elem.currentTarget)});
 
+
 //document.getElementsByTagName('body').addEventListener('click', hideMenus)
 
 
@@ -16,10 +17,12 @@ function toggleDisplayed(elemClicked){
       elem.classList.remove(shownClassName);
       elem.classList.add(hiddenClassName);
       elem.dataset.displayed = 'False';
+      elem.style.display = 'none';
     }
     else{
       elem.classList.remove(hiddenClassName);
       elem.classList.add(shownClassName); 
+      elem.style.display = 'flex';
       elem.dataset.displayed = 'True';
     }
   }

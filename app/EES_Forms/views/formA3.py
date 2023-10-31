@@ -133,9 +133,9 @@ def formA3(request, facility, selector):
                 if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
                     finder = issues_model.objects.filter(date=A.date, form='A-3')
                     if finder:
-                        issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/' + formName + '/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/form'
+                        issue_page = '../../issues_view/' + formName + '/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
 
