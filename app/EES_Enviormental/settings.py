@@ -154,7 +154,7 @@ if USE_S3:
     MEDIA_ROOT = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}'
     DEFAULT_FILE_STORAGE = 'EES_Enviormental.storage_backends.PublicMediaStorage'
 else:
-    STATIC_URL = '/static/'
+    STATIC_URL = 'EES_Forms/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
