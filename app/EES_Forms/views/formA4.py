@@ -19,7 +19,7 @@ def formA4(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
@@ -36,19 +36,13 @@ def formA4(request, facility, selector):
             existing = True
             search = True
             print('CHECK 1')
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
         if search:
             database_form = ''
@@ -67,7 +61,6 @@ def formA4(request, facility, selector):
                 leaks = 'yes'
         else:
             if existing:
-                print('CHECK 2')
                 initial_data = {
                     'date': database_form.date,
                     'observer': database_form.observer,
@@ -99,7 +92,6 @@ def formA4(request, facility, selector):
 
             data = formA4_form(initial=initial_data)
             collect_json = ''
-        print(leaks)
         
         if request.method == "POST":
             if existing:
@@ -117,15 +109,14 @@ def formA4(request, facility, selector):
                     
                 A.save()
                 if A.notes.lower() != 'no ve' or A.leak_data != "{}":
-                    finder = issues_model.objects.filter(date=A.date, form='A-4')
+                    finder = issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')
                     if finder:
-                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/issue'
+                        issue_page = '../../issues_view/' + formName + '/' + str(todays_log.date_save) + '/issue'
                     else:
-                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-                
+                        issue_page = '../../issues_view/' + formName + '/' + str(todays_log.date_save) + '/form'
                     return redirect(issue_page)
-                elif issues_model.objects.filter(date=A.date, form='A-4'):
-                    issues_model.objects.filter(date=A.date, form='A-4')[0].delete()
+                elif issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4'):
+                    issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')[0].delete()
                 
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 

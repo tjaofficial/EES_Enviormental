@@ -50,7 +50,7 @@
             <ul style="text-align: center;">
             {% for x in sops %}
                 <div class="cardDash" style="width: 94%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
-                    <a href='../media/SOPs/{{ x.pdf_link }}' target="_blank">
+                    <a href='{{ x.pdf_link }}' target="_blank">
                         <div style="width: 100%; text-align: left;font-size: 20px;">
                             {{ x.name }} - {{ x.revision_date }}
                         </div>

@@ -17,12 +17,10 @@ function toggleDisplayed(elemClicked){
       elem.classList.remove(shownClassName);
       elem.classList.add(hiddenClassName);
       elem.dataset.displayed = 'False';
-      elem.style.display = 'none';
     }
     else{
       elem.classList.remove(hiddenClassName);
       elem.classList.add(shownClassName); 
-      elem.style.display = 'flex';
       elem.dataset.displayed = 'True';
     }
   }

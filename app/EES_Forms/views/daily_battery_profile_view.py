@@ -30,12 +30,16 @@ def daily_battery_profile_view(request, facility, access_page, date):
             existing = True
     
     if existing:
+        if todays_log.inop_numbs == "-":
+            inop_numbers = todays_log.inop_numbs
+        else:
+            inop_numbers = todays_log.inop_numbs[1:-1].replace("'", "")
         initial_data = {
             'facilityChoice': todays_log.facilityChoice,
             'foreman': todays_log.foreman,
             'crew': todays_log.crew,
             'inop_ovens': todays_log.inop_ovens,
-            'inop_numbs': todays_log.inop_numbs[1:-1].replace("'", ""),
+            'inop_numbs': inop_numbers,
             'date_save': todays_log.date_save,
         }
     else:

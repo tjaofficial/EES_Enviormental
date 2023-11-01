@@ -44,25 +44,6 @@ body {
   margin: 5px;
 }
 
-.profileDropdown {
-  position: fixed;
-  right: 27px;
-  top: 2.5rem;
-  width: 15rem;
-  background-color: #dfe5e9;
-  border-radius: 1rem;
-  box-shadow: 1px 3px 7px 0px #9898a6;
-}
-.profileDropdown a:hover {
-  text-decoration: underline;
-}
-.profileDropdown_shown {
-  display: block;
-}
-.profileDropdown_hidden {
-  display: none;
-}
-
 .headerSpace {
   height: 3rem;
   width: 100%;

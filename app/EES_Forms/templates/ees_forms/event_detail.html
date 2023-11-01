@@ -1,7 +1,7 @@
-{% extends "supervisor/sup_layout.html" %}
-
-{% block list%}
-{% load static %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
 <style>
     #back_arrow{
         padding-left: 5rem;
@@ -17,16 +17,18 @@
         </svg>
     </a>
 </div>
-<center>
+<div class="mainCont center" style="width:35rem;">
     {% if access_page == 'view' %}
-    <div style="padding-top: 30px;">
-        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto;" class="eventAdd">
-            <h3>View Event Details</h3><br>
-            
-            Observer: {{ my_event.observer }}<br>
-            Title: {{ my_event.title }}<br>
-            Date: {{ my_event.date }}<br>
-            Description: {{ my_event.notes }}<br>
+    <div class="card">
+        <a href="{% url 'Calendar' facility my_event.date.year my_event.date.month %}">
+            <span class="closeAdd">&times;</span>
+        </a>
+        <div class="cardHeader">View Event Details</div>
+        <div class="contentCont">
+            Observer: {{ my_event.observer }}<br><br>
+            Title: {{ my_event.title }}<br><br>
+            Date: {{ my_event.date }}<br><br>
+            Description: {{ my_event.notes }}<br><br>
             <br>
             {% if supervisor %}
             <div>
@@ -60,7 +62,7 @@
         </div>
     </div>
     {% endif %}
-</center>
+</div>
 
 
 

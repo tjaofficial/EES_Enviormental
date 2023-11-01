@@ -160,7 +160,7 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     MEDIA_ROOT2 = os.path.join(BASE_DIR2, 'media')
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'EES_Forms/static'),)
 
 
 CLIENT_VAR = 'client'

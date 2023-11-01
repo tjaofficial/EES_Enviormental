@@ -116,7 +116,7 @@ class FormCReadForm(ModelForm):
             'salt_12',
         )
         widgets = {
-            'TRead1': forms.TextInput(attrs={'id': 'TRead1', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'TRead1': forms.TextInput(attrs={'id': 'TRead1', 'oninput': 'truck_average()', 'oninput':'autoFillZeros(TRead1.id)', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'TRead2': forms.TextInput(attrs={'id': 'TRead2', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'TRead3': forms.TextInput(attrs={'id': 'TRead3', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'TRead4': forms.TextInput(attrs={'id': 'TRead4', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -128,7 +128,7 @@ class FormCReadForm(ModelForm):
             'TRead10': forms.TextInput(attrs={'id': 'TRead10', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'TRead11': forms.TextInput(attrs={'id': 'TRead11', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'TRead12': forms.TextInput(attrs={'id': 'TRead12', 'oninput': 'truck_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'ARead1': forms.TextInput(attrs={'id': 'ARead1', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'ARead1': forms.TextInput(attrs={'id': 'ARead1', 'oninput': 'area_average()',  'oninput':'autoFillZeros(ARead1.id)', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'ARead2': forms.TextInput(attrs={'id': 'ARead2', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'ARead3': forms.TextInput(attrs={'id': 'ARead3', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'ARead4': forms.TextInput(attrs={'id': 'ARead4', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -140,7 +140,7 @@ class FormCReadForm(ModelForm):
             'ARead10': forms.TextInput(attrs={'id': 'ARead10', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'ARead11': forms.TextInput(attrs={'id': 'ARead11', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'ARead12': forms.TextInput(attrs={'id': 'ARead12', 'oninput': 'area_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'storage_1': forms.TextInput(attrs={'required': False, 'id': 'storage_1', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'storage_1': forms.TextInput(attrs={'required': False, 'id': 'storage_1', 'oninput': 'storage_average()', 'oninput':'autoFillZeros(storage_1.id)', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'storage_2': forms.TextInput(attrs={'required': False, 'id': 'storage_2', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'storage_3': forms.TextInput(attrs={'required': False, 'id': 'storage_3', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'storage_4': forms.TextInput(attrs={'required': False, 'id': 'storage_4', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -152,7 +152,7 @@ class FormCReadForm(ModelForm):
             'storage_10': forms.TextInput(attrs={'required': False, 'id': 'storage_10', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'storage_11': forms.TextInput(attrs={'required': False, 'id': 'storage_11', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'storage_12': forms.TextInput(attrs={'required': False, 'id': 'storage_12', 'oninput': 'storage_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'salt_1': forms.TextInput(attrs={'required': False, 'id': 'salt_1', 'oninput': 'salt_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'salt_1': forms.TextInput(attrs={'required': False, 'id': 'salt_1', 'oninput': 'salt_average()', 'oninput':'autoFillZeros(salt_1.id)', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'salt_2': forms.TextInput(attrs={'required': False, 'id': 'salt_2', 'oninput': 'salt_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'salt_3': forms.TextInput(attrs={'required': False, 'id': 'salt_3', 'oninput': 'salt_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'salt_4': forms.TextInput(attrs={'required': False, 'id': 'salt_4', 'oninput': 'salt_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1823,7 +1823,7 @@ class formM_readings_form(ModelForm):
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
-            'pav_1' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_1' : forms.TextInput(attrs={'oninput':'paved_average()', 'oninput':'autoFillZeros(id_pav_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_2' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_3' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_4' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1835,7 +1835,7 @@ class formM_readings_form(ModelForm):
             'pav_10' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_11' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'pav_12' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_1' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_1' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'oninput':'autoFillZeros(id_unp_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_2' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_3' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_4' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1847,7 +1847,7 @@ class formM_readings_form(ModelForm):
             'unp_10' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_11' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'unp_12' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_1' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_1' : forms.TextInput(attrs={'oninput':'parking_average()', 'oninput':'autoFillZeros(id_par_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_2' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_3' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'par_4' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),

@@ -231,6 +231,19 @@ spill_kit_choices = (
     ("oil XL cart","PIG Spill Kit in Extra-Large Response Chest"),
     ("universal drum","PIG Spill Kit in Overpack Salvage Drum")
 )
+colorMode_choices = (
+    ("dark","Dark Mode"),
+    ("light", "Light Mode")
+)
+notification_header_choices = (
+    ("compliance","OUT OF COMPLIANCE"),
+    ("90days","90 DAY OVENS"),
+    ("message","MESSAGE"),
+    ("event","EVENT"),
+    ("schedule","SCHEDULE UPDATED"),
+    ("submitted","FORM SUBMITTED"),
+    ("corrective","CORRECTIVE ACTION")
+)
 # -all_users = User.objects.all()
 # -all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
@@ -474,6 +487,11 @@ class user_profile_model(models.Model):
         on_delete=models.CASCADE, 
         blank=True, 
         null=True
+    )
+    colorMode = models.CharField(
+        choices=colorMode_choices,
+        max_length=5,
+        default='light'
     )
     def __str__(self):
         return self.user.username
@@ -6952,3 +6970,30 @@ class formSubmissionRecords_model(models.Model):
     submitted = models.BooleanField(default=False)
     def __str__(self):
         return str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)
+    
+class notifications_model(models.Model):
+    facilityChoice = models.ForeignKey(
+        bat_info_model,
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    user = models.ForeignKey(
+        user_profile_model,
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    clicked = models.BooleanField(default=False)
+    hovered = models.BooleanField(default=False)
+    header = models.CharField(
+        max_length=50,
+        choices=notification_header_choices
+    )
+    body = models.CharField(
+        max_length=150
+    )
+    notes = models.CharField(
+        max_length=150
+    )
+    date = models.DateField(auto_now_add=True)
+    def __str__(self):
+        return str(self.date) + " - " + str(self.facilityChoice) + " - " + str(self.header)

@@ -34,7 +34,7 @@ def formM(request, facility, selector):
     full_name = request.user.get_full_name()
 
 
-    if len(profile) > 0:
+    if profile.exists():
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
         if same_user:
             cert_date = request.user.user_profile_model.cert_date
@@ -58,13 +58,14 @@ def formM(request, facility, selector):
             form2 = database_model2
             existing = True
             search = True
-        elif len(org) > 0 or len(org2) > 0:
+        elif org.exists() or org2.exists():
             database_form = org[0]
             database_form2 = org2[0]
             if selector == 'form':
                 if today_number in {0, 1, 2, 3, 4}:
                     if todays_log.date_save == database_form.date:
                         existing = True
+                        print("CHECK 1")
         if search:
             database_form = ''
             THEmonth = form.date.month
@@ -127,6 +128,7 @@ def formM(request, facility, selector):
                     'par_total': database_form2.par_total,
                 }
                 form2 = formM_readings_form(initial=initial_data)
+                print(initial_data)
             else:
                 initial_data = {
                     'date': todays_log.date_save,
@@ -146,7 +148,8 @@ def formM(request, facility, selector):
 
             A_valid = form.is_valid()
             B_valid = reads.is_valid()
-
+            print(form.errors)
+            print(reads.errors)
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = reads.save(commit=False)

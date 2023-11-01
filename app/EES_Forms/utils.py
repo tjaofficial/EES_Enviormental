@@ -7,6 +7,7 @@ from django.apps import apps
 import ast
 import requests
 import json
+from django.shortcuts import redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 #from .admin import EventAdmin
@@ -454,3 +455,168 @@ def calculateProgessBar(facility, frequency):
     percent_completed = (count_comp / count_total) * 100
     print(percent_completed)
     return percent_completed 
+
+def ninetyDayPushTravels(facility):
+    all_db_reads = formA5_readings_model.objects.filter(form__facilityChoice__facility_name=facility)
+    if all_db_reads.exists():
+        def all_ovens(reads):
+            A = []
+            for p in reads:
+                date = p.form.date
+                list = [p.o1, p.o2, p.o3, p.o4]
+                year = date.year
+                month = date.month
+                day = date.day
+
+                dateAdded = datetime.datetime(year, month, day)
+                EXPdate = dateAdded + datetime.timedelta(days=91)
+                daysLeft = EXPdate - datetime.datetime.now()
+                
+                for q in list:
+                    if len(str(q)) == 1:
+                        ovenNumber = "0" + str(q)
+                    else:
+                        ovenNumber = q
+
+                    A.append((ovenNumber, p.form.date, EXPdate.date, daysLeft.days))
+            return A
+        all_read_ovens = all_ovens(all_db_reads)
+        func = lambda x: (x[0], x[1])
+        sort_by_oven = sorted(all_read_ovens, key=func, reverse=True)
+
+        def final(organizedOvens):
+            B = []
+            i = 1
+            for oven_a in organizedOvens:
+                B.append(oven_a)
+            for oven_b in organizedOvens:
+                for y in range(i, len(organizedOvens)):
+                    check_instance = organizedOvens[y]
+                    if check_instance[0] == oven_b[0]:
+                        if check_instance in B:
+                            B.remove(check_instance)
+                i += 1
+
+            for n in range(1, 86):
+                for oven in B:
+                    if len(str(n)) == 1:
+                        zero_n = "0" + str(n)
+                    else:
+                        zero_n = str(n)
+                        
+                    if zero_n == oven[0]:
+                        exist = True
+                        break
+                    else:
+                        exist = False
+                if not exist:
+                    B.append((zero_n, 'N/A', 0, 0))              
+            return B
+        all_ovens_EXP = final(sort_by_oven)
+        
+        def sort_key(oven):
+            return oven[0]
+        all_ovens_EXP.sort(key=sort_key, reverse=True) 
+        
+        def overdue_30(cool):
+            C = []
+            for x in cool:
+                if x[3] <= 30:
+                    C.append(x)
+            return C
+
+        def overdue_10(cool):
+            D = []
+            for x in cool:
+                if x[3] <= 10:
+                    D.append(x)
+            return D
+
+        def overdue_5(cool):
+            E = []
+            for x in cool:
+                if x[3] <= 5:
+                    E.append(x)
+            return E
+
+        def overdue_closest(cool):
+            F = []
+        
+            func2 = lambda R: (R[3])
+            sort2 = sorted(cool, key=func2)
+            most_recent = sort2[0][3]
+        
+            for x in sort2:
+                if x[3] == most_recent:
+                    F.append(x)
+            return F
+
+        od_30 = overdue_30(all_ovens_EXP)
+        od_10 = overdue_10(all_ovens_EXP)
+        od_5 = overdue_5(all_ovens_EXP)
+        od_recent = overdue_closest(all_ovens_EXP)
+    
+        return {'30days': od_30, '10days': od_10, '5days': od_5, 'closest': od_recent, 'all': all_ovens_EXP}
+    return 'EMPTY'
+    
+def userColorMode(user):
+    userProfile = user_profile_model.objects.filter(user__username=user.username)
+    if userProfile.exists():
+        userColorMode = userProfile[0].colorMode
+    if userColorMode == 'light':
+        return (False, 'lightMode')
+    else:
+        return (True, 'darkMode')
+     
+def colorModeSwitch(request):
+    userProfile = user_profile_model.objects.filter(user__username=request.user.username)
+    if userProfile.exists():
+        userProfile = userProfile[0]
+    if request.POST['colorMode'] == 'light':
+        userProfile.colorMode = 'light'
+    else:
+        userProfile.colorMode = 'dark'
+    print(userProfile.colorMode)
+    userProfile.save()
+    print(userProfile.colorMode)
+
+    return redirect(request.META['HTTP_REFERER'])
+
+def getOldFormID(facility, formID):
+    facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    if facilitiesForm.exists():
+        formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
+        for formPair in formIDandLabel:
+            if formID == formPair[0]:
+                formLabel = formPair[1]
+                return formLabel
+
+def formCreateNotification(facility, user, formID, date):
+    nFacility = bat_info_model.objects.filter(facility_name=facility)
+    if nFacility.exists():
+        nFacility = nFacility[0]
+    nUserProfile = user_profile_model.objects.filter(user__username=user.username)
+    if nUserProfile.exists():
+        nUserProfile = nUserProfile[0]
+    companyUsers = user_profile_model.objects.filter(company__company_name=nUserProfile.company.company_name )
+    nForms = getOldFormID(facility, formID)         
+    for person in companyUsers:
+        n = notifications_model(
+            facilityChoice=nFacility,
+            user = person,
+            clicked = False,
+            hovered = False,
+            header = 'submitted',
+            body = "Click here to view Form " + nForms + " on " + str(date) + ".",
+            notes = "Submitted by " + user.first_name + " " + user.last_name + "."
+        )
+        if n not in companyUsers:
+            n.save()
+    print(nForms + "notification was sent.")
+   
+def notificationCalc(user):
+    userProfile = user_profile_model.objects.filter(user__username=user.username)
+    if userProfile.exists():
+        userProfile = userProfile[0]
+        
+        

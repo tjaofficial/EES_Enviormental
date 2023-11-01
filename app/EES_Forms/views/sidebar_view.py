@@ -157,9 +157,14 @@ def calendar_view(request, facility, year, month):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
-    month = month.title()
-    month_number = list(calendar.month_name).index(month)
-    month_number = int(month_number)
+    try:
+        month_number = int(month)
+        month = calendar.month_name[month_number]
+    except:
+        month = month.title()
+        month_number = list(calendar.month_name).index(month)
+        month_number = int(month_number)
+        
 
     if month_number == 1:
         prev_month = str(calendar.month_name[12])
@@ -392,7 +397,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
     options = bat_info_model.objects.all()
     issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    
+
     if todays_log.exists():
         todays_log = todays_log[0]
     if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
@@ -455,14 +460,11 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
-        print(form_date)
         org = issues_model.objects.filter(date__exact=form_date)
         database_form = org[0]
-        print('CHECK 1')
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
                 if form_name == entry.form:
-                    print('CHECK 3')
                     picker = entry
                     form = issues_form()
                     link = ''
@@ -474,12 +476,9 @@ def issues_view(request, facility, form_name, form_date, access_page):
         database_form = org[0]
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                print('check 1')
                 if form_name == entry.form:
-                    print('check 2')
                     picker = entry
                     link = ''
-
         initial_data = {
             'form': picker.form,
             'issues': picker.issues,
@@ -628,6 +627,7 @@ def event_detail_view(request, facility, access_page, event_id):
 
                 return redirect('../../event_detail/' + str(event_id) + '/view')
 
+    
     return render(request, "ees_forms/event_detail.html", {
         'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, "unlock": unlock, "client": client, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })

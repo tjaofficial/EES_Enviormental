@@ -27,6 +27,7 @@
     </style>
     <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
     <script defer src="{% static 'ees_forms/script/formM.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/3minAutoFil.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
@@ -112,13 +113,18 @@
                         <tr>
                             <td colspan="5" class="formM_box1">
                                 PAVED:{% if existing %} 
-                                            {% for pair in paved_roads %}
-                                            {% if pair.0 == form.paved %}
-                                                {{ pair.1 }}
+                                            {% if selector == "form" %}
+                                                {{ form.paved }}
+                                            {% else %}
+                                                {% for pair in paved_roads %}
+                                                    {% if pair.0 == form.paved.value %}
+                                                        {{ pair.1 }}
+                                                        we did it
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endif %}
-                                        {% endfor %}
                                         {% else %}
-                                        {{form.paved}}
+                                            {{form.paved}}
                                         {% endif %}
                                         &nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
                                 <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
@@ -187,14 +193,18 @@
                         </tr> 
                         <tr>
                             <td colspan="5" class="formM_box1">
-                                UNPAVED:{% if existing %} 
-                                            {% for pair in unpaved_roads %}
-                                            {% if pair.0 == form.unpaved %}
-                                                {{ pair.1 }}
+                                UNPAVED:{% if existing %}
+                                            {% if selector == "form" %}
+                                                {{ form.unpaved }}
+                                            {% else %}
+                                                {% for pair in unpaved_roads %}
+                                                    {% if pair.0 == form.unpaved %}
+                                                        {{ pair.1 }}
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endif %}
-                                        {% endfor %}
                                         {% else %}
-                                        {{form.unpaved}}
+                                            {{form.unpaved}}
                                         {% endif %} 
                                         &nbsp; &nbsp; &nbsp; &nbsp;
                                 Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
@@ -269,13 +279,17 @@
                         <tr>
                             <td colspan="5" class="formM_box1">
                                 PARKING LOT:{% if existing %} 
-                                            {% for pair in parking_lots %}
-                                                {% if pair.0 == form.parking %}
-                                                    {{ pair.1 }}
+                                                {% if selector == "form" %}
+                                                    {{ form.parking }}
+                                                {% else %}
+                                                    {% for pair in parking_lots %}
+                                                        {% if pair.0 == form.parking %}
+                                                            {{ pair.1 }}
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 {% endif %}
-                                            {% endfor %}
                                             {% else %}
-                                            {{form.parking}}
+                                                {{form.parking}}
                                             {% endif %} 
                                             &nbsp; &nbsp; &nbsp; &nbsp;
                                 Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}

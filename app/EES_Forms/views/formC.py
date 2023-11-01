@@ -4,7 +4,7 @@ import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms, bat_info_model
 from ..forms import SubFormC1, FormCReadForm
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, formCreateNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -18,7 +18,7 @@ def formC(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
@@ -27,7 +27,7 @@ def formC(request, facility, selector):
     full_name = request.user.get_full_name()
     
 
-    if len(profile) > 0:
+    if profile.exists():
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
         if same_user:
             cert_date = request.user.user_profile_model.cert_date
@@ -50,21 +50,15 @@ def formC(request, facility, selector):
             existing = True
             search = True
         # ------check if database is empty----------
-        elif len(org) > 0 or len(org2) > 0:
+        elif org.exists() or org2.exists():
             database_form = org[0]
             database_form2 = org2[0]
             # -------check if there is a daily battery profile
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
             
         if search:
@@ -173,12 +167,13 @@ def formC(request, facility, selector):
                 if B.form.average_t > 5 or B.form.average_p > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     finder = issues_model.objects.filter(date=A.date, form='C')
                     if finder:
-                        issue_page = '../../issues_view/C/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/'+formName+'/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/C/' + str(database_form.date) + '/form'
+                        issue_page = '../../issues_view/'+formName+'/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
-
+                
+                formCreateNotification(facility, request.user, formName, now)
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

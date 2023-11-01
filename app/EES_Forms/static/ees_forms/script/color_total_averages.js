@@ -42,39 +42,15 @@ function stop_light(average, id_param) {
  FORM C - COAL FIELD
 *************/
 function truck_average(){
-    const TRead1 = document.getElementById('TRead1').value;
-    if (TRead1 == 'fil'){
-        for (i=1;i<13;i+=1){
-            document.getElementById('TRead'+i).value = 0;
-        }
-    } 
     get_average('TRead', 'average_t', 12);
 }
 function area_average(){
-    const ARead = document.getElementById('ARead1').value;
-    if (ARead == 'fil'){
-        for (i=1;i<13;i+=1){
-            document.getElementById('ARead'+i).value = 0;
-        }
-    } 
     get_average('ARead', 'average_p', 12);
 }
 function storage_average(){
-    const Storage = document.getElementById('storage_1').value;
-    if (Storage == 'fil'){
-        for (i=1;i<13;i+=1){
-            document.getElementById('storage_'+i).value = 0;
-        }
-    } 
     get_average('storage_', 'average_storage', 12);
 }
 function salt_average(){
-    const Salt = document.getElementById('salt_1').value;
-    if (Salt == 'fil'){
-        for (i=1;i<13;i+=1){
-            document.getElementById('salt_'+i).value = 0;
-        }
-    } 
     get_average('salt_', 'average_salt', 12);
 }
 

@@ -426,25 +426,7 @@ li {
 #progress{
     padding: 0 20px 0 20px;
 }
-.profileDropdown {
-    position: fixed;
-    right: 27px;
-    top: 2.5rem;
-    width: 15rem;
-    background-color: #dfe5e9;
-    border-radius: 1rem;
-    box-shadow: 1px 3px 7px 0px #9898a6;
-    z-index: 2;
-}
-.profileDropdown a:hover {
-    text-decoration: underline;
-}
-.profileDropdown_shown {
-    display: block;
-}
-.profileDropdown_hidden {
-    display: none;
-}
+
   .sidebar_item {
     font-weight: bolder;
     font-family: Arial, Helvetica, sans-serif;
@@ -488,63 +470,18 @@ li {
     padding: 6px 28px;
     box-shadow: inset black 0px 0px 20px 0px;
 }
-
-
-/* The switch - the box around the slider */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 53px;
-    height: 24px;
-  }
-  
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  /* The slider */
-  .slider {
+.notification{
+    position: fixed;
+    right: 11rem; 
+}
+.notification #bell{
+    height: 25px;
+    fill:#ffffff
+}
+.notification #yellowDot{
     position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 17px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: #000000;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
+    height: 12px;
+    fill: #ffea00;
+    bottom: 0px;
+    left: -4px;
+}
