@@ -13,8 +13,7 @@
         {% if facility != 'supervisor' %}
         <form action="search_forms/search" method="POST" class='archiveHeader'>
             {% csrf_token %}
-            <input class='searchInput' type='search' placeholder="Type Search Here" name="searched" required>
-            <input class="" type="date">
+            <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
             <button type="submit" class='searchButton'>Search</button>
         </form>
         {% else %}

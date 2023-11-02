@@ -104,11 +104,12 @@
                                 <ul id='sbClientGroup' style="display: block;">
                                     <li><a href="{% url 'archive' facility %}">Archive</a></li>
                                     <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
+                                    <li><a href="{% url 'Sop' facility %}">SOP's</a></li>
                                     <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
-                                    <li><a href=#>Weekly Reports</a></li>
-                                    <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li>
                                     <li><a href="{% url 'Schedule' facility %}">Schedule</a></li>
                                     <li><a href="{% url 'Add Event' facility %}">Add Events</a></li>
+                                    <li><a href=#>Weekly Reports</a></li>
+                                    <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li>
                                 </ul>
                             </li>
                         {% endif %}

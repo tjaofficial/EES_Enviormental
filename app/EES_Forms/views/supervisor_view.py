@@ -16,8 +16,8 @@ from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar,
 lock = login_required(login_url='Login')
 
 def getCompanyFacilities(username):
-    thisProfileData = user_profile_model.objects.all().filter(user__username=username)[0]
-    sortedFacilityData = bat_info_model.objects.all().filter(company__company_name=thisProfileData.company.company_name)
+    thisProfileData = user_profile_model.objects.filter(user__username=username)[0]
+    sortedFacilityData = bat_info_model.objects.filter(company__company_name=thisProfileData.company.company_name)
     
     return sortedFacilityData
 

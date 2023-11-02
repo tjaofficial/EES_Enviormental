@@ -498,6 +498,7 @@ def IncompleteForms(request, facility):
                     sub.save()
                 elif sub.formID.frequency == 'Weekly':
                     if todays_num in {0, 1, 2, 3, 4}:
+                        print('CHECK 1')
                         sub.dueDate = weekday_fri
                         start_sat = weekday_fri - datetime.timedelta(days=6)
                     else:
@@ -510,11 +511,21 @@ def IncompleteForms(request, facility):
                         sub.submitted = False
                     sub.save()
                 elif sub.formID.frequency == 'Daily':
-                    sub.dueDate = today
-                    A = sub.dateSubmitted
-                    if today != A:
-                        sub.submitted = False
-                    sub.save()
+                    print(sub.formID)
+                    if sub.formID.weekend_only and todays_num not in {5,6}:
+                        print("CHECK 1")
+                        print(sub.submitted)
+                        sub.save()
+                        continue
+                    else:    
+                        print("CHECK 2")
+                        sub.dueDate = today
+                        A = sub.dateSubmitted
+                        if today != A:
+                            print("CHECK 3")
+                            sub.submitted = False
+                        sub.save()
+                        print(sub.submitted)
                     
                 if sub.formID.day_freq in {'Everyday', todays_num} or (todays_num in {5, 6} and sub.formID.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and sub.formID.day_freq == 'Weekdays'):
                     if sub.submitted == False:

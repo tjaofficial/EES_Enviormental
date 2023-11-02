@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch
 from django.contrib.auth.decorators import login_required
 import os
 import ast
@@ -219,9 +219,12 @@ def archive_view(request, facility):
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if request.method == 'POST':
         answer = request.POST
-        print(answer)
-        if answer['facilitySelect'] != '':
-            return redirect('archive', answer['facilitySelect'])
+        if supervisor:
+            if answer['facilitySelect'] != '':
+                return redirect('archive', answer['facilitySelect'])
+        else:
+            if 'colorMode' in answer.keys():
+                colorModeSwitch(request)
 
     return render(request, 'ees_forms/ees_archive.html', {
         'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
@@ -229,6 +232,7 @@ def archive_view(request, facility):
 
 @lock
 def search_forms_view(request, facility, access_page):
+    print(request.POST)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -239,6 +243,10 @@ def search_forms_view(request, facility, access_page):
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    formSubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    if facilitiesForm.exists():
+        formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
     if access_page != 'search':
         if access_page != 'formN_model':
             chk_database = apps.get_model('EES_Forms', access_page).objects.count()
@@ -361,26 +369,37 @@ def search_forms_view(request, facility, access_page):
             print(monthList)
 
     if request.method == "POST":
-        searched = request.POST['searched']
+        passedData = request.POST
+        if 'searched' in passedData.keys():
+            searched = passedData['searched']
+        else:
+            searched = False
         database = ''
         database2 = ''
         att_check = ''
         mainList = ''
         weekend = False
+        
+        
+        if searched:
+            form_list = formSubs.filter(Q(formID__form__icontains=searched) | Q(formID__frequency__icontains=searched) | Q(formID__title__icontains=searched)).order_by('formID')
 
-        form_list = Forms.objects.filter(Q(form__icontains=searched) | Q(frequency__icontains=searched) | Q(title__icontains=searched))
-
-        forms = form_list.filter(facilityChoice__facility_name=facility).order_by('form')
+        forms = []
+        for subInfo in form_list:
+            for facilityForms in formIDandLabel:
+                if subInfo.formID.id == facilityForms[0]: 
+                    forms.append((facilityForms, subInfo))
+        # forms = form_list
         letterForms = []
-        otherForms = []
-        for x in forms:
-            if len(x.form) <= 3:
-                letterForms.append([x.form.replace('-',''), 'form' + x.form.replace('-','') + '_model', x])
-            else:
-                otherForms.append([x.form.replace(' ', '_'), x.form.replace(' ', '_').lower() + '_model', x])
 
+        for x in forms:
+            if x[0][0] not in {26,27}:
+                letterForms.append([x[0][1], 'form' + x[1].formID.form.replace('-','') + '_model', x[1].formID])
+            else:
+                letterForms.append([x[0][1], x[1].formID.form.replace(' ', '_').lower() + '_model', x[1].formID])
+        print(letterForms)
         return render(request, 'ees_forms/search_forms.html', {
-            'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'otherForms': otherForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {

@@ -103,12 +103,6 @@ button{
     font-size: 1.1rem;
     min-width: 162px;
 }
-#back_arrow{
-  height: 2rem;
-  padding-left: 5rem;
-  color: #cacaca;
-  margin-top: 1rem;
-}
 #card_fitter{
   width: fit-content; 
   margin: .5rem 2rem;

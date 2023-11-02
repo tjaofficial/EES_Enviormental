@@ -1,6 +1,11 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% block list %}{% load static %}
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+<div>
+    {% include "ees_forms/backArrow.html" %}
+</div>
 <div class="page_center">
     <div id="prof_form_holder" class='cardDash'>
         <div style="padding: 13px; font-size: 2rem; text-align: center;">
