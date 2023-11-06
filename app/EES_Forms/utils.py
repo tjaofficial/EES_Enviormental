@@ -618,6 +618,8 @@ def createNotificationDatabase(facility, user, formID, date, notifSelector):
                 todayName = 'Saturday'
             else:
                 todayName = 'Sunday'
+        else:
+            todayName = False
         newNotifData = json.dumps({'formID': formID, 'date': str(date), 'weekend': todayName})
     else:
         todayName = False
