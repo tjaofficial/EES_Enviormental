@@ -5,7 +5,7 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formE_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 
@@ -101,7 +101,7 @@ def formE(request, facility, selector):
                 if A.leaks == "Yes":
                     issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
-                
+                createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:

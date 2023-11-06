@@ -4,7 +4,7 @@ import datetime
 from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model, facility_forms_model
 from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 import ast
 
 lock = login_required(login_url='Login')
@@ -155,7 +155,7 @@ def formA1(request, facility, selector):
                                 issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
 
                             return redirect(issue_page)
-                        
+                createNotification(facility, request.user, formName, now, 'submitted')        
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

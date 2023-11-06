@@ -6,11 +6,12 @@ from EES_Forms.views.supervisor_view import getCompanyFacilities
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..utils import setUnlockClientSupervisor
+from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected
 lock = login_required(login_url='Login')
 
 @lock
 def facilityList(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -57,11 +58,12 @@ def facilityList(request, facility):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, 'supervisor/sup_facilityList.html', {
-        'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': finalList
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': finalList
     })
 
 @lock    
 def facilityForm(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -164,5 +166,5 @@ def facilityForm(request, facility):
             form.save()
             return redirect('facilityList', facility)
     return render (request, 'supervisor/facilityForms.html', {
-        'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
     })

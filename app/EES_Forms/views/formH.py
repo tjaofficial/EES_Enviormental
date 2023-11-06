@@ -6,7 +6,7 @@ from ..forms import formH_form, user_profile_form, formH_readings_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -268,7 +268,7 @@ def formH(request, facility, selector):
 
                 B.form = A
                 B.save()
-
+                createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

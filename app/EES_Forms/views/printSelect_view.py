@@ -7,13 +7,14 @@ from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from EES_Forms.views.supervisor_view import getCompanyFacilities
 import ast
-from ..utils import Calendar
+from ..utils import Calendar, checkIfFacilitySelected
 import datetime
 
 lock = login_required(login_url='Login')
 
 @lock
 def printSelect(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     options = bat_info_model.objects.all()
     alertMessage = ''
     unlock = False
@@ -224,5 +225,5 @@ def printSelect(request, facility):
             
     
     return render(request, "shared/printSelect.html", {
-        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'selectList': parseList, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'selectList': parseList, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'alertMessage': alertMessage,
     })

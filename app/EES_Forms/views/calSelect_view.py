@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import Calendar2, parseFormList
+from ..utils import Calendar2, checkIfFacilitySelected
 from ..models import facility_forms_model
 import ast
 import datetime
@@ -11,6 +11,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def calSelect(request, facility, type, forms, year, month):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = False
     client = False
     supervisor = False
@@ -81,5 +82,5 @@ def calSelect(request, facility, type, forms, year, month):
 
         # return redirect(craftUrl)
     return render(request,"shared/calSelect.html",{
-        'prev_year': prev_year, 'next_year': next_year, "type": type, "forms": forms, 'prev_month': prev_month, 'next_month': next_month, "facility": facility, "html_cal": html_cal, 'supervisor': supervisor, "client": client, 'unlock': unlock,
+        'notifs': notifs, 'prev_year': prev_year, 'next_year': next_year, "type": type, "forms": forms, 'prev_month': prev_month, 'next_month': next_month, "facility": facility, "html_cal": html_cal, 'supervisor': supervisor, "client": client, 'unlock': unlock,
     }) 

@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected
 from django.contrib.auth.decorators import login_required
 import os
 import ast
@@ -19,6 +19,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def corrective_action_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -147,11 +148,12 @@ def corrective_action_view(request, facility):
         if answer['facilitySelect'] != '':
             return redirect('Corrective-Action', answer['facilitySelect'])
     return render(request, "ees_forms/corrective_actions.html", {
-        "varPull": varPull, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'notifs': notifs, "varPull": varPull, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock
 def calendar_view(request, facility, year, month):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -191,7 +193,7 @@ def calendar_view(request, facility, year, month):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "ees_forms/schedule.html", {
-        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
     })
 
 @lock
@@ -211,6 +213,7 @@ def schedule_view(request, facility):
 
 @lock
 def archive_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -227,12 +230,12 @@ def archive_view(request, facility):
                 colorModeSwitch(request)
 
     return render(request, 'ees_forms/ees_archive.html', {
-        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
 @lock
 def search_forms_view(request, facility, access_page):
-    print(request.POST)
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -399,15 +402,16 @@ def search_forms_view(request, facility, access_page):
                 letterForms.append([x[0][1], x[1].formID.form.replace(' ', '_').lower() + '_model', x[1].formID])
         print(letterForms)
         return render(request, 'ees_forms/search_forms.html', {
-            'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'sortedFacilityData': sortedFacilityData, 'monthList': monthList, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'monthList': monthList, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
         })
 
 @lock
 def issues_view(request, facility, form_name, form_date, access_page):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -562,11 +566,12 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     return render(request, "ees_forms/issues_template.html", {
-        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
     })
 
 @lock
 def event_add_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -603,11 +608,12 @@ def event_add_view(request, facility):
             return redirect(cal_link)
 
     return render(request, "ees_forms/event_add.html", {
-        'sortedFacilityData': sortedFacilityData,'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'supervisor': supervisor, "client": client, 'unlock': unlock, 
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData,'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'supervisor': supervisor, "client": client, 'unlock': unlock, 
     })
 
 @lock
 def event_detail_view(request, facility, access_page, event_id):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -648,7 +654,7 @@ def event_detail_view(request, facility, access_page, event_id):
 
     
     return render(request, "ees_forms/event_detail.html", {
-        'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, "unlock": unlock, "client": client, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+        'notifs': notifs, 'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, "unlock": unlock, "client": client, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
     })
 
 def handlePhone(number):
@@ -661,6 +667,7 @@ def handlePhone(number):
     
 @lock
 def shared_contacts_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -732,11 +739,12 @@ def shared_contacts_view(request, facility):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "shared/contacts.html", {
-        'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'form_enteredA5': form_enteredA5, 'form_enteredA4': form_enteredA4, 'form_enteredA3': form_enteredA3, 'form_enteredA2': form_enteredA2,'form_enteredA1': form_enteredA1, 'date': date
     })
     
 @lock
 def sop_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -774,10 +782,11 @@ def sop_view(request, facility):
 
             
     return render(request, 'shared/sops.html', {
-        'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'notifs': notifs, 'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })
     
 def formsProgress(request, facility, section):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -841,5 +850,5 @@ def formsProgress(request, facility, section):
                 
     print(finalList)
     return render(request, 'supervisor/formsProgress.html', {
-        'finalList': finalList, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'notifs': notifs, 'finalList': finalList, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

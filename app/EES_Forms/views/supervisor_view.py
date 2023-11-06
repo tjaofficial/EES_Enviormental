@@ -11,7 +11,7 @@ import braintree
 import json
 import requests
 import os
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected
 
 lock = login_required(login_url='Login')
 
@@ -23,6 +23,7 @@ def getCompanyFacilities(username):
 
 @lock
 def sup_dashboard_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -220,7 +221,8 @@ def sup_dashboard_view(request, facility):
                 'unlock': unlock,
                 'sortedFacilityData': sortedFacilityData,
                 'colorMode': colorMode,
-                'userMode': userMode
+                'userMode': userMode,
+                'notifs': notifs
             })
     if request.method == 'POST':
         answer = request.POST
@@ -269,11 +271,13 @@ def sup_dashboard_view(request, facility):
         'unlock': unlock, 
         'sortedFacilityData': sortedFacilityData, 
         'colorMode': colorMode,
-        'userMode': userMode
+        'userMode': userMode,
+        'notifs': notifs
     })
 
 @lock
 def register_view(request, facility, access_page):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -418,11 +422,12 @@ def register_view(request, facility, access_page):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "ees_forms/ees_register.html", {
-        'sortedFacilityData': sortedFacilityData, 'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
     })
     
 @lock
 def sup_account_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
@@ -489,4 +494,5 @@ def sup_account_view(request, facility):
         'facility': facility,
         'accountData': accountData,
         'cardSubscription': cardSubscription,
+        'notifs': notifs
     })

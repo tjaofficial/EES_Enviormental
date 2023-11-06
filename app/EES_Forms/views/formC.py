@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, formC_model, formC_readings_model, Forms, bat_info_model
 from ..forms import SubFormC1, FormCReadForm
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, formCreateNotification
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -172,8 +174,7 @@ def formC(request, facility, selector):
                         issue_page = '../../issues_view/'+formName+'/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
-                
-                formCreateNotification(facility, request.user, formName, now)
+                createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

@@ -4,6 +4,7 @@
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
+
 <body>
     <input id='access_page' type='hidden' value={{access_page}} />
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}

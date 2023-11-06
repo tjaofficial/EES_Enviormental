@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -167,6 +167,7 @@ def formM(request, facility, selector):
 
                     return redirect(issue_page)
                 
+                createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 updateSubmissionForm(facility, 23, True, todays_log.date_save)

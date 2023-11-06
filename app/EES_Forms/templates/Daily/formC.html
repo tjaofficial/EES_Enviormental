@@ -1,7 +1,5 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
-{% block list%}
-{% load static %}
-
+{% block list%}{% load static %}
 <link href="{% static 'ees_forms/style/formC.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
@@ -10,16 +8,15 @@
 <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/color_total_averages.js' %}"></script>
 {% if not unlock %}
-        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-    {% endif %}
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
 <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
-
 <div id="paperSize">
     <div>
         {% include "ees_forms/backArrow.html" %}
     </div>
     <div class="mainCont">
-        <form action="" method="POST" style="margin: auto; width: fit-content; margin-bottom: 100px;">
+        <form id="form" action="" method="POST" style="margin: auto; width: fit-content; margin-bottom: 100px;">
             {% csrf_token %}
             <div class="card" id="card_fitter">
                 {% include "ees_forms/print_button.html" %}
@@ -402,3 +399,6 @@
     </div>
 </div>
 {% endblock %}
+<script>
+    
+</script>

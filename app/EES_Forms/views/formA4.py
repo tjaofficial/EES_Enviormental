@@ -6,7 +6,7 @@ from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 from .print_form_view import time_change, date_change
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -118,6 +118,7 @@ def formA4(request, facility, selector):
                 elif issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4'):
                     issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')[0].delete()
                 
+                createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

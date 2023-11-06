@@ -40,6 +40,7 @@ USE_S3 = os.getenv('USE_S3') == 'TRUE'
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'EES_Forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,9 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 if(USE_S3): INSTALLED_APPS.append('storages')
+
+ASGI_APPLICATION = 'EES_Enviormental.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -188,3 +192,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SESSION_COOKIE_AGE = 21600
 SESSION_SAVE_EVERY_REQUEST = True
+
+CHANNEL_LAYERS = {
+    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+}

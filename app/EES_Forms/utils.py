@@ -9,6 +9,8 @@ import requests
 import json
 from django.shortcuts import redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 #from .admin import EventAdmin
 
@@ -591,7 +593,8 @@ def getOldFormID(facility, formID):
                 formLabel = formPair[1]
                 return formLabel
 
-def formCreateNotification(facility, user, formID, date):
+def createNotificationDatabase(facility, user, formID, date, notifSelector):
+    todayNumb = datetime.date.today().weekday()
     nFacility = bat_info_model.objects.filter(facility_name=facility)
     if nFacility.exists():
         nFacility = nFacility[0]
@@ -599,24 +602,100 @@ def formCreateNotification(facility, user, formID, date):
     if nUserProfile.exists():
         nUserProfile = nUserProfile[0]
     companyUsers = user_profile_model.objects.filter(company__company_name=nUserProfile.company.company_name )
-    nForms = getOldFormID(facility, formID)         
+    # subForm = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=formID)
+    # if subForm.exists():
+    #     subForm = subForm[0]
+    #     if subForm.formID.id not in {26,27}:
+    #         ModelName =  'form' + subForm.formID.form.replace('-','') + '_model'
+    #     else:
+    #         ModelName = subForm.formID.form.replace(' ', '_').lower() + '_model'
+    # modelData = apps.get_model('EES_Forms', ModelName).objects.all()
+    newHeader =  notifSelector        
+    if notifSelector == 'submitted':
+        nForms = getOldFormID(facility, formID)    
+        if todayNumb in {5,6}:
+            if todayNumb == 5:
+                todayName = 'Saturday'
+            else:
+                todayName = 'Sunday'
+        newNotifData = json.dumps({'formID': formID, 'date': str(date), 'weekend': todayName})
+    else:
+        todayName = False
+    if notifSelector == 'corrective':
+        newNotifData = json.dumps({'formID': formID, 'date': str(date)})
+    elif notifSelector == '90days':
+        newNotifData = json.dumps({'ovenNumber': formID, 'date': str(date)})
+    elif notifSelector == 'messages':
+        print('Inbox Messages: TBA')
+
     for person in companyUsers:
         n = notifications_model(
             facilityChoice=nFacility,
             user = person,
             clicked = False,
             hovered = False,
-            header = 'submitted',
-            body = "Click here to view Form " + nForms + " on " + str(date) + ".",
-            notes = "Submitted by " + user.first_name + " " + user.last_name + "."
+            formData = newNotifData,
+            header = newHeader,
+            body = "Click here to view.",
+            notes = "Submitted by " + user.first_name + " " + user.last_name + ". "
         )
         if n not in companyUsers:
             n.save()
-    print(nForms + "notification was sent.")
+    print("Form " + nForms + " notification was sent.")
    
-def notificationCalc(user):
+def notificationCalc(user, facility):
     userProfile = user_profile_model.objects.filter(user__username=user.username)
     if userProfile.exists():
         userProfile = userProfile[0]
+    notifications = notifications_model.objects.filter(facilityChoice__facility_name=facility)
+    print(notifications)
+    newNotifs = notifications.filter(clicked=False, hovered=False, user=userProfile)
+    if newNotifs.exists():
+        notifCount = len(newNotifs)
+    else:
+        notifCount = 0
+    return notifCount
+    
+def displayNotifications(user, facility):
+    notifCount = notificationCalc(user, facility)
+    nUserProfile = user_profile_model.objects.filter(user__username=user.username)
+    if nUserProfile.exists():
+        nUserProfile = nUserProfile[0]
+    allNotifs = notifications_model.objects.filter(facilityChoice__facility_name=facility, user=nUserProfile).order_by('-created_at')
+    facForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    if facForms.exists():
+        formIDandLabel = ast.literal_eval(facForms[0].formData)
+    unReadList = []
+    readList = []
+    unReadNotifs = allNotifs.filter(clicked=False, hovered=False)
+    readNotifs = allNotifs.filter(hovered=False)
+    for unRead in unReadNotifs:
+        notifFormData = json.loads(unRead.formData)
+        for x in formIDandLabel:
+            if int(notifFormData['formID']) == int(x[0]):
+                for y in formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=x[0]):
+                    parseForm = "form" + y.formID.link
+                    formPullData = (x, unRead, notifFormData, y.formID.link)
+                    unReadList.append(formPullData)
+    print('__________________________________________________________')
+    return {'notifCount': notifCount, 'unRead': unReadList, "read": readNotifs}
         
-        
+def createNotification(facility, user, formID, date, notifSelector):
+    createNotificationDatabase(facility, user, formID, date, notifSelector)
+    facilityParse = 'notifications_' + facility.replace(" ","_")
+    notifCount = str(notificationCalc(user, facility))
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        facilityParse, {
+            'type': 'notification',
+            'count': notifCount,
+            'facility': facility
+        }
+    )
+    
+def checkIfFacilitySelected(user, facility):
+    if facility != 'supervisor':
+        notifs = displayNotifications(user, facility)
+    else:
+        notifs = ''
+    return notifs

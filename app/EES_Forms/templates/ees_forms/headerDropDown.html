@@ -96,21 +96,20 @@
         </form>
     </div>
 </div>
-<div id="notifDropdown" class="profileDropdown" style="display:none;">
-    <div class="notifCont">
-        <div class="notifHeader">
-            FORM SUBMITTED - A1
+<div id="notifDropdown" class="profileDropdown" style="display: none; max-height: 41rem; overflow: scroll;">
+    {% for notif in notifs.unRead %}
+    <a href="{% url notif.3 facility notif.2.date %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.1.id}}">  
+        <div id="notifColor" class="notifCont" style="{% if not notif.1.hovered %}background-color: #ffff00ad;{% endif %}">
+            <div class="notifHeader">
+                {{notif.1.get_header_display}} - {{notif.0.1}}
+            </div>
+            <div class="notifNote">
+                {{notif.1.notes}}{{notif.1.body}}
+            </div>
+            <div class='notifTimeMarker'>
+                {{notif.1.created_at}}
+            </div>
         </div>
-        <div class="notifNote">
-            Charges were a total of 12.0 seconds on 10/31/23. Submitted by Tobe Ackerman.
-        </div>
-    </div>
-    <div class="notifCont">
-        <div class="notifHeader">
-            FORM SUBMITTED - D
-        </div>
-        <div class="notifNote">
-            All trucks have been inspected for the week of 10/31/23. Submitted by Tobe Ackerman.
-        </div>
-    </div>
+    </a>
+    {% endfor %}
 </div>

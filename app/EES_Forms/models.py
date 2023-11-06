@@ -6984,6 +6984,9 @@ class notifications_model(models.Model):
     )
     clicked = models.BooleanField(default=False)
     hovered = models.BooleanField(default=False)
+    formData = models.CharField(
+        max_length=150,
+    )
     header = models.CharField(
         max_length=50,
         choices=notification_header_choices
@@ -6994,6 +6997,6 @@ class notifications_model(models.Model):
     notes = models.CharField(
         max_length=150
     )
-    date = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return str(self.date) + " - " + str(self.facilityChoice) + " - " + str(self.header)
+        return str(self.created_at) + " - " + str(self.facilityChoice) + " - " + str(self.user) + " - " + str(self.header)

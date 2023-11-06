@@ -6,7 +6,7 @@ from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -318,6 +318,7 @@ def formA5(request, facility, selector):
                     return redirect(issue_page)
 
                 if selector != 'new':
+                    createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

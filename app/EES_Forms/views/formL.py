@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formL_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -235,6 +235,7 @@ def formL(request, facility, selector):
                     return redirect('IncompleteForms', facility)
                 else:
                     parseNewDate = todays_log.date_save - datetime.timedelta(days=1)
+                    createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, parseNewDate)
 
                     return redirect('IncompleteForms', facility)

@@ -6,7 +6,7 @@ from ..forms import Forms, formB_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -196,6 +196,7 @@ def formB(request, facility, selector):
                 #        filled_out = False
                 #        break
                 if filled_out:
+                    createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():

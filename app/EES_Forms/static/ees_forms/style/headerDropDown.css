@@ -53,3 +53,8 @@
     background-color: #636465;
     border-radius: 1rem;
 }
+.notifTimeMarker{
+    text-align: right;
+    font-size: 11px;
+    color: #4d4d4d;
+}

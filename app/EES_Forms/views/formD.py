@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model, bat_info_model, formSubmissionRecords_model
 from ..forms import formD_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -134,6 +134,7 @@ def formD(request, facility, selector):
                         break
 
                 if filled_out:
+                    createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
