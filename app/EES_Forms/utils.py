@@ -648,7 +648,6 @@ def notificationCalc(user, facility):
     if userProfile.exists():
         userProfile = userProfile[0]
     notifications = notifications_model.objects.filter(facilityChoice__facility_name=facility)
-    print(notifications)
     newNotifs = notifications.filter(clicked=False, hovered=False, user=userProfile)
     if newNotifs.exists():
         notifCount = len(newNotifs)
