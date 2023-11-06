@@ -668,14 +668,15 @@ def displayNotifications(user, facility):
     readList = []
     unReadNotifs = allNotifs.filter(clicked=False, hovered=False)
     readNotifs = allNotifs.filter(hovered=False)
-    for unRead in unReadNotifs:
-        notifFormData = json.loads(unRead.formData)
-        for x in formIDandLabel:
-            if int(notifFormData['formID']) == int(x[0]):
-                for y in formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=x[0]):
-                    parseForm = "form" + y.formID.link
-                    formPullData = (x, unRead, notifFormData, y.formID.link)
-                    unReadList.append(formPullData)
+    if unReadNotifs.exists():
+        for unRead in unReadNotifs:
+            notifFormData = json.loads(unRead.formData)
+            for x in formIDandLabel:
+                if int(notifFormData['formID']) == int(x[0]):
+                    for y in formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=x[0]):
+                        parseForm = "form" + y.formID.link
+                        formPullData = (x, unRead, notifFormData, y.formID.link)
+                        unReadList.append(formPullData)   
     print('__________________________________________________________')
     return {'notifCount': notifCount, 'unRead': unReadList, "read": readNotifs}
         
