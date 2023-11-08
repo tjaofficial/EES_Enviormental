@@ -1,0 +1,88 @@
+
+form{
+    margin:0px;
+}
+.input{
+    display: block;
+    box-sizing: border-box;
+    border:none;
+    height:100%;
+    width:100%;
+}
+.input[type=text]:focus{
+    outline:none;
+}
+
+.tempInputStyle{
+    margin: auto;
+    height: 2rem;
+    border:1px solid black;
+    border-radius: 5px;
+    padding:0.5rem;
+    width:30rem
+}
+#postButton, #subButton{
+    height: 2rem;
+    border:1px solid black;
+    border-radius: 5px;
+    width:30rem;
+    margin-top:10px;
+}
+.optionsCont{
+    background: #fff;
+    box-shadow: 0px 0px 0px 5px rgb(255 255 255 / 40%), 0px 4px 20px rgb(0 0 0 / 33%);
+    border-radius: 5px;
+    margin:2rem; 
+    padding:3rem
+}
+#submit {
+    height: 4rem;
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px 0;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+        background: -moz-linear-gradient(
+        top,
+        #b9c5dd 0%,
+        #a4b0cb);
+    background: -webkit-gradient(
+        linear, left top, left bottom, 
+        from(#b9c5dd),
+        to(#a4b0cb));
+    border-radius: 5px;
+    border: 1px solid #737b8d;
+    box-shadow:
+        0px 5px 5px rgba(000,000,000,0.1),
+        inset 0px 1px 0px rgba(255,255,255,0.5);
+    text-shadow:
+        0px 1px 3px rgba(000,000,000,0.3),
+        0px 0px 0px rgba(255,255,255,0);
+    display: table;
+    position: static;
+    clear: both;
+}
+
+#submit:hover {
+    background: -moz-linear-gradient(
+        top,
+        #a4b0cb 0%,
+        #b9c5dd);
+    background: -webkit-gradient(
+        linear, left top, left bottom, 
+        from(#a4b0cb),
+        to(#b9c5dd));
+}
+.infoCont{
+    height: 21rem;
+}
+.topSection2{
+    width: 89rem;
+    margin: auto;
+    position: relative;
+    margin-top: 6rem;
+}

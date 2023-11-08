@@ -1,0 +1,184 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
+<div class="mainCont">
+    <div class="card">
+        <div class="cardHeader">Change Card On File</div>
+        <div class="contentCont">
+            <div id="clientToken"style="display:none;" data-client_token={{client_token}}></div>
+                <!-- Information form-->
+                <div id="iForm" style="margin: auto;display: block; width: 41rem;">
+                    <form action="" id="Payment_Method_Form" method="post">
+                        {% csrf_token %}
+                        {% if action == "change" %}
+                            <div class="cardInfoCont" style="margin-bottom: 48px;">
+                                <h2 style="text-align: center; margin-bottom: 22px;"> Card Infromation</h2>
+                                <label for="nameOnCard">Name On Card</label>
+                                <div class="tempInputStyle">
+                                    <input class="input" id="nameOnCard" type="text" name="nameOnCard" placeholder="John Smith"/>
+                                </div>
+                                <label for="card-number">Card Number</label>
+                                <div class="tempInputStyle">
+                                    <input class="input" id="card-number" type="text" name="card-number" placeholder="1234 5678 9055 5555"/>
+                                </div>
+                                <label for="cvv">CVV</label>
+                                <div class="tempInputStyle">
+                                    <input class="input" id="cvv" type="text" name="cvv" placeholder="cvv"/>
+                                </div>
+                                <label for="expiration-date">Expiration Date</label>
+                                <div class="tempInputStyle">
+                                    <input class="input" id="expiration-date" type="text" name="expiration-date" placeholder="xx/xxxx"/>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="billingAddressCont" style="margin-bottom: 48px;">
+                            <h2 style="text-align: center; margin-bottom: 22px;">Billing Address</h2>
+                            <input class="input" type="hidden" id="planId" value="{{pId}}"/>
+                            <label for="address1">Address 1</label>
+                            <div class="tempInputStyle">
+                                <input class="input" id="address1" type="text" name="address1" placeholder="Line 1"/>
+                            </div>
+                            <label for="address2">Address 2</label>
+                            <div class="tempInputStyle">
+                                <input class="input" id="address2" type="text" name="address2" placeholder="Line 2"/>
+                            </div>
+                            <label for="city">City</label>
+                            <div class="tempInputStyle">
+                                <input class="input" id="city" type="text" name="city" placeholder="City"/>
+                            </div>
+                            <label for="state">State</label>
+                            <div class="tempInputStyle">
+                                <input class="input" id="state" type="text" name="state" placeholder="MI"/>
+                            </div>
+                            <label for="postalCode">Zip Code</label>
+                            <div class="tempInputStyle">
+                                <input class="input" id="postalCode" type="text" name="postalCode" placeholder="11111"/>
+                            </div>
+                        </div>
+                        <input id="submit" type="submit" value="Review Subscription" name="{% if action == 'change' %}newCard{% else %}updateAddress{% endif %}" />
+                    </form>
+                </div>
+        </div>
+      </div>
+      <div class="contentCont">
+          {{customer}}
+          <br><br><br>
+          {{payment_method}}
+      </div>
+</div>
+<script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>
+<script src="https://js.braintreegateway.com/web/3.90.0/js/hosted-fields.min.js"></script>
+<script>
+  const form = document.querySelector('#Payment_Method_Form');
+  const submit = document.querySelector('input[type="submit"]');
+  const clientTokenElem = document.querySelector("#clientToken")
+  const clientToken = clientTokenElem.dataset.client_token;
+  
+
+    // This example shows Hosted Fields, but you can also use this
+    // client instance to create additional components here, such as
+    // PayPal or Data Collector.
+
+    braintree.hostedFields.create({
+      client: clientInstance,
+      styles: {
+        'input': {
+          'font-size': '14px',
+          'height': '30px'
+        },
+        'input.invalid': {
+          'color': 'red'
+        },
+        'input.valid': {
+          'color': 'green'
+        }
+      },
+      fields: {
+        cardholderName: {
+          selector: '#nameOnCard',
+          placeholder: 'Name as it appears on your card'
+        },
+        number: {
+          container: '#card-number',
+          placeholder: '4111 1111 1111 1111'
+        },
+        cvv: {
+          container: '#cvv',
+          placeholder: '123'
+        },
+        expirationDate: {
+          container: '#expiration-date',
+          placeholder: '10/2022'
+        },
+      }
+    }, function (hostedFieldsErr, hostedFieldsInstance) {
+      if (hostedFieldsErr) {
+        console.error(hostedFieldsErr);
+        return;
+      }
+
+      submit.removeAttribute('disabled');
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+          if (tokenizeErr) {
+            console.error(tokenizeErr);
+            return;
+          }
+          console.dir(payload)
+          //Get the form values
+          const planId = document.querySelector("#planId").value
+          const nameOnCard = payload.details.cardholderName;
+          console.log("JavaScript Console.log 'nameOnCard: '" + String(nameOnCard));
+          const address1 = document.querySelector("#address1").value
+          const address2 = document.querySelector("#address2").value
+
+          const city = document.querySelector("#city").value
+          const state = document.querySelector("#state").value
+          const postalCode = document.querySelector("#postalCode").value
+          const cardNumber = "************"+payload.details.lastFour
+          const expirationDate = payload.details.expirationMonth + "/"+ payload.details.expirationYear 
+
+          //set the form values for review
+          document.querySelector("#rNameOnCard").innerHTML += nameOnCard
+          document.querySelector("#rAddress1").innerHTML += address1
+          document.querySelector("#rAddress2").innerHTML += address2
+          document.querySelector("#rCity").innerHTML += city
+          document.querySelector("#rState").innerHTML += state
+          document.querySelector("#rZip").innerHTML += postalCode
+          document.querySelector("#rCardNumber").innerHTML += cardNumber
+          document.querySelector("#rExpiration").innerHTML += expirationDate
+          //Set the form values for post
+          document.querySelector("#pPayNonce").value = payload.nonce
+          document.querySelector("#pPlanId").value = planId
+          document.querySelector("#rNameOnCard").value = nameOnCard
+          document.querySelector("#pAddress1").value = address1
+          document.querySelector("#pAddress2").value = address2
+
+          document.querySelector("#pCity").value = city
+          document.querySelector("#pState").value = state
+          document.querySelector("#pZipCode").value = postalCode
+
+          //Show Review
+          showFrom("review")
+          
+
+          console.log('Got a nonce: ' + payload.nonce);
+        });
+      }, false);
+    });
+  });
+
+  function showFrom(form){
+    if(form == "review"){
+      document.querySelector("#iForm").style.display = "none"
+      document.querySelector("#iReview").style.display = "block"
+    }
+    else{
+      document.querySelector("#iForm").style.display = "block"
+      document.querySelector("#iReview").style.display = "none"
+    }
+  }
+</script>
+{% endblock %}

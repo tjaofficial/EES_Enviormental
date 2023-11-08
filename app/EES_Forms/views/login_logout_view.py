@@ -167,7 +167,14 @@ def registerCompany(request):
             form.save()
             
             
-            companySel = company_model.objects.get(company_name=request.POST['company_name'])
+            companySel = company_model.objects.filter(company_name=request.POST['company_name'])
+            if companySel.exists():
+                if len(companySel) > 1:
+                    companySel = companySel[0]
+                    print(len(companySel))
+                    print('Duplicate compnay in database, need to send back message')
+                else:
+                    companySel = companySel[0]
             userProf.company = companySel
             userProf.save()
             print(userProf.company)

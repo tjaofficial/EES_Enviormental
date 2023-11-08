@@ -271,7 +271,12 @@ class company_model(models.Model):
         max_length=500,
         null=True,
         blank=True
-    )              
+    )
+    payment_method_token = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )
     def __str__(self):
         return self.company_name
 

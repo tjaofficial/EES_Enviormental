@@ -9,41 +9,47 @@
                 <a href="{% url 'Register' facility 'form' %}">Add Facility</a>
             </div> {% endcomment %}
         </div>
-        <div class="contentCont center" style="padding: unset;">
-            {% for info in facilities %}
-            <div class="facilityFormSec">
-                <div class="facilityFormHeader">
-                    {{info.0.facility_name}}
-                </div>
-                <div class="">
-                    <table class="standardTable">
-                        <tr>
-                            <th class="underline headerFont" style="width: 20%;">Label</th>
-                            <th class="underline headerFont" style="width: 60%;">Form Title</th>
-                            <th style="width: 20%;"></th>
-                        </tr>
-                        {% for x in info.1 %}
+        {% if facilities|length > 0 %}
+            <div class="contentCont center" style="padding: unset;">
+                {% for info in facilities %}
+                <div class="facilityFormSec">
+                    <div class="facilityFormHeader">
+                        {{info.0.facility_name}}
+                    </div>
+                    <div class="">
+                        <table class="standardTable">
                             <tr>
-                                <td class="center">{{x.1}}</td>
-                                <td class="">{{x.2}}</td>
-                                <td class="center smallLink">
-                                    <a href=#>
-                                        edit
-                                    </a>
-                                </td>
+                                <th class="underline headerFont" style="width: 20%;">Label</th>
+                                <th class="underline headerFont" style="width: 60%;">Form Title</th>
+                                <th style="width: 20%;"></th>
                             </tr>
-                        {% endfor %}
-                    </table>
+                            {% for x in info.1 %}
+                                <tr>
+                                    <td class="center">{{x.1}}</td>
+                                    <td class="">{{x.2}}</td>
+                                    <td class="center smallLink">
+                                        <a href=#>
+                                            edit
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="smallLink" style="padding-top: 32px;">
+                        <a href="{% url 'facilityForms' info.0.facility_name %}">
+                            add/remove forms
+                        </a>
+                    </div>
                 </div>
-                <div class="smallLink" style="padding-top: 32px;">
-                    <a href="{% url 'facilityForms' info.0.facility_name %}">
-                        add/remove forms
-                    </a>
-                </div>
+                <hr style="width:80%;margin:auto;">
+                {% endfor %}
             </div>
-            <hr style="width:80%;margin:auto;">
-            {% endfor %}
-        </div>
+        {% else %}
+            <div class="contentCont center">
+                No facilities have been created <a href="{% url 'Register' facility 'facility' %}">Click here</a> to add a facility.
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

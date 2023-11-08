@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, facility_forms_model, formSubmissionRecords_model
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, facility_forms_model, formSubmissionRecords_model, company_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
@@ -11,7 +11,7 @@ import braintree
 import json
 import requests
 import os
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, braintreeGateway
 
 lock = login_required(login_url='Login')
 
@@ -438,17 +438,10 @@ def sup_account_view(request, facility):
     sortedFacilityData = getCompanyFacilities(request.user.username)
     accountData = user_profile_model.objects.all().get(user__username=request.user.username)
     print(accountData)
-    
+    cardSubscription = False
     try:
         customerId = accountData.company.customerID
-        gateway = braintree.BraintreeGateway(
-            braintree.Configuration(
-                braintree.Environment.Sandbox,
-                merchant_id=os.environ.get('BRAINTREE_MERCHANT_ID'),
-                public_key=os.environ.get('BRAINTREE_PUBLIC_KEY'),
-                private_key=os.environ.get('BRAINTREE_PRIVATE_KEY')
-            )
-        )
+        gateway = braintreeGateway()
         customer = gateway.customer.find(customerId)
         print(customer)
         dateStart = "1900-01-01"
@@ -496,3 +489,120 @@ def sup_account_view(request, facility):
         'cardSubscription': cardSubscription,
         'notifs': notifs
     })
+    
+@lock
+def sup_card_update(request, facility, action):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
+        return redirect('IncompleteForms', facility)
+    accountData = user_profile_model.objects.get(user__username=request.user.username)
+    gateway = braintreeGateway()
+    customerId = accountData.company.customerID
+    token = accountData.company.payment_method_token
+    payment_method = gateway.payment_method.find(token)
+    def updateCardAddress(token):
+        updateCard = gateway.payment_method.update(token, {
+            "billing_address": {
+                "street_address": request.POST['address1'],
+                "extended_address": request.POST['address2'],
+                "locality": request.POST['city'],
+                "region": request.POST['state'],
+                "postal_code": request.POST['postalCode'],
+                "options": {
+                    "update_existing": True
+                }
+            }
+        })
+        
+        if updateCard.is_success:
+            transaction = updateCard.is_success
+        else:
+            transaction = updateCard.errors.deep_errors
+        return transaction
+    def addCard(token):
+        newCard = gateway.payment_method.update(token, {
+            "billing_address": {
+                "street_address": request.POST['address1'],
+                "extended_address": request.POST['address2'],
+                "locality": request.POST['city'],
+                "region": request.POST['state'],
+                "postal_code": request.POST['postalCode'],
+                "options": {
+                    "update_existing": True
+                }
+            },
+            'cardholder_name': request.POST['nameOnCard'],
+            'number':  request.POST['card-number'],
+            'expiration_date': request.POST['expiration-date'],
+            'cvv': request.POST['cvv'],
+            "options": {
+                'make_default': True,
+                'verify_card': True,
+                'skip_advanced_fraud_checking': False
+            }
+        })
+        if newCard.is_success:
+            transaction = newCard.is_success
+        else:
+            transaction = newCard.errors.deep_errors
+        return transaction
+        
+    if action == "update" or action == "change":
+        customer = gateway.customer.find(customerId)
+        # customer = gateway.customer.find("the_customer_id")
+        # customer.payment_methods # array of braintree.PaymentMethod instances
+        template = "supervisor/braintree/sup_cardUpdate.html"
+        variables = {
+            'supervisor': supervisor, 
+            "client": client, 
+            'unlock': unlock,
+            'facility': facility,
+            'notifs': notifs,
+            'customer': customer,
+            'token': token,
+            'payment_method': payment_method,
+            "action": action,
+        }
+    elif action == "cancel":
+        template = "supervisor/braintree/sup_cancelSub.html"
+        variables = {
+            'supervisor': supervisor, 
+            "client": client, 
+            'unlock': unlock,
+            'facility': facility,
+            'notifs': notifs,
+            'token': token,
+            "action": action,
+            'payment_method': payment_method,
+        }
+         
+    if request.method == "POST":
+        updateAddress = request.POST.get('updateAddress', False)
+        newCard = request.POST.get('newCard', False)
+        cancelSub = request.POST.get('cancelSub', False)
+        if updateAddress:
+            updateCardAddress(token)
+            company = company_model.objects.get(id=accountData.company.id)
+            company.address = request.POST['address1'] + ", " + request.POST['address2']
+            company.city = request.POST['city']
+            company.state = request.POST['state']
+            company.zipcode = request.POST['postalCode']
+            company.save()
+            print("UPDATED ADDRESS")
+            return redirect('Account', facility)
+        elif newCard:
+            addCard(token)
+            print(addCard(token))
+        elif cancelSub:
+            if request.POST['cancel'] == 'cancel':
+                subscriptions = payment_method.subscriptions
+                for sub in subscriptions:
+                    if sub.status == "Active":
+                        subscriptionID = sub.id
+                result = gateway.subscription.cancel(subscriptionID)
+            print('SUBSCRIPTION CANCELLED')
+    
+    return render (request, template, variables)

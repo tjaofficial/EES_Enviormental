@@ -77,7 +77,8 @@ def billing(request, step):
         else:
             pass
             #return redirect('billing', step = "subscriptions")
-
+        print('Name On Card')
+        print(request.POST)
         planId = request.POST['planId']
         print(planId)        
         nameOnCard = request.POST['nameOnCard']
@@ -181,6 +182,9 @@ def billing(request, step):
         if not addSubsriptionResult.is_success:
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
+        else:
+            userComp.payment_method_token = vaultPaymentToken
+            userComp.save()
         
         # for x in addSubsriptionResult:
         #     print(x)

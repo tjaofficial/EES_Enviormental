@@ -104,10 +104,6 @@
                 <h2 style="text-align: center">Billing Address</h2>
                 <form action="/" id="Customer_Info_Form" method="post">
                     <input type="hidden" id="planId" value="{{pId}}"/>
-                    <label for="nameOnCard">Name On Card</label>
-                    <div class="tempInputStyle">
-                      <input type="text" id="nameOnCard" placeholder="Jane Doe"/>
-                    </div>
                     <label for="address1">Address 1</label>
                     <div class="tempInputStyle">
                       <input type="text" id="address1" placeholder="Line 1"/>
@@ -133,7 +129,10 @@
             <div class="optionsCont" style="margin-bottom: 10px;">
                 <h2 style="text-align: center"> Card Infromation</h2>
                 <form action="/" id="Payment_Method_Form" method="post">
-
+                    <label for="nameOnCard">Name On Card</label>
+                    <div id="nameOnCard" class="tempInputStyle">
+                      {% comment %} <input type="text" id="nameOnCard"/> {% endcomment %}
+                    </div>
                     <label for="card-number">Card Number</label>
                     <div id="card-number" class="tempInputStyle"></div>
 
@@ -148,8 +147,8 @@
             </div>
 
 
-          <!-- Review Form -->
-          <div id="iReview" style="margin: auto; display: none;">
+            <!-- Review Form -->
+            <div id="iReview" style="margin: auto; display: none;">
                 <p id="rNameOnCard" class="reviewInfo">Name on Card: </p>
                 <p id="rAddress1" class="reviewInfo">Address 1: </p>
                 <p id="rAddress2" class="reviewInfo">Address 2: </p>
@@ -158,20 +157,20 @@
                 <p id="rZip" class="reviewInfo">Zip Code: </p>
                 <p id="rCardNumber" class="reviewInfo">Card Number: </p>
                 <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
-                
-              <form action="/billing/receipt" method="post">
-                {% csrf_token %}
-                <input id="pPayNonce" type="hidden" name="payNonce"/>
-                <input id="pPlanId" type="hidden" name="planId"/>
-                <input id="pNameOnCard" type="hidden" name="nameOnCard"/>
-                <input id="pAddress1" type="hidden" name="address1"/>
-                <input id="pAddress2" type="hidden" name="address2"/>
-                <input id="pCity" type="hidden" name="city"/>
-                <input id="pState" type="hidden" name="state"/>
-                <input id="pZipCode" type="hidden" name="zipCode"/>
-                <input id="postButton" type="submit" value="Confirm Subscription"/>
-              </form>
-
+                  
+                <form action="/billing/receipt" method="post">
+                    {% csrf_token %}
+                    <input id="pPayNonce" type="hidden" name="payNonce"/>
+                    <input id="pPlanId" type="hidden" name="planId"/>
+                    <input id="pNameOnCard" type="hidden" name="nameOnCard"/>
+                    <input id="pAddress1" type="hidden" name="address1"/>
+                    <input id="pAddress2" type="hidden" name="address2"/>
+                    <input id="pCity" type="hidden" name="city"/>
+                    <input id="pState" type="hidden" name="state"/>
+                    <input id="pZipCode" type="hidden" name="zipCode"/>
+                    <input id="postButton" type="submit" value="Confirm Subscription"/>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -212,6 +211,10 @@
           }
         },
         fields: {
+          cardholderName: {
+            selector: '#nameOnCard',
+            placeholder: 'Name as it appears on your card'
+          },
           number: {
             container: '#card-number',
             placeholder: '4111 1111 1111 1111'
@@ -244,7 +247,8 @@
             console.dir(payload)
             //Get the form values
             const planId = document.querySelector("#planId").value
-            const nameOnCard = document.querySelector("#nameOnCard").value
+            const nameOnCard = payload.details.cardholderName;
+            console.log("JavaScript Console.log 'nameOnCard: '" + String(nameOnCard));
             const address1 = document.querySelector("#address1").value
             const address2 = document.querySelector("#address2").value
 

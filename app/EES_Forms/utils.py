@@ -7,6 +7,8 @@ from django.apps import apps
 import ast
 import requests
 import json
+import braintree
+import os
 from django.shortcuts import redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from channels.layers import get_channel_layer
@@ -701,3 +703,15 @@ def checkIfFacilitySelected(user, facility):
     else:
         notifs = ''
     return notifs
+    
+def braintreeGateway():
+    gateway = braintree.BraintreeGateway(
+        braintree.Configuration(
+            braintree.Environment.Sandbox,
+            merchant_id=os.environ.get('BRAINTREE_MERCHANT_ID'),
+            public_key=os.environ.get('BRAINTREE_PUBLIC_KEY'),
+            private_key=os.environ.get('BRAINTREE_PRIVATE_KEY')
+        )
+    )
+    return gateway
+
