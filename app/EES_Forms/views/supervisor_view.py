@@ -479,7 +479,7 @@ def sup_account_view(request, facility):
             # break
     except:
         cardSubscription = ''
-    return render(request, 'supervisor/sup_account.html',{
+    return render(request, 'supervisor/settings/sup_account.html',{
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
@@ -554,7 +554,7 @@ def sup_card_update(request, facility, action):
         customer = gateway.customer.find(customerId)
         # customer = gateway.customer.find("the_customer_id")
         # customer.payment_methods # array of braintree.PaymentMethod instances
-        template = "supervisor/braintree/sup_cardUpdate.html"
+        template = "supervisor/settings/braintree/sup_cardUpdate.html"
         variables = {
             'supervisor': supervisor, 
             "client": client, 
@@ -567,7 +567,7 @@ def sup_card_update(request, facility, action):
             "action": action,
         }
     elif action == "cancel":
-        template = "supervisor/braintree/sup_cancelSub.html"
+        template = "supervisor/settings/braintree/sup_cancelSub.html"
         variables = {
             'supervisor': supervisor, 
             "client": client, 

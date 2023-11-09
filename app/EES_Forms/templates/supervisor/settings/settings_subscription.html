@@ -1,0 +1,42 @@
+<div class="centerFlex">
+    <table class="tableClass">
+        <tr class='tableSpacer'>
+            <td class="labelClass">Subscription:</td>
+            <td class="labelClass2">{% if cardSubscription %}Supervisor Account + 3 Extra Registrations{% else %}<a href=#>Click here to pick a subscription!</a>{% endif %}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Monthly Amount:</td>
+            <td class="labelClass2">{% if cardSubscription %}${{cardSubscription.price}}{% else %}-{% endif %}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Status:</td>
+            <td class="labelClass2">{% if cardSubscription %}{{cardSubscription.status}}{% else %}-{% endif %}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Next Billing Date:</td>
+            <td class="labelClass2">{% if cardSubscription %}{{cardSubscription.next_billing_date}}{% else %}-{% endif %}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass" colspan=2 style="text-align: center;">
+                {% if cardSubscription %}<a href=#>Change Subscription</a><br>{% endif %}
+                <a href=#>See Billing History</a><br>
+                {% if cardSubscription %}<a href="{% url 'cardUpdate' facility 'update' %}">Cancel Subscription</a>{% endif %}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='headerSpacer' style="width: 30%;">Card Options</th>
+        </tr>
+        
+        {% comment %} <tr class='tableSpacer'>
+            <td class="labelClass">Name on Card:</td>
+            <td class="labelClass2">{{cardSubscription.cardholder}}</td>
+        </tr> {% endcomment %}
+        <tr class='tableSpacer'>
+            <td class="labelClass2" style="text-align: center;" colspan=2>
+                <a href="{% url 'cardUpdate' facility 'update' %}">Update Billing Address</a><br>
+                <a href="{% url 'cardUpdate' facility 'add' %}">Add Payment</a><br>
+                <a href="{% url 'cardUpdate' facility 'change' %}">Change Card Details</a>
+            </td>
+        </tr>
+    </table>
+</div>
