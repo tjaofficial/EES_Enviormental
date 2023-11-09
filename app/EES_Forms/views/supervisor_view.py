@@ -11,6 +11,7 @@ import braintree
 import json
 import requests
 import os
+from django.db.models import Q
 from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, braintreeGateway
 
 lock = login_required(login_url='Login')
@@ -284,6 +285,8 @@ def register_view(request, facility, access_page):
     options = bat_info_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     user_profiles = user_profile_model.objects.all()
+    accountData = user_profiles.get(user__username=request.user.username)
+    userCompany = accountData.company
     media = settings.MEDIA_ROOT
     userProfileInfo = ''
     userData2 = ''
@@ -347,7 +350,7 @@ def register_view(request, facility, access_page):
                     user = form.save()
                     profile = profile_form.save(commit=False)
                     profile.user = user
-
+                    profile.company = userCompany
                     profile.save()
 
                     group = Group.objects.get(name=profile.position)
@@ -436,8 +439,11 @@ def sup_account_view(request, facility):
     
     facility = 'supervisor'
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    accountData = user_profile_model.objects.all().get(user__username=request.user.username)
-    print(accountData)
+    userProfileQuery = user_profile_model.objects.all()
+    accountData = userProfileQuery.get(user__username=request.user.username)
+    userCompany = accountData.company
+    listOfEmployees = userProfileQuery.filter(~Q(id=accountData.id), company=userCompany)
+    print(sortedFacilityData)
     cardSubscription = False
     try:
         customerId = accountData.company.customerID
@@ -487,7 +493,8 @@ def sup_account_view(request, facility):
         'facility': facility,
         'accountData': accountData,
         'cardSubscription': cardSubscription,
-        'notifs': notifs
+        'notifs': notifs,
+        'listOfEmployees': listOfEmployees
     })
     
 @lock

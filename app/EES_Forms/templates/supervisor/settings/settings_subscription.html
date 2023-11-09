@@ -2,7 +2,13 @@
     <table class="tableClass">
         <tr class='tableSpacer'>
             <td class="labelClass">Subscription:</td>
-            <td class="labelClass2">{% if cardSubscription %}Supervisor Account + 3 Extra Registrations{% else %}<a href=#>Click here to pick a subscription!</a>{% endif %}</td>
+            <td class="labelClass2">
+                {% if cardSubscription %}
+                    Supervisor Account + 3 Extra Registrations
+                {% else %}
+                    <a href=#>Click here to pick a subscription!</a>
+                {% endif %}
+            </td>
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass">Monthly Amount:</td>
