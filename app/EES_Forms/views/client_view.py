@@ -5,15 +5,9 @@ import datetime
 import json
 import requests
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities
 
 lock = login_required(login_url='Login')
-
-def getCompanyFacilities(username):
-    thisProfileData = user_profile_model.objects.all().filter(user__username=username)[0]
-    sortedFacilityData = bat_info_model.objects.all().filter(company__company_name=thisProfileData.company.company_name)
-    
-    return sortedFacilityData
 
 @lock
 def client_dashboard_view(request, facility):

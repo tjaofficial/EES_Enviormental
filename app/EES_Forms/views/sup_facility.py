@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model
 from ..forms import facility_forms_form
-from EES_Forms.views.supervisor_view import getCompanyFacilities
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected
+from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities
 lock = login_required(login_url='Login')
 
 @lock

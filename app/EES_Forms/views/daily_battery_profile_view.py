@@ -5,8 +5,7 @@ from ..models import daily_battery_profile_model, user_profile_model, bat_info_m
 from ..forms import daily_battery_profile_form
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from .supervisor_view import getCompanyFacilities
-from ..utils import setUnlockClientSupervisor
+from ..utils import setUnlockClientSupervisor, getCompanyFacilities
 import re
 
 lock = login_required(login_url='Login')

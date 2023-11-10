@@ -1,0 +1,69 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/selectRegistrations.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/selectRegistrations.js' %}"></script>
+<div class="mainCont" style="width:700px; max-width:none;margin: auto;">
+    <div class="card" style='margin-bottom: 50px;'>
+        <div class="cardHeader">Select Amount of Registrations</div>
+        <div class="contentCont">
+            Please select the number of additioanl employees you would like to purchase a registration for:
+            <form method="post" autocomplete="off" action="../subscription/payment">
+                {% csrf_token %}
+                <div class="itemsCont">
+                    <table style="margin:auto;">
+                        <tr>
+                            <th style="width: 18rem;">Item</th>
+                            <th class="center" style="width: 2rem;">Qty.</th>
+                            <th lass="center" style="width: 6rem;">Amount</th>
+                        </tr>
+                        <tr>
+                            <td colspan=3><hr></td>
+                        </tr>
+                        <tr>
+                            <td colspan=3 height="15px"></td>
+                        </tr>
+                        <tr>
+                            <td>{{selectedPlan.name}} Subscription</td>
+                            <td>1</td>
+                            <td id="planPrice" class="thirdCol">${{selectedPlan.price}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan=3 height="15px"></td>
+                        </tr>
+                        <tr>
+                            <td>Additional Employee Registration</td>
+                            <td>
+                                <select name="seats" id="seats" onchange="adjustPrice(this)">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6+</option>
+                                </select>
+                            </td>
+                            <td id="adjustedAmount" class="thirdCol">$75.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan=3 height="15px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan=3><hr></td>
+                        </tr>
+                        <tr>
+                            <td colspan=3 height="15px"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align:right;">total:</td>
+                            <td id="totalPrice" class="thirdCol">$199.00</td>
+                        </tr>
+                    </table>
+                </div>
+                <input type="hidden" value={{selectedPlan.id}} name="planId">
+                <input id="submit" type="submit" value="Payment>">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

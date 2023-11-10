@@ -6,14 +6,13 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities
 from django.contrib.auth.decorators import login_required
 import os
 import ast
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from .print_form_view import date_change
-from EES_Forms.views.supervisor_view import getCompanyFacilities
 lock = login_required(login_url='Login')
 
 

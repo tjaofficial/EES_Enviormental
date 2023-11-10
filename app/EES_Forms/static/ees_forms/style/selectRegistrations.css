@@ -1,0 +1,19 @@
+.itemsCont{
+    background-color: #a8bbcc;
+    padding: 10px 0px;
+    width: 30rem;
+    margin: auto;
+    border-radius: 10px;
+}
+hr{
+    background-color: black;
+    height: 1px;
+    border: none;
+}
+.thirdCol{
+ text-align: right;
+}
+.center{
+    text-align: center;
+    margin: auto;
+}

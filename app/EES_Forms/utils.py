@@ -715,3 +715,9 @@ def braintreeGateway():
     )
     return gateway
 
+def getCompanyFacilities(username):
+    thisProfileData = user_profile_model.objects.filter(user__username=username)[0]
+    sortedFacilityData = bat_info_model.objects.filter(company__company_name=thisProfileData.company.company_name)
+    
+    return sortedFacilityData
+

@@ -5,9 +5,8 @@ from ..models import Forms, bat_info_model, facility_forms_model
 from ..forms import *
 from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from EES_Forms.views.supervisor_view import getCompanyFacilities
 import ast
-from ..utils import Calendar, checkIfFacilitySelected
+from ..utils import Calendar, checkIfFacilitySelected, getCompanyFacilities
 import datetime
 
 lock = login_required(login_url='Login')

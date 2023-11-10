@@ -45,10 +45,18 @@
         </tr>
         {% endfor %}
         <tr class='tableSpacer'>
-            <td colspan="2" class="labelClass" style="text-align: center;">
-                <a href=#>
-                    edit
-                </a>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Company Options</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2" style="text-align: center;" colspan=2>
+                <a href="{% url 'Register' facility 'client' %}">Update Company Details</a><br>
+                <a href="{% url 'Register' facility 'observer' %}">Add Employee</a><br>
+                <a href="{% url 'Register' facility 'client' %}">Add Client Facility</a><br>
+                <a href="{% url 'Register' facility 'client' %}">Add Client Profile</a><br>
+                {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
             </td>
         </tr>
     </table>

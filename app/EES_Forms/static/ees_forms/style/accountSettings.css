@@ -49,3 +49,8 @@
     font-size:14px;
     padding-left:45px;
 }
+hr {
+    background-image: linear-gradient(to right, white, #c1c7ce, white);
+    height: 1px;
+    border: none;
+  }

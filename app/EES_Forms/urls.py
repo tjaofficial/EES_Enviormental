@@ -11,8 +11,6 @@ urlpatterns = [
     
     ##---REGISTRATION-----
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
-    path("<str:facility>/account", views.sup_account_view, name="Account"),
-    path("<str:facility>/account/<str:action>", views.sup_card_update, name="cardUpdate"),
     path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
     path("register_company", views.registerCompany, name="companyReg"),
@@ -20,6 +18,12 @@ urlpatterns = [
     path("logout", views.logout_view, name="Logout"),
     path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
+    
+    ##--ACCOUNT SETTINGS-----
+    path("<str:facility>/account", views.sup_account_view, name="Account"),
+    path("<str:facility>/account/payment-method/<str:action>", views.sup_card_update, name="cardUpdate"),
+    path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
+    
     ##---BILLING
     path("billing/<str:step>", views.billing, name="billing"),
 

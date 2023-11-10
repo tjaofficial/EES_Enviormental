@@ -10,9 +10,8 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
-from EES_Forms.views.supervisor_view import getCompanyFacilities
 from ..models import spill_kit_inventory_model, facility_forms_model
-from ..utils import parseFormList
+from ..utils import parseFormList, getCompanyFacilities
 import json
 import io
 import datetime

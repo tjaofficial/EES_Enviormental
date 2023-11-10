@@ -1,0 +1,48 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/selectPayment.css' %}" rel="stylesheet" />
+{% comment %} <script defer src="{% static 'ees_forms/script/selectRegistrations.js' %}"></script> {% endcomment %}
+
+<div class="mainCont" style="width:700px; max-width:none;margin: auto;">
+    <div class="card" style='margin-bottom: 50px;'>
+        <div class="cardHeader">Payment Method</div>
+        <div class="contentCont">
+            <form method="post" autocomplete="off" action="../subscription/review">
+                <div class="dataBoxes">
+                    <div class="infoHeaders">Contact Information</div>
+                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                        <div>{{customer.first_name}} {{customer.last_name}}</div>
+                        <div>{{customer.email}}</div>
+                        <div>({{customer.phone|slice:"2:5"}}) {{customer.phone|slice:"5:8"}}-{{customer.phone|slice:"8:"}}</div>
+                    </div>
+                </div><br>
+                {% if cardsOnFile|length > 0 %}
+                <div class="dataBoxes">
+                    <div class="infoHeaders">Billing Address</div>
+                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                        <div>name on card</div>
+                        <div>address1</div>
+                        <div>address2</div>
+                        <div>city/state/zip</div>
+                        <div>edit</div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="dataBoxes">
+                    <div class="infoHeaders">Payment</div>
+                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                        {% if cardsOnFile|length > 0 %}
+                            <div>Show card on file to slect (Card ending in ****)</div>
+                        {% endif %}
+                        <a href="{% url 'cardUpdate' facility 'add' %}">+ Add New Payment Method</a>
+                        {% comment %} <div>possibly paypal</div> {% endcomment %}
+                    </div>
+                </div>
+                <br>
+                <input type="hidden" value={{selectedPlan.id}} name="planId">
+                <input type="hidden" value={{seats}} name="planId">
+                <input id="submit" type="submit" value="Review Order>">
+        </div>
+    </div>
+</div>
+{% endblock %}
