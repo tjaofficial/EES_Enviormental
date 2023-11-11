@@ -9,10 +9,12 @@ from django.contrib import messages
 from django.contrib.auth.models import Group
 import json
 from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities
+from ..decor import isSubActive
 
 lock = login_required(login_url='Login')
 
 @lock
+@isSubActive
 def sup_dashboard_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
@@ -267,6 +269,7 @@ def sup_dashboard_view(request, facility):
     })
 
 @lock
+@isSubActive
 def register_view(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]

@@ -721,3 +721,4 @@ def getCompanyFacilities(username):
     
     return sortedFacilityData
 
+    
