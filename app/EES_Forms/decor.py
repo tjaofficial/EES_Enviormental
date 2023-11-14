@@ -20,7 +20,7 @@ def isSubActive(func):
         else:
             print(gateway.customer.find(customerId))
         #get rid of the status=True for prod    
-        status = True    
+        #status = True    
         if status:
             return func(request, facility, *args, **kwargs)
         else:
