@@ -14,7 +14,7 @@ def isSubActive(func):
         gateway = braintreeGateway()
         accountData = user_profile_model.objects.get(user__username=request.user.username)
         customerId = accountData.company.customerID
-        if not customerId:
+        if not customerId or customerId == 'none':
             status = False
             print("no customer ID")
         else:
