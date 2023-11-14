@@ -18,7 +18,7 @@ def isSubActive(func):
             status = False
             print("no customer ID")
         else:
-            print(customer = gateway.customer.find(customerId))
+            print(gateway.customer.find(customerId))
         #get rid of the status=True for prod    
         status = True    
         if status:

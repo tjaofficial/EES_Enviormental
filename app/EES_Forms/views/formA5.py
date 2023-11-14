@@ -296,24 +296,24 @@ def formA5(request, facility, selector):
                 if B.o1_highest_opacity >= 10 or B.o1_average_6 >= 35 or B.o1_instant_over_20 == 'Yes' or B.o1_average_6_over_35 == 'Yes':
                     finder = issues_model.objects.filter(date=A.date, form='A-5')
                     if finder:
-                        issue_page = '../../issues_view/A-5/' + str(A.date) + '/issue'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o2_highest_opacity >= 10 or B.o2_average_6 >= 35 or B.o2_instant_over_20 == 'Yes'  or B.o2_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
+                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o3_highest_opacity >= 10 or B.o3_average_6 >= 35 or B.o3_instant_over_20 == 'Yes' or B.o3_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
+                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 
                 if B.o4_highest_opacity >= 10 or B.o4_average_6 >= 35 or B.o4_instant_over_20 == 'Yes' or B.o4_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/A-5/' + str(A.date) + '/form'
+                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
 
                     return redirect(issue_page)
 

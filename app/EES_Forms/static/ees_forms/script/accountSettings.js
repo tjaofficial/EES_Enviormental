@@ -2,13 +2,6 @@ openInformation = (ele) => {
     const childElem = ele.parentElement.children[1];
     const elemID = ele.id;
     console.log(elemID)
-    // if (elemID == 'account') {
-    //     var heightChange = '186px';
-    // } else if (elemID == 'company') {
-    //     var heightChange = '345px';
-    // } else {
-    //     var heightChange = '300px';
-    // }
     var heightChange = 'fit-content';
     console.log(childElem.style.height)
     if (childElem.style.height == heightChange){
@@ -17,5 +10,17 @@ openInformation = (ele) => {
     } else {
         childElem.style.height = heightChange;
         childElem.style.padding = '20px 0px';
+    }
+}
+
+seeEmployees = () => {
+    const seeAll = document.getElementById('seeAll');
+    const employees = document.getElementById('employeesCont');
+    if(seeAll.innerText == "see all"){
+        employees.style.display = 'table-row';
+        seeAll.innerText = 'see less';
+    } else {
+        employees.style.display = 'none';
+        seeAll.innerText = 'see all';
     }
 }

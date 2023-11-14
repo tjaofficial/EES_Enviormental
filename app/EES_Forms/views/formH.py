@@ -20,8 +20,8 @@ def formH(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
+    now = datetime.datetime.now().date()
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = formH_model.objects.all().order_by('-date')
@@ -31,12 +31,8 @@ def formH(request, facility, selector):
     exist_canvas = ''
     
     if unlock:
-        if len(profile) > 0:
-            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-            if same_user:
-                cert_date = request.user.user_profile_model.cert_date
-            else:
-                return redirect('IncompleteForms', facility)
+        if profile.exists():
+            cert_date = request.user.user_profile_model.cert_date
         else:
             return redirect('IncompleteForms', facility)
     
@@ -59,33 +55,26 @@ def formH(request, facility, selector):
             existing = True
             search = True
         # ------check if database is empty----------
-        elif len(org) > 0 or len(org2) > 0:
+        elif org.exists() or org2.exists():
             if selector != 'formL':
                 database_form = org[0]
                 database_form2 = org2[0]
                 # -------check if there is a daily battery profile
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        if todays_log.date_save == database_form.date:
-                            existing = True
-                    else:
-                        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                        return redirect(batt_prof)
+                if now == todays_log.date_save:
+                    if todays_log.date_save == database_form.date:
+                        existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                     return redirect(batt_prof)
-            elif len(orgFormL) > 0:
+            elif orgFormL.exists():
                 formName = 'H-L'
                 database_form2 = orgFormL[0]
                 for line in org:
                     if line.date == database_form2.form.date:
                         database_form = line
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        if todays_log.date_save == database_form.date:
-                            existing = True
+                if now == todays_log.date_save:
+                    if todays_log.date_save == database_form.date:
+                        existing = True
         
         if search:
             database_form = ''

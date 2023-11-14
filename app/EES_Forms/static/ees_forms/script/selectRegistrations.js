@@ -10,3 +10,6 @@ adjustPrice = (elem) => {
     amount.innerText = "$" + String(additionalPrice) + ".00";
     totalPrice.innerText = "$" + String(parseInt(additionalPrice) + parseInt(planPrice.innerText.slice(1,4))) + ".00"
 }
+
+const input = document.getElementById('seats');
+adjustPrice(seats)

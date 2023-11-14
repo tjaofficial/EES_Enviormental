@@ -4,6 +4,7 @@ from django.db.models import Q
 import braintree
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities
 from ..models import user_profile_model, company_model
+from ..forms import User, user_profile_form
 import datetime
 import json
 
@@ -25,6 +26,7 @@ def sup_select_subscription(request, facility, selector):
         "client": client, 
         'unlock': unlock,
         'facility': facility,
+        'selector': selector
     }
     
     if selector == 'subscription':
@@ -62,16 +64,125 @@ def sup_select_subscription(request, facility, selector):
         variables['selectedPlan'] = selectedPlan
         link = "supervisor/settings/braintree/select_registration_amount.html"
     elif selector == "payment":
-        accountData = user_profile_model.objects.get(user__username=request.user.username)
-        customerId = accountData.company.customerID
-        customer = gateway.customer.find(customerId)
-        cardsOnFile = customer.credit_cards
         print(request.POST)
+        user = request.user
+        accountData = user_profile_model.objects.get(user__username=user.username)
+        customerId = accountData.company.customerID
+        if customerId:
+            customer = gateway.customer.find(customerId)
+        else:
+            newCustomer = gateway.customer.create({
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "company": accountData.company.company_name,
+                "email": user.email,
+                "phone": accountData.phone
+            })
+            if newCustomer.is_success:
+                userCompany = company_model.objects.get(id=accountData.company.id)
+                userCompany.customerID = newCustomer.customer.id
+                userCompany.save()
+                customer = gateway.customer.find(userCompany.customerID)
+            else:
+                for i in newCustomer.errors.deep_errors:
+                    print(i.code)
+                    if i.code == "81724":
+                        print("Duplicate card exists.")
+        cardsOnFile = customer.credit_cards
+        cardData = request.POST.get('payNonce', False)
+        dataTemplateUse = request.POST
+        if 'payNonce' in request.POST.keys():
+            cardData = gateway.payment_method_nonce.find(request.POST['payNonce'])
+        else:
+            cardData = False
+        plans = gateway.plan.all()
+        for plan in plans:
+            if plan.id == request.POST['planId']:
+                planDetails = plan
+        addRegistrationCost = format(int(request.POST['seats'])*75, '.2f')
+        totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
+        # if len(cardsOnFile) < 0 or cardData:
+        #     dataTemplateUse = request.POST
+        # else:
+        #     dataTemplateUse = False
+        variables['dataTemplateUse'] = dataTemplateUse
         variables['customer'] = customer
         variables['cardsOnFile'] = cardsOnFile
+        variables['selectedPlan'] = request.POST['planId']
+        variables['seats'] = request.POST['seats']
+        variables['cardData'] = cardData
+        variables['totalData']  = request.POST
+        variables['planDetails'] = planDetails
+        variables['addRegistrationCost'] = addRegistrationCost
+        variables['totalCost'] = totalCost
         link = "supervisor/settings/braintree/select_payment.html"
-    elif selector == "review":
-        link = "supervisor/settings/braintree/select_review.html"
+    elif selector == "receipt":
+        print(request.POST)
+        user = request.user
+        accountData = user_profile_model.objects.get(user__username=user.username)
+        customerId = accountData.company.customerID
+        plans = gateway.plan.all()
+        for plan in plans:
+            if plan.id == request.POST['planId']:
+                planDetails = plan
+        addRegistrationCost = format(int(request.POST['seats'])*75, '.2f')
+        totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
+        updateCustomer = gateway.customer.update(customerId, {
+            "payment_method_nonce": request.POST['payNonce'],
+            'credit_card':{ # A credit or debit payment method.
+                'billing_address': { # A billing address associated with a specific credit card. The maximum number of addresses per customer is 50. - 
+                    'company': accountData.company.company_name,   # str - Company name. Maximum 255 characters.
+                    'street_address': request.POST['address1'],   # str - The street address. Maximum 255 characters.  
+                    'extended_address': request.POST['address2'],   # str - The extended address information—such as apartment or suite number. 255 character maximum.
+                    'locality': request.POST['city'],    # str - The locality/city. Maximum 255 characters.
+                    'postal_code': request.POST['zipCode'],    # str - The postal code. Postal code must be a string of 4-9 alphanumeric characters, optionally separated by a dash or a space. Spaces and hyphens are ignored.
+                    'region': request.POST['state'],    # str - The state or province. Maximum 255 characters.
+                    'country_code_alpha2': 'US',    # str - The ISO 3166-1 alpha-2 country code specified in an address. The gateway only accepts specific alpha-2 values.
+                },    
+                'cardholder_name': request.POST['nameOnCard'],    # str - The name associated with the credit card. Must be less than or equal to 175 characters.
+                'options':{ # Optional values that can be passed with a request. - 
+                    'fail_on_duplicate_payment_method': True,    # bool - If this option is passed and the same payment method has already been added to the Vault for any customer, the request will fail. This option will be ignored for PayPal, Pay with Venmo, Apple Pay, Google Pay, and Samsung Pay payment methods.
+                    'make_default': True,    # bool - This option makes the specified payment method the default for the customer.
+                    'skip_advanced_fraud_checking': False,    # boolean - If the payment method is a credit card, prevents the verification from being evaluated as part of Premium Fraud Management Tools checks. Use with caution – once you've skipped checks for a verification, it is not possible to run them retroactively.:     #  - 
+                    'verify_card': True,   # bool - If the payment method is a credit card, this option prompts the gateway to verify the card's number and expiration date. It also verifies the AVS and CVV information if you've enabled AVS and CVV rules.:     #  - NOTE Braintree strongly recommends verifying all cards before they are stored in your Vault by enabling card verification for your entire account in the Control Panel. In some cases, cardholders may see a temporary authorization on their account after their card has been verified. The authorization will fall off the cardholder's account within a few days and will never settle.:     #  - Only returns a CreditCardVerification result if verification runs and is unsuccessful.
+                }     
+            } ,    
+        })
+        
+        if not updateCustomer.is_success:
+            print(updateCustomer)
+            print('ERROR UPDATING CUSTOMER')
+            for i in updateCustomer.errors.deep_errors:
+                print(i.code)
+                if i.code == "81724":
+                    print("Duplicate card exists.")
+                    
+        vaultPaymentToken = updateCustomer.customer.payment_methods[0].token
+        addSubsriptionResult = gateway.subscription.create({
+            "payment_method_token": vaultPaymentToken,
+            "plan_id": request.POST['planId']
+        })
+        userComp = company_model.objects.filter(company_name=accountData.company.company_name)
+        if userComp.exists():
+            userComp = userComp[0]
+        else:
+            print("No Compnay has been entered for user profile information")
+            
+        if not addSubsriptionResult.is_success:
+            print('ERROR CREATING NEW SUBSCRIPTION')
+            for i in addSubsriptionResult.errors.deep_errors:
+                print(i)
+        else:
+            userComp.payment_method_token = vaultPaymentToken
+            userComp.subID = addSubsriptionResult.id
+            userComp.save()
+            print('MADE IT TO FUCKING SAVE')
+
+        variables['totalData']  = request.POST
+        variables['planDetails'] = planDetails
+        variables['addRegistrationCost'] = addRegistrationCost
+        variables['totalCost'] = totalCost
+        link = "supervisor/settings/braintree/select_receipt.html"
         
     return render(request, link, variables)
 
@@ -87,51 +198,41 @@ def sup_account_view(request, facility):
     facility = 'supervisor'
     sortedFacilityData = getCompanyFacilities(request.user.username)
     userProfileQuery = user_profile_model.objects.all()
-    accountData = userProfileQuery.get(user__username=request.user.username)
+    accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
-    listOfEmployees = userProfileQuery.filter(~Q(id=accountData.id), company=userCompany)
-    print(sortedFacilityData)
-    cardSubscription = False
-    try:
-        customerId = accountData.company.customerID
-        gateway = braintreeGateway()
-        customer = gateway.customer.find(customerId)
-        print(customer)
-        dateStart = "1900-01-01"
-        dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
-        for card in customer.credit_cards:
-            for sub in card.subscriptions:
-                if sub.status == 'Active':
-                    finished = True
-                    cardSubscription = {
-                        'first_billing_date': sub.first_billing_date,
-                        'billing_day_of_month': sub.billing_day_of_month,
-                        'billing_period_start_date': sub.billing_period_start_date,
-                        'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
-                        'next_billing_date': sub.next_billing_date,
-                        'plan_id': sub.plan_id,
-                        'price': sub.price,
-                        'status': sub.status,
-                        'last_4': card.last_4,
-                        'card_type': card.card_type,
-                        'cardholder': card.cardholder_name,
-                    }
-                    break
-            if finished:
-                break    
-                # .transactions[0] #this is a list# 
-                    # id
-                    # amount
-                    # plan_id
-                    # .credit_card_details
-                        # token
-                        # last_4
-                        # card_type
-            #     print(sub.first_billing_date)
-            #     break
-            # break
-    except:
-        cardSubscription = ''
+    listOfEmployees = userProfileQuery.filter(~Q(id=accountData.id), ~Q(position="client"), company=userCompany, )
+    print(listOfEmployees)
+    customerId = accountData.company.customerID
+    subID = accountData.company.subID
+    gateway = braintreeGateway()
+    customer = gateway.customer.find(customerId)
+    print(customer)
+    dateStart = "1900-01-01"
+    dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
+    sub = gateway.subscription.find(subID)
+    if sub.status == "Active":
+        activeSub = gateway.subscription.find(subID)
+        plans = gateway.plan.all()
+        for plan in plans:
+            if plan.id == activeSub.plan_id:
+                companyPlan = plan
+    else:
+        activeSub = False
+        companyPlan = False
+    if activeSub:
+        subDetails = {
+            'first_billing_date': sub.first_billing_date,
+            'billing_day_of_month': sub.billing_day_of_month,
+            'billing_period_start_date': sub.billing_period_start_date,
+            'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
+            'next_billing_date': sub.next_billing_date,
+            'plan_id': sub.plan_id,
+            'price': sub.price,
+            'status': sub.status,
+            'name': companyPlan.name,
+        }
+    else:
+        subDetails = ''
     return render(request, 'supervisor/settings/sup_account.html',{
         'supervisor': supervisor, 
         "client": client, 
@@ -139,13 +240,14 @@ def sup_account_view(request, facility):
         'sortedFacilityData': sortedFacilityData,
         'facility': facility,
         'accountData': accountData,
-        'cardSubscription': cardSubscription,
         'notifs': notifs,
-        'listOfEmployees': listOfEmployees
+        'listOfEmployees': listOfEmployees,
+        'subDetails': subDetails,
+        'activeSub': activeSub
     })
     
 @lock
-def sup_card_update(request, facility, action):
+def sup_card_update(request, facility, action, planId=False, seats=False):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -155,7 +257,7 @@ def sup_card_update(request, facility, action):
     accountData = user_profile_model.objects.get(user__username=request.user.username)
     gateway = braintreeGateway()
     customerId = accountData.company.customerID
-    if action != "add":
+    if action[0:3] != "add":
         token = accountData.company.payment_method_token
         payment_method = gateway.payment_method.find(token)
     variables = {
@@ -166,7 +268,8 @@ def sup_card_update(request, facility, action):
             'notifs': notifs,
             "action": action,
         }
-    
+    customer = gateway.customer.find(customerId)
+    print(customer)
     def updateCardAddress(token):
         updateCard = gateway.payment_method.update(token, {
             "billing_address": {
@@ -186,33 +289,76 @@ def sup_card_update(request, facility, action):
         else:
             transaction = updateCard.errors.deep_errors
         return transaction
-    def addCard(token):
-        newCard = gateway.payment_method.update(token, {
-            "billing_address": {
-                "street_address": request.POST['address1'],
-                "extended_address": request.POST['address2'],
-                "locality": request.POST['city'],
-                "region": request.POST['state'],
-                "postal_code": request.POST['postalCode'],
-                "options": {
-                    "update_existing": True
-                }
-            },
-            'cardholder_name': request.POST['nameOnCard'],
-            'number':  request.POST['card-number'],
-            'expiration_date': request.POST['expiration-date'],
-            'cvv': request.POST['cvv'],
-            "options": {
-                'make_default': True,
-                'verify_card': True,
-                'skip_advanced_fraud_checking': False
-            }
-        })
-        if newCard.is_success:
-            transaction = newCard.is_success
-        else:
-            transaction = newCard.errors.deep_errors
-        return transaction
+    def addCard(customerId, token):
+        print('hello')
+        
+        
+        
+        
+        
+        
+        
+        # updateCard = gateway.payment_method.update(token, {
+        #     "billing_address": {
+        #         "street_address": request.POST['address1'],
+        #         "extended_address": request.POST['address2'],
+        #         "locality": request.POST['city'],
+        #         "region": request.POST['state'],
+        #         "postal_code": request.POST['postalCode'],
+        #         "options": {
+        #             "update_existing": True
+        #         }
+        #     },
+        #     'cardholder_name': request.POST['nameOnCard'],
+        #     'number': request.POST['nameOnCard'],
+        #     'expiration_date': request.POST['nameOnCard'],
+        #     'cvv': request.POST['nameOnCard'], 
+        #     'options': {
+        #         'make_default': True,
+        #         'verify_card': True
+        #     }
+        # })
+        
+        
+        
+        
+        # result = gateway.payment_method_nonce.create(token)
+        # nonce = result.payment_method_nonce.nonce
+        # newerCard = gateway.payment_method.create({
+        #     "customer_id": customerId,
+        #     "payment_method_nonce": nonce,
+        #     "options": {
+        #         "verify_card": True
+        #     }
+        # })
+        
+        
+        # newCard = gateway.payment_method.create(token, {
+        #     "billing_address": {
+        #         "street_address": request.POST['address1'],
+        #         "extended_address": request.POST['address2'],
+        #         "locality": request.POST['city'],
+        #         "region": request.POST['state'],
+        #         "postal_code": request.POST['postalCode'],
+        #         "options": {
+        #             "update_existing": True
+        #         }
+        #     },
+        #     'cardholder_name': request.POST['nameOnCard'],
+        #     'number':  request.POST['card-number'],
+        #     'expiration_date': request.POST['expiration-date'],
+        #     'cvv': request.POST['cvv'],
+        #     "options": {
+        #         'make_default': True,
+        #         'verify_card': True,
+        #         'skip_advanced_fraud_checking': False
+        #     }
+        # })
+        # if newCard.is_success:
+        #     transaction = newCard.is_success
+        # else:
+        #     transaction = newCard.errors.deep_errors
+        # return transaction
         
     if action in {"update","change"}:
         customer = gateway.customer.find(customerId)
@@ -222,7 +368,9 @@ def sup_card_update(request, facility, action):
         variables['customer'] = customer
         variables['token'] = token
         variables['payment_method'] = payment_method
-    elif action == "add":
+    elif action[0:3] == "add":
+        print("maide it through the second add")
+        print(request.POST)
         if customerId is None:
             client_token = gateway.client_token.generate()
         else:
@@ -235,7 +383,8 @@ def sup_card_update(request, facility, action):
         template = "supervisor/settings/braintree/sup_cardAdd.html"
         variables['customer'] = customer
         variables['client_token'] = client_token
-        
+        variables['pId'] = planId
+        variables['seats'] = seats
     elif action == "cancel":
         template = "supervisor/settings/braintree/sup_cancelSub.html"
         variables['token'] = token
@@ -256,8 +405,7 @@ def sup_card_update(request, facility, action):
             print("UPDATED ADDRESS")
             return redirect('Account', facility)
         elif newCard:
-            addCard(token)
-            print(addCard(token))
+            print('new CArd')
         elif cancelSub:
             if request.POST['cancel'] == 'cancel':
                 subscriptions = payment_method.subscriptions
@@ -268,3 +416,35 @@ def sup_card_update(request, facility, action):
             print('SUBSCRIPTION CANCELLED')
     
     return render (request, template, variables)
+
+def sup_update_account(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
+        return redirect('IncompleteForms', facility)
+    facility = 'supervisor'
+    user = user_profile_model.objects.get(user__id=request.user.id)
+    
+    initial_data = {
+        'username': user.user.username,
+        'first_name': user.user.first_name,
+        'last_name': user.user.last_name,
+        'email': user.user.email,
+        'cert_date': user.cert_date,
+        'phone': user.phone,
+        'certs': user.certs,
+        'profile_picture': user.profile_picture,
+    }
+    userForm = User()
+    userProfileForm = user_profile_form(initial=initial_data)
+    return render(request, 'supervisor/settings/settings_account_update.html', {
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'facility': facility,
+        'notifs': notifs,
+        'userForm': userForm,
+        'userProfileForm': userProfileForm
+    })

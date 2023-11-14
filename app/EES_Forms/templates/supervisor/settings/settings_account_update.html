@@ -1,0 +1,23 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
+<div style='margin:auto; width: 42rem;'>
+    <div class="card" style='margin-bottom: 50px;'>
+        <div class="cardHeader">Account Settings</div>
+        <div class="contentCont" style="padding: 15px 32px;">
+            <form method="post" action=''>
+                {{userForm.username}}
+                {{userForm.first_name}}
+                last name
+                email
+                certification date<br>
+                {{userProfileForm.phone.label}}: {{userProfileForm.phone}}<br>
+                {{userProfileForm.certs.label}}: {{userProfileForm.certs}}<br>
+                {{userProfileForm.profile_picture.label}}: {{userProfileForm.profile_picture}}<br>
+                <input type="submit" value="Save"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

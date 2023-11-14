@@ -18,7 +18,7 @@ def formL(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]

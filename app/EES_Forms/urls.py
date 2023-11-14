@@ -21,8 +21,9 @@ urlpatterns = [
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
-    path("<str:facility>/account/payment-method/<str:action>", views.sup_card_update, name="cardUpdate"),
+    path("<str:facility>/account/payment-method/<str:action>/<str:planId>/<str:seats>", views.sup_card_update, name="cardUpdate"),
     path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
+    path("<str:facility>/account/update", views.sup_update_account, name="accountUpdate"),
     
     ##---BILLING
     path("billing/<str:step>", views.billing, name="billing"),

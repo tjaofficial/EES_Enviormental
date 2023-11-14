@@ -19,7 +19,7 @@ def formN(request, facility, selector):
     search = False
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     today = datetime.date.today()
     month_name = calendar.month_name[today.month]
     form_pull = formM_model.objects.all().filter(date__month=today.month)

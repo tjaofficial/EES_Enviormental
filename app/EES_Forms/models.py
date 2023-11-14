@@ -90,7 +90,9 @@ truck_id_choices = (
     ('#9', '#9'),
     ('Dozer', 'Dozer'),
     ('Semi', 'Semi'),
-    ('Contractor', 'Contractor')
+    ('Contractor', 'Contractor'),
+    ('Security', 'Security'),
+    ('Water Truck', 'Water Truck'),
 )
 content_choices = (
     ('Coal', 'Coal'),
@@ -273,6 +275,11 @@ class company_model(models.Model):
         blank=True
     )
     payment_method_token = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )
+    subID = models.CharField(
         max_length=500,
         null=True,
         blank=True
@@ -498,6 +505,7 @@ class user_profile_model(models.Model):
         max_length=5,
         default='light'
     )
+    active = models.BooleanField(default=False, null=True)
     def __str__(self):
         return self.user.username
 

@@ -1,28 +1,42 @@
+
 <div class="centerFlex">
     <table class="tableClass">
         <tr class='tableSpacer'>
             <td class="labelClass">Subscription:</td>
             <td class="labelClass2">
-                {% if cardSubscription %}
-                    Supervisor Account + 3 Extra Registrations
+                {% if activeSub %}
+                    {{subDetails.name}} <br>
+                    3 Extra Registrations
                 {% else %}
                     <a href="{% url 'subscriptionSelect' facility 'subscription' %}">Click here to pick a subscription!</a>
                 {% endif %}
             </td>
         </tr>
-        {% if cardSubscription %}
+        {% if activeSub %}
             <tr class='tableSpacer'>
                 <td class="labelClass">Monthly Amount:</td>
-                <td class="labelClass2">{% if cardSubscription %}${{cardSubscription.price}}{% else %}-{% endif %}</td>
+                <td class="labelClass2">${{subDetails.price}}</td>
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Status:</td>
-                <td class="labelClass2">{% if cardSubscription %}{{cardSubscription.status}}{% else %}-{% endif %}</td>
+                <td class="labelClass2">{{subDetails.status}}</td>
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Next Billing Date:</td>
-                <td class="labelClass2">{% if cardSubscription %}{{cardSubscription.next_billing_date}}{% else %}-{% endif %}</td>
+                <td class="labelClass2">{{subDetails.next_billing_date}}</td>
             </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">Active Accounts:</td>
+                <td class="labelClass2">( 5 / 7 ) <a id="seeAll" href=# onclick="seeEmployees()">see all</a></td>
+            </tr>
+            <tr id="employeesCont" class='tableSpacer' style="display:none;">
+                <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
+                    {% for employee in listOfEmployees %}
+                        {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee %}Active{% else %}Inactive{% endif %} <a href=#>(cancel)</a><br>
+                    {% endfor %}
+                </td>
+            </tr>
+            
         {% endif %}
         <tr class='tableSpacer'>
             <td colspan="2" class="labelClass"><hr></td>
@@ -32,9 +46,9 @@
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass" colspan=2 style="text-align: center;">
-                {% if cardSubscription %}<a href=#>Change Subscription</a><br>{% endif %}
+                {% if activeSub %}<a href=#>Change Subscription</a><br>{% endif %}
                 <a href=#>See Billing History</a><br>
-                {% if cardSubscription %}<a href="{% url 'cardUpdate' facility 'update' %}">Cancel Subscription</a>{% endif %}
+                {% if activeSub %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}">Cancel Subscription</a>{% endif %}
             </td>
         </tr>
         <tr class='tableSpacer'>
@@ -43,15 +57,10 @@
         <tr class='tableSpacer'>
             <th colspan=2 class='' style="width: 30%;">Card Options</th>
         </tr>
-        
-        {% comment %} <tr class='tableSpacer'>
-            <td class="labelClass">Name on Card:</td>
-            <td class="labelClass2">{{cardSubscription.cardholder}}</td>
-        </tr> {% endcomment %}
         <tr class='tableSpacer'>
             <td class="labelClass2" style="text-align: center;" colspan=2>
-                <a href="{% url 'cardUpdate' facility 'update' %}">Update Billing Address</a><br>
-                <a href="{% url 'cardUpdate' facility 'add' %}">Add/Change Payment Method</a><br>
+                <a href="{% url 'cardUpdate' facility 'update' 'false' 'false' %}">Update Billing Address</a><br>
+                <a href="{% url 'cardUpdate' facility 'add' 'false' 'false'%}">Add/Change Payment Method</a><br>
                 {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
             </td>
         </tr>

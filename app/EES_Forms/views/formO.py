@@ -20,7 +20,7 @@ def formO(request, facility, selector, weekend_day):
     existing = False
     search = False
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
     full_name = request.user.get_full_name()
@@ -45,7 +45,7 @@ def formO(request, facility, selector, weekend_day):
             data = database_model
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
             if database_form.date == today:
                 existing = True
@@ -93,9 +93,9 @@ def formO(request, facility, selector, weekend_day):
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
                     finder = issues_model.objects.filter(date=A.date, form='O')
                     if finder:
-                        issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/issue'
+                        issue_page = '../../../issues_view/'+ str(formName) +'/' + str(todays_log.date_save) + '/issue'
                     else:
-                        issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/form'
+                        issue_page = '../../../issues_view/'+ str(formName) +'/' + str(todays_log.date_save) + '/form'
 
                     return redirect(issue_page)
 

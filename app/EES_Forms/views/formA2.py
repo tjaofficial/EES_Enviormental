@@ -113,7 +113,7 @@ def formA2(request, facility, selector):
                 A.facilityChoice = finalFacility
                 A.save()
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
                 if A.leaking_doors == 0:
                     createNotification(facility, request.user, formName, now, 'submitted')
@@ -122,9 +122,9 @@ def formA2(request, facility, selector):
                 else:
                     finder = issues_model.objects.filter(date=A.date, form='A-2')
                     if finder:
-                        issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
             else:
                 print("Form not valid")

@@ -169,9 +169,9 @@ def formC(request, facility, selector):
                 if B.form.average_t > 5 or B.form.average_p > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     finder = issues_model.objects.filter(date=A.date, form='C')
                     if finder:
-                        issue_page = '../../issues_view/'+formName+'/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/'+str(formName)+'/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/'+formName+'/' + str(database_form.date) + '/form'
+                        issue_page = '../../issues_view/'+str(formName)+'/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')

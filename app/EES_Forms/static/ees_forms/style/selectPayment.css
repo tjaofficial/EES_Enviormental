@@ -11,3 +11,7 @@
     padding: 20px;
     text-align: left;
 }
+.priceRight{
+    width: 100%;
+    text-align: right;
+}

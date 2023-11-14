@@ -23,8 +23,8 @@ def formM(request, facility, selector):
     existing = False
     search = False
     THEmonth = False
-    now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
+    now = datetime.datetime.now().date()
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
@@ -35,11 +35,7 @@ def formM(request, facility, selector):
 
 
     if profile.exists():
-        same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-        if same_user:
-            cert_date = request.user.user_profile_model.cert_date
-        else:
-            return redirect('IncompleteForms', facility)
+        cert_date = request.user.user_profile_model.cert_date
     else:
         return redirect('IncompleteForms', facility)
     
@@ -161,9 +157,9 @@ def formM(request, facility, selector):
                 if int(B.pav_total) > 5 or int(B.unp_total) > 5 or int(B.par_total) > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     finder = issues_model.objects.filter(date=A.date, form='M')
                     if finder:
-                        issue_page = '../../issues_view/M/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/M/' + str(database_form.date) + '/form'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
                 

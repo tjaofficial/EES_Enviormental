@@ -100,9 +100,6 @@ def billing(request, step):
                 'billing_address': { # A billing address associated with a specific credit card. The maximum number of addresses per customer is 50. - 
                     'company': userProfile.company.company_name,   # str - Company name. Maximum 255 characters.
                     'country_code_alpha2': 'US',    # str - The ISO 3166-1 alpha-2 country code specified in an address. The gateway only accepts specific alpha-2 values.
-                    #'country_code_alpha3': ,    # str - The ISO 3166-1 alpha-3 country code specified in an address. The gateway only accepts specific alpha-3 values.
-                    #'country_code_numeric': ,    # str - The ISO 3166-1 numeric country code specified in an address. The gateway only accepts specific numeric values.
-                    #'country_name': ,    # str - The country name specified in an address. We only accept specific country names.
                     'extended_address': addressLine2,   # str - The extended address information—such as apartment or suite number. 255 character maximum.
                     #'first_name': ,    # str - The first name. Maximum 255 characters.
                     #'last_name': ,    # str - The last name. Maximum 255 characters.
@@ -116,33 +113,16 @@ def billing(request, step):
                     'fail_on_duplicate_payment_method': True,    # bool - If this option is passed and the same payment method has already been added to the Vault for any customer, the request will fail. This option will be ignored for PayPal, Pay with Venmo, Apple Pay, Google Pay, and Samsung Pay payment methods.
                     'make_default': True,    # bool - This option makes the specified payment method the default for the customer.
                     'skip_advanced_fraud_checking': False,    # boolean - If the payment method is a credit card, prevents the verification from being evaluated as part of Premium Fraud Management Tools checks. Use with caution – once you've skipped checks for a verification, it is not possible to run them retroactively.:     #  - 
-                    #'verification_amount': ,    # str - Specify a non-negative amount that you want to use to verify a card. If you do not pass this option, the gateway will automatically use a verification amount of $0 or $1, depending on the processor and/or card type.
-                    #'verification_merchant_account_id': ,    # str - Specify the merchant account ID that you want to use to verify a card. Can't be a Braintree Marketplace sub-merchant account. For more details on merchant accounts in general, see merchant_account_id on Transaction:     # Sale.:     #  - 
                     'verify_card': True,   # bool - If the payment method is a credit card, this option prompts the gateway to verify the card's number and expiration date. It also verifies the AVS and CVV information if you've enabled AVS and CVV rules.:     #  - NOTE Braintree strongly recommends verifying all cards before they are stored in your Vault by enabling card verification for your entire account in the Control Panel. In some cases, cardholders may see a temporary authorization on their account after their card has been verified. The authorization will fall off the cardholder's account within a few days and will never settle.:     #  - Only returns a CreditCardVerification result if verification runs and is unsuccessful.
                 }     
                 #'token':     # str - An alphanumeric value that references a specific payment method stored in your Vault. Must be less than or equal to 36 characters. If using a custom integration, you can specify what you want the token to be. If not specified, the gateway will generate one that can be accessed on the result. If using our Drop-in UI with a customer ID to vault payment methods, you can't specify your own token. Length and format of gateway-generated tokens and IDs may change at any time.:     #  - 
-            } ,    
-            #'custom_fields': ,    # A collection of custom field/value pairs. Fields and values must be less than 255 characters. You must set up each custom field in the Control Panel prior to passing  - t with a request. Querying this value returns a collection of custom field values stored on the customer object.
-            #'device_data': ,    # str - Customer device information. Pass this value only if you have Premium Fraud Management Tools enabled and are adding credit card data to your Vault. Be sure to provide the full string received from the Braintree client SDK.
+            } ,
             'email': userEmail,    # str - Email address composed of ASCII characters.
-            #'fax': ,    # str - Fax number. Maximum 255 characters.
             'first_name':userFirstName ,    # str - The first name. The first name value must be less than or equal to 255 characters.
             #'id': ,    # str - A string value that will represent this specific customer in your Vault. 36 character maximum; must be unique within your Vault; valid characters are letters, numbers, -, and _; the words "all" and "new" currently can't be used. If not specified on creation, the gateway will generate an alphanumeric ID that can be accessed on the result. The generated IDs will never start with a leading 0 and are case insensitive.:     #  - 
             'last_name': userLastName,    # str - The last name. The last name value must be less than or equal to 255 characters.
             'payment_method_nonce':  nonce_from_the_client,   # str - One-time-use reference to payment information provided by your customer, such as a credit card or PayPal account. When passed on customer create, it creates a payment method associated with the new customer; see example below.
             'phone': userPhone,    # str - Phone number. Maximum 255 characters.
-            #'risk_data':{ # Customer device information, which is sent directly to supported processors for fraud analysis. These fields are automatically populated if using Premium Fraud  - anagement Tools. Currently only available when processing American Express via Amex Direct. Contact us with any questions.
-                #'customer_browser': ,    # str - The User Agent field provided by the customer. Maximum 255 characters.
-                #'customer_ip': ,    # str - The customer's IP address.:     #  - 
-            #}
-            #'tax_identifiers': [
-            #{
-            #'country_code': ,    # str - The ISO 3166-1 alpha-2 country code specified in an address. The gateway only accepts specific alpha-2 values.
-            #'identifier': ,    # str -:     #  - The Social Security number analogue for the corresponding country code.
-            #},
-            #]    # Array - A set of country code ID pairs, analogous to Social Security numbers in the United States. A customer may have multiple national tax identifiers in the event of multinational citizenship, but only one identifier per country code. Because tax identifiers are PII, these values are not displayed in the Control Panel or serialized on the customer response. You will only need to use these fields for processing in certain countries.
-            
-            #'website': ,    # str:     #  - Website URL. Must be less than or equal to 255 characters. Website must be well-formed. The URL scheme is optional.
         })
 
         if not createCustomerResult.is_success:

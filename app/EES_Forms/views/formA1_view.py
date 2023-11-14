@@ -129,11 +129,8 @@ def formA1(request, facility, selector):
                 A.facilityChoice = finalFacility
                 A.save()
                 B.save()
-                formLabels = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
-                for label in formLabels:
-                    if label[0] == formName:
-                        theLabel = label[1]
-                    finder = issues_model.objects.filter(date=A.date, form=theLabel)
+                
+                finder = issues_model.objects.filter(date=A.date, form=formName)
             #     if B.comments not in {'-', 'n/a', 'N/A'}:
             #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
@@ -142,17 +139,17 @@ def formA1(request, facility, selector):
                 for x in sec:
                     if 10 <= x:
                         if finder:
-                            issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/resubmit'
+                            issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/resubmit'
                         else:
-                            issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
+                            issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
 
                         return redirect(issue_page)
                     else:
                         if B.total_seconds >= 55:
                             if finder:
-                                issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/resubmit'
+                                issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/resubmit'
                             else:
-                                issue_page = '../../issues_view/' + theLabel + '/' + str(database_form.date) + '/form'
+                                issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
 
                             return redirect(issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')        

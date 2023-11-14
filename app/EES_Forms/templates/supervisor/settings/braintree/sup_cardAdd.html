@@ -10,7 +10,7 @@
                 <div id="iForm" style="margin: auto;display: block; width: 41rem;">
                     <form action="" id="Payment_Method_Form" method="post">
                         {% csrf_token %}
-                        {% if action == "change" or action == "add"%}
+                        {% if action == "change" or action|slice:'0:3' == "add" %}
                         <h2 style="text-align: center; margin-bottom: 22px;">Card Information</h2>
                             <div class="cardInfoCont" style="margin-bottom: 48px;">
                                 <label for="nameOnCard">Name On Card</label>
@@ -55,12 +55,32 @@
                         <input id="submit" type="submit" value="Review Subscription" name="{% if action == 'change' %}newCard{% else %}updateAddress{% endif %}" disabled="{% if action == 'change' or action == 'add'%}True{% else %}False{% endif %}"/>
                     </form>
                 </div>
-        </div>
-      </div>
-      <div class="contentCont">
-          {{customer}}
-          <br><br><br>
-          {{payment_method}}
+                <!-- Review Form -->
+                <div id="iReview" style="margin: auto; display: none;">
+                    <p id="rNameOnCard" class="reviewInfo">Name on Card: </p>
+                    <p id="rAddress1" class="reviewInfo">Address 1: </p>
+                    <p id="rAddress2" class="reviewInfo">Address 2: </p>
+                    <p id="rCity" class="reviewInfo">City: </p>
+                    <p id="rState" class="reviewInfo">State: </p>
+                    <p id="rZip" class="reviewInfo">Zip Code: </p>
+                    <p id="rCardNumber" class="reviewInfo">Card Number: </p>
+                    <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
+                    
+                    <form action="{% if action|slice:'4:' == 'subscription' %}../../../subscription/payment{% else %}/billing/receipt{% endif %}" method="post">
+                        {% csrf_token %}
+                        <input id="pSeats" type="hidden" name="seats" value="{{seats}}"/>
+                        <input id="pPayNonce" type="hidden" name="payNonce"/>
+                        <input id="pPlanId" type="hidden" name="planId"/>
+                        <input id="pNameOnCard" type="hidden" name="nameOnCard"/>
+                        <input id="pAddress1" type="hidden" name="address1"/>
+                        <input id="pAddress2" type="hidden" name="address2"/>
+                        <input id="pCity" type="hidden" name="city"/>
+                        <input id="pState" type="hidden" name="state"/>
+                        <input id="pZipCode" type="hidden" name="zipCode"/>
+                        <input id="postButton" type="submit" value="Confirm Subscription"/>
+                    </form>
+                </div>
+            </div>
       </div>
 </div>
 <script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>
@@ -157,7 +177,7 @@ braintree.client.create({
                 //Set the form values for post
                 document.querySelector("#pPayNonce").value = payload.nonce
                 document.querySelector("#pPlanId").value = planId
-                document.querySelector("#rNameOnCard").value = nameOnCard
+                document.querySelector("#pNameOnCard").value = nameOnCard
                 document.querySelector("#pAddress1").value = address1
                 document.querySelector("#pAddress2").value = address2
 
