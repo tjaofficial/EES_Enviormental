@@ -8,7 +8,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.models import Group
 import json
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations
 from ..decor import isSubActive
 
 lock = login_required(login_url='Login')
@@ -290,6 +290,8 @@ def register_view(request, facility, access_page):
     data = ''
     data2 = bat_info_model.objects.all()
     facilityLink = False
+    if checkIfMoreRegistrations(request.user):
+        addMoreRegistrations = checkIfMoreRegistrations(request.user)[3]
 
     if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
@@ -298,9 +300,9 @@ def register_view(request, facility, access_page):
                 userInfo = User.objects.all().filter(id__exact=access_page)[0]
                 pic = userProfileInfo.profile_picture
                 if userProfileInfo.phone:
-                    number = userProfileInfo.phone[2:];
-                    first = number[:3];
-                    middle = number[3:6];
+                    number = userProfileInfo.phone[2:]
+                    first = number[:3]
+                    middle = number[3:6]
                     end = number[6:]
                     parseNumber = '(' + first + ')' + middle + '-'+ end
                 else:
@@ -418,6 +420,24 @@ def register_view(request, facility, access_page):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "ees_forms/ees_register.html", {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'facilityLink': facilityLink, 'userProfileInfo': userProfileInfo, 'media': media, 'pic': pic, 'access_page': access_page, 'options': options, 'facility': facility, 'form': form, 'profile_form': profile_form, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'data': data, 'data2': data2, 'userData2': userData2, 'userInfo': userInfo
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'facilityLink': facilityLink, 
+        'userProfileInfo': userProfileInfo, 
+        'media': media, 
+        'pic': pic, 
+        'access_page': access_page, 
+        'options': options, 
+        'facility': facility, 
+        'form': form, 
+        'profile_form': profile_form, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
+        'data': data, 
+        'data2': data2, 
+        'userData2': userData2, 
+        'userInfo': userInfo,
+        'addMoreRegistrations': addMoreRegistrations
     })
     

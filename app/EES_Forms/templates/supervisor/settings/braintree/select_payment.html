@@ -19,29 +19,22 @@
                     </div>
                 </div><br>
                 {% if cardsOnFile|length > 0 %}
-                <div class="dataBoxes">
-                    <div class="infoHeaders">Billing Address</div>
-                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
-                        <div>name on card</div>
-                        <div>address1</div>
-                        <div>address2</div>
-                        <div>city/state/zip</div>
-                        <div>edit</div>
-                    </div>
-                </div><br>
+                    {% for x in cardsOnFile %}
+                            <div class="dataBoxes">
+                                <div class="infoHeaders">Billing Address</div>
+                                <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                                    <div>{{x.cardholder_name}}</div>
+                                    <div>{{x.billing_address.street_address}}</div>
+                                    {% if x.billing_address.extended_address %}<div>{{x.billing_address.extended_address}}</div>{% endif %}
+                                    <div>{{x.billing_address.locality}} / {{x.billing_address.region}} / {{x.billing_address.postal_code}}</div>
+                                </div>
+                            </div><br>
+                    {% endfor %}
                 {% endif %}
                 <div class="dataBoxes">
                     <div class="infoHeaders">Payment</div>
                     <div id='optionsCont' class="tabInfoCont infoBoxes" style="height:fit-content">
-                        {% if cardsOnFile|length > 0 %}
-                            <div id="cardCont" style="display:block;">
-                                <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card" checked>
-                                <div style="display: inline-flex;">
-                                    hello<br>
-                                    {{cardData.details.card_type|upper}} ending in {{cardData.details.last_four }}<br><br>
-                                </div>
-                            </div>
-                        {% elif cardData %}
+                        {% if cardData %}
                             <div id="cardCont" style="display:block;">
                                 <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card" checked>
                                 <div style="display: inline-flex;">
@@ -49,11 +42,32 @@
                                     {{ cardData.details.card_type|upper }} ending in {{ cardData.details.last_four }}<br><br>
                                 </div>
                             </div>
+                        {% elif cardsOnFile|length > 0 %}
+                            {% for card in cardsOnFile %}
+                                {% if card.default %}
+                                    <div id="cardCont" style="display:block;">
+                                        <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card-default" checked>
+                                        <div style="display: inline-flex;">
+                                            DEFAULT CARD<br>
+                                            {{card.card_type|upper}} ending in {{card.last_4 }}<br><br>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div id="cardCont" style="display:block;">
+                                        <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card-new" checked>
+                                        <div style="display: inline-flex;">
+                                            {{card.card_type|upper}} ending in {{card.last_4 }}<br><br>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
-                        <div id="paypalCont" style="display:block;">
+                        <div id="paypalCont" style="display:inline-flex;">
                             <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="paypal">
-                            <div style="display: inline-flex;">
-                                PayPal_logo - PayPal<br><br>
+                            <div style="margin-left: 6px;">
+                                <div style="display: flex;height: 28px;justify-content: center;align-items: center;">
+                                    <img style="width: 84px;" src="{% static 'images/paypal_icon.png' %}"><br><br>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -98,6 +112,7 @@
                 <input type="hidden" value="{{totalData.city}}" name="city"/>
                 <input type="hidden" value="{{totalData.state}}" name="state"/>
                 <input type="hidden" value="{{totalData.zipCode}}" name="zipCode"/>
+            </form>
         </div>
     </div>
 </div>

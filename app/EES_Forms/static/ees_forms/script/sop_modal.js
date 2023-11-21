@@ -1,3 +1,5 @@
+
+
 // Get the modal
 var modalAdd = document.getElementById("addModal");
 
@@ -8,8 +10,8 @@ var addBtn = document.getElementById("addBtn");
 var spanAdd = document.getElementsByClassName("closeAdd")[0];
 
 // When the user clicks the button, open the modal 
-addBtn.onclick = function() {
-    modalAdd.style.display = "block";
+triggerButton = (elem) => {
+  modalAdd.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal

@@ -1,12 +1,61 @@
-
+{% load static %}
+<script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/settings_subscription.js' %}"></script>
+<link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet" />
 <div class="centerFlex">
+    <div id="addModal" class="modalAdd">
+        <div id="cancelReg" class="modal-content" style="width: 64%;">
+            <span class="closeAdd">&times;</span>
+            <div class='modalHeader'>
+                <h1>Cancel Registration for <span class="registerName"></span>?</h1>
+            </div>
+            <div class='modalContent'>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div style="color:black;text-align:justify;">
+                        Are you sure you would like to cancel your registration for <span class="registerName"></span>? Once cancelled, <span class="registerName"></span> will have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
+                        <br><br>
+                        <p>Please type "cancel" below and confirm</p><br>
+                        <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
+                        <input id="registerID" type="hidden" name="registerID" value=""/>
+                        <br>
+                        <div style="text-align: right;">
+                            <input id="submit" type="submit" value="Confirm Cancellation" disabled>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+        </div>
+        <div id="cancelSub" class="modal-content" style="width: 64%;">
+            <span class="closeAdd">&times;</span>
+            <div class='modalHeader'>
+                <h1>Cancel Subscription for {{userCompany}}?</h1>
+            </div>
+            <div class='modalContent'>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div style="color:black;text-align:justify;">
+                        Are you sure you would like to cancel your subscription to MethodPlus+? Once cancelled, all accounts registered with {{userCompany}} will have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
+                        <br><br>
+                        <p>Please type "cancel subscription" below and confirm</p><br>
+                        <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
+                        <input id="registerID" type="hidden" name="registerID" value=""/>
+                        <br>
+                        <div style="text-align: right;">
+                            <input id="submit" type="submit" value="Confirm Cancellation" disabled>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
     <table class="tableClass">
         <tr class='tableSpacer'>
             <td class="labelClass">Subscription:</td>
             <td class="labelClass2">
                 {% if activeSub %}
                     {{subDetails.name}} <br>
-                    3 Extra Registrations
+                    {{subDetails.additional}} Extra Registration(s)
                 {% else %}
                     <a href="{% url 'subscriptionSelect' facility 'subscription' %}">Click here to pick a subscription!</a>
                 {% endif %}
@@ -15,7 +64,7 @@
         {% if activeSub %}
             <tr class='tableSpacer'>
                 <td class="labelClass">Monthly Amount:</td>
-                <td class="labelClass2">${{subDetails.price}}</td>
+                <td class="labelClass2">${{subDetails.totalCharge}}</td>
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Status:</td>
@@ -27,12 +76,12 @@
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Active Accounts:</td>
-                <td class="labelClass2">( 5 / 7 ) <a id="seeAll" href=# onclick="seeEmployees()">see all</a></td>
+                <td class="labelClass2">( {{active_registrations}} / {{registrationData.0}} ) <a id="seeAll" href=# onclick="seeEmployees()">see all</a></td>
             </tr>
             <tr id="employeesCont" class='tableSpacer' style="display:none;">
                 <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
                     {% for employee in listOfEmployees %}
-                        {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee %}Active{% else %}Inactive{% endif %} <a href=#>(cancel)</a><br>
+                        <p style="{%if not employee.active%}color:gray;{%endif%}">{{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee.active %}Active {% if employee.user.id != accountData.user.id %}<a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{subDetails.next_billing_date}}" data-regid="{{employee.id}}">(cancel)</a>{% endif %}{% else %}Inactive{% endif %}</p>
                     {% endfor %}
                 </td>
             </tr>

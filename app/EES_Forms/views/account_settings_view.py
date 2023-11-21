@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import braintree
-from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities
+from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
 from ..models import user_profile_model, company_model
 from ..forms import User, user_profile_form
 import datetime
@@ -89,6 +89,7 @@ def sup_select_subscription(request, facility, selector):
                     if i.code == "81724":
                         print("Duplicate card exists.")
         cardsOnFile = customer.credit_cards
+        print(cardsOnFile)
         cardData = request.POST.get('payNonce', False)
         dataTemplateUse = request.POST
         if 'payNonce' in request.POST.keys():
@@ -127,41 +128,61 @@ def sup_select_subscription(request, facility, selector):
                 planDetails = plan
         addRegistrationCost = format(int(request.POST['seats'])*75, '.2f')
         totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
-        updateCustomer = gateway.customer.update(customerId, {
-            "payment_method_nonce": request.POST['payNonce'],
-            'credit_card':{ # A credit or debit payment method.
-                'billing_address': { # A billing address associated with a specific credit card. The maximum number of addresses per customer is 50. - 
-                    'company': accountData.company.company_name,   # str - Company name. Maximum 255 characters.
-                    'street_address': request.POST['address1'],   # str - The street address. Maximum 255 characters.  
-                    'extended_address': request.POST['address2'],   # str - The extended address information—such as apartment or suite number. 255 character maximum.
-                    'locality': request.POST['city'],    # str - The locality/city. Maximum 255 characters.
-                    'postal_code': request.POST['zipCode'],    # str - The postal code. Postal code must be a string of 4-9 alphanumeric characters, optionally separated by a dash or a space. Spaces and hyphens are ignored.
-                    'region': request.POST['state'],    # str - The state or province. Maximum 255 characters.
-                    'country_code_alpha2': 'US',    # str - The ISO 3166-1 alpha-2 country code specified in an address. The gateway only accepts specific alpha-2 values.
-                },    
-                'cardholder_name': request.POST['nameOnCard'],    # str - The name associated with the credit card. Must be less than or equal to 175 characters.
-                'options':{ # Optional values that can be passed with a request. - 
-                    'fail_on_duplicate_payment_method': True,    # bool - If this option is passed and the same payment method has already been added to the Vault for any customer, the request will fail. This option will be ignored for PayPal, Pay with Venmo, Apple Pay, Google Pay, and Samsung Pay payment methods.
-                    'make_default': True,    # bool - This option makes the specified payment method the default for the customer.
-                    'skip_advanced_fraud_checking': False,    # boolean - If the payment method is a credit card, prevents the verification from being evaluated as part of Premium Fraud Management Tools checks. Use with caution – once you've skipped checks for a verification, it is not possible to run them retroactively.:     #  - 
-                    'verify_card': True,   # bool - If the payment method is a credit card, this option prompts the gateway to verify the card's number and expiration date. It also verifies the AVS and CVV information if you've enabled AVS and CVV rules.:     #  - NOTE Braintree strongly recommends verifying all cards before they are stored in your Vault by enabling card verification for your entire account in the Control Panel. In some cases, cardholders may see a temporary authorization on their account after their card has been verified. The authorization will fall off the cardholder's account within a few days and will never settle.:     #  - Only returns a CreditCardVerification result if verification runs and is unsuccessful.
-                }     
-            } ,    
-        })
-        
-        if not updateCustomer.is_success:
-            print(updateCustomer)
-            print('ERROR UPDATING CUSTOMER')
-            for i in updateCustomer.errors.deep_errors:
-                print(i.code)
-                if i.code == "81724":
-                    print("Duplicate card exists.")
-                    
-        vaultPaymentToken = updateCustomer.customer.payment_methods[0].token
-        addSubsriptionResult = gateway.subscription.create({
-            "payment_method_token": vaultPaymentToken,
-            "plan_id": request.POST['planId']
-        })
+        if request.POST['paymentSelected'][5:] == "new":
+            updateCustomer = gateway.customer.update(customerId, {
+                "payment_method_nonce": request.POST['payNonce'],
+                'credit_card':{ # A credit or debit payment method.
+                    'billing_address': { # A billing address associated with a specific credit card. The maximum number of addresses per customer is 50. - 
+                        'company': accountData.company.company_name,   # str - Company name. Maximum 255 characters.
+                        'street_address': request.POST['address1'],   # str - The street address. Maximum 255 characters.  
+                        'extended_address': request.POST['address2'],   # str - The extended address information—such as apartment or suite number. 255 character maximum.
+                        'locality': request.POST['city'],    # str - The locality/city. Maximum 255 characters.
+                        'postal_code': request.POST['zipCode'],    # str - The postal code. Postal code must be a string of 4-9 alphanumeric characters, optionally separated by a dash or a space. Spaces and hyphens are ignored.
+                        'region': request.POST['state'],    # str - The state or province. Maximum 255 characters.
+                        'country_code_alpha2': 'US',    # str - The ISO 3166-1 alpha-2 country code specified in an address. The gateway only accepts specific alpha-2 values.
+                    },    
+                    'cardholder_name': request.POST['nameOnCard'],    # str - The name associated with the credit card. Must be less than or equal to 175 characters.
+                    'options':{ # Optional values that can be passed with a request. - 
+                        'fail_on_duplicate_payment_method': True,    # bool - If this option is passed and the same payment method has already been added to the Vault for any customer, the request will fail. This option will be ignored for PayPal, Pay with Venmo, Apple Pay, Google Pay, and Samsung Pay payment methods.
+                        'make_default': True,    # bool - This option makes the specified payment method the default for the customer.
+                        'skip_advanced_fraud_checking': False,    # boolean - If the payment method is a credit card, prevents the verification from being evaluated as part of Premium Fraud Management Tools checks. Use with caution – once you've skipped checks for a verification, it is not possible to run them retroactively.:     #  - 
+                        'verify_card': True,   # bool - If the payment method is a credit card, this option prompts the gateway to verify the card's number and expiration date. It also verifies the AVS and CVV information if you've enabled AVS and CVV rules.:     #  - NOTE Braintree strongly recommends verifying all cards before they are stored in your Vault by enabling card verification for your entire account in the Control Panel. In some cases, cardholders may see a temporary authorization on their account after their card has been verified. The authorization will fall off the cardholder's account within a few days and will never settle.:     #  - Only returns a CreditCardVerification result if verification runs and is unsuccessful.
+                    }     
+                } ,    
+            })
+            
+            if not updateCustomer.is_success:
+                print(updateCustomer)
+                print('ERROR UPDATING CUSTOMER')
+                for i in updateCustomer.errors.deep_errors:
+                    print(i.code)
+                    if i.code == "81724":
+                        print("Duplicate card exists.")
+                        
+            vaultPaymentToken = updateCustomer.customer.payment_methods[0].token
+            addSubsriptionResult = gateway.subscription.create({
+                "payment_method_token": vaultPaymentToken,
+                "plan_id": request.POST['planId']
+            })
+        else:
+            vaultPaymentToken = accountData.company.payment_method_token
+            addOnEdits = {
+                "payment_method_token": vaultPaymentToken,
+                "plan_id": request.POST['planId']
+            }
+            if request.POST['seats'] == 0:
+                addOnEdits["add_ons"] = {
+                    "remove": ["86gr"]
+                }
+            else:
+                addOnEdits["add_ons"] = {
+                    "update": [{
+                        "existing_id": "86gr",
+                        "quantity": request.POST['seats']
+                    }]
+                }
+            addSubsriptionResult = gateway.subscription.create(addOnEdits)
+    
         userComp = company_model.objects.filter(company_name=accountData.company.company_name)
         if userComp.exists():
             userComp = userComp[0]
@@ -174,7 +195,7 @@ def sup_select_subscription(request, facility, selector):
                 print(i)
         else:
             userComp.payment_method_token = vaultPaymentToken
-            userComp.subID = addSubsriptionResult.id
+            userComp.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
             userComp.save()
             print('MADE IT TO FUCKING SAVE')
 
@@ -200,12 +221,15 @@ def sup_account_view(request, facility):
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
-    listOfEmployees = userProfileQuery.filter(~Q(id=accountData.id), ~Q(position="client"), company=userCompany, )
+    listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
     print(listOfEmployees)
+    active_registrations = len(listOfEmployees.filter(active=True))
+    total_registrations = 7
     customerId = accountData.company.customerID
     subID = accountData.company.subID
     gateway = braintreeGateway()
     customer = gateway.customer.find(customerId)
+    
     print(customer)
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
@@ -220,6 +244,7 @@ def sup_account_view(request, facility):
         activeSub = False
         companyPlan = False
     if activeSub:
+        registrationData = checkIfMoreRegistrations(request.user)
         subDetails = {
             'first_billing_date': sub.first_billing_date,
             'billing_day_of_month': sub.billing_day_of_month,
@@ -230,9 +255,19 @@ def sup_account_view(request, facility):
             'price': sub.price,
             'status': sub.status,
             'name': companyPlan.name,
+            'totalCharge': sub.price + registrationData[2],
+            'additional': registrationData[1]
         }
     else:
         subDetails = ''
+        registrationData = ''
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+        selectedRegister = userProfileQuery.get(id=int(data['registerID']))
+        selectedRegister.active = False
+        selectedRegister.save()
+        return redirect("Account", facility)
     return render(request, 'supervisor/settings/sup_account.html',{
         'supervisor': supervisor, 
         "client": client, 
@@ -243,7 +278,10 @@ def sup_account_view(request, facility):
         'notifs': notifs,
         'listOfEmployees': listOfEmployees,
         'subDetails': subDetails,
-        'activeSub': activeSub
+        'activeSub': activeSub,
+        'accountData': accountData,
+        'active_registrations': active_registrations,
+        'registrationData': registrationData
     })
     
 @lock
@@ -254,7 +292,7 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     if unlock:
         return redirect('IncompleteForms', facility)
-    accountData = user_profile_model.objects.get(user__username=request.user.username)
+    accountData = user_profile_model.objects.get(user__id=request.user.id)
     gateway = braintreeGateway()
     customerId = accountData.company.customerID
     if action[0:3] != "add":
@@ -408,12 +446,11 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
             print('new CArd')
         elif cancelSub:
             if request.POST['cancel'] == 'cancel':
-                subscriptions = payment_method.subscriptions
-                for sub in subscriptions:
-                    if sub.status == "Active":
-                        subscriptionID = sub.id
-                result = gateway.subscription.cancel(subscriptionID)
-            print('SUBSCRIPTION CANCELLED')
+                subID = accountData.company.subID
+                cancelResult = gateway.subscription.cancel(subID)
+                print(cancelResult)
+                print('SUBSCRIPTION CANCELLED')
+                return redirect("Account", facility)
     
     return render (request, template, variables)
 

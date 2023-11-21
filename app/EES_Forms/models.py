@@ -7013,3 +7013,16 @@ class notifications_model(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return str(self.created_at) + " - " + str(self.facilityChoice) + " - " + str(self.user) + " - " + str(self.header)
+    
+# class braintreePlans(models.Model):
+#     planID = models.CharField(
+#         max_length=150
+#     )
+#     planName = models.CharField(
+#         max_length=70
+#     )
+#     price = models.IntegerField()
+#     registrations = models.IntegerField()
+#     def __str__(self):
+#         return str(self.planID) + "-" + str(self.planName)
+    
