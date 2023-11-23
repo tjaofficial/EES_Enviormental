@@ -33,7 +33,6 @@ def sup_select_subscription(request, facility, selector):
     if selector == 'subscription':
         plans = gateway.plan.all()
         cPlan = []
-        print(plans[0])
         for plan in plans:
             oPlan = {
                 'pid': plan.id,
@@ -233,34 +232,41 @@ def sup_account_view(request, facility):
     print(customer)
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
-    sub = gateway.subscription.find(subID)
-    if sub.status == "Active":
-        activeSub = gateway.subscription.find(subID)
-        plans = gateway.plan.all()
-        for plan in plans:
-            if plan.id == activeSub.plan_id:
-                companyPlan = plan
+    if subID:
+        sub = gateway.subscription.find(subID)
+        if sub.status == "Active":
+            activeSub = gateway.subscription.find(subID)
+            plans = gateway.plan.all()
+            for plan in plans:
+                if plan.id == activeSub.plan_id:
+                    companyPlan = plan
+        else:
+            activeSub = False
+            companyPlan = False
+        if activeSub:
+            registrationData = checkIfMoreRegistrations(request.user)
+            subDetails = {
+                'first_billing_date': sub.first_billing_date,
+                'billing_day_of_month': sub.billing_day_of_month,
+                'billing_period_start_date': sub.billing_period_start_date,
+                'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
+                'next_billing_date': sub.next_billing_date,
+                'plan_id': sub.plan_id,
+                'price': sub.price,
+                'status': sub.status,
+                'name': companyPlan.name,
+                'totalCharge': sub.price + registrationData[2],
+                'additional': registrationData[1]
+            }
+        else:
+            subDetails = ''
+            registrationData = ''
     else:
         activeSub = False
         companyPlan = False
-    if activeSub:
-        registrationData = checkIfMoreRegistrations(request.user)
-        subDetails = {
-            'first_billing_date': sub.first_billing_date,
-            'billing_day_of_month': sub.billing_day_of_month,
-            'billing_period_start_date': sub.billing_period_start_date,
-            'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
-            'next_billing_date': sub.next_billing_date,
-            'plan_id': sub.plan_id,
-            'price': sub.price,
-            'status': sub.status,
-            'name': companyPlan.name,
-            'totalCharge': sub.price + registrationData[2],
-            'additional': registrationData[1]
-        }
-    else:
         subDetails = ''
         registrationData = ''
+        
     if request.method == "POST":
         data = request.POST
         print(data)

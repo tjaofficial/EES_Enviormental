@@ -290,8 +290,11 @@ def register_view(request, facility, access_page):
     data = ''
     data2 = bat_info_model.objects.all()
     facilityLink = False
+    print(checkIfMoreRegistrations(request.user))
     if checkIfMoreRegistrations(request.user):
         addMoreRegistrations = checkIfMoreRegistrations(request.user)[3]
+    else:
+        addMoreRegistrations = False
 
     if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
