@@ -13,31 +13,9 @@
                 <form action="" method="POST">
                     {% csrf_token %}
                     <div style="color:black;text-align:justify;">
-                        Are you sure you would like to cancel your registration for <span class="registerName"></span>? Once cancelled, <span class="registerName"></span> will have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
+                        Are you sure you would like to cancel your registration for <span class="registerName"></span>? Once cancelled, <span class="registerName"></span> will only have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
                         <br><br>
                         <p>Please type "cancel" below and confirm</p><br>
-                        <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
-                        <input id="registerID" type="hidden" name="registerID" value=""/>
-                        <br>
-                        <div style="text-align: right;">
-                            <input id="submit" type="submit" value="Confirm Cancellation" disabled>
-                        </div>
-                    </div>  
-                </form>
-            </div>
-        </div>
-        <div id="cancelSub" class="modal-content" style="width: 64%;">
-            <span class="closeAdd">&times;</span>
-            <div class='modalHeader'>
-                <h1>Cancel Subscription for {{userCompany}}?</h1>
-            </div>
-            <div class='modalContent'>
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    <div style="color:black;text-align:justify;">
-                        Are you sure you would like to cancel your subscription to MethodPlus+? Once cancelled, all accounts registered with {{userCompany}} will have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
-                        <br><br>
-                        <p>Please type "cancel subscription" below and confirm</p><br>
                         <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
                         <input id="registerID" type="hidden" name="registerID" value=""/>
                         <br>
@@ -95,8 +73,8 @@
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass" colspan=2 style="text-align: center;">
-                {% if activeSub %}<a href=#>Change Subscription</a><br>{% endif %}
-                <a href=#>See Billing History</a><br>
+                {% if activeSub %}<a href="{% url 'subscriptionChange' facility %}">Change Subscription</a><br>{% endif %}
+                <a href="{% url 'billingHistory' facility %}">See Billing History</a><br>
                 {% if activeSub %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}">Cancel Subscription</a>{% endif %}
             </td>
         </tr>

@@ -4,18 +4,29 @@
 <script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
-        <div class="cardHeader">Account Settings</div>
+        <div class="cardHeader">
+            {% include "ees_forms/BackArrow.html" with destination="accountSettings" %}
+            {% if selector == "account" %}Account{% elif selector == "company" %}Company{% endif %} Settings
+        </div>
         <div class="contentCont" style="padding: 15px 32px;">
-            <form method="post" action=''>
-                {{userForm.username}}
-                {{userForm.first_name}}
-                last name
-                email
-                certification date<br>
-                {{userProfileForm.phone.label}}: {{userProfileForm.phone}}<br>
-                {{userProfileForm.certs.label}}: {{userProfileForm.certs}}<br>
-                {{userProfileForm.profile_picture.label}}: {{userProfileForm.profile_picture}}<br>
-                <input type="submit" value="Save"/>
+            <form method="post" action='' style='text-align:left;'>
+                {% csrf_token %}
+                {% if selector == "account" %}
+                    {{primaryForm.username.label}}: {{primaryForm.username}}<br><br>
+                    {{primaryForm.first_name.label}}: {{primaryForm.first_name}}<br><br>
+                    {{primaryForm.last_name.label}}: {{primaryForm.last_name}}<br><br>
+                    {{primaryForm.email.label}}: {{primaryForm.email}}<br><br>
+                    Certification Date: {{secondaryForm.cert_date}}<br><br>
+                    {{secondaryForm.phone.label}}: {{secondaryForm.phone}}<br><br>
+                {% elif selector == "company" %}
+                    {{primaryForm.company_name.label}}: {{primaryForm.company_name}}<br><br>
+                    {{primaryForm.address.label}}: {{primaryForm.address}}<br><br>
+                    {{primaryForm.city.label}}: {{primaryForm.city}}<br><br>
+                    {{primaryForm.state.label}}: {{primaryForm.state}}<br><br>
+                    {{primaryForm.zipcode.label}}: {{primaryForm.zipcode}}<br><br>
+                    {{primaryForm.phone.label}}: {{primaryForm.phone}}<br><br>
+                {% endif %}
+                <p style="text-align:center"><input type="submit" value="Save"/></p>
             </form>
         </div>
     </div>

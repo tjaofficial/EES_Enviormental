@@ -3,88 +3,90 @@
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
-<div>
-    {% include "ees_forms/backArrow.html" %}
-</div>
-<div class="page_center">
-    <div id="prof_form_holder" class='cardDash'>
-        <div style="padding: 13px; font-size: 2rem; text-align: center;">
-                        Profile Information
-                    </div>
-        {% if access_page == 'main' %}
-        <div style="text-align: center; ">
-            <img class="prof_pic_view" src="../../../media/{{ pic }}">
-            <br><br>
-            <a href="../profile/photo_change">Change ID Photo</a>
-            <br><br>
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<div class="mainCont" style="width:100rem;max-width: none;">
+    <div id="prof_form_holder" class='card'>
+        <div class="cardHeader">
+            {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+            Profile Information
         </div>
-        {% else %}
-        <div style="text-align: center; ">
-            <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
-            <br><br>
-            <a href="../profile/photo_change">Add ID Photo</a>
-            <form action="" method="POST" enctype='multipart/form-data'>
-                {% csrf_token %}
-                {{ pic_form.profile_picture }}
-                <br>
-                <input type="submit" value="Upload">
-            </form>
-            <br><br>
-        </div>
-        {% endif %}
-        <div style="text-align: center;">
-            <table style="border-collapse: collapse; margin: auto;" class="table_font">
-                <tr>
-                    <td class="prof_table_title" style="border-top: 1px solid gray;" >
-                        Name:
-                    </td>
-                    <td colspan="2" id='obj_data' class="prof_table_data">
-                        {{ request.user.first_name }} {{ request.user.last_name }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="prof_table_title">
-                        Username:
-                    </td>
-                    <td colspan="2" id='obj_data' class="prof_table_data">
-                        {{ request.user }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="prof_table_title">
-                        Password:
-                    </td>
-                    <td colspan="2" id='obj_data'>
-                        <a href="{% url 'PasswordChange' facility %}">Change Password</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="prof_table_title">
-                        Phone:
-                    </td>
-                    <td colspan="2" id='obj_data'>
-                        {{ user_select.phone }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="prof_table_title">
-                        Email:
-                    </td>
-                    <td colspan="2" id='obj_data' class='prof_table_data'>
-                        {{ request.user.email }}
-                    </td>
-                </tr>
-                <tr id='obj_data'>
-                    <td class="prof_table_title" style="padding-top: 25px; padding-bottom: 25px;">
-                        Certification Date:<br><br>
-                        Position:
-                    </td>
-                    <td colspan="2" style="padding-top: 25px; padding-bottom: 25px;">
-                        {{ user_select.cert_date }}<br><br>
-                        {{ user_select.position }}
-                    </td>
-                </tr>
-            </table>
+
+        <div class="contentCont">
+            {% if access_page == 'main' %}
+            <div style="text-align: center;">
+                <img class="prof_pic_view" src="../../../media/{{ pic }}">
+                <br><br>
+                <a href="../profile/photo_change">Change ID Photo</a>
+                <br><br>
+            </div>
+            {% else %}
+            <div style="text-align: center; ">
+                <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
+                <br><br>
+                <a href="../profile/photo_change">Add ID Photo</a>
+                <form action="" method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ pic_form.profile_picture }}
+                    <br>
+                    <input type="submit" value="Upload">
+                </form>
+                <br><br>
+            </div>
+            {% endif %}
+            <div style="text-align: center;">
+                <table style="border-collapse: collapse; margin: auto;" class="table_font">
+                    <tr>
+                        <td class="prof_table_title" style="border-top: 1px solid gray;" >
+                            Name:
+                        </td>
+                        <td colspan="2" id='obj_data' class="prof_table_data">
+                            {{ request.user.first_name }} {{ request.user.last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title">
+                            Username:
+                        </td>
+                        <td colspan="2" id='obj_data' class="prof_table_data">
+                            {{ request.user }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title">
+                            Password:
+                        </td>
+                        <td colspan="2" id='obj_data'>
+                            <a href="{% url 'PasswordChange' facility %}">Change Password</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title">
+                            Phone:
+                        </td>
+                        <td colspan="2" id='obj_data'>
+                            {{ user_select.phone }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="prof_table_title">
+                            Email:
+                        </td>
+                        <td colspan="2" id='obj_data' class='prof_table_data'>
+                            {{ request.user.email }}
+                        </td>
+                    </tr>
+                    <tr id='obj_data'>
+                        <td class="prof_table_title" style="padding-top: 25px; padding-bottom: 25px;">
+                            Certification Date:<br><br>
+                            Position:
+                        </td>
+                        <td colspan="2" style="padding-top: 25px; padding-bottom: 25px;">
+                            {{ user_select.cert_date }}<br><br>
+                            {{ user_select.position }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
     

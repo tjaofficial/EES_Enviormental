@@ -2,7 +2,10 @@
 <link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
 <div class="mainCont">
     <div class="card">
-        <div class="cardHeader">Change Card On File</div>
+        <div class="cardHeader">
+          {% include "ees_forms/BackArrow.html" with destination="accountSettings" %}
+          {% if action == "change" %}Change Card{% elif action == "update" %}Update Address{% endif %}
+        </div>
         <div class="contentCont">
             <div id="clientToken"style="display:none;" data-client_token={{client_token}}></div>
                 <!-- Information form-->
@@ -31,7 +34,22 @@
                             </div>
                         {% endif %}
                         <div class="billingAddressCont" style="margin-bottom: 48px;">
-                            <h2 style="text-align: center; margin-bottom: 22px;">Billing Address</h2>
+                            {% if action == "change" %}<h2 style="text-align: center; margin-bottom: 22px;">Billing Address</h2>{% endif %}
+                            {% if action == "update" %}
+                              <div style="background-color: #8080804a; padding: 31px; border-radius: 8px;">
+                                <h3>Old Address:</h3>
+                                {% for x in customer.credit_cards %}
+                                  {% if x.default %}
+                                    {{x.billing_address.street_address}}<br>
+                                    {% if x.billing_address.extended_address != none %}{{x.billing_address.extended_address}}<br>{% endif %}
+                                    {{x.billing_address.locality}}, {{x.billing_address.region}} {{x.billing_address.postal_code}}<br>
+                                  {% endif %}
+                                {% endfor %}
+                              </div>
+                              <br><br>
+                              <h3>New Address:</h3><br>
+                            {% endif %}
+
                             <input class="input" type="hidden" id="planId" value="{{pId}}"/>
                             <label for="address1">Address 1</label>
                             <div class="tempInputStyle">
@@ -54,7 +72,7 @@
                                 <input class="input" id="postalCode" type="text" name="postalCode" placeholder="11111"/>
                             </div>
                         </div>
-                        <input id="submit" type="submit" value="Review Subscription" name="{% if action == 'change' %}newCard{% else %}updateAddress{% endif %}" />
+                        <input id="submit" type="submit" value="{% if action == 'update' %}Update Address{% elif action == 'change' %}Change Card{% endif %}" name="{% if action == 'change' %}newCard{% else %}updateAddress{% endif %}" />
                     </form>
                 </div>
         </div>

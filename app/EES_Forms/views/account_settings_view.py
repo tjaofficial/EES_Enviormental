@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import braintree
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
-from ..models import user_profile_model, company_model
-from ..forms import User, user_profile_form
+from ..models import user_profile_model, company_model, User
+from ..forms import CreateUserForm, user_profile_form, company_form
 import datetime
 import json
+from django.contrib.auth.forms import UserCreationForm
 
 lock = login_required(login_url='Login')
 
@@ -224,7 +225,6 @@ def sup_account_view(request, facility):
     listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
     print(listOfEmployees)
     active_registrations = len(listOfEmployees.filter(active=True))
-    total_registrations = 7
     customerId = accountData.company.customerID
     subID = accountData.company.subID
     gateway = braintreeGateway()
@@ -307,7 +307,6 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
             "action": action,
         }
     customer = gateway.customer.find(customerId)
-    print(customer)
     def updateCardAddress(token):
         updateCard = gateway.payment_method.update(token, {
             "billing_address": {
@@ -399,9 +398,6 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
         # return transaction
         
     if action in {"update","change"}:
-        customer = gateway.customer.find(customerId)
-        # customer = gateway.customer.find("the_customer_id")
-        # customer.payment_methods # array of braintree.PaymentMethod instances
         template = "supervisor/settings/braintree/sup_cardUpdate.html"
         variables['customer'] = customer
         variables['token'] = token
@@ -424,9 +420,15 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
         variables['pId'] = planId
         variables['seats'] = seats
     elif action == "cancel":
+        subID = accountData.company.subID
+        sub = gateway.subscription.find(subID)
+        if sub.status == "Active":
+            activeSub = gateway.subscription.find(subID)
+            billing_period_end_date = activeSub.billing_period_end_date
         template = "supervisor/settings/braintree/sup_cancelSub.html"
         variables['token'] = token
         variables['payment_method'] = payment_method
+        variables['billing_period_end_date'] = billing_period_end_date
          
     if request.method == "POST":
         updateAddress = request.POST.get('updateAddress', False)
@@ -454,7 +456,8 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
     
     return render (request, template, variables)
 
-def sup_update_account(request, facility):
+@lock
+def sup_update_account(request, facility, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -463,25 +466,128 @@ def sup_update_account(request, facility):
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
     user = user_profile_model.objects.get(user__id=request.user.id)
-    
-    initial_data = {
-        'username': user.user.username,
-        'first_name': user.user.first_name,
-        'last_name': user.user.last_name,
-        'email': user.user.email,
-        'cert_date': user.cert_date,
-        'phone': user.phone,
-        'certs': user.certs,
-        'profile_picture': user.profile_picture,
-    }
-    userForm = User()
-    userProfileForm = user_profile_form(initial=initial_data)
-    return render(request, 'supervisor/settings/settings_account_update.html', {
+    variables = {
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
         'facility': facility,
         'notifs': notifs,
-        'userForm': userForm,
-        'userProfileForm': userProfileForm
+        'selector': selector
+    }
+    if selector == "account":
+        primaryModel = User.objects.get(id=request.user.id)
+        initial_data = {
+            'username': user.user.username,
+            'first_name': user.user.first_name,
+            'last_name': user.user.last_name,
+            'email': user.user.email,
+            'cert_date': user.cert_date,
+            'phone': user.phone,
+            'certs': user.certs,
+            'profile_picture': user.profile_picture,
+        }
+        primaryForm = CreateUserForm(initial=initial_data)
+        secondaryForm = user_profile_form(initial=initial_data)
+        variables['secondaryForm'] = secondaryForm
+    elif selector == "company":
+        primaryModel = company_model.objects.get(id=user.company.id)
+        initial_data = {
+            'company_name': primaryModel.company_name,
+            'address': primaryModel.address,
+            'city': primaryModel.city,
+            'state': primaryModel.state,
+            'zipcode': primaryModel.zipcode,
+            'phone': primaryModel.phone,
+        }
+        primaryForm = company_form(initial=initial_data)
+    
+    variables['primaryForm'] = primaryForm
+    if request.method == 'POST':
+        print(request.POST)
+        dataFromForm = request.POST
+        if selector == "account":
+            primaryModel.first_name = dataFromForm['first_name']
+            primaryModel.last_name = dataFromForm['last_name']
+            primaryModel.username = dataFromForm['username']
+            primaryModel.email = dataFromForm['email']
+            user.cert_date = dataFromForm['cert_date']
+            user.phone = dataFromForm['phone']
+            user.save()
+        elif selector == "company":
+            primaryModel.company_name = dataFromForm['company_name']
+            primaryModel.address = dataFromForm['address']
+            primaryModel.city = dataFromForm['city']
+            primaryModel.state = dataFromForm['state']
+            primaryModel.zipcode = dataFromForm['zipcode']
+            primaryModel.phone = dataFromForm['phone']
+            
+        primaryModel.save()
+        return redirect("Account", facility)
+
+    return render(request, 'supervisor/settings/settings_account_update.html', variables)
+
+@lock
+def sup_change_subscription(request, facility):   
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
+        return redirect('IncompleteForms', facility)
+    facility = 'supervisor'
+    user = user_profile_model.objects.get(user__id=request.user.id)
+    subID = user.company.subID
+    gateway = braintreeGateway()
+    activeSub = gateway.subscription.find(subID)
+    plans = gateway.plan.all()
+    cPlan = []
+    print(plans[0])
+    for plan in plans:
+        oPlan = {
+            'pid': plan.id,
+            'billingDOM': plan.billing_day_of_month,
+            'currency_iso_code': plan.currency_iso_code,
+            'description': plan.description.split("\n"),
+            'Customizable_Forms': 'Customizable Forms',
+            'Real_time_Data_Entry': 'Real-time Data Entry',
+            'Multimedia_Integration': 'Multimedia Integration',
+            'Advanced_Reporting': 'Advanced Reporting',
+            'Collaborative_Workflows': 'Collaborative Workflows',
+            'Security_and_Compliance': 'Security and Compliance',
+            'Offline_Accessibility': 'Offline Accessibility',
+            'name': plan.name,
+            'price': plan.price
+            }
+        cPlan.append(oPlan)
+    cPlan.sort(key=lambda d: d['price'])
+    return render(request, 'supervisor/settings/braintree/sup_changeSub.html', {
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'facility': facility,
+        'notifs': notifs,
+        'planList': cPlan,
+        'activeSub': activeSub
+    })
+  
+@lock  
+def sup_billing_history(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
+        return redirect('IncompleteForms', facility)
+    facility = 'supervisor'
+    user = user_profile_model.objects.get(user__id=request.user.id)
+    subID = user.company.subID
+    gateway = braintreeGateway()
+    activeSub = gateway.subscription.find(subID)
+    return render(request, 'supervisor/settings/braintree/sup_billing_history.html', {
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'facility': facility,
+        'notifs': notifs,
+        'activeSub': activeSub
     })

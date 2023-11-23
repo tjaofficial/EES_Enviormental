@@ -1,0 +1,47 @@
+{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/billingHistory.css' %}" rel="stylesheet" />
+<div class='mainCont' style="width: 67rem; max-width:none;margin: auto;">
+    <div class='card'>
+        <div class="cardHeader">
+            {% include "ees_forms/BackArrow.html" with destination="accountSettings" %}
+            Billing History
+        </div>
+        <div class="contentCont">
+            <div class="searchCont">
+                <table>
+                    <tr>
+                        <th class="tableHeader" style="width: 15rem;">Search for invoice ID</th>
+                        <th class="tableHeader" style="width: 10rem;">Filter by date</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="trans_id" placeholder="s9je5"></td>
+                        <td><input type="date" name="trans_date"></td>
+                    </tr>
+                </table>
+                
+                <br>
+                <table style="margin: auto;">
+                    <tr>
+                        <th class="tableHeader" style="width: 15rem;">Description</th>
+                        <th class="tableHeader" style="width: 13rem;">Billed To</th>
+                        <th class="tableHeader" style="width: 13rem;">Transaction Date</th>
+                        <th class="tableHeader" style="width: 9rem;">Status</th>
+                        <th class="tableHeader" style="width: 7rem;">Amount</th>
+                        <th class="tableHeader" style="">Actions</th>
+                    </tr>
+                    {% for x in activeSub.transactions %}
+                        <tr class="row">
+                            <td>Subscription Purchase<br><p style="color:gray; font-size:12px;">{{x.id}}</p></td>
+                            <td>Anthony Ackerman<br><p style="color:gray; font-size:12px;">Ending in {{x.credit_card_details.last_4}}</p></td>
+                            <td>{{x.created_at.date}}</td>
+                            <td>{% if x.status == "settled" %}PAID{% else %}{{x.status}}{% endif %}</td>
+                            <td>${{x.amount}}</td>
+                            <td><a href=#>View Invoice</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

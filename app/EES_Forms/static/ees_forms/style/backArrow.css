@@ -1,6 +1,13 @@
 #back_arrow{
     height: 2rem;
-    padding-left: 5rem;
+    /* padding-left: 5rem; */
     color: #cacaca;
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
+    margin-top: -5px;
+}
+.backArrowCont{
+    color: #aaaaaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
 }

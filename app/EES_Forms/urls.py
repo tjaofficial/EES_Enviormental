@@ -23,7 +23,9 @@ urlpatterns = [
     path("<str:facility>/account", views.sup_account_view, name="Account"),
     path("<str:facility>/account/payment-method/<str:action>/<str:planId>/<str:seats>", views.sup_card_update, name="cardUpdate"),
     path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
-    path("<str:facility>/account/update", views.sup_update_account, name="accountUpdate"),
+    path("<str:facility>/account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
+    path("<str:facility>/subscription/change", views.sup_change_subscription, name="subscriptionChange"),
+    path("<str:facility>/subscription/billing", views.sup_billing_history, name="billingHistory"),
     
     ##---BILLING
     path("billing/<str:step>", views.billing, name="billing"),
