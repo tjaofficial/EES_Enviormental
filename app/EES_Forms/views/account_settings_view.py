@@ -222,14 +222,11 @@ def sup_account_view(request, facility):
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
     listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
-    print(listOfEmployees)
     active_registrations = len(listOfEmployees.filter(active=True))
-    customerId = accountData.company.customerID
     subID = accountData.company.subID
     gateway = braintreeGateway()
-    customer = gateway.customer.find(customerId)
     
-    print(customer)
+
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
     if subID:
