@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model, User
 from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
@@ -574,7 +574,10 @@ def event_add_view(request, facility):
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
-    options = bat_info_model.objects.all()  
+    options = bat_info_model.objects.all()
+    companyData = user_profile_model.objects.get(user__id=request.user.id).company
+    listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
+    
     if options.filter(facility_name=facility).exists():
         finalFacility = options.filter(facility_name=facility)[0]
     else:
@@ -607,7 +610,17 @@ def event_add_view(request, facility):
             return redirect(cal_link)
 
     return render(request, "ees_forms/event_add.html", {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData,'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'form': form_var, 'profile': profile, 'supervisor': supervisor, "client": client, 'unlock': unlock, 
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData,'options': options, 
+        'facility': facility, 
+        'today_year': today_year, 
+        'today_month': today_month, 
+        'form': form_var, 
+        'profile': profile, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
+        'listOfObservers': listOfObservers
     })
 
 @lock
@@ -620,7 +633,9 @@ def event_detail_view(request, facility, access_page, event_id):
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     options = bat_info_model.objects.all()
-        
+    companyData = user_profile_model.objects.get(user__id=request.user.id).company
+    listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
+    
     context = {}
     if supervisor:
         context['parent_template'] = 'admin/sup_layout.html'
@@ -653,7 +668,20 @@ def event_detail_view(request, facility, access_page, event_id):
 
     
     return render(request, "ees_forms/event_detail.html", {
-        'notifs': notifs, 'options': options, 'facility': facility, 'context': context, "supervisor": supervisor, "unlock": unlock, "client": client, 'today_year': today_year, 'today_month': today_month, 'form': form, 'my_event': my_event, 'event_id': event_id, 'access_page': access_page
+        'notifs': notifs, 
+        'options': options, 
+        'facility': facility, 
+        'context': context, 
+        "supervisor": supervisor, 
+        "unlock": unlock, 
+        "client": client, 
+        'today_year': today_year, 
+        'today_month': today_month, 
+        'form': form, 
+        'my_event': my_event, 
+        'event_id': event_id, 
+        'access_page': access_page,
+        'listOfObservers': listOfObservers
     })
 
 def handlePhone(number):

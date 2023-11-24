@@ -4,10 +4,8 @@
 <div class='mainCont'>
     <div class="card">
         <div class="cardHeader">
+            {% include "ees_forms/backArrow.html" with destination="dashboard"%}
             Facilities
-            {% comment %} <div style="text-align: right;font-size: 14px;">
-                <a href="{% url 'Register' facility 'form' %}">Add Facility</a>
-            </div> {% endcomment %}
         </div>
         {% if facilities|length > 0 %}
             <div class="contentCont center" style="padding: unset;">

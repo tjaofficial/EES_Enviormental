@@ -3,29 +3,34 @@
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 
-<body>
-    <div class="mainCont" style="margin-top:6rem;width:34rem;">
-        <div class="card">
-            <div class='cardHeader'>Battery Information</div>
-            <form class="contentCont" method="POST" action="">
-                {% csrf_token %}
-                {{ form.facility }}
-                Foreman: {{ form.foreman }}<br>
-                Crew: {{ form.crew }}<br><br>
-                Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br>
-                <p style='font-size: .7rem;'>* separate each oven with a comma *</p>
-                <p style='font-size: .7rem;'>* if there are NO inoperable ovens please type '-' *</p><br>
 
-                <input type="submit" name="submit_bat_info">
-                <br><br>
-                {% if access_page == 'login' or access_page == 'edit' %}
-                <p>
-                    Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
-                </p>
-                {% endif %}
-            </form>
-            
+<div class="mainCont" style="margin-top:6rem;width:34rem;">
+    <div class="card">
+        <div class='cardHeader'>
+            {% if access_page == "edit" %}
+                {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+            {% endif %}
+            Battery Information
         </div>
+        <form class="contentCont" method="POST" action="">
+            {% csrf_token %}
+            {{ form.facility }}
+            Foreman: {{ form.foreman }}<br>
+            Crew: {{ form.crew }}<br><br>
+            Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br>
+            <p style='font-size: .7rem;'>* separate each oven with a comma *</p>
+            <p style='font-size: .7rem;'>* if there are NO inoperable ovens please type '-' *</p><br>
+
+            <input type="submit" name="submit_bat_info">
+            <br><br>
+            {% if access_page == 'login' or access_page == 'edit' %}
+            <p>
+                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
+            </p>
+            {% endif %}
+        </form>
+        
     </div>
-</body>
+</div>
+
 {% endblock %}

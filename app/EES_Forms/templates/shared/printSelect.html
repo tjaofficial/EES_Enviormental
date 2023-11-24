@@ -11,7 +11,10 @@
     </div>
     <div class="mainCont" style="width:400px;">
         <div class="card" style="min-width: 400px; ">
-            <div class="cardHeader">Choose Forms to Print</div>
+            <div class="cardHeader">
+                {% include "ees_forms/backArrow.html" with destination="dashboard"%}
+                Choose Forms to Print
+            </div>
             <form action="" method="POST" class="contentCont">
                 {% csrf_token %}
                 <p>{{alertMessage}}</p>

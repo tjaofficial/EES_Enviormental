@@ -12,15 +12,13 @@
 {% endif %}
 <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 <div id="paperSize">
-    <div>
-        {% include "ees_forms/backArrow.html" %}
-    </div>
     <div class="mainCont">
         <form id="form" action="" method="POST" style="margin: auto; width: fit-content; margin-bottom: 100px;">
             {% csrf_token %}
             <div class="card" id="card_fitter">
                 {% include "ees_forms/print_button.html" %}
                 <div class="paper_fitter" style="padding: 3rem;">
+                    {% include "ees_forms/backArrow.html" with destination="dashboard" %}
                     <table style="border-collapse: collapse; margin: auto;">
                         <!-- Header Information -->
                         <!-- vvvvvv Header Information vvvvvvvvv -->
@@ -399,6 +397,3 @@
     </div>
 </div>
 {% endblock %}
-<script>
-    
-</script>

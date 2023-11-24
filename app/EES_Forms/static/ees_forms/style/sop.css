@@ -1,0 +1,9 @@
+.sopCard{
+    font-family: Arial, Helvetica, sans-serif;
+    width: 600px;
+    background-color: #b5b5b524;
+    box-shadow: #00000042 3px 4px 3px 0px;
+    margin: 2rem;
+    padding: 0 1rem;
+    border-radius: 1rem;
+}

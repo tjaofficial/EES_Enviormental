@@ -13,15 +13,13 @@
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 
     <div id="paperSize">
-        <div>
-            {% include "ees_forms/backArrow.html" %}
-        </div>
         <div class="mainCont">
             <form action="" method="POST" style="width: fit-content; margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">
                     {% include "ees_forms/print_button.html" %}
                     <div class="paper_fitter" style="padding: 3rem;">
+                        {% include "ees_forms/backArrow.html" with destination="dashboard" %}
                         <table style="border-collapse: collapse; margin: auto;">
                             <tr>
                                 <th class="boxTitle" colspan="6" style="text-align: center;">Method 303 Doors - Form (A-2)</th>

@@ -2,63 +2,55 @@
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
-<style>
-    #back_arrow{
-        padding-left: 5rem;
-        color: #cacaca;
-        margin-top: 1rem;
-        height: 2rem;
-    }
-</style>
-<div>
-    <a href="../../schedule/{{today_year}}/{{today_month}}">
-        <svg id="back_arrow" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
-        </svg>
-    </a>
-</div>
 <div class="mainCont center" style="width:35rem;">
     {% if access_page == 'view' %}
     <div class="card">
-        <a href="{% url 'Calendar' facility my_event.date.year my_event.date.month %}">
-            <span class="closeAdd">&times;</span>
-        </a>
-        <div class="cardHeader">View Event Details</div>
+        <div class="cardHeader">
+            {% include "ees_forms/backArrow.html" with destination="calendar"%}
+            View Event Details
+        </div>
         <div class="contentCont">
             Observer: {{ my_event.observer }}<br><br>
-            Title: {{ my_event.title }}<br><br>
+            Title: {{ my_event.get_title_display }}<br><br>
             Date: {{ my_event.date }}<br><br>
             Description: {{ my_event.notes }}<br><br>
             <br>
             {% if supervisor %}
             <div>
-                <a href="../../event_detail/{{ event_id }}/edit">Edit</a>
+                <a href="{% url 'Event Details' facility event_id 'edit' %}">Edit</a>
             </div>
             {% endif %}
         </div>
     </div>
     {% elif access_page == 'edit' %}
-    <div style="padding-top: 30px;">
-        <div style="padding-top: 25px; padding-bottom: 25px; margin: auto; text-align: left" class="eventAdd">
+    <div class="card">
+        <div class="cardHeader">
+            {% include "ees_forms/backArrow.html" with destination="calendar-event"%}
+            Edit Event Details
+        </div>
+        <div class='contentCont'>
             <form action="" method="POST">
                 {% csrf_token %}
-                <center>
-                    <h3>Edit Event Details</h3><br>
-                    
-                    Observer: {{ my_event.observer }}<br><br>
+                <div style="margin:auto;">
+                    Observer:<select name="observer" id="observers">
+                        <option value="">-----</option>
+                        {% for observer in listOfObservers %}
+                            {% if my_event.observer.value == observer.user.last_name %} 
+                                <option value="{{observer.id}}" selected>{{observer.user.last_name}}</option>
+                            {% else %}
+                                <option value="{{observer.id}}">{{observer.user.last_name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select><br><br>
                     Title: {{ my_event.title }}<br><br>
                     Date: {{ my_event.date }}<br><br>
                     Start: {{ my_event.start_time }}<br><br>
                     End: {{ my_event.end_time }}<br><br>
-                        
                     Description:<br> {{ my_event.notes }}<br>
                     <br>
                     <input type="submit" value="Save">
-                </center>  
+                </div>  
             </form>
-            <div>
-                <a href="../../event_detail/{{ event_id }}/view">Back</a>
-            </div>
         </div>
     </div>
     {% endif %}
