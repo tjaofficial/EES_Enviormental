@@ -1,17 +1,10 @@
 .regCont{
-    /* background-color: white;
-    margin: auto;
-    width: 550px;
-    height: 300px;
-    position: relative;
-    top: 15rem;
-    border-radius: 15px;
-    border: solid 5px #5e7a80; */
     width: 406px;
     max-width: 406px;
     margin: 0 auto;
     position: relative;
     top: 11rem;
+    left: -38px
 }
 .regHeader{
     border-radius: 15px;

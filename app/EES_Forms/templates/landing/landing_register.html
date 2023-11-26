@@ -1,12 +1,13 @@
-{% extends 'landing/landing_layout.html' %}{% load static %}
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
 {% block body %}
 <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
-<div class='topCont' style='height:100%;'>
-    <div class='regCont'>
+<link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
+<div class='topCont'>
+    <div class='regCont' style="top:6rem;">
         <form id="signup" method="POST" action="">
             {% csrf_token %}
             <div class='regHeader'>
-                <h style='font-weight: bolder; font-size: 28px;'>Sign Up</h>
+                <h1 style='font-weight: bolder; font-size: 28px;'>Sign Up</h1>
                 <p>Fill out this for to get started</p>
             </div>
             <hr>

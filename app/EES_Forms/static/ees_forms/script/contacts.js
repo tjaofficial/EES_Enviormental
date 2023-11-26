@@ -11,7 +11,7 @@ function htmlList(list) {
 }
 
 function getid(obj) {
-    const facility = document.getElementById('facility').innerHTML;
+    const facility = document.getElementById('facilityCheck').value;
     const name = document.getElementById("name" + obj.id).innerHTML;
     const email = document.getElementById("email" + obj.id).innerHTML;
     const phone = document.getElementById("phone" + obj.id).innerHTML;

@@ -1,0 +1,110 @@
+
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+.landing_H1{
+    font-size: 48px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.main_display_photo{
+    background-image: url('../images/farmer_inspection.jpg');
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+    height: 31rem;
+}
+.centerContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.hero {
+    background-image: url('background.jpg'); /* Replace with your background image */
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    padding: 57px 0 0 0;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #3434347a;
+    padding: 16px;
+    border-radius: 4px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+.feature-section {
+    background-color: #fff;
+    padding: 80px 0;
+}
+
+.feature {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.feature h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 16px;
+    color: #555;
+}
+
+.cta-section {
+    background-color: #3498db;
+    color: #fff;
+    text-align: center;
+    padding: 80px 0;
+}
+
+.cta-section h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.cta-section p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .hero {
+        padding: 100px 0;
+    }
+}

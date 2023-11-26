@@ -1,0 +1,43 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block body %}
+<link href="{% static 'landing/style/landingPage_main.css' %}" rel="stylesheet">
+<section class="hero main_display_photo">
+    <div class="container main_display_photo centerContent">
+        <div class="hero-content">
+            <div class="landing_H1">Welcome to MethodPlus+</div>
+            <p>Your solution for efficient and accurate field data collection</p>
+            <a href="{% url 'register' %}" class="button">Get Started</a>
+        </div>
+    </div>
+</section>
+
+<section id="features" class="feature-section">
+    <h2>Key Features</h2>
+    <div class="container">
+        <div class="feature">
+            <h3>Customizable Forms</h3>
+            <p>Create forms tailored to your project's unique needs with our user-friendly interface.</p>
+        </div>
+        <div class="feature">
+            <h3>Real-time Data Entry</h3>
+            <p>Efficiently input data directly from the field, ensuring accuracy and promptness.</p>
+        </div>
+        <div class="feature">
+            <h3>Offline Accessibility</h3>
+            <p>Collect data seamlessly in remote locations with our offline functionality.</p>
+        </div>
+        <div class="feature">
+            <h3>Multimedia Integration</h3>
+            <p>Enhance your observations with photos, videos, and audio recordings attached directly to your forms.</p>
+        </div>
+    </div>
+</section>
+
+<section id="cta" class="cta-section">
+    <div class="container">
+        <h2>Ready to streamline your data collection process?</h2>
+        <p>Sign up for MethodPlus+ now!</p>
+        <a href="#signup" class="button">Sign Up</a>
+    </div>
+</section>
+{% endblock %}

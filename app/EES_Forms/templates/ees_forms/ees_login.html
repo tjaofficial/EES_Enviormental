@@ -1,31 +1,27 @@
-{% extends 'landing/landing_layout.html' %}{% load static %}
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
 {% block body %}
-
-    <link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
-    <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
-
-    <div class='topCont' style='height:100%;'>
-        <div id="login" class="regCont">
-            <form id='signup' name="login" action="" method="POST">
-                {% csrf_token %}
-                <div class='regHeader'>
-                    <h2 class='methodPlus' style='margin:auto; text-align: center; font-size: 47px;'>MethodPlus+</h2>
-                </div>
-                <hr>
-                <div class='regBody'>
-                {% if login_error.error %}
-                    <div class="login__error">{{ login_error.message }}</div>
-                {% endif %}
-                    <input id="username" type="text" name="username" placeholder='Username'>
-                    <input  id="password" type="password" name="password" placeholder='Password'>
-                    
-                    <input id="submit" type="submit" value="Login">
-                </div>
-                <p style='text-align:center;'>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
-            </form>
-            
-        </div>
+<link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
+<link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
+<link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
+<div class='topCont'>
+    <div id="login" class="regCont">
+        <form id='signup' name="login" action="" method="POST">
+            {% csrf_token %}
+            <div class='regHeader'>
+                <h2 class='methodPlus' style='margin:auto; text-align: center; font-size: 47px;'>MethodPlus+</h2>
+            </div>
+            <hr>
+            <div class='regBody'>
+            {% if login_error.error %}
+                <div class="login__error">{{ login_error.message }}</div>
+            {% endif %}
+                <input id="username" type="text" name="username" placeholder='Username'>
+                <input  id="password" type="password" name="password" placeholder='Password'>
+                
+                <input id="submit" type="submit" value="Login">
+            </div>
+            <p style='text-align:center;'>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+        </form>
     </div>
-</body>
-
+</div>
 {% endblock %}

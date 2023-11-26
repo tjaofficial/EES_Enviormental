@@ -3,7 +3,7 @@
 {% if selector == 'form' %}
 {% else %}
     <div style='width: 100%; height: 25px; text-align: right; padding-top: 22px; padding-right: 22px;'>
-        <a href="{% if formName == 'O' or formName == 'P' %}../{% else %}{% endif %}../../printIndex/{{formName}}/{{selector}}" target="_blank" >
+        <a href="{% url 'printIndex' facility formName selector %}" target="_blank" >
             <div class="button-8" role="button" style='height:25px;'>PRINT</div>
         </a>
     </div>
