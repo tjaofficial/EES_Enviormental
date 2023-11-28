@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, company_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
@@ -34,6 +34,8 @@ def sup_dashboard_view(request, facility):
     emypty_dp_today = True
     colorMode = userColorMode(request.user)[0]  
     userMode = userColorMode(request.user)[1]
+    userProfile = user_profile_model.objects.get(user__id=request.user.id)
+    userCompany = userProfile.company
     print(colorMode)
     
     if options.exists():
@@ -68,11 +70,11 @@ def sup_dashboard_view(request, facility):
         quarterly_percent = calculateProgessBar(facility, 'Quarterly')
         annually_percent = 0
     else:
-        daily_percent = ''
-        weekly_percent = ''
-        monthly_percent = ''
-        quarterly_percent = ''
-        annually_percent = ''
+        daily_percent = False
+        weekly_percent = False
+        monthly_percent = False
+        quarterly_percent = False
+        annually_percent = False
     # -------90 DAY PUSH ----------------
     pushTravelsData = ninetyDayPushTravels(facility)
     if pushTravelsData == 'EMPTY':
@@ -88,7 +90,7 @@ def sup_dashboard_view(request, facility):
         od_recent = pushTravelsData['closest']
         all_ovens = pushTravelsData['all']
     # ----CONTACTS-----------------
-    profile = user_profile_model.objects.all()
+    allContacts = user_profile_model.objects.filter(company=userCompany)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     # ----USER ON SCHEDULE----------
     todays_obser = 'Schedule Not Updated'
@@ -202,7 +204,7 @@ def sup_dashboard_view(request, facility):
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
                 'todays_obser': todays_obser,
-                'profile': profile, 
+                'profile': allContacts, 
                 'weather': weather, 
                 'od_recent': od_recent, 
                 'weekly_percent': weekly_percent, 
@@ -247,7 +249,7 @@ def sup_dashboard_view(request, facility):
         'weather': weather, 
         'todays_log': todays_log, 
         'todays_obser': todays_obser, 
-        'profile': profile, 
+        'profile': allContacts, 
         'A1data': A1data, 
         'A2data': A2data, 
         'A3data': A3data, 

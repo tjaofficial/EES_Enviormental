@@ -1,4 +1,5 @@
-{% extends "ees_forms/layout.html" %}{% block list %}{% load static %}
+{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <div class="mainCont marginTop">
     <div class='card'>

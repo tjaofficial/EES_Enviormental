@@ -42,7 +42,7 @@
         <div class="card" id="card_fitter">
             {% include "ees_forms/print_button.html" %}
             <div class="paper_fitter" style="padding: 3rem;">
-                {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+                {% include "ees_forms/backArrow.html" with destination="form" %}
                 <div style="width:100%; text-align: right;">
                     
                     <a href="{% if search %}../../Monthly/formN/{{THEmonth}}{% elif unlock and not search %}../../Monthly/formN/form{% endif %}">

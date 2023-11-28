@@ -76,3 +76,9 @@
 .categoryStyle{
     padding-bottom: 7px;
 }
+.contact_group_header{
+    display: grid;
+    text-align: center;
+    background-color: #2535449c;
+    padding: 7px;
+}

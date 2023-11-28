@@ -1,7 +1,7 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list%}{% load static %}
-<script defer src="{% static 'ees_forms/script/formB.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formB.js' %}"></script>
 <link href="{% static 'ees_forms/style/formB.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 {% if not unlock %}
@@ -18,7 +18,7 @@
             <div class="card" id="card_fitter">
                 {% include "ees_forms/print_button.html" %}
                 <div class="paper_fitter" style="padding: 3rem;">
-                    {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+                    {% include "ees_forms/backArrow.html" with destination="form" %}
                     <table style="border-collapse: collapse">
                         <tr>
                             <th id="boxTitle" colspan="6">

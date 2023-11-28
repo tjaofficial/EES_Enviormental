@@ -2,24 +2,43 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from ..models import user_profile_model, bat_info_model, User
 from ..forms import bat_info_form
+from..utils import setUnlockClientSupervisor, checkIfFacilitySelected
 
 lock = login_required(login_url='Login')
 profile = user_profile_model.objects.all()
 
 @lock
 def about_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     profile = user_profile_model.objects.all()
 
     return render(request, 'ees_forms/ees_about.html', {
-        'profile': profile, 'facility': facility
+        'profile': profile, 
+        'facility': facility,
+        'notifs': notifs,
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
     })
 
 @lock
 def safety_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     profile = user_profile_model.objects.all()
 
     return render(request, 'ees_forms/ees_safety.html', {
-        'profile': profile, 'facility': facility
+        'profile': profile, 
+        'facility': facility,
+        'supervisor': supervisor, 
+        'notifs': notifs,
+        "client": client, 
+        'unlock': unlock, 
     })
 
 @lock

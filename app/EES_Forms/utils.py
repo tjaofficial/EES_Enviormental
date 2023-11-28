@@ -456,7 +456,10 @@ def calculateProgessBar(facility, frequency):
             forms_comp.append(formSub.formID.id)
     count_comp = len(forms_comp)
     count_total = len(formSubRecords.filter(formID__frequency=frequency))
-    percent_completed = (count_comp / count_total) * 100
+    if count_total == 0:
+        percent_completed = False
+    else:
+        percent_completed = (count_comp / count_total) * 100
     print(percent_completed)
     return percent_completed 
 

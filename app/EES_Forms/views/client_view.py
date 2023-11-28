@@ -30,6 +30,8 @@ def client_dashboard_view(request, facility):
     now = datetime.datetime.now().date()
     options = bat_info_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
+    userProfile = user_profile_model.objects.get(user__id=request.user.id)
+    userCompany = userProfile.company
     if options.exists():
         options = options[0]
     #VVV i may not need this because the facility is perminent for the client VVV
@@ -176,7 +178,7 @@ def client_dashboard_view(request, facility):
         od_30 = ''
 
     # ----CONTACTS-----------------
-    profile = user_profile_model.objects.all()
+    allContacts = user_profile_model.objects.filter(company=userCompany)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     # ----USER ON SCHEDULE----------
     todays_obser = 'Schedule Not Updated'
@@ -309,7 +311,7 @@ def client_dashboard_view(request, facility):
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
                 'todays_obser': todays_obser, 
-                'profile': profile, 
+                'profile': allContacts, 
                 'weather': weather, 
                 'od_recent': od_recent, 
                 'weekly_percent': weekly_percent, 
@@ -344,7 +346,7 @@ def client_dashboard_view(request, facility):
         'weather': weather, 
         'todays_log': todays_log, 
         'todays_obser': todays_obser, 
-        'profile': profile, 
+        'profile': allContacts, 
         'A1data': A1data, 
         'A2data': A2data, 
         'A3data': A3data, 

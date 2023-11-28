@@ -401,11 +401,43 @@ def search_forms_view(request, facility, access_page):
                 letterForms.append([x[0][1], x[1].formID.form.replace(' ', '_').lower() + '_model', x[1].formID])
         print(letterForms)
         return render(request, 'ees_forms/search_forms.html', {
-            'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'letterForms': letterForms, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'searched': searched, 'forms': forms, 'access_page': access_page, 'database': database, 'database2': database2,  'att_check': att_check, 'weekend': weekend,  'client': client,
+            'notifs': notifs, 
+            'sortedFacilityData': sortedFacilityData, 
+            'options': options, 
+            'facility': facility, 
+            'unlock': unlock, 
+            'supervisor': supervisor, 
+            'letterForms': letterForms, 
+            'mainList': mainList, 
+            'readingsData': readingsData, 
+            'profile': profile, 
+            'searched': searched, 
+            'forms': forms, 
+            'access_page': access_page, 
+            'database': database, 
+            'database2': database2, 
+            'att_check': att_check, 
+            'weekend': weekend, 
+            'client': client,
         })
     else:
         return render(request, 'ees_forms/search_forms.html', {
-            'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'monthList': monthList, 'options': options, 'facility': facility, 'unlock': unlock, 'supervisor': supervisor, 'mainList': mainList, 'readingsData': readingsData, 'profile': profile, 'access_page': access_page, 'database': database, 'database2': database2, 'att_check': att_check, 'weekend': weekend, 'client': client,
+            'notifs': notifs, 
+            'sortedFacilityData': sortedFacilityData, 
+            'monthList': monthList, 
+            'options': options, 
+            'facility': facility, 
+            'unlock': unlock, 
+            'supervisor': supervisor, 
+            'mainList': mainList, 
+            'readingsData': readingsData, 
+            'profile': profile, 
+            'access_page': access_page, 
+            'database': database, 
+            'database2': database2, 
+            'att_check': att_check, 
+            'weekend': weekend, 
+            'client': client,
         })
 
 @lock
@@ -699,16 +731,14 @@ def shared_contacts_view(request, facility):
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
     options = bat_info_model.objects.all()
-    companyOfSupervisor = user_profile_model.objects.get(user=request.user).company
+    companyOfUser = user_profile_model.objects.get(user=request.user).company
     sortedFacilityData = getCompanyFacilities(request.user.username)
     
-    if facility == 'supervisor':
-        profile = user_profile_model.objects.filter(company=companyOfSupervisor).order_by('user')
-    else:
-        profile = user_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('user')
+    companyProfiles = user_profile_model.objects.filter(company=companyOfUser).order_by('user')
+    userProfile = companyProfiles.get(user__id=request.user.id)
     
     organized_list = []
-    for index, user in enumerate(profile):
+    for index, user in enumerate(companyProfiles):
         if user.certs:
             certList = user.certs.split(',')
             i = 0
@@ -724,7 +754,15 @@ def shared_contacts_view(request, facility):
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "shared/contacts.html", {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'organized_list': organized_list, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'options': options, 
+        'facility': facility, 
+        'userProfile': userProfile, 
+        'organized_list': organized_list, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock
     })
     
 @lock

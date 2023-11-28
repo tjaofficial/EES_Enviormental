@@ -31,7 +31,6 @@ function clean_up_submitted_form() {
 function individual_day() {
     const today = new Date();
     let d = today.getDay();
-    console.log(d);
     let name_0 = false;
     let name_1 = false;
     let name_2 = false;
@@ -284,16 +283,12 @@ function section_1_hidden() {
     }
 }
 function section_2_hidden() {
-    console.log('CHECK 1');
-    
     list = [0,1,2,3,4];
-    console.log(list);
     for (let item=0; item < list.length; item++){
         const coal_vessel = document.getElementById('id_coal_vessel_' + item).value;
         const water_sprays = document.getElementById('id_water_sprays_' + item).value;
         const loader_lowered = document.getElementById('id_loader_lowered_' + item).value;
         const working_water_sprays = document.getElementById('id_working_water_sprays_' + item).value;
-        console.log(item);
         if ( coal_vessel == 'No' ) {
             list.splice(item,1);
             list.forEach((item2) => {
@@ -470,7 +465,6 @@ function auto_fill_section_1() {
     list = [0,1,2,3,4]
     list.forEach((item) => {
         const q_spills = document.getElementById('id_spills_' + item).value;
-        
         if (q_spills == "No") {
             document.getElementById('id_pushed_back_' + item).value = 'N/A';
         }
@@ -553,3 +547,4 @@ function section_2_require() {
 
     })
 }
+

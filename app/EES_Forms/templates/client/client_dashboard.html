@@ -456,6 +456,7 @@
                     <p class="contactHeader center">Certification Date</p>
                 </div>
                 {% for person in profile %}
+                {% if person.facilityChoice.facility_name == facility or person.position == "observer" or person.position == "supervisor"%}
                     <div class="grid-observ_singles">
                         <span class="c_card_circle_oven c_circle_font_color">
                             {% if person.profile_picture %}
@@ -470,6 +471,7 @@
                         <p class="contactFont center">{{ person.cert_date }}</p>
                     </div>
                     <hr>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

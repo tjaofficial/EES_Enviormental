@@ -1,25 +1,28 @@
 {% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
 {% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 {% comment %} <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet"> {% endcomment %}
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
-<div>
-    {% include "ees_forms/backArrow.html" %}
-</div>
-<center>
-    <div class="container" style="min-width: 400px; min-height: 500px;">
-        {% if facility != 'supervisor' %}
-        <form action="search_forms/search" method="POST" class='archiveHeader'>
-            {% csrf_token %}
-            <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
-            <button type="submit" class='searchButton'>Search</button>
-        </form>
-        {% else %}
-        NO FACILITY SELECTED
-        {% endif %}
+{% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
+<div class="mainCont">
+    <div class="card">
+        <div class="cardHeader">
+            {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+            {% if facility != 'supervisor' %}
+            <form action="search_forms/search" method="POST" class=''>
+                {% csrf_token %}
+                <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
+                <button type="submit" class='searchButton'>Search</button>
+            </form>
+            {% else %}
+            NO FACILITY SELECTED
+            {% endif %}
+        </div>
+        <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+        </div>
     </div>
-</center>
-
+</div>
 {% endblock %}

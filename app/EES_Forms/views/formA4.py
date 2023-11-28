@@ -108,15 +108,16 @@ def formA4(request, facility, selector):
                     A.leak_data = "{}"
                     
                 A.save()
+                finder = issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')
                 if A.notes.lower() != 'no ve' or A.leak_data != "{}":
-                    finder = issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')
-                    if finder:
-                        issue_page = '../../issues_view/' + str(formName) + '/' + str(todays_log.date_save) + '/issue'
+                    if finder.exists():
+                        newSelector = 'issue'
                     else:
-                        issue_page = '../../issues_view/' + str(formName) + '/' + str(todays_log.date_save) + '/form'
+                        newSelector = 'form'
+                    issue_page = '../../issues_view/' + str(formName) + '/' + str(todays_log.date_save) + '/'+ newSelector
                     return redirect(issue_page)
-                elif issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4'):
-                    issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')[0].delete()
+                elif finder.exists():
+                    finder[0].delete()
                 
                 createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)

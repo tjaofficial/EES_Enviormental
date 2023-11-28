@@ -19,13 +19,20 @@ function getid(obj) {
     const certs = document.getElementById("certs" + obj.id).innerHTML;
     const userID = document.getElementById("userID" + obj.id).innerHTML;
     const image = document.getElementById("image" + obj.id).innerHTML;
-    console.log(facility);
+    const supervisor = document.getElementById('supervisor').dataset.supervisor;
+    console.log(supervisor);
     console.log(obj);
     
     // for (i=1; i<certs.length; i++){
 
     // }
-    document.getElementById("replaceContent").innerHTML = "<div class='cardHeader'>" + name + "</div><div class='contact_data_cont'><div class='contact_image' style='text-align: center;'>"+ image + "</div><div class='contact_data_cont_inner'><div class='contact_data'><p class='categoryStyle'>Phone: " + phoneHandler(phone) + "</p><p class='categoryStyle'>Email: " + email + "</p><p class='categoryStyle'>Smoke Certification: " + cert_date + "</p><p style=''>Certifications:<br> " + htmlList(certs) + "</p></div></div></div><a href='../../" + facility + "/Register/" + userID + "'><div id='edit'>Edit</div></a>";
+    if (supervisor == "True"){
+        var editButton = "<a href='../../" + facility + "/Register/" + userID + "'><div id='edit'>Edit</div></a>";
+    } else {
+        var editButton = "";
+    }
+    console.log(editButton)
+    document.getElementById("replaceContent").innerHTML = "<div class='cardHeader'>" + name + "</div><div class='contact_data_cont'><div class='contact_image' style='text-align: center;'>"+ image + "</div><div class='contact_data_cont_inner'><div class='contact_data'><p class='categoryStyle'>Phone: " + phoneHandler(phone) + "</p><p class='categoryStyle'>Email: " + email + "</p><p class='categoryStyle'>Smoke Certification: " + cert_date + "</p><p style=''>Certifications:<br> " + htmlList(certs) + "</p></div></div></div>" + editButton;
 }
 
 function phoneHandler(fullNumber){

@@ -13,10 +13,10 @@
         <div class="card" id="card_fitter" style="width: 60%;">
             {% include "ees_forms/print_button.html" %}
             <div class="paper_fitter" style="padding: 3rem; width: 100%;">
-                {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+                {% include "ees_forms/backArrow.html" with destination="form" %}
                 <div style="width:100%; text-align: right;">
                     {% if selector == 'form' %}
-                    <a href="../../Daily/formM/form">
+                    <a href="{% url 'formM' facility 'form' %}">
                         Form M - List
                     </a><br>
                     {% endif %}
@@ -45,7 +45,7 @@
                 </table>
                 <br>
                 <center>
-                    <a style='color: blue;' href={% static "images/maps/roads_parking_map.jpg" %} target="_blank">View Road Map</a>
+                    <a style='color: blue;' href="{% static 'images/maps/roads_parking_map.jpg' %}" target="_blank">View Road Map</a>
                 </center>
                 <br>
                 <table style="border-collapse: collapse; margin: auto; width: 100%;">

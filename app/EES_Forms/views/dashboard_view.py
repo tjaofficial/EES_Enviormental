@@ -505,6 +505,7 @@ def IncompleteForms(request, facility):
                         sub.dueDate = weekend_fri
                         start_sat = today - datetime.timedelta(days= todays_num - 5)
                     A = sub.dateSubmitted
+                    B = sub.dueDate
                     if sub.formID.day_freq == 'Weekends' and A != today:
                         sub.submitted = False   
                     elif A < start_sat or A > sub.dueDate:
@@ -521,6 +522,7 @@ def IncompleteForms(request, facility):
                         print("CHECK 2")
                         sub.dueDate = today
                         A = sub.dateSubmitted
+                        B = sub.dueDate
                         if today != A:
                             print("CHECK 3")
                             sub.submitted = False
@@ -536,37 +538,37 @@ def IncompleteForms(request, facility):
                                 if g2_form.submitted == True and startOfWeek <= g2_form.dateSubmitted <= weekday_fri:
                                     continue
                                 else:
-                                    all_incomplete_forms.append((sub.formID, forms[1]))
+                                    all_incomplete_forms.append((sub, forms[1]))
                             else:
-                                all_incomplete_forms.append((sub.formID, forms[1]))
+                                all_incomplete_forms.append((sub, forms[1]))
                         else:
-                            all_incomplete_forms.append((sub.formID, forms[1]))
+                            all_incomplete_forms.append((sub, forms[1]))
                         if sub.formID.frequency == 'Daily':
-                            daily_incomplete_forms.append((sub.formID, forms[1]))
+                            daily_incomplete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Weekly':
-                            weekly_incomplete_forms.append((sub.formID, forms[1]))
+                            weekly_incomplete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Monthly':
-                            monthly_incomplete_forms.append((sub.formID, forms[1]))
+                            monthly_incomplete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Quarterly':
-                            quarterly_incomplete_forms.append((sub.formID, forms[1]))
+                            quarterly_incomplete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Annual':
-                            annual_incomplete_forms.append((sub.formID, forms[1]))
+                            annual_incomplete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Semi-Annual':
-                            sannual_incomplete_forms.append((sub.formID, forms[1]))
+                            sannual_incomplete_forms.append((sub, forms[1]))
                     elif sub.submitted == True: 
-                        all_complete_forms.append((sub.formID, forms[1]))
+                        all_complete_forms.append((sub, forms[1]))
                         if sub.formID.frequency == 'Daily':
-                            daily_complete_forms.append((sub.formID, forms[1]))
+                            daily_complete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Weekly':
-                            weekly_complete_forms.append((sub.formID, forms[1]))
+                            weekly_complete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Monthly':
-                            monthly_complete_forms.append((sub.formID, forms[1]))
+                            monthly_complete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Quarterly':
-                            quarterly_complete_forms.append((sub.formID, forms[1]))
+                            quarterly_complete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Annual':
-                            annual_complete_forms.append((sub.formID, forms[1]))
+                            annual_complete_forms.append((sub, forms[1]))
                         elif sub.formID.frequency == 'Semi-Annual':
-                            sannual_complete_forms.append((sub.formID, forms[1]))
+                            sannual_complete_forms.append((sub, forms[1]))
                 
     sorting_array = [
         all_incomplete_forms,
