@@ -10,8 +10,8 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
-from ..models import spill_kit_inventory_model, facility_forms_model
-from ..utils import parseFormList, getCompanyFacilities
+from ..models import spill_kit_inventory_model, facility_forms_model, issues_model
+from ..utils import parseFormList, getCompanyFacilities, getNewFormID_w_formID
 import json
 import io
 import datetime
@@ -185,7 +185,7 @@ def inventoryResponse(tagOn, sk):
 @lock
 def form_PDF(request, facility, formDate, formName):
     facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    
+    formList1 = ast.literal_eval(facilityForms[0].formData)
 
     if formDate[0:6] == 'single':
         formTag = formDate[0:6]
@@ -198,10 +198,13 @@ def form_PDF(request, facility, formDate, formName):
     
     if formTag == 'single' or formTag == '':
         formList = [formName]
+        print(formName)
+        for fList in formList1:
+            for sList in formList:
+                print("hello")
     elif formName == 'Coke Battery Daily Packet':
-        formList = ['A1', 'A2', 'A3', 'A4', 'A5']
+        formList = ['1', '2', '3', '4', '5']
     elif formName == 'Facility Weekly Packet':
-        formList1 = ast.literal_eval(facilityForms[0].formData)
         formList = []
         for fList in formList1:
             if fList[0] == 23:
@@ -228,6 +231,7 @@ def form_PDF(request, facility, formDate, formName):
         try:
             int(item)
             print("This is a number: " + str(item))
+            itemID = int(item)
             ModelForms = Forms.objects.filter(form=item, facilityChoice__facility_name=facility)
             if len(ModelForms) > 0:
                 ModelForms = ModelForms[0]
@@ -277,7 +281,7 @@ def form_PDF(request, facility, formDate, formName):
         #Pick the specific form date
         formsAndData = {}
         if reFormName[-1] == 'N':
-            parseDateN = datetime.datetime.strptime(formDate, "%Y-%m-%d")
+            parseDateN = datetime.datetime.strptime(formDate[:-2], "%m-%Y")
             daysInMonth = calendar.monthrange(parseDateN.year, parseDateN.month)
             newDateN = str(parseDateN.year) + '-' + str(parseDateN.month) + '-' + '01'
             print(daysInMonth[1] + 1)
@@ -304,11 +308,12 @@ def form_PDF(request, facility, formDate, formName):
                     else:
                         database_model = ''
                         continue
-                elif formName[-1] == 'N':
+                elif int(formName) == 23: #this is form 'N'
                     if parseDateStart <= x.date <= parseDateStop:
                         formsAndData[str(x.date)] = [x]
                         print(x)
-                        continue
+                        print('what the fuck')
+                        break
                     else:
                         database_model = ''
                         continue
@@ -340,7 +345,7 @@ def form_PDF(request, facility, formDate, formName):
                     elif formName[-1] == 'N':
                         if parseDateStart <= x.date <= parseDateStop:
                             formsAndData[str(x.date)] = [x]
-                            continue
+                            break
                         else:
                             database_model2 = ''
                             continue
@@ -365,7 +370,7 @@ def form_PDF(request, facility, formDate, formName):
                 elif formName[-1] == 'N':
                     if parseDateStart <= x.date <= parseDateStop:
                         formsAndData[str(x.date)] = [x]
-                        continue
+                        break
                     else:
                         database_model = ''
                         continue
@@ -389,15 +394,7 @@ def form_PDF(request, facility, formDate, formName):
         alphaStore = ''
         print(list(formsAndData))
         for alpha in list(formsAndData):
-            #print(len(formsAndData[alpha]))
             print("CHECK 1")
-            # if alphaStore == '':
-            #     print("CHECK 1.1")
-            #     alphaStore += alpha[:7]
-            #     print(alphaStore)
-            # else:
-            #     print("CHECK 1.2")
-            #     continue
             if len(formsAndData[alpha]) == 2:
                 doubleDB = True
                 print(item + ' is a double database...')
@@ -919,7 +916,7 @@ def form_PDF(request, facility, formDate, formName):
                     suffix2 = '<sup>o</sup>'
                 tableData = [
                     [title],
-                    [subTitle],
+                    [''],
                     ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                     [Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>COUNTY</sup></b>&#160;&#160;</para><para fontSize=7>' + data.county + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT NO.</sup></b>&#160;&#160;</para><para fontSize=7>' + data.estab_no + '</para>', styles['Normal']), '', ''],
                     [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + data.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + data.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(data.date) + '</para>', styles['Normal']), '', ''],
@@ -967,7 +964,7 @@ def form_PDF(request, facility, formDate, formName):
                     ['', '', Paragraph('<para fontSize=8><b>Notes:&#160;</b>' + data.notes + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
                 ]
                 tableColWidths = (45,10,20,20,40,40,40,40,30,40,20,20,42,42,42,42,40)
-                tableRowHeights = (20, 20, 0, 16, 16, 16, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 7, 14, 0, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 21, 0, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 10, 35)
+                tableRowHeights = (15, 15, 0, 16, 16, 16, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 7, 14, 0, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 21, 0, 14, 14, 14, 5, 14, 14, 14, 14, 14, 14, 14, 10, 35)
                 
                 style = [
                     #Fonts
@@ -2186,7 +2183,7 @@ def form_PDF(request, facility, formDate, formName):
                 ]
             elif item == 'N': 
                 print(formM_model.objects.all()[0].date.year)
-                dataN = formM_model.objects.all().filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
+                dataN = formM_model.objects.filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
                 new = 'Fugitive Dust Inspection'
                 titleN = 'Method 9D Monthly Checklist - (N)'
                 subTitleN = 'Facility Name: ' + facility
@@ -2594,8 +2591,37 @@ def form_PDF(request, facility, formDate, formName):
                     ('SPAN', (0,32), (3,32)),
                     ('SPAN', (0,33), (3,33)),
                 ]
-            
             heightGroup = ('A5', 'G1', 'G2', 'H')
+            print("________________")
+            issueFormID = getNewFormID_w_formID(facility, itemID)
+            issueForm = issues_model.objects.filter(date=data.date, form=issueFormID)
+            if issueForm.exists():
+                issueSpace = len(tableData)
+                issueForm = issueForm[0]
+                issueTable = [
+                    [''],
+                    [Paragraph('<para align=center><b>Corrective-Action</b></para>', styles['Normal'])],
+                    [Paragraph('<para><b>Issues:</b>&#160;&#160;' + issueForm.issues + '</para>', styles['Normal'])],
+                    [Paragraph('<para><b>EES Personnel Notified:</b>&#160;&#160;' + issueForm.notified + '&#160;&#160;&#160;&#160;&#160;<b>Date/Time:</b>&#160;&#160;' + date_change(issueForm.date) + '&#160;/&#160;' + time_change(issueForm.time) + '</para>', styles['Normal'])],
+                    [Paragraph('<para><b>Corrective Action Taken:</b>&#160;&#160;' + issueForm.cor_action + '</para>', styles['Normal'])],
+                ]
+                for issue_line in issueTable:
+                    tableData.append(issue_line)
+                issueStyle = [
+                    ('SPAN', (0,1 + issueSpace), (-1,1 + issueSpace)),
+                    ('SPAN', (0,2 + issueSpace), (-1,2 + issueSpace)),
+                    ('SPAN', (0,3 + issueSpace), (-1,3 + issueSpace)),
+                    ('SPAN', (0,4 + issueSpace), (-1,4 + issueSpace)),
+                    ('BOX', (0,1 + issueSpace), (-1,4 + issueSpace), 1, colors.black),
+                    ('BOX', (0,1 + issueSpace), (-1,1 + issueSpace), 1, colors.black),
+                ]
+                for issue_style in issueStyle:
+                    style.append(issue_style)
+                if item in heightGroup:
+                    addedRowHeights = (20,15,15,15,15)    
+                    tableRowHeights = tableRowHeights + addedRowHeights
+            print("________________")
+            
             if item in heightGroup:
                 dataList.append([tableData, tableColWidths, style, tableRowHeights],)
             else:

@@ -5,7 +5,7 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formE_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 
@@ -26,7 +26,8 @@ def formE(request, facility, selector):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formE_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
-
+    picker = issueForm_picker(facility, selector, formName)
+    
     # THIS IS TO TRANSITION THE MIGRATIONS NEED THIS TEMPORARILY ASK TOBE
     # for x in daily_prof:
     #     for y in bat_info_model.objects.all():
@@ -109,5 +110,5 @@ def formE(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formE.html", {
-        "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
+        'picker': picker, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
     })

@@ -5,7 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm,setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm,setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -25,7 +25,7 @@ def formA2(request, facility, selector):
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
     org = formA2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-
+    picker = issueForm_picker(facility, selector, formName)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -133,5 +133,5 @@ def formA2(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA2.html", {
-        'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
+        'picker': picker, 'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
     })

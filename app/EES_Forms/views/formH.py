@@ -6,7 +6,7 @@ from ..forms import formH_form, user_profile_form, formH_readings_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -29,6 +29,7 @@ def formH(request, facility, selector):
     orgFormL = org2.filter(comb_formL__exact=True)
     full_name = request.user.get_full_name()
     exist_canvas = ''
+    picker = issueForm_picker(facility, selector, formName)
     
     if unlock:
         if profile.exists():
@@ -266,5 +267,5 @@ def formH(request, facility, selector):
 
         return redirect(batt_prof)
     return render(request, "Weekly/formH.html", {
-        'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "supervisor": supervisor, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
+        'picker': picker, 'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "supervisor": supervisor, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
     })

@@ -119,15 +119,6 @@
     max-width: 150px;
     height: 35px;
 }
-
-.issue_boxes{ border: 1px solid black; 
-    font-size: 20px;
-}
-#issues{
-    width: 1000px;  
-}
-#person_notified{
-}
 #datetime {
     width: 203px;
 }

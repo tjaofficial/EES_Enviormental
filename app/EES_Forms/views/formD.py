@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model, bat_info_model, formSubmissionRecords_model
 from ..forms import formD_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -27,7 +27,8 @@ def formD(request, facility, selector):
     end_week = last_saturday + one_week
     sunday = today - datetime.timedelta(days=1)
     submitted_forms = formD_model.objects.all().order_by('-week_start')
-
+    picker = issueForm_picker(facility, selector, formName)
+    
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -149,5 +150,5 @@ def formD(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formD.html", {
-        "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
+        'picker': picker, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

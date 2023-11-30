@@ -30,7 +30,7 @@
 <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 <input id="weather" type="hidden" value="{{weather}}"></div>
 <div id="paperSize">    
-    <div class="mainCont">
+    <div class="mainCont gap" style="width: 93rem;">
         <form action="" method="POST" style="margin-bottom: 100px;">
             {% csrf_token %}
             <div class="card" id="card_fitter">
@@ -445,7 +445,7 @@
                                     <tr>
                                         <td colspan="6">
                                             Oven No: {{ readings_form.o3 }}
-                                            <span class="oven1_pop_class" id="oven3_pop_id">Please Change Oven No.</span>
+                                            <span class="oven3_pop_class" id="oven3_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -560,7 +560,7 @@
                                     <tr>
                                         <td colspan="6">
                                             Oven No: {{ readings_form.o4 }}
-                                            <span class="oven2_pop_class" id="oven4_pop_id">Please Change Oven No.</span>
+                                            <span class="oven4_pop_class" id="oven4_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -679,11 +679,23 @@
                         <br>
                         {{ data.notes }}
                         <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
-                        <span class="comment_skip_class" id="comment_skip_id">
-                            <a id="exit_pop_id" class='exit_pop_class'>
+                        <span class="comment_skip_class" id="comment_skip_id_2" style="display:none;">
+                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop()">
                                 X
                             </a>
                             Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
+                        </span>
+                        <span class="comment_skip_class" id="comment_skip_id_3" style="display:none;">
+                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop()">
+                                X
+                            </a>
+                            Please change Oven No. for THIRD oven or comment below what oven(s) were skipped.
+                        </span>
+                        <span class="comment_skip_class" id="comment_skip_id_4" style="display:none;">
+                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop()">
+                                X
+                            </a>
+                            Please change Oven No. for FORTH oven or comment below what oven(s) were skipped.
                         </span>
                         {% if supervisor or client %} {% elif unlock and not search %}
                         <br><br><br>

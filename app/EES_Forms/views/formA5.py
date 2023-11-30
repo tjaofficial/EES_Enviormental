@@ -6,7 +6,7 @@ from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -27,7 +27,7 @@ def formA5(request, facility, selector):
     org2 = formA5_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
-    
+    picker = issueForm_picker(facility, selector, formName)
     if unlock:
         if len(profile) > 0:
             same_user = user_profile_model.objects.filter(user__exact=request.user.id)
@@ -285,7 +285,7 @@ def formA5(request, facility, selector):
                             A.ambient_temp_stop = 'same'
                         else:
                             A.ambient_temp_stop = weather['temperature']
-                    A.facilityChoice = finalFacility
+                A.facilityChoice = finalFacility
                     
 
                 A.save()
@@ -328,5 +328,5 @@ def formA5(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA5.html", {
-        'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
+        'picker': picker, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
     })

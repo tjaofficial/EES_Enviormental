@@ -31,7 +31,7 @@
     border-radius: 1rem;
     box-shadow: 1px 3px 7px 0px #9898a6;
     border: solid #8b8b8b 1px;
-    z-index: 1;
+    z-index: 2;
 }
 .profileDropdown a:hover {
     text-decoration: underline;
@@ -57,4 +57,10 @@
     text-align: right;
     font-size: 11px;
     color: #4d4d4d;
+}
+.modalHeaderDrop{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
 }

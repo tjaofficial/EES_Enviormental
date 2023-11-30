@@ -1,6 +1,6 @@
 .mainCont {
     margin: auto;
-    max-width: 775px;
+    /* max-width: 775px; */
     margin-bottom: 30px;
     font-family: sans-serif;
 }
@@ -30,4 +30,7 @@
 }
 .center{
     text-align: center;
+}
+.gap{
+    padding-top: 2rem;
 }

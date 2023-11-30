@@ -54,6 +54,10 @@ function salt_average(){
     get_average('salt_', 'average_salt', 12);
 }
 
+truck_average();
+area_average();
+storage_average();
+salt_average();
 
 /*************
  FORM M - ROADS AND AREAS

@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -32,7 +32,7 @@ def formM(request, facility, selector):
     org = formM_model.objects.all().order_by('-date')
     org2 = formM_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
-
+    picker = issueForm_picker(facility, selector, formName)
 
     if profile.exists():
         cert_date = request.user.user_profile_model.cert_date
@@ -175,5 +175,5 @@ def formM(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formM.html", {
-        "existing": existing, 'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
+        'picker': picker, "existing": existing, 'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
     })

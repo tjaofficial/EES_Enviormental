@@ -6,7 +6,7 @@ from ..forms import SubFormC1, FormCReadForm
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -27,7 +27,7 @@ def formC(request, facility, selector):
     org = formC_model.objects.all().order_by('-date')
     org2 = formC_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
-    
+    picker = issueForm_picker(facility, selector, formName)
 
     if profile.exists():
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
@@ -184,5 +184,5 @@ def formC(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formC.html", {
-        "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
+        'picker': picker, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

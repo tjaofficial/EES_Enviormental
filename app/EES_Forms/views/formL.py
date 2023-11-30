@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formL_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -29,7 +29,8 @@ def formL(request, facility, selector):
     today_number = today.weekday()
     opened = True
     week_start_dates = formL_model.objects.all().order_by('-week_start')
-
+    picker = issueForm_picker(facility, selector, formName)
+    
     # -----check if Daily Battery Profile
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -245,5 +246,5 @@ def formL(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formL.html", {
-        'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "selector": selector, 'profile': profile, 'opened': opened, 'formName': formName, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'picker': picker, 'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "selector": selector, 'profile': profile, 'opened': opened, 'formName': formName, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

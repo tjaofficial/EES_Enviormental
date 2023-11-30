@@ -6,7 +6,7 @@ from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readi
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -28,6 +28,7 @@ def formG1(request, facility, selector):
     org2 = formG1_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
+    picker = issueForm_picker(facility, selector, formName)
     
     if unlock:
         if len(profile) > 0:
@@ -242,7 +243,7 @@ def formG1(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Weekly/formG1.html", {
-        'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
     })
 
 
@@ -262,6 +263,7 @@ def formG2(request, facility, selector):
     org2 = formG2_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
+    picker = issueForm_picker(facility, selector, formName)
     
     if unlock:
         if len(profile) > 0:
@@ -473,5 +475,5 @@ def formG2(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Monthly/formG2.html", {
-        "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
+        'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

@@ -373,9 +373,9 @@ def search_forms_view(request, facility, access_page):
     if request.method == "POST":
         passedData = request.POST
         if 'searched' in passedData.keys():
-            searched = passedData['searched']
+            searchedText = passedData['searched']
         else:
-            searched = False
+            searchedText = False
         database = ''
         database2 = ''
         att_check = ''
@@ -383,8 +383,8 @@ def search_forms_view(request, facility, access_page):
         weekend = False
         
         
-        if searched:
-            form_list = formSubs.filter(Q(formID__form__icontains=searched) | Q(formID__frequency__icontains=searched) | Q(formID__title__icontains=searched)).order_by('formID')
+        if searchedText:
+            form_list = formSubs.filter(Q(formID__form__icontains=searchedText) | Q(formID__frequency__icontains=searchedText) | Q(formID__title__icontains=searchedText)).order_by('formID')
 
         forms = []
         for subInfo in form_list:
@@ -411,7 +411,7 @@ def search_forms_view(request, facility, access_page):
             'mainList': mainList, 
             'readingsData': readingsData, 
             'profile': profile, 
-            'searched': searched, 
+            'searched': searchedText, 
             'forms': forms, 
             'access_page': access_page, 
             'database': database, 

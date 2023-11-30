@@ -1,0 +1,42 @@
+{% load static %}
+<link href="{% static 'ees_forms/style/issueForm.css' %}" rel="stylesheet" />
+<div class="issue_card">
+    <div class="cardHeader">
+        Corrective Action LogID - #{{ picker.id }}
+    </div>
+    <div class="issue_contentCont">
+        <br>
+        <div style="display: flex; margin: auto; width: fit-content;">
+            <h4 class="issue_labels">Form:</h4> 
+            
+                &nbsp;&nbsp;{{ picker.form }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+            <h4 class="issue_labels">Date:</h4> 
+            
+                &nbsp;&nbsp;{{ picker.date }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <h4 class="issue_labels">Time:</h4> 
+            
+                &nbsp;&nbsp;{{ picker.time }}
+        
+        </div>
+        <br>
+        
+        <h4 class="issue_labels">Describe Issues:</h4>
+        <div class="issue_box">
+            "{{ picker.issues }}"
+        </div>
+        <br><br>
+        <h4 class="issue_labels">Corrective Action Taken:</h4>
+        <div class="issue_box">
+            "{{ picker.cor_action }}"
+        </div>
+        <br><br>
+        <div class="issue_bottomCont">
+            <h4 class="issue_labels">
+                EES Personnel Notified:
+            </h4>&nbsp; {{ picker.notified }}
+        </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formI_model, bat_info_model
 from ..forms import formI_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -32,7 +32,8 @@ def formI(request, facility, selector):
     filled_in = False
     partial_form = False
     week = ''
-
+    picker = issueForm_picker(facility, selector, formName)
+    
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector not in ('form', 'edit'):
@@ -170,5 +171,5 @@ def formI(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formI.html", {
-        'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
+        'picker': picker, 'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })

@@ -1,6 +1,4 @@
-
 function timecheck_1() {
-    "use strict";
     const start1 = document.getElementById('truck_start_time').value,
           end1 = document.getElementById('truck_stop_time').value;
 
@@ -19,7 +17,6 @@ function timecheck_1() {
     }
 }
 function timecheck_2() {
-    "use strict";
     const start1 = document.getElementById('area_start_time').value,
           end1 = document.getElementById('area_stop_time').value;
 

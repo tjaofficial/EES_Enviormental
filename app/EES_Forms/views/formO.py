@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model, bat_info_model
 from ..forms import formO_form
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -26,7 +26,7 @@ def formO(request, facility, selector, weekend_day):
     full_name = request.user.get_full_name()
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     month_name = calendar.month_name[today.month]
-
+    picker = issueForm_picker(facility, selector, formName)
     org = formO_model.objects.all().order_by('-date')
 
     if weekend_day == 'saturday':
@@ -107,5 +107,5 @@ def formO(request, facility, selector, weekend_day):
 
         return redirect(batt_prof)
     return render(request, "Weekly/formO.html", {
-        'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
+        'picker': picker, 'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

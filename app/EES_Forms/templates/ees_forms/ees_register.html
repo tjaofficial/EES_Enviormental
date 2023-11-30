@@ -8,12 +8,12 @@
 <body>
     <input id='access_page' type='hidden' value={{access_page}} />
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
-    <div class="mainCont">
+    <div class="mainCont gap">
         <div id='card' class="card">
             <div class='tabContainer'>
-                <div id='tab1' class='cardHeader tabs topLeftCont start'>Observer/Supervisor</div>
-                <div id='tab2' class='cardHeader tabs middleCont'>Facility</div>
-                <div id='tab3' class='cardHeader tabs topRightCont'>Client</div>
+                <div id='tab1' class='cardHeaderTabs tabs topLeftCont start'>Observer/Supervisor</div>
+                <div id='tab2' class='cardHeaderTabs tabs middleCont'>Facility</div>
+                <div id='tab3' class='cardHeaderTabs tabs topRightCont'>Client</div>
             </div>
             <div id="login" class='contentCont' style='display: block;'>
                 {% if addMoreRegistrations %}

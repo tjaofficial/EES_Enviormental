@@ -589,8 +589,20 @@ def colorModeSwitch(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
-def getOldFormID(facility, formID):
+def getNewFormID_w_formID(facility, formID):
     facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    if facilitiesForm.exists():
+        formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
+        for formPair in formIDandLabel:
+            if formID == formPair[0]:
+                formLabel = formPair[1]
+                return formLabel
+
+def getNewFormID_w_oldFormID(facility, formID):
+    facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    for x in Forms.objects.all():
+        if x.form.replace('-','') == formID:
+            formID = x.id
     if facilitiesForm.exists():
         formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
         for formPair in formIDandLabel:
@@ -617,7 +629,7 @@ def createNotificationDatabase(facility, user, formID, date, notifSelector):
     # modelData = apps.get_model('EES_Forms', ModelName).objects.all()
     newHeader =  notifSelector        
     if notifSelector == 'submitted':
-        nForms = getOldFormID(facility, formID)    
+        nForms = getNewFormID_w_formID(facility, formID)    
         if todayNumb in {5,6}:
             if todayNumb == 5:
                 todayName = 'Saturday'
@@ -745,3 +757,15 @@ def checkIfMoreRegistrations(user):
     else:
         return False
     return (total_registrations, additionalRgistrations, additionalAmount, addMore)
+
+def issueForm_picker(facility, date, formName):
+    if date == 'form':
+        return False
+    parsedDate = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    formLabel = getNewFormID_w_formID(facility, formName)
+    issueData = issues_model.objects.filter(date__exact=parsedDate, form=formLabel)
+    if issueData.exists():
+        issueData = issues_model.objects.get(date__exact=parsedDate, form=formLabel)
+    else:
+        issueData = False
+    return issueData

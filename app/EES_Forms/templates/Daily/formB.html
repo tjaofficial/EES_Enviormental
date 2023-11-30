@@ -12,9 +12,9 @@
 <input id="weather" type="hidden" value="{{weather}}"></div>
 <div id="paperSize">
     <div class="mainCont">
-        <form action="" method=POST style="margin: auto; width: fit-content; margin-bottom: 100px;">
+        <form action="" method=POST style="margin: auto; margin-bottom: 100px;">
             {% csrf_token %}
-            <div id="frequency" hidden="true">{{ freq }}</div>
+            <div id="frequency" hidden="true" data-frequency="{{freq}}"></div>
             <div class="card" id="card_fitter">
                 {% include "ees_forms/print_button.html" %}
                 <div class="paper_fitter" style="padding: 3rem;">
@@ -22,7 +22,7 @@
                     <table style="border-collapse: collapse">
                         <tr>
                             <th id="boxTitle" colspan="6">
-                                Fugitive Dust Inspection - Form (B)
+                                Fugitive Dust Inspection - Form (B) {{freq}}
                             </th>
                         </tr>
                         <tr>

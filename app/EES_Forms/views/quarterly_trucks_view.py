@@ -4,7 +4,7 @@ import datetime
 from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms, bat_info_model
 from ..forms import quarterly_trucks_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 
@@ -21,6 +21,7 @@ def quarterly_trucks(request, facility, selector):
     today = datetime.date.today()
     submitted_forms = quarterly_trucks_model.objects.all().order_by('-date')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    picker = issueForm_picker(facility, selector, formName)
     
     def what_quarter(input):
         if input.month in {1,2,3}:
@@ -131,5 +132,5 @@ def quarterly_trucks(request, facility, selector):
         return redirect(batt_prof)
             
     return render(request, 'Quarterly/quarterly_trucks.html', {
-        'facility': facility, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'data': data
+        'picker': picker, 'facility': facility, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'data': data
     })

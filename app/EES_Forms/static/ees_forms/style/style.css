@@ -57,7 +57,7 @@ body {
   display: grid;
   grid-template-rows: 3rem 1fr;
   transition: left 0.5s;
-  z-index: 1;
+  z-index: 2;
  
 }
 .sidebar_item {
@@ -279,7 +279,7 @@ color: darkgray;
     padding-right: 1rem;
 }
 #paperSize{
-    width: 1400px;
+    /* width: 1400px; */
     margin: auto;
     padding-top: 1rem;
 }
@@ -343,19 +343,6 @@ span.sideWord{
     width: auto;
     display: inline-flex;
 }
-.issue_box{
-    border: 1px solid black;
-    width: 100%;
-    border-radius: 18px;
-    padding: .5rem;
-    background-color: lightgray;
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-.issue_headers{
-    color: darkgray;
-    font-size: .8rem;
-}
 .prof_pic_view{
     width: 200px;
     border-radius: 50px;
@@ -379,27 +366,27 @@ span.sideWord{
     font-family: sans-serif;
 }
 .prof_table_data{
-    width: 281px;
-    padding: 8px;
-    padding-left: 0px;
+  width: 281px;
+  padding: 8px;
+  padding-left: 0px;
 }
 #prof_form_holder{
-    margin: auto;
-    width: 45%;
-    margin-top: 2rem;
-    padding-bottom: 2rem;
+  margin: auto;
+  width: 45%;
+  margin-top: 2rem;
+  padding-bottom: 2rem;
 }
 .submit_button{
-    font-size: 1.8rem;
+  font-size: 1.8rem;
 }
 #landscape_page_button{
-    margin-left: 4rem;
+  margin-left: 4rem;
 }
 #card_fitter{
-    width: fit-content; 
-    margin: auto;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
+  width: fit-content;
+  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 .paper_fitter{
     padding-top: 1.5rem; 
@@ -533,7 +520,6 @@ span.sideWord{
 }
 /* The actual popup (appears on top) */
 .oven2_pop_class {
-  visibility: hidden;
   width: 205px;
   background-color: #ff6666;
   color: black;
@@ -559,6 +545,58 @@ span.sideWord{
   border-color: #555 transparent transparent transparent;
 }
 
+.oven3_pop_class {
+  width: 205px;
+  background-color: #ff6666;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  margin-left: -122px;
+  margin-top: -43px;
+  opacity: 75%;
+}
+
+/* Popup arrow */
+.oven3_pop_class::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.oven4_pop_class {
+  width: 205px;
+  background-color: #ff6666;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  margin-left: -122px;
+  margin-top: -43px;
+  opacity: 75%;
+}
+
+/* Popup arrow */
+.oven4_pop_class::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
 .exit_pop_class{
     top: 3px;
     position: absolute;
@@ -567,7 +605,8 @@ span.sideWord{
     background: none;
     border: none;
     padding: unset;
-    font-size: .8rem;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .area_popup_class{

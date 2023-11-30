@@ -6,7 +6,7 @@ from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 from .print_form_view import time_change, date_change
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -25,7 +25,7 @@ def formA4(request, facility, selector):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA4_model.objects.all().order_by('-date')
     full_name = request.user.get_full_name()
-    
+    picker = issueForm_picker(facility, selector, formName)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -129,5 +129,5 @@ def formA4(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "Daily/formA4.html", {
-        'leaks': leaks,'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
+        'picker': picker, 'leaks': leaks,'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
     })
