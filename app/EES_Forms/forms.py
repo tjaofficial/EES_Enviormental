@@ -603,10 +603,12 @@ class formA3_form(ModelForm):
             'om_leaks2': forms.NumberInput(attrs={'onchange': 'om_equation()', 'id': 'om_leaks2', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'l_leak_json': forms.TextInput(attrs={'id': 'lids', 'type': "hidden", 'value': '{}', 'data-resulttable': ""}),
             'l_leaks2': forms.NumberInput(attrs={'onchange': 'l_equation()', 'id': 'l_leaks2', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'om_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
-            'om_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
-            'l_traverse_time_min': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
-            'l_traverse_time_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
+            'om_traverse_time_min': forms.NumberInput(attrs={'oninput':'total_time("offtakes")', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
+            'om_traverse_time_sec': forms.NumberInput(attrs={'oninput':'total_time("offtakes")', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
+            'om_total_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
+            'l_traverse_time_min': forms.NumberInput(attrs={'oninput':'total_time("lids")', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
+            'l_traverse_time_sec': forms.NumberInput(attrs={'oninput':'total_time("lids")', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
+            'l_total_sec': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "1"}),
             'om_allowed_traverse_time': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
             'l_allowed_traverse_time': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;', 'required': True, 'min': "0"}),
             'om_valid_run': forms.CheckboxInput(attrs={'style': 'width: 50px;', 'required': True}),
@@ -2191,3 +2193,9 @@ class formSubmissionRecords_form(ModelForm):
             'facilityChoice': forms.Select(attrs={}),
             'submitted': forms.CheckboxInput(attrs={})
         }
+        
+class braintree_form(ModelForm):
+    class Meta:
+        model = braintree_model
+        fields = ('__all__')
+        widgets = {}

@@ -293,30 +293,31 @@ def formA5(request, facility, selector):
                 B.form = A
                 B.save()
 
+                finder = issues_model.objects.filter(date=A.date, form='A-5').exists()
+                issueForm_exists = False
+                issueFound = False
                 if B.o1_highest_opacity >= 10 or B.o1_average_6 >= 35 or B.o1_instant_over_20 == 'Yes' or B.o1_average_6_over_35 == 'Yes':
-                    finder = issues_model.objects.filter(date=A.date, form='A-5')
+                    issueFound = True
                     if finder:
-                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/issue'
+                        issueForm_exists = True
+                elif B.o2_highest_opacity >= 10 or B.o2_average_6 >= 35 or B.o2_instant_over_20 == 'Yes'  or B.o2_average_6_over_35 == 'Yes':
+                    issueFound = True
+                    if finder:
+                        issueForm_exists = True
+                elif B.o3_highest_opacity >= 10 or B.o3_average_6 >= 35 or B.o3_instant_over_20 == 'Yes' or B.o3_average_6_over_35 == 'Yes':
+                    issueFound = True
+                    if finder:
+                        issueForm_exists = True
+                elif B.o4_highest_opacity >= 10 or B.o4_average_6 >= 35 or B.o4_instant_over_20 == 'Yes' or B.o4_average_6_over_35 == 'Yes':
+                    issueFound = True
+                    if finder:
+                        issueForm_exists = True
+                if issueFound:
+                    if issueForm_exists:
+                        issue_page = 'issue'
                     else:
-                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o2_highest_opacity >= 10 or B.o2_average_6 >= 35 or B.o2_instant_over_20 == 'Yes'  or B.o2_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o3_highest_opacity >= 10 or B.o3_average_6 >= 35 or B.o3_instant_over_20 == 'Yes' or B.o3_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
-                if B.o4_highest_opacity >= 10 or B.o4_average_6 >= 35 or B.o4_instant_over_20 == 'Yes' or B.o4_average_6_over_35 == 'Yes':
-                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(A.date) + '/form'
-
-                    return redirect(issue_page)
-
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, str(formName), str(A.date), issue_page)
                 if selector != 'new':
                     createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)

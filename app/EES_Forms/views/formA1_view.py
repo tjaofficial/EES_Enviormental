@@ -121,7 +121,7 @@ def formA1(request, facility, selector):
                 A.save()
                 B.save()
                 
-                finder = issues_model.objects.filter(date=A.date, form=formName)
+                finder = issues_model.objects.filter(date=A.date, form=formName).exists()
             #     if B.comments not in {'-', 'n/a', 'N/A'}:
             #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
@@ -141,10 +141,10 @@ def formA1(request, facility, selector):
                                 issueForm_exists = True
                 if issueFound:
                     if issueForm_exists:
-                        return redirect('issues_view', facility, str(formName), str(database_form.date), 'resubmit')
+                        issue_page = 'issue'
                     else:
-                        return redirect('issues_view', facility, str(formName), str(database_form.date), 'form')
-                
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, str(formName), str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')        
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 

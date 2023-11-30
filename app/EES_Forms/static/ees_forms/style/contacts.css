@@ -1,48 +1,75 @@
 #edit{
-    position: relative;
-    bottom: -13px;
-    left: 18rem;
+    text-align: right;
+    margin: auto;
+    padding-right: 1rem;
 }
-.contact_data_cont{
-    height: 41rem;
-    padding: 32px 15px 0px 15px
+.contact_singles:hover {
+    background-color: #dfe5e9;
+}
+.profColumn{
+    width: 8%;
+}
+.nameColumn{
+    width: 19%;
+}
+.phoneColumn{
+    width: 18%;
+}
+.emailColumn{
+    width: 35%;
+}
+.left{
+    text-align: left;
+}
+#contactLines tr{
+    height: 4rem;
+    border-bottom: 1px solid #00000033;
+}
+.tableFont{
+    font-size: 14px;
+}
+#contactLines svg{
+    height: 2rem;
+}
+.contactTable{
+    width: 100%;
+    border-collapse: collapse;
+}
+#contactLines .contactHeader{
+    height:4rem;
+    height: 2rem;
+    font-size: 12px;
+    color: black;
+}
+.contact_icon_cont{
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+}
+.contact_icon_color{
+    color: gray;
 }
 .contact_list_cont{
     height: 45rem;
     overflow: scroll;
 }
-#contact_list_cont{
-    padding-left: 23px;
-    padding-right: 23px;
-}
-.contact_singles {
+.contact_group_header{
     display: grid;
-    grid-template-columns: 1fr 3fr 5fr 6fr 5fr;
-    height: 5rem;
+    text-align: center;
+    background-color: #2535449c;
+    padding: 7px;
 }
-.contact_singles:hover {
-    background-color: #dfe5e9;
-}
-.contact_icon_cont{
-    max-width: 100%;
-    height: auto;
-    align-items: center;
-    display: flex;
-    margin-left: 16px;
-}
-.contact_icon_color{
-    color: gray;
-}
-.contact_list_font{
-    font-size: .9rem;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.card.contact_data_card{
-    grid-row: span 14;
-    grid-column: span 2;
-    /* padding: 32px; */
+
+
+
+
+
+
+.contact_data_cont{
+    height: 41rem;
+    padding: 32px 15px 0px 15px
 }
 .contact_image{
     background-color: gray;
@@ -62,23 +89,6 @@
     margin: auto;
     width: 93%;
 }
-.contactFont{
-    font-size: .7rem;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.contactHeader{
-    font-size: 0.9rem;
-    font-weight:900;
-    display: flex;
-}
 .categoryStyle{
     padding-bottom: 7px;
-}
-.contact_group_header{
-    display: grid;
-    text-align: center;
-    background-color: #2535449c;
-    padding: 7px;
 }

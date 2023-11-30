@@ -5,9 +5,13 @@ document.getElementById("tab3").addEventListener("click", changeTab3);
 
 function setInitialTab() {
     const access_page = document.getElementById('access_page').value;
+    const addMoreRegistrations = document.getElementById('addMoreRegistrations').dataset.registrations;
+
     if (access_page == 'form' || access_page == 'observer'){
         changeTab1();
-        cert_date1();
+        if(addMoreRegistrations == 'True'){
+            cert_date1();
+        }
     } else if (access_page == 'facility'){
         changeTab2();
     } else if (access_page == 'client'){

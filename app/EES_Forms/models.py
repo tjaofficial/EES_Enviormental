@@ -250,6 +250,58 @@ notification_header_choices = (
 # -all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
 # Create your models here.
+class braintree_model(models.Model):
+    status = models.CharField(
+        max_length=12,
+        default='inactive'
+    )
+    customerID = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )
+    payment_method_token = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )
+    subID = models.CharField(
+        max_length=500,
+        null=True,
+        blank=True
+    )
+    planID = models.CharField(
+        max_length=150,
+        null=True,
+        blank=True
+    )
+    planName = models.CharField(
+        max_length=70,
+        null=True,
+        blank=True
+    )
+    price = models.CharField(
+        max_length=70,
+        null=True,
+        blank=True
+    )
+    registrations = models.IntegerField(
+        null=True,
+        blank=True
+    )
+    next_billing_date = models.DateField(
+        auto_now=False, 
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.PROTECT
+    )
+    def __str__(self):
+        return str(self.user.last_name) + "-" + str(self.customerID)
+    
 class company_model(models.Model):
     company_name = models.CharField(
         max_length=60
@@ -283,6 +335,12 @@ class company_model(models.Model):
         max_length=500,
         null=True,
         blank=True
+    )
+    braintree = models.OneToOneField(
+        braintree_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
     )
     def __str__(self):
         return self.company_name
@@ -941,8 +999,14 @@ class formA3_model(models.Model):
     )
     om_traverse_time_min = models.CharField(max_length=30)
     om_traverse_time_sec = models.CharField(max_length=30)
+    om_total_sec = models.IntegerField(
+        default=0
+    )
     l_traverse_time_min = models.CharField(max_length=30)
     l_traverse_time_sec = models.CharField(max_length=30)
+    l_total_sec = models.IntegerField(
+        default=0
+    )
     om_allowed_traverse_time = models.CharField(max_length=30)
     l_allowed_traverse_time = models.CharField(max_length=30)
     om_valid_run = models.BooleanField(default=None)
@@ -7013,16 +7077,4 @@ class notifications_model(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return str(self.created_at) + " - " + str(self.facilityChoice) + " - " + str(self.user) + " - " + str(self.header)
-    
-# class braintreePlans(models.Model):
-#     planID = models.CharField(
-#         max_length=150
-#     )
-#     planName = models.CharField(
-#         max_length=70
-#     )
-#     price = models.IntegerField()
-#     registrations = models.IntegerField()
-#     def __str__(self):
-#         return str(self.planID) + "-" + str(self.planName)
     

@@ -3,8 +3,8 @@ from django.http import HttpResponseNotFound
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model
-from ..forms import CreateUserForm, user_profile_form, company_form
+from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model, braintree_model
+from ..forms import CreateUserForm, user_profile_form, company_form, braintree_form
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -155,7 +155,7 @@ def landingRegister(request):
     
 @lock    
 def registerCompany(request):
-    userProf = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
+    userProf = user_profile_model.objects.filter(user__id=request.user.id)[0]
     companyForm = company_form()
     print(userProf.company)
     if request.method == 'POST':
@@ -163,22 +163,28 @@ def registerCompany(request):
         new_data = request.POST.copy()
         new_data['phone'] = finalPhone
         form = company_form(new_data)
+        form2 = braintree_form(new_data)
         if form.is_valid():
-            form.save()
-            
-            
-            companySel = company_model.objects.filter(company_name=request.POST['company_name'])
-            if companySel.exists():
-                if len(companySel) > 1:
-                    companySel = companySel[0]
-                    print(len(companySel))
-                    print('Duplicate compnay in database, need to send back message')
+            companyNameCheck = company_model.objects.filter(company_name=request.POST['company_name'])
+            if companyNameCheck.exists():
+                print('CREATE PAGE TO SHOW POSSIBLE COMPANIES')
+            else:
+                print('Did not find duplciates in dataBase, ')
+                braintreeQuery = braintree_model.objects.filter(user__id=request.user.id)
+                if braintreeQuery.exists():
+                    braintreeSave = braintreeQuery[0]
                 else:
-                    companySel = companySel[0]
-            userProf.company = companySel
-            userProf.save()
-            print(userProf.company)
-            return redirect('billing', 'subscriptions')
+                    braintreeSave = braintree_model(user=request.user, status='inactive', registrations=0)
+                    braintreeSave.save()
+                companySave = form.save(commit=False)
+                companySave.braintree = braintreeSave
+                companySave.save()
+                userProf.company = companySave
+                braintreeSave.save()
+                companySave.save()
+                userProf.save()
+
+                return redirect('billing', 'subscriptions')
     return render(request, 'landing/registerCompany.html',{
         'companyForm': companyForm,
     })

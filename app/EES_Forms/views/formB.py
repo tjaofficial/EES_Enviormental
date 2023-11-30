@@ -30,9 +30,6 @@ def formB(request, facility, selector):
     end_week = last_monday + one_week
     freq = False
     fridayDate = today + datetime.timedelta(days=(4 - today.weekday()))
-    print('___________')
-    print(today)
-    print(fridayDate)
     if 2 < today.month < 11:
         freq = True
     elif today.month == 2 and fridayDate.month == (today.month + 1):

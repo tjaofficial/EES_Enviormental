@@ -87,8 +87,10 @@ def formA3(request, facility, selector):
                     'l_leaks2': database_form.l_leaks2,
                     'om_traverse_time_min': database_form.om_traverse_time_min,
                     'om_traverse_time_sec': database_form.om_traverse_time_sec,
+                    'om_total_sec': database_form.om_total_sec,
                     'l_traverse_time_min': database_form.l_traverse_time_min,
                     'l_traverse_time_sec': database_form.l_traverse_time_sec,
+                    'l_total_sec': database_form.l_total_sec,
                     'om_allowed_traverse_time': database_form.om_allowed_traverse_time,
                     'l_allowed_traverse_time': database_form.l_allowed_traverse_time,
                     'om_valid_run': database_form.om_valid_run,
@@ -131,13 +133,12 @@ def formA3(request, facility, selector):
                 A.save()
 
                 if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
-                    finder = issues_model.objects.filter(date=A.date, form='A-3')
+                    finder = issues_model.objects.filter(date=A.date, form='A-3').exists()
                     if finder:
-                        issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/issue'
+                        issue_page = 'issue'
                     else:
-                        issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, str(formName), str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 

@@ -48,16 +48,6 @@ HTML{
     grid-row: span 14;
     grid-column: span 6;
 }
-.grid-dashboard{
-    display: grid;
-    height: 1026;
-    padding: 1rem;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(18, 1fr);
-    grid-gap: 1rem;
-    max-width: 1646px;
-    margin: auto;
-}
 .card-title{
     padding-top: 1rem;
     padding-left: 1rem;

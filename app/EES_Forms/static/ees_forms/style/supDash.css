@@ -42,3 +42,13 @@
     box-shadow: dimgrey 0px 0px 20px -5px;
     border: none;
 }
+.grid-dashboard{
+    display: grid;
+    height: 1026;
+    padding: 1rem;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    grid-gap: 1rem;
+    max-width: 1646px;
+    margin: auto;
+}

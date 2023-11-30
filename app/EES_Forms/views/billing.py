@@ -2,7 +2,7 @@
 from django.http import HttpResponseServerError
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..models import user_profile_model, company_model
+from ..models import user_profile_model, company_model, braintree_model
 import braintree
 import os
 
@@ -28,6 +28,7 @@ def billing(request, step):
     )
 
     if step == "subscriptions":
+        print(request.POST)
         plans = gateway.plan.all()
         cPlan = []
 
@@ -46,6 +47,7 @@ def billing(request, step):
         pVars = {'plans':cPlan}
 
     if step == "customer":
+        print(request.POST)
         if request.method == 'POST':
             pId = request.POST['planId']
         else:
@@ -66,6 +68,8 @@ def billing(request, step):
         }
 
     if step == "review":
+        print(request.POST)
+        
         template = "admin/billing/review.html"
         pVars = {}
 
@@ -79,8 +83,10 @@ def billing(request, step):
             #return redirect('billing', step = "subscriptions")
         print('Name On Card')
         print(request.POST)
+        braintreeInfo = braintree_model.objects.get(user__id=request.user.id)
         planId = request.POST['planId']
         print(planId)        
+        braintreeInfo.planID = planId
         nameOnCard = request.POST['nameOnCard']
         addressLine1 = request.POST['address1']
         addressLine2 = request.POST['address2']
@@ -149,6 +155,7 @@ def billing(request, step):
         else:
             print("No Compnay has been entered for user profile information")
         userComp.customerID = vaultCustomerId
+        braintreeInfo.customerID = vaultCustomerId
         userComp.save()
 
         #store the customer ID to th client that it is assocatited with
@@ -164,14 +171,20 @@ def billing(request, step):
                 print(i)
         else:
             userComp.payment_method_token = vaultPaymentToken
+            braintreeInfo.payment_method_token = vaultPaymentToken
+            braintreeInfo.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
             userComp.save()
-        
         # for x in addSubsriptionResult:
         #     print(x)
         #     break
         #on success and active 
-
-
+        plans = gateway.plan.all()
+        for plan in plans:
+            if plan.id == planId:
+                braintreeInfo.planName = plan.name
+                braintreeInfo.price = plan.price
+        braintreeInfo.status = 'active'
+        braintreeInfo.save()
         template = "admin/billing/receipt.html"
         pVars = {'information':"Congrats the sub was created"}
 

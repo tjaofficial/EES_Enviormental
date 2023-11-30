@@ -7,8 +7,9 @@
 
 <body>
     <input id='access_page' type='hidden' value={{access_page}} />
+    <div id='addMoreRegistrations' style='display:none;' data-registrations={{addMoreRegistrations}}></div>
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
-    <div class="mainCont gap">
+    <div class="mainCont gap" style="width: 43rem;">
         <div id='card' class="card">
             <div class='tabContainer'>
                 <div id='tab1' class='cardHeaderTabs tabs topLeftCont start'>Observer/Supervisor</div>

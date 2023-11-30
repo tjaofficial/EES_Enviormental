@@ -19,7 +19,6 @@ clean_up_submitted_form();
 function clean_up_submitted_form() {
     individual_day();
     month_select();
-    console.log(month_select());
     if (month_select() == '1day') {
         section_1_hidden();
         section_2_hidden();
@@ -175,7 +174,6 @@ function individual_day() {
 }
 function month_select() {
     const freq = document.getElementById('frequency').dataset.frequency;
-    console.log(freq);
     if (freq == 'True') {
         auto_fill_section_1();
         auto_fill_section_2();

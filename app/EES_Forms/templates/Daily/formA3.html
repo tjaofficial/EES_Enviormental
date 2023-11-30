@@ -64,6 +64,9 @@
                                 Please Change End Time
                             </span>
                             <div hidden="true">{{ data.om_leak_json }}</div>
+                            <span class="popup_damperClass" id="om_damperPopup">
+                                Dampered ovens and inoperable ovens overlap.
+                            </span>
                             <table style="border-collapse: collapse;">
                                 <tr>
                                     <th id="boxa5" colspan="3">
@@ -96,7 +99,7 @@
                                 {% endfor %}
                                 <tbody id="offtakes_tableBody" data-numRows="1">
                             </table>
-                            <div>Traverse Time: {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec</div>
+                            <div>Traverse Time: {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec = {{data.om_total_sec}}sec</div>
                             <div style='margin-top: 15px;'>
                                 One Pass ({{ data.one_pass }})
                             </div>
@@ -109,6 +112,9 @@
                                 Please Change End Time
                             </span>
                             <div hidden="true">{{ data.l_leak_json }}</div>
+                            <span class="popup_class" id="l_damperPopup">
+                                Dampered ovens and inoperable ovens overlap.
+                            </span>
                             <table style="border-collapse: collapse;">
                                 <tr>
                                     <th id="boxa5" colspan="6">
@@ -142,7 +148,7 @@
                                 <tbody id="lids_tableBody" data-numRows="1">
                                 </tbody>
                             </table>
-                            <div>Traverse Time: {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec</div>
+                            <div>Traverse Time: {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec = {{data.l_total_sec}}sec</div>
                         </div>
                     </section>
                     <section>
