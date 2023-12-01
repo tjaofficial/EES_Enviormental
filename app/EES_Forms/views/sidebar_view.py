@@ -771,6 +771,7 @@ def sop_view(request, facility):
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     options = bat_info_model.objects.all()
     sops = sop_model.objects.all().order_by('name')
     sopForm = sop_form()
@@ -805,7 +806,7 @@ def sop_view(request, facility):
 
             
     return render(request, 'shared/sops.html', {
-        'notifs': notifs, 'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'sortedFacilityData':sortedFacilityData, 'notifs': notifs, 'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })
     
 def formsProgress(request, facility, section):
@@ -813,6 +814,7 @@ def formsProgress(request, facility, section):
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     if unlock:
         return redirect('IncompleteForms', facility)
     existsing = False
@@ -872,6 +874,16 @@ def formsProgress(request, facility, section):
             finalList[each].sort(key=myFunc)
                 
     print(finalList)
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, 'supervisor/formsProgress.html', {
-        'notifs': notifs, 'finalList': finalList, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'notifs': notifs, 
+        'finalList': finalList, 
+        'facility': facility, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'sortedFacilityData': sortedFacilityData
     })

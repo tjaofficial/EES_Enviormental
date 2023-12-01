@@ -15,6 +15,7 @@
     padding: 19px 0;
     font-weight: bolder;
     color: white;
+    cursor: pointer;
 }
 .tabContainer{
     background-color: rgb(55, 55, 55);
@@ -55,4 +56,37 @@
     background-color: #80808026;
     border-radius: 12px;
     padding: 20px;
+}
+p{
+    margin-bottom: 5px;
+}
+
+.input{
+    padding: 3px;
+    margin-left: 0;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    line-height: 1.071em;
+    box-shadow: 0 1px 2px #eee inset;
+}
+.form-line{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 36px;
+    padding-right: 36px;
+    margin: 6px 0;
+    width: 100%;
+}
+.label{
+    width: 150px;
+    font-weight: bold;
+    margin-bottom: 9px;
+    display: inline-block;
+    text-align: left;
+    padding: 3px;
+    white-space: normal;
+    word-break: break-word;
+}
+.inputCont{
+    display: inline-block;
 }

@@ -294,7 +294,7 @@ def register_view(request, facility, access_page):
     facilityLink = False
     print(checkIfMoreRegistrations(request.user))
     if checkIfMoreRegistrations(request.user):
-        addMoreRegistrations = checkIfMoreRegistrations(request.user)[3]
+        addMoreRegistrations = checkIfMoreRegistrations(request.user)[1]
     else:
         addMoreRegistrations = False
 

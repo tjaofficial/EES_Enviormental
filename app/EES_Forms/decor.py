@@ -1,7 +1,7 @@
 import braintree
 from django.shortcuts import redirect
 from .utils import braintreeGateway
-from .models import user_profile_model
+from .models import user_profile_model, braintree_model
 
 # def client_redirect(x):
 #     if not x.groups.filter(name='SGI Technician') or x.is_superuser:
@@ -11,16 +11,18 @@ from .models import user_profile_model
 
 def isSubActive(func):
     def wrapper(request, facility, *args, **kwargs):
-        gateway = braintreeGateway()
-        accountData = user_profile_model.objects.get(user__username=request.user.username)
-        print(accountData.company.customerID)
-        customerId = accountData.company.customerID
-        if not customerId or customerId == 'none':
+        braintreeData = braintree_model.objects.filter(user__id=request.user.id)
+        profileData = user_profile_model.objects.get(user__id=request.user.id)
+        if braintreeData.exists():
+            braintreeData = braintreeData.get(user__id=request.user.id)
+        else:
+            print('handle if there is no braintree entry')
+        status = braintreeData.status
+        if status == "active":
+            status = True
+        else:
             status = False
             print("no customer ID")
-        else:
-            status = True
-            print(gateway.customer.find(customerId))
         #V------get rid of the status=True for prod-----V
         status = True    
         if status:

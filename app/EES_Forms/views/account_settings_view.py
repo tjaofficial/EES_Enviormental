@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import braintree
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
-from ..models import user_profile_model, company_model, User
+from ..models import user_profile_model, company_model, User, braintree_model
 from ..forms import CreateUserForm, user_profile_form, company_form
 import datetime
 import json
@@ -215,7 +215,12 @@ def sup_account_view(request, facility):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     if unlock:
         return redirect('IncompleteForms', facility)
-    
+    braintreeData = braintree_model.objects.filter(user__id=request.user.id)
+    if braintreeData.exists():
+        braintreeData = braintreeData.get(user__id=request.user.id)
+    else:
+        print('handle if there is no braintree entry')
+        
     facility = 'supervisor'
     sortedFacilityData = getCompanyFacilities(request.user.username)
     userProfileQuery = user_profile_model.objects.all()
@@ -223,46 +228,9 @@ def sup_account_view(request, facility):
     userCompany = accountData.company
     listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
     active_registrations = len(listOfEmployees.filter(active=True))
-    subID = accountData.company.subID
-    gateway = braintreeGateway()
-    
 
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
-    if subID:
-        sub = gateway.subscription.find(subID)
-        if sub.status == "Active":
-            activeSub = gateway.subscription.find(subID)
-            plans = gateway.plan.all()
-            for plan in plans:
-                if plan.id == activeSub.plan_id:
-                    companyPlan = plan
-        else:
-            activeSub = False
-            companyPlan = False
-        if activeSub:
-            registrationData = checkIfMoreRegistrations(request.user)
-            subDetails = {
-                'first_billing_date': sub.first_billing_date,
-                'billing_day_of_month': sub.billing_day_of_month,
-                'billing_period_start_date': sub.billing_period_start_date,
-                'billing_period_end_date': sub.billing_period_end_date, #(day before the billing day in the next month)
-                'next_billing_date': sub.next_billing_date,
-                'plan_id': sub.plan_id,
-                'price': sub.price,
-                'status': sub.status,
-                'name': companyPlan.name,
-                'totalCharge': sub.price + registrationData[2],
-                'additional': registrationData[1]
-            }
-        else:
-            subDetails = ''
-            registrationData = ''
-    else:
-        activeSub = False
-        companyPlan = False
-        subDetails = ''
-        registrationData = ''
         
     if request.method == "POST":
         data = request.POST
@@ -272,19 +240,17 @@ def sup_account_view(request, facility):
         selectedRegister.save()
         return redirect("Account", facility)
     return render(request, 'supervisor/settings/sup_account.html',{
+        'notifs': notifs,
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
         'sortedFacilityData': sortedFacilityData,
         'facility': facility,
         'accountData': accountData,
-        'notifs': notifs,
         'listOfEmployees': listOfEmployees,
-        'subDetails': subDetails,
-        'activeSub': activeSub,
         'accountData': accountData,
         'active_registrations': active_registrations,
-        'registrationData': registrationData
+        'braintreeData': braintreeData
     })
     
 @lock

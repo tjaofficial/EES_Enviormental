@@ -737,26 +737,25 @@ def getCompanyFacilities(username):
     return sortedFacilityData
 
 def checkIfMoreRegistrations(user):
-    accountData = user_profile_model.objects.get(user__id=user.id)
-    userCompany = accountData.company
+    profileData = user_profile_model.objects.get(user__id=user.id)
+    braintreeData = braintree_model.objects.filter(user__id=user.id)
+    userCompany = profileData.company
     listOfEmployees = user_profile_model.objects.filter(~Q(position="client"), company=userCompany, )
-    active_registrations = len(listOfEmployees.filter(active=True))
-    subID = accountData.company.subID
-    if subID:
-        gateway = braintreeGateway()
-        sub = gateway.subscription.find(subID)
-        if sub.status == "Active":
-            additionalRgistrations = sub.add_ons[0].quantity
-            additionalAmount = sub.add_ons[0].amount*additionalRgistrations
-        
-        total_registrations = 2 + additionalRgistrations
-        if active_registrations >= total_registrations:
-            addMore = False
-        else:
-            addMore = True
+    if braintreeData.exists():
+        braintreeData = braintreeData.get(user__id=user.id)
     else:
+        print('Thehere is no braintree entry in database for this Company/User.')
         return False
-    return (total_registrations, additionalRgistrations, additionalAmount, addMore)
+    total_registrations = braintreeData.registrations
+    active_registrations = len(listOfEmployees.filter(active=True))
+    print(active_registrations)
+    print(total_registrations)
+    if active_registrations >= total_registrations:
+        addMore = False
+    else:
+        addMore = True
+
+    return (total_registrations, addMore)
 
 def issueForm_picker(facility, date, formName):
     if date == 'form':
