@@ -81,3 +81,14 @@ function cert_date1() {
         document.getElementById('facilityNameDiv').style.display = 'none';
     }
 }
+
+function batteryInformation(){
+    const batteryInfo = document.getElementById('batteryInfo');
+    const cokeBattery = document.getElementById('cokeBattery');
+
+    if (cokeBattery.value == "true"){
+        batteryInfo.style.display = 'block';
+    } else {
+        batteryInfo.style.display = 'none';
+    }
+}

@@ -232,20 +232,20 @@ class bat_info_form(ModelForm):
         fields = ('bat_num', 'total_ovens', 'facility_name', 'county', 'estab_num', 'equip_location', 'address', 'state', 'district', 'bat_height', 'bat_height_label', 'bat_main', 'bat_lids', 'city')
 
         widgets = {
-            'bat_num': forms.NumberInput(attrs={'type': 'number','style': ''}),
-            'total_ovens': forms.NumberInput(attrs={'type': 'number','style': ''}),
-            'facility_name': forms.TextInput(attrs={'type': 'text', 'class':'input', 'style': ''}),
-            'county': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
+            'bat_num': forms.NumberInput(attrs={'class':'input', 'type': 'number','style': 'width: 7rem;'}),
+            'total_ovens': forms.NumberInput(attrs={'class':'input', 'type': 'number','style': 'width: 6rem;'}),
+            'facility_name': forms.TextInput(attrs={'type': 'text', 'class':'input', 'style': 'width: 100%;'}),
+            'county': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width: 9rem;'}),
             'estab_num': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
             'equip_location': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
-            'address': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
-            'state': forms.TextInput(attrs={'type': 'text', 'class':'input', 'placeholder':'ST', 'style': ''}),
-            'district': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
+            'address': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width:100%;'}),
+            'state': forms.TextInput(attrs={'type': 'text', 'class':'input', 'placeholder':'XX', 'style': 'width: 3rem;'}),
+            'district': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width: 9rem;'}),
             'city': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
-            'bat_height': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 3rem;font-size: 1rem; border-radius: 15px;'}),
-            'bat_height_label': forms.Select(attrs={'class':'input', 'style':'width: 6rem; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'bat_main': forms.Select(attrs={'class':'input', 'style':'width: 6rem; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'bat_lids': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;font-size: 1rem; border-radius: 15px;'}),
+            'bat_height': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;'}),
+            'bat_height_label': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
+            'bat_main': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
+            'bat_lids': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;'}),
         }
 
 

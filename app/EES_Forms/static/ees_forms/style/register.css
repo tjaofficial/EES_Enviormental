@@ -86,7 +86,18 @@ p{
     padding: 3px;
     white-space: normal;
     word-break: break-word;
+    vertical-align: top;
+    color: #5d5d5d;
 }
 .inputCont{
     display: inline-block;
+}
+.sub_label{
+    min-height: 13px;
+    font-size: 0.786em;
+    margin-top: 3px;
+    color: #999999;
+    display: block;
+    margin-bottom: 3px;
+    word-wrap: break-word;
 }

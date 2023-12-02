@@ -34,3 +34,8 @@
 .gap{
     padding-top: 2rem;
 }
+.innerCardHeader{
+    width: 29rem;
+    margin: auto;
+    text-align: center;
+}
