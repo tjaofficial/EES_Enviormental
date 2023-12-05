@@ -116,3 +116,6 @@ h2{
     text-align: justify;
     margin: auto;
 }
+.strikeOut{
+    text-decoration: line-through;
+}

@@ -36,7 +36,14 @@ def sup_dashboard_view(request, facility):
     userMode = userColorMode(request.user)[1]
     userProfile = user_profile_model.objects.get(user__id=request.user.id)
     userCompany = userProfile.company
-    print(colorMode)
+    
+    #remove after running once in production
+    for s in formA3:
+        s.om_total_sec = (int(s.om_traverse_time_min)*60) + int(s.om_traverse_time_sec)
+        s.l_total_sec = (int(s.l_traverse_time_min)*60) + int(s.l_traverse_time_sec)
+        s.save()
+    #====================================================
+    
     
     if options.exists():
         options = options[0]
@@ -190,7 +197,6 @@ def sup_dashboard_view(request, facility):
         if emypty_dp_today:
             if request.method == 'POST':
                 answer = request.POST
-                print(answer)
                 if 'facilitySelect' in answer.keys():
                     if answer['facilitySelect'] != '':
                         return redirect('sup_dashboard', answer['facilitySelect'])
@@ -221,7 +227,6 @@ def sup_dashboard_view(request, facility):
             })
     if request.method == 'POST':
         answer = request.POST
-        print(answer)
         if 'facilitySelect' in answer.keys():
             if answer['facilitySelect'] != '':
                 return redirect('sup_dashboard', answer['facilitySelect'])
@@ -292,7 +297,6 @@ def register_view(request, facility, access_page):
     data = ''
     data2 = bat_info_model.objects.all()
     facilityLink = False
-    print(checkIfMoreRegistrations(request.user))
     if checkIfMoreRegistrations(request.user):
         addMoreRegistrations = checkIfMoreRegistrations(request.user)[1]
     else:
@@ -300,7 +304,7 @@ def register_view(request, facility, access_page):
 
     if supervisor:
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
-            if len(user_profiles.filter(user__id__exact=access_page)) > 0:
+            if user_profiles.filter(user__id__exact=access_page).exists():
                 userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
                 userInfo = User.objects.all().filter(id__exact=access_page)[0]
                 pic = userProfileInfo.profile_picture
@@ -331,7 +335,7 @@ def register_view(request, facility, access_page):
             #"if there are no facilities linked to the request.user's company then we should get back false or "
             userProf = user_profiles.filter(user__username=request.user.username)[0]
             userFacility = options.filter(company=userProf.company)
-            if len(userFacility) > 0:
+            if userFacility.exists():
                 facilityLink = True
         if request.method == 'POST':
             check_1 = request.POST.get('create_user', False)
@@ -362,11 +366,13 @@ def register_view(request, facility, access_page):
                 else:
                     messages.error(request, "The Information Entered Was Invalid.")
             elif check_2:
+                print(request.POST)
                 form = bat_info_form(request.POST)
                 profile_form = ''
                 if form.is_valid():
-                    facilityModel = bat_info_model.objects.filter(facility_name=form['facility_name'])
-                    if len(facilityModel) == 0:    
+                    print(request.POST['facility_name'])
+                    facilityModel = bat_info_model.objects.filter(facility_name=request.POST['facility_name'])
+                    if not facilityModel.exists():    
                         A = form.save(commit=False)
                         A.company = userProf.company
                         
@@ -375,7 +381,10 @@ def register_view(request, facility, access_page):
                         messages.success(request, 'Facility Created')
                         return redirect('sup_dashboard', facility)
                     else:
+                        messages.error(request, "The facility name you have entered is taken, please choose different name")
                         print('need error message response for matching Facility names, choose different name')
+                        print(messages)
+                        return redirect('Register', facility, 'facility')
             elif check_3:
                 print('CHECK 3')
                 finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))

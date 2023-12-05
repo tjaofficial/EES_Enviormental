@@ -347,27 +347,64 @@ class company_model(models.Model):
 
 class bat_info_model(models.Model):
     company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
-    bat_num = models.IntegerField()
-    total_ovens = models.IntegerField()
+    bat_num = models.IntegerField(
+        null=True,
+        blank=True
+    )
+    total_ovens = models.IntegerField(
+        null=True,
+        blank=True
+    )
     facility_name = models.CharField(max_length=30)
-    county = models.CharField(max_length=30)
-    estab_num = models.CharField(max_length=10)
-    equip_location = models.CharField(max_length=30)
-    address = models.CharField(max_length=30)
-    state = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
-    district = models.CharField(max_length=30)
-    bat_height = models.IntegerField()
+    county = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+    estab_num = models.CharField(
+        max_length=10,
+        null=True,
+        blank=True
+    )
+    equip_location = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+    address = models.CharField(
+        max_length=30
+    )
+    state = models.CharField(
+        max_length=30
+    )
+    city = models.CharField(
+        max_length=30
+    )
+    district = models.CharField(
+        max_length=30,
+        null=True,
+        blank=True
+    )
+    bat_height = models.IntegerField(
+        null=True,
+        blank=True
+    )
     bat_height_label = models.CharField(
         max_length=10,
-        choices=heightLabel
+        choices=heightLabel,
+        null=True,
+        blank=True
     )
     bat_main = models.CharField(
         max_length=10,
-        choices=batteryMain_choices
+        choices=batteryMain_choices,
+        null=True,
+        blank=True
     )
-    bat_lids = models.IntegerField()
-    formsList = models.CharField(max_length=300)
+    bat_lids = models.IntegerField(
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return self.facility_name

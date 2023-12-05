@@ -308,7 +308,14 @@ def form_PDF(request, facility, formDate, formName):
                     else:
                         database_model = ''
                         continue
-                elif int(formName) == 23: #this is form 'N'
+                elif formName == 'Coke Battery Daily Packet':
+                    if str(x.date) == str(formDate):
+                        formsAndData[str(x.date)] = [x]
+                        continue
+                    else:
+                        database_model = ''
+                        continue
+                elif str(formName) == str(23): #this is form 'N'
                     if parseDateStart <= x.date <= parseDateStop:
                         formsAndData[str(x.date)] = [x]
                         print(x)
@@ -715,7 +722,7 @@ def form_PDF(request, facility, formDate, formName):
                     tableInsert = [
                         ['', '', '', '', '', '', '', '', '', '', '', ''],
                         ['', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', ''],
-                        ['', '', '', str(data.om_traverse_time_min) + 'min ' + str(data.om_traverse_time_sec) + 'sec', '', '', '', '', str(data.l_traverse_time_min) + 'min ' + str(data.l_traverse_time_sec) + 'sec', '', '', ''],
+                        ['', '', str(data.om_traverse_time_min) + 'min  ' + str(data.om_traverse_time_sec) + 'sec = ' + str(data.om_total_sec) + ' sec', '', '', '', '', str(data.l_traverse_time_min) + 'min  ' + str(data.l_traverse_time_sec) + 'sec = ' + str(data.l_total_sec) + ' sec', '', '', ''],
                         ['', '', '', '', '', '', '', '', '', '', '', ''],
                         ['', Paragraph('<para align=left>D = Dampered Off<br/>C = Cap</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time: (Offtakes)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + data.om_allowed_traverse_time, '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(data.om_valid_run) + '</para>', styles['Normal']), ''],
                         ['', 'F = Flange', '', '', '', '', '', '', '', '', '', ''],
@@ -769,8 +776,12 @@ def form_PDF(request, facility, formDate, formName):
                         #traverse time
                         ('ALIGN', (2,10 + spaced), (-1,11 + spaced), 'CENTER'),
                         ('SPAN', (2,10 + spaced), (4,10 + spaced)),
+                        ('SPAN', (2,11 + spaced), (4,11 + spaced)),
+                        ('ALIGN', (2,11 + spaced), (4,11 + spaced), 'CENTER'),
                         #('BACKGROUND', (2,10 + spaced), (4,10 + spaced),'(.6,.7,.8)'),
                         ('SPAN', (7,10 + spaced), (9,10 + spaced)),
+                        ('SPAN', (7,11 + spaced), (9,11 + spaced)),
+                        ('ALIGN', (7,11 + spaced), (9,11 + spaced), 'CENTER'),
                         
                         #bottom data
                         ('SPAN', (1,13 + spaced), (2, 13 + spaced)),

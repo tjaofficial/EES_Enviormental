@@ -77,14 +77,16 @@
                                 <div style="display:block;">
                                     <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
                                         <span>
-                                            <input type="text" name="address2" class="input" style="width:100%;" maxlength="30" required="" id="id_address2">
+                                            {{data.address}}
                                         </span>
                                         <label class="sub_label">Street Address</label>
                                     </span>
                                 </div>
                                 <div style="display:block;">
                                     <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                        <span>{{data.address}}</span>
+                                        <span>
+                                            <input type="text" name="address2" class="input" style="width:100%;" id="id_address2">
+                                        </span>
                                         <label class="sub_label">Street Address Line 2</label>
                                     </span>
                                 </div>
@@ -190,7 +192,7 @@
                     </div>
                     <center><input type="submit" name="create_facility"></center>
                 </form>
-
+                {{messages}}
                 {% for message in messages %}
                     <p>{{message}}</p>
                 {% endfor%}

@@ -66,9 +66,10 @@ def sup_select_subscription(request, facility, selector):
     elif selector == "payment":
         print(request.POST)
         user = request.user
-        accountData = user_profile_model.objects.get(user__username=user.username)
+        accountData = user_profile_model.objects.get(user__id=user.id)
         customerId = accountData.company.customerID
-        if customerId:
+    
+        if customerId and customerId != 'none':
             customer = gateway.customer.find(customerId)
         else:
             newCustomer = gateway.customer.create({
@@ -374,12 +375,12 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
     elif action[0:3] == "add":
         print("maide it through the second add")
         print(request.POST)
-        if customerId is None:
-            client_token = gateway.client_token.generate()
-        else:
+        if customerId and customerId != 'none':
             client_token = gateway.client_token.generate({
                 "customer_id": customerId
             })
+        else:
+            client_token = gateway.client_token.generate()
         customer = gateway.customer.find(customerId)
         # customer = gateway.customer.find("the_customer_id")
         # customer.payment_methods # array of braintree.PaymentMethod instances
