@@ -589,7 +589,7 @@ def colorModeSwitch(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
-def getNewFormID_w_formID(facility, formID):
+def getNewFormLabel_w_formID(facility, formID):
     facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
     if facilitiesForm.exists():
         formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
@@ -598,7 +598,7 @@ def getNewFormID_w_formID(facility, formID):
                 formLabel = formPair[1]
                 return formLabel
 
-def getNewFormID_w_oldFormID(facility, formID):
+def getNewFormLabel_w_oldFormID(facility, formID):
     facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
     for x in Forms.objects.all():
         if x.form.replace('-','') == formID:
@@ -609,6 +609,12 @@ def getNewFormID_w_oldFormID(facility, formID):
             if formID == formPair[0]:
                 formLabel = formPair[1]
                 return formLabel
+            
+def getFormID_w_oldFormLabel(formLabel):
+    for x in parseFormList:
+        if x[1] == formLabel:
+            formID = x[0]
+    return formID
 
 def createNotificationDatabase(facility, user, formID, date, notifSelector):
     todayNumb = datetime.date.today().weekday()
@@ -629,7 +635,7 @@ def createNotificationDatabase(facility, user, formID, date, notifSelector):
     # modelData = apps.get_model('EES_Forms', ModelName).objects.all()
     newHeader =  notifSelector        
     if notifSelector == 'submitted':
-        nForms = getNewFormID_w_formID(facility, formID)    
+        nForms = getNewFormLabel_w_formID(facility, formID)    
         if todayNumb in {5,6}:
             if todayNumb == 5:
                 todayName = 'Saturday'
@@ -759,7 +765,7 @@ def issueForm_picker(facility, date, formName):
     if date == 'form':
         return False
     parsedDate = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-    formLabel = getNewFormID_w_formID(facility, formName)
+    formLabel = getNewFormLabel_w_formID(facility, formName)
     issueData = issues_model.objects.filter(date__exact=parsedDate, form=formLabel)
     if issueData.exists():
         issueData = issues_model.objects.get(date__exact=parsedDate, form=formLabel)

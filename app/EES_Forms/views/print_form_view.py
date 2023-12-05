@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
 from ..models import spill_kit_inventory_model, facility_forms_model, issues_model
-from ..utils import parseFormList, getCompanyFacilities, getNewFormID_w_formID
+from ..utils import parseFormList, getCompanyFacilities, getNewFormLabel_w_formID, getFormID_w_oldFormLabel
 import json
 import io
 import datetime
@@ -246,6 +246,14 @@ def form_PDF(request, facility, formDate, formName):
                         break
         except:
             print("The '" + str(item) + "' form has been caught by the EXCEPTION")
+
+            print("This is a Letter/String: " + str(item))
+            itemID = item
+            ModelForms = Forms.objects.filter(form=item, facilityChoice__facility_name=facility)
+            if len(ModelForms) > 0:
+                ModelForms = ModelForms[0]
+                reFormName = item
+                modelName = 'form' + item + '_model'
         if item[0] == 'F':
             print('Skipped Form and Continued')
             continue
@@ -339,7 +347,8 @@ def form_PDF(request, facility, formDate, formName):
             if item in ('A1', 'A5', 'C', 'G1', 'G2', 'H', 'M'):
                 print('made it here')
                 readingsModel = apps.get_model('EES_Forms', 'form' + item + '_readings_model')
-                org2 = readingsModel.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                org2 = readingsModel.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+                print(org2)
                 for x in org2:
                     if formName == 'Facility Weekly Packet':
                         print("Getting paired Readings Model...")
@@ -2604,7 +2613,7 @@ def form_PDF(request, facility, formDate, formName):
                 ]
             heightGroup = ('A5', 'G1', 'G2', 'H')
             print("________________")
-            issueFormID = getNewFormID_w_formID(facility, itemID)
+            issueFormID = getNewFormLabel_w_formID(facility, getFormID_w_oldFormLabel(itemID))
             issueForm = issues_model.objects.filter(date=data.date, form=issueFormID)
             if issueForm.exists():
                 issueSpace = len(tableData)

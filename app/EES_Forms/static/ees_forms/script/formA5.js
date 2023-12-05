@@ -127,29 +127,29 @@ function pushTravelCheck(pushB) {
         if (isEven(ovenB) && isEven(ovenA) && ovenA < ovenB || !isEven(ovenB) && !isEven(ovenA) && ovenA < ovenB || ovenA == 85 && isEven(ovenB) || ovenA == 84 && !isEven(ovenB)) {
             if (ovenB >= parseInt(ovenA) + 4 || ovenB >= parseInt(ovenA) + 4 || ovenA == 85 && ovenB >= 4 || ovenA == 84 && ovenB >= 3){
                 console.log('SKIPPED AN OVEN')
-                document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.display = 'none';
-                document.getElementById("comment_skip_id_" + parseInt(pushB)).style.display = 'inline';
+                document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
+                document.getElementById("comment_skip_id_" + String(parseInt(pushB))).style.display = 'inline';
             } else {
                 console.log('EVERYTHING IS FINE')
-                document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.display = 'none';
-                document.getElementById("comment_skip_id").style.display = 'none';
+                document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
+                document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
             }
         } else {//if (!(parseInt(ovenA) in endingNumbers) && ovenA >= ovenB || ovenB == parseInt(ovenA) + 1 || ovenA == 85 && ovenB == 1 || ovenA == 84 && ovenB == 2) {
             console.log('NEED TO CHANGE INPUT')
             document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.display = 'inline';
-            document.getElementById("comment_skip_id").style.display = 'none';
+            document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
         }
     } else {
         console.log('no input')
-        document.getElementById("comment_skip_id").style.display = 'none';
-        document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.display = 'none';
+        document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
+        document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
     }
 }
 pushTravelCheck(2);
 pushTravelCheck(3);
 pushTravelCheck(4);
 function exit_pop() {
-    document.getElementById("comment_skip_id").style.display = 'none';
+    document.getElementById("comment_skip_id_").style.display = 'none';
 }
 
 function weatherStoplight() {
