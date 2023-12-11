@@ -151,10 +151,12 @@
                                         HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                                     </td>
                                     <td id="sketchBox" colspan="3" rowspan="7" data-filledSketch = "{{exist_canvas}}" data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer" data-selector={{selector}}>
-                                        <div id='imgspinner' class="loader"></div>
-                                        {% if selector == 'form' %}
+                                        <div>
+                                            <div id='imgspinner' class="loader"></div>
+                                            {% if selector == 'form' %}
                                             {{data.canvas}}
-                                        {% endif %}
+                                            {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -680,19 +682,19 @@
                         {{ data.notes }}
                         <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
                         <span class="comment_skip_class" id="comment_skip_id_2" style="display:none;">
-                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop()">
+                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop(2)">
                                 X
                             </a>
                             Please change Oven No. for SECOND oven or comment below what oven(s) were skipped.
                         </span>
                         <span class="comment_skip_class" id="comment_skip_id_3" style="display:none;">
-                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop()">
+                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop(3)">
                                 X
                             </a>
                             Please change Oven No. for THIRD oven or comment below what oven(s) were skipped.
                         </span>
                         <span class="comment_skip_class" id="comment_skip_id_4" style="display:none;">
-                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop()">
+                            <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop(4)">
                                 X
                             </a>
                             Please change Oven No. for FORTH oven or comment below what oven(s) were skipped.

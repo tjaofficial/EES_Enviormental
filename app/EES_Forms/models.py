@@ -4646,11 +4646,12 @@ class Event(models.Model):
     )
 
     observer = models.CharField(
-        max_length=30
+        max_length=30,
+        blank=True,
+        null=True
     )
     title = models.CharField(
-        max_length=30,
-        choices=cal_title_choices
+        max_length=50,
     )
     date = models.DateField(
         auto_now_add=False,

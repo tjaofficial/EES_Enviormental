@@ -1,5 +1,5 @@
 {% extends "supervisor/sup_layout.html" %}{% block list%}{% load static %}
-<div class="mainCont">
+<div class="mainCont" style="width:35rem;">
     <div class="card">
         <div class="cardHeader">
             {% include "ees_forms/backArrow.html" with destination="calendar"%}
@@ -8,14 +8,28 @@
         <div class="contentCont">
             <form action="" method="POST">
                 {% csrf_token %}
+                {% if facility != "supervisor" %}
                 Observer:<select name="observer" id="observers">
                     <option value="">-----</option>
                     {% for observer in listOfObservers %}
                         <option value="{{observer.user.last_name}}">{{observer.user.last_name}}</option>
                     {% endfor %}
                 </select><br><br>
-                {% comment %} Observer: {{ form.observer }}<br> {% endcomment %}
-                Title/Task: {{ form.title }}<br>
+                {% endif %}
+                Title: 
+                {% if facility != "supervisor" %}
+                <select name="title" style="width: 150px;" required="" id="id_title">
+                    <option value="" selected="">---------</option>
+                    <option value="P">Primary</option>
+                    <option value="BU">Back Up</option>
+                    <option value="Off">Off</option>
+                    <option value="Office">Office </option>
+                    <option value="BH">BagHouses</option>
+                    <option value="QT">Quarterly Trucks</option>
+                    <option value="BH2-S">Boilerhouse Stacks</option>
+                    <option value="T">Training</option>
+                </select>
+                {% else %}{{ form.title }}{% endif %}
                 <br>
                 Date: {{ form.date }}<br>
                 <br>

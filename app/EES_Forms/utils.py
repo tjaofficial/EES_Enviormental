@@ -762,7 +762,7 @@ def checkIfMoreRegistrations(user):
     return (total_registrations, addMore)
 
 def issueForm_picker(facility, date, formName):
-    if date == 'form':
+    if date == 'form' or date == 'edit':
         return False
     parsedDate = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     formLabel = getNewFormLabel_w_formID(facility, formName)

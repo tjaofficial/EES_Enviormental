@@ -631,8 +631,9 @@ def event_add_view(request, facility):
         if request_form.is_valid():
             A = request_form.save(commit=False)
             A.enteredBy = fullName
-            A.personal = True
-            if facility != "supervisor":
+            if facility == "supervisor":
+                A.personal = True
+            else:
                 A.facilityChoice = finalFacility
                 A.personal = False
             A.save()
@@ -677,26 +678,41 @@ def event_detail_view(request, facility, access_page, event_id):
     form = events_form()
     if access_page == 'view':
         my_event = Event.objects.get(pk=event_id)
+        if request.method == 'POST':
+            if "delete" in request.POST.keys():
+                data_pull = Event.objects.get(pk=event_id)
+                data_pull.delete()
+                cal_link = '../../schedule/' + str(today_year) + '/' + today_month
+                return redirect(cal_link)
     elif access_page == 'edit':
         data_pull = Event.objects.get(pk=event_id)
         initial_data = {
-            'observer': data_pull.observer,
             'title': data_pull.title,
             'date': data_pull.date,
             'start_time': data_pull.start_time,
             'end_time': data_pull.end_time,
             'notes': data_pull.notes,
         }
+        if facility != "supervisor":
+            initial_data['observer'] = data_pull.observer
+            
         my_event = events_form(initial=initial_data)
 
         if request.method == 'POST':
+            print(request.POST)
             data = events_form(request.POST, instance=data_pull)
+            print(data)
             print('pork')
+            print(data.errors)
             if data.is_valid():
+                A = data.save(commit=False)
+                A.enteredBy = request.user.last_name
+                if facility == "supervisor":
+                    A.personal = True
                 print('chicken')
-                data.save()
+                A.save()
 
-                return redirect('../../event_detail/' + str(event_id) + '/view')
+                #return redirect('../../event_detail/' + str(event_id) + '/view')
 
     
     return render(request, "ees_forms/event_detail.html", {

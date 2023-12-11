@@ -148,8 +148,8 @@ function pushTravelCheck(pushB) {
 pushTravelCheck(2);
 pushTravelCheck(3);
 pushTravelCheck(4);
-function exit_pop() {
-    document.getElementById("comment_skip_id_").style.display = 'none';
+function exit_pop(pushB) {
+    document.getElementById("comment_skip_id_"+String(parseInt(pushB))).style.display = 'none';
 }
 
 function weatherStoplight() {

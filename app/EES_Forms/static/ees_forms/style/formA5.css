@@ -1,5 +1,7 @@
-#sketchBox img {
-    /* width: 471px; */
+#setImage {
+    width: 471px;
+    overflow: visible;
+    overflow-clip-margin: unset;
 }
 .comment_skip_class {
     width: 239px;

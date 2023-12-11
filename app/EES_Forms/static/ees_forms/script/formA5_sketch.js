@@ -22,10 +22,11 @@ window.addEventListener("load", ()=>{
   }
   //Create render Image
   const renderedImage = newImageObject(urlToRender)
+  console.log(renderedImage)
 
   //hide loader add Image
-  sketchContainer.removeChild(spinner);
-  sketchContainer.appendChild(renderedImage);
+  sketchContainer.children[0].removeChild(spinner);
+  sketchContainer.children[0].appendChild(renderedImage);
 
   sketchContainer.addEventListener('click', (elem)=>{sketchPopup(elem.currentTarget, blankImage, renderedImage)});
   
@@ -103,7 +104,7 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
   {
     image = new Image()
     image.src = imageURL;
-    image.crossOrigin = "ananymous";
+    image.crossOrigin = "anonymous";
     return image;
   }
 

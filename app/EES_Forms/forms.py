@@ -1926,7 +1926,7 @@ class events_form(ModelForm):
         fields = ('__all__')
         widgets = {
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'title' : forms.Select(attrs={'style':'width: 150px;'}),
+            'title' : forms.TextInput(attrs={'style':'width: 150px;'}),
             'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
