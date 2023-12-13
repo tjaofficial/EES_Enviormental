@@ -1,6 +1,5 @@
 .headerLogo{
     width: 8rem;
-    padding-left: 2rem;
 }
 nav {
     display: flex;
@@ -65,4 +64,11 @@ nav a:hover {
     .hamburger {
         display: flex;
     }
+}
+.navCont{
+    display: flex;
+    position: absolute;
+    right: 0px;
+    height: 50%;
+    padding-right: 2rem;
 }

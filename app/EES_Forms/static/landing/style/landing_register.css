@@ -1,10 +1,8 @@
 .regCont{
-    width: 406px;
-    max-width: 406px;
+    /* width: 406px;
+    max-width: 406px; */
     margin: 0 auto;
-    position: relative;
-    top: 11rem;
-    left: -38px
+    margin-top: 120px;
 }
 .regHeader{
     border-radius: 15px;
@@ -26,6 +24,7 @@
     position: static;
     margin: auto;
     width: 100%;
+    box-sizing: border-box;
 }
 #signup p{
     color: #8f8f8f;

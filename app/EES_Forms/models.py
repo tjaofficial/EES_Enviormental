@@ -7116,3 +7116,17 @@ class notifications_model(models.Model):
     def __str__(self):
         return str(self.created_at) + " - " + str(self.facilityChoice) + " - " + str(self.user) + " - " + str(self.header)
     
+class braintreePlans(models.Model):
+    planID = models.CharField(
+        max_length=50
+    )
+    name = models.CharField(
+        max_length=150
+    )
+    price = models.IntegerField()
+    description = models.CharField(
+        max_length=150
+    )
+    def __str__(self):
+        return str(self.name) + ' - ' + str(self.planID)
+    

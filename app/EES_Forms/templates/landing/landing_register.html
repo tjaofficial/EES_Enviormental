@@ -2,13 +2,15 @@
 {% block body %}
 <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
 <link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
+<script defer src="{% static 'landing/script/terms_of_use.js' %}"></script>
+{% include 'landing/terms_of_use.html' %}
 <div class='topCont'>
-    <div class='regCont' style="top:6rem;">
+    <div class='regCont' style="width: 479px;">
         <form id="signup" method="POST" action="">
             {% csrf_token %}
             <div class='regHeader'>
                 <h1 style='font-weight: bolder; font-size: 28px;'>Sign Up</h1>
-                <p>Fill out this for to get started</p>
+                <p>Fill out this form to get started</p>
             </div>
             <hr>
             <div class='regBody'>
@@ -21,7 +23,12 @@
                 {{userForm.password2}}
                 <div class="checkboxy">
                     <input name="cecky" id="checky" value="1" type="checkbox" required />
-                    <label class="terms">I accept the <a href=#>terms of use</a></label>
+                    <label class="terms">
+                        I accept the 
+                        <span id="addBtn" onclick="triggerButton(this)" style="color: blue; text-decoration: underline;">
+                            terms of use
+                        </span>
+                    </label>
                 </div>
             </div>
             <input type="submit" id="submit" name="SIGN UP FOR METHODPLUS+" value="SIGN UP FOR METHODPLUS+">

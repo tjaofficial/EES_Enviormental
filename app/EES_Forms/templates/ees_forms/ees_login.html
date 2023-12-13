@@ -1,10 +1,9 @@
 {% extends 'landing/landingPage_layout.html' %}{% load static %}
 {% block body %}
-<link href="{% static 'ees_forms/style/login/login.css' %}" rel="stylesheet">
 <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
 <link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
 <div class='topCont'>
-    <div id="login" class="regCont">
+    <div id="login" class="regCont" style="width: 479px;">
         <form id='signup' name="login" action="" method="POST">
             {% csrf_token %}
             <div class='regHeader'>
