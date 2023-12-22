@@ -612,8 +612,11 @@ def getNewFormLabel_w_oldFormID(facility, formID):
             
 def getFormID_w_oldFormLabel(formLabel):
     for x in parseFormList:
+        print(x)
         if x[1] == formLabel:
             formID = x[0]
+    if not formID:
+        print('The input for getFormID_w_oldFormLabel() did not match any of the old labels.')
     return formID
 
 def createNotificationDatabase(facility, user, formID, date, notifSelector):

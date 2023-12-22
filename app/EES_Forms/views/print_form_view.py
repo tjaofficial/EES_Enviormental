@@ -2613,7 +2613,10 @@ def form_PDF(request, facility, formDate, formName):
                 ]
             heightGroup = ('A5', 'G1', 'G2', 'H')
             print("________________")
-            issueFormID = getNewFormLabel_w_formID(facility, getFormID_w_oldFormLabel(itemID))
+            print(itemID)
+            # try:
+            #     int(item)
+            issueFormID = getNewFormLabel_w_formID(facility, itemID) #getFormID_w_oldFormLabel(itemID)
             issueForm = issues_model.objects.filter(date=data.date, form=issueFormID)
             if issueForm.exists():
                 issueSpace = len(tableData)
