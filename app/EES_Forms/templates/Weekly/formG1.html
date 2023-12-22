@@ -153,10 +153,12 @@
                                         HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                                     </td>
                                     <td id="sketchBox" colspan="3" rowspan="7" data-filledSketch = "{{exist_canvas}}" data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer" data-selector={{selector}}>
-                                        <div id='imgspinner' class="loader"></div>
-                                        {% if selector == 'form' %}
-                                            {{data.canvas}}
-                                        {% endif %}
+                                        <div> 
+                                            <div id='imgspinner' class="loader"></div>
+                                            {% if selector == 'form' %}
+                                                {{data.canvas}}
+                                            {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
