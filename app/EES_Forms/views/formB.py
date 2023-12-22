@@ -187,10 +187,12 @@ def formB(request, facility, selector):
             else:
                 data = formB_form(request.POST)
             A_valid = data.is_valid()
+            finalFacility = options
+            
             if A_valid:
-                data.save(commit=False)
-                data.facilityChoice = options
-                data.save()
+                A = data.save(commit=False)
+                A.facilityChoice = options
+                A.save()
 
                 filled_out = True
                 # for items in week_almost.whatever().values():
