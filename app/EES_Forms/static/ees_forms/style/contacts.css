@@ -52,7 +52,7 @@
     color: gray;
 }
 .contact_list_cont{
-    height: 45rem;
+    /* height: 45rem; */
     overflow: scroll;
 }
 .contact_group_header{

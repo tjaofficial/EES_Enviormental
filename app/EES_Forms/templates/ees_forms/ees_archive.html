@@ -2,12 +2,11 @@
 {% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-{% comment %} <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet"> {% endcomment %}
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
 {% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
-<div class="mainCont gap" style="width: 43rem;">
+<div class="mainCont" style="width: 43rem;">
     <div class="card">
         <div class="cardHeader">
             {% include "ees_forms/backArrow.html" with destination="dashboard" %}

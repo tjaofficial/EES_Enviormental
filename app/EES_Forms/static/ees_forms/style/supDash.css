@@ -2,11 +2,13 @@
     margin: 0px 13px 13px 13px;
 }
 .appCont{
-    width: 21rem;
+    width: 14vw;
     margin: auto;
-    height: 20rem;
+    aspect-ratio: 1;
     text-decoration: none;
     padding: 53px 37px;
+    max-width: 268px;
+    min-width: 206px;
 }
 .appHeader{
     margin-bottom: 1rem;
@@ -14,7 +16,8 @@
 }
 .appIcon{
     margin: auto;
-    width: 10rem;
+    width: 49%;
+    max-width: 8.4rem;
 }
 .icon{
     fill: #787878;
@@ -24,15 +27,16 @@
 }
 .mainAppCont {
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto;
     padding: 88px 10px;
     column-gap: 50px;
-    row-gap: 50px;
+    /* row-gap: 50px; */
+    width: 61%;
   }
   .grid-item {
     background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(0, 0, 0, 0.8);
-    font-size: 30px;
+    font-size: 1.3vw;
     text-align: center;
     border-radius: 48px;
   }
@@ -45,10 +49,153 @@
 .grid-dashboard{
     display: grid;
     height: 1026;
-    padding: 1rem;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(18, 1fr);
     grid-gap: 1rem;
     max-width: 1646px;
     margin: auto;
+    width: 100%;
+}
+
+.grid-battery-weather{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    height: 100%;
+}
+.weather_battery_font{
+    font-size: 1.0rem;
+    font-weight: 100;
+    text-align: center;
+}
+.weather_info{
+    margin:auto;
+}
+.weather_battery_font span{
+    color: #9f9f9f;
+}
+.progress_bars_whole{
+    height: 100%;
+    justify-items: center;
+    align-items: center;
+}
+.progress_bar_div{
+    width: 22rem;
+    height: 50%;
+}
+#progress{
+    padding: 0 20px 0 20px;
+    height: 100%;
+}
+.container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 2rem;
+    height: 30%;
+    margin-top: .7rem;
+}
+.dataHold{
+    width: 75%;
+    margin: auto;
+    height: 11rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.grid-double{
+    display:grid;
+    grid-gap: .4rem;
+    grid-template-rows: 1fr 1fr;
+    height: 86%;
+}
+.dataHold2{
+    width: 75%;
+    margin: auto;
+    height: 100%;
+}
+.grid-dataMini{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 13rem;
+    grid-gap: .3rem;
+    padding-top: .2rem;
+    padding-bottom: 0.3rem;
+}
+.grid-dataMini2{
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 12rem;
+    margin: auto;
+    grid-gap: .7rem;
+    padding-top: .7rem;
+}
+.grid-dataMini3{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    width: 12rem;
+    margin: auto;
+    grid-gap: .7rem;
+    padding-top: .7rem;
+}
+.minifont.data{
+    text-align:center;
+}
+.gridLeaks{
+    display:grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.card.longest{
+    grid-row: span 6;
+    grid-column: span 8;
+    min-width: 1534.42px;
+    min-height: 299.328px;
+    max-height: 299.328px;
+}
+.card.skinny{
+    grid-row: span 2;
+    grid-column: span 8;
+    min-height: 89.109px;
+    max-height: 89.109px;
+}
+.card.quarters{
+    grid-row: span 5;
+    grid-column: span 2;
+    min-height: 246.766px;
+    max-height: 246.766px;
+    height: 100%;
+}
+.card.halfs{
+    grid-row: span 7;
+    grid-column: span 4;
+    min-height: 351.891px;
+    max-height: 351.891px;
+    height: 100%;
+}
+.card.eighths{
+    grid-row: span 5;
+    grid-column: span 1;
+}
+.card.contact_card{
+    grid-row: span 14;
+    grid-column: span 6;
+}
+.card-title{
+    padding-top: 1rem;
+    padding-left: 1rem;
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+#canvasHolder{
+    position: relative;
+    margin: auto;
+    width: 100%;
+    height: calc(100% - 34px);
+    padding: 24px;
 }

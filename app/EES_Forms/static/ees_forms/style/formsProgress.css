@@ -22,9 +22,9 @@
     width: 20px;
 }
 #mainBody{
-    overflow-x: hidden;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
+    width: 100%;
 }
 .snap{
     scroll-snap-align: start;

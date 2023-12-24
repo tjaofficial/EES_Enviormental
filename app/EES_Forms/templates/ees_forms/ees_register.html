@@ -9,7 +9,7 @@
     <input id='access_page' type='hidden' value={{access_page}} />
     <div id='addMoreRegistrations' style='display:none;' data-registrations={{addMoreRegistrations}}></div>
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
-    <div class="mainCont gap" style="width: 43rem;">
+    <div class="mainCont" style="width: 43rem;">
         <div id='card' class="card">
             <div class='tabContainer'>
                 <div id='tab1' class='cardHeaderTabs tabs topLeftCont start'>Observer/Supervisor</div>
@@ -192,7 +192,6 @@
                     </div>
                     <center><input type="submit" name="create_facility"></center>
                 </form>
-                {{messages}}
                 {% for message in messages %}
                     <p>{{message}}</p>
                 {% endfor%}
@@ -207,6 +206,24 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         <div style="text-align:left;width: 33rem;margin: auto;">
+                            <li class="form-line">
+                                <div class="label">Choose Facility</div>
+                                <div class="inputCont" style="width: 294px;">
+                                    <div style="display:block;">
+                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                            <span>
+                                                <select class="input" name="facilityChoice" id="id_2_facilityChoice" required>
+                                                    <option value="" selected="">---------</option>
+                                                    {% for place in data2 %}
+                                                    <option value="{{place.id}}">{{place.facility_name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </span>
+                                            <label class="sub_label">Facility</label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
                             <li class="form-line">
                                 <div class="label">Client Information</div>
                                 <div class="inputCont">
@@ -273,24 +290,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="form-line">
-                                <div class="label">Choose Facility</div>
-                                <div class="inputCont" style="width: 294px;">
-                                    <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span>
-                                                <select class="input" name="facilityChoice" id="id_2_facilityChoice" required>
-                                                    <option value="" selected="">---------</option>
-                                                    {% for place in data2 %}
-                                                    <option value="{{place.id}}">{{place.facility_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </span>
-                                            <label class="sub_label">Facility</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </li>
+                            
                         </div>           
                         <center><input type="submit" name="create_facility"></center>
                     </form>

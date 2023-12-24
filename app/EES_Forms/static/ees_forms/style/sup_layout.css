@@ -2,6 +2,12 @@ HTML{
     display: flex;
     overflow: hidden;
 }
+body{
+    width:100%; 
+    margin: 0px;
+    display:flex; 
+    height:100vh;
+}
 *{
     margin: 0px;
     padding: 0px;
@@ -15,45 +21,7 @@ HTML{
 .highlight_dark:hover {
     background-color:#1c2630;
 }
-.card.longest{
-    grid-row: span 6;
-    grid-column: span 8;
-    min-width: 1534.42px;
-    min-height: 299.328px;
-    max-height: 299.328px;
-}
-.card.skinny{
-    grid-row: span 2;
-    grid-column: span 8;
-    min-height: 89.109px;
-    max-height: 89.109px;
-}
-.card.quarters{
-    grid-row: span 5;
-    grid-column: span 2;
-    min-height: 246.766px;
-    max-height: 246.766px;
-}
-.card.halfs{
-    grid-row: span 7;
-    grid-column: span 4;
-    min-height: 351.891px;
-    max-height: 351.891px;
-}
-.card.eighths{
-    grid-row: span 5;
-    grid-column: span 1;
-}
-.card.contact_card{
-    grid-row: span 14;
-    grid-column: span 6;
-}
-.card-title{
-    padding-top: 1rem;
-    padding-left: 1rem;
-    font-size: 1rem;
-    font-family: sans-serif;
-}
+
 .nested{
     padding-left: 2rem;
     padding-right: 2rem;
@@ -92,63 +60,13 @@ HTML{
     font-weight: 900;
     color: #263544;
 }
-.dataHold{
-    width: 75%;
-    margin: auto;
-    height: 11rem;
-    margin-top: 0.3rem;
-}
-.grid-double{
-    display:grid;
-    grid-gap: .4rem;
-    grid-template-rows: 1fr 1fr;
-    height: 86%;
-}
-.dataHold2{
-    width: 75%;
-    margin: auto;
-    height: 100%;
-}
+
 .miniFont{
     font-size: .8rem;
     font-weight: 100;
     text-align: center;
 }
-.grid-dataMini{
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    width: 13rem;
-    grid-gap: .3rem;
-    padding-top: .2rem;
-    padding-bottom: 0.3rem;
-}
-.grid-dataMini2{
-    display: grid;
-    grid-template-columns: 1fr 2fr 2fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    width: 12rem;
-    margin: auto;
-    grid-gap: .7rem;
-    padding-top: .7rem;
-}
-.grid-dataMini3{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    width: 12rem;
-    margin: auto;
-    grid-gap: .7rem;
-    padding-top: .7rem;
-}
-.minifont.data{
-    text-align:center;
-}
-.gridLeaks{
-    display:grid;
-    justify-content: center;
-    grid-template-columns: 1fr 1fr 1fr;
-}
+
 .dataLabels{
     justify-content: center;
     display:flex;
@@ -243,13 +161,7 @@ li {
     height: 7px;
     border-radius: 37rem;
 } */
-.container {
-    width: 100%;
-    background-color: #ddd;
-    border-radius: 2rem;
-    height: 10%;
-    margin-top: .7rem;
-}
+
 .skills {
     text-align: right;
     color: white;
@@ -285,29 +197,7 @@ li {
 .c_circle_font_color{
     color: #67886F;
 }
-.grid-battery-weather{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    margin:1rem 2rem;
-    height: 71%;
-    align-items: center;
-}
-.weather_battery_font{
-    font-size: 1.0rem;
-    font-weight: 100;
-    text-align: center;
-}
-.battery_info{
-    margin: 1rem 2rem;
-    margin-top: 1rem;
-}
-.weather_info{
-    margin:auto;
-}
-.weather_battery_font span{
-    color: #9f9f9f;
-}
+
 .ca_holder{
     width: 100%;
     padding: 0rem 1rem;
@@ -330,45 +220,42 @@ li {
     text-decoration:none;
     color: black;
 }
-#canvasHolder{
-    position: relative;
-    margin: auto;
-    width: 46rem;
-    margin-left: 0rem;
+.mainContentContainer{
+    width: 100%;
+    overflow: scroll;
+    margin-top: 3rem;
+    display: flex;
+    /* margin-bottom: 3rem; */
+    justify-content: center;
+    padding: 1.5rem;
 }
+
 #sideBar{
     width:20rem;
     background-color: #28333e;
     display: table;
-    /* min-height: 1080px; */
     min-width: 273.578px;
     margin: 0px;
+    position: relative;
+    bottom: 0;
 }
 #companyBox{
-    width:100%; 
-    height: 3rem; 
-    background-color: #263544; 
-    box-shadow: 0px -10px 14px 0px;
     align-items: center;
     display: flex;
-    position: fixed;
+}
+.facilitySelector{
+    position: absolute;
+    left: 323;
 }
 #topBar{
-   /* width:auto; 
-    height:3rem; 
-    background-color:#253544; 
-    display: flex;
-    align-items: center;
-    padding-left: 2rem; */
-
     width: 100%;
     height: 3rem;
     background-color: #253544;
     display: flex;
     align-items: center;
-    padding-left: 2rem;
     position: fixed;
     z-index: 1;
+    min-width: 790px;
 }
 .sideAlign{
     padding: 0px;
@@ -390,7 +277,7 @@ li {
     max-height: 205.688px;
 }
 .drop_down{
-    position: fixed;
+    position: absolute;
     right: 2rem;
 }
 .no_link_css{
@@ -404,17 +291,6 @@ li {
     margin: auto;
     padding: 22px;
     width: 30%;
-}
-.progress_bars_whole{
-    height: 100%;
-    justify-items: center;
-    align-items: center;
-}
-.progress_bar_div{
-    width: 22rem;
-}
-#progress{
-    padding: 0 20px 0 20px;
 }
 
   .sidebar_item {

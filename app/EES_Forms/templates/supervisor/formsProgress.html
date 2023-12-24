@@ -1,12 +1,12 @@
 {% extends "supervisor/sup_layout.html" %}{% load static %}{% load sup_tags %}{% block list%}
 <link href="{% static 'ees_forms/style/formsProgress.css' %}" rel="stylesheet" />
-<body>
+<div style="width: 100%;">    
     <div class="pageHeader">
         <h1>Form Progress Report</h1>
         {% if supervisor %}
             <a href="{% url 'facilityList' facility %}">add/remove forms</a>
         {% endif %}
-        </div>
+    </div>
     <div id="mainBody">
         <div class="sections snap" id="DailyProg">
             <h1 class="secHeader">Daily Forms Progress</h1>
@@ -79,5 +79,6 @@
             </div>
         </div>
     </div>
-</body>
+</div>
+
 {% endblock %}

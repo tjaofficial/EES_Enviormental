@@ -4,12 +4,14 @@
 {% if facility == 'supervisor' %}
     <div class='mainAppCont'>
         <a class='appCont grid-item addOns' href="{% url 'Schedule' facility %}"> 
+            <div style="width:100%;">
                 <div class='appHeader'>SCHEDULE</div>
-                <div class='appIcon' style='width: 8.4rem;'>
+                <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path class='icon' d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z"/>
                     </svg>
                 </div>
+            </div>
         </a>
         <a class='appCont grid-item addOns' href="{% url 'Contacts' facility %}"> 
                 <div class='appHeader'>CONTACTS</div>
@@ -20,12 +22,14 @@
                 </div>
         </a>
         <a class='appCont grid-item addOns' href="{% url 'Account' facility %}"> 
+            <div style="width:100%;">
                 <div class='appHeader'>ACCOUNT</div>
                 <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                         <path class='icon' d="M0 96l576 0c0-35.3-28.7-64-64-64H64C28.7 32 0 60.7 0 96zm0 32V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128H0zM64 405.3c0-29.5 23.9-53.3 53.3-53.3H234.7c29.5 0 53.3 23.9 53.3 53.3c0 5.9-4.8 10.7-10.7 10.7H74.7c-5.9 0-10.7-4.8-10.7-10.7zM176 320c-35.3 0-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64s-28.7 64-64 64zM352 208c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16zm0 64c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16zm0 64c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16z"/>
                     </svg>
                 </div>
+            </div>
         </a>
         <a class='appCont grid-item addOns' href=#> 
                 <div class='appHeader'>SETTINGS</div>
@@ -37,7 +41,7 @@
         </a>
         <a class='appCont grid-item addOns' href="{% url 'Register' facility 'observer'%}"> 
                 <div class='appHeader'>ADD USER</div>
-                <div class='appIcon' style='width: 8.4rem;'>
+                <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path class='icon' d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                     </svg>
@@ -61,7 +65,7 @@
         </a>
         <a class='appCont grid-item addOns' href="{% url 'Register' facility 'client'%}"> 
                 <div class='appHeader'>ADD CLIENT</div>
-                <div class='appIcon' style='width: 8.4rem;'>
+                <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path class='icon' d="M272 304h-96C78.8 304 0 382.8 0 480c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32C448 382.8 369.2 304 272 304zM48.99 464C56.89 400.9 110.8 352 176 352h96c65.16 0 119.1 48.95 127 112H48.99zM224 256c70.69 0 128-57.31 128-128c0-70.69-57.31-128-128-128S96 57.31 96 128C96 198.7 153.3 256 224 256zM224 48c44.11 0 80 35.89 80 80c0 44.11-35.89 80-80 80S144 172.1 144 128C144 83.89 179.9 48 224 48z"/>
                     </svg>
@@ -158,7 +162,7 @@
                 <div id='A2card' class="inner-card">
                     {% if form_enteredA2 %}<p id='A2overlay'>Click for<br> Form A-2</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-2 - Doors</div>
-                    <div class="grid-double">
+                    <div class="{% if A2data %}grid-double{% else %}dataHold{% endif %}">
                         {% if A2data %}
                         <div class="dataHold2" style="margin-top:0.3rem;">
                             <div class="dataSingle" style="justify-content: left;">
@@ -214,7 +218,7 @@
                 <div id='A3card' class="inner-card">
                     {% if form_enteredA3 %}<p id='A3overlay'>Click for<br> Form A-3</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
-                    <div class="grid-double">
+                    <div class="{% if A3data %}grid-double{% else %}dataHold{% endif %}">
                         {% if A3data %}
                         <div class="dataHold2" style="margin-top: 0.3rem;">
                             <div class="dataSingle" style="justify-content: left;">
@@ -354,7 +358,7 @@
         <div class="card-title">7 Day - Total Charges Graph</div>
         {% if facility != 'supervisor' %}
         <div id='canvasHolder'>
-            <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%" style='margin-left: -20px;'></canvas>
+            <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%" style='margin: auto;'></canvas>
         </div>
         {% else %}
         NO FACILITY SELECTED
@@ -436,78 +440,80 @@
     </div>
     <div id="battery_weather" class="card quarters">
         <div class="card-title">Todays Battery/Weather Info.</div>
-        <div style="overflow: scroll;" class="grid-battery-weather battery_info center bat_weather_class">
-            {% if facility != 'supervisor' %}
-            <p class="weather_battery_font">
-                <span>
-                    Observer:
-                </span>
+        <div style="padding:10px; height: calc(100% - 34px); width:100%;">
+            <div style="overflow: scroll;" class="grid-battery-weather center bat_weather_class">
+                {% if facility != 'supervisor' %}
+                <p class="weather_battery_font">
+                    <span>
+                        Observer:
+                    </span>
+                    <br>
+                    {{ todays_obser }}
+                </p>
+                <p class="weather_battery_font">
+                    <span>
+                        Foreman:
+                    </span>
+                    <br>
+                    {% if todays_log.foreman %}{{ todays_log.foreman }}{% else %}N/A{% endif %}
+                </p>
+                <p class="weather_battery_font">
+                    <span>
+                        Crew:
+                    </span>
+                    <br>
+                    {% if todays_log.foreman %}{{ todays_log.crew }}{% else %}N/A{% endif %}
+                </p>
+                {% if weather.city %}
+                <p class="weather_battery_font">
+                    <span>
+                        City:
+                    </span>
+                    <br>
+                    {% if weather %}{{ weather.city }}{% else %}N/A{% endif %}
+                </p>
+                <p class="weather_battery_font">
+                    <span>
+                        Temperature:
+                    </span>
+                    <br>
+                    {% if weather %}{{ weather.temperature|floatformat:"0" }}° F{% else %}N/A{% endif %}
+                </p>
+                <p class="weather_battery_font">
+                    <span>
+                        Description:
+                    </span>
+                    <br>
+                    {% if weather %}{{ weather.description }}{% else %}N/A{% endif %}
+                </p>
+                <p class="weather_battery_font">
+                    <span>
+                        Wind:
+                    </span>
+                    <br>
+                    {% if weather %}{{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}{% else %}N/A{% endif %}
+                </p>
+                <p class="weather_battery_font">
+                    <span>
+                        Humidity:
+                    </span>
+                    <br>
+                    {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
+                </p>
+                {% else %}
                 <br>
-                {{ todays_obser }}
-            </p>
-            <p class="weather_battery_font">
-                <span>
-                    Foreman:
-                </span>
-                <br>
-                {% if todays_log.foreman %}{{ todays_log.foreman }}{% else %}N/A{% endif %}
-            </p>
-            <p class="weather_battery_font">
-                <span>
-                    Crew:
-                </span>
-                <br>
-                {% if todays_log.foreman %}{{ todays_log.crew }}{% else %}N/A{% endif %}
-            </p>
-            {% if weather.city %}
-            <p class="weather_battery_font">
-                <span>
-                    City:
-                </span>
-                <br>
-                {% if weather %}{{ weather.city }}{% else %}N/A{% endif %}
-            </p>
-            <p class="weather_battery_font">
-                <span>
-                    Temperature:
-                </span>
-                <br>
-                {% if weather %}{{ weather.temperature|floatformat:"0" }}° F{% else %}N/A{% endif %}
-            </p>
-            <p class="weather_battery_font">
-                <span>
-                    Description:
-                </span>
-                <br>
-                {% if weather %}{{ weather.description }}{% else %}N/A{% endif %}
-            </p>
-            <p class="weather_battery_font">
-                <span>
-                    Wind:
-                </span>
-                <br>
-                {% if weather %}{{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}{% else %}N/A{% endif %}
-            </p>
-            <p class="weather_battery_font">
-                <span>
-                    Humidity:
-                </span>
-                <br>
-                {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
-            </p>
-            {% else %}
-            <br>
-            <p class="weather_battery_font">
-                <span>
-                    Invalid City:
-                </span>
-                <br>
-                {{weather.error}}
-            </p>
-            {% endif %}
-            {% else %}
-            NO FACILITY SELECTED
-            {% endif %}
+                <p class="weather_battery_font">
+                    <span>
+                        Invalid City:
+                    </span>
+                    <br>
+                    {{weather.error}}
+                </p>
+                {% endif %}
+                {% else %}
+                NO FACILITY SELECTED
+                {% endif %}
+            </div>
         </div>
     </div>
     <div id="latestActivity4" class="card custom">
