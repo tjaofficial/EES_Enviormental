@@ -2617,7 +2617,11 @@ def form_PDF(request, facility, formDate, formName):
             # try:
             #     int(item)
             issueFormID = getNewFormLabel_w_formID(facility, itemID) #getFormID_w_oldFormLabel(itemID)
-            issueForm = issues_model.objects.filter(date=data.date, form=issueFormID)
+            try:
+                issueForm = issues_model.objects.filter(date=data.date, form=issueFormID)
+            except:
+                issueForm = issues_model.objects.filter(date=data.week_start, form=issueFormID)
+                
             if issueForm.exists():
                 issueSpace = len(tableData)
                 issueForm = issueForm[0]

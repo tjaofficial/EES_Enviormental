@@ -755,7 +755,11 @@ def checkIfMoreRegistrations(user):
     else:
         print('There is no braintree entry in database for this Company/User.')
         return False
-    total_registrations = braintreeData.registrations
+    if braintreeData.registrations:
+        total_registrations = braintreeData.registrations
+    else:
+        print('There is no data in the database entry for this Company/User.')
+        return False
     active_registrations = len(listOfEmployees.filter(active=True))
     if active_registrations >= total_registrations:
         addMore = False
