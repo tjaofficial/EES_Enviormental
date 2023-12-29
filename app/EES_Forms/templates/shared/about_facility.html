@@ -1,0 +1,31 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list %}{% load static %}
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<div class="mainCont marginTop">
+    <div class='card'>
+        <div class="cardHeader">{{facility}}</div>
+        <div class="contentCont">
+            <div style='display: flex; justify-content: center; margin-bottom: 15px;'>
+                <img style='width:47%; margin-right: 33px;' src="{% static 'images/DTE-EES2.jpeg' %}">
+                <img style='width:47%;' src="{% static 'images/DTE-EES1.jpeg' %}">
+            </div>
+            <div style='margin-bottom: 15px; font-size:20px;'>
+                The by-product recovery coke oven battery began operation in 1992. National Steel Corp.-Great Lakes Division originally owned and operated the battery as well as the steel-making operations on Zug Island in River Rouge. In 1997, National Steel sold the battery to EES Coke but continued to manage the coke operations. In 2003, U.S. Steel acquired the iron and steel assets from National Steel and in 2004 EES Coke assumed sole responsibility for the coke operations.
+            </div>
+            <div style='margin-bottom: 15px;font-size:20px;'>
+                EES Coke is part of DTE Energy Services, an unregulated subsidiary of DTE Energy (NYSE: DTE).
+            </div>
+            <div style='margin-bottom: 15px;font-size:20px;'>
+                The coke oven battery consists of 85 individual ovens that are heated with an underfire combustion system. A by-product of heating the coal to produce coke is COG. The COG is processed on-site in the by-product recovery plant that removes tars, light oils and ammonia. The COG is then used to heat the battery, sent to U.S. Steel or sent offsite. Any excess COG is combusted in the on-site COG flare. 
+
+            </div>
+            <div style='margin-bottom: 15px;font-size:20px;'>
+                400 Zug Island Road
+                Detroit, MI 48209
+
+                ***possibly include a map just showing where***
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

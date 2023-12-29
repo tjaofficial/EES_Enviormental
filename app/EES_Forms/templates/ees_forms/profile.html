@@ -1,13 +1,14 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list %}{% load static %}
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/profile.css' %}" rel="stylesheet">
 {% endif %}
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <div class="mainCont" style="max-width: none;">
     <div id="prof_form_holder" class='card'>
         <div class="cardHeader">
-            {% include "ees_forms/backArrow.html" with destination="dashboard" %}
+            {% include "shared/components/backArrow.html" with destination="dashboard" %}
             Profile Information
         </div>
         <div class="contentCont">

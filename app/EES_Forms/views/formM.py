@@ -174,6 +174,6 @@ def formM(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formM.html", {
+    return render(request, "shared/forms/daily/formM.html", {
         'picker': picker, "existing": existing, 'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
     })

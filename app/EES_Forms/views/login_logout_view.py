@@ -81,7 +81,7 @@ def login_view(request):
             login_error["error"] = True
             login_error["message"] = 'Incorrect username or password'
 
-    return render(request, "ees_forms/ees_login.html", {
+    return render(request, "shared/login.html", {
         'facility': facility, "now": now, "login_error": login_error, 'access': access, 'loginPage': loginPage
     })
 

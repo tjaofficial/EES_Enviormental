@@ -1,9 +1,9 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list %}{% load static %}
 <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <div>
-    {% include "ees_forms/backArrow.html" %}
+    {% include "shared/components/backArrow.html" %}
 </div>
 <div class="mainCont" style="max-width:none;">
     <div class="card" id="card_fitter">

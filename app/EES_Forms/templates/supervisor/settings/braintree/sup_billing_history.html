@@ -1,9 +1,9 @@
-{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/billingHistory.css' %}" rel="stylesheet" />
 <div class='mainCont' style="width: 67rem; max-width:none;margin: auto;">
     <div class='card'>
         <div class="cardHeader">
-            {% include "ees_forms/BackArrow.html" with destination="accountSettings" %}
+            {% include "shared/components/backArrow.html" with destination="accountSettings" %}
             Billing History
         </div>
         <div class="contentCont">

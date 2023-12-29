@@ -106,6 +106,6 @@ def formO(request, facility, selector, weekend_day):
         batt_prof = '../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
-    return render(request, "Weekly/formO.html", {
+    return render(request, "shared/forms/weekly/formO.html", {
         'picker': picker, 'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

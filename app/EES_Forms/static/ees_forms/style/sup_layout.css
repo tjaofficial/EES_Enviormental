@@ -1,18 +1,26 @@
 HTML{
     display: flex;
     overflow: hidden;
+    position: fixed;
+    bottom: 0;
+    top: 0;
 }
 body{
     width:100%; 
     margin: 0px;
     display:flex; 
-    height:100vh;
+    height:100%;
+    position: fixed;
 }
 *{
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
     font-family: sans-serif;
+}
+a {
+    text-decoration: none;
+    color: #001011;
 }
 .whiteFont{
     color:white; 
@@ -21,7 +29,9 @@ body{
 .highlight_dark:hover {
     background-color:#1c2630;
 }
-
+.submit_button{
+    font-size: 1.8rem;
+  }
 .nested{
     padding-left: 2rem;
     padding-right: 2rem;
@@ -73,83 +83,9 @@ body{
     margin-bottom: .3rem;
     margin-top: .3rem;
 }
-.myTabs{
-    display: flex;
-    flex-wrap: wrap;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-    width: 92%;
-    margin: 0.4rem 2rem;
-}
-.myTabs input[type='radio']{
-    display:none;
-}
-.myTabs label{
-    padding: .5rem;
-    background-color: gray;
-    display: flex;
-    align-items: center;
-    font-weight: 900;
-    height:2rem;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-}
-.myTabs .tab{
-    width:100%;
-    padding: 2rem 2rem 2rem 2rem;
-    background-color: white;
-    order: 1;
-    height: 13rem;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    box-shadow: inset 0 0 20px 0px #0000005c;
-    overflow: scroll;
-}
-.dataPT {
-    display:block;
-    column-count: 2;
-}
-.dataStyle {
-    margin-bottom: 10px;
-}
 
-.myTabs input[type="radio"]:checked + label + .tab + .dataPT{
-    display:block;
-    column-count: 3;
-    column-gap: 0px;
-    column-fill: auto;
-    height: 13rem;
-    text-align: center;
-}
-.myTabs input[type="radio"]:checked + label{
-    background-color:white;
-}
-ul {
-    display: block;
-    list-style-type: none;
-    margin-left: 0;
-    margin-right: 0;
-}
-li {
-    display: block;
-    list-style-type: none;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 35px;
-    font-size: 0.9rem;
-    font-weight: 100;
-}
-.menuItems{
-    margin-top: 67px;
-}
-.menuItems a{
-    color: white;
-    text-decoration: none;
-}
+
+
 .grid-sliders{
     display:grid;
     grid-gap: .1rem;
@@ -230,15 +166,7 @@ li {
     padding: 1.5rem;
 }
 
-#sideBar{
-    width:20rem;
-    background-color: #28333e;
-    display: table;
-    min-width: 273.578px;
-    margin: 0px;
-    position: relative;
-    bottom: 0;
-}
+
 #companyBox{
     align-items: center;
     display: flex;

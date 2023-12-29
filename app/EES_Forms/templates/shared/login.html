@@ -1,0 +1,27 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block body %}
+<link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
+<link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
+<div class='topCont'>
+    <div id="login" class="regCont" style="width: 479px;">
+        <form id='signup' name="login" action="" method="POST">
+            {% csrf_token %}
+            <div class='regHeader'>
+                <h2 class='methodPlus' style='margin:auto; text-align: center; font-size: 47px;'>MethodPlus+</h2>
+            </div>
+            <hr>
+            <div class='regBody'>
+            {% if login_error.error %}
+                <div class="login__error">{{ login_error.message }}</div>
+            {% endif %}
+                <input id="username" type="text" name="username" placeholder='Username'>
+                <input  id="password" type="password" name="password" placeholder='Password'>
+                
+                {% include "shared/components/submitButton.html" with label="login" %}
+            </div>
+            <p style='text-align:center;'><a href="{% url 'register' %}">Forgot password?</a></p><br>
+            <p style='text-align:center;'>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
+        </form>
+    </div>
+</div>
+{% endblock %}

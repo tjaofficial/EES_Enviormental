@@ -212,6 +212,6 @@ def formB(request, facility, selector):
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
-    return render(request, "Daily/formB.html", {
+    return render(request, "shared/forms/daily/formB.html", {
         'picker': picker, 'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
     })

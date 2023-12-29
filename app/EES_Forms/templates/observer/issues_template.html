@@ -1,0 +1,108 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/style/issueForm.css' %}" rel="stylesheet" />
+<div style="padding-top: 30px;">
+    <div class="issue_card">
+        <div class="cardHeader">
+        {% if access_page == 'form' %}
+            {% include "shared/components/backArrow.html" with destination="corrective_action-form" link=link %}
+            Fill Out a Corrective Action Form
+        {% elif access_page == 'issue' %}
+            {% include "shared/components/backArrow.html" with destination="corrective_action" %}
+            Corrective Action LogID - #{{ picker.id }}
+        {% elif access_page == 'edit' or access_page == 'resubmit'%}
+                {% include "shared/components/backArrow.html" with destination="corrective_action-edit" date=link %}
+                EDIT - Corrective Action LogID - #{{ picker.id }}  
+        {% endif %}
+        </div>
+        <div class="issue_contentCont">
+            {% if access_page == 'form' %}
+                <form action="" method="POST" style="padding-bottom: 25px;">
+                    {% csrf_token %}
+                    <br>
+                    <div style="text-align:center;">
+                        Form: {{ form.form }} 
+                        Date: {{ form.date }}
+                        Time: {{ form.time }}
+                    </div>
+                    <br>
+                    Describe Issue:<br>
+                    {{ form.issues }}<br><br>
+                    Corrective Action Taken:<br>
+                    {{ form.cor_action }}<br><br>
+                    EES Personnel Notified: {{ form.notified }}<br> 
+                    <br><br>
+                    <div style="text-align: center;">
+                        <input type="submit" value="Submit Issue" style="font-size: 1.5rem;">
+                    </div>
+                </form>
+            {% elif access_page == 'issue' %}
+                <br>
+                <div style="display: flex; margin: auto; width: fit-content;">
+                    <h4 class="issue_labels">Form:</h4> 
+                    
+                        &nbsp;&nbsp;{{ picker.form }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    
+                    <h4 class="issue_labels">Date:</h4> 
+                    
+                        &nbsp;&nbsp;{{ picker.date }}
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <h4 class="issue_labels">Time:</h4> 
+                    
+                        &nbsp;&nbsp;{{ picker.time }}
+                
+                </div>
+                <br>
+                <h4 class="issue_labels">Describe Issues:</h4>
+                <div class="issue_box">
+                    "{{ picker.issues }}"
+                </div>
+                <br><br>
+                <h4 class="issue_labels">Corrective Action Taken:</h4>
+                <div class="issue_box">
+                    "{{ picker.cor_action }}"
+                </div>
+                <br><br>
+                <div class="issue_bottomCont">
+                    <h4 class="issue_labels">
+                        EES Personnel Notified:
+                    </h4>&nbsp; {{ picker.notified }}
+                </div>
+                {% if unlock %}
+                <div style="text-align: right;">
+                    <a href="{% url  'issues_view' facility picker.form picker.date 'edit' %}">
+                        Edit
+                    </a>
+                </div>
+                {% endif %}
+                <br>
+            {% elif access_page == 'edit' or access_page == 'resubmit' %}
+                <form action="" method="POST" style="padding-bottom: 25px;">
+                    {% csrf_token %}
+                    <br>
+                    <div style="text-align:center;">
+                        Form: {{ form.form }} 
+                        Date: {{ form.date }}
+                        Time: {{ form.time }}
+                    </div>
+                    <br>
+                    
+                    Describe Issue:<br>
+                    {{ form.issues }}<br><br>
+                    Corrective Action Taken:<br>
+                    {{ form.cor_action }}<br><br>
+                    EES Personnel Notified: {{ form.notified }}<br>
+                    
+                        
+                    <br><br>
+                    <div style="text-align: center;">
+                        {% include "shared/components/submitButton.html" with label="submit" %}
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list %}{% load static %}
+<link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+{% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
+<div class="mainCont" style="width: 43rem;">
+    <div class="card">
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="dashboard" %}
+            {% if facility != 'supervisor' %}
+            <form action="search_forms/search" method="POST" class=''>
+                {% csrf_token %}
+                <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
+                {% include "shared/components/submitButton.html" with label="search" %}
+            </form>
+            {% else %}
+            NO FACILITY SELECTED
+            {% endif %}
+        </div>
+        <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -183,6 +183,6 @@ def formC(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formC.html", {
+    return render(request, "shared/forms/daily/formC.html", {
         'picker': picker, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

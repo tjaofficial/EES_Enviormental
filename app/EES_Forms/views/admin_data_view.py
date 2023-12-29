@@ -12,6 +12,6 @@ def admin_data_view(request, facility):
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
 
-    return render(request, "ees_forms/admin_data.html", {
+    return render(request, "shared/admin_data.html", {
         'facility': facility, "back": back, "today": today, 'profile': profile,
     })

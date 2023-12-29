@@ -37,14 +37,6 @@ def sup_dashboard_view(request, facility):
     userProfile = user_profile_model.objects.get(user__id=request.user.id)
     userCompany = userProfile.company
     
-    #remove after running once in production
-    for s in formA3:
-        s.om_total_sec = (int(s.om_traverse_time_min)*60) + int(s.om_traverse_time_sec)
-        s.l_total_sec = (int(s.l_traverse_time_min)*60) + int(s.l_traverse_time_sec)
-        s.save()
-    #====================================================
-    
-    
     if options.exists():
         options = options[0]
     
@@ -212,7 +204,10 @@ def sup_dashboard_view(request, facility):
                 'todays_obser': todays_obser,
                 'profile': allContacts, 
                 'weather': weather, 
-                'od_recent': od_recent, 
+                'od_recent': od_recent,
+                "od_30": od_30, 
+                "od_10": od_10, 
+                "od_5": od_5, 
                 'weekly_percent': weekly_percent, 
                 'monthly_percent': monthly_percent, 
                 'annually_percent': annually_percent, 
@@ -433,7 +428,7 @@ def register_view(request, facility, access_page):
         answer = request.POST
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
-    return render(request, "ees_forms/ees_register.html", {
+    return render(request, "supervisor/register.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
         'facilityLink': facilityLink, 

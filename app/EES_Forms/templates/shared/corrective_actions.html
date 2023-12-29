@@ -1,0 +1,74 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
+<script defer src="{% static 'ees_forms/script/corrective_actions.js' %}"></script>
+<div class='mainCont' style="width:750px;">
+    <div class="card">
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="dashboard"%}
+            Corrective Action Search
+        </div>
+        <br>
+        <div class='contentCont'>
+            <form method="GET" action="./Corrective-Action" style="text-align: center;">
+                <div class="CR_dataCont">
+                    <div class="inputCont">
+                        Search Form Name <br>
+                        <input type="search" name="issueForm" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                    </div>
+                    <div class="inputCont">
+                        Search Month/Year<br>
+                        <input type="month" name="issueMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
+                    </div>
+                    <div class="inputCont">
+                        Search Date<br>
+                        <input type="date" name="issueDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
+                    </div>
+                    <div class="inputCont">
+                        Search Issue Description<br>
+                        <input type="search" name="issue_contains" placeholder="Issue Contains..." value="{% if varPull.3 %}{{varPull.3}}{% endif %}"/>
+                    </div>
+                </div>
+                <div class="CR_dataCont">
+                    <div class="inputCont">
+                        Personnel Notified<br>
+                        <input type="search" name="notified" placeholder="Personnel Name" value="{% if varPull.4 %}{{varPull.4}}{% endif %}"/>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    {% include "shared/components/submitButton.html" with label="search" %}
+                </div>
+            </form>
+        </div>
+    </div><br>
+    <div class='card'>
+        <div class="cardHeader">
+            {% if facility == "supervisor" %}Please select a facilty at the top of the screen{% else %}Corrective Action Forms - By Date{% endif %}
+        </div>
+        <br>
+        <div class='contentCont'>
+            <ul style="text-align: center;">
+            {% if ca_forms == "empty" %}
+                No Results Found For:<br>
+                "{% if varPull.0 %}{{varPull.0}}, {% endif %}{% if varPull.1 %}{{varPull.1}}, {% endif %}{% if varPull.2 %}{{varPull.2}}, {% endif %}{% if varPull.3 %}{{varPull.3}}, {% endif %}{% if varPull.4 %}{{varPull.4}}{% endif %}"
+            {% else %}
+                {% for x in ca_forms %}
+                    <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                        <div class="card CR_tiles" style="width: 600px;{% if client and not x.viewed %} background-color: #ebee17;{% endif %}">
+                            <div class='CR_dateHeader'>
+                                {{ x.date }} - {{ x.form }}
+                            </div>
+                            <div class='CR_paragraph'>
+                                {{ x.issues }}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% endif %}
+            </ul>    
+        </div>
+    </div>
+</div>
+{% endblock %}

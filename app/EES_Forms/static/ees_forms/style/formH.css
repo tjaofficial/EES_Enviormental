@@ -53,10 +53,6 @@ span.sideWord{
         width: 50px;
     font-size: 15px;
 }
-#newName{
-    width: auto;
-    display: inline-flex;
-}
 #formH_box1{
     border: 1px solid black;
     text-align: center;
@@ -67,3 +63,31 @@ span.sideWord{
     width: 60px;
     text-align: center;
 }
+/* The actual popup (appears on top) */
+.popuptext1 {
+    visibility: hidden;
+    width: 187px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin-left: -222px;
+    margin-top: -43px;
+    opacity: 75%;
+  }
+  
+  /* Popup arrow */
+  .popuptext1::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }

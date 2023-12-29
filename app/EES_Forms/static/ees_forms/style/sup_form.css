@@ -1,130 +1,21 @@
-#A1overlay {
+.formA_overlay {
     position: absolute;
     text-align: center;
-    padding: 67px 98px;
     font-family: sans-serif;
     font-size: 23px;
     font-weight: bolder;
     border-radius: 20px;
     color: #ffffff00;
     height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-#A1overlay:hover{
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
+.formA_overlay:hover{
     background-color: #000000ad;
-    border-radius: 20px;
     color: #ffffff70;
-    height: 100%;
 }
-#A2overlay {
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    border-radius: 20px;
-    color: #ffffff00;
-    height: 100%;
-}
-#A2overlay:hover{
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    background-color: #000000ad;
-    border-radius: 20px;
-    color: #ffffff70;
-    height: 100%;
-}
-#A3overlay {
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    border-radius: 20px;
-    color: #ffffff00;
-    height: 100%;
-}
-#A3overlay:hover{
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    background-color: #000000ad;
-    border-radius: 20px;
-    color: #ffffff70;
-    height: 100%;
-}
-#A4overlay {
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    border-radius: 20px;
-    color: #ffffff00;
-    height: 100%;
-}
-#A4overlay:hover{
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    background-color: #000000ad;
-    border-radius: 20px;
-    color: #ffffff70;
-    height: 100%;
-}
-#A5overlay {
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    border-radius: 20px;
-    color: #ffffff00;
-    height: 100%;
-}
-#A5overlay:hover{
-    position: absolute;
-    text-align: center;
-    padding: 67px 98px;
-    font-family: sans-serif;
-    font-size: 23px;
-    font-weight: bolder;
-    background-color: #000000ad;
-    border-radius: 20px;
-    color: #ffffff70;
-    height: 100%;
-}
-#A1card{
-    position: relative;
-}
-#A2card{
-    position: relative;
-}
-#A3card{
-    position: relative;
-}
-#A4card{
-    position: relative;
-}
-#A5card{
+.formA_card{
     position: relative;
 }

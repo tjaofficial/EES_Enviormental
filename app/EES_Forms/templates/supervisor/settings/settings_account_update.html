@@ -1,11 +1,11 @@
-{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
         <div class="cardHeader">
-            {% include "ees_forms/backArrow.html" with destination="accountSettings" %}
+            {% include "shared/components/backArrow.html" with destination="accountSettings" %}
             {% if selector == "account" %}Account{% elif selector == "company" %}Company{% endif %} Settings
         </div>
         <div class="contentCont" style="padding: 15px 32px;">

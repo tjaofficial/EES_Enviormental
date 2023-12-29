@@ -69,7 +69,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
             A.save()
             return redirect('IncompleteForms', facility)
 
-    return render(request, "ees_forms/Bat_Info.html", {
+    return render(request, "observer/Bat_Info.html", {
         'supervisor': supervisor, "client": client, 'unlock': unlock, 'form': form, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
     })
 
@@ -93,6 +93,6 @@ def facility_select_view(request):
             batt_prof = '../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect(batt_prof)
 
-    return render(request, "ees_forms/facility_select.html", {
+    return render(request, "observer/facility_select.html", {
         'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': profileFacs, 'loginPage': loginPage, 'profile': profile, 
     })

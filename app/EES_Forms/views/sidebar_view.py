@@ -146,7 +146,7 @@ def corrective_action_view(request, facility):
         print(answer)
         if answer['facilitySelect'] != '':
             return redirect('Corrective-Action', answer['facilitySelect'])
-    return render(request, "ees_forms/corrective_actions.html", {
+    return render(request, "shared/corrective_actions.html", {
         'notifs': notifs, "varPull": varPull, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
@@ -228,7 +228,7 @@ def archive_view(request, facility):
             if 'colorMode' in answer.keys():
                 colorModeSwitch(request)
 
-    return render(request, 'ees_forms/ees_archive.html', {
+    return render(request, 'shared/archive.html', {
         'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })
 
@@ -596,7 +596,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
                 updateSubmissionForm(facility, formID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
-    return render(request, "ees_forms/issues_template.html", {
+    return render(request, "observer/issues_template.html", {
         'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
     })
 
@@ -642,7 +642,7 @@ def event_add_view(request, facility):
 
             return redirect(cal_link)
 
-    return render(request, "ees_forms/event_add.html", {
+    return render(request, "supervisor/event_add.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData,'options': options, 
         'facility': facility, 
@@ -715,7 +715,7 @@ def event_detail_view(request, facility, access_page, event_id):
                 #return redirect('../../event_detail/' + str(event_id) + '/view')
 
     
-    return render(request, "ees_forms/event_detail.html", {
+    return render(request, "shared/event_detail.html", {
         'notifs': notifs, 
         'options': options, 
         'facility': facility, 

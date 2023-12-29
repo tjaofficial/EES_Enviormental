@@ -1,7 +1,20 @@
-const modalHeaderDrop = document.getElementById('addModalHeaderDrop');
-const profileMenu = document.getElementById('profileDropdown');
-const notificationMenu = document.getElementById('notifDropdown');
+var modalHeaderDrop = document.getElementById('addModalHeaderDrop');
+var profileMenu = document.getElementById('profileDropdown');
+var notificationMenu = document.getElementById('notifDropdown');
+
+window.addEventListener('click', closeModel);
+
+function closeModel(event) {
+    if (event.target == modalHeaderDrop) {
+        console.log('hello')
+        modalHeaderDrop.style.display = "none";
+        profileMenu.style.display = "none";
+        notificationMenu.style.display = "none";
+    }
+}
+
 headerDropDown = (item) => {
+    if (!item) return;
     if (item.id == 'notifDropdown'){
         if (notificationMenu.style.display == 'none') {
             notificationMenu.style.display = 'block';
@@ -24,6 +37,7 @@ headerDropDown = (item) => {
 }
 
 changeOtherInput = (initialInput) => {
+    if (!initialInput) return;
     if (document.getElementById(initialInput.id).checked == true){
         document.getElementById('switchInput').value = 'dark';
     } else {
@@ -32,10 +46,3 @@ changeOtherInput = (initialInput) => {
 }
 
 
-window.onclick = function(event) {
-    if (event.target == modalHeaderDrop) {
-        modalHeaderDrop.style.display = "none";
-        profileMenu.style.display = "none";
-        notificationMenu.style.display = "none";
-    }
-}

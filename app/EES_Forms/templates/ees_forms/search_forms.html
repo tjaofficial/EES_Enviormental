@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list %}{% load static %}
 
 <link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
@@ -6,7 +6,7 @@
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
 <div>
-    {% include "ees_forms/backArrow.html" %}
+    {% include "shared/components/backArrow.html" %}
 </div>
 {% if searched %}
     {% if access_page == 'search' %}

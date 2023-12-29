@@ -235,11 +235,15 @@ def sup_account_view(request, facility):
         
     if request.method == "POST":
         data = request.POST
-        print(data)
-        selectedRegister = userProfileQuery.get(id=int(data['registerID']))
-        selectedRegister.active = False
-        selectedRegister.save()
-        return redirect("Account", facility)
+        if 'facilitySelect' in data.keys():
+            if data['facilitySelect'] != '':
+                return redirect('sup_dashboard', data['facilitySelect'])
+        else:
+            print(data)
+            selectedRegister = userProfileQuery.get(id=int(data['registerID']))
+            selectedRegister.active = False
+            selectedRegister.save()
+            return redirect("Account", facility)
     return render(request, 'supervisor/settings/sup_account.html',{
         'notifs': notifs,
         'supervisor': supervisor, 

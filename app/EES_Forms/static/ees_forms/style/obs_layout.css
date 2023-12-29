@@ -1,0 +1,19 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+.primaryLightBackground{
+    background-color: #dfe5e9;
+}
+.primaryDarkBackground{
+    background-color: #263544;
+}
+.submit_button{
+    font-size: 1.8rem;
+}
+a {
+    text-decoration: none;
+    color: #001011;
+}

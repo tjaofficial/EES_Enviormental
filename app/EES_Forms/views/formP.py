@@ -107,6 +107,6 @@ def formP(request, facility, selector, weekend_day):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formP.html", {
+    return render(request, "shared/forms/weekly/formP.html", {
         'picker': picker, 'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

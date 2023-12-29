@@ -30,7 +30,7 @@ def pt_admin1_view(request, facility):
     od_recent = pushTravelsData['closest']
     all_ovens = pushTravelsData['all']
 
-    return render(request, "ees_forms/PushTravels.html", {
+    return render(request, "shared/PushTravels.html", {
         'facility': facility, "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 'allForms': allForms
     })
 

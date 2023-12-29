@@ -149,6 +149,6 @@ def formD(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formD.html", {
+    return render(request, "shared/forms/weekly/formD.html", {
         'picker': picker, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

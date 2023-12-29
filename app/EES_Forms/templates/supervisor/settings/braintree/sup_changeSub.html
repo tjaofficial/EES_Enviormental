@@ -1,11 +1,11 @@
-{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/selectSubscription.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/subscriptionChange.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/subscriptionChange.js' %}"></script>
 <div class='mainCont' style="width: 1182px; max-width:none;margin: auto;">
     <div class='card'>
         <div class="cardHeader">
-            {% include "ees_forms/BackArrow.html" with destination="accountSettings" %}
+            {% include "shared/components/backArrow.html" with destination="accountSettings" %}
             Change Subscription
         </div>
         <div class="contentCont">

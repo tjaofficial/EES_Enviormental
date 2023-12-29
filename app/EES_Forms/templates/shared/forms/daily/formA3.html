@@ -1,0 +1,346 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}
+
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<link href="{% static 'ees_forms/style/formA3/formA3.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/formA3.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+<div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+<div id="paperSize">
+    <div class="mainCont">
+        <form action="" method="POST" style="margin: auto; margin-bottom: 100px;">
+            {% csrf_token %}
+            <div class="card" id="card_fitter">
+                {% include "shared/components/print_button.html" %}
+                <div class="paper_fitter" style="padding: 3rem;"> 
+                    {% include "shared/components/backArrow.html" with destination="form" %}  
+                    <section>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <th id="boxTitle" colspan="5" style="text-align: center;">Method 303 Lids and Offtakes - Form (A-3)</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th colspan="3" style="text-align: center;">Facility Name: {{facility}}</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
+                            </tr>
+                            <tr>
+                                <th colspan="6">
+                                    Battery No. {{option.bat_num}} &nbsp; &nbsp; &nbsp; 
+                                    Total No. Ovens: {{options.total_ovens}} &nbsp; &nbsp; &nbsp;
+                                    Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }} <br>
+                                    Inoperable Oven Number(s)&nbsp; &nbsp;{{ data.inop_numbs }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="6">
+                                    Crew:
+                                    &nbsp; &nbsp;{{ data.crew }}
+                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                    Battery Foreman:
+                                    &nbsp; &nbsp;{{ data.foreman }}
+                                </th>
+                            </tr>
+                        </table>
+                    </section>
+                    <section class="resultTables">
+                        <div class="resultTables_container">
+                            <div>Start Time:{{ data.om_start }}</div>
+                            <div>End Time:{{ data.om_stop }}</div>
+                            <span class="popup_class" id="om_timePopup">
+                                Please Change End Time
+                            </span>
+                            <div hidden="true">{{ data.om_leak_json }}</div>
+                            <span class="popup_damperClass" id="om_damperPopup">
+                                Dampered ovens and inoperable ovens overlap.
+                            </span>
+                            <table style="border-collapse: collapse;">
+                                <tr>
+                                    <th id="boxa5" colspan="3">
+                                        OFFTAKES AND MINI STANDPIPES
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th id="boxa6" colspan="1">
+                                        Oven
+                                    </th>
+                                    <th id="boxa6" colspan="2">
+                                        Location
+                                    </th>
+                                </tr>
+                                {% for item in omSide_json %}
+                                    <tr>
+                                        <th id="boxa6" colspan="1">
+                                            {{ item.oven }}
+                                        </th>
+                                        <th id="boxa6" colspan="2">
+                                            {% for loc in item.location %}
+                                                {% if forloop.last %}
+                                                    {{ loc }}
+                                                {% else %}
+                                                    {{ loc }},
+                                                {% endif %}
+                                            {% endfor %}
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+                                <tbody id="offtakes_tableBody" data-numRows="1">
+                            </table>
+                            <div>Traverse Time: {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec = {{data.om_total_sec}}sec</div>
+                            <div style='margin-top: 15px;'>
+                                One Pass ({{ data.one_pass }})
+                            </div>
+                        </div>
+
+                        <div class="resultTables_container">
+                            <div> Start Time:{{ data.l_start }} </div>
+                            <div> End Time:{{ data.l_stop }} </div>
+                            <span class="popup_class" id="l_timePopup">
+                                Please Change End Time
+                            </span>
+                            <div hidden="true">{{ data.l_leak_json }}</div>
+                            <span class="popup_class" id="l_damperPopup">
+                                Dampered ovens and inoperable ovens overlap.
+                            </span>
+                            <table style="border-collapse: collapse;">
+                                <tr>
+                                    <th id="boxa5" colspan="6">
+                                        LIDS
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th id="boxa6" colspan="1">
+                                        Oven
+                                    </th>
+                                    <th id="boxa6" colspan="8">
+                                        Location
+                                    </th>
+                                </tr>
+                                {% for item in lSide_json %}
+                                    <tr>
+                                        <th id="boxa6" colspan="1">
+                                            {{ item.oven }}
+                                        </th>
+                                        <th id="boxa6" colspan="2">
+                                            {% for loc in item.location %}
+                                                {% if forloop.last %}
+                                                    {{ loc }}
+                                                {% else %}
+                                                    {{ loc }},
+                                                {% endif %}
+                                            {% endfor %}
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+                                <tbody id="lids_tableBody" data-numRows="1">
+                                </tbody>
+                            </table>
+                            <div>Traverse Time: {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec = {{data.l_total_sec}}sec</div>
+                        </div>
+                    </section>
+                    <section>
+                        <table style="border-collapse: collapse; margin: auto;">
+                            <tr>
+                                <td style="width: 150px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                                    D = Dampered off
+                                </td>
+                                <td style="width: 254px; text-align: center;">
+                                    Allowed Traverse Time:
+                                </td>
+                                <td rowspan="2" style="width: 354px; text-align: left;">
+                                    = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                                    Valid Run?
+                                </td>
+                                <td></td>
+                            </tr>    
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    C = Cap
+                                </td>
+                                <td style="text-align: center;">
+                                    (Offtakes)
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                    {{ data.om_valid_run }}
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    F = Flange
+                                </td>
+                                <td style="text-align: center;"></td>
+                                <td></td>
+                            </tr>
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    S = Slip Joint
+                                </td>
+                                <td style="text-align: center;">
+                                    Allowed Traverse Time:
+                                </td>
+                                <td rowspan="2" style="width: 354px; text-align: left;">
+                                    = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                                    Valid Run?
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    B = Base
+                                </td>
+                                <td style="text-align: center;">
+                                    (Lids)
+                                </td>
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                    {{ data.l_valid_run }}
+                                </td>
+                            </tr> 
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    P = Piping
+                                </td>
+                                <td style="text-align: center;"></td>
+                                <td></td>
+                            </tr> 
+                            <tr> 
+                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                    O = Other
+                                </td>
+                                <td colspan="3" style="text-align: center;">
+                                    Total Offtake Leaks: {{ data.om_leaks }} Total Leaking Lids: {{ data.l_leaks }}
+                                </td>
+                            </tr>    
+                            <tr>  
+                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                    MS = Mini Standpipe
+                                </td>
+                                <td style="text-align: center;"></td>
+                                <td></td>
+                            </tr>
+                        </table>    
+                        <table style="border-collapse: collapse; margin: auto;">    
+                                <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <td style="width: 100px;"></td>
+                                <td></td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.l_leaks2 }} x 100
+                                </td>
+                                <td></td>
+                                <td style="width: 75px"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="text-align: center; margin: auto; width: 133px;">
+                                    % Leaking Lids = 
+                                </td>
+                                <td>
+                                    ---------------------- = 
+                                </td>
+                                <td>
+                                    --------------------------------- = 
+                                </td>
+                                <td>
+                                    {{ data.l_percent_leaking }}%
+                                </td>
+                                <td></td>
+                            </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - {{ data.inop_ovens }}) - {{ data.l_not_observed }}
+                                </td>
+                                    <td></td>
+                                    <td></td>
+                            </tr>
+                                <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <td style="width: 100px;"></td>
+                                <td></td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.om_leaks2 }} x 100
+                                </td>
+                                <td></td>
+                                <td style="width: 75px"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="text-align: center; margin: auto; width: 133px;">
+                                    % Leaking Offtakes = 
+                                </td>
+                                <td>
+                                    ---------------------- = 
+                                </td>
+                                <td>
+                                    --------------------------------- = 
+                                </td>
+                                <td>
+                                    {{ data.om_percent_leaking }}%
+                                </td>
+                                <td></td>
+                            </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                                </td>
+                                <td>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - {{ data.inop_ovens }}) - {{ data.om_not_observed }}
+                                </td>
+                                    <td></td>
+                                    <td></td>
+                            </tr>
+                            <tr>
+                                <td style="height: 25px" > </td>
+                            </tr> 
+                            <tr>
+                                <td style="text-align: center; margin: auto; " colspan="6">
+                                    Where: P<sub>ve</sub> = Leaking Lids Obsered, P<sub>ovn</sub> = Lids Per Oven, P<sub>no</sub> = Lids Not Observed, N = Number of Ovens, N<sub>i</sub> = Inoperable Oven,<br> T<sub>ve</sub> = Leaking Offtakes Observed, T<sub>ovn</sub> = Ofttakes Per Oven, J = Permanent Jumper Pipes, T<sub>no</sub> = Offtakes Not Observed
+                                </td>
+                            </tr> 
+                        </table>
+                    </section>
+                    <div id="noteBox">
+                        Notes: <br>
+                        {{ data.notes }}
+                    </div>
+                    {% if supervisor or client %} {% elif unlock and not search %}
+                        {% include "shared/components/submitButton.html" with label="form" %}
+                    {% endif %}
+                </div>
+            </div>
+        </form> 
+    </div>    
+</div>
+{% endblock %}

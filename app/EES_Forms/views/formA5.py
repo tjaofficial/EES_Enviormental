@@ -328,6 +328,6 @@ def formA5(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA5.html", {
+    return render(request, "shared/forms/daily/formA5.html", {
         'picker': picker, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
     })

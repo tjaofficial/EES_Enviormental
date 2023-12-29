@@ -153,7 +153,7 @@ def formA1(request, facility, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
-    return render(request, "Daily/formA1.html", {
+    return render(request, "shared/forms/daily/formA1.html", {
         'facility': facility,
         'notifs': notifs,
         'supervisor': supervisor, 

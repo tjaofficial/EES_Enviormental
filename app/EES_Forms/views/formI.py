@@ -170,6 +170,6 @@ def formI(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formI.html", {
+    return render(request, "shared/forms/daily/formI.html", {
         'picker': picker, 'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })

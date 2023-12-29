@@ -149,6 +149,6 @@ def formA3(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA3.html", {
+    return render(request, "shared/forms/daily/formA3.html", {
         'picker': picker, 'options': options, "unlock": unlock,"search": search, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
     })

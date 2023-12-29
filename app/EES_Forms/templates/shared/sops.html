@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%} {% load static %}
 <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
@@ -30,7 +30,7 @@
     </div>
     <div class='card'>
         <div class="cardHeader">
-            {% include "ees_forms/backArrow.html" with destination="dashboard"%}
+            {% include "shared/components/backArrow.html" with destination="dashboard"%}
             SOP Directory - By Name
         </div>
         <div class="contentCont">

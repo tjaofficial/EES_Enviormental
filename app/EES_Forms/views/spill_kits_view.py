@@ -263,7 +263,7 @@ def spill_kits(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Monthly/spillkits_form.html", {
+    return render(request, "shared/forms/monthly/spillkits_form.html", {
         'iFormList': iFormList, 'month': month, 'facility': facility, 'sk_form': data, 'selector': selector, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
     })
 
@@ -421,6 +421,6 @@ def spill_kits_inventory_form(request, facility, month, skNumber, selector):
             
             return redirect('spill_kits', facility, "form")
                 
-    return render(request, "Monthly/spillKits_inventoryForm.html",{
+    return render(request, "shared/forms/monthly/spillKits_inventoryForm.html",{
         'full_name': full_name,'skNumber': skNumber, 'skForm': skForm, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, "data": data, "search": search, "existing": existing, "data2": data2, "formAttached": formAttached, "selector": selector
     })

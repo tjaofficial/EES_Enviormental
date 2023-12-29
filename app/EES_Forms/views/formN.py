@@ -50,6 +50,6 @@ def formN(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Monthly/formN.html", {
+    return render(request, "shared/forms/monthly/formN.html", {
         'formName': formName, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'search': search, 'facility': facility, 'now': todays_log, 'selector': selector, 'profile': profile, 'month_name': month_name, 'paved_loc': paved_loc, 'unpaved_loc': unpaved_loc, 'parking_loc': parking_loc,
     })

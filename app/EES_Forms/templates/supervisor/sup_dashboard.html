@@ -1,5 +1,7 @@
-{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/supDash.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/sup_dashboard_chart.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/sup_dashboard.js' %}"></script>
 
 {% if facility == 'supervisor' %}
     <div class='mainAppCont'>
@@ -121,9 +123,9 @@
     <div id="fromAInfo" class="card longest">
         <div class="card-title">Todays Forms</div>
         <div class="nested">
-            <a class="no_link_css"  {% if form_enteredA1 %} href="Daily/formA1/{{ date }}" {% else %} {% endif %}>
-                <div id='A1card' class="inner-card">
-                    {% if form_enteredA1 %}<p id='A1overlay'>Click for<br> Form A-1</p>{% else%}{% endif %}
+            <a class="no_link_css"  {% if form_enteredA1 %} href="shared/forms/daily/formA1/{{ date }}" {% else %} {% endif %}>
+                <div id='A1card' class="inner-card formA_card">
+                    {% if form_enteredA1 %}<p id='A1overlay' class="formA_overlay">Click for<br> Form A-1</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-1 - Charges</div>
                     <div class="dataHold">
                         {% if A1data %}
@@ -158,9 +160,9 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA2 %} href="Daily/formA2/{{ date }}" {% else %} {% endif %}>
-                <div id='A2card' class="inner-card">
-                    {% if form_enteredA2 %}<p id='A2overlay'>Click for<br> Form A-2</p>{% else%}{% endif %}
+            <a class="no_link_css" {% if form_enteredA2 %} href="shared/forms/daily/formA2/{{ date }}" {% else %} {% endif %}>
+                <div id='A2card' class="inner-card formA_card">
+                    {% if form_enteredA2 %}<p id='A2overlay' class="formA_overlay">Click for<br> Form A-2</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-2 - Doors</div>
                     <div class="{% if A2data %}grid-double{% else %}dataHold{% endif %}">
                         {% if A2data %}
@@ -214,9 +216,9 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA3 %} href="Daily/formA3/{{ date }}" {% else %} {% endif %}>
-                <div id='A3card' class="inner-card">
-                    {% if form_enteredA3 %}<p id='A3overlay'>Click for<br> Form A-3</p>{% else%}{% endif %}
+            <a class="no_link_css" {% if form_enteredA3 %} href="shared/forms/daily/formA3/{{ date }}" {% else %} {% endif %}>
+                <div id='A3card' class="inner-card formA_card">
+                    {% if form_enteredA3 %}<p id='A3overlay' class="formA_overlay">Click for<br> Form A-3</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
                     <div class="{% if A3data %}grid-double{% else %}dataHold{% endif %}">
                         {% if A3data %}
@@ -270,9 +272,9 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA4 %} href="Daily/formA4/{{ date }}" {% else %} {% endif %}>
-                <div id='A4card' class="inner-card">
-                    {% if form_enteredA4 %}<p id='A4overlay'>Click for<br> Form A-4</p>{% else%}{% endif %}
+            <a class="no_link_css" {% if form_enteredA4 %} href="shared/forms/daily/formA4/{{ date }}" {% else %} {% endif %}>
+                <div id='A4card' class="inner-card formA_card">
+                    {% if form_enteredA4 %}<p id='A4overlay' class="formA_overlay">Click for<br> Form A-4</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-4 - Collection Main</div>
                     <div class="dataHold">
                         {% if A4data %}
@@ -319,9 +321,9 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA5 %} href="Daily/formA5/{{ date }}" {% else %} {% endif %}>
-                <div id='A5card' class="inner-card">
-                    {% if form_enteredA5 %}<p id='A5overlay'>Click for<br> Form A-5</p>{% else%}{% endif %}
+            <a class="no_link_css" {% if form_enteredA5 %} href="shared/forms/daily/formA5/{{ date }}" {% else %} {% endif %}>
+                <div id='A5card' class="inner-card formA_card">
+                    {% if form_enteredA5 %}<p id='A5overlay' class="formA_overlay">Click for<br> Form A-5</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-5 - Push Travels</div>
                     <div class="dataHold">
                         {% if A5data %}
@@ -519,33 +521,32 @@
     <div id="latestActivity4" class="card custom">
         <div class="card-title">90 Day Push Travel Evaluation</div>
         <div class="myTabs">
-            <input type="radio" id="tab_5day" name="myTabs" checked="checked">
+            <input onclick="displayGroupOfOvens('5Day')" type="radio" id="tab_5day" name="myTabs" checked="checked">
             <label for="tab_5day">Due 5 Days</label>
-            <div class="tab">
+            <div id="data_5Day" class="tab" style='display:block;'>
                 <div class='dataPT'>
-                {% for x in od_recent %}
-                    <div class='dataStyle'>
-                        Oven #{{ x.0 }}
-                        Due:&nbsp;&nbsp;{{ x.2 }}<br>
-                    </div>
-                {% endfor %}
+                    {% for x in od_5 %}
+                        <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                    {% endfor %}
                 </div>
             </div>
-            <input type="radio" id="tab_10day" name="myTabs">
+            <input onclick="displayGroupOfOvens('10Day')" type="radio" id="tab_10day" name="myTabs">
             <label for="tab_10day">Due 10 Days</label>
-            <div class="tab" style='display:none;'>
-                {% for x in od_10 %}
-                Oven #{{ x.0 }}
-                Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
-                {% endfor %}
+            <div id="data_10Day" class="tab" style='display:none;'>
+                <div class='dataPT'>
+                    {% for x in od_10 %}
+                    <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                    {% endfor %}
+                </div>
             </div>
-            <input type="radio" id="tab_30day" name="myTabs">
+            <input onclick="displayGroupOfOvens('30Day')" type="radio" id="tab_30day" name="myTabs">
             <label for="tab_30day">Due 30 Days</label>
-            <div class="tab" style='display:none;'>
-                {% for x in od_30 %}
-                Oven #{{ x.0 }}
-                Due:&nbsp;&nbsp;{{ x.2 }}<br><br>
-                {% endfor %}
+            <div id="data_30Day" class="tab" style='display:none;'>
+                <div class='dataPT'>
+                    {% for x in od_30 %}
+                    <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

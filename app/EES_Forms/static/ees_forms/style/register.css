@@ -101,3 +101,7 @@ p{
     margin-bottom: 3px;
     word-wrap: break-word;
 }
+.prof_pic_view{
+    width: 200px;
+    border-radius: 50px;
+}

@@ -245,6 +245,6 @@ def formL(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formL.html", {
+    return render(request, "shared/forms/daily/formL.html", {
         'picker': picker, 'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "selector": selector, 'profile': profile, 'opened': opened, 'formName': formName, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

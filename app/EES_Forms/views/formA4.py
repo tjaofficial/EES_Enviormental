@@ -128,6 +128,6 @@ def formA4(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA4.html", {
+    return render(request, "shared/forms/daily/formA4.html", {
         'picker': picker, 'leaks': leaks,'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
     })

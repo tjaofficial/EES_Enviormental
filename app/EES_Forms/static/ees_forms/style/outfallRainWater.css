@@ -1,0 +1,23 @@
+.td_head_style{
+    vertical-align: bottom; 
+    text-align: center; 
+    border: 1px solid black;
+}
+.span_head_style{
+    writing-mode: vertical-rl; 
+    transform: rotate(180deg); 
+    white-space: nowrap; 
+    padding-top: .5rem;
+    padding-left: .4rem;
+    padding-right: .4rem;
+    padding-bottom: .5rem;
+    text-align: left; 
+}
+.data_rows_water{
+    border: 1px solid black;
+    text-align: center;
+    padding: .4rem;
+}
+.data_rows_water select{
+    font-size: 1.2rem;
+}

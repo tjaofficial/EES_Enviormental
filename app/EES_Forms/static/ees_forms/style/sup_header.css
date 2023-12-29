@@ -1,0 +1,11 @@
+.icon{
+    height:2rem; 
+    padding-left: 1rem
+}
+.companyName{
+    color: white; 
+    padding-left: 1rem;
+    font-family: sans-serif;
+    font-weight: 100; 
+    font-size:1rem;
+}

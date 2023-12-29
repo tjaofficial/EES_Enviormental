@@ -1,4 +1,4 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/printSelect.css' %}" rel="stylesheet">
@@ -7,12 +7,12 @@
 <script defer src="{% static 'ees_forms/script/printSelect.js' %}"></script>
 <body>
     <div>
-        {% include "ees_forms/backArrow.html" %}
+        {% include "shared/components/backArrow.html" %}
     </div>
     <div class="mainCont" style="width:400px;">
         <div class="card" style="min-width: 400px; ">
             <div class="cardHeader">
-                {% include "ees_forms/backArrow.html" with destination="dashboard"%}
+                {% include "shared/components/backArrow.html" with destination="dashboard"%}
                 Choose Forms to Print
             </div>
             <form action="" method="POST" class="contentCont">

@@ -131,6 +131,6 @@ def quarterly_trucks(request, facility, selector):
 
         return redirect(batt_prof)
             
-    return render(request, 'Quarterly/quarterly_trucks.html', {
+    return render(request, "shared/forms/quarterly/quarterly_trucks.html", {
         'picker': picker, 'facility': facility, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'data': data
     })

@@ -242,7 +242,7 @@ def formG1(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formG1.html", {
+    return render(request, "shared/forms/weekly/formG1.html", {
         'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
     })
 
@@ -474,6 +474,6 @@ def formG2(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Monthly/formG2.html", {
+    return render(request, "shared/forms/monthly/formG2.html", {
         'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

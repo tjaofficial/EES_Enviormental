@@ -1,0 +1,30 @@
+{% load static %}
+<link href="{% static 'ees_forms/style/submitButton.css' %}" rel="stylesheet">
+
+
+{% if label == 'form' %}
+<br><br>
+    <input 
+        type="submit" 
+        value="Submit Form" 
+        class="submit_button" 
+    />
+{% elif label == 'submit' %}
+    <input 
+        type="submit" 
+        name="submit_bat_info"
+        value="submit"
+    >
+{% elif label == 'search' %}
+    <input 
+        type="submit" 
+        value="Search" 
+        class="searchButton" 
+    />
+{% elif label == 'login' %}
+    <input 
+        id="submit" 
+        type="submit" 
+        value="Login"
+    >
+{% endif %}

@@ -132,6 +132,6 @@ def formA2(request, facility, selector):
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA2.html", {
+    return render(request, "shared/forms/daily/formA2.html", {
         'picker': picker, 'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
     })

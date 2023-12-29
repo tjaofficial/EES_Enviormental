@@ -15,7 +15,7 @@ def about_view(request, facility):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     profile = user_profile_model.objects.all()
 
-    return render(request, 'ees_forms/ees_about.html', {
+    return render(request, 'shared/about_facility.html', {
         'profile': profile, 
         'facility': facility,
         'notifs': notifs,
@@ -43,9 +43,15 @@ def safety_view(request, facility):
 
 @lock
 def settings_view(request, facility):
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if not client:
+        return redirect('IncompleteForms', facility)
     existing = False
-    userName = request.user.get_username()
-    userProfFaci = user_profile_model.objects.get(user__username=userName).facility_name
+    userID = request.user.id
+    print(user_profile_model.objects.get(user__id=userID).facilityChoice)
+    userProfFaci = user_profile_model.objects.get(user__id=userID).facilityChoice.facility_name
     database_model = bat_info_model.objects.filter(facility_name=userProfFaci)
     print(database_model)
     

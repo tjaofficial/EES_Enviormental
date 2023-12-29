@@ -59,10 +59,6 @@ span.sideWord{
         width: 50px;
     font-size: 15px;
 }
-#newName{
-    width: auto;
-    display: inline-flex;
-}
 #formG1_box1{
     border: 1px solid black;
     text-align: center;

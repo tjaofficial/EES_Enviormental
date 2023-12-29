@@ -1,7 +1,7 @@
-document.getElementById('adminLabel').addEventListener('click', collapse1)
-document.getElementById('reportsLabel').addEventListener('click', collapse2)
-document.getElementById('sbClient').addEventListener('click', collapse3)
-document.getElementById('calendarLabel').addEventListener('click', collapse4)
+//document.getElementById('adminLabel').addEventListener('click', collapse1)
+//document.getElementById('reportsLabel').addEventListener('click', collapse2)
+//document.getElementById('sbClient').addEventListener('click', collapse3)
+//document.getElementById('calendarLabel').addEventListener('click', collapse4)
 
 function collapse1(){
     const adminDisplay = document.getElementById('adminGroup').style.display;

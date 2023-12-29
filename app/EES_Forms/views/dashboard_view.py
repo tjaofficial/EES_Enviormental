@@ -601,7 +601,7 @@ def IncompleteForms(request, facility):
     
     inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
 
-    return render(request, "ees_forms/dashboard.html", {
+    return render(request, "observer/obs_dashboard.html", {
         'form_checkDaily2': form_checkDaily2, 
         'form_checkAll': form_checkAll, 
         "today": today, 
