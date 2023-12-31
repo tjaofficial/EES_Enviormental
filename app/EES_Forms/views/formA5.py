@@ -20,7 +20,7 @@ def formA5(request, facility, selector):
     existing = False
     search = False
     now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.all()
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = formA5_model.objects.all().order_by('-date')
@@ -28,15 +28,13 @@ def formA5(request, facility, selector):
     full_name = request.user.get_full_name()
     exist_canvas = ''
     picker = issueForm_picker(facility, selector, formName)
+    
     if unlock:
-        if len(profile) > 0:
-            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-            if same_user:
-                cert_date = request.user.user_profile_model.cert_date
-            else:
-                return redirect('IncompleteForms')
+        if profile.exists():
+            cert_date = request.user.user_profile_model.cert_date
         else:
-            return redirect('IncompleteForms')
+            return redirect('IncompleteForms', facility)
+    
     #Weather API Pull
     weather = weatherDict(options.city)
     weather2 = json.dumps(weather)
@@ -45,7 +43,7 @@ def formA5(request, facility, selector):
         todays_log = daily_prof[0]
         if selector == 'new':
             existing = False
-        elif selector != 'form' and selector != 'new':
+        elif selector != 'form':
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
@@ -57,17 +55,12 @@ def formA5(request, facility, selector):
             profile_form = ''
             existing = True
             search = True
-        elif len(org) > 0 and len(org2) > 0:
+        elif org.exists() or org2.exists():
             database_form = org[0]
             database_form2 = org2[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if str(todays_log.date_save) == str(database_form.date):
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if str(todays_log.date_save) == str(database_form.date):
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
@@ -329,5 +322,5 @@ def formA5(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/daily/formA5.html", {
-        'picker': picker, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
+        'picker': picker, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
     })

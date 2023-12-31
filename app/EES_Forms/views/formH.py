@@ -62,7 +62,7 @@ def formH(request, facility, selector):
                 database_form2 = org2[0]
                 # -------check if there is a daily battery profile
                 if now == todays_log.date_save:
-                    if todays_log.date_save == database_form.date:
+                    if str(todays_log.date_save) == str(database_form.date):
                         existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

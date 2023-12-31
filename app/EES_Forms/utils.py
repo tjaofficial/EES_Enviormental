@@ -223,12 +223,12 @@ class Calendar2(HTMLCalendar):
                 forms_from_day = forms.filter(date__day=day)
                 for form in forms_from_day:
                     if form.date.year == year:
-                        forms_html += "<a href='../../../../printIndex/" + str(selectedForm[0]) + "/single-" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
             else:
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/" + str(selectedForm[0]) + "/single-" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
         forms_html += "</ul>"
         
         if day == 0:
@@ -779,3 +779,139 @@ def issueForm_picker(facility, date, formName):
     else:
         issueData = False
     return issueData
+
+def date_change(date):
+    if isinstance(date, str):
+        date = datetime.datetime.strptime(date, "%Y-%m-%d")
+    
+    if len(str(date.month)) == 2:
+        month = str(date.month)
+    else:
+        month = '0'+str(date.month)
+    if len(str(date.day)) == 2:
+        day = str(date.day)
+    else:
+        day = '0'+str(date.day)
+    parsed = month + '-' + day + '-' + str(date.year)
+    return parsed
+
+def time_change(time):
+    if isinstance(time, str):
+        time = str(datetime.datetime.strptime(time, "%H:%M"))[11:]
+    if time:
+        hourNum = int(str(time)[0:2])
+        minNum = str(time)[3:5]
+        timeLabel = 'AM'
+        if hourNum > 12:
+            newHourNum = str(hourNum - 12)
+            timeLabel = 'PM'
+            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+        elif hourNum == 12:
+            newHourNum = str(time)[0:2]
+            timeLabel = 'PM'
+            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+        elif hourNum == 00:
+            newHourNum = '12'
+            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+        else:
+            newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
+        return newTime
+    else:
+        print('TIME_CHANGE ERROR: no time entered')
+        print('ERROR TIME ENTERED: ' + str(time))
+        print('RETURNING: "-" and moving on...')
+        return '-'
+
+def date_time_change(dateTime):
+    if isinstance(dateTime, str):
+        dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%dT%H:%M")
+        
+    date = date_change(dateTime.date())
+    time = time_change(dateTime.time())
+    return date + ', ' + time
+
+def road_choices(input):
+    paved_roads = {
+        'p1': '#4 Booster Station',
+        'p2': '#5 Battery Road',
+        'p3': 'Coal Dump Horseshoe',
+        'p4': 'Coal Handling Road (Partial)',
+        'p5': 'Coke Plant Road',
+        'p6': 'Coke Plant Mech Road',
+        'p7': 'North Gate Area',
+        'p8': 'Compund Road',
+        'p9': 'D-4 Blast Furnace Road',
+        'p10': 'Gap Gate Road',
+        'p11': '#3 Ore Dock Road',
+        'p12': 'River Road',
+        'p13': 'Weigh Station Road',
+        'p14': 'Zug Island Road'
+    }
+    unpaved_roads = {
+        'unp1': 'North Gate Truck Turn',
+        'unp2': 'Screening Station Road',
+        'unp3': 'Coal Handling Road (Partial)',
+        'unp4': 'Taj Mahal Road',
+        'unp5': 'PECS Approach',
+        'unp6': 'No. 2 Boilerhouse Road',
+        'unp7': 'Bypass Route',
+    }
+    parking_lots = {
+        'par1': 'Gap Gate Parking',
+        'par2': 'Truck Garage Area',
+        'par3': 'EES Coke Office Parking',
+    }
+    if input[1].isnumeric():
+        answer = paved_roads[input]
+    elif input[0] == 'u':
+        answer = unpaved_roads[input]
+    else:
+        answer = parking_lots[input]
+    return answer
+
+def truck_choices(input):
+    truck_choices = {
+        '#5': 'Truck #5',
+        '#6': 'Truck #6',
+        '#7': 'Truck #7',
+        '#9': 'Truck #9',
+        'contractor': 'Contractor',
+        'dozer': 'Dozer',
+    }
+    return truck_choices[input]
+        
+def area_choices(input):
+    area_choices = {
+        'panther eagle': 'Panther Eagle',
+        'kepler': 'Kepler',
+        'rock lick': 'Rock Lick',
+        'mcclure': 'McClure',
+        'elk valley': 'Elk Valley',
+    }
+    return area_choices[input]
+    
+def emptyInputs(input):
+    if not input:
+        this = 'N/A'
+        return this
+    else:
+        return input
+    
+def quarterParse(input):
+    if input == 1:
+        return '1st Quarter'
+    elif input == 2:
+        return '2nd Quarter'
+    elif input == 3:
+        return '3rd Quarter'
+    elif input == 4:
+        return '4th Quarter'
+    
+def inventoryResponse(tagOn, sk):
+    database = spill_kit_inventory_model.objects.filter(skID=sk)
+    if tagOn == "No" and len(database) > 0:
+        return "Yes"
+    elif tagOn == "No" and len(database) == 0:
+        return "No"
+    else:
+        return "N/A"      

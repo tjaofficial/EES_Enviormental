@@ -56,7 +56,7 @@ urlpatterns = [
     path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
     path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
 
-
+    ##---FORMS
     path("<str:facility>/Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("<str:facility>/Daily/formA2/<str:selector>", views.formA2, name="formA2"),
     path("<str:facility>/Daily/formA3/<str:selector>", views.formA3, name="formA3"),
@@ -86,13 +86,17 @@ urlpatterns = [
     path("<str:facility>/Monthly/spill_kits/<str:month>/<int:skNumber>/<str:selector>", views.spill_kits_inventory_form, name="skInventory"),
     path("<str:facility>/Quarterly/quarterly_trucks/<str:selector>", views.quarterly_trucks, name="quarterly_trucks"),
     
-
+    ##---COKE_BATTERY_DATA
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("<str:facility>/pt_admin1", views.pt_admin1_view, name="pt_admin1"),
     path("<str:facility>/pt_mth_input", views.pt_mth_input, name="pt_mth_input"),
     path("<str:facility>/method303_rolling_avg", views.method303_rolling_avg, name="rolling_avg"),
     path("<str:facility>/admin_data", views.admin_data_view, name="admin_data"),
 
+    ##---PRINTING
+    path('<str:facility>/printIndex/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
+    path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
+    path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
 
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
 
@@ -100,9 +104,6 @@ urlpatterns = [
     
     
     # path('pdf_view', views.render_pdf_view, name="pdf_view"),
-    path('<str:facility>/printIndex/<str:formName>/<str:formDate>', views.form_PDF, name='printIndex'),
-    path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
-    path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
     #path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
     #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
 ]

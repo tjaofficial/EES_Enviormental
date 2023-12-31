@@ -519,7 +519,12 @@
         </div>
     </div>
     <div id="latestActivity4" class="card custom">
-        <div class="card-title">90 Day Push Travel Evaluation</div>
+        <div class="card-title" style="display: flex;">
+            <div>90 Day Push Travel Evaluation</div>
+            <div style="position: relative; right: -59%;">
+                <a style="text-decoration: underline;" href="{% url 'pt_admin1' facility %}">see all</a>
+            </div>
+        </div>
         <div class="myTabs">
             <input onclick="displayGroupOfOvens('5Day')" type="radio" id="tab_5day" name="myTabs" checked="checked">
             <label for="tab_5day">Due 5 Days</label>
