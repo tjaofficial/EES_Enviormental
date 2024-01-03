@@ -59,6 +59,7 @@ admin.site.register(formSubmissionRecords_model)
 admin.site.register(notifications_model)
 admin.site.register(braintree_model)
 admin.site.register(braintreePlans)
+admin.site.register(settings_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']

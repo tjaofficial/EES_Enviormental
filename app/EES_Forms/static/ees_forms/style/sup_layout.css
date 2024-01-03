@@ -286,3 +286,13 @@ a {
     left: -2px;
     font-weight: bold;
 }
+.mainContCenter{
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    left: 274px;
+    right: 0;
+    bottom: 0;
+    top: 48px;
+    align-items: center;
+}

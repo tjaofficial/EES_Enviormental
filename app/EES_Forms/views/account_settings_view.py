@@ -67,7 +67,7 @@ def sup_select_subscription(request, facility, selector):
         print(request.POST)
         user = request.user
         accountData = user_profile_model.objects.get(user__id=user.id)
-        customerId = accountData.company.customerID
+        customerId = accountData.company.braintree.customerID
     
         if customerId and customerId != 'none':
             customer = gateway.customer.find(customerId)
@@ -81,9 +81,9 @@ def sup_select_subscription(request, facility, selector):
             })
             if newCustomer.is_success:
                 userCompany = company_model.objects.get(id=accountData.company.id)
-                userCompany.customerID = newCustomer.customer.id
+                userCompany.braintree.customerID = newCustomer.customer.id
                 userCompany.save()
-                customer = gateway.customer.find(userCompany.customerID)
+                customer = gateway.customer.find(userCompany.braintree.customerID)
             else:
                 for i in newCustomer.errors.deep_errors:
                     print(i.code)
@@ -122,7 +122,7 @@ def sup_select_subscription(request, facility, selector):
         print(request.POST)
         user = request.user
         accountData = user_profile_model.objects.get(user__username=user.username)
-        customerId = accountData.company.customerID
+        customerId = accountData.company.braintree.customerID
         plans = gateway.plan.all()
         for plan in plans:
             if plan.id == request.POST['planId']:
@@ -166,7 +166,7 @@ def sup_select_subscription(request, facility, selector):
                 "plan_id": request.POST['planId']
             })
         else:
-            vaultPaymentToken = accountData.company.payment_method_token
+            vaultPaymentToken = accountData.company.braintree.payment_method_token
             addOnEdits = {
                 "payment_method_token": vaultPaymentToken,
                 "plan_id": request.POST['planId']
@@ -195,8 +195,8 @@ def sup_select_subscription(request, facility, selector):
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
         else:
-            userComp.payment_method_token = vaultPaymentToken
-            userComp.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
+            userComp.braintree.payment_method_token = vaultPaymentToken
+            userComp.braintree.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
             userComp.save()
             print('MADE IT TO FUCKING SAVE')
 
@@ -228,7 +228,7 @@ def sup_account_view(request, facility):
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
     listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
-    active_registrations = len(listOfEmployees.filter(active=True))
+    active_registrations = len(listOfEmployees.filter(company__braintree__status='active'))
 
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
@@ -241,7 +241,7 @@ def sup_account_view(request, facility):
         else:
             print(data)
             selectedRegister = userProfileQuery.get(id=int(data['registerID']))
-            selectedRegister.active = False
+            selectedRegister.company.braintree.status = "active"
             selectedRegister.save()
             return redirect("Account", facility)
     return render(request, 'supervisor/settings/sup_account.html',{
@@ -268,9 +268,9 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
         return redirect('IncompleteForms', facility)
     accountData = user_profile_model.objects.get(user__id=request.user.id)
     gateway = braintreeGateway()
-    customerId = accountData.company.customerID
+    customerId = accountData.company.braintree.customerID
     if action[0:3] != "add":
-        token = accountData.company.payment_method_token
+        token = accountData.company.braintree.payment_method_token
         payment_method = gateway.payment_method.find(token)
     variables = {
             'supervisor': supervisor, 
@@ -394,7 +394,7 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
         variables['pId'] = planId
         variables['seats'] = seats
     elif action == "cancel":
-        subID = accountData.company.subID
+        subID = accountData.company.braintree.subID
         sub = gateway.subscription.find(subID)
         if sub.status == "Active":
             activeSub = gateway.subscription.find(subID)
@@ -510,7 +510,7 @@ def sup_change_subscription(request, facility):
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
     user = user_profile_model.objects.get(user__id=request.user.id)
-    subID = user.company.subID
+    subID = user.company.braintree.subID
     gateway = braintreeGateway()
     activeSub = gateway.subscription.find(subID)
     plans = gateway.plan.all()
@@ -554,7 +554,7 @@ def sup_billing_history(request, facility):
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
     user = user_profile_model.objects.get(user__id=request.user.id)
-    subID = user.company.subID
+    subID = user.company.braintree.subID
     gateway = braintreeGateway()
     activeSub = gateway.subscription.find(subID)
     return render(request, 'supervisor/settings/braintree/sup_billing_history.html', {

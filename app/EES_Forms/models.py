@@ -246,6 +246,16 @@ notification_header_choices = (
     ("submitted","FORM SUBMITTED"),
     ("corrective","CORRECTIVE ACTION")
 )
+weekly_range_choices = (
+    ('0','Monday'),
+    ('1','Tuesday'),
+    ('2','Wednesday'),
+    ('3','Thursday'),
+    ('4','Friday'),
+    ('5','Saturday'),
+    ('6','Sunday')
+)
+
 # -all_users = User.objects.all()
 # -all_user_choices_x = ((x.username, x.get_full_name()) for x in all_users)
 
@@ -302,6 +312,15 @@ class braintree_model(models.Model):
     def __str__(self):
         return str(self.user.last_name) + "-" + str(self.customerID)
     
+class settings_model(models.Model):
+    company = models.CharField(max_length=100)
+    weekly_start_day = models.CharField(
+        max_length=2,
+        choices=weekly_range_choices
+    )
+    def __str__(self):
+        return self.company
+    
 class company_model(models.Model):
     company_name = models.CharField(
         max_length=60
@@ -321,23 +340,14 @@ class company_model(models.Model):
     phone = models.CharField(
         max_length=14
     )
-    customerID = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True
-    )
-    payment_method_token = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True
-    )
-    subID = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True
-    )
     braintree = models.OneToOneField(
         braintree_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
+    settings = models.OneToOneField(
+        settings_model, 
         on_delete=models.CASCADE, 
         blank=True, 
         null=True
@@ -600,7 +610,6 @@ class user_profile_model(models.Model):
         max_length=5,
         default='light'
     )
-    active = models.BooleanField(default=False, null=True)
     def __str__(self):
         return self.user.username
 
@@ -4044,7 +4053,6 @@ class formI_model(models.Model):
 
 # ----------------------------------------------------------------------FORM L---------------<
 
-
 class formL_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     today = datetime.date.today()
@@ -4295,8 +4303,6 @@ class formL_model(models.Model):
         return str(self.week_start)
 
 # -----------------------------------------------------------------FORM M---------------<
-
-
 class formM_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(

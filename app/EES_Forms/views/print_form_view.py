@@ -10,7 +10,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
-from ..models import spill_kit_inventory_model, facility_forms_model, issues_model
+from ..models import spill_kit_inventory_model, facility_forms_model, issues_model, settings_model, user_profile_model
 from ..utils import parseFormList, getCompanyFacilities, getNewFormLabel_w_formID, getFormID_w_oldFormLabel, date_change, time_change, date_time_change, road_choices, truck_choices, area_choices, emptyInputs, quarterParse, inventoryResponse
 import json
 import io
@@ -50,6 +50,7 @@ class PageNumCanvas(canvas.Canvas):
       
 @lock
 def form_PDF(request, facility, formGroup, formIdentity, formDate):
+    userProfile = user_profile_model.objects.get(user=request.user)
     facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
     forms_and_labels = ast.literal_eval(facilityForms[0].formData)
     print(forms_and_labels)
@@ -64,13 +65,9 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
     elif formGroup == 'facility_weekly':
         formsBeingUsed = []
         for fForms in forms_and_labels:
-            if fForms[0] == 23:
-                continue
+            # if fForms[0] == 23:
+            #     continue
             formsBeingUsed.append(fForms[0])
-            # if fList[0] == 26:
-            #     formList.append('Spill Kits')
-            # elif fList[0] == 27:
-            #     formList.append('Quarterly Trucks')
     elif formGroup == 'monthly':
         formsBeingUsed = ['G2', 'Spill Kits']
     elif formGroup == 'tanks':
@@ -94,15 +91,37 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             print(formModel)
             print('')
         except:
-            print("Could not find a model with the name " + formModelName + " for formID " + formID)
-            continue
-        
-        formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
-        endDate = formDateParsed
-        if formGroup not in ['single', 'coke_battery']:
-            startDate = formDateParsed - datetime.timedelta(days=6)
-        else:   
-            startDate = formDateParsed
+            if formID == 23:
+                formModel = apps.get_model('EES_Forms', 'formM_model')
+                formModel = formModel.objects.filter(facilityChoice__facility_name=facility)
+                print('Using form 22 data to create form 23.')
+                print('')  
+                print("Pulling all submitted data for " + facility + " from "+ 'formM_model')
+            else:
+                print("Could not find a model with the name " + formModelName + " for formID " + str(formID))
+                continue
+        try:
+            formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
+        except:
+            formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m").date()
+        if formGroup == 'single' and formInformation.frequency == 'Monthly':
+            monthDays = calendar.monthrange(formDateParsed.year, formDateParsed.month)
+            startDateString = str(formDateParsed.year) + "-" + str(formDateParsed.month) + "-01"
+            endDateString = str(formDateParsed.year) + "-" + str(formDateParsed.month) + "-" + str(monthDays[1])
+            startDate = datetime.datetime.strptime(startDateString, "%Y-%m-%d").date()
+            endDate = datetime.datetime.strptime(endDateString, "%Y-%m-%d").date()
+        else:
+            formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
+            endDate = formDateParsed
+            if formGroup not in ['single', 'coke_battery']:
+                startingDayNumb = int(userProfile.company.settings.weekly_start_day)
+                amountOfDaysToStartingDay = (startingDayNumb-formDateParsed.weekday())
+                if formDateParsed.weekday() < startingDayNumb:
+                    amountOfDaysToStartingDay = amountOfDaysToStartingDay-7
+                startDate = formDateParsed + datetime.timedelta(days=amountOfDaysToStartingDay)
+                endDate = startDate + datetime.timedelta(days=6)
+            else:   
+                startDate = formDateParsed
         print("Filtering submissions starting on " + str(startDate) + " and ending on " + str(endDate))
         formsAndData = {}
         ## ----- ADD NEW FORM DATE SELECTIONS BELOEW ----- ##
@@ -146,8 +165,15 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
                     formLabel = label[1]
             
             styles = getSampleStyleSheet()
-            fileName = 'form' + formLabel + '_' + formDate + ".pdf"
-            documentTitle = 'form' + formLabel + '_' + formDate
+            if formGroup == 'single':
+                fileName = 'form' + formLabel + '_' + formDate + ".pdf"
+                documentTitle = 'form' + formLabel + '_' + formDate
+            elif formGroup == 'coke_battery':
+                fileName = "form_1_packet.pdf"
+                documentTitle = "form_1_packet"
+            elif formGroup == 'facility_weekly':
+                fileName = "facility_weekly_packet.pdf"
+                documentTitle = "facility_weekly_packet"
             title = formInformation.header + ' ' + formInformation.title + ' - Form (' + formInformation.form + ')'
             subTitle = 'Facility Name: ' + facility
             #always the same on all A-forms
@@ -176,11 +202,11 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             if formID == 9:
                 tableData, tableColWidths, style = pdf_template_9(formData, title, subTitle)
             if formID == 17:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_17(formData, formSecondaryData, title, subTitle)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_17(formData, formSecondaryData, title, subTitle, formInformation)
             if formID == 18:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_18(formData, formSecondaryData, title, subTitle)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_18(formData, formSecondaryData, title, subTitle, formInformation)
             if formID == 19:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_19(formData, formSecondaryData, title, subTitle)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_19(formData, formSecondaryData, title, subTitle, formInformation)
             if formID == 20:
                 tableData, tableColWidths, style = pdf_template_20(formData, title, subTitle)
             if formID == 21:
@@ -192,11 +218,11 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             if formID == 24:
                 tableData, tableColWidths, style = pdf_template_24(formData, title, subTitle)
             if formID == 25:
-                tableData, tableColWidths, style = pdf_template_25(formData, title, subTitle)
+                tableData, tableColWidths, style = pdf_template_25(formData, title, subTitle, formInformation)
             if formID == 26:
-                tableData, tableColWidths, style = pdf_template_26(formData, title, subTitle)
+                tableData, tableColWidths, style = pdf_template_26(formData, title, subTitle, formInformation)
             if formID == 27:
-                tableData, tableColWidths, style = pdf_template_27(formData, title, subTitle)
+                tableData, tableColWidths, style = pdf_template_27(formData, title, subTitle, formInformation)
                 
             heightGroup = (5,17,18,19)
             
@@ -252,14 +278,11 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             print('FINISHED...')
             print('PDFs for ' + str(formID) + ' has been created. Moving to next form')
             print("_________________________________")
-    
-        
     print('')
     print("End of process")
     print("_________________________________")
-    print('Finished creating PDFs...')        
+    print('Finished creating PDFs...')      
     try:
-        
         pdf.build(elems, canvasmaker=PageNumCanvas)
             # get buffer
         stream.seek(0)

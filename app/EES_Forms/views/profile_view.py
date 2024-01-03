@@ -9,6 +9,7 @@ import os
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 lock = login_required(login_url='Login')
 
+@lock
 def profile(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
@@ -51,7 +52,7 @@ def profile(request, facility, access_page):
 
             return redirect('../profile/main')
 
-    return render(request, "ees_forms/profile.html", {
+    return render(request, "shared/profile.html", {
         'notifs': notifs,
         'unlock': unlock, 
         'client': client, 

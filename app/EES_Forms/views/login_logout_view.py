@@ -94,14 +94,6 @@ def logout_view(request):
 
     return redirect('Login')
 
-
-def profile_redirect(request, facility):
-    return redirect('../' + facility + '/profile/main')
-
-    return render(request, 'profile.hmtl', {
-
-    })
-
 def change_password(request, facility):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -109,7 +101,7 @@ def change_password(request, facility):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             # messages.success(request, 'Your password was successfully updated!')
-            return redirect('profile_redirect', facility)
+            return redirect('profile', facility, 'main')
         else:
             messages.error(request, 'Please correct the error below.')
     else:

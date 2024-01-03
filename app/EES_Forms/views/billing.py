@@ -154,9 +154,8 @@ def billing(request, step):
             userComp = userComp[0]
         else:
             print("No Compnay has been entered for user profile information")
-        userComp.customerID = vaultCustomerId
-        braintreeInfo.customerID = vaultCustomerId
-        userComp.save()
+        braintreeInfo.braintree.customerID = vaultCustomerId
+        braintreeInfo.save()
 
         #store the customer ID to th client that it is assocatited with
 
@@ -170,10 +169,9 @@ def billing(request, step):
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
         else:
-            userComp.payment_method_token = vaultPaymentToken
             braintreeInfo.payment_method_token = vaultPaymentToken
             braintreeInfo.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
-            userComp.save()
+            braintreeInfo.save()
         # for x in addSubsriptionResult:
         #     print(x)
         #     break

@@ -1,11 +1,5 @@
 document.getElementById('button_hamburger').addEventListener('click', (elem)=>{toggleDisplayed(elem.currentTarget)});
 document.getElementById('button_profile').addEventListener('click', (elem)=>{toggleDisplayed(elem.currentTarget)});
-document.getElementById('drop_down').addEventListener('click', (elem)=>{toggleDisplayed(elem.currentTarget)});
-document.getElementById('exitModal').addEventListener('click', (elem)=>{toggleDisplayed(elem.currentTarget)});
-
-
-//document.getElementsByTagName('body').addEventListener('click', hideMenus)
-
 
 function toggleDisplayed(elemClicked){
   if (!document.getElementById('hide_menu').value) {

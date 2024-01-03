@@ -178,21 +178,31 @@ def printSelect(request, facility):
 
     if request.method == "POST":
         answer = request.POST
-        for x in answer:
-            if x == 'facilitySelect':
+        forms  = request.POST['forms']
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
                 return redirect('PrintSelect', answer['facilitySelect'])
         inputDate = datetime.datetime.strptime(request.POST["monthSel"], "%Y-%m").date()
         if request.POST['type'] == 'single':
+            print('HFLSKDJFLSKJDFLKSJDF--------')
+            print(forms)
+            if int(forms) == 23:
+                print('yes its 23')
+                formDate = request.POST['monthSel']
+                formGroup = 'single'
+                formIdentity = forms
+                
+                return redirect('printIndex', facility, formGroup, formIdentity, formDate)
             return redirect("CalSelect", facility, request.POST['type'], request.POST['forms'], inputDate.year, inputDate.month)
         elif request.POST['type'] == "group":
             return redirect("CalSelect", facility, request.POST['type'], request.POST['formGroups'], inputDate.year, inputDate.month)
             
         try:
-            if request.POST['forms'] != '':
-                if 1 <= len(request.POST['forms']) <= 2:
-                    formCheck = 'form' + request.POST['forms'].capitalize() + '_model'
-                elif len(request.POST['forms']) > 2:
-                    formCheck = request.POST['forms'] + '_model'
+            if forms != '':
+                if 1 <= len(forms) <= 2:
+                    formCheck = 'form' + forms.capitalize() + '_model'
+                elif len(forms) > 2:
+                    formCheck = forms + '_model'
                 else:
                     print('something is wrong')
                 mainModel = apps.get_model('EES_Forms', formCheck)
@@ -209,11 +219,11 @@ def printSelect(request, facility):
             
             typeFormDate = '/' + request.POST['type'] + '-' + request.POST['formDate']
                 
-            if request.POST['forms'] == '' and request.POST['formGroups'] != '':
+            if forms == '' and request.POST['formGroups'] != '':
                 formGroups = '/' + request.POST['formGroups']
                 craftUrl = 'printIndex' + formGroups + typeFormDate
-            elif request.POST['formGroups'] == '' and request.POST['forms'] != '':
-                forms = '/' + request.POST['forms'].capitalize()
+            elif request.POST['formGroups'] == '' and forms != '':
+                forms = '/' + forms.capitalize()
                 craftUrl = 'printIndex' + forms + typeFormDate
 
             return redirect(craftUrl)

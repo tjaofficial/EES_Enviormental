@@ -4,7 +4,7 @@
 <link href="{% static 'ees_forms/style/headerDropDown.css' %}" rel="stylesheet">
 <div id="notifDropdown" class="profileDropdown" style="display:none;">
     {% if loginPage %}{% else %}
-        <a href="{% url 'profile_redirect' facility %}">
+        <a href="{% url 'profile' facility 'main' %}">
             <div class="sidebar_item">
                 <div class="sidebar_svg">
                     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="calendar-week" class="svg-inline--fa fa-calendar-week fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

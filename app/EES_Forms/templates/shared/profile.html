@@ -2,10 +2,10 @@
 {% block list %}{% load static %}
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-    <link href="{% static 'ees_forms/style/profile.css' %}" rel="stylesheet">
-{% endif %}
+    {% endif %}
+<link href="{% static 'ees_forms/style/profile.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-<div class="mainCont" style="max-width: none;">
+<div class="mainCont mainContCenter" style="width: 40rem;">
     <div id="prof_form_holder" class='card'>
         <div class="cardHeader">
             {% include "shared/components/backArrow.html" with destination="dashboard" %}
@@ -28,7 +28,7 @@
                     {% csrf_token %}
                     {{ pic_form.profile_picture }}
                     <br>
-                    <input type="submit" value="Upload">
+                    {% include 'shared/components/submitButton.html' with label='upload' %}
                 </form>
                 <br><br>
             </div>
@@ -36,7 +36,7 @@
             <div style="text-align: center;">
                 <table style="border-collapse: collapse; margin: auto;" class="table_font">
                     <tr>
-                        <td class="prof_table_title" style="border-top: 1px solid gray;" >
+                        <td class="prof_table_title" style="border-top: 2px solid lightgray;" >
                             Name:
                         </td>
                         <td colspan="2" id='obj_data' class="prof_table_data">

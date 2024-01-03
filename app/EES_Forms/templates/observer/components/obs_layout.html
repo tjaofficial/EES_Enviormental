@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="shortcut icon" href="#" />
+        <script defer src="{% static 'ees_forms/script/headerDropDown.js' %}"></script>
         <link href="{% static 'ees_forms/style/obs_layout.css' %}" rel="stylesheet">
         <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
         <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
@@ -9,9 +10,8 @@
     </head>
     <body class="primaryLightBackground">
         {% include "observer/components/obs_header.html" %}
-        
         {% include "observer/components/obs_sideBar.html" %}
-        
+        {% include "shared/components/headerDropDown.html" %}
         <div class="headerSpace"></div>
     
         {% block list %}

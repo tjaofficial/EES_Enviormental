@@ -455,3 +455,35 @@ function check_dampered_inoperable(elem, observed, action) {
 }
 check_dampered_inoperable(false, 'offtakes', 'initial');
 check_dampered_inoperable(false, 'lids', 'initial');
+
+function inoperable_ovens() {
+    const inop = document.getElementById('inop_ovens').value;
+    
+    document.getElementById('l_inop_ovens').value = parseInt(inop);
+    document.getElementById('om_inop_ovens').value = parseInt(inop);
+    l_equation();
+    om_equation();
+
+    const inop_numbs_input = document.getElementById('inop_numbs');
+    var length_of_inop_numbers = inop_numbs_input.value.replace(' ', '').split(',').length
+    const inop_message = document.getElementById('inop_message');
+    if (length_of_inop_numbers != inop){
+        console.log('Error message')
+        inop_message.style.display = "block";
+    } else {
+        var blank = false;
+        for(let x=0;x<length_of_inop_numbers;x++){
+            const oven_number = inop_numbs_input.value.replace(' ', '').split(',')[x];
+            if (!oven_number || +oven_number == 0 || isNaN(+oven_number)) {
+                var blank = true;
+                console.log("you got it")
+            }
+        }
+        if (blank) {
+            inop_message.style.display = "block";
+        } else {
+            inop_message.style.display = "none";
+        }
+    }
+}
+inoperable_ovens();

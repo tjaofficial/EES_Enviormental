@@ -9,7 +9,7 @@
 <div id="addModalHeaderDrop" class="modalHeaderDrop" style="display:none;">
     <div id="profileDropdown" class="profileDropdown modeTextColor modeBackGround" style="display:none;">
         {% if loginPage %}{% else %}
-            <a href="{% url 'profile_redirect' facility %}">
+            <a href="{% url 'profile' facility 'main' %}">
                 <div class="sidebar_item modeTextColor">
                     <div class="sidebar_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
@@ -113,4 +113,7 @@
         </div>
     </a>
     {% endfor %}
+    <div class="notifCont">
+        No Notifications
+    </div>
 </div>

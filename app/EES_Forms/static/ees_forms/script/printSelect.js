@@ -25,22 +25,6 @@ function selectItemLis() {
     }
 }
 
-// function selectFormLis() {
-//     const form = document.getElementById('forms').value;
-//         console.log(form + ' this is input')
-//         for(i=0; i < formList.length; i++){
-//             const formName = formList[i]
-//             if(formName == form){
-//                 console.log('CHECK 3')
-//                 document.getElementById('selDate').style.visibility = 'visible';
-//                 document.getElementById('formDate').addEventListener("change", selectPrintLis);
-//             } else if (form == ''){
-//                 document.getElementById('selDate').style.visibility = 'hidden';
-//                 document.getElementById('printButton').style.visibility = 'hidden';
-//             }
-//         }
-// }
-
 function selectGroupLis() {
     const group = document.getElementById('formGroups').value;
         if(group != ''){
