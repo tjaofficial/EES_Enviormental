@@ -610,6 +610,9 @@ class user_profile_model(models.Model):
         max_length=5,
         default='light'
     )
+    is_active = models.BooleanField(
+        default=False
+    )
     def __str__(self):
         return self.user.username
 
@@ -7136,3 +7139,13 @@ class braintreePlans(models.Model):
     def __str__(self):
         return str(self.name) + ' - ' + str(self.planID)
     
+class tokens_model(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.PROTECT
+    )
+    token = models.CharField(
+        max_length=100
+    )
+    def __str__(self):
+        return str(self.user) + ' - ' + str(self.token)

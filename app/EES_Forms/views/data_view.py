@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import formA3_model, formA2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, formA5_model, Forms
 from django.apps import apps
-from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor
+from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
@@ -20,6 +20,7 @@ def pt_admin1_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     data = formA5_model.objects.all()
+    sortedFacilityData = getCompanyFacilities(request.user.username)
 
     # -------90 DAY PUSH ----------------
     all_db_reads = formA5_readings_model.objects.all()
@@ -29,9 +30,32 @@ def pt_admin1_view(request, facility):
     od_5 = pushTravelsData['5days']
     od_recent = pushTravelsData['closest']
     all_ovens = pushTravelsData['all']
+    
+    if request.method == 'POST':
+        answer = request.POST
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
 
     return render(request, "shared/PushTravels.html", {
-        'facility': facility, "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 'allForms': allForms
+        'facility': facility, 
+        "now": now, 
+        'todays_log': todays_log, 
+        "back": back, 
+        'reads': all_db_reads, 
+        'data': data, 
+        'cool': all_ovens, 
+        'od_30': od_30, 
+        'od_10': od_10, 
+        'od_5': od_5, 
+        'od_recent': od_recent, 
+        "today": today, 
+        'profile': profile, 
+        'client': client, 
+        "supervisor": supervisor, 
+        "unlock": unlock, 
+        'allForms': allForms,
+        'sortedFacilityData': sortedFacilityData, 
     })
 
 

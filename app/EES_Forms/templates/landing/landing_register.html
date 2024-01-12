@@ -4,8 +4,8 @@
 <link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
 <script defer src="{% static 'landing/script/terms_of_use.js' %}"></script>
 {% include 'landing/terms_of_use.html' %}
-<div class='topCont'>
-    <div class='regCont' style="width: 479px;">
+<div class='topCont noOverflowCenter'  style="padding: 3rem 0px;">
+    <div class='regCont' style="width: 479px;margin-top:unset;">
         <form id="signup" method="POST" action="">
             {% csrf_token %}
             <div class='regHeader'>
@@ -31,7 +31,7 @@
                     </label>
                 </div>
             </div>
-            <input type="submit" id="submit" name="SIGN UP FOR METHODPLUS+" value="SIGN UP FOR METHODPLUS+">
+            {% include "shared/components/submitButton.html" with label="register" %}<br>
             <p style='text-align:center;'>Already have an account? <a href="{% url 'Login' %}">Log in</a></p>
         </form>
     </div>

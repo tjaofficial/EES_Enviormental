@@ -13,6 +13,10 @@ from django.shortcuts import redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django.http import HttpResponse
+from django.utils.encoding import force_str
+from django.contrib.auth import get_user_model
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 
 #from .admin import EventAdmin
 
@@ -235,7 +239,7 @@ class Calendar2(HTMLCalendar):
         if day == 0:
             return '<td class="noday">&nbsp;</td>'  # day outside month
         else:
-            return '<td class="%s">%d%s</td>' % (self.cssclasses[weekday], day, forms_html)
+            return '<td class="hover %s">%d%s</td>' % (self.cssclasses[weekday], day, forms_html)
 
  
     def formatweek(self, theweek, events, year, forms, selectedForm):
@@ -877,3 +881,5 @@ def inventoryResponse(tagOn, sk):
         return "No"
     else:
         return "N/A"      
+    
+    

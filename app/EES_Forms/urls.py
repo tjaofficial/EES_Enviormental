@@ -13,9 +13,12 @@ urlpatterns = [
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
+    path("activate/<str:uidb64>/<str:token>/", views.activate_view, name="activate"),
     path("register_company", views.registerCompany, name="companyReg"),
     path("no_registration", views.valid_account_logout, name="no_registration"),
     path("logout", views.logout_view, name="Logout"),
+    path("request-password", views.request_password_view, name='requestPassword'),
+    path("change-password", views.main_change_password, name='mainPasswordChange'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
     path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     

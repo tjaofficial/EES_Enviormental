@@ -2,8 +2,8 @@
 {% block body %}
 <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
 <link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
-<div class='topCont'>
-    <div id="login" class="regCont" style="width: 479px;">
+<div class='topCont noOverflowCenter'>
+    <div id="login" class="regCont" style="width: 479px;margin-top:unset;">
         <form id='signup' name="login" action="" method="POST">
             {% csrf_token %}
             <div class='regHeader'>
@@ -19,7 +19,7 @@
                 
                 {% include "shared/components/submitButton.html" with label="login" %}
             </div>
-            <p style='text-align:center;'><a href="{% url 'register' %}">Forgot password?</a></p><br>
+            <p style='text-align:center;'><a href="{% url 'requestPassword' %}">Forgot password?</a></p><br>
             <p style='text-align:center;'>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
         </form>
     </div>

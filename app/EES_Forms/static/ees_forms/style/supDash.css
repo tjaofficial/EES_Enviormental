@@ -257,3 +257,8 @@
 .myTabs input[type="radio"]:checked + label{
     background-color:white;
 }
+.todayFormsCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -26,4 +26,5 @@ a {
     bottom: 0; 
     top: 48px; 
     align-items: center;
+    overflow: scroll;
 }

@@ -22,7 +22,7 @@ RUN pip install -r requirements.txt
 #RUN apk del build-deps
 
 RUN apt-get update \
-    && apt-get install -yyq netcat
+    && apt-get install -yyq netcat-traditional
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
