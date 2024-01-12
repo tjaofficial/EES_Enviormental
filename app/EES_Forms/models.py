@@ -7140,7 +7140,7 @@ class braintreePlans(models.Model):
         return str(self.name) + ' - ' + str(self.planID)
     
 class tokens_model(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.PROTECT
     )
@@ -7148,4 +7148,4 @@ class tokens_model(models.Model):
         max_length=100
     )
     def __str__(self):
-        return str(self.user) + ' - ' + str(self.token)
+        return str(self.id) + ' - ' + str(self.token)

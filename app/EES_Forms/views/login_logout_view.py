@@ -10,7 +10,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.contrib import messages
 from django.contrib.auth.models import Group
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, EMAIL_HOST
 from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes, force_str
@@ -116,20 +116,51 @@ def activate_view(request, uidb64, token):
 
 def request_password_view(request):
     if request.method == 'POST':
+        print('CHECK 1')
         email = request.POST['email']
-        userQuery = User.objects.filter(email=email)
-        if userQuery.exists():
-            subject = 'Update Your Password'
-            message = 'Hello'
-            fromEmail = 'info@methodplus.com'
-            toEmail = 'ajackerm@mtu.edu'#User.objects.get(email=email)
-            send_mail(
-                subject,
-                message,
-                fromEmail,
-                [toEmail],
-                fail_silently=False,
-            )
+        user = User.objects.filter(email=email)
+        
+        if user.exists():
+            if len(user) == 1:
+                user = user[0]
+                userProfile = user_profile_model.objects.get(user=user)
+                if userProfile.is_active:
+                    print('CHECK 2')
+                    current_site = get_current_site(request)
+                    print('CHECK 3')
+                    mail_subject = 'MethodPlus: Activate Your New Account'   
+                    message = render_to_string('landing/acc_active_email.html', {  
+                        'user': user,  
+                        'domain': current_site.domain,  
+                        'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                        'token':create_token(user),  
+                    })  
+                    print('CHECK 4')
+                    to_email = email 
+                    emailSend = EmailMessage(mail_subject, message, to=[to_email]) 
+                    print('CHECK 5') 
+                    emailSend.send()
+                    #messages.success(request,"Please confirm your email address to complete the registration")
+                    return redirect('Login')
+                
+                
+                    # subject = 'Update Your Password'
+                    # message = 'Hello'
+                    # fromEmail = 'info@methodplus.com'
+                    # toEmail = 'ajackerm@mtu.edu'#User.objects.get(email=email)
+                    # send_mail(
+                    #     subject,
+                    #     message,
+                    #     fromEmail,
+                    #     [toEmail],
+                    #     fail_silently=False,
+                    # )
+                else:
+                    print('Not an active profile')
+            else:
+                print('Multiple users with email')
+        else:
+            print('User does not exist')
             
         
     return render(request, 'landing/landing_requestPasswordChange.html', {
