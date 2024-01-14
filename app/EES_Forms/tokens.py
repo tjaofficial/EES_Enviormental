@@ -14,3 +14,14 @@ def check_token(user, token):
     except:
         realToken = False
     return realToken
+
+def delete_token(user, token):
+    tokenModel = tokens_model.objects.all()
+    try:
+        realToken = tokenModel.get(user=user, token=token)
+        realToken.delete()
+        print("token successfully removed")
+    except:
+        print("Not a valid token")
+        
+    

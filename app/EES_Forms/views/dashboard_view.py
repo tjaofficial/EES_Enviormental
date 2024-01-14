@@ -383,6 +383,19 @@ def IncompleteForms(request, facility):
             due_date=today,
             date_submitted=today - datetime.timedelta(days=1),
             submitted=False,)
+        STI_SP001_monthly_inspection = Forms(
+            form=28,
+            frequency="Monthly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="form28",
+            header="STI SP001",
+            title="Monthly Tank Inspection Checklist",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False
+        )
 
         A1.save()
         A2.save()
@@ -411,6 +424,7 @@ def IncompleteForms(request, facility):
         P.save()
         spill_kits.save()
         quarterly_trucks.save()
+        STI_SP001_monthly_inspection.save()
 
 # -------90 DAY PUSH ----------------
     pushTravelsData = ninetyDayPushTravels(facility)

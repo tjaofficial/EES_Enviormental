@@ -1,0 +1,21 @@
+.noOverflowCenter{
+    display: flex; 
+    justify-content: center; 
+    align-items: baseline; 
+    width:100%;
+  }
+.whiteSheetCont{
+    width: 950px;
+    background: white;
+    height: calc(100vh - 57px - 32px - 18px);
+    box-shadow: black 0 0 20px -15px;
+    padding: 2rem;
+}
+.contentCont{
+    padding: 2rem;
+}
+.sheetHeader{
+    width:100%;
+    text-align: center;
+    font-size: 26px;
+}

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 import braintree
 import os
+from ..models import FAQ_model
+from ..forms import FAQ_form
 
 def adminDash(request):
     print('hello')
@@ -34,4 +36,13 @@ def adminDash(request):
     return render(request, 'admin/admin_dashboard.html', {
         'search_results': search_results
     })
+    
+def admin_add_FAQ_view(request):
+    if request.method == "POST":
+        data = request.POST
+        form = FAQ_form(data)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+    return render(request, 'admin/admin_add_FAQ.html', {})
     

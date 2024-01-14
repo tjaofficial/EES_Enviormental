@@ -59,7 +59,7 @@
     /* margin-top: 57px;  */
     /* padding: 3rem 0px;  */
     display: flex; 
-    justify-items: center; 
+    justify-content: center; 
     align-items: center; 
     min-height: 745px;
     /* height: calc(100vh - 18px - 57px - 6rem - 2rem); */

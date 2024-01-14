@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-import braintree
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
-from ..models import user_profile_model, company_model, User, braintree_model
+from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans
 from ..forms import CreateUserForm, user_profile_form, company_form
 import datetime
-import json
-from django.contrib.auth.forms import UserCreationForm
+import braintree
+
 
 lock = login_required(login_url='Login')
 
@@ -19,6 +18,7 @@ def sup_select_subscription(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     if unlock:
         return redirect('IncompleteForms', facility)
+    user = request.user
     gateway = braintreeGateway()
     
     variables = {
@@ -29,16 +29,16 @@ def sup_select_subscription(request, facility, selector):
         'facility': facility,
         'selector': selector
     }
+    plans = braintreePlans.objects.all()
     
     if selector == 'subscription':
-        plans = gateway.plan.all()
         cPlan = []
         for plan in plans:
             oPlan = {
                 'pid': plan.id,
-                'billingDOM': plan.billing_day_of_month,
-                'currency_iso_code': plan.currency_iso_code,
                 'description': plan.description.split("\n"),
+                'name': plan.name,
+                'price': plan.price,
                 'Customizable_Forms': 'Customizable Forms',
                 'Real_time_Data_Entry': 'Real-time Data Entry',
                 'Multimedia_Integration': 'Multimedia Integration',
@@ -46,8 +46,6 @@ def sup_select_subscription(request, facility, selector):
                 'Collaborative_Workflows': 'Collaborative Workflows',
                 'Security_and_Compliance': 'Security and Compliance',
                 'Offline_Accessibility': 'Offline Accessibility',
-                'name': plan.name,
-                'price': plan.price
                 }
             cPlan.append(oPlan)
         cPlan.sort(key=lambda d: d['price'])
@@ -55,19 +53,27 @@ def sup_select_subscription(request, facility, selector):
         variables['planList'] = cPlan
         link = "supervisor/settings/braintree/select_subscription.html"
     elif selector == "registration":
-        plans = gateway.plan.all()
         for iPlans in plans:
             print(iPlans)
-            if iPlans.id == request.POST['planId']:
+            print(request.POST)
+            print(request.POST['planId'])
+            print(iPlans.id)
+            if iPlans.id == int(request.POST['planId']):
                 selectedPlan = iPlans
         print(request.POST)
         variables['selectedPlan'] = selectedPlan
         link = "supervisor/settings/braintree/select_registration_amount.html"
     elif selector == "payment":
         print(request.POST)
-        user = request.user
+        seats = request.POST['seats']
+        addRegistrationCost = format(int(seats)*75, '.2f')
         accountData = user_profile_model.objects.get(user__id=user.id)
         customerId = accountData.company.braintree.customerID
+        for plan in plans:
+            print(plan)
+            if plan.id == int(request.POST['planId']):
+                planDetails = plan
+        totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
     
         if customerId and customerId != 'none':
             customer = gateway.customer.find(customerId)
@@ -82,6 +88,7 @@ def sup_select_subscription(request, facility, selector):
             if newCustomer.is_success:
                 userCompany = company_model.objects.get(id=accountData.company.id)
                 userCompany.braintree.customerID = newCustomer.customer.id
+                userCompany.braintree.save()
                 userCompany.save()
                 customer = gateway.customer.find(userCompany.braintree.customerID)
             else:
@@ -97,16 +104,6 @@ def sup_select_subscription(request, facility, selector):
             cardData = gateway.payment_method_nonce.find(request.POST['payNonce'])
         else:
             cardData = False
-        plans = gateway.plan.all()
-        for plan in plans:
-            if plan.id == request.POST['planId']:
-                planDetails = plan
-        addRegistrationCost = format(int(request.POST['seats'])*75, '.2f')
-        totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
-        # if len(cardsOnFile) < 0 or cardData:
-        #     dataTemplateUse = request.POST
-        # else:
-        #     dataTemplateUse = False
         variables['dataTemplateUse'] = dataTemplateUse
         variables['customer'] = customer
         variables['cardsOnFile'] = cardsOnFile
@@ -120,14 +117,13 @@ def sup_select_subscription(request, facility, selector):
         link = "supervisor/settings/braintree/select_payment.html"
     elif selector == "receipt":
         print(request.POST)
-        user = request.user
+        seats = request.POST['seats']
         accountData = user_profile_model.objects.get(user__username=user.username)
         customerId = accountData.company.braintree.customerID
-        plans = gateway.plan.all()
         for plan in plans:
-            if plan.id == request.POST['planId']:
+            if plan.id == int(request.POST['planId']):
                 planDetails = plan
-        addRegistrationCost = format(int(request.POST['seats'])*75, '.2f')
+        addRegistrationCost = format(int(seats)*75, '.2f')
         totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
         if request.POST['paymentSelected'][5:] == "new":
             updateCustomer = gateway.customer.update(customerId, {
@@ -163,15 +159,15 @@ def sup_select_subscription(request, facility, selector):
             vaultPaymentToken = updateCustomer.customer.payment_methods[0].token
             addSubsriptionResult = gateway.subscription.create({
                 "payment_method_token": vaultPaymentToken,
-                "plan_id": request.POST['planId']
+                "plan_id": planDetails.planID
             })
         else:
             vaultPaymentToken = accountData.company.braintree.payment_method_token
             addOnEdits = {
                 "payment_method_token": vaultPaymentToken,
-                "plan_id": request.POST['planId']
+                "plan_id": planDetails.planID
             }
-            if request.POST['seats'] == 0:
+            if int(seats) == 0:
                 addOnEdits["add_ons"] = {
                     "remove": ["86gr"]
                 }
@@ -179,7 +175,7 @@ def sup_select_subscription(request, facility, selector):
                 addOnEdits["add_ons"] = {
                     "update": [{
                         "existing_id": "86gr",
-                        "quantity": request.POST['seats']
+                        "quantity": int(seats)
                     }]
                 }
             addSubsriptionResult = gateway.subscription.create(addOnEdits)
@@ -195,8 +191,17 @@ def sup_select_subscription(request, facility, selector):
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
         else:
+            cancelSub = gateway.subscription.cancel(userComp.braintree.subID)
+
             userComp.braintree.payment_method_token = vaultPaymentToken
             userComp.braintree.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
+            userComp.braintree.planID = planDetails.planID
+            userComp.braintree.planName = planDetails.name
+            userComp.braintree.price = totalCost
+            userComp.braintree.registrations = int(request.POST['seats']) + 2
+            userComp.braintree.next_billing_date = datetime.datetime.today()
+            userComp.braintree.status = 'active'
+            userComp.braintree.save()
             userComp.save()
             print('MADE IT TO FUCKING SAVE')
 
@@ -513,14 +518,11 @@ def sup_change_subscription(request, facility):
     subID = user.company.braintree.subID
     gateway = braintreeGateway()
     activeSub = gateway.subscription.find(subID)
-    plans = gateway.plan.all()
+    plans = braintreePlans.objects.all()
     cPlan = []
-    print(plans[0])
     for plan in plans:
         oPlan = {
             'pid': plan.id,
-            'billingDOM': plan.billing_day_of_month,
-            'currency_iso_code': plan.currency_iso_code,
             'description': plan.description.split("\n"),
             'Customizable_Forms': 'Customizable Forms',
             'Real_time_Data_Entry': 'Real-time Data Entry',
@@ -556,12 +558,14 @@ def sup_billing_history(request, facility):
     user = user_profile_model.objects.get(user__id=request.user.id)
     subID = user.company.braintree.subID
     gateway = braintreeGateway()
-    activeSub = gateway.subscription.find(subID)
+    collection = gateway.transaction.search(
+        braintree.TransactionSearch.customer_id == user.company.braintree.customerID
+    )
     return render(request, 'supervisor/settings/braintree/sup_billing_history.html', {
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
         'facility': facility,
         'notifs': notifs,
-        'activeSub': activeSub
+        'collection': collection
     })

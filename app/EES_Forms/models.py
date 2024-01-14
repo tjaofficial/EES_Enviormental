@@ -313,10 +313,27 @@ class braintree_model(models.Model):
         return str(self.user.last_name) + "-" + str(self.customerID)
     
 class settings_model(models.Model):
+    measurement_choices = (
+        ('metric', 'Metric'),
+        ('imperial', 'Imperial')
+    )
+    dashboard_template_choices = (
+        ('Default','Default'),
+        ('Coke Battery Dashboard','Coke Battery Dashboard')
+    )
+    
     company = models.CharField(max_length=100)
     weekly_start_day = models.CharField(
         max_length=2,
         choices=weekly_range_choices
+    )
+    units_measurements = models.CharField(
+        max_length=10,
+        choices=measurement_choices
+    )
+    dashboard_template = models.CharField(
+        max_length=30,
+        choices=dashboard_template_choices
     )
     def __str__(self):
         return self.company
@@ -7149,3 +7166,115 @@ class tokens_model(models.Model):
     )
     def __str__(self):
         return str(self.id) + ' - ' + str(self.token)
+    
+class facility_tags_register_model(models.Model):
+    orientation_choices = (
+        ('horizontal', 'Horizontal'),
+        ('vertical', 'Vertical'),
+        ('rectangular', 'Rectangular')
+    )
+    tankID = models.CharField(max_length=20)
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    last_inspection_date = models.DateField(
+        auto_now=False, 
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    manufacturer = models.CharField(
+        max_length=70,
+        null=True,
+        blank=True
+    )
+    contents = models.CharField(max_length=40)
+    construction_date = models.DateField(
+        auto_now=False, 
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    last_repair_reconstruction = models.DateField(
+        auto_now=False, 
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    height = models.CharField(max_length=20)
+    diameter = models.CharField(max_length=20)
+    capacity = models.CharField(max_length=20)
+    last_change_service_date = models.DateField(
+        auto_now=False, 
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    construction = models.CharField(max_length=200)
+    design = models.CharField(max_length=40)
+    orientation = models.CharField(
+        max_length=40,
+        choices=orientation_choices
+    )
+    containment = models.CharField(max_length=40)
+    CRDM = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    release_prevention_barrier = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    
+    def __str__(self):
+        return str(self.facilityChoice.facility_name) + ' - ' + str(self.tankID)
+    
+class form28_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    inspector = models.CharField(max_length=40)
+    date = models.DateField(auto_now=False, auto_now_add=False)
+    tankChoice = models.ForeignKey(facility_tags_register_model, on_delete=models.CASCADE)
+    retain_until_date = models.DateField(auto_now=False, auto_now_add=False)
+    prior_inspection_date = models.DateField(auto_now=False, auto_now_add=False)
+    containment_structure = models.CharField(max_length=100)
+    primary_tank = models.CharField(max_length=100)
+    cont_drain_valves = models.CharField(max_length=100)
+    pathways_entry = models.CharField(max_length=100)
+    tank_leaks = models.CharField(max_length=100)
+    secondary_cont_leaks = models.CharField(max_length=100)
+    interstice_leaks = models.CharField(max_length=100)
+    valves = models.CharField(max_length=200)
+    spill_cont_boxes = models.CharField(max_length=200)
+    liquid_level_equipment = models.CharField(max_length=200)
+    overfill_equipment = models.CharField(max_length=200)
+    piping_connections = models.CharField(max_length=100)
+    ladder_platform_structure = models.CharField(max_length=100)
+    other_conditions = models.CharField(max_length=200)
+    additional_comments = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return str(self.facilityChoice.facility_name) + ' - ' + str(self.tankChoice.tankID)
+    
+class FAQ_model(models.Model):
+    section = models.CharField(max_length=75)
+    question = models.CharField(max_length=150)
+    answer = models.CharField(max_length=700)
+    link = models.CharField(max_length=30)
+    def __str__(self):
+        return str(self.question)
+  
+    
+    
+# class tank_library(models.Model):
+#     title = models.CharField(max_length=40)
+#     description = models.TextField()
+#     pic_file = models.FileField(
+#         upload_to='tank_library/',
+#         blank=True,
+#         null=True
+#     )
+#     pic_url = models.CharField(
+#         max_length=1000000,
+#         blank=True,
+#         null=True
+#     )

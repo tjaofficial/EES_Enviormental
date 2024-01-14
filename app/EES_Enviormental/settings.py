@@ -198,12 +198,12 @@ CHANNEL_LAYERS = {
 }
 
 #EMAIL
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com' #os.environ.get('EMAIL_HOST')
-EMAIL_PORT = 587 #os.environ.get('EMAIL_PORT')
-EMAIL_USE_TLS = True #os.environ.get('EMAIL_USE_TLS')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 EMAIL_FROM = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = 'qkcufopwjyavcpqn' #os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 PASSWORD_RESET_TIMEOUT = 14400

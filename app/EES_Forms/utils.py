@@ -726,7 +726,7 @@ def checkIfMoreRegistrations(user):
     else:
         print('There is no data in the database entry for this Company/User.')
         return False
-    active_registrations = len(listOfEmployees.filter(active=True))
+    active_registrations = len(listOfEmployees.filter(is_active=True))
     if active_registrations >= total_registrations:
         addMore = False
     else:

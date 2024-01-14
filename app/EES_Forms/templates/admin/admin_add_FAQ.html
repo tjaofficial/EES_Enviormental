@@ -1,0 +1,21 @@
+{% extends 'admin/components/admin_layout.html' %}{% load static %}
+{% block body %}
+<div>
+    <div>Add FAQ</div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <select name="section">
+            <option value="">------</option>
+            <option value="About MethodPlus+">About MethodPlus+</option>
+            <option value="All About Forms">All About Forms</option>
+            <option value="Subscriptions and Plans">Subscriptions and Plans</option>
+            <option value="MethodPlus+ Privacy">MethodPlus+ Privacy</option>
+            <option value="Downloading Your Data">Downloading Your Data</option>
+            <option value="For Best Results">For Best Results</option>
+        </section>
+        <input type="text" name="question" id="question" />
+        <input type="text" name="answer" id="answer" />
+        {% include 'shared/components/submitButton.html' with label="Submit" %}
+    </form>
+</div>
+{% endblock %}

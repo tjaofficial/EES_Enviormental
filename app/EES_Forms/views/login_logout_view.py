@@ -16,7 +16,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 from django.template.loader import render_to_string  
-from ..tokens import create_token, check_token
+from ..tokens import create_token, check_token, delete_token
+from django.conf import settings
+from django.utils.html import strip_tags
 
 profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
@@ -32,6 +34,16 @@ def login_view(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('adminDash')
+        # elif userProf.exists():
+        #     print('Check 1')
+        #     if userProf.company == None:
+        #         print('IT FUCKING IS')
+        #     print(userProf.company)
+        #     print(userProf.is_active)
+        #     if not userProf.company and userProf.is_active:
+        #         print('Check 2')
+        #         return redirect('regCompany')
+
         elif request.user.groups.filter(name=SUPER_VAR):
             return redirect('sup_dashboard', SUPER_VAR)
         elif request.user.groups.filter(name=CLIENT_VAR):
@@ -59,9 +71,17 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
+            userProf = user_profile_model.objects.filter(user__id=request.user.id)
             if request.user.is_superuser:
                 return redirect('adminDash')
-            elif request.user.groups.filter(name=SUPER_VAR):
+            elif userProf.exists():
+                userProf = userProf[0]
+                print('Check 1')
+                if not userProf.company and userProf.is_active:
+                    print('Check 2')
+                    return redirect('companyReg')
+            
+            if request.user.groups.filter(name=SUPER_VAR):
                 if len(bat_info_model.objects.all()) > 0:
                     return redirect('sup_dashboard', SUPER_VAR)
                 else:
@@ -104,57 +124,77 @@ def activate_view(request, uidb64, token):
     User = get_user_model()  
     try:  
         uid = force_str(urlsafe_base64_decode(uidb64))  
+        user = User.objects.get(pk=uid)
+        userProf = user_profile_model.objects.get(user=user)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):  
+        user = None  
+    if user is not None and check_token(user, token):
+        A = user
+        B = userProf
+        A.is_active = True  
+        B.is_active = True
+        A.save()
+        B.save()
+        delete_token(user, token)
+
+        messages.success(request, 'Account has been activated. Please Login for further instruction.')
+        return redirect('Login')
+    else:  
+        return HttpResponse('Activation link is invalid!') 
+    
+def reset_password_activate_view(request, uidb64, token):  
+    User = get_user_model()  
+    try:  
+        uid = force_str(urlsafe_base64_decode(uidb64))  
         user = User.objects.get(pk=uid)  
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):  
         user = None  
     if user is not None and check_token(user, token):  
-        user.is_active = True  
-        user.save()  
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')  
-    else:  
-        return HttpResponse('Activation link is invalid!') 
+        if request.method == 'POST':
+            new_password = request.POST['new_password']
+            confirm_password = request.POST['confirm_password']
+            if new_password != confirm_password:
+                messages.success(request, 'Your passwords do not match.')
+                return redirect('reset', uidb64, token) 
+            user.set_password(new_password)
+            user.save()
+            delete_token(user, token)
+            messages.success(request, 'Your password was successfully updated. Please login.')
+            return redirect('Login')
+        return render(request, 'landing/landing_resetPasswordChange.html', {})
+    else:
+        messages.success(request, 'No user found/Invalid Activation link. Try Again.')
+        return redirect('Login') 
 
 def request_password_view(request):
     if request.method == 'POST':
-        print('CHECK 1')
         email = request.POST['email']
         user = User.objects.filter(email=email)
-        
         if user.exists():
             if len(user) == 1:
                 user = user[0]
                 userProfile = user_profile_model.objects.get(user=user)
                 if userProfile.is_active:
-                    print('CHECK 2')
+                    mail_subject = 'MethodPlus: Reset Your Account Password'   
                     current_site = get_current_site(request)
-                    print('CHECK 3')
-                    mail_subject = 'MethodPlus: Activate Your New Account'   
-                    message = render_to_string('landing/acc_active_email.html', {  
+                    html_message = render_to_string('landing/reset_password_email.html', {  
                         'user': user,  
                         'domain': current_site.domain,  
                         'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                         'token':create_token(user),  
-                    })  
-                    print('CHECK 4')
+                    })
+                    plain_message = strip_tags(html_message)
                     to_email = email 
-                    emailSend = EmailMessage(mail_subject, message, to=[to_email]) 
-                    print('CHECK 5') 
-                    emailSend.send()
-                    #messages.success(request,"Please confirm your email address to complete the registration")
+                    send_mail(
+                        mail_subject,
+                        plain_message,
+                        settings.EMAIL_HOST_USER,
+                        [to_email],
+                        html_message=html_message,
+                        fail_silently=False
+                    )
+                    messages.success(request,"Please check you email. If there is an account registered to that email, we will send you instructions to reset your password.")
                     return redirect('Login')
-                
-                
-                    # subject = 'Update Your Password'
-                    # message = 'Hello'
-                    # fromEmail = 'info@methodplus.com'
-                    # toEmail = 'ajackerm@mtu.edu'#User.objects.get(email=email)
-                    # send_mail(
-                    #     subject,
-                    #     message,
-                    #     fromEmail,
-                    #     [toEmail],
-                    #     fail_silently=False,
-                    # )
                 else:
                     print('Not an active profile')
             else:
@@ -172,7 +212,7 @@ def main_change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            # messages.success(request, 'Your password was successfully updated!')
+            messages.success(request, 'Your password was successfully updated!')
             return redirect('profile', 'main')
         else:
             messages.error(request, 'Please correct the error below.')
@@ -211,7 +251,9 @@ def landingRegister(request):
         form = CreateUserForm(new_data)
         profile_form = user_profile_form(new_data)
         if form.is_valid() and profile_form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.is_active = False
@@ -223,16 +265,23 @@ def landingRegister(request):
 
             current_site = get_current_site(request)
             mail_subject = 'MethodPlus: Activate Your New Account'   
-            message = render_to_string('landing/acc_active_email.html', {  
+            html_message = render_to_string('landing/acc_active_email.html', {  
                 'user': user,  
                 'domain': current_site.domain,  
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                 'token':create_token(user),  
             })  
+            plain_message = strip_tags(html_message)
             to_email = form.cleaned_data.get('email')  
-            email = EmailMessage(mail_subject, message, to=[to_email])  
-            email.send()
-            #messages.success(request,"Please confirm your email address to complete the registration")
+            send_mail(
+                mail_subject,
+                plain_message,
+                settings.EMAIL_HOST_USER,
+                [to_email],
+                html_message=html_message,
+                fail_silently=False
+            )
+            messages.success(request,"Please confirm your email address to complete the registration")
             return redirect('Login')
             # user = form.cleaned_data.get('username')
             
@@ -278,7 +327,7 @@ def registerCompany(request):
                 companySave.save()
                 userProf.save()
 
-                return redirect('billing', 'subscriptions')
+                return redirect('billing', 'subscription')
     return render(request, 'landing/registerCompany.html',{
         'companyForm': companyForm,
     })

@@ -2,18 +2,24 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    
+    ##---ADMIN PAGES -------
+    path("admin-pages/addFAQ", views.admin_add_FAQ_view, name="adminFAQ"),
     ##---MAIN DASHBOARDS----
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
     path("adminDash", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
     
+    ##---LANDNG PAGES-----
+    path("FAQ", views.FAQ_view, name="FAQ"),
+    path("contact-mp", views.landing_contact_view, name="landingContact"),
+       
     ##---REGISTRATION-----
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
     path("activate/<str:uidb64>/<str:token>/", views.activate_view, name="activate"),
+    path("reset/<str:uidb64>/<str:token>/", views.reset_password_activate_view, name="reset"),
     path("register_company", views.registerCompany, name="companyReg"),
     path("no_registration", views.valid_account_logout, name="no_registration"),
     path("logout", views.logout_view, name="Logout"),
@@ -25,13 +31,14 @@ urlpatterns = [
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
     path("<str:facility>/account/payment-method/<str:action>/<str:planId>/<str:seats>", views.sup_card_update, name="cardUpdate"),
+    path("billing/payment-method/<str:planId>/<str:seats>", views.landing_addCard_view, name="cardAdd"),
     path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
     path("<str:facility>/account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
     path("<str:facility>/subscription/change", views.sup_change_subscription, name="subscriptionChange"),
     path("<str:facility>/subscription/billing", views.sup_billing_history, name="billingHistory"),
     
     ##---BILLING
-    path("billing/<str:step>", views.billing, name="billing"),
+    path("billing/<str:step>", views.billing_view, name="billing"),
 
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
     path('<str:facility>/about', views.about_view, name='about'),
