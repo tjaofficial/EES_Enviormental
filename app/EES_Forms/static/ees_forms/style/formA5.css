@@ -1,3 +1,85 @@
-#sketchBox img {
-    /* width: 471px; */
+#setImage {
+    width: 471px;
+    overflow: visible;
+    overflow-clip-margin: unset;
 }
+.comment_skip_class {
+    width: 239px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 16px 0;
+    position: absolute;
+    z-index: 1;
+    margin-left: 362px;
+    margin-top: -244px;
+    font-size: 1rem;
+    padding-top: 18px;
+}
+.exit_pop_class{
+    top: 3px;
+    position: absolute;
+    right: 4px;
+    color: black;
+    background: none;
+    border: none;
+    padding: unset;
+    font-size: 1rem;
+    cursor: pointer;
+}
+/* The actual popup (appears on top) */
+.popuptext2 {
+    visibility: hidden;
+    width: 187px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    margin-left: -156px;
+    margin-top: -43px;
+    opacity: 75%;
+  }
+  
+  /* Popup arrow */
+  .popuptext2::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  /* The actual popup (appears on top) */
+.popuptext1 {
+    visibility: hidden;
+    width: 187px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin-left: -222px;
+    margin-top: -43px;
+    opacity: 75%;
+  }
+  
+  /* Popup arrow */
+  .popuptext1::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }

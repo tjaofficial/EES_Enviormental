@@ -40,6 +40,7 @@ USE_S3 = os.getenv('USE_S3') == 'TRUE'
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'EES_Forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,9 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 if(USE_S3): INSTALLED_APPS.append('storages')
+
+ASGI_APPLICATION = 'EES_Enviormental.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -160,7 +164,7 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     MEDIA_ROOT2 = os.path.join(BASE_DIR2, 'media')
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'EES_Forms/static'),)
 
 
 CLIENT_VAR = 'client'
@@ -186,3 +190,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+SESSION_COOKIE_AGE = 21600
+SESSION_SAVE_EVERY_REQUEST = True
+
+CHANNEL_LAYERS = {
+    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+}
+
+#EMAIL
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_POST = os.getenv('EMAIL_POST')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+
+
+print(SECRET_KEY)
+print(os.getenv('EMAIL_HOST'))

@@ -1,0 +1,35 @@
+.issue_card{
+    font-family: Arial, Helvetica, sans-serif;
+    width: 600px;
+    background-color: white;
+    box-shadow: #0000007d 4px 7px 12px 3px;
+    border-radius: 1rem;
+    margin: auto;
+}
+.issue_contentCont{
+    padding: 0 1rem;
+}
+.issue_labels{
+    color: darkgray;
+    font-size: .8rem;
+}
+.issue_box{
+    border: 1px solid black;
+    width: 100%;
+    border-radius: 18px;
+    padding: .5rem;
+    background-color: lightgray;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.issue_bottomCont{
+    display: flex;
+    padding-bottom: 2rem;
+}
+.issue_header_wo_exit{
+    text-align: center; 
+}
+.issue_header_w_exit{
+    text-align: center; 
+    margin-top: -20px;
+}

@@ -1,12 +1,3 @@
-#card{
-    background-color: #ffffff;
-    /* height: 48rem; */
-    margin: auto;
-    border-radius: 15px;
-    box-shadow: 2px 2px 17px 0px #8080804a;
-    border: #0000004f solid 1px;
-    width: 742px;
-}
 #card2{
     background-color: #ffffff;
     /* height: 48rem; */
@@ -24,6 +15,7 @@
     padding: 19px 0;
     font-weight: bolder;
     color: white;
+    cursor: pointer;
 }
 .tabContainer{
     background-color: rgb(55, 55, 55);
@@ -33,41 +25,83 @@
     display: flex;
     /* width: 738px; */
 }
-.dataCont{
-    background-color: white;
-    border-radius: 20px;
-    margin: auto;
-    /* padding: 22px; */
-    text-align: center;
-    /* width: 30%; */
-}
 .topLeftCont{
-    border-top-left-radius: 13px;
+    border-top-left-radius: 11px;
 }
 .topRightCont{
-    border-top-right-radius: 13px;
+    border-top-right-radius: 11px;
 }
-.tabs:hover{
+/* .tabs:hover{
     background-color: white;
-    /* height: 3.5rem;*/
     display: inline-block;
     width: 100%;
     text-align: center;
     padding: 19px 0;
     font-weight: bolder;
-}
+} */
 .start{
     color: black;
     background-color: white;
 }
-.cardHeader{
+.cardHeaderTabs{
     padding: 15px;
     color: white;
     background-color: #253544;
-    border-radius: 13px 13px 0px 0px;
+    /* border-radius: 13px 13px 0px 0px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .formCont{
     background-color: #80808026;
     border-radius: 12px;
     padding: 20px;
+}
+p{
+    margin-bottom: 5px;
+}
+
+.input{
+    padding: 3px;
+    margin-left: 0;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    line-height: 1.071em;
+    box-shadow: 0 1px 2px #eee inset;
+}
+.form-line{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 36px;
+    padding-right: 36px;
+    margin: 6px 0;
+    width: 100%;
+}
+.label{
+    width: 150px;
+    font-weight: bold;
+    margin-bottom: 9px;
+    display: inline-block;
+    text-align: left;
+    padding: 3px;
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: top;
+    color: #5d5d5d;
+}
+.inputCont{
+    display: inline-block;
+}
+.sub_label{
+    min-height: 13px;
+    font-size: 0.786em;
+    margin-top: 3px;
+    color: #999999;
+    display: block;
+    margin-bottom: 3px;
+    word-wrap: break-word;
+}
+.prof_pic_view{
+    width: 200px;
+    border-radius: 50px;
 }

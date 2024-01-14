@@ -1,0 +1,24 @@
+{% load static %}
+<link href="{% static 'landing/style/landingPage_navBar.css' %}" rel="stylesheet">
+<div class="container" style="display: inline-flex; width: 100%; padding: 0;">
+    <div style="width: 56%;">
+        <a style="padding-left: 2rem;" href="{% url 'landing' %}"><img class="headerLogo" src="{% static 'logo/logo_main_white_transparent.png' %}"/></a>
+    </div>
+    <div class="navCont">
+        <nav id="navbar">
+            <ul>
+                <li><a href="{% url 'landing' %}">Home</a></li>
+                <li><a href="{% url 'landing' %}#features">Features</a></li>
+                <li><a href="{% url 'landing' %}#about">About</a></li>
+                <li><a href="{% url 'landing' %}#pricing">Pricing</a></li>
+                <li><a href="{% url 'landing' %}#contact">Contact</a></li>
+                <li><a href="{% url 'Login' %}">Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </nav>
+    </div>
+</div>

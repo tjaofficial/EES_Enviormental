@@ -1,30 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model, bat_info_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model, bat_info_model, formSubmissionRecords_model
 from ..forms import formD_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formD(request, facility, selector):
-    formName = "D"
+    formName = 8
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
     last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
@@ -32,10 +27,9 @@ def formD(request, facility, selector):
     end_week = last_saturday + one_week
     sunday = today - datetime.timedelta(days=1)
     submitted_forms = formD_model.objects.all().order_by('-week_start')
-
-    count_bp = daily_battery_profile_model.objects.count()
-
-    if count_bp != 0:
+    picker = issueForm_picker(facility, selector, formName)
+    
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in submitted_forms:
@@ -135,19 +129,19 @@ def formD(request, facility, selector):
                 
                 new_latest_form = formD_model.objects.all().order_by('-week_start')[0]
                 filled_out = True
-                done = Forms.objects.filter(form='D')[0]
                 for items in new_latest_form.whatever().values():
                     if items is None or items == '':
                         filled_out = False  # -change this back to false
                         break
 
                 if filled_out:
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    createNotification(facility, request.user, formName, now, 'submitted')
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 else:
-                    done.submitted = False
-                    done.save()
+                    if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
+                        subForm = formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility)[0]
+                    subForm.submitted = False
+                    subForm.save()
 
             return redirect('IncompleteForms', facility)
     else:
@@ -155,6 +149,6 @@ def formD(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formD.html", {
-        "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
+    return render(request, "shared/forms/weekly/formD.html", {
+        'picker': picker, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, "back": back, 'todays_log': todays_log, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

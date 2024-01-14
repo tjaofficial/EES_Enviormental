@@ -22,7 +22,7 @@ function addResultEventListeners(){
     const resultElement = document.querySelectorAll("[data-resultInput]");
     for(i=0; i<resultElement.length; i++){
         resultElement[i].addEventListener('change', handle_Table_Input)
-        resultElement[i].addEventListener('input', update_Temp_Save)
+        resultElement[i].addEventListener('change', update_Temp_Save)
         resultElement[i].addEventListener('change', total_leaking_doors)
     }
 
@@ -169,7 +169,7 @@ function createHTMLString(dataJSON, input_ID){
 
                 for(a=0; a<dataArray.length; a++){
                     if(dataArray[a]["location"]){
-                        if(dataArray[a]["location"][0] !== "D"){
+                        if(dataArray[a]["location"][0] !== "dampered_off"){
                             total_lid_leaks++
                         }
                     }
@@ -183,7 +183,7 @@ function createHTMLString(dataJSON, input_ID){
 
                 for(b=0; b<dataArray.length; b++){
                     if(dataArray[b]["location"]){
-                        if(dataArray[b]["location"][0] !== "D"){
+                        if(dataArray[b]["location"][0] !== "dampered_off"){
                             total_om_leaks++
                         }
                     }
@@ -203,13 +203,28 @@ function createHTMLString(dataJSON, input_ID){
 // Template for Table Rows
 
 function locationHTMLTemplate(value, target, locationIndex, resultInput){
-    let htmlTempate = `<select data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}" style="margin-bottom:3px;">
-                            <option value="" ${value? 'selected': ''}>--</option>
-                            <option value="D" ${value === "D"? 'selected': ''}>D</option>
-                            <option value="C" ${value === "C"? 'selected': ''}>C</option>
-                            <option value="M" ${value === "M"? 'selected': ''}>M</option>
-                        </select>`;
-
+    if(target == 'offtakes'){
+        var htmlTempate = `<select oninput="check_dampered_inoperable(this, '${target}', 'inputted')" data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}" style="margin-bottom:3px;">
+                                <option value="" ${value? 'selected': ''}>--</option>
+                                <option value="dampered_off" ${value === "dampered_off"? 'selected': ''}>D</option>
+                                <option value="cap" ${value === "cap"? 'selected': ''}>C</option>
+                                <option value="flange" ${value === "flange"? 'selected': ''}>F</option>
+                                <option value="slip_joint" ${value === "slip_joint"? 'selected': ''}>S</option>
+                                <option value="base" ${value === "base"? 'selected': ''}>B</option>
+                                <option value="piping" ${value === "piping"? 'selected': ''}>P</option>
+                                <option value="other" ${value === "other"? 'selected': ''}>O</option>
+                                <option value="mini_standpipe" ${value === "mini_standpipe"? 'selected': ''}>MS</option>
+                            </select>`;
+    } else {
+        var htmlTempate = `<select oninput="check_dampered_inoperable(this, '${target}', 'inputted')" data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}" style="margin-bottom:3px;">
+                                <option value="" ${value? 'selected': ''}>--</option>
+                                <option value="dampered_off" ${value === "dampered_off"? 'selected': ''}>D</option>
+                                <option value="1" ${value === "1"? 'selected': ''}>1</option>
+                                <option value="2" ${value === "2"? 'selected': ''}>2</option>
+                                <option value="3" ${value === "3"? 'selected': ''}>3</option>
+                                <option value="4" ${value === "4"? 'selected': ''}>4</option>
+                            </select>`;
+    }
     return htmlTempate
 }
 
@@ -225,11 +240,10 @@ function htmlLayout(empty, data, target){
     })
 
     locationhtml = locationhtml + locationHTMLTemplate("", target, -1, locationResultInput);
-
-
+    
     const htmlStr= `<tr>
                         <td class="boxa6" colspan="1" style="text-align: center; width: 84px;">
-                            <input type="number" style="text-align: center; width: 45px; margin-bottom:3px;" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" data-targetinput="${target}"/>
+                            <input type="number" oninput="check_dampered_inoperable(this, '${target}', 'inputted')" style="text-align: center; width: 45px; margin-bottom:3px;" ${!empty? 'value="'+data.oven+'"': ''} data-resultInput="${empty? -1: i}" data-resultKey="oven" data-targetinput="${target}"/>
                         </td>
                         <td class="boxa6" colspan="1" style="width:90px; margin-bottom:3px;">
                             ${locationhtml}
@@ -277,7 +291,7 @@ function total_leaking_doors() {
     } else {
         var x = 0;
         for (let i=0; i < o_array.length; i+=1) {
-            if (o_array[i]['location'] == 'D'){
+            if (o_array[i]['location'] == 'dampered_off'){
                 x +=1;
             }
         }
@@ -294,7 +308,7 @@ function total_leaking_doors() {
     } else {
         var y = 0;
         for (let c=0; c < l_array.length; c+=1) {
-            if (l_array[c]['location'] == 'D'){
+            if (l_array[c]['location'] == 'dampered_off'){
                 y +=1;
             }
         }
@@ -309,7 +323,28 @@ function total_leaking_doors() {
 }
 total_leaking_doors()
 
+function total_time(observed){
+    if(observed == "offtakes"){
+        const om_traverse_time_min = document.getElementById('id_om_traverse_time_min').value;
+        const om_traverse_time_sec = document.getElementById('id_om_traverse_time_sec').value;
+        const om_total_sec = document.getElementById('id_om_total_sec');
+        const om_total = minutesToSeconds(om_traverse_time_min)+parseInt(om_traverse_time_sec? om_traverse_time_sec: 0);
+        om_total_sec.value = om_total;
+    } else {
+        const l_traverse_time_min = document.getElementById('id_l_traverse_time_min').value;
+        const l_traverse_time_sec = document.getElementById('id_l_traverse_time_sec').value;
+        const l_total_sec = document.getElementById('id_l_total_sec');
+        const l_total = minutesToSeconds(l_traverse_time_min)+parseInt(l_traverse_time_sec? l_traverse_time_sec: 0);
+        l_total_sec.value = l_total;
+    }
+}
+total_time('offtakes');
+total_time('lids');
 
+function minutesToSeconds(minutes){
+    let total_seconds = minutes*60
+    return parseInt(total_seconds)
+}
 
 function l_equation() {
     const l_leaks = document.getElementById('l_leaks2').value,
@@ -337,21 +372,118 @@ function one_pass_func() {
     const om_stop = document.getElementById('id_om_stop').value;
     const om_traverse_time_min = document.getElementById('id_om_traverse_time_min').value;
     const om_traverse_time_sec = document.getElementById('id_om_traverse_time_sec').value;
+    const om_total_sec = document.getElementById('id_om_total_sec').value;
     console.log(checked);
     if (checked) {
         document.getElementById('id_l_start').value = om_start;
         document.getElementById('id_l_stop').value = om_stop;
         document.getElementById('id_l_traverse_time_min').value = om_traverse_time_min;
         document.getElementById('id_l_traverse_time_sec').value = om_traverse_time_sec;
+        document.getElementById('id_l_total_sec').value = om_total_sec;
     }
 }
 one_pass_func();
-
 /*****************************************
-Initiates the Tables on JS load
-*****************************************/
+ Initiates the Tables on JS load
+ *****************************************/
 setTimeout(
     initate_Result_Table(),
     1000
-)
+    )
+    
+function check_dampered_inoperable(elem, observed, action) {
+    const inop_numbers = document.getElementById('inop_numbs').value.replaceAll(' ','').split(',');
+    if(observed == 'offtakes'){
+        var ovenData = JSON.parse(document.querySelectorAll("[id='offtakes']")[0].value)['data'];
+        var idAttachment = 'om'
+    } else {
+        var ovenData = JSON.parse(document.querySelectorAll("[id='lids']")[0].value)['data'];
+        var idAttachment = 'l'
+    }
+    if(action == "inputted"){
+        const tableAnswers = elem.parentNode.parentNode.parentNode.children;
+        var noOvensMatch1 = true;
+        for(var y=0;y<tableAnswers.length;y++){
+            var element = tableAnswers[y].children[0].children[0].value;
+            console.log(tableAnswers[y].children[1].children.length);
+            console.log(element);
+            for(let x=0;x<inop_numbers.length;x++){
+                let inopOvenNumber = inop_numbers[x];
+                if(parseInt(inopOvenNumber) == parseInt(element)){
+                    if(tableAnswers[y].children[1].children.length == 2){
+                        var locationValue = tableAnswers[y].children[1].children[0].value;
+                        if(locationValue == "dampered_off"){
+                            noOvensMatch1 = false;
+                            console.log('found one')
+                        }
+                    }
+                }
+            }
+        }
+        if(noOvensMatch1){
+            document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+            console.log('No Ovens Match the Inoperable')
+        } else {
+            document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+        }
+    } else {
+        try{
+            var noOvensMatch2 = true;
+            for(var x=0;x<inop_numbers.length;x++){
+                var inopOvenNumber = inop_numbers[x];
+                for(var i=0;i<ovenData.length;i++){
+                    var damperedOvenNumber = ovenData[i]['oven'];
+                    if(parseInt(inopOvenNumber) == parseInt(damperedOvenNumber || parseInt(inputValue) == parseInt(inopOvenNumber))){
+                        if(ovenData[i]['location'] == "dampered_off"){
+                            noOvensMatch2 = false;
+                            console.log('found one in ' + observed)
+                        }
+                    }
+                }
+            }
+            if(noOvensMatch2){
+                document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+                console.log('No Ovens Match')
+            } else {
+                document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+            }
+        } catch(err) {
+            document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+            console.log("No Data Inputed for " + observed)
+        }
+    }
+}
+check_dampered_inoperable(false, 'offtakes', 'initial');
+check_dampered_inoperable(false, 'lids', 'initial');
 
+function inoperable_ovens() {
+    const inop = document.getElementById('inop_ovens').value;
+    
+    document.getElementById('l_inop_ovens').value = parseInt(inop);
+    document.getElementById('om_inop_ovens').value = parseInt(inop);
+    l_equation();
+    om_equation();
+
+    const inop_numbs_input = document.getElementById('inop_numbs');
+    var length_of_inop_numbers = inop_numbs_input.value.replace(' ', '').split(',').length
+    const inop_message = document.getElementById('inop_message');
+    if (length_of_inop_numbers != inop){
+        console.log('Error message')
+        inop_message.style.display = "block";
+    } else {
+        var blank = false;
+        for(let x=0;x<length_of_inop_numbers;x++){
+            const oven_number = inop_numbs_input.value.replace(' ', '').split(',')[x];
+            if (!oven_number || +oven_number == 0 || isNaN(+oven_number)) {
+                var blank = true;
+                console.log("you got it")
+            }
+        }
+        if (blank) {
+            inop_message.style.display = "block";
+        } else {
+            inop_message.style.display = "none";
+        }
+    }
+}
+inoperable_ovens();

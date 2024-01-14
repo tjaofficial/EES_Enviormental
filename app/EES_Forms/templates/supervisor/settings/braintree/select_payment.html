@@ -1,0 +1,119 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/selectPayment.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primary/primaryButton.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/select_payment.js' %}"></script>
+
+<div class="mainCont" style="width:700px; max-width:none;margin: auto;">
+    <div class="card" style='margin-bottom: 50px;'>
+        <div class="cardHeader">Payment Method</div>
+        <div class="contentCont">
+            <form id="dataGather" method="post" autocomplete="off" action="../subscription/receipt">
+                {% csrf_token %}
+                <div class="dataBoxes">
+                    <div class="infoHeaders">Contact Information</div>
+                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                        <div>{{customer.first_name}} {{customer.last_name}}</div>
+                        <div>{{customer.email}}</div>
+                        <div>({{customer.phone|slice:"2:5"}}) {{customer.phone|slice:"5:8"}}-{{customer.phone|slice:"8:"}}</div>
+                    </div>
+                </div><br>
+                {% if cardsOnFile|length > 0 %}
+                    {% for x in cardsOnFile %}
+                            <div class="dataBoxes">
+                                <div class="infoHeaders">Billing Address</div>
+                                <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                                    <div>{{x.cardholder_name}}</div>
+                                    <div>{{x.billing_address.street_address}}</div>
+                                    {% if x.billing_address.extended_address %}<div>{{x.billing_address.extended_address}}</div>{% endif %}
+                                    <div>{{x.billing_address.locality}} / {{x.billing_address.region}} / {{x.billing_address.postal_code}}</div>
+                                </div>
+                            </div><br>
+                    {% endfor %}
+                {% endif %}
+                <div class="dataBoxes">
+                    <div class="infoHeaders">Payment</div>
+                    <div id='optionsCont' class="tabInfoCont infoBoxes" style="height:fit-content">
+                        {% if cardData %}
+                            <div id="cardCont" style="display:block;">
+                                <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card" checked>
+                                <div style="display: inline-flex;">
+                                    {{ dataTemplateUse.nameOnCard }}<br>
+                                    {{ cardData.details.card_type|upper }} ending in {{ cardData.details.last_four }}<br><br>
+                                </div>
+                            </div>
+                        {% elif cardsOnFile|length > 0 %}
+                            {% for card in cardsOnFile %}
+                                {% if card.default %}
+                                    <div id="cardCont" style="display:block;">
+                                        <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card-default" checked>
+                                        <div style="display: inline-flex;">
+                                            DEFAULT CARD<br>
+                                            {{card.card_type|upper}} ending in {{card.last_4 }}<br><br>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div id="cardCont" style="display:block;">
+                                        <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card-new" checked>
+                                        <div style="display: inline-flex;">
+                                            {{card.card_type|upper}} ending in {{card.last_4 }}<br><br>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <div id="paypalCont" style="display:inline-flex;">
+                            <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="paypal">
+                            <div style="margin-left: 6px;">
+                                <div style="display: flex;height: 28px;justify-content: center;align-items: center;">
+                                    <img style="width: 84px;" src="{% static 'images/paypal_icon.png' %}"><br><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <a id="addNewCard" style="display:block;" href="{% url 'cardUpdate' facility 'add-subscription' totalData.planId totalData.seats %}">+ Add New Payment Method<br><br></a>
+                    <div id="saveContinue" style="margin: auto; text-align: center;display:block;">
+                        <div onclick="changePaymentArea()">Save & Continue</div>
+                    </div>
+                </div><br>
+                <div id="orderSummary" class="dataBoxes" style="display:none;">
+                    <div class="infoHeaders">Subscription Details</div>
+                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                        <div>{{planDetails.name}} Subscription</div>
+                        <div>- {{planDetails.description}}</div>
+                        <div class="priceRight">${{planDetails.price}}</div>
+                        <div>Additional Registrations</div>
+                        <div>- Add ({{seats}}) additional registrations</div>
+                        <div class="priceRight">${{addRegistrationCost}}</div><br>
+                        <hr><br>
+                        <div>Total Amount</div>
+                        <div class="priceRight">${{totalCost}}</div>
+                    </div>
+                </div><br>
+                <div id="review" class="dataBoxes" style="display:none;">
+                    <div class="infoHeaders">Review & Complete</div>
+                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                        Take a moment to review your details above before completing your purchase.
+                    </div>
+                    <div style="margin: auto; text-align: center;">
+                        <input type="checkbox" id="reviewed" name="reviewed" value="reviewed" onchange="reviewCheck(this)">
+                        <label for="reviewed"> I have reviewed my purchase details.</label><br><br>
+                        <input id="submit" type="submit" value="Review Order>" style="display:none;">
+                    </div>
+                </div>
+                <br>
+                <input type="hidden" value="{{totalData.planId}}" name="planId">
+                <input type="hidden" value="{{totalData.seats}}" name="seats">
+                <input type="hidden" value="{{totalData.payNonce}}" name="payNonce"/>
+                <input type="hidden" value="{{totalData.nameOnCard}}" name="nameOnCard"/>
+                <input type="hidden" value="{{totalData.address1}}" name="address1"/>
+                <input type="hidden" value="{{totalData.address2}}" name="address2"/>
+                <input type="hidden" value="{{totalData.city}}" name="city"/>
+                <input type="hidden" value="{{totalData.state}}" name="state"/>
+                <input type="hidden" value="{{totalData.zipCode}}" name="zipCode"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

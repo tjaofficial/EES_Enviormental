@@ -51,6 +51,6 @@ def signature(request, facility):
             data.save()
             
             return redirect('IncompleteForms', facility)
-    return render(request, "ees_forms/ees_signature.html", {
+    return render(request, "observer/personnel_signature.html", {
         'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'data': data
     })

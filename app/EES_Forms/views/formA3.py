@@ -5,6 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA3_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -12,27 +13,20 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA3(request, facility, selector):
-    formName = "A3"
+    formName = 3
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
-    count_bp = daily_battery_profile_model.objects.count()
     org = formA3_model.objects.all().order_by('-date')
-
-    if count_bp != 0:
+    picker = issueForm_picker(facility, selector, formName)
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
@@ -93,8 +87,10 @@ def formA3(request, facility, selector):
                     'l_leaks2': database_form.l_leaks2,
                     'om_traverse_time_min': database_form.om_traverse_time_min,
                     'om_traverse_time_sec': database_form.om_traverse_time_sec,
+                    'om_total_sec': database_form.om_total_sec,
                     'l_traverse_time_min': database_form.l_traverse_time_min,
                     'l_traverse_time_sec': database_form.l_traverse_time_sec,
+                    'l_total_sec': database_form.l_total_sec,
                     'om_allowed_traverse_time': database_form.om_allowed_traverse_time,
                     'l_allowed_traverse_time': database_form.l_allowed_traverse_time,
                     'om_valid_run': database_form.om_valid_run,
@@ -109,13 +105,14 @@ def formA3(request, facility, selector):
                     'notes': database_form.notes,
                 }
             else:
+                inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
                 initial_data = {
                     'date': todays_log.date_save,
                     'observer': full_name,
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
                     'inop_ovens': todays_log.inop_ovens,
-                    'inop_numbs': todays_log.inop_numbs,
+                    'inop_numbs': inopNumbsParse,
                     'notes': 'N/A',
                     'facility_name': facility,
                 }
@@ -136,18 +133,14 @@ def formA3(request, facility, selector):
                 A.save()
 
                 if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
-                    finder = issues_model.objects.filter(date=A.date, form='A-3')
+                    finder = issues_model.objects.filter(date=A.date, form='A-3').exists()
                     if finder:
-                        issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/issue'
+                        issue_page = 'issue'
                     else:
-                        issue_page = '../../issues_view/A-3/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-
-                done = Forms.objects.filter(form='A-3')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, str(formName), str(database_form.date), issue_page)
+                createNotification(facility, request.user, formName, now, 'submitted')
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
             print(form)
@@ -156,6 +149,6 @@ def formA3(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA3.html", {
-        'options': options, "unlock": unlock,"search": search, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
+    return render(request, "shared/forms/daily/formA3.html", {
+        'picker': picker, 'options': options, "unlock": unlock,"search": search, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
     })

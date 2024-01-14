@@ -1,0 +1,52 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
+<div class="mainCont" style="margin-top:5rem;">
+    <div class="card">
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="accountSettings" %}
+            Cancel Subscription
+        </div>
+        <div class="contentCont">
+            <div id="iForm" style="margin: auto;display: block; width: 41rem;">
+                <form action="" id="Payment_Method_Form" method="post">
+                    {% csrf_token %}
+                    <div class="billingAddressCont" style="margin-bottom: 22px;">
+                        <h2 style="text-align: center; margin-bottom: 22px;">ATTENTION</h2>
+                        <p style="text-align: justify;">
+                            You are about to CANCEL your subscription to MethodPlus+. 
+                            Once cancelled, all accounts will be inactive. 
+                            Employees will not have access to creating/changing any 
+                            existing files, graphs, or statistics. 
+                            <span style="text-decoration: underline;">
+                                Employees and Clients will still have access to 
+                                all submitted files.
+                            </span> 
+                            Your subscription will remain active untill the 
+                            end of the billing-cycle.({{billing_period_end_date}})
+                        </p>
+                        <br>
+                        <p>Are you sure you want to CANCEL your subscription?</p><br>
+                        <div class="tempInputStyle" style="width: 22rem; border: 3px solid red;">
+                            <input id="cancel" class="input" oninput="allowSubmit()" type="text" name="cancel" placeholder="Please type the word 'cancel' to cancel your subscription" style="text-align:center;"/>
+                        </div>
+                    </div>
+                    <input id="submitCancel" type="submit" value="Cancel Subscription" name="cancelSub" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function allowSubmit(){
+        const input = document.getElementById('cancel').value;
+        const submit = document.getElementById('submitCancel');
+        if (input == 'cancel'){
+            submit.disabled = false;
+        } else {
+            submit.disabled = true;
+        }
+    }
+    allowSubmit();
+</script>
+{% endblock %}

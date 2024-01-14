@@ -1,26 +1,35 @@
-{% extends "supervisor/sup_layout.html" %}{% load static %}{% block list%}
-<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
-<div style='margin:auto; width:44%;max-width:775px;'>
-    <div class="card" style=''>
-        <div class="cardHeader">Select Forms</div>
-        <div class="contact_list_cont">
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
+<div class='mainCont'>
+    <div class="card bottomOfPageMargin">
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="facilityList"%}
+            Select Forms
+        </div>
+        <div style='padding: 15px 32px;'>
             <form method='POST' action=''>
                 {% csrf_token %}
                 <table style='margin:auto;width:100%;'>
                     <tr>
-                        <th style="width: 10%;"></th>
-                        <th style="width: 30%;">Form Type</th>
-                        <th style="width: 40%;">Description</th>
+                        <th style="width: 1%;"></th>
+                        <th style="width: 2%;">Label</th>
+                        <th style="width: 4%;"></th>
+                        <th style="width: 25%;">Form Type</th>
+                        <th style="width: 30%;">Description</th>
                     </tr>
                     {% for form in formList %}
                     <tr>
-                        <td><input name="forms{{ forloop.counter }}" type="checkbox" value="{{form.header}}--{{form.title}}" {% for x in modelList %}{% if x == form.header|cut:" "|add:"--"|add:form.title|cut:" " %}checked{% else %}{% endif %}{% endfor %}/></td>
-                        <td>{{form.header}}</td>
+                        <td class="rowCheckMark"><input name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for x in modelList %}{% if x.0 == form.id %}checked{% endif %}{% endfor %}/></td>
+                        <td class="rowFormLabel"><input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for x in modelList %}{% if x.0 == form.id %}{{x.1}}{% endif %}{% endfor %}"/></td>
+                        <td class="rowFormID">{{form.id}} - </td>
+                        <td class="rowFormType">{{form.header}}</td>
                         <td>{{form.title}}</td>
                     </tr>
                     {% endfor %}
                 </table>
-                <input type='submit' value='Save'/>
+                <div class="center" style="margin-top:10px;">
+                    <input type='submit' value='Save'/>
+                </div>
             </form>
         </div>
     </div>

@@ -5,6 +5,7 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formE_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 
@@ -13,29 +14,33 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formE(request, facility, selector):
-    formName = "E"
+    formName = 9
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = formE_model.objects.all().order_by('-date')
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
+    org = formE_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
+    picker = issueForm_picker(facility, selector, formName)
+    
+    # THIS IS TO TRANSITION THE MIGRATIONS NEED THIS TEMPORARILY ASK TOBE
+    # for x in daily_prof:
+    #     for y in bat_info_model.objects.all():
+    #         if x.facility == y.facility_name:
+    #             x.facilityChoice = y
+    #             x.save()
+    #             print('done')
+    # for z in daily_prof:
+    #     if "EES" in z.facility:
+    #         z.facilityChoice = options
+    #         z.save()
 
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
@@ -44,19 +49,13 @@ def formE(request, facility, selector):
             form = database_model
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
         if search:
             database_form = ''
@@ -101,20 +100,15 @@ def formE(request, facility, selector):
                 A.save()
                 
                 if A.leaks == "Yes":
-                    issue_page = '../../issues_view/E/' + str(database_form.date) + '/form'
-
+                    issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
-                done = Forms.objects.filter(form='E')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
-
+                createNotification(facility, request.user, formName, now, 'submitted')
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
         return redirect(batt_prof)
 
-    return render(request, "Daily/formE.html", {
-        "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
+    return render(request, "shared/forms/daily/formE.html", {
+        'picker': picker, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
     })

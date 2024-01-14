@@ -1,0 +1,127 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/pushTravels.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<div>
+    {% include "shared/components/backArrow.html" %}
+</div>
+<div class="mainCont mainContCenter gap">
+    <div id="pusht_travels" style="text-align: center; margin: auto;">    
+        <div class="ptHolder">
+            <div class='headerTitle'>
+               TODAY: {{ todays_log.date_save }}
+            </div>
+            <br>
+            <div>
+                <table class='tableStyle'>
+                    <tr>
+                        <th colspan="4" class='headerTable'>
+                            OVERDUE
+                        </th>
+                    </tr>
+                    <tr>
+                        <td class="dataLanes">
+                            Less Than 30 Days Left
+                        </td>
+                        <td class="dataLanes">
+                            Less Than 10 Days Left
+                        </td>
+                        <td class="dataLanes">
+                            Less Than 5 Days Left
+                        </td>
+                        <td class="dataLanes">
+                            Closest Oven Due
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="dataLanes" style='border-bottom-left-radius: 15px; padding-bottom: 30px;'>
+                            {% for day in od_30 %}
+                                {% if day.2 == 0 %}
+                                {% else %}
+                                    #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td class="dataLanes" style='padding-bottom: 30px;'>
+                            {% for day in od_10 %}
+                                {% if day.2 == 0 %}
+                                {% else %}
+                                    #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                                    {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td class="dataLanes" style='padding-bottom: 30px;'>
+                            {% for day in od_5 %}
+                                {% if day.2 == 0 %}
+                                {% else %}
+                                    #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                                    {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td class="dataLanes" style='border-bottom-right-radius: 15px; padding-bottom: 30px;'>
+                            {% for x in od_recent %}
+                                {% if x.2 == 0 %}
+                                {% else %}
+                                    #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br>
+        <a href="shared/forms/daily/formA5/new" >
+            <div style='background-color: #b4b4b4;padding: 15px;font-size: 1.5rem;border: black 2px solid;width: 279px;border-radius: 47px;box-shadow: 3px 3px 7px 0px;margin: auto;margin-top: 15px;margin-bottom: 15px;'>Submit Missing Data</div>
+        </a>
+        <!--<div style='background-color: #253544;box-shadow: #0000007d 4px 7px 12px 3px;margin: 2rem;padding:1rem;border-radius: 1rem;'>
+            <div style='height: 300px;width: 41rem;margin: auto;background-color: #dfe5e9;border-radius: 1rem;'>
+                Please Select a Form
+                {% for items in allForms %}
+                {{items.form}}
+            {% endfor %}
+            </div>
+        </div>-->
+        <center>
+            <div class='table2Style'>
+                <div id="pusht_travels" style="text-align: center; margin: auto;">  
+                    <table style="margin: auto; border-collapse: collapse; text-align: center;">
+                        <tr>
+                            <th class="dataLanes2Header" style='border-top-left-radius: 15px;'>
+                                Oven No.
+                            </th>
+                            <th class="dataLanes2Header">
+                                Most Recent Reading
+                            </th>
+                            <th class="dataLanes2Header">
+                                Next Reading to be Completed By
+                            </th>
+                            <th class="dataLanes2Header" style='border-top-right-radius: 15px;'>
+                                Days Left
+                            </th>
+                        </tr>
+                    {% for item in cool %}
+                        <tr>
+                            <td class="dataLanes2">
+                                {{ item.0 }}
+                            </td>
+                            <td class="dataLanes2">
+                                {{ item.1 }}
+                            </td>
+                            <td class="dataLanes2">
+                                {{ item.2 }}
+                            </td>
+                            <td class="dataLanes2">
+                                {{ item.3 }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div> 
+            </center>
+        </div>
+    </div>
+</div>
+{% endblock %}

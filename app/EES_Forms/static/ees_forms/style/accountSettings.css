@@ -1,0 +1,56 @@
+.tableSpacer{
+    height: 22px;
+    font-size: 14px;
+}
+.headerSpacer{
+    padding-top: 20px;
+    
+}
+.labelClass{
+    width:10%;
+    color: #535353;
+}
+.labelClass2{
+    width: 19%;
+}
+.settingsTab{
+    width: 100%;
+    padding: 20;
+    font-size: 21px;
+    text-align: center;
+    background-image: linear-gradient(to right, white, #c1c7ce, white);
+}
+.settingsTab:hover{
+    width: 100%;
+    padding: 20;
+    font-size: 21px;
+    text-align: center;
+    background-image: linear-gradient(to right, white, #727f90, white);
+}
+.tabInfoCont{
+    width: 80%;
+    margin: auto;
+    background-color: #c1c7ce;
+    transition: height 1s;
+    height: 0px;
+    overflow: hidden;
+}
+.centerFlex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.tableClass{
+    margin:auto;
+    width:81%;
+}
+.cellData{
+    font-size:14px;
+    padding-left:45px;
+}
+hr {
+    background-image: linear-gradient(to right, white, #c1c7ce, white);
+    height: 1px;
+    border: none;
+  }

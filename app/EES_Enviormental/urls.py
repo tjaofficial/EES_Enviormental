@@ -18,6 +18,7 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from EES_Forms import views
+# from EES_Forms.consumers import NotifConsumer
 
 
 urlpatterns = [
@@ -25,5 +26,9 @@ urlpatterns = [
     path('', include("EES_Forms.urls")),
     path("", views.landing_page, name="landing"),
 ]
+
+# websocket_urlpatterns = [
+#     path("ws/notifications/", NotifConsumer.as_asgi())
+# ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

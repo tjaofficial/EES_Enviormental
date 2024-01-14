@@ -1,0 +1,34 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/printSelect.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/calSelect.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<body>
+    <div class="mainCont mainContCenter">
+        <div class="card" style="padding: 25px; width: 830px; min-width: 400px; min-height: 500px; margin:auto;">
+            {% include "shared/components/backArrow.html" with destination='print' %}
+            <div id='selDate'>
+                <div style="margin: auto;">
+                    <div style="text-align: center;">
+                        <a href="../../../../calSelect/{{type}}/{{forms}}/{{prev_year}}/{{prev_month}}">
+                        <button style="padding: 10px;margin-bottom: 14px;">
+                                Previous Month
+                            </button>
+                        </a>
+                        <a href="../../../../calSelect/{{type}}/{{forms}}/{{next_year}}/{{next_month}}"> 
+                            <button style="padding: 10px;margin-bottom: 14px;">
+                                Next Month
+                            </button>    
+                        </a>
+                    </div>
+                </div>
+                <div class="calendar">
+                    {{ html_cal|safe }}
+                </div>
+            </div>
+            {% comment %} <button id='printButton' type="submit">Print</button> {% endcomment %}
+        </div>
+    </div>
+</body>
+{% endblock %}

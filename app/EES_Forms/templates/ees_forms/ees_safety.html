@@ -1,12 +1,12 @@
-{% extends "ees_forms/layout.html" %}
-
-{% block list %}
-<center>
-    <div id="prof_form_holder" class='card' style='padding-top: 16px;'>
-        <div>
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list %}{% load static %}
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<div class="mainCont mainContCenter" style="width: 600px;">
+    <div class="card">
+        <div class="cardHeader">
             <h2>Safety Information and Contacts</h2>
-            
-            <br>
+        </div>
+        <div class="contentCont">
             <h4>Office Staff</h4><br>
             <h5>Enviornmental</h5>
             Brenna Harden - (734)320-5255<br>
@@ -46,9 +46,9 @@
             <h5>Crew D</h5>
             Gary Rice - (734)309-1275<br>
             Nick Slatinsky - (313)358-5954
-        </div>
-        <br><br><br>
-        <div>
+            
+            <br><br><br>
+
             <h3>Radio Channels</h3>
             Channel 1 - Coal Field/Trucks<br>
             Channel 2 - Battery<br>
@@ -56,7 +56,7 @@
             Channel 4 - Boilerhouse #2
         </div>
     </div>
-</center>
+</div>
 
 
 {% endblock %}

@@ -103,8 +103,8 @@
   padding: 8px 0;
   position: absolute;
   z-index: 1;
-  margin-left: -164px;
-  margin-top: -58px;
+  margin-left: 75px;
+  margin-top: -57px;
   opacity: 100%;
   font-size: 1rem;
 }
@@ -119,4 +119,29 @@ border-style: solid;
 border-color: #555 transparent transparent transparent;
 }
 
+.popup_damperClass{
+  visibility: hidden;
+  width: 177px;
+  background-color: #ff6666;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  margin-left: 0px;
+  margin-top: 6px;
+  opacity: 100%;
+  font-size: 1rem;
+}
+.popup_damperClass::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+  }
 /*# sourceMappingURL=formA3.css.map */

@@ -1,0 +1,18 @@
+.mainCont {
+    margin: auto;
+    margin-bottom: 30px;
+    font-family: sans-serif;
+}
+.card {
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 3px 2px 5px 0px #00000021;
+}
+#paperSize{
+    margin: auto;
+    padding-top: 1rem;
+}
+#boxTitle{
+    font-size: 30px;
+}

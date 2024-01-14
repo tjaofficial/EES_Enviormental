@@ -1,39 +1,34 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..forms import spill_kits_form
-from ..models import daily_battery_profile_model, Forms, spill_kits_model, bat_info_model
+from ..forms import spill_kits_form, spill_kit_inventory_form
+from ..models import daily_battery_profile_model, Forms, spill_kits_model, bat_info_model, spill_kit_inventory_model
 import datetime
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+import json
+import ast
+from ..utils import stringToDate, setUnlockClientSupervisor, updateSubmissionForm
 
 lock = login_required(login_url='Login')
 
 @lock
 def spill_kits(request, facility, selector):
-    formName = "spill_kits"
+    formName = "26"
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     now = datetime.datetime.now()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     sk_form = spill_kits_form()
     full_name = request.user.get_full_name()
-    count_bp = daily_battery_profile_model.objects.count()
     today = datetime.date.today()
     org = spill_kits_model.objects.all().order_by('-date')
-    
     month_name = calendar.month_name[today.month]
     
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             print('CHECK 1')
@@ -53,11 +48,24 @@ def spill_kits(request, facility, selector):
             if now.month == month_number:
                 print('CHECK 3')
                 existing = True
-
+        iFormList = {}
         if search:
+            print('CHECK 1.2')
             database_form = ''
+            month = database_model.month
+            inventoryModel = spill_kit_inventory_model.objects.filter(date__month=database_model.date.month)
+            for subForm in inventoryModel:
+                iFormList[subForm.skID] = [subForm.skID,stringToDate(subForm.date)]
+            iFormList = json.dumps(iFormList)
         else:
+            inventoryModel = spill_kit_inventory_model.objects.filter(date__month=now.month)
+            if len(inventoryModel) > 0:
+                for subForm in inventoryModel:
+                    iFormList[subForm.skID] = [subForm.skID,stringToDate(subForm.date)]
+                iFormList = json.dumps(iFormList)
+            print(iFormList)
             if existing:
+                month = database_form.month
                 initial_data = {
                     'observer': database_form.observer,
                     'date': database_form.date,
@@ -188,6 +196,12 @@ def spill_kits(request, facility, selector):
                     'sk21_report': database_form.sk21_report,
                     'sk21_comment': database_form.sk21_comment,
                     
+                    'skut22_tag_on': database_form.skut22_tag_on,
+                    'skut22_serial': database_form.skut22_serial,
+                    'skut22_complete': database_form.skut22_complete,
+                    'skut22_report': database_form.skut22_report,
+                    'skut22_comment': database_form.skut22_comment,
+                    
                     'skut23_tag_on': database_form.skut23_tag_on,
                     'skut23_serial': database_form.skut23_serial,
                     'skut23_complete': database_form.skut23_complete,
@@ -211,14 +225,9 @@ def spill_kits(request, facility, selector):
                     'skut26_complete': database_form.skut26_complete,
                     'skut26_report': database_form.skut26_report,
                     'skut26_comment': database_form.skut26_comment,
-                    
-                    'skut27_tag_on': database_form.skut27_tag_on,
-                    'skut27_serial': database_form.skut27_serial,
-                    'skut27_complete': database_form.skut27_complete,
-                    'skut27_report': database_form.skut27_report,
-                    'skut27_comment': database_form.skut27_comment,
                 }
             else:
+                month = month_name
                 initial_data = {
                     'observer': full_name,
                     'date': todays_log.date_save,
@@ -239,7 +248,6 @@ def spill_kits(request, facility, selector):
                 
                 new_latest_form = spill_kits_model.objects.filter(month=month_name)[0]
                 filled_out = True
-                done = Forms.objects.filter(form='Spill Kits')[0]
                 for items in new_latest_form.whatever().values():
                     print(items)
                     if items is None or items == '':
@@ -247,19 +255,172 @@ def spill_kits(request, facility, selector):
                         break
 
                 if filled_out:    
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-                else:
-                    done.submitted = False
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                     
-            return redirect('IncompleteForms', facility)
+                return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
 
-    return render(request, 'Monthly/spillkits.html', {
-        'facility': facility, 'sk_form': data, 'selector': selector, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
+    return render(request, "shared/forms/monthly/spillkits_form.html", {
+        'iFormList': iFormList, 'month': month, 'facility': facility, 'sk_form': data, 'selector': selector, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
+    })
+
+@lock
+def spill_kits_inventory_form(request, facility, month, skNumber, selector):
+    formName = "spill_kits_inventory"
+    unlock = False
+    client = False
+    supervisor = False
+    search = False
+    existing = False
+    if request.user.groups.filter(name=OBSER_VAR):
+        unlock = True
+    if request.user.groups.filter(name=CLIENT_VAR):
+        client = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
+    
+    count_bp = daily_battery_profile_model.objects.count()
+    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    org = spill_kit_inventory_model.objects.all().order_by('-date')
+    today = datetime.date.today()
+    now = datetime.datetime.now().date()
+    full_name = request.user.get_full_name()
+    skForm = spill_kit_inventory_form()
+    attachedTo = spill_kits_model.objects.filter(month=month)
+    
+    if len(attachedTo) > 0:
+        formAttached = attachedTo[0]
+    else:
+        formAttached = "form"
+        
+    if count_bp != 0:
+        todays_log = daily_prof[0]
+        if selector not in ['form','edit']:
+            print('CHECK 1')
+            for x in org:
+                if str(x.date) == str(selector) and x.skID == skNumber:
+                    database_model = x
+            data = database_model
+            existing = True
+            search = True
+            print(data)
+        elif len(org) > 0:
+            print('CHECK 2')
+            if now == todays_log.date_save:
+                filterByskID = spill_kit_inventory_model.objects.filter(skID=skNumber).order_by('-date')
+                if len(filterByskID) > 0:
+                    database_form = filterByskID[0]
+                    if todays_log.date_save.month == database_form.date.month:
+                        existing = True
+            else:
+                batt_prof = '../../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+                return redirect(batt_prof)
+        if search:
+            print('CHECK 1.1')
+            database_form = ''
+            data2 = {
+                    "counted_items": ast.literal_eval(data.counted_items),
+                    "missing_items": ast.literal_eval(data.missing_items)
+                }
+            print(data2)
+        else:
+            if existing:
+                print('CHECK 2.1')
+                initial_data = {
+                    "date": database_form.date,
+                    "inspector":  database_form.inspector,
+                    'skID':  database_form.skID,
+                    "type":  database_form.type,
+                }
+                data2 = {
+                    "counted_items": ast.literal_eval(database_form.counted_items),
+                    "missing_items": ast.literal_eval(database_form.missing_items)
+                }
+                print(data2['counted_items'][0])
+                print(selector)
+            else:
+                print('CHECK 3')
+                initial_data = {
+                    "date": todays_log.date_save,
+                    "inspector":  full_name,
+                    'skID':  skNumber
+                }
+                data2 = ''
+                
+            data = spill_kit_inventory_form(initial=initial_data)
+    else:
+        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+
+        return redirect(batt_prof)
+    
+    if request.method == "POST":
+        dataPOST = request.POST
+        if len(attachedTo) > 0:
+            skSubmitted = attachedTo[0]
+        copyData = request.POST.copy()
+        if dataPOST['type'] == 'oil XL cart':
+            copyData['counted_items'] = [
+                dataPOST['t1count1'],
+                dataPOST['t1count2'],
+                dataPOST['t1count3'],
+                dataPOST['t1count4'],
+                dataPOST['t1count5'],
+                dataPOST['t1count6'],
+                dataPOST['t1count7'],
+                dataPOST['t1count8'],
+                dataPOST['t1count9'],
+                dataPOST['t1count10']
+            ]
+            copyData['missing_items'] = [
+                dataPOST['t1miss1'],
+                dataPOST['t1miss2'],
+                dataPOST['t1miss3'],
+                dataPOST['t1miss4'],
+                dataPOST['t1miss5'],
+                dataPOST['t1miss6'],
+                dataPOST['t1miss7'],
+                dataPOST['t1miss8'],
+                dataPOST['t1miss9'],
+                dataPOST['t1miss10']
+            ]
+        else:
+            copyData['counted_items'] = [
+                dataPOST['t2count1'],
+                dataPOST['t2count2'],
+                dataPOST['t2count3'],
+                dataPOST['t2count4'],
+                dataPOST['t2count5'],
+                dataPOST['t2count6'],
+                dataPOST['t2count7'],
+                dataPOST['t2count8'],
+                dataPOST['t2count9']
+            ]
+            copyData['missing_items'] = [
+                dataPOST['t2miss1'],
+                dataPOST['t2miss2'],
+                dataPOST['t2miss3'],
+                dataPOST['t2miss4'],
+                dataPOST['t2miss5'],
+                dataPOST['t2miss6'],
+                dataPOST['t2miss7'],
+                dataPOST['t2miss8'],
+                dataPOST['t2miss9']
+            ]
+        #copyData['spill_kit_submitted'] = skSubmitted
+        print(copyData)
+        if existing:
+            form = spill_kit_inventory_form(copyData, instance=database_form)
+        else:
+            form = spill_kit_inventory_form(copyData)
+        if form.is_valid():
+            form.save()
+            
+            return redirect('spill_kits', facility, "form")
+                
+    return render(request, "shared/forms/monthly/spillKits_inventoryForm.html",{
+        'full_name': full_name,'skNumber': skNumber, 'skForm': skForm, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, "data": data, "search": search, "existing": existing, "data2": data2, "formAttached": formAttached, "selector": selector
     })

@@ -5,6 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm,setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -12,27 +13,20 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA2(request, facility, selector):
-    unlock = False
-    client = False
+    formName = 2
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    formName = "A2"
     existing = False
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
-    count_bp = daily_battery_profile_model.objects.count()
-    org = formA2_model.objects.all().order_by('-date')
-
-    if count_bp != 0:
+    org = formA2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    picker = issueForm_picker(facility, selector, formName)
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
@@ -41,19 +35,13 @@ def formA2(request, facility, selector):
             data = database_model
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
         if search:
             database_form = ''
@@ -100,59 +88,50 @@ def formA2(request, facility, selector):
                     'percent_leaking': database_form.percent_leaking,
                 }
             else:
+                inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
                 initial_data = {
                     'date': todays_log.date_save,
                     'observer': full_name,
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
                     'inop_ovens': todays_log.inop_ovens,
-                    'inop_numbs': todays_log.inop_numbs,
+                    'inop_numbs': inopNumbsParse,
                     'notes': 'N/A',
                     'facility_name': facility,
                 }
-
             data = formA2_form(initial=initial_data)
             pSide_json = ''
             cSide_json = ''
-            
         if request.method == "POST":
             if existing:
                 form = formA2_form(request.POST, instance=database_form)
             else:
                 form = formA2_form(request.POST)
             finalFacility = options
-            
             if form.is_valid():
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
                 A.save()
-
                 if A.notes not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
-
+                    issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
-
                 if A.leaking_doors == 0:
-                    done = Forms.objects.filter(form='A-2')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    createNotification(facility, request.user, formName, now, 'submitted')
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                     return redirect('IncompleteForms', facility)
                 else:
                     finder = issues_model.objects.filter(date=A.date, form='A-2')
                     if finder:
-                        issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/A-2/' + str(database_form.date) + '/form'
-
+                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
             else:
                 print("Form not valid")
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA2.html", {
-        'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
+    return render(request, "shared/forms/daily/formA2.html", {
+        'picker': picker, 'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
     })

@@ -1,0 +1,124 @@
+.c1_popup_class{
+    visibility: hidden;
+    width: 177px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    margin-left: 0;
+    margin-top: -37px;
+    opacity: 100%;
+    font-size: 1rem;
+}
+.c1_popup_class::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+
+.c_popup_oven_class{
+    visibility: hidden;
+    width: 205px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    margin-left: -271px;
+    margin-top: -7px;
+    opacity: 100%;
+    font-size: 1rem;
+}
+.c_popup_oven_class::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: 102px;
+    margin-top: -22px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+    rotate: -90deg;
+}
+.comment_skip_class {
+    visibility: hidden;
+    width: 239px;
+    background-color: #ff6666;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 16px 0;
+    position: absolute;
+    z-index: 1;
+    left: 20%;
+    margin-left: 362px;
+    margin-top: 112px;
+    opacity: 75%;
+    font-size: 1rem;
+    padding-top: 18px;
+}
+
+/* Popup arrow */
+.comment_skip_class::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    margin-top: -116px;
+    rotate: 180deg;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+#boxTitle{
+    font-size: 30px;
+}
+#boxa1{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 150px;
+    max-width: 150px;
+    height: 35px;
+}
+#boxa2{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 80px;
+    max-width: 80px;
+    height: 35px;
+}
+#boxa3{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 300px;
+    max-width: 300px;
+    height: 35px;
+}
+#boxa13{
+    align-content: center;
+    text-align: center;
+    border: 1px solid black;
+    min-width: 150px;
+    max-width: 150px;
+    height: 35px;
+}
+#datetime {
+    width: 203px;
+}

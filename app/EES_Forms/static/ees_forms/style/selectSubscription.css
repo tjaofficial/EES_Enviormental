@@ -1,0 +1,121 @@
+.optionsCont{
+    background: #fff;
+    box-shadow: 0px 0px 0px 5px rgb(255 255 255 / 40%), 0px 4px 20px rgb(0 0 0 / 33%);
+    border-radius: 5px;
+    width:20rem; 
+    margin:2rem; 
+}
+#submit {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+        background: -moz-linear-gradient(
+        top,
+        #b9c5dd 0%,
+        #a4b0cb);
+    background: -webkit-gradient(
+        linear, left top, left bottom, 
+        from(#b9c5dd),
+        to(#a4b0cb));
+    border-radius: 15px;
+    border: 1px solid #737b8d;
+    box-shadow:
+        0px 5px 5px rgba(000,000,000,0.1),
+        inset 0px 1px 0px rgba(255,255,255,0.5);
+    text-shadow:
+        0px 1px 3px rgba(000,000,000,0.3),
+        0px 0px 0px rgba(255,255,255,0);
+    display: table;
+    position: static;
+    clear: both;
+}
+
+#submit:hover {
+    background: -moz-linear-gradient(
+        top,
+        #a4b0cb 0%,
+        #b9c5dd);
+    background: -webkit-gradient(
+        linear, left top, left bottom, 
+        from(#a4b0cb),
+        to(#b9c5dd));
+}
+.infoCont{
+    height: 26rem;
+}
+.topSection2{
+    width: 89rem;
+    margin: auto;
+    position: relative;
+    margin-top: 6rem;
+}
+.underlay{
+    background-color: white;
+    width: 1200px;
+    height: 45rem;
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    margin-left: -600px;
+    z-index: 0;
+    margin-top: 24rem;
+    border-radius: 2rem;
+    box-shadow: #ffffff 0px 9px 20px 20px;
+}
+h1{
+    font-size: 1.5rem;
+    text-align: center;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    display: block;
+}
+.planHeader{
+    background: #634089;
+    padding: 1px;
+    color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.priceBubble{
+    border-radius: 50px;
+    background: #c0a6dc;
+    position: relative;
+    height: 3rem;
+    width: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    top: -16px;
+    left: 105px;
+    font-size: 21px;
+}
+.featCont{
+    width: 51rem;
+    margin: auto;
+    background-color: #a8bbcc;
+    border-radius: 6px;
+    padding: 35px;
+    box-shadow: 0px 0px 0px 5px rgb(255 255 255 / 40%), 0px 4px 20px rgb(0 0 0 / 33%);
+}
+h2{
+    font-size: 20px;
+}
+.desc{
+    width: 37rem;
+    text-align: justify;
+    margin: auto;
+}
+.strikeOut{
+    text-decoration: line-through;
+}

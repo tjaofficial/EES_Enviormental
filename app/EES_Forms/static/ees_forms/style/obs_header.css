@@ -1,0 +1,39 @@
+.header_text_color{
+    color: white;
+}
+.header {
+  z-index: 10;
+  height: 3rem;
+  width: 100%;
+  position: fixed;
+  display: grid;
+  grid-template-columns: 3rem 1fr 10rem;
+}
+.header_hamburger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header_hamburger svg {
+  height: 2rem;
+}
+.header_Name {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bolder;
+}
+.header_profile {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.5rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-right: 10px;
+}
+.header_profile svg {
+  height: 1.5rem;
+  /*color: #001011;*/
+  margin: 5px;
+}

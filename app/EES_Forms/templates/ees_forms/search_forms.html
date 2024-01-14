@@ -1,187 +1,112 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list %}{% load static %}
 
 <link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
-<div>
-    {% include "ees_forms/backArrow.html" %}
-</div>
 {% if searched %}
     {% if access_page == 'search' %}
-    <div class="container" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem; height:auto; padding-bottom: 20px;">
-        <div class='archiveHeader' style="display: flex;">
-                <a href="{% url 'archive' facility %}">
-                    <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                </a>
-            <h2 class='searchHeader'>Search results for "{{ searched }}":</h2>
+        <div class="mainCont mainContCenter">
+            <div class="container" style="min-width: 400px; min-height: 500px; margin: auto; height:auto; padding-bottom: 20px;">
+                <div class='archiveHeader' style="display: flex;">
+                    {% include "shared/components/backArrow.html" with destination='archive' %}
+                    <h2 class='searchHeader'>Search results for "{{ searched }}":</h2>
+                </div>
+                <ul style="height: auto; padding-bottom: 2rem; max-height: 644px; overflow: scroll;">
+                    {% for letterF in letterForms %}
+                    <!--delete laterr-->{% if letterF.0.0 != 'F' %}
+                        <li style="text-align: left;">
+                            <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{letterF.1 }}">
+                                Form {{ letterF.0 }} - {{ letterF.2.title }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <ul style="height: auto; padding-bottom: 2rem; max-height: 644px; overflow: scroll;">
-            {% for letterF in letterForms %}
-            <!--delete laterr-->{% if letterF.0.0 != 'F' %}
-                <li style="text-align: left;">
-                    <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{letterF.1 }}">
-                        Form {{ letterF.2.form }} - {{ letterF.2.title }}
-                    </a>
-                </li>
-                {% endif %}
-            {% endfor %}
-            {% for otherF in otherForms %}
-                <li style="text-align: left;">
-                    <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{otherF.1}}">
-                        {{ otherF.2.form }} {{ otherF.2.title }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
     {% else %}
         nothing
     {% endif %}
 {% else %}
     {% if access_page %}
         {% if access_page != 'formN_model' %}
-        <div class="container" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
-            {% if att_check != 5 %}
-                    <div class='archiveHeader' style="display: flex;">
-                        <a href="{% url 'archive' facility %}">
-                            <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                        </a>
-                        <h2 class='searchHeader'>Select Date Below:</h2>
-                    </div>
-                    <ul style="height: auto; padding-bottom: 2rem;">
-                        {% for item in mainList %}
-                            {% if item.0|slice:"0:4" == 'form' %}
-                                <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
-                                    <li style="text-align: left;">
-                                        {{ item.1 }}
-                                    </li>
-                                </a>
-                            {% else %}
-                                <a style="font-size: 1.4rem;" href="../{{item.3}}/{{item.0|slice:"0:-6"}}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
-                                    <li style="text-align: left;">
-                                        {{ item.1 }}
-                                    </li>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                
-
-                
-            <!--{% elif att_check == 2 %}
-                <div style="">
-                    <a style="display: flex;" href="{% url 'archive' %}">
-                        <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                    </a>
-                    <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Select Date Below:</h2>
+            <div class="mainCont mainContCenter">
+                <div class="container" style="min-width: 400px; min-height: 500px; margin: auto;">
+                    {% if att_check != 5 %}
+                        <div class='archiveHeader' style="display: flex;">
+                            {% include "shared/components/backArrow.html" with destination='archive' %}
+                            <h2 class='searchHeader'>Select Date Below:</h2>
+                        </div>
+                        <ul style="height: auto; padding-bottom: 2rem;">
+                            {% for item in mainList %}
+                                {% if item.0|slice:"0:4" == 'form' %}
+                                    <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                                        <li style="text-align: left;">
+                                            {{ item.1 }}
+                                        </li>
+                                    </a>
+                                {% else %}
+                                    <a style="font-size: 1.4rem;" href="../{{item.3}}/{{item.0|slice:"0:-6"}}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                                        <li style="text-align: left;">
+                                            {{ item.1 }}
+                                        </li>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% elif att_check == 5 %}
+                        <div class='archiveHeader' style="display: flex;">
+                            <a href="{% url 'archive' facility %}">
+                                <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
+                            </a>
+                            <h2 class='searchHeader'>Select Date Below:</h2>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <center>Form {{ access_page.4 }} Database is Empty</center>
+                        </div>
+                    {% endif %}
+                    
                 </div>
-                <ul style="height: auto; padding-bottom: 2rem;">
-                    {% for x in database %}
-                    <!--2--Weekly----Week----
-                        <a style="font-size: 1.4rem;" href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}">
-                            <li style="text-align: left;">
-                                {{ x.week_start }}
-                            </li>
-                        </a>
-                    {% endfor %}
-                </ul>
-            {% elif att_check == 3 %}
-            <div style="">
-                    <a style="display: flex;" href="{% url 'archive' %}">
-                        <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                    </a>
-            <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Select Date Below:</h2>
             </div>
-                <ul style="height: auto; padding-bottom: 2rem;">
-                    {% for x in database %}
-                    <!--3--Daily----Week----
-                        <a style="font-size: 1.4rem;" href="../Daily/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.week_start.year }}-{% if x.week_start.month < 10 %}0{{x.week_start.month}}{%else%}{{x.week_start.month}}{% endif %}-{% if x.week_start.day < 10 %}0{{x.week_start.day}}{%else%}{{x.week_start.day}}{% endif %}">
-                            <li style="text-align: left;">
-                                {{ x.week_start }}
-                            </li>
-                        </a>
-                    {% endfor %}
-                </ul>
-            {% elif att_check == 4 %}
-            <div style="">
-                    <a style="display: flex;" href="{% url 'archive' %}">
-                        <svg style="color: black; width: 2rem; text-align: left; margin-top: 1rem;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                    </a>
-            <h2 style="padding: 2rem; text-align: center; margin-top: -4rem;">Select Date Below:</h2>
-            </div>
-                <ul style="height: auto; padding-bottom: 2rem;">
-                    {% for x in database %}
-                        {% if readingsData %}
-                            {% if database2 == 'empty' %}
-                                <center>*Form{{ access_page.4 }} Database ERROR-00001*</center>
-                            {% else %}
-                                {% for y in database2 %}
-                                    {% if x.date == y.form.date %}
-                                    <!----Weekly----Date----
-                                        <a style="font-size: 1.4rem;" href="../Weekly/form{% if access_page.5 == '_' %}{{ access_page.4 }}{% else %}{{ access_page.4 }}{{ access_page.5}}{% endif %}/{{ x.date.year }}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}{% if weekend %}/{% if x.weekend_day == 5 %}Saturday{% else %}Sunday{% endif %}{% else %}{% endif %}">
-                                            <li style="text-align: left;">
-                                                {{ x.date }}
-                                            </li>
-                                        </a>
-                                    {% else %}
-                                        <center>*Form{{ access_page.4 }} Database ERROR-00002*</center>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </ul> -->
-            {% elif att_check == 5 %}
-            <div class='archiveHeader' style="display: flex;">
-                <a href="{% url 'archive' facility %}">
-                    <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                </a>
-                <h2 class='searchHeader'>Select Date Below:</h2>
-            </div>
-            <div style="padding: 2rem;">
-                <center>Form {{ access_page.4 }} Database is Empty</center>
-            </div>
-            {% endif %}
-            
-        </div>
         {% else %}
-        <div class="container" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
-            {% if att_check != 5 %}
-                <div class='archiveHeader' style="display: flex;">
-                    <a href="{% url 'archive' facility %}">
-                        <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                    </a>
-                    <h2 class='searchHeader'>Select Date Below:</h2>
+            <div class="mainCont mainContCenter">
+                <div class="container" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
+                    {% if att_check != 5 %}
+                        <div class='archiveHeader' style="display: flex;">
+                            <a href="{% url 'archive' facility %}">
+                                <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
+                            </a>
+                            <h2 class='searchHeader'>Select Date Below:</h2>
+                        </div>
+                        <ul style="height: auto; padding-bottom: 2rem;">
+                            {% for item in monthList %}
+                                <a style="font-size: 1.4rem;" href="../Monthly/formN/{{item.0}}-{{item.1}}-N">
+                                    <li style="text-align: left;">
+                                        {{ item.1 }} - {{ item.2 }}
+                                    </li>
+                                </a>
+                            {% endfor %}
+                        </ul>
+                    {% elif att_check == 5 %}
+                        <div class='archiveHeader' style="display: flex;">
+                            <a href="{% url 'archive' facility %}">
+                                <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
+                            </a>
+                            <h2 class='searchHeader'>Select Date Below:</h2>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <center>Form {{ access_page.4 }} Database is Empty</center>
+                        </div>
+                    {% endif %}
                 </div>
-                <ul style="height: auto; padding-bottom: 2rem;">
-                    {% for item in monthList %}
-                        <a style="font-size: 1.4rem;" href="../Monthly/formN/{{item.0}}-{{item.1}}-N">
-                            <li style="text-align: left;">
-                                {{ item.1 }} - {{ item.2 }}
-                            </li>
-                        </a>
-                    {% endfor %}
-                </ul>
-            {% elif att_check == 5 %}
-                <div class='archiveHeader' style="display: flex;">
-                    <a href="{% url 'archive' facility %}">
-                        <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                    </a>
-                    <h2 class='searchHeader'>Select Date Below:</h2>
-                </div>
-                <div style="padding: 2rem;">
-                    <center>Form {{ access_page.4 }} Database is Empty</center>
-                </div>
-            {% endif %}
-        </div>
+            </div>
         {% endif %}
     {% else %}
-    <div class="card" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
-        <h2>You forgot to search for a form</h2>
-    </div>
-    
+        <div class="card" style="min-width: 400px; min-height: 500px; margin: auto; margin-top: 2rem;">
+            <h2>You forgot to search for a form</h2>
+        </div>
     {% endif %}
 {% endif %}
 

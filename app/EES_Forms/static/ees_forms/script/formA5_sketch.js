@@ -22,10 +22,11 @@ window.addEventListener("load", ()=>{
   }
   //Create render Image
   const renderedImage = newImageObject(urlToRender)
+  console.log(renderedImage)
 
   //hide loader add Image
-  sketchContainer.removeChild(spinner);
-  sketchContainer.appendChild(renderedImage);
+  sketchContainer.children[0].removeChild(spinner);
+  sketchContainer.children[0].appendChild(renderedImage);
 
   sketchContainer.addEventListener('click', (elem)=>{sketchPopup(elem.currentTarget, blankImage, renderedImage)});
   
@@ -40,6 +41,7 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
   elem = document.getElementById(elemEffected);
   canvisInitiated = elem.dataset.canvis_intiated;
   if(selector == 'form'){
+    elem.style.display = "flex";
     if(canvisInitiated == 'False'){
       let sketchpad = initiateSketch(canvas, renderedImage);
       elem.dataset.canvis_intiated = 'True'
@@ -47,7 +49,7 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
       document.getElementById('canvas_save').addEventListener('click', (elem)=>{save_canvas(elem.currentTarget, canvas, renderedImage, elemClicked)});
     }
     console.log('test');
-    toggleDisplayed(elemClicked);
+    //toggleDisplayed(elemClicked);
   }
 }
   
@@ -88,8 +90,8 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
       //}
 
 
-
-      toggleDisplayed(elem);
+      document.getElementById("modalContainer").style.display = 'none';
+      //toggleDisplayed(elem);
   }
   
   function drawImgToCanvas(canvas, imageElem){
@@ -102,7 +104,7 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
   {
     image = new Image()
     image.src = imageURL;
-    image.crossOrigin = "ananymous";
+    image.crossOrigin = "anonymous";
     return image;
   }
 
@@ -126,5 +128,3 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
     return localSavedLink
 
   }
-
-

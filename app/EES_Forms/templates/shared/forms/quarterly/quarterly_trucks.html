@@ -1,0 +1,264 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}
+<link href="{% static 'ees_forms/style/quarterly_trucks.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/quarterly_trucks.js' %}"></script>
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+
+<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+<div id="paperSize">
+    <div class="mainCont">
+        <form action="" method="POST" style="margin: auto;margin-bottom: 100px;">
+            {% csrf_token %}
+            <div class="card" id="card_fitter">
+                {% include "shared/components/print_button.html" %}
+                <div class="paper_fitter" style="padding: 3rem;">
+                    {% include "shared/components/backArrow.html" with destination="form" %}
+                    <table style="border-collapse: collapse; margin: auto;">
+                        <tr>
+                            <th id="boxTitle" colspan="5" style="text-align: center;">
+                                Fugiative Dust Inspections - Quarterly Truck Inspection
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th colspan="3" style="text-align: center;">
+                                Facility Name: {{facility}}
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td style="height: 15px;" ></td>
+                        </tr>
+                        <tr>
+                            <th colspan="3" style="text-align: center;">
+                                {{data.date}} - {{data.quarter}} Quarter
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px;" ></td>
+                        </tr>
+                    </table>
+                    <div id="truckCard">
+                        <div id="truckTabs">
+                            <div class="tabContainer topLeftCont" id='tab1Cont'>
+                                Truck 5
+                            </div>
+                            <div class="tabContainer" id='tab2Cont'>
+                                Truck 6
+                            </div>
+                            <div class="tabContainer" id='tab3Cont'>
+                                Truck 7
+                            </div>
+                            <div class="tabContainer topRightCont" id='tab4Cont'>
+                                Truck 9
+                            </div>
+                        </div>
+                        <div class="truckForm" id='truck1Card'>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th class="inputHeader">
+                                        Observer: {{ data.observer_5_1 }}<br/> Date: {{ data.date_5_1 }} <br/>Time: {{ data.time_5_1 }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        1) Condition of Rear Gate Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.rear_gate_5_1 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        2) Condition of Box Interior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_interior_5_1 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        3) Condition of Box Exterior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_exterior_5_1 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        4) Exhaust Position Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.exhaust_5_1 }}
+                                    </td>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td colspan="2">
+                                        {{ data.comments_5_1 }}
+                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="truckForm" id='truck2Card'>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th class="inputHeader">
+                                        Observer: {{ data.observer_6_2 }}<br/> Date: {{ data.date_6_2 }} <br/>Time: {{ data.time_6_2 }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        1) Condition of Rear Gate Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.rear_gate_6_2 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        2) Condition of Box Interior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_interior_6_2 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        3) Condition of Box Exterior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_exterior_6_2 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        4) Exhaust Position Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.exhaust_6_2 }}
+                                    </td>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td colspan="2">
+                                        {{ data.comments_6_2 }}
+                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="truckForm" id='truck3Card'>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th class="inputHeader">
+                                        Observer: {{ data.observer_7_3 }}<br/> Date: {{ data.date_7_3 }} <br/>Time: {{ data.time_7_3 }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        1) Condition of Rear Gate Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.rear_gate_7_3 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        2) Condition of Box Interior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_interior_7_3 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        3) Condition of Box Exterior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_exterior_7_3 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        4) Exhaust Position Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.exhaust_7_3 }}
+                                    </td>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td colspan="2">
+                                        {{ data.comments_7_3 }}
+                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="truckForm" id='truck4Card'>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th class="inputHeader">
+                                        Observer: {{ data.observer_9_4 }}<br/> Date: {{ data.date_9_4 }} <br/>Time: {{ data.time_9_4 }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        1) Condition of Rear Gate Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.rear_gate_9_4 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        2) Condition of Box Interior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_interior_9_4 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        3) Condition of Box Exterior Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.box_exterior_9_4 }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">
+                                        4) Exhaust Position Satisfactory:
+                                    </th>
+                                    <td>
+                                        {{ data.exhaust_9_4 }}
+                                    </td>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td colspan="2">
+                                        {{ data.comments_9_4 }}
+                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div> 
+                    {% if supervisor or client %} {% elif unlock and not search %}
+                    {% include "shared/components/submitButton.html" with label="form" %}
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

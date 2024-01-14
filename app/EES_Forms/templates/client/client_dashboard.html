@@ -1,49 +1,55 @@
-{% extends "supervisor/sup_layout.html" %}{% block list%}{% load static %}
+{% extends "supervisor/components/sup_layout.html" %}{% block list%}{% load static %}
 <script defer src="{% static 'ees_forms/script/clientDash.js' %}"></script>
 <div>
     <div class="grid-dashboard" style="overflow: scroll;">
         <div id="progress" class="card skinny">
             <div class="grid-sliders progress_bars_whole">
-                <div class="skillBar progress_bar_div">
-                    <p>Daily Progress</p>
-                    <div class="container">
-                        <div class="skills daily"></div>
+                <a href="./progress/daily#DailyProg">
+                    <div class="skillBar progress_bar_div">
+                        <p>Daily Progress</p>
+                        <div class="container">
+                            <div class="skills daily"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="skillBar progress_bar_div">
-                    <p>Weekly Progress</p>
-                    <div class="container">
-                        <div class="skills weekly"></div>
+                </a>
+                <a href="./progress/weekly#WeeklyProg">
+                    <div class="skillBar progress_bar_div">
+                        <p>Weekly Progress</p>
+                        <div class="container">
+                            <div class="skills weekly"></div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="skillBar progress_bar_div">
-                    <p>Monthly Progress</p>
-                    <div class="container">
-                        <div class="skills monthly"></div>
+                </a>
+                <a href="./progress/monthly#MonthlyProg">
+                    <div class="skillBar progress_bar_div">
+                        <p>Monthly Progress</p>
+                        <div class="container">
+                            <div class="skills monthly"></div>
+                        </div>
                     </div>
-                </div>
-
+                </a>
                 <!-- <div class="skillBar progress_bar_div">
                     <p>Quarterly Progress</p>
                     <div class="container">
                         <div class="skills quarterly"></div>
                     </div>
                 </div> -->
-
-                <div class="skillBar progress_bar_div">
-                    <p>Annually Progress</p>
-                    <div class="container">
-                        <div class="skills annually"></div>
+                <a href="./progress/annually#AnnuallyProg">
+                    <div class="skillBar progress_bar_div">
+                        <p>Annually Progress</p>
+                        <div class="container">
+                            <div class="skills annually"></div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
         <div id="fromAInfo" class="card longest">
             <div class="card-title">Todays Forms</div>
             <div class="nested">
-                <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{ date }}" {% else %} {% endif %}>
-                    <div class="inner-card">
+                <a class="no_link_css" {% if form_enteredA1 %} href="shared/forms/daily/formA1/{{ date }}" {% else %} {% endif %}>
+                    <div id='A1card' class="inner-card">
+                        {% if form_enteredA1 %}<p id='A1overlay'>Click for<br> Form A-1</p>{% else%}{% endif %}
                         <div class="card-title inner_font">Form A-1 - Charges</div>
                         <div class="dataHold">
                             {% if A1data %}
@@ -73,15 +79,16 @@
                                 <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
                             </div>
                             {% else %}
-                            <p class="miniFont" style="text-align:center;">N/A</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
                 </a>
-                <a class="no_link_css" {% if form_enteredA2 %} href="Daily/formA2/{{ date }}" {% else %} {% endif %}>
+                <a class="no_link_css" {% if form_enteredA2 %} href="shared/forms/daily/formA2/{{ date }}" {% else %} {% endif %}>
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-2 - Doors</div>
                         <div class="grid-double">
+                            {% if A2data %}
                             <div class="dataHold2" style="margin-top:0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
                                     <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
@@ -123,16 +130,20 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                    <p class="miniFont" style="text-align:center;">No Ovens Found Leaking</p>
                                 {% endif %}
                             </div>
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-2 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
-                <a class="no_link_css" {% if form_enteredA3 %} href="Daily/formA3/{{ date }}" {% else %} {% endif %}>
+                <a class="no_link_css" {% if form_enteredA3 %} href="shared/forms/daily/formA3/{{ date }}" {% else %} {% endif %}>
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
                         <div class="grid-double">
+                            {% if A3data %}
                             <div class="dataHold2" style="margin-top: 0.3rem;">
                                 <div class="dataSingle" style="justify-content: left;">
                                     <p class="dataFont" style="font-size:.74rem;">List of Leaking Lids</p>
@@ -174,16 +185,20 @@
                                         </div>
                                     {% endfor %}
                                 {% else %}
-                                    <p class="miniFont" style="text-align:center;">N/A</p>
+                                    <p class="miniFont" style="text-align:center;">No Standpipes Found Leaking</p>
                                 {% endif %}
                             </div>
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-3 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
-                <a class="no_link_css" {% if form_enteredA4 %} href="Daily/formA4/{{ date }}" {% else %} {% endif %}>
+                <a class="no_link_css" {% if form_enteredA4 %} href="shared/forms/daily/formA4/{{ date }}" {% else %} {% endif %}>
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-4 - Collection Main</div>
                         <div class="dataHold">
+                            {% if A4data %}
                             <div class="dataSingle"> 
                                 <p class="dataFont">Pressures</p>
                             </div>
@@ -217,22 +232,25 @@
                             <hr>
                             <div class="dataSingle"> 
                                 <p class="dataFont" style="padding-top:.24rem;">
-                                    Notes:</br>
+                                    Notes:<br>
                                     {{ A4data.notes }}
                                 </p>
                             </div>
+                            {% else %}
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-4 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
-                <a class="no_link_css" {% if form_enteredA5 %} href="Daily/formA5/{{ date }}" {% else %} {% endif %}>
+                <a class="no_link_css" {% if form_enteredA5 %} href="shared/forms/daily/formA5/{{ date }}" {% else %} {% endif %}>
                     <div class="inner-card">
                         <div class="card-title inner_font">Form A-5 - Push Travels</div>
                         <div class="dataHold">
+                            {% if A5data %}
                             <div class="dataSingle"> 
                                 <p class="dataFont">Push Travels</p>
                             </div>
                             <hr>
-                            {% if A5data %}
                                 <div class="grid-dataMini3">
                                     <p class="miniFont title number">1</p> 
                                     <p class="miniFont">Oven #{{ A5data.o1 }}</p> 
@@ -251,7 +269,7 @@
                                     <p class="miniFont title">{{ A5data.o4_highest_opacity }}%</p> 
                                 </div>
                             {% else %}
-                                <p class="miniFont" style="text-align:center;">N/A</p>
+                            <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-5 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                             {% endif %}
                         </div>
                     </div>
@@ -438,6 +456,7 @@
                     <p class="contactHeader center">Certification Date</p>
                 </div>
                 {% for person in profile %}
+                {% if person.facilityChoice.facility_name == facility or person.position == "observer" or person.position == "supervisor"%}
                     <div class="grid-observ_singles">
                         <span class="c_card_circle_oven c_circle_font_color">
                             {% if person.profile_picture %}
@@ -452,6 +471,7 @@
                         <p class="contactFont center">{{ person.cert_date }}</p>
                     </div>
                     <hr>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

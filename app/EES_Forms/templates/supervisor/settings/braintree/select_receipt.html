@@ -1,0 +1,38 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/selectPayment.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primary/primaryButton.css' %}" rel="stylesheet" />
+<div class='mainCont'>
+    <div class='card'>
+        <div class="cardHeader">Purchase Confirmation</div>
+        <div class="contentCont" style="padding:32px;">
+            <div id="orderSummary" class="dataBoxes">
+                <div class="infoHeaders">Subscription Details</div>
+                <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                    <div>{{planDetails.name}} Subscription</div>
+                    <div>- {{planDetails.description}}</div>
+                    <div class="priceRight">${{planDetails.price}}</div>
+                    <div>Additional Registrations</div>
+                    <div>- Add ({{totalData.seats}}) additional registrations</div>
+                    <div class="priceRight">${{addRegistrationCost}}</div><br>
+                    <hr><br>
+                    <div>Total Amount</div>
+                    <div class="priceRight">${{totalCost}}</div>
+                </div>
+            </div><br>
+            <div style="text-align:justify;"> 
+                <p>Thank You! You're all set!</p><br>
+                <p>Your payment has been successfully processed and your subscription to MethodPlus+ has been confirmed. Check your email inbox for your Subscription Receipt and Account Details. If your email doesn't show up right away, make sure you check your Junk Folder.</p><br>
+                <p>You can access your subscription details in settings located within the <a href=#>Account Settings</a>. If you have any questions, please visit the <a href="">FAQ</a> section or contact our <a href="">Support Team</a>.</p><br>
+                    
+                <p>Time to use your cutting-edge inspection form program designed to streamline and enhance the way you collect and manage critical data in real-time. Remember, MethodPlus+ is a powerful tool when it comes to collecting, storing, and viewing observation data. Take full advantage of all the functionality MethodPlus+ has to offer including tailored Forms to fit your needs.</p><br>
+
+                <p>Click below to get started with MethodPlus+</p><br>
+                <div style="margin:auto; text-align:center;">
+                    <a href="{% url 'Register' 'supervisor' 'facility' %}">
+                        <button class="primaryButton" id="submit">Get started</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}

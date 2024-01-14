@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, formB_model, bat_info_model
+from ..models import user_profile_model, daily_battery_profile_model, formB_model, bat_info_model, formSubmissionRecords_model
 from ..forms import Forms, formB_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,21 +14,15 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formB(request, facility, selector):
-    formName = "B"
+    formName = 6
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     now = datetime.datetime.now()
     today = datetime.date.today()
     last_monday = today - datetime.timedelta(days=today.weekday())
@@ -39,22 +34,18 @@ def formB(request, facility, selector):
         freq = True
     elif today.month == 2 and fridayDate.month == (today.month + 1):
         freq = True
-    elif today.month == 11 and fridayDate.month == (today.month + 1):
+    elif today.month == 10 and fridayDate.month == (today.month + 1):
         freq = True
-
 
     week_start_dates = formB_model.objects.all().order_by('-week_start')
 
-    count_bp = daily_battery_profile_model.objects.count()
-
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
-    city = 'Dearborn'
-    city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
-    weather = {
-        'wind_speed': round(city_weather['wind']['speed'], 0),
-    }
+    # Weather API Pull
+    weather = weatherDict(options.city)
     weather2 = json.dumps(weather)
-    if count_bp != 0:
+    
+    picker = issueForm_picker(facility, selector, formName)
+    
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in week_start_dates:
@@ -66,8 +57,7 @@ def formB(request, facility, selector):
         elif len(week_start_dates) > 0:
             database_form = week_start_dates[0]
             if database_form.week_start == last_monday:
-                existing = True
-                    
+                existing = True  
         if search:
             database_form = ''
         else:
@@ -197,10 +187,12 @@ def formB(request, facility, selector):
             else:
                 data = formB_form(request.POST)
             A_valid = data.is_valid()
+            finalFacility = options
+            
             if A_valid:
-                data.save(commit=False)
-                data.facilityChoice = options
-                data.save()
+                A = data.save(commit=False)
+                A.facilityChoice = options
+                A.save()
 
                 filled_out = True
                 # for items in week_almost.whatever().values():
@@ -208,18 +200,18 @@ def formB(request, facility, selector):
                 #        filled_out = False
                 #        break
                 if filled_out:
-                    done = Forms.objects.filter(form='B')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    createNotification(facility, request.user, formName, now, 'submitted')
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 else:
-                    done.submitted = False
-                    done.save()
+                    if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
+                        subForm = formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility)[0]
+                    subForm.submitted = False
+                    subForm.save()
             return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
-    return render(request, "Daily/formB.html", {
-        'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
+    return render(request, "shared/forms/daily/formB.html", {
+        'picker': picker, 'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
     })

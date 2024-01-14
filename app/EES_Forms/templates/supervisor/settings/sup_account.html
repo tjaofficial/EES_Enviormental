@@ -1,0 +1,41 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">
+<div style='margin:auto; width: 42rem;'>
+    <div class="card" style='margin-bottom: 50px;'>
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="dashboard"%}
+            Account Settings
+        </div>
+        <div style="padding: 15px 32px;">
+            <div class="tabCont">
+                <div id="account" class="settingsTab" onclick='openInformation(this)'>
+                    Account Information
+                </div>
+                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                    {% include "supervisor/settings/settings_account.html" %}
+                </div>
+            </div>
+            <hr>
+            <div class="tabCont">
+                <div id="company" class="settingsTab" onclick='openInformation(this)'>
+                    Company Information
+                </div>
+                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                    {% include "supervisor/settings/settings_company.html" %}
+                </div>
+            </div>
+            <hr>
+            <div class="tabCont">
+                <div id="subscription" class="settingsTab" onclick='openInformation(this)'>
+                    Subscription Information
+                </div>   
+                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                    {% include "supervisor/settings/settings_subscription.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

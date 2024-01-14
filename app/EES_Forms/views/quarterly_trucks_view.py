@@ -4,30 +4,24 @@ import datetime
 from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms, bat_info_model
 from ..forms import quarterly_trucks_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 
 @lock
 def quarterly_trucks(request, facility, selector):
-    formName = "quarterly_trucks"
+    formName = "27"
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
     today = datetime.date.today()
-    full_name = request.user.get_full_name()
     submitted_forms = quarterly_trucks_model.objects.all().order_by('-date')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    picker = issueForm_picker(facility, selector, formName)
     
     def what_quarter(input):
         if input.month in {1,2,3}:
@@ -39,9 +33,7 @@ def quarterly_trucks(request, facility, selector):
         if input.month in {10,11,12}:
             return 4
     
-    count_bp = daily_battery_profile_model.objects.count()
-    
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in submitted_forms:
@@ -55,7 +47,7 @@ def quarterly_trucks(request, facility, selector):
             database_form = submitted_forms[0]
             if now.month == todays_log.date_save.month:
                 if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
+                    if what_quarter(todays_log.date_save) == what_quarter(database_form.date):
                         existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
@@ -111,6 +103,8 @@ def quarterly_trucks(request, facility, selector):
                     'date': today,
                 }
             data = quarterly_trucks_form(initial=initial_data)
+            
+            
         if request.method == "POST":
             if existing:
                 data = quarterly_trucks_form(request.POST, instance=database_form)
@@ -125,24 +119,18 @@ def quarterly_trucks(request, facility, selector):
                 
                 new_latest_form = quarterly_trucks_model.objects.all().order_by('-date')[0]
                 filled_out = True
-                done = Forms.objects.filter(form='Quarterly Trucks')[0]
                 for items in new_latest_form.whatever().values():
                     if items is None or items == '':
                         filled_out = False  # -change this back to false
                         break
                 if filled_out:
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
-                else:
-                    done.submitted = False
-                    done.save()
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
             
-    return render(request, 'Quarterly/quarterly_trucks.html', {
-        'facility': facility, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'data': data
+    return render(request, "shared/forms/quarterly/quarterly_trucks.html", {
+        'picker': picker, 'facility': facility, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'data': data
     })

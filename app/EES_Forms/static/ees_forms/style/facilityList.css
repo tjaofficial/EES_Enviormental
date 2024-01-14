@@ -1,0 +1,31 @@
+.standardTable{
+    margin:auto;
+    width:100%;
+}
+.underline{
+    text-decoration: underline;
+}
+.facilityFormSec{
+    padding: 40px 0px;
+}
+.facilityFormHeader{
+    padding: 0px 0px 20px 0px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.center{
+    text-align: center;
+}
+.smallLink{
+    font-size: 14px;
+    text-decoration: underline;
+}
+.headerFont{
+    font-size: 14px;
+    font-weight: bold;
+}
+.contact_list_cont{
+    height: 45rem;
+    overflow: scroll;
+    padding: 15px 32px;
+}

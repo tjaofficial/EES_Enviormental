@@ -1,0 +1,28 @@
+.prof_table_title{
+    width: 225px;
+    padding: 8px;
+    padding-left: 0px;
+    color: gray;
+}
+.table_font{
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+.prof_table_data{
+  width: 281px;
+  padding: 8px;
+  padding-left: 0px;
+}
+#obj_data{
+    border-top: 2px solid lightgray;
+    border-bottom: 2px solid lightgray;
+}
+#form_holder{
+    margin: auto;
+    font-size: 1.5rem;
+    width: 70%;
+}
+.prof_pic_view{
+    width: 200px;
+    border-radius: 50px;
+}

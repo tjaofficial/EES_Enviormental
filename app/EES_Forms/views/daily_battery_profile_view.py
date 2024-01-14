@@ -5,49 +5,45 @@ from ..models import daily_battery_profile_model, user_profile_model, bat_info_m
 from ..forms import daily_battery_profile_form
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import setUnlockClientSupervisor, getCompanyFacilities
+import re
 
 lock = login_required(login_url='Login')
 
-
 @lock
 def daily_battery_profile_view(request, facility, access_page, date):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=CLIENT_VAR):
-        unlock = True
-    if request.user.groups.filter(name=OBSER_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-        
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     profile = user_profile_model.objects.all()
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     form = daily_battery_profile_form
-    options = bat_info_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     existing = False
     todays_log = ''
 
-    if len(daily_prof) > 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
-        if now.month == todays_log.date_save.month:
-            if now.day == todays_log.date_save.day:
-                if now.year == todays_log.date_save.year:
-                    existing = True
+        if now == todays_log.date_save:
+            existing = True
     
     if existing:
+        if todays_log.inop_numbs == "-":
+            inop_numbers = todays_log.inop_numbs
+        else:
+            inop_numbers = todays_log.inop_numbs[1:-1].replace("'", "")
         initial_data = {
-            'facility': todays_log.facility,
+            'facilityChoice': todays_log.facilityChoice,
             'foreman': todays_log.foreman,
             'crew': todays_log.crew,
             'inop_ovens': todays_log.inop_ovens,
-            'inop_numbs': todays_log.inop_numbs,
+            'inop_numbs': inop_numbers,
             'date_save': todays_log.date_save,
         }
     else:
         initial_data = {
-            'facility': facility
+            'facilityChoice': options
         }
 
     form = daily_battery_profile_form(initial=initial_data)
@@ -59,48 +55,44 @@ def daily_battery_profile_view(request, facility, access_page, date):
         
         if form.is_valid():
             A = form.save(commit=False)
+            A.facilityChoice = options
             if A.inop_numbs == '-':
                 A.inop_ovens = 0
             else:
                 A.inop_ovens = len(request.POST['inop_numbs'].replace(' ', ''). split(','))
+                
+                newList = []
+                for x in request.POST['inop_numbs'].split(','):
+                    x = re.sub("[^0-9]", "", x)
+                    newList.append(x)
+                A.inop_numbs = newList
             A.save()
             return redirect('IncompleteForms', facility)
 
-    return render(request, "ees_forms/Bat_Info.html", {
-        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': options, 'form': form, 'now': now, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
+    return render(request, "observer/Bat_Info.html", {
+        'supervisor': supervisor, "client": client, 'unlock': unlock, 'form': form, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
     })
 
 @lock
 def facility_select_view(request):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=CLIENT_VAR):
-        unlock = True
-    if request.user.groups.filter(name=OBSER_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-        
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    profileFacs = getCompanyFacilities(request.user.username)
     profile = user_profile_model.objects.all()
     loginPage = True
-    now = datetime.datetime.now()
-    options = bat_info_model.objects.all()
-    count_bp = daily_battery_profile_model.objects.count()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-
+    now = datetime.datetime.now().date()
     if request.method == 'POST':
         answer = request.POST['facility']
+        daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer).order_by('-date_save')
         if answer != '':
-            if count_bp != 0:
+            if daily_prof.exists():
                 todays_log = daily_prof[0]
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        return redirect('IncompleteForms', answer)
-
+                if now == todays_log.date_save:
+                    return redirect('IncompleteForms', answer)
             batt_prof = '../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect(batt_prof)
 
-    return render(request, "ees_forms/facility_select.html", {
-        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': options, 'now': now, 'loginPage': loginPage, 'profile': profile, 
+    return render(request, "observer/facility_select.html", {
+        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': profileFacs, 'loginPage': loginPage, 'profile': profile, 
     })

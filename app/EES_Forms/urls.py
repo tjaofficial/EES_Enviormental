@@ -8,20 +8,31 @@ urlpatterns = [
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
     path("adminDash", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
+    
     ##---REGISTRATION-----
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
-    path("<str:facility>/account", views.sup_account_view, name="Account"),
     path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
+    path("activate/<str:uidb64>/<str:token>/", views.activate_view, name="activate"),
     path("register_company", views.registerCompany, name="companyReg"),
     path("no_registration", views.valid_account_logout, name="no_registration"),
     path("logout", views.logout_view, name="Logout"),
-    path('<str:facility>/profile_redirect', views.profile_redirect, name='profile_redirect'),
+    path("request-password", views.request_password_view, name='requestPassword'),
+    path("change-password", views.main_change_password, name='mainPasswordChange'),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
+    path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
+    
+    ##--ACCOUNT SETTINGS-----
+    path("<str:facility>/account", views.sup_account_view, name="Account"),
+    path("<str:facility>/account/payment-method/<str:action>/<str:planId>/<str:seats>", views.sup_card_update, name="cardUpdate"),
+    path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
+    path("<str:facility>/account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
+    path("<str:facility>/subscription/change", views.sup_change_subscription, name="subscriptionChange"),
+    path("<str:facility>/subscription/billing", views.sup_billing_history, name="billingHistory"),
+    
     ##---BILLING
     path("billing/<str:step>", views.billing, name="billing"),
 
-    path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
     path('<str:facility>/about', views.about_view, name='about'),
     path('<str:facility>/safety', views.safety_view, name='safety'),
@@ -45,8 +56,9 @@ urlpatterns = [
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
     path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
+    path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
 
-
+    ##---FORMS
     path("<str:facility>/Daily/formA1/<str:selector>", views.formA1, name="formA1"),
     path("<str:facility>/Daily/formA2/<str:selector>", views.formA2, name="formA2"),
     path("<str:facility>/Daily/formA3/<str:selector>", views.formA3, name="formA3"),
@@ -73,15 +85,20 @@ urlpatterns = [
     path("<str:facility>/Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
     path("<str:facility>/Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
     path("<str:facility>/Monthly/spill_kits/<str:selector>", views.spill_kits, name="spill_kits"),
+    path("<str:facility>/Monthly/spill_kits/<str:month>/<int:skNumber>/<str:selector>", views.spill_kits_inventory_form, name="skInventory"),
     path("<str:facility>/Quarterly/quarterly_trucks/<str:selector>", views.quarterly_trucks, name="quarterly_trucks"),
     
-
+    ##---COKE_BATTERY_DATA
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("<str:facility>/pt_admin1", views.pt_admin1_view, name="pt_admin1"),
     path("<str:facility>/pt_mth_input", views.pt_mth_input, name="pt_mth_input"),
     path("<str:facility>/method303_rolling_avg", views.method303_rolling_avg, name="rolling_avg"),
     path("<str:facility>/admin_data", views.admin_data_view, name="admin_data"),
 
+    ##---PRINTING
+    path('<str:facility>/printIndex/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
+    path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
+    path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
 
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
 
@@ -89,8 +106,6 @@ urlpatterns = [
     
     
     # path('pdf_view', views.render_pdf_view, name="pdf_view"),
-    path('<str:facility>/printIndex/<str:formName>/<str:formDate>', views.form_PDF, name='printIndex'),
-    path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
     #path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
     #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),
 ]

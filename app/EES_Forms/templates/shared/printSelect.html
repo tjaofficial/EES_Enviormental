@@ -1,61 +1,56 @@
-{% extends unlock|yesno:"ees_forms/layout.html,supervisor/sup_layout.html" %}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%}{% load static %}
 <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/printSelect.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/printSelect.js' %}"></script>
 <body>
-    <div>
-        {% include "ees_forms/backArrow.html" %}
-    </div>
-    <center>
-        <div class="card" style="min-width: 400px; min-height: 500px;">
-            {% if facility == 'supervisor' %}
-            <p>Please Select a Facility First</p>
-            {% else %}
-            <form action="" method="POST" style="padding: 2rem; ">
+    <div class="mainCont mainContCenter" style="width:400px;">
+        <div class="card" style="min-width: 400px; ">
+            <div class="cardHeader">
+                {% include "shared/components/backArrow.html" with destination="dashboard"%}
+                Choose Forms to Print
+            </div>
+            <form action="" method="POST" class="contentCont">
                 {% csrf_token %}
                 <p>{{alertMessage}}</p>
+                Choose Month/Year: <input id='monthSel' name='monthSel' type='month'/> <br><br>
                 <div id='selItem'>
                     <label for="type">Choose one:</label>
                     <select name="type" id="type" required="True" autofocus>
                         <option value="" selected>------</option>
                         <option value="single">Single Form</option>
-                        <option value="group">Group Forms</option>
+                        <option value="group">Packet</option>
                     </select>
                 </div>
-                <br/>
-                <div id='selForm' style='visibility:hidden;'>
+                <br>
+                <div id='selForm' style='display:none;'>
                     <label for="forms">Choose Form:</label>
                     <select name="forms" id="forms">
                         <option value="" selected>------</option>
                         {% for x in selectList %}
-                        <option value="{{x.1}}">{{x.0}}</option>
+                        <option value="{{x.0}}">{{x.1}}</option>
                         {% endfor %}
                     </select>
+                    <br><br>
                 </div>
-                <br/>
-                <div id='selGroup' style='visibility:hidden;'>
-                    <label for="formGroups">Choose Group:</label>
+                <div id='selGroup' style='display:none;'>
+                    <label for="formGroups">Choose Packet:</label>
                     <select name="formGroups" id="formGroups">
                         <option value="" selected>------</option>
-                        <option value="formA">Form A</option>
-                        <option value="weekly">Weekly Packet</option>
+                        <option value="Coke Battery Daily Packet">Coke Battery Daily Packet</option>
+                        <option value="Facility Weekly Packet">Facility Weekly Packet</option>
                         <!--<option value="monthly">Monthly</option>
                         <option value="tanks">Monthly Tanks/Areas</option>
                         <option value="waste">Waste Weekly</option>-->
                     </select>
+                    <br><br>
                 </div>
-                <br/>
-                <div id='selDate' style='visibility:hidden;'>
-                    <label for="formDate">Pick a Date:</label>
-                    <input id='formDate' name='formDate' type='date'/>
-                    
-                </div>
-                <br/>
-                <button id='printButton' type="submit" style='visibility:hidden;'>Print</button>
+                {% comment %} <input id='formDate' name='formDate' type='date'/> <br> {% endcomment %}
+                <input id='select' name='select' type='submit' value="Select Date >" style="padding:0px 5px;"/>
             </form>
-            {% endif %}
         </div>
-    </center>
+    </div>
 </body>
 {% endblock %}

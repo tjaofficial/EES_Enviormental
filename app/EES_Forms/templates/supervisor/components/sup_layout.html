@@ -1,0 +1,52 @@
+{% load static %}
+<style>
+    .daily{
+        width: {{ daily_percent }}%; 
+        background-color: #348EFA;
+    }
+    .weekly{
+        width: {{ weekly_percent }}%; 
+        background-color: #F55667;
+    }
+    .monthly{
+        width: {{ monthly_percent }}%; 
+        background-color: #4ACFAE;
+    }
+    .quarterly{
+        width: {{ quarterly_percent }}%; 
+        background-color: #FCB050;
+    }
+    .annually{
+        width: {{ annually_percent }}%; 
+        background-color: #FCB050;
+    }
+</style>
+<html>
+    <head>
+        <link rel="shortcut icon" href=# />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script defer src="{% static 'ees_forms/script/sup_sidebar.js' %}"></script>
+        <script defer src="{% static 'ees_forms/script/notifications.js' %}"></script>
+        <script defer src="{% static 'notifications/notifications.js' %}"></script>
+        <script defer src="{% static 'ees_forms/script/headerDropDown.js' %}"></script>
+        <link href="{% static 'ees_forms/style/sup_layout.css' %}" rel="stylesheet" />
+        <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
+        <link href="{% static 'ees_forms/style/sup_form.css' %}" rel="stylesheet" />
+        {% if colorMode %}
+            <link href="{% static 'ees_forms/style/darkMode.css' %}" rel="stylesheet">
+        {% else %}
+            <link href="{% static 'ees_forms/style/lightMode.css' %}" rel="stylesheet">
+        {% endif %}
+    </head>
+    <body class="modeMainBackground">
+        {{ facility|json_script:"facility" }}
+        {% include "supervisor/components/sup_header.html" %}
+        {% include "supervisor/components/sup_sideBar.html" %}
+        {% include "shared/components/headerDropDown.html" %}
+        <div class="mainContentContainer">
+            {% block list %}
+            
+            {% endblock %}
+        </div>
+    </body>
+<html>

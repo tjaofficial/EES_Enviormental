@@ -1,0 +1,30 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+.primaryLightBackground{
+    background-color: #dfe5e9;
+}
+.primaryDarkBackground{
+    background-color: #263544;
+}
+.submit_button{
+    font-size: 1.8rem;
+}
+a {
+    text-decoration: none;
+    color: #001011;
+}
+.mainContCenter{
+    display: flex; 
+    justify-content: center; 
+    position: fixed; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    top: 48px; 
+    align-items: center;
+    overflow: scroll;
+}

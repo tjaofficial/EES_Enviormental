@@ -1,0 +1,200 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%} {% load static %}
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/fullFormCheck.js' %}"></script>
+<link href="{% static 'ees_forms/style/formA1.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+
+<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+<div class="mainCont gap" style="max-width:none;padding-top:2rem;">
+  <form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px">
+    {% csrf_token %}
+    <div class="card" id="card_fitter">
+      {% include "shared/components/print_button.html" %}
+      <div class="paper_fitter" style="padding: 3rem">
+        {% include "shared/components/backArrow.html" with destination="form" %}
+        <table style="border-collapse: collapse; margin: auto">
+          <tr>
+            <th id="boxTitle" colspan="6" style="text-align: center">
+              Method 303 Charging - Form (A-1)
+            </th>
+            <th></th>
+          </tr>
+          <tr>
+            <th colspan="6" style="text-align: center">
+              Facility Name: {{facility}}
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr>
+            <td style="height: 25px"></td>
+          </tr>
+          <tr>
+            <th colspan="6">
+              Inspectors Name: &nbsp; &nbsp; {{ data.observer }} &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp; &nbsp;
+              &nbsp; {{ data.date }}
+            </th>
+          </tr>
+          <tr>
+            <td style="height: 25px"></td>
+          </tr>
+          <tr>
+            <th colspan="6">
+              Battery No. {{data.facilityChoice.bat_num}} &nbsp; Crew: &nbsp; &nbsp; {{ data.crew }}
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Battery Foreman:
+              &nbsp; &nbsp;{{ data.foreman }}
+            </th>
+          </tr>
+          <tr>
+            <td style="height: 25px"></td>
+          </tr>
+          <tr>
+            <th colspan="6">
+              Start Time:{{ data.start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; End Time:{{ data.stop }}
+            </th>
+          </tr>
+          <tr>
+            <td style="height: 25px"></td>
+          </tr>
+          <tr>
+            <td id="boxa2">Charge Number</td>
+            <td id="boxa2">Oven Number</td>
+            <td id="boxa1">Start Time</td>
+            <td id="boxa1">Stop Time</td>
+            <td id="boxa1">Visible Emissions (sec)</td>
+            <td id="boxa3">Comments</td>
+          </tr>
+          <tr>
+            <td id="boxa2" style="text-align: center">1</td>
+            <td id="boxa2">{{ readings.c1_no }}</td>
+            <td id="boxa1">
+              {{ readings.c1_start }}
+              <span class="c1_popup_class" id="c1_timePopup"
+                >Please Change Time</span
+              >
+            </td>
+            <td id="boxa1">{{ readings.c1_stop }}</td>
+            <td id="boxa1">{{ readings.c1_sec }}</td>
+            <td id="boxa3">{{ readings.c1_comments }}</td>
+          </tr>
+          <tr>
+            <td id="boxa2" style="text-align: center">2</td>
+            <td id="boxa2">
+              {{ readings.c2_no }}
+              <span class="c_popup_oven_class" id="c2_popup_oven"
+                >Please Change Oven No.</span
+              >
+            </td>
+            <td id="boxa1">
+              {{ readings.c2_start }}
+              <span class="c1_popup_class" id="c2_timePopup"
+                >Please Change Time</span
+              >
+            </td>
+            <td id="boxa1">{{ readings.c2_stop }}</td>
+            <td id="boxa1">{{ readings.c2_sec }}</td>
+            <td id="boxa3">{{ readings.c2_comments }}</td>
+          </tr>
+          <tr>
+            <td id="boxa2" style="text-align: center">3</td>
+            <td id="boxa2">
+              {{ readings.c3_no }}
+              <span class="c_popup_oven_class" id="c3_popup_oven"
+                >Please Change Oven No.</span
+              >
+            </td>
+            <td id="boxa1">
+              {{ readings.c3_start }}
+              <span class="c1_popup_class" id="c3_timePopup"
+                >Please Change Time</span
+              >
+            </td>
+            <td id="boxa1">{{ readings.c3_stop }}</td>
+            <td id="boxa1">{{ readings.c3_sec }}</td>
+            <td id="boxa3">{{ readings.c3_comments }}</td>
+          </tr>
+          <tr>
+            <td id="boxa2" style="text-align: center">4</td>
+            <td id="boxa2">
+              {{ readings.c4_no }}
+              <span class="c_popup_oven_class" id="c4_popup_oven"
+                >Please Change Oven No.</span
+              >
+            </td>
+            <td id="boxa1">
+              {{ readings.c4_start }}
+              <span class="c1_popup_class" id="c4_timePopup"
+                >Please Change Time</span
+              >
+            </td>
+            <td id="boxa1">{{ readings.c4_stop }}</td>
+            <td id="boxa1">{{ readings.c4_sec }}</td>
+            <td id="boxa3">{{ readings.c4_comments }}</td>
+          </tr>
+          <tr>
+            <td id="boxa2" style="text-align: center">5</td>
+            <td id="boxa2">
+              {{ readings.c5_no }}
+              <span class="c_popup_oven_class" id="c5_popup_oven"
+                >Please Change Oven No.</span
+              >
+            </td>
+            <td id="boxa1">
+              {{ readings.c5_start }}
+              <span class="c1_popup_class" id="c5_timePopup"
+                >Please Change Time</span
+              >
+            </td>
+            <td id="boxa1">{{ readings.c5_stop }}</td>
+            <td id="boxa1">{{ readings.c5_sec }}</td>
+            <td id="boxa3">{{ readings.c5_comments }}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="boxa1">Total(Seconds):</td>
+            <td id="boxa1">{{readings.total_seconds}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td style="height: 40px">Larry Car Number: {{ readings.larry_car }}</td>
+          </tr>
+          <tr style="font-size: 20px">
+            <td>Comments:</td>
+          </tr>
+          <tr style="font-size: 20px; text-align: center">
+            <td colspan="6">
+              {{ readings.comments }}
+              <span class="comment_skip_class" id="comment_skip_id1" data-inputValue1='' data-inputValue2=''>></span>
+              <span class="comment_skip_class" id="comment_skip_id2" data-inputValue1='' data-inputValue2=''>></span>
+              <span class="comment_skip_class" id="comment_skip_id3" data-inputValue1='' data-inputValue2=''>></span>
+              <span class="comment_skip_class" id="comment_skip_id4" data-inputValue1='' data-inputValue2=''>></span>
+            </td>
+          </tr>
+          <tr>
+            <td style="height: 40px"></td>
+          </tr>
+        </table>
+        {% if supervisor or client %} {% elif unlock and not search %}
+          {% include "shared/components/submitButton.html" with label="form" %}
+        {% endif %}
+      </div>
+    </div>
+    <br>
+    {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
+  </form>
+</div>
+
+{% endblock %}

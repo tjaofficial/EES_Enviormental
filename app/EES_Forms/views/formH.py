@@ -6,6 +6,7 @@ from ..forms import formH_form, user_profile_form, formH_readings_form
 import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,80 +14,34 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formH(request, facility, selector):
-    formName = "H"
+    formName = 19
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    now = datetime.datetime.now().date()
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = formH_model.objects.all().order_by('-date')
     org2 = formH_readings_model.objects.all().order_by('-form')
-    
     orgFormL = org2.filter(comb_formL__exact=True)
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
     full_name = request.user.get_full_name()
-    
     exist_canvas = ''
+    picker = issueForm_picker(facility, selector, formName)
     
     if unlock:
-        if len(profile) > 0:
-            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-            if same_user:
-                cert_date = request.user.user_profile_model.cert_date
-            else:
-                return redirect('IncompleteForms', facility)
+        if profile.exists():
+            cert_date = request.user.user_profile_model.cert_date
         else:
             return redirect('IncompleteForms', facility)
     
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
-    city = 'Dearborn'
-    city_weather = requests.get(url.format(city)).json()  # request the API data and convert the JSON to Python data types
-    weather = {
-        'city': city,
-        'temperature': round(city_weather['main']['temp'], 0),
-        'description': city_weather['weather'][0]['description'],
-        'icon': city_weather['weather'][0]['icon'],
-        'wind_speed': round(city_weather['wind']['speed'], 0),
-        'wind_direction': city_weather['wind']['deg'],
-        'humidity': city_weather['main']['humidity'],
-    }
-    degree = weather['wind_direction']
-    
-    def toTextualDescription(degree):
-        if degree > 337.5:
-            return 'N'
-        if degree > 292.5:
-            return 'NW'
-        if degree > 247.5:
-            return 'W'
-        if degree > 202.5:
-            return 'SW'
-        if degree > 157.5:
-            return 'S'
-        if degree > 122.5:
-            return 'SE'
-        if degree > 67.5:
-            return 'E'
-        if degree > 22.5:
-            return 'NE'
-        return 'N'
-    wind_direction = toTextualDescription(degree)
-    weather['wind_direction'] = wind_direction
+    # Weather API Pull
+    weather = weatherDict(options.city)
     weather2 = json.dumps(weather)
     
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form' and selector != 'formL':
             for x in org:
@@ -101,33 +56,26 @@ def formH(request, facility, selector):
             existing = True
             search = True
         # ------check if database is empty----------
-        elif len(org) > 0 or len(org2) > 0:
+        elif org.exists() or org2.exists():
             if selector != 'formL':
                 database_form = org[0]
                 database_form2 = org2[0]
                 # -------check if there is a daily battery profile
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        if todays_log.date_save == database_form.date:
-                            existing = True
-                    else:
-                        batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                        return redirect(batt_prof)
+                if now == todays_log.date_save:
+                    if str(todays_log.date_save) == str(database_form.date):
+                        existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                     return redirect(batt_prof)
-            elif len(orgFormL) > 0:
+            elif orgFormL.exists():
                 formName = 'H-L'
                 database_form2 = orgFormL[0]
                 for line in org:
                     if line.date == database_form2.form.date:
                         database_form = line
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        if todays_log.date_save == database_form.date:
-                            existing = True
+                if now == todays_log.date_save:
+                    if todays_log.date_save == database_form.date:
+                        existing = True
         
         if search:
             database_form = ''
@@ -296,31 +244,28 @@ def formH(request, facility, selector):
                 A.facilityChoice = options
                 if not existing:
                     if A.wind_speed_stop == 'TBD':
-                        if int(A.wind_speed_start) == int(round(city_weather['wind']['speed'], 0)):
+                        if int(A.wind_speed_start) == int(weather['wind_speed']):
                             A.wind_speed_stop = 'same'
                         else:
-                            A.wind_speed_stop = round(city_weather['wind']['speed'], 0)
+                            A.wind_speed_stop = weather['wind_speed']
                     if A.ambient_temp_stop == 'TBD':
-                        if int(A.ambient_temp_start) == int(round(city_weather['main']['temp'], 0)):
+                        if int(A.ambient_temp_start) == int(weather['temperature']):
                             A.ambient_temp_stop = 'same'
                         else:
-                            A.ambient_temp_stop = round(city_weather['main']['temp'], 0)
+                            A.ambient_temp_stop = weather['temperature']
                         
                 A.save()
 
                 B.form = A
                 B.save()
-
-                done = Forms.objects.filter(form='H')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                createNotification(facility, request.user, formName, now, 'submitted')
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
         return redirect(batt_prof)
-    return render(request, "Weekly/formH.html", {
-        'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "supervisor": supervisor, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
+    return render(request, "shared/forms/weekly/formH.html", {
+        'picker': picker, 'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "supervisor": supervisor, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
     })

@@ -14,7 +14,9 @@ admin.site.register(daily_battery_profile_model)
 admin.site.register(user_profile_model)
 admin.site.register(pt_admin1_model)
 admin.site.register(formA1_model)
+admin.site.register(form1_model)
 admin.site.register(formA1_readings_model)
+admin.site.register(form1_readings_model)
 admin.site.register(formA2_model)
 admin.site.register(formA3_model)
 admin.site.register(formA4_model)
@@ -45,16 +47,24 @@ admin.site.register(formO_model)
 admin.site.register(formP_model)
 admin.site.register(spill_kits_model)
 admin.site.register(quarterly_trucks_model)
+admin.site.register(form27_model)
 admin.site.register(sop_model)
 admin.site.register(issues_model)
 admin.site.register(bat_info_model)
 admin.site.register(signature_model)
 admin.site.register(company_model)
 admin.site.register(facility_forms_model)
+admin.site.register(spill_kit_inventory_model)
+admin.site.register(formSubmissionRecords_model)
+admin.site.register(notifications_model)
+admin.site.register(braintree_model)
+admin.site.register(braintreePlans)
+admin.site.register(settings_model)
+admin.site.register(tokens_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']
-    change_list_template = 'admin/events/change_list.html'
+    change_list_template = 'supervisor/events/change_list.html'
  
     def changelist_view(self, request, extra_context=None):
         after_day = request.GET.get('date__gte', None)

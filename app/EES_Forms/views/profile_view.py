@@ -2,13 +2,19 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from ..models import user_profile_model, Forms
 from ..forms import user_profile_form
+from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected
 import datetime
 import os
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 lock = login_required(login_url='Login')
 
+@lock
 def profile(request, facility, access_page):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     profile = user_profile_model.objects.all()
     existing = False
     today = datetime.date.today()
@@ -46,8 +52,19 @@ def profile(request, facility, access_page):
 
             return redirect('../profile/main')
 
-    return render(request, "ees_forms/profile.html", {
-        'facility': facility, "back": back, 'user_select': user_select, "today": today, 'pic': pic, 'pic_form': pic_form, 'access_page': access_page, 'profile': profile,
+    return render(request, "shared/profile.html", {
+        'notifs': notifs,
+        'unlock': unlock, 
+        'client': client, 
+        'supervisor': supervisor, 
+        'facility': facility, 
+        "back": back, 
+        'user_select': user_select, 
+        "today": today, 
+        'pic': pic, 
+        'pic_form': pic_form, 
+        'access_page': access_page, 
+        'profile': profile,
     })
 
 @lock

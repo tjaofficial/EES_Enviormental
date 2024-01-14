@@ -24,14 +24,14 @@
 .passChange{
     margin: 30px 0px;
 }
-.cardHeader{
+/* .cardHeader{
     padding: 15px;
     color: white;
     background-color: #253544;
     border-radius: 13px 13px 0px 0px;
     font-size: .8rem;
     font-family: sans-serif;
-}
+} */
 li{
     margin: auto;
     width: 31rem;

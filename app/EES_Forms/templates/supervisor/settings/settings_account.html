@@ -1,0 +1,39 @@
+<div class="centerFlex">
+    <table class="tableClass">
+        <tr class='tableSpacer'>
+            <td class="labelClass">Name:</td>
+            <td class="labelClass2">{{accountData.user.first_name}} {{accountData.user.last_name}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Username:</td>
+            <td class="labelClass2">{{accountData.user.username}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Phone:</td>
+            <td class="labelClass2">{{accountData.phone}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Account Email:</td>
+            <td class="labelClass2">{{accountData.user.email}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Password Change:</td>
+            <td class="labelClass2">
+                <a href="{% url 'PasswordChange' facility %}">
+                    Change password
+                </a>
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Account Options</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2" style="text-align: center;" colspan=2>
+                <a href="{% url 'accountUpdate' facility 'account' %}">Update Account Details</a><br>
+            </td>
+        </tr>
+    </table>
+</div>

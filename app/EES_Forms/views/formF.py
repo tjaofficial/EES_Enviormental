@@ -4,6 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formF1_model, formF2_model, formF3_model, formF4_model, formF5_model, formF6_model, formF7_model
 from ..forms import formF1_form, formF2_form, formF3_form, formF4_form, formF5_form, formF6_form, formF7_form
 from dateutil.relativedelta import relativedelta
+from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -11,7 +12,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formF1(request, selector):
-    formName = "F1"
+    formName = 10
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -212,10 +213,7 @@ def formF1(request, selector):
                     if form.is_valid():
                         form.save()
 
-                        done = Forms.objects.filter(form='F-1')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
+                        updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                         return redirect('IncompleteForms')
     else:
@@ -223,14 +221,14 @@ def formF1(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF1.html", {
+    return render(request, "shared/forms/weekly/formF1.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
 @lock
 def formF2(request, selector):
-    formName = "F2"
+    formName = 11
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -436,14 +434,14 @@ def formF2(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF2.html", {
+    return render(request, "shared/forms/weekly/formF2.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
 @lock
 def formF3(request, selector):
-    formName = "F3"
+    formName = 12
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -648,14 +646,14 @@ def formF3(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF3.html", {
+    return render(request, "shared/forms/weekly/formF3.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
 @lock
 def formF4(request, selector):
-    formName = "F4"
+    formName = 13
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -860,14 +858,14 @@ def formF4(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF4.html", {
+    return render(request, "shared/forms/weekly/formF4.html", {
         "back": back, 'todays_log': todays_log, 'data': data, "today": today, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
 @lock
 def formF5(request, selector):
-    formName = "F5"
+    formName = 14
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -1072,14 +1070,14 @@ def formF5(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF5.html", {
+    return render(request, "shared/forms/weekly/formF5.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
 @lock
 def formF6(request, selector):
-    formName = "F6"
+    formName = 15
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -1183,10 +1181,7 @@ def formF6(request, selector):
                             if form.is_valid():
                                 form.save()
 
-                                done = Forms.objects.filter(form='F-6')[0]
-                                done.submitted = True
-                                done.date_submitted = todays_log.date_save
-                                done.save()
+                                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                                 return redirect('IncompleteForms')
                 else:
@@ -1239,10 +1234,7 @@ def formF6(request, selector):
                                 if form.is_valid():
                                     form.save()
 
-                                    done = Forms.objects.filter(form='F-6')[0]
-                                    done.submitted = True
-                                    done.date_submitted = todays_log.date_save
-                                    done.save()
+                                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                                     return redirect('IncompleteForms')
                         else:
@@ -1256,10 +1248,7 @@ def formF6(request, selector):
                                 if form.is_valid():
                                     form.save()
 
-                                    done = Forms.objects.filter(form='F-6')[0]
-                                    done.submitted = True
-                                    done.date_submitted = todays_log.date_save
-                                    done.save()
+                                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                                     return redirect('IncompleteForms')
             else:
@@ -1284,14 +1273,14 @@ def formF6(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF6.html", {
+    return render(request, "shared/forms/weekly/formF6.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
 @lock
 def formF7(request, selector):
-    formName = "F7"
+    formName = 16
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     now = datetime.datetime.now()
@@ -1451,10 +1440,7 @@ def formF7(request, selector):
                                 if form.is_valid():
                                     form.save()
 
-                                    done = Forms.objects.filter(form='F-7')[0]
-                                    done.submitted = True
-                                    done.date_submitted = todays_log.date_save
-                                    done.save()
+                                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                                     return redirect('IncompleteForms')
                         else:
@@ -1485,10 +1471,7 @@ def formF7(request, selector):
                     if form.is_valid():
                         form.save()
 
-                        done = Forms.objects.filter(form='F-7')[0]
-                        done.submitted = True
-                        done.date_submitted = todays_log.date_save
-                        done.save()
+                        updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                         return redirect('IncompleteForms')
     else:
@@ -1496,6 +1479,6 @@ def formF7(request, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formF7.html", {
+    return render(request, "shared/forms/weekly/formF7.html", {
         "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })

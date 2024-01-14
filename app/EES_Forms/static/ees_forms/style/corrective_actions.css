@@ -42,3 +42,16 @@
     border-radius: 16px;
     color: white;
 }
+.inputCont{
+    font-size: 15px;
+    margin: 0px 10px;
+}
+.CR_dataCont{
+    display: inline-flex;
+    padding: 0px 0px 18px 0px;
+}
+.button{
+    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid black;
+}

@@ -4,27 +4,22 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formI_model, bat_info_model
 from ..forms import formI_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formI(request, facility, selector):
-    formName = "I"
+    formName = 20
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
     last_monday = today - datetime.timedelta(days=today.weekday())
@@ -37,9 +32,9 @@ def formI(request, facility, selector):
     filled_in = False
     partial_form = False
     week = ''
-    count_bp = daily_battery_profile_model.objects.count()
-
-    if count_bp != 0:
+    picker = issueForm_picker(facility, selector, formName)
+    
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector not in ('form', 'edit'):
             submit = False
@@ -166,10 +161,8 @@ def formI(request, facility, selector):
                             filled_in = False
 
                 if filled_in:
-                    done = Forms.objects.filter(form='I')[0]
-                    done.submitted = True
-                    done.date_submitted = todays_log.date_save
-                    done.save()
+                    createNotification(facility, request.user, formName, now, 'submitted')
+                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                     return redirect('IncompleteForms', facility)
     else:
@@ -177,6 +170,6 @@ def formI(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formI.html", {
-        'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
+    return render(request, "shared/forms/daily/formI.html", {
+        'picker': picker, 'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })

@@ -1,0 +1,11 @@
+#deleteButton{
+    border: none; 
+    background-color: unset; 
+    font-size: 16px; 
+    text-decoration: underline;
+    cursor: pointer;
+    color: blue;
+}
+#editButton{
+    margin-right: 4rem;
+}

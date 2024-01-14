@@ -1,8 +1,8 @@
-from .login_logout_view import login_view, logout_view, profile_redirect, change_password, valid_account_logout, landingRegister, registerCompany
+from .login_logout_view import login_view, logout_view, change_password, valid_account_logout, landingRegister, registerCompany, main_change_password, request_password_view, activate_view
 from .header_view import about_view, safety_view, settings_view
-from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view
+from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view, formsProgress
 from .dashboard_view import IncompleteForms
-from .supervisor_view import sup_dashboard_view, register_view, sup_account_view
+from .supervisor_view import sup_dashboard_view, register_view
 from .data_view import pt_admin1_view, pt_mth_input
 from .crud_sop_view import delete_sop_view, update_sop_view
 from .client_view import client_dashboard_view
@@ -14,6 +14,8 @@ from .billing import billing
 from .landing_view import *
 from .admin_view import *
 from .sup_facility import *
+from .calSelect_view import *
+from .account_settings_view import *
 
 
 from .daily_battery_profile_view import *
@@ -39,8 +41,7 @@ from .formM import *
 from .formN import *
 from .formO import *
 from .formP import *
-from .con_dashboard_view import *
-from .spill_kits_view import *
+from .spill_kits_view import spill_kits, spill_kits_inventory_form
 from .quarterly_trucks_view import *
 from .weekly_enviornmental_inspections import *
 

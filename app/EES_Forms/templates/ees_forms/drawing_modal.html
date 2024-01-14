@@ -1,15 +1,27 @@
-
 {% load static %}
 
 <script src="{% static 'ees_forms/script/atrament.min.js' %}"></script>
+<link href="{% static 'ees_forms/style/method9Canvas.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/method9Canvas.js' %}"></script>
 
-<div id="modalContainer" class="modalContainer modalContainer_hidden" data-canvis_intiated="False" data-displayed="False">
-    
-    <div class="modalCard card" >
-        <div class="modalCard_title"> SKETCH <div id="exitModal" data-controls="modalContainer">EXIT</div></div>
-        <div class="modalCard_body">
-            <canvas id="sketchpad" style="background-color: blueviolet;" ></canvas>
-            <div data-controls="modalContainer" id="canvas_save">SAVE</div><div id="clearCanvis">clear</div>
+<div id="modalContainer" class="modalContainer modalContainer_hidden" style="display:none;" data-canvis_intiated="False" data-displayed="False">
+    <div class="modalCard method9MainCont">
+        <div class="method9Card">
+            <span class="closeAdd">&times;</span>
+            <div class="modalCard_title method9CardHeader">
+                Source Layout Sketch
+            </div>
+            <div class="modalCard_body">
+                <canvas id="sketchpad"></canvas>
+                <div style="display:flex;">
+                    <div class="saveClear" data-controls="modalContainer" id="canvas_save">
+                        save
+                    </div>
+                    <div class="saveClear" id="clearCanvis">
+                        clear
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

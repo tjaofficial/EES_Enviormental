@@ -1,136 +1,61 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import formA3_model, formA2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, formA5_model, Forms
+from django.apps import apps
+from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
 
 
 def pt_admin1_view(request, facility):
-    unlock = False
-    client = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-        
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     allForms = Forms.objects.all()
-        
     today = datetime.date.today()
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
-
-    all_db_reads = formA5_readings_model.objects.all()
     data = formA5_model.objects.all()
-    # add_days = datetime.timedelta(days=91)
+    sortedFacilityData = getCompanyFacilities(request.user.username)
 
-    def all_ovens(reads):
-        A = []
-        for p in reads:
-            date = p.form.date
-            list = [p.o1, p.o2, p.o3, p.o4]
-            year = date.year
-            month = date.month
-            day = date.day
-
-            dateAdded = datetime.datetime(year, month, day)
-            EXPdate = dateAdded + datetime.timedelta(days=91)
-            daysLeft = EXPdate - datetime.datetime.now()
-            
-            for q in list:
-                if len(str(q)) == 1:
-                    ovenNumber = "0" + str(q)
-                else:
-                    ovenNumber = q
-
-                A.append((ovenNumber, p.form.date, EXPdate.date, daysLeft.days))
-        return A
-    all_read_ovens = all_ovens(all_db_reads)
-    func = lambda x: (x[0], x[1])
-    sort_by_oven = sorted(all_read_ovens, key=func, reverse=True)
+    # -------90 DAY PUSH ----------------
+    all_db_reads = formA5_readings_model.objects.all()
+    pushTravelsData = ninetyDayPushTravels(facility)
+    od_30 = pushTravelsData['30days']
+    od_10 = pushTravelsData['10days']
+    od_5 = pushTravelsData['5days']
+    od_recent = pushTravelsData['closest']
+    all_ovens = pushTravelsData['all']
     
-    print('START HERE')
-    
-    def final(organizedOvens):
-        B = []
-        i = 1
-        for oven_a in organizedOvens:
-            B.append(oven_a)
-        for oven_b in organizedOvens:
-            for y in range(i, len(organizedOvens)):
-                check_instance = organizedOvens[y]
-                if check_instance[0] == oven_b[0]:
-                    if check_instance in B:
-                        B.remove(check_instance)
-            i += 1
+    if request.method == 'POST':
+        answer = request.POST
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
 
-        for n in range(1, 86):
-            for oven in B:
-                if len(str(n)) == 1:
-                    zero_n = "0" + str(n)
-                else:
-                    zero_n = str(n)
-                    
-                if zero_n == oven[0]:
-                    exist = True
-                    break
-                else:
-                    exist = False
-            if not exist:
-                B.append((zero_n, 'N/A', 0, 0))              
-        return B
-    all_ovens_EXP = final(sort_by_oven)
-    
-    def sort_key(oven):
-        return oven[0]
-    all_ovens_EXP.sort(key=sort_key, reverse=True) 
-    
-    def overdue_30(cool):
-        C = []
-        for x in cool:
-            if x[3] <= 30:
-                C.append(x)
-        return C
-
-    def overdue_10(cool):
-        D = []
-        for x in cool:
-            if x[3] <= 10:
-                D.append(x)
-        return D
-
-    def overdue_5(cool):
-        E = []
-        for x in cool:
-            if x[3] <= 5:
-                E.append(x)
-        return E
-
-    def overdue_closest(cool):
-        F = []
-    
-        func2 = lambda R: (R[3])
-        sort2 = sorted(cool, key=func2)
-        most_recent = sort2[0][3]
-    
-        for x in sort2:
-            if x[3] == most_recent:
-                F.append(x)
-        return F
-
-    od_30 = overdue_30(all_ovens_EXP)
-    od_10 = overdue_10(all_ovens_EXP)
-    od_5 = overdue_5(all_ovens_EXP)
-    od_recent = overdue_closest(all_ovens_EXP)
-
-    return render(request, "ees_forms/PushTravels.html", {
-        'facility': facility, "now": now, 'todays_log': todays_log, "back": back, 'reads': all_db_reads, 'data': data, 'cool': all_ovens_EXP, 'od_30': od_30, 'od_10': od_10, 'od_5': od_5, 'od_recent': od_recent, "today": today, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 'allForms': allForms
+    return render(request, "shared/PushTravels.html", {
+        'facility': facility, 
+        "now": now, 
+        'todays_log': todays_log, 
+        "back": back, 
+        'reads': all_db_reads, 
+        'data': data, 
+        'cool': all_ovens, 
+        'od_30': od_30, 
+        'od_10': od_10, 
+        'od_5': od_5, 
+        'od_recent': od_recent, 
+        "today": today, 
+        'profile': profile, 
+        'client': client, 
+        "supervisor": supervisor, 
+        "unlock": unlock, 
+        'allForms': allForms,
+        'sortedFacilityData': sortedFacilityData, 
     })
 
 
@@ -253,17 +178,27 @@ def pt_mth_input(request, facility):
 
 
 def method303_rolling_avg(request, facility):
+    unlock = False
+    client = False
+    supervisor = False
+    if request.user.groups.filter(name=OBSER_VAR):
+        unlock = True
+    if request.user.groups.filter(name=CLIENT_VAR):
+        client = True
+    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
+        supervisor = True
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')
     todays_log = daily_prof[0]
     now = datetime.datetime.now()
     today = datetime.date.today()
     A = []
-
+    print("hello")
     def form_compile(daily_prof):
         formA1 = formA1_readings_model.objects.all()
         formA2 = formA2_model.objects.all()
         formA3 = formA3_model.objects.all()
         i = 1
+        print("CHECK 1")
         for date_select in daily_prof:
             for logA1 in formA1:
                 if str(date_select.date_save) == str(logA1.form.date):
@@ -283,6 +218,49 @@ def method303_rolling_avg(request, facility):
         return A
 
     list_of_records = form_compile(daily_prof)
+    
+    # if request.method == "POST":
+    parseFromList = [
+        (1, "A1"),
+        (2, "A2"),
+        (3, "A3"),
+        (4, "A4"),
+        (5, "A5"),
+        (6, "B"),
+        (7, "C"),
+        (8, "D"),
+        (9, "E"),
+        (10, "F1"),
+        (11, "F2"),
+        (12, "F3"),
+        (13, "F4"),
+        (14, "F5"),
+        (15, "F6"),
+        (16, "F7"),
+        (17, "G1"),
+        (18, "G1"),
+        (19, "H"),
+        (20, "I"),
+        (21, "L"),
+        (22, "M"),
+        (23, "N"),
+        (24, "O"),
+        (25, "P"),
+        (26, "R"),
+        (27, "Q"),  
+    ]
+    for x in parseFromList:
+        modelName = "form"+x[1]+"_model"
+        formID = int(x[0])
+        print(modelName)
+        print("___________________________")
+        existingModelData = apps.get_model('EES_Forms', modelName).objects.all()
+        for y in existingModelData:
+            print(y)
+            break
+                
+            
+        
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
         'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile,

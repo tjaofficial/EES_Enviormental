@@ -1,0 +1,101 @@
+{% load static %}
+<script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/settings_subscription.js' %}"></script>
+<link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet" />
+<div class="centerFlex">
+    <div id="addModal" class="modalAdd">
+        <div id="cancelReg" class="modal-content" style="width: 64%;">
+            <span class="closeAdd">&times;</span>
+            <div class='modalHeader'>
+                <h1>Cancel Registration for <span class="registerName"></span>?</h1>
+            </div>
+            <div class='modalContent'>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div style="color:black;text-align:justify;">
+                        Are you sure you would like to cancel your registration for <span class="registerName"></span>? Once cancelled, <span class="registerName"></span> will only have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
+                        <br><br>
+                        <p>Please type "cancel" below and confirm</p><br>
+                        <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
+                        <input id="registerID" type="hidden" name="registerID" value=""/>
+                        <br>
+                        <div style="text-align: right;">
+                            <input id="submit" type="submit" value="Confirm Cancellation" disabled>
+                        </div>
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
+    <table class="tableClass">
+        <tr class='tableSpacer'>
+            <td class="labelClass">Subscription:</td>
+            <td class="labelClass2">
+                {% if braintreeData.status == "active" %}
+                    {{braintreeData.planName}} <br>
+                    {{braintreeData.registrations|add:"-2"}} Extra Registration(s)
+                {% else %}
+                    <a href="{% url 'subscriptionSelect' facility 'subscription' %}">Click here to pick a subscription!</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% if braintreeData.status == "active" %}
+            <tr class='tableSpacer'>
+                <td class="labelClass">Monthly Amount:</td>
+                <td class="labelClass2">${{braintreeData.price}}</td>
+            </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">Status:</td>
+                <td class="labelClass2">{{braintreeData.status|title}}</td>
+            </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">Next Billing Date:</td>
+                <td class="labelClass2">{{braintreeData.next_billing_date}}</td>
+            </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">Active Accounts:</td>
+                <td class="labelClass2">( {{active_registrations}} / {{braintreeData.registrations}} ) <a id="seeAll" href=# onclick="seeEmployees()">see all</a></td>
+            </tr>
+            <tr id="employeesCont" class='tableSpacer' style="display:none;">
+                <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
+                    {% for employee in listOfEmployees %}
+                        <p style="{%if employee.company.braintree.status != 'active' %}color:gray;{% endif %}">
+                            {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee.company.braintree.status == 'active' %}Active {% if employee.user.id != accountData.user.id %}
+                            <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}">
+                                (cancel)
+                            </a>
+                            {% endif %}{% else %}Inactive{% endif %}
+                        </p>
+                    {% endfor %}
+                </td>
+            </tr>
+            
+        {% endif %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Subscription Options</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass" colspan=2 style="text-align: center;">
+                {% if braintreeData.status == "active" %}<a href="{% url 'subscriptionChange' facility %}">Change Subscription</a><br>{% endif %}
+                <a href="{% url 'billingHistory' facility %}">See Billing History</a><br>
+                {% if braintreeData.status == "active" %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}">Cancel Subscription</a>{% endif %}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Card Options</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2" style="text-align: center;" colspan=2>
+                <a href="{% url 'cardUpdate' facility 'update' 'false' 'false' %}">Update Billing Address</a><br>
+                <a href="{% url 'cardUpdate' facility 'add' 'false' 'false'%}">Add/Change Payment Method</a><br>
+                {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
+            </td>
+        </tr>
+    </table>
+</div>

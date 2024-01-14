@@ -1,0 +1,55 @@
+{% load static %}
+<link href="{% static 'ees_forms/style/submitButton.css' %}" rel="stylesheet">
+
+
+{% if label == 'form' %}
+<br><br>
+    <input 
+        type="submit" 
+        value="Submit Form" 
+        class="submit_button" 
+    />
+{% elif label == 'submit' %}
+    <input 
+        type="submit" 
+        name="submit_bat_info"
+        value="submit"
+    >
+{% elif label == 'search' %}
+    <input 
+        type="submit" 
+        value="Search" 
+        class="searchButton" 
+    />
+{% elif label == 'login' %}
+    <input 
+        id="submit" 
+        type="submit" 
+        value="Login"
+    >
+{% elif label == 'upload' %}
+    <input 
+        id="submit" 
+        type="submit" 
+        value="Upload"
+    >
+{% elif label == 'register' %}
+    <input 
+        id="submit" 
+        type="submit" 
+        value="SIGN UP FOR METHODPLUS+"
+        name="SIGN UP FOR METHODPLUS+" 
+    >
+{% elif label == 'password' %}
+    <input
+        id="submit"
+        type="submit"
+        value="Change Password"
+    >
+{% elif label == 'request' %}
+    <input
+        id="submit"
+        type="submit"
+        value="Request"
+    >
+{% endif %}

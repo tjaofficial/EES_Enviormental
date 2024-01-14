@@ -1,0 +1,40 @@
+section{
+    width: 80%;
+    max-width: 1000;
+    margin: auto;
+    margin-top: 50px;
+}
+.signature_container{
+    width: 100%;
+    max-width: 1500px;
+    aspect-ratio: 16/9;
+    background-color: white;
+    border-radius: 20px;
+    
+    display: block;
+    position: relative;
+}
+
+canvas{
+    height: 100%;
+    width: 100%;
+    border: 2px black solid;
+    border-radius: 15px;
+}
+.input_button {
+    margin: auto;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    padding: 6px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.supNameCont{
+    font-size:1.2rem; 
+    padding-top: 15px; 
+    text-align:center;
+}
+.submitCont{
+    padding-top:15px;
+    text-align:center;
+}

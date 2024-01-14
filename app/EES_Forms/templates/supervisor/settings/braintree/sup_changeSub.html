@@ -1,0 +1,142 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/selectSubscription.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/subscriptionChange.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/subscriptionChange.js' %}"></script>
+<div class='mainCont' style="width: 1182px; max-width:none;margin: auto;">
+    <div class='card'>
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="accountSettings" %}
+            Change Subscription
+        </div>
+        <div class="contentCont">
+            <div id="planID" style="display:none;" data-planid="{{activeSub.plan_id}}"></div>
+            <div id="planHolder" style="display:inline-flex;">
+                {% for plan in planList %}
+                    <div id="{{plan.pid}}" class="optionsCont borderHover">
+                        <div class="infoCont">
+                            <div class="planHeader">
+                                <h1>{{plan.name}}</h1>
+                            </div>
+                            <div class="priceBubble">
+                                ${{plan.price}}
+                            </div>
+                            <div style="padding: 0px 1rem;">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                    {{plan.description.0}}
+                                </div><br>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                    {{plan.Security_and_Compliance}}
+                                </div><br>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                    {{plan.Customizable_Forms}}
+                                </div><br>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                    {{plan.Real_time_Data_Entry}}
+                                </div><br>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                    {{plan.Collaborative_Workflows}}
+                                </div><br>
+                                <div style="display: inline-flex;">
+                                    {% if plan == planList.0 %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                                        </svg>
+                                    {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                        </svg>
+                                    {% endif %}
+                                    &nbsp;<p class="{% if plan == planList.0 %}strikeOut{% endif %}">{{plan.Multimedia_Integration}}</p>
+                                </div><br><br>
+                                <div style="display: inline-flex;">
+                                    {% if plan == planList.0 %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                                    </svg>
+                                    {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                    {% endif %}
+                                    &nbsp;<p class="{% if plan == planList.0 %}strikeOut{% endif %}">{{plan.Advanced_Reporting}}</p>
+                                </div><br><br>
+                                <div style="display: inline-flex;">
+                                    {% if plan != planList.2 %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                                        </svg>
+                                    {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                        </svg>
+                                    {% endif %}
+                                    &nbsp;<p class="{% if plan != planList.2 %}strikeOut{% endif %}">{{plan.Offline_Accessibility}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 0px 1rem 1rem;">
+                            <form method="post" autocomplete="off" action="../account/subscription/registration">
+                                {% csrf_token %}
+                                <input type="hidden" value={{plan.pid}} name="planId">
+                                <input type="hidden" value=True name="planChange">
+                                <input id="submit" type="submit" onclick="changeSelected(this)" value="Select">
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div>
+                <h1 style="font-size: 4rem;">MethodPlus+</h1>
+                <div class="featCont">
+                    <div class="selectionInfoCont">
+                        
+                    </div>
+                    <div class="featDescriptions">
+                        <h2>Security and Compliance:</h2>
+                        <p class="desc">Rest easy knowing that your data is secure. MethodPlus+ prioritizes the privacy and confidentiality of your information, ensuring compliance with industry standards and regulations.</p>
+                    </div><br><br>
+                    <div class="featDescriptions">
+                        <h2>Customizable Forms:</h2>
+                        <p class="desc">Tailor your inspection forms to fit the unique needs of your projects. MethodPlus+ offers a user-friendly interface that allows you to create, modify, and deploy forms with ease.</p>
+                    </div><br><br>
+                    <div class="featDescriptions">
+                        <h2>Real-time Data Entry:</h2>
+                        <p class="desc">Say goodbye to delays and manual data entry errors. With MethodPlus+, observers can input data directly into the system from the field, ensuring that information is captured accurately and promptly.</p>
+                    </div><br><br>
+                    <div class="featDescriptions">
+                        <h2>Collaborative Workflows:</h2>
+                        <p class="desc">Enhance team collaboration by sharing forms and data effortlessly. MethodPlus+ facilitates seamless communication between field observers, supervisors, and stakeholders, fostering a more connected and efficient workflow.</p>
+                    </div><br><br>
+                    <div class="featDescriptions">
+                        <h2>Multimedia Integration:</h2>
+                        <p class="desc">Capture a complete picture of the situation with multimedia integration. Attach photos, videos, and audio recordings directly to your inspection forms, providing a richer context to your observations.</p>
+                    </div><br><br>
+                    <div class="featDescriptions">
+                        <h2>Advanced Reporting:</h2>
+                        <p class="desc">Make informed decisions with MethodPlus+'s robust reporting features. Generate detailed reports and analytics to gain insights into trends, identify areas for improvement, and showcase compliance with ease.</p>
+                    </div><br><br>
+                    <div class="featDescriptions">
+                        <h2>Offline Accessibility:</h2>
+                        <p class="desc">No internet connection? No problem. MethodPlus+ operates seamlessly offline, enabling observers to collect data even in remote locations. Once online, the system automatically syncs the data for centralized management.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

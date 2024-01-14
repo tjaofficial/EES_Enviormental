@@ -1,0 +1,17 @@
+.tosModalCont{
+    padding-top: 65px;
+    position: fixed;
+    z-index: 4000;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 0;
+    width: 100vw;
+    background: #00000066;
+    height: 100vh;
+}
+#signup p{
+    margin-block-start: 5px;
+}
+#signup h4{
+    margin-block-end: 5px;
+}

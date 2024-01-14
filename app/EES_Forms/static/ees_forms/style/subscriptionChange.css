@@ -1,0 +1,13 @@
+.currentPlanBorder{
+    border: #331e78 dotted 4px;
+}
+
+.borderHover:hover{
+    border: #177b19 dotted 4px;
+}
+.selectionInfoCont{
+    width: 34rem;
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+}

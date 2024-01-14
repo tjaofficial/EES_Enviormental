@@ -1,0 +1,63 @@
+<div class="centerFlex">
+    <table class="tableClass">
+        <tr class='tableSpacer'>
+            <td class="labelClass">Company Name:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2 cellData">{{accountData.company.company_name}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Company Address:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2 cellData">{{accountData.company.address}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2 cellData">{{accountData.company.city}}, {{accountData.company.state}} {{accountData.company.zipcode}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Company Phone:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2 cellData">{{accountData.company.phone}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass">Supervisors/Observers:</td>
+        </tr>
+        {% for employee in listOfEmployees %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">
+                - {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass">Facilities:</td>
+        </tr>
+        {% for facilities in sortedFacilityData %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">
+                - {{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Company Options</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2" style="text-align: center;" colspan=2>
+                <a href="{% url 'accountUpdate' facility 'company' %}">Update Company Details</a><br>
+                <a href="{% url 'Register' facility 'observer' %}">Add Employee</a><br>
+                <a href="{% url 'Register' facility 'facility' %}">Add Client Facility</a><br>
+                <a href="{% url 'Register' facility 'client' %}">Add Client Profile</a><br>
+                {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
+            </td>
+        </tr>
+    </table>
+</div>

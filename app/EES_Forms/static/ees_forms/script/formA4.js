@@ -14,8 +14,6 @@ function leak_appear(){
 
 leak_appear()
 
-
-
 /*****************************************
 Initial Page Load Setup
 *****************************************/

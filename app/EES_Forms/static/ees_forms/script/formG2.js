@@ -1,3 +1,25 @@
+function ovenCheck(oven2){
+    if (oven2.id == 'id_PEC_oven_b') {
+        var oven1 = document.getElementById('id_PEC_oven_a');
+        var popUp = document.getElementById('popUp2')
+    } else if (oven2.id == 'id_PEC_oven_c') {
+        var oven1 = document.getElementById('id_PEC_oven_b');
+        var popUp = document.getElementById('popUp3');
+    }
+    console.log(oven2.value)
+    console.log(parseInt(oven1.value) + 2)
+
+    if (parseInt(oven1.value) + 2 == parseInt(oven2.value) || !oven2.value || !oven1.value){
+        popUp.style.display = 'none';
+    } else {
+        popUp.style.display = 'block';
+    }
+}
+function firstOvenCheck(){
+    var oven2 = document.getElementById('id_PEC_oven_b');
+    ovenCheck(oven2)
+}
+
 function stop_light(average, id_param) {
     const inputAverage = document.getElementById(id_param).value;
     if (inputAverage) {

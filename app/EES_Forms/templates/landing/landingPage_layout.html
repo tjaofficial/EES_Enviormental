@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{% static 'landing/style/landingPage_layout.css' %}" rel="stylesheet">
+        <script defer src="{% static 'landing/script/nav_bar.js' %}"></script>
+        <title>MethodPlus+ Data Collection</title>
+    </head>
+    <body>
+        <header>
+            {% include 'landing/landingPage_navBar.html' %}
+        </header>
+        {% block body %}
+        
+        {% endblock %}
+        <footer>
+            <div class="container minWidth">
+                <p>&copy; 2024 MethodPlus+ | All rights reserved</p>
+            </div>
+        </footer>
+    </body>
+</html>
+

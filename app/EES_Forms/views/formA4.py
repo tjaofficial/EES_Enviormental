@@ -6,35 +6,27 @@ from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 from .print_form_view import time_change, date_change
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA4(request, facility, selector):
-    formName = "A4"
+    formName = 4
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA4_model.objects.all().order_by('-date')
-    
-    count_bp = daily_battery_profile_model.objects.count()
-    
     full_name = request.user.get_full_name()
-    
-    if count_bp != 0:
+    picker = issueForm_picker(facility, selector, formName)
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
@@ -44,19 +36,13 @@ def formA4(request, facility, selector):
             existing = True
             search = True
             print('CHECK 1')
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
         if search:
             database_form = ''
@@ -75,7 +61,6 @@ def formA4(request, facility, selector):
                 leaks = 'yes'
         else:
             if existing:
-                print('CHECK 2')
                 initial_data = {
                     'date': database_form.date,
                     'observer': database_form.observer,
@@ -107,7 +92,6 @@ def formA4(request, facility, selector):
 
             data = formA4_form(initial=initial_data)
             collect_json = ''
-        print(leaks)
         
         if request.method == "POST":
             if existing:
@@ -124,21 +108,19 @@ def formA4(request, facility, selector):
                     A.leak_data = "{}"
                     
                 A.save()
+                finder = issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')
                 if A.notes.lower() != 'no ve' or A.leak_data != "{}":
-                    finder = issues_model.objects.filter(date=A.date, form='A-4')
-                    if finder:
-                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/issue'
+                    if finder.exists():
+                        newSelector = 'issue'
                     else:
-                        issue_page = '../../issues_view/A-4/' + str(todays_log.date_save) + '/form'
-                
+                        newSelector = 'form'
+                    issue_page = '../../issues_view/' + str(formName) + '/' + str(todays_log.date_save) + '/'+ newSelector
                     return redirect(issue_page)
-                elif issues_model.objects.filter(date=A.date, form='A-4'):
-                    issues_model.objects.filter(date=A.date, form='A-4')[0].delete()
+                elif finder.exists():
+                    finder[0].delete()
                 
-                done = Forms.objects.filter(form='A-4')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                createNotification(facility, request.user, formName, now, 'submitted')
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:
@@ -146,6 +128,6 @@ def formA4(request, facility, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "Daily/formA4.html", {
-        'leaks': leaks,'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
+    return render(request, "shared/forms/daily/formA4.html", {
+        'picker': picker, 'leaks': leaks,'collect_json': collect_json, 'options': options, "search": search, 'existing': existing, "client": client, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'unlock': unlock, 'facility': facility
     })

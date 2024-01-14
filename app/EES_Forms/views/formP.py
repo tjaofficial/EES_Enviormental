@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formP_model, bat_info_model
 from ..forms import formP_form
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -12,26 +13,20 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formP(request, facility, selector, weekend_day):
-    formName = "P"
+    formName = 25
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
-    unlock = False
-    client = False
     search = False
-    supervisor = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
-    daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    now = datetime.datetime.now()
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    now = datetime.datetime.now().date()
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
     full_name = request.user.get_full_name()
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     month_name = calendar.month_name[today.month]
-
+    picker = issueForm_picker(facility, selector, formName)
     org = formP_model.objects.all().order_by('-date')
 
     if weekend_day == 'saturday':
@@ -41,9 +36,7 @@ def formP(request, facility, selector, weekend_day):
     else:
         ss_filler = ''
 
-    count_bp = daily_battery_profile_model.objects.count()
-
-    if count_bp != 0:
+    if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
             for x in org:
@@ -52,7 +45,7 @@ def formP(request, facility, selector, weekend_day):
             data = database_model
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             database_form = org[0]
             if database_form.date == today:
                 existing = True
@@ -100,16 +93,13 @@ def formP(request, facility, selector, weekend_day):
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
                     finder = issues_model.objects.filter(date=A.date, form='O')
                     if finder:
-                        issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/issue'
+                        issue_page = '../../../issues_view/'+ str(formName) +'/' + str(todays_log.date_save) + '/issue'
                     else:
-                        issue_page = '../../../issues_view/O/' + str(todays_log.date_save) + '/form'
+                        issue_page = '../../../issues_view/'+ str(formName) +'/' + str(todays_log.date_save) + '/form'
 
                     return redirect(issue_page)
 
-                done = Forms.objects.filter(form='P')[0]
-                done.submitted = True
-                done.date_submitted = todays_log.date_save
-                done.save()
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:
@@ -117,6 +107,6 @@ def formP(request, facility, selector, weekend_day):
 
         return redirect(batt_prof)
 
-    return render(request, "Weekly/formP.html", {
-        'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
+    return render(request, "shared/forms/weekly/formP.html", {
+        'picker': picker, 'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

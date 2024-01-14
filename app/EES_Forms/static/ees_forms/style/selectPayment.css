@@ -1,0 +1,17 @@
+.infoBoxes{
+    padding: 20px;
+    font-size: 14px;
+}
+.infoHeaders{
+    font-weight: bold;
+}
+.dataBoxes{
+    border: #c1c1c1 solid 2px;
+    border-radius: 2px;
+    padding: 20px;
+    text-align: left;
+}
+.priceRight{
+    width: 100%;
+    text-align: right;
+}

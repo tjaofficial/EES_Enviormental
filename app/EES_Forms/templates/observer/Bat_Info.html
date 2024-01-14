@@ -1,0 +1,34 @@
+{% extends "observer/components/obs_layout.html" %}{% block list%}{% load static %}
+<link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+
+<div class="mainCont mainContCenter" style="width:34rem;">
+    <div class="card">
+        <div class='cardHeader'>
+            {% if access_page == "edit" %}
+                {% include "shared/components/backArrow.html" with destination="dashboard" %}
+            {% endif %}
+            Battery Information
+        </div>
+        <form class="contentCont" method="POST" action="">
+            {% csrf_token %}
+            {{ form.facility }}
+            Foreman: {{ form.foreman }}<br>
+            Crew: {{ form.crew }}<br><br>
+            Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br>
+            <p style='font-size: .7rem;'>* separate each oven with a comma *</p>
+            <p style='font-size: .7rem;'>* if there are NO inoperable ovens please type '-' *</p><br>
+
+            {% include "shared/components/submitButton.html" with label="submit" %}
+            <br><br>
+            {% if access_page == 'login' or access_page == 'edit' %}
+            <p>
+                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
+            </p>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

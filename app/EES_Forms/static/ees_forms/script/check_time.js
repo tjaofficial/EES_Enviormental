@@ -1,19 +1,24 @@
 function check_time(startId, endId, timePopup) {
-    const start = document.getElementById(startId).value,
-          end = document.getElementById(endId).value;
+    try {
+        const start = document.getElementById(startId).value,
+            end = document.getElementById(endId).value;
 
-    if (end == false) {
-        var popup = document.getElementById(timePopup).style.visibility = 'hidden';
-    }
-    else if (start >= end) {
-        document.getElementById(timePopup).style.visibility = 'visible';
-        document.getElementById(startId).style.backgroundColor = "white";
-        document.getElementById(endId).style.backgroundColor = "white";
-    }
-    else{
-        var popup = document.getElementById(timePopup).style.visibility = 'hidden';
-        document.getElementById(startId).style.backgroundColor = "#3c983c85";
-        document.getElementById(endId).style.backgroundColor = "#3c983c85";
+        if (end == false) {
+            var popup = document.getElementById(timePopup).style.visibility = 'hidden';
+        }
+        else if (start >= end) {
+            document.getElementById(timePopup).style.visibility = 'visible';
+            document.getElementById(startId).style.backgroundColor = "white";
+            document.getElementById(endId).style.backgroundColor = "white";
+        }
+        else{
+            var popup = document.getElementById(timePopup).style.visibility = 'hidden';
+            document.getElementById(startId).style.backgroundColor = "#3c983c85";
+            document.getElementById(endId).style.backgroundColor = "#3c983c85";
+        }
+        console.log("Times Inputed")
+    } catch(err) {
+        console.log("Times Not Inputed")
     }
 }
 
@@ -39,6 +44,8 @@ function timecheck_pushDoors() {
 function timecheck_cokeDoors() {
     check_time('c_start', 'c_stop', 'c_timePopup');
 }
+timecheck_pushDoors();
+timecheck_cokeDoors();
 
 /*************
  FORM A-1 - CHARGES

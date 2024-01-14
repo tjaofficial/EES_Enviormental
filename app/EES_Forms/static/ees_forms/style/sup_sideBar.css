@@ -1,0 +1,33 @@
+#sideBar{
+    width:20rem;
+    background-color: #28333e;
+    display: table;
+    min-width: 273.578px;
+    margin: 0px;
+    position: relative;
+    bottom: 0;
+}
+.menuItems{
+    margin-top: 67px;
+}
+.menuItems a{
+    color: white;
+    text-decoration: none;
+}
+ul {
+    display: block;
+    list-style-type: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+li {
+    display: block;
+    list-style-type: none;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 35px;
+    font-size: 0.9rem;
+    font-weight: 100;
+}

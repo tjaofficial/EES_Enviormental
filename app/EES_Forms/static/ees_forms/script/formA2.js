@@ -1,91 +1,3 @@
-// Get Required Input Fields
-
-/*
-function updateCalcs() {
-    // Push Side
-
-    const pushSide_startTime_value  = document.getElementById('pushSide_startTime').value;
-    const pushSide_endTime_value = document.getElementById('pushSide_endTime').value;
-    const pushSide_tempBlocked_min_value = document.getElementById('pushSide_tempBlocked_min').value;
-    const pushSide_tempBlocked_max_value = document.getElementById('pushSide_tempBlocked_max').value;
-    const pushSide_traverseTime_value_min = document.getElementById('pushSide_traverseTime_min').value;
-    const pushSide_traverseTime_value_second = document.getElementById('pushSide_traverseTime_second').value;
-    
-    pushSide_startTime_array = getTimeArray(pushSide_startTime_value);
-    pushSide_endTime_array = getTimeArray(pushSide_endTime_value);
-
-    pushSide_timeDelta = timeDelta(pushSide_startTime_array, pushSide_endTime_array);
-    
-    
-    document.getElementById('pushSide_traverseTime_min').value = pushSide_timeDelta[1];
-    document.getElementById('pushSide_traverseTime_second').value = pushSide_timeDelta[2];
-
-    // coke Side
-
-    const cokeSide_startTime_value  = document.getElementById('cokeSide_startTime').value;
-    const cokeSide_endTime_value = document.getElementById('cokeSide_endTime').value;
-    //const cokeSide_tempBlocked_min_value = document.getElementById('cokeSide_tempBlocked_min').value;
-    //const cokeSide_tempBlocked_max_value = document.getElementById('cokeSide_tempBlocked_max').value;
-    const cokeSide_traverseTime_value_min = document.getElementById('cokeSide_traverseTime_min').value;
-    const cokeSide_traverseTime_value_second = document.getElementById('cokeSide_traverseTime_second').value;
-    
-    cokeSide_startTime_array = getTimeArray(cokeSide_startTime_value);
-    cokeSide_endTime_array = getTimeArray(cokeSide_endTime_value);
-
-    cokeSide_timeDelta = timeDelta(cokeSide_startTime_array, cokeSide_endTime_array);
-    
-    
-    document.getElementById('cokeSide_traverseTime_min').value = cokeSide_timeDelta[1];
-    document.getElementById('cokeSide_traverseTime_second').value = cokeSide_timeDelta[2];
-    
-    //Total Traverse Time
-    traverseTime_total = 60*(pushSide_timeDelta[1]+cokeSide_timeDelta[1])+pushSide_timeDelta[2]+cokeSide_timeDelta[2];
-    document.getElementById('total_traverseTime').value = traverseTime_total;
-}
-
-
-// takes a time string 'hh:mm:ss' and returns a int array [hh, mm, ss]
-const getTimeArray = (timeString) => {
-    let timeArray = timeString.split(":");
-    let intTimeArray = [parseInt(timeArray[0]),parseInt(timeArray[1]),parseInt(timeArray[2])];
-    return intTimeArray;
-}
-
-// takes a 2 int arrays (mil time) [hh, mm, ss] and returns the time difference in a int array [hh, mm, sss]
-const timeDelta = (startTimeArray,endTimeArray) => {
-    let hourDelta = endTimeArray[0] - startTimeArray[0];
-    let minuteDelta = endTimeArray[1] - startTimeArray[1];
-    let secondDelta = endTimeArray[2] - startTimeArray[2];
-    
-    if (secondDelta < 0){
-        minuteDelta--;
-        secondDelta = 60-Math.abs(secondDelta);
-    }
-    
-    if (minuteDelta < 0){
-        hourDelta--;
-        minuteDelta = 60-Math.abs(minuteDelta);
-    }
-
-    if(hourDelta < 0){
-        prevDayTimeDelta = 24 - startTimeArray[0];
-        currentDayTimeDelta = endTimeArray[0];
-        hourDelta = prevDayTimeDelta + currentDayTimeDelta;
-        // 3 - 16 = -13
-    }
-
-    
-    
-    
-
-    
-
-    deltaArray = [hourDelta, minuteDelta, secondDelta];
-    return deltaArray;    
-    
-}
-*/
-
 /*****************************************
 Adding Rows to Table
 *****************************************/
@@ -118,7 +30,7 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
-    console.log(tableHTML)
+    //console.log(tableHTML)
     document.getElementById(`${input_ID}_ctableBody`).innerHTML = tableHTML;
 }
 
@@ -133,14 +45,13 @@ function intiateResultEventListeners(){
     }
 }
 
-
 function handle_Table_Input(event){
     const elem = event.target;
     let resultInputAttr = elem.dataset.resultinput;
     const resultKeyAttr = elem.dataset.resultkey;
     const elemValue = elem.value; 
     const input_Target = elem.dataset.targetinput;
-    console.log(input_Target)
+    //console.log(input_Target)
 
     if(parseInt(resultInputAttr) === -1){
         addToResultArray(input_Target, resultKeyAttr, elemValue);
@@ -195,9 +106,6 @@ function updateResultArray(target, array_Position, key, value){
 
 //createHTMLString(pushResultDataJSON);
 
-
-
-
 // Takes objects whether should be empty and data to return string of html
 // Template for Table Rows
 function htmlLayout(empty, data, target){
@@ -250,7 +158,7 @@ function update_Temp_Save(){
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
-    initate_Result_Table();
+initate_Result_Table();
 
 
 
@@ -278,10 +186,10 @@ function pc_doors_not_observed() {
         if(parseInt(push_from) < parseInt(push_to)){
             for(o=parseInt(push_from); o<=parseInt(push_to); o++){
                 for(i=0; i<select_numbers.length; i++){
-                    console.log("Comparing Ovens " + o + " AND Ovens " + select_numbers[i])
+                    //console.log("Comparing Ovens " + o + " AND Ovens " + select_numbers[i])
                     if(parseInt(o) === parseInt(select_numbers[i])){
                         x += 1;
-                        console.log("Push Side has " + x + " Oven(s) the same.")
+                        //console.log("Push Side has " + x + " Oven(s) the same.")
                     }
                 }
             }
@@ -289,10 +197,10 @@ function pc_doors_not_observed() {
         else {
             for(o=parseInt(push_to); o<=parseInt(push_from); o++){
                 for(i=0; i<select_numbers.length; i++){
-                    console.log("Comparing Ovens " + o + " AND Ovens " + select_numbers[i])
+                    //console.log("Comparing Ovens " + o + " AND Ovens " + select_numbers[i])
                     if(parseInt(o) === parseInt(select_numbers[i])){
                         x += 1;
-                        console.log("Push Side has " + x + " Oven(s) the same.")
+                        //console.log("Push Side has " + x + " Oven(s) the same.")
                     }
                 }
             }
@@ -311,10 +219,10 @@ function pc_doors_not_observed() {
         if(parseInt(coke_from) < parseInt(coke_to)){
             for(i=parseInt(coke_from); i<=parseInt(coke_to); i++){
                 for(k=0; k<select_numbers.length; k++){
-                    console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
+                    //console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
                     if(parseInt(i) === parseInt(select_numbers[k])){
                         y += 1;
-                        console.log("Coke Side has " + y + " Oven(s) the same.")
+                        //console.log("Coke Side has " + y + " Oven(s) the same.")
                     }
                 }
             }
@@ -322,10 +230,10 @@ function pc_doors_not_observed() {
         else {
             for(i=parseInt(coke_to); i<=parseInt(coke_from); i++){
                 for(k=0; k<select_numbers.length; k++){
-                    console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
+                    //console.log("Comparing Ovens " + i + " AND Ovens " + select_numbers[k])
                     if(parseInt(i) === parseInt(select_numbers[k])){
                         y += 1;
-                        console.log("Coke Side has " + y + " Oven(s) the same.")
+                        //console.log("Coke Side has " + y + " Oven(s) the same.")
                     }
                 }
             }
@@ -339,16 +247,38 @@ function pc_doors_not_observed() {
     const not_observed = parseInt(push_block_total) + parseInt(coke_block_total);
     
     document.getElementById('doors_not_observed').value = not_observed;
-    
+    equation();
 }
+pc_doors_not_observed();
 
 function inoperable_ovens() {
     const inop = document.getElementById('inop_ovens').value;
     
     document.getElementById('inop_doors_eq').value = parseInt(inop) * 2;
-}
+    equation();
 
-inoperable_ovens()
+    const inop_numbs_input = document.getElementById('inop_numbs');
+    var length_of_inop_numbers = inop_numbs_input.value.replace(' ', '').split(',').length
+    const inop_message = document.getElementById('inop_message');
+    if (length_of_inop_numbers != inop ){
+        console.log('Error message')
+        inop_message.style.display = "block";
+    } else {
+        var blank = false;
+        for(let x=0;x<length_of_inop_numbers;x++){
+            const oven_number = inop_numbs_input.value.replace(' ', '').split(',')[x];
+            if (!oven_number || +oven_number == 0 || isNaN(+oven_number)) {
+                var blank = true;
+            }
+        }
+        if (blank) {
+            inop_message.style.display = "block";
+        } else {
+            inop_message.style.display = "none";
+        }
+    }
+}
+inoperable_ovens();
 
 function total_leaking_doors() {
     const p_elem = document.querySelector(['#pushSide']),
@@ -356,23 +286,47 @@ function total_leaking_doors() {
     
     const p_array = JSON.parse(p_elem.value).data,
           c_array = JSON.parse(c_elem.value).data;
+          console.log(p_array);
+          console.log(c_array);
+    let pushList = []
+
+    //---------------------------------------------------------------
+    //-------Attempt to remove duplicates but might need to just add a popup---------
+    //---------------------------------------------------------------
+
+    // for (let i=0; i<p_array.length; i++){
+    //     let singleDoor = p_array[i]['oven'];
+    //     console.log(singleDoor)
+    //     pushList.push(singleDoor)
+    // }
+    // for (let x=0; x<p_array.length; x++){
+    //     let ovenDoor = p_array[x]['oven'];
+    //     if (ovenDoor in pushList){
+    //         p_array[x]['oven'] = "";
+    //         p_array[x]['location'] = "";
+    //         p_array[x]['zone'] = "";
+    //         console.log(p_array)
+    //         let pushJson = JSON.stringify(p_array);
+    //         document.querySelector(['#pushSide']).value.data = pushJson;
+    //     }
+    // }
     if (typeof p_array === 'undefined') {
         var p_len = 0;
-    }
-    else {
+    } else {
         var p_len = p_array.length;
+        console.log(p_len);
     }
     if (typeof c_array === 'undefined') {
         var c_len = 0;
-    }
-    else {
+    } else {
         var c_len = c_array.length;
     }
     const total_doors = p_len + c_len;
     
     document.getElementById('leaking_doors').value = total_doors;
+    equation();
 }
-total_leaking_doors()
+total_leaking_doors();
 
 function total_traverse() {
     const push_traverse_min = document.getElementById('id_p_traverse_time_min').value,
@@ -408,9 +362,14 @@ function total_traverse() {
           
     
     let total_secs = parseInt(push_secs) + parseInt(coke_secs);
-    
-    document.getElementById('total_traverse_time').value = total_secs;
+
+    if (total_secs == 0) {
+        document.getElementById('total_traverse_time').value = total_secs;
+    } else {
+        document.getElementById('total_traverse_time').value = total_secs;
+    }
 }
+total_traverse();
 
 function equation() {
     const leaks = document.getElementById('leaking_doors').value,
@@ -418,9 +377,11 @@ function equation() {
           not_obs = document.getElementById('doors_not_observed').value;
     
     const equate = (parseInt(leaks) * 100)/(170 - parseInt(inops) - parseInt(not_obs));
-    
-    document.getElementById('id_percent_leaking').value = parseFloat(equate).toFixed(3);
-    
+    if (isNaN(equate)) {
+        document.getElementById('id_percent_leaking').value = '';
+    } else {
+        document.getElementById('id_percent_leaking').value = parseFloat(equate).toFixed(3);
+    }
 }
 
 function allowed_time() {
@@ -431,4 +392,5 @@ function allowed_time() {
     document.getElementById('allowed_traverse_time').value = equate_time;
           
 }
-
+allowed_time();
+equation();
