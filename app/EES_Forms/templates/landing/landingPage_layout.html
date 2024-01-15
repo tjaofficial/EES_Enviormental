@@ -24,6 +24,16 @@
                 {% endfor %}
             </ul>
         {% endif %}
+        {% if form_1.errors %}
+            <div class="alert alert-danger">
+                {{ userForm.errors }}
+            </div>
+        {% endif %}
+        {% if form_2.errors %}
+            <div class="alert alert-danger">
+                {{ profileForm.errors }}
+            </div>
+        {% endif %}
         {% block body %}
         
         {% endblock %}

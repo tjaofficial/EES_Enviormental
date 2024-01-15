@@ -19,31 +19,18 @@ from django.template.loader import render_to_string
 from ..tokens import create_token, check_token, delete_token
 from django.conf import settings
 from django.utils.html import strip_tags
+from django.core.exceptions import ValidationError
 
 profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
 
 def login_view(request):
-    loginPage = True
-    facility = ''
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     count_bp = daily_battery_profile_model.objects.count()
-    existing = False
-    login_error = {"error":False, "message":''}
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('adminDash')
-        # elif userProf.exists():
-        #     print('Check 1')
-        #     if userProf.company == None:
-        #         print('IT FUCKING IS')
-        #     print(userProf.company)
-        #     print(userProf.is_active)
-        #     if not userProf.company and userProf.is_active:
-        #         print('Check 2')
-        #         return redirect('regCompany')
-
         elif request.user.groups.filter(name=SUPER_VAR):
             return redirect('sup_dashboard', SUPER_VAR)
         elif request.user.groups.filter(name=CLIENT_VAR):
@@ -52,18 +39,10 @@ def login_view(request):
         elif request.user.groups.filter(name=OBSER_VAR):
             if count_bp != 0:
                 todays_log = daily_prof[0]
-                if now.month == todays_log.date_save.month:
-                    if now.day == todays_log.date_save.day:
-                        return redirect('facilitySelect')
+                if now == todays_log.date_save:
+                    return redirect('facilitySelect')
                 batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                return redirect(batt_prof) 
-        else:
-            return redirect('no_registration')
-        access = False
-    else:
-        access = True
-
+                return redirect(batt_prof)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -76,11 +55,8 @@ def login_view(request):
                 return redirect('adminDash')
             elif userProf.exists():
                 userProf = userProf[0]
-                print('Check 1')
                 if not userProf.company and userProf.is_active:
-                    print('Check 2')
                     return redirect('companyReg')
-            
             if request.user.groups.filter(name=SUPER_VAR):
                 if len(bat_info_model.objects.all()) > 0:
                     return redirect('sup_dashboard', SUPER_VAR)
@@ -91,29 +67,13 @@ def login_view(request):
                 return redirect('c_dashboard', facility)
             elif request.user.groups.filter(name=OBSER_VAR):
                 return redirect('facilitySelect')
-                # if count_bp != 0:
-                #     todays_log = daily_prof[0]
-                #     if now.month == todays_log.date_save.month:
-                #         if now.day == todays_log.date_save.day:
-                #             return redirect('IncompleteForms')
-                # else:
-                #     return HttpResponseNotFound("No Battry Profile Data In Data Base")
-                
-                #batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             else:
-                return HttpResponseNotFound("None of the Users in database are assigned a group")
-        
+                messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
+                return redirect('Login')
         else:
-            login_error["error"] = True
-            login_error["message"] = 'Incorrect username or password'
-
-    return render(request, "shared/login.html", {
-        'facility': facility, "now": now, "login_error": login_error, 'access': access, 'loginPage': loginPage
-    })
-
-def valid_account_logout(request):
-    
-    return render(request, "admin/no_registration.html")
+            messages.error(request,"Incorrect username or password")
+            return redirect('Login')
+    return render(request, "shared/login.html", {})
     
 def logout_view(request):
     logout(request)
@@ -228,7 +188,7 @@ def change_password(request, facility):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            # messages.success(request, 'Your password was successfully updated!')
+            messages.success(request, 'Your password was successfully updated!')
             return redirect('profile', facility, 'main')
         else:
             messages.error(request, 'Please correct the error below.')
@@ -250,6 +210,10 @@ def landingRegister(request):
         new_data['position'] = SUPER_VAR
         form = CreateUserForm(new_data)
         profile_form = user_profile_form(new_data)
+        print(len(request.POST['phone']))
+        if len(request.POST['phone']) < 10:
+            profile_form.add_error('phone', ValidationError("The card has been declined."))
+        print(profile_form.errors)
         if form.is_valid() and profile_form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
@@ -283,15 +247,9 @@ def landingRegister(request):
             )
             messages.success(request,"Please confirm your email address to complete the registration")
             return redirect('Login')
-            # user = form.cleaned_data.get('username')
-            
-            # new_user = authenticate(
-            #     username=form.cleaned_data['username'],
-            #     password=form.cleaned_data['password1'],
-            # )
-            #login(request, new_user)
-            # messages.success(request, 'Account was created for ' + user + '. Please check your email for Activation Email.')
-            # return redirect('companyReg')
+        else:
+            messages.error(request,"Please fix your inputs.")
+            return redirect('register')
     return render(request, 'landing/landing_register.html',{
         'userForm': userForm, 'profileForm': profileForm
     })

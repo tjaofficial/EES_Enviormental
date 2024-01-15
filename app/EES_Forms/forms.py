@@ -175,13 +175,17 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
         
         widgets = {
-            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
+            'username': forms.TextInput(attrs={'placeholder': 'Username', 'autofocus': False }),
             'email': forms.EmailInput(attrs={'placeholder': 'E-mail', 'style':'width: 15rem;'}),
             'password1': forms.TextInput(attrs={'type': 'password', 'placeholder': 'Password'}),
             'password2': forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
             'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'autofocus': False})
 
 
 class daily_battery_profile_form(ModelForm):
