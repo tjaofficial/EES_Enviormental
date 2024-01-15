@@ -21,6 +21,7 @@ from django.conf import settings
 from django.utils.html import strip_tags
 from django.core.exceptions import ValidationError
 
+
 profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
 

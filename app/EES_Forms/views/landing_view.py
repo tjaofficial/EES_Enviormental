@@ -3,8 +3,11 @@ from ..models import braintreePlans, FAQ_model, Forms
 from .inital_form_add import add_forms_to_database
 
 def landing_page(request):
-    if Forms.objects.count() <= 5:
-        add_forms_to_database()
+    # IMPORTANT - THIS CHECKS IF DATABASE IS EMPTY AND ADD THE INITAL DATA
+    # DO NOT DELETE
+    add_forms_to_database()
+    
+    
     btPlans = braintreePlans.objects.all()
     print('hello')
     cPlan = []

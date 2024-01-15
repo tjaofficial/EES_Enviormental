@@ -31,7 +31,6 @@ def billing_view(request, step):
                 }
             cPlan.append(oPlan)
         cPlan.sort(key=lambda d: d['price'])
-        print(cPlan[0]['description'])
         variables['planList'] = cPlan
         link = "landing/braintree/subscription.html"
     elif step == "registration":

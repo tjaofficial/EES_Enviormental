@@ -24,20 +24,57 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        {% if form_1.errors %}
-            <div class="alert alert-danger">
-                {{ userForm.errors }}
-            </div>
-        {% endif %}
-        {% if form_2.errors %}
-            <div class="alert alert-danger">
-                {{ profileForm.errors }}
-            </div>
-        {% endif %}
         {% block body %}
         
         {% endblock %}
         <footer>
+            <div class="footerContent">
+                <div class="footerTiles">
+                    <h5>Contacts</h5>
+                    <div>
+                        9473 Chicken Drive<br>
+                        stamperd, MI, 48532<br>
+                        (pho)nen-umber<br>
+                        email@email.com
+                    </div>
+                </div>
+                <div class="footerTiles">
+                    <h5>Popular</h5>
+                    <div>
+                        <ul>
+                            <li>Login</li>
+                            <li>Subscription & Pricing</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footerTiles">
+                    <h5>Our Company</h5>
+                    <div>
+                        <ul>
+                            <li>About Us</li>
+                            <li>Testimonials</li>
+                            <li>Subscription & Pricing</li>
+                            <li>Included Forms</li>
+                            <li>New & Updates</li>
+                            <li>Our Clients</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footerTiles">
+                    <h5>Help Support</h5>
+                    <div>
+                        <ul>
+                            <li>Terms & Conditions</li>
+                            <li><a href="{% url 'FAQ' %}">FAQs</a></li>
+                            <li>Custom Forms</li>
+                            <li>Website Tutorial</li>
+                            <li>Privacy Policy</li>
+                            <li>Open Ticket</li>
+                            <li>Contact Us</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="container minWidth">
                 <p>&copy; 2024 MethodPlus+ | All rights reserved</p>
             </div>
