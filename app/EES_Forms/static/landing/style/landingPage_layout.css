@@ -8,7 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #eaeaea;
     color: #333;
     width: 100%;
     min-height: 100vh;
@@ -31,4 +31,10 @@ header {
 }
 .minWidth{
     min-width: 360px;
+}
+.whiteSheetCont{
+    width: 950px;
+    background: white;
+    height: calc(100vh - 57px - 32px - 18px);
+    box-shadow: black 0 0 20px -15px;
 }

@@ -2199,3 +2199,9 @@ class braintree_form(ModelForm):
         model = braintree_model
         fields = ('__all__')
         widgets = {}
+        
+class FAQ_form(ModelForm):
+    class Meta:
+        model = FAQ_model
+        fields = ('__all__')
+        widgets = {}

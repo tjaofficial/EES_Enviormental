@@ -29,7 +29,7 @@
                         <th class="tableHeader" style="width: 7rem;">Amount</th>
                         <th class="tableHeader" style="">Actions</th>
                     </tr>
-                    {% for x in activeSub.transactions %}
+                    {% for x in collection %}
                         <tr class="row">
                             <td>Subscription Purchase<br><p style="color:gray; font-size:12px;">{{x.id}}</p></td>
                             <td>Anthony Ackerman<br><p style="color:gray; font-size:12px;">Ending in {{x.credit_card_details.last_4}}</p></td>

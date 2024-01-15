@@ -1,0 +1,114 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block body %}
+<link href="{% static 'ees_forms/style/selectSubscription.css' %}" rel="stylesheet" />
+<link href="{% static 'landing/style/landing_subscriptionSelect.css' %}" rel="stylesheet" />
+<link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
+
+<div class='topCont noOverflowCenter' style="height:100%;">
+    <div class="headerSpace"></div>
+    <div class='topSection2' style="width: 100%;">
+        <div style="display:flex; flex-direction: row; text-align: center; justify-content: center;">
+            {% for plan in planList %}
+                <div id="{{plan.pid}}" class="optionsCont borderHover">
+                    <div class="infoCont">
+                        <div class="planHeader">
+                            <h1>{{plan.name}}</h1>
+                        </div>
+                        <div class="priceBubble">
+                            ${{plan.price}}
+                        </div>
+                        <div style="padding: 0px 1rem;">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                </svg>
+                                {{plan.description.0}}
+                            </div><br>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                </svg>
+                                {{plan.Security_and_Compliance}}
+                            </div><br>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                </svg>
+                                {{plan.Customizable_Forms}}
+                            </div><br>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                </svg>
+                                {{plan.Real_time_Data_Entry}}
+                            </div><br>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                </svg>
+                                {{plan.Collaborative_Workflows}}
+                            </div><br>
+                            <div style="display: inline-flex;">
+                                {% if plan == planList.0 %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                {% endif %}
+                                &nbsp;<p class="{% if plan == planList.0 %}strikeOut{% endif %}">{{plan.Multimedia_Integration}}</p>
+                            </div><br><br>
+                            <div style="display: inline-flex;">
+                                {% if plan == planList.0 %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                    <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                                </svg>
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                    <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                </svg>
+                                {% endif %}
+                                &nbsp;<p class="{% if plan == planList.0 %}strikeOut{% endif %}">{{plan.Advanced_Reporting}}</p>
+                            </div><br><br>
+                            <div style="display: inline-flex;">
+                                {% if plan != planList.2 %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+                                        <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+                                    </svg>
+                                {% endif %}
+                                &nbsp;<p class="{% if plan != planList.2 %}strikeOut{% endif %}">{{plan.Offline_Accessibility}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 0px 1rem 1rem;">
+                        <form method="post" autocomplete="off" action="/billing/registration">
+                            {% csrf_token %}
+                            <input type="hidden" value={{plan.pid}} name="planId">
+                            <input type="hidden" value=True name="planChange">
+                            <input id="submit" type="submit" onclick="changeSelected(this)" value="Select">
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="">
+
+    </div>
+</div>
+
+  <script src="https://js.braintreegateway.com/web/3.90.0/js/client.min.js"></script>
+  <script src="https://js.braintreegateway.com/web/3.90.0/js/hosted-fields.min.js"></script>
+  <script>
+
+  </script>
+
+
+  {% endblock %}

@@ -5,6 +5,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{% static 'landing/style/landingPage_layout.css' %}" rel="stylesheet">
+        <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
+        <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
         <script defer src="{% static 'landing/script/nav_bar.js' %}"></script>
         <title>MethodPlus+ Data Collection</title>
     </head>
@@ -12,6 +14,16 @@
         <header>
             {% include 'landing/landingPage_navBar.html' %}
         </header>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+                        <span onclick="remove_messages(this)" class="closeAdd">&times;</span>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% block body %}
         
         {% endblock %}

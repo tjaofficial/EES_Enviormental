@@ -1,0 +1,34 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block body %}
+<link href="{% static 'landing/style/landing_whiteSheet_layout.css' %}" rel="stylesheet">
+<div class='noOverflowCenter'>
+    <div class="whiteSheetCont">
+        <div class="sheetHeader">Frequently Asked Questions</div>
+        <div class="contentCont">
+            {% for section, list in sectionDict.items %}
+                <div class="sectionCont">
+                    <h4>{{section}}</h4>
+                    <ol>
+                        {% for qas in list %}
+                            <li><a href=#><h5>{{qas.question}}</h5></a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endfor %}
+            {% for section, list in sectionDict.items %}
+                <div class="sectionCont">
+                    <h4>{{section}}</h4>
+                    <ol>
+                        {% for qas in list %}
+                            <li>
+                                <h5>{{qas.question}}</h5>
+                                <p>{{qas.answer}}:{{qas.link}}</p>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,4 +1,4 @@
-from .login_logout_view import login_view, logout_view, change_password, valid_account_logout, landingRegister, registerCompany, main_change_password, request_password_view, activate_view
+from .login_logout_view import login_view, logout_view, change_password, valid_account_logout, landingRegister, registerCompany, main_change_password, request_password_view, activate_view, reset_password_activate_view
 from .header_view import about_view, safety_view, settings_view
 from .sidebar_view import corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view, formsProgress
 from .dashboard_view import IncompleteForms
@@ -10,7 +10,7 @@ from .formA1_view import formA1
 from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 from .signature_view import signature
-from .billing import billing
+from .billing import billing_view, landing_addCard_view
 from .landing_view import *
 from .admin_view import *
 from .sup_facility import *

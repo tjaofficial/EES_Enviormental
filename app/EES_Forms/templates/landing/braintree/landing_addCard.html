@@ -1,11 +1,10 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+{% extends 'landing/landingPage_layout.html' %}{% load static %}{% block body %}
 <link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
-<div class="mainCont">
+<div class="mainCont" style="width: 46rem;">
     <div class="card">
         <div class="cardHeader">
-                {% include "shared/components/backArrow.html" with destination="accountSettings" %}
-                Change Card On File
+            Add New Card
         </div>
         <div class="contentCont">
             <div id="clientToken"style="display:none;" data-client_token={{client_token}}></div>
@@ -13,24 +12,21 @@
                 <div id="iForm" style="margin: auto;display: block; width: 41rem;">
                     <form action="" id="Payment_Method_Form" method="post">
                         {% csrf_token %}
-                        {% if action == "change" or action|slice:'0:3' == "add" %}
-                        <h2 style="text-align: center; margin-bottom: 22px;">Card Information</h2>
-                            <div class="cardInfoCont" style="margin-bottom: 48px;">
-                                <label for="nameOnCard">Name On Card</label>
-                                <div id="nameOnCard" class="tempInputStyle">
-                                {% comment %} <input type="text" id="nameOnCard"/> {% endcomment %}
-                                </div>
-                                <label for="card-number">Card Number</label>
-                                <div id="card-number" class="tempInputStyle"></div>
-
-                                <label for="cvv">CVV</label>
-                                <div id="cvv" class="tempInputStyle"></div>
-
-                                <label for="expiration-date">Expiration Date</label>
-                                <div id="expiration-date" class="tempInputStyle"></div>
-                                </div>
+                        <div class="cardInfoCont" style="margin-bottom: 48px;">
+                            <h2 style="text-align: center; margin-bottom: 22px;">Card Information</h2>
+                            <label for="nameOnCard">Name On Card</label>
+                            <div id="nameOnCard" class="tempInputStyle">
+                            {% comment %} <input type="text" id="nameOnCard"/> {% endcomment %}
                             </div>
-                        {% endif %}
+                            <label for="card-number">Card Number</label>
+                            <div id="card-number" class="tempInputStyle"></div>
+
+                            <label for="cvv">CVV</label>
+                            <div id="cvv" class="tempInputStyle"></div>
+
+                            <label for="expiration-date">Expiration Date</label>
+                            <div id="expiration-date" class="tempInputStyle"></div>
+                        </div>
                         <div class="billingAddressCont" style="margin-bottom: 48px;">
                             <h2 style="text-align: center; margin-bottom: 22px;">Billing Address</h2>
                             <input class="input" type="hidden" id="planId" value="{{pId}}"/>
@@ -69,7 +65,7 @@
                     <p id="rCardNumber" class="reviewInfo">Card Number: </p>
                     <p id="rExpiration" class="reviewInfo">Expiration Date: </p>
                     
-                    <form action="{% if action|slice:'4:' == 'subscription' %}../../../subscription/payment{% else %}/billing/receipt{% endif %}" method="post">
+                    <form action="/billing/receipt" method="post">
                         {% csrf_token %}
                         <input id="pSeats" type="hidden" name="seats" value="{{seats}}"/>
                         <input id="pPayNonce" type="hidden" name="payNonce"/>
@@ -80,6 +76,7 @@
                         <input id="pCity" type="hidden" name="city"/>
                         <input id="pState" type="hidden" name="state"/>
                         <input id="pZipCode" type="hidden" name="zipCode"/>
+                        <input id="pPaymentSelected" type="hidden" name="paymentSelected" value="card-new"/>
                         <input id="postButton" type="submit" value="Confirm Subscription"/>
                     </form>
                 </div>

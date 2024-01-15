@@ -1,7 +1,10 @@
 from django.shortcuts import render
-from ..models import braintreePlans
+from ..models import braintreePlans, FAQ_model, Forms
+from .inital_form_add import add_forms_to_database
 
 def landing_page(request):
+    if Forms.objects.count() <= 5:
+        add_forms_to_database()
     btPlans = braintreePlans.objects.all()
     print('hello')
     cPlan = []
@@ -24,3 +27,25 @@ def landing_page(request):
     return render(request, 'landing/landingPage_main.html', {
         "planList": cPlan
     })
+    
+def FAQ_view(request):
+    FAQData = FAQ_model.objects.all()
+    sectionList = []
+    for FAQ in FAQData:
+        if FAQ.section not in sectionList:
+            sectionList.append(FAQ.section)
+    
+    sectionDict = {}
+    for section in sectionList:
+        sectionGroup = []
+        for question in FAQData:
+            if question.section == section:
+                sectionGroup.append(question)
+        sectionDict[section] = sectionGroup  
+    return render(request, 'landing/FAQ.html', {
+        'sectionDict': sectionDict
+    })
+
+def landing_contact_view(request):
+    
+    return render(request, 'landing/landing_contact.html', {})
