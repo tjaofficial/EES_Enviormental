@@ -11,7 +11,7 @@ from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, EMAIL_HOST
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
@@ -138,7 +138,7 @@ def request_password_view(request):
                 if userProfile.is_active:
                     mail_subject = 'MethodPlus: Reset Your Account Password'   
                     current_site = get_current_site(request)
-                    html_message = render_to_string('landing/reset_password_email.html', {  
+                    html_message = render_to_string('email/reset_password_email.html', {  
                         'user': user,  
                         'domain': current_site.domain,  
                         'uid':urlsafe_base64_encode(force_bytes(user.pk)),  

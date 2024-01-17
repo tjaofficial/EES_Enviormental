@@ -16,6 +16,7 @@ from .admin_view import *
 from .sup_facility import *
 from .calSelect_view import *
 from .account_settings_view import *
+from .invoice_view import *
 
 
 from .daily_battery_profile_view import *

@@ -105,6 +105,7 @@ urlpatterns = [
     path('<str:facility>/printIndex/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
     path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
     path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
+    path('billing-history/invoice/<str:invoiceID>', views.invoices, name='invoicePDF'),
 
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
 

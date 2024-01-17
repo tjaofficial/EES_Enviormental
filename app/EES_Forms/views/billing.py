@@ -3,6 +3,13 @@ from django.contrib.auth.decorators import login_required
 from ..models import user_profile_model, company_model, braintreePlans
 from ..utils import braintreeGateway
 import datetime
+from django.contrib.sites.shortcuts import get_current_site  
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode  
+from django.template.loader import render_to_string  
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+from django.conf import settings
 
 lock = login_required(login_url='Login')
 
@@ -177,6 +184,24 @@ def billing_view(request, step):
             userComp.braintree.status = 'active'
             userComp.braintree.save()
             userComp.save()
+            
+            mail_subject = 'MethodPlus: Welcome to MethodPlus+. Your account has been activated.'   
+            current_site = get_current_site(request)
+            html_message = render_to_string('email/acc_welcome_email.html', {  
+                'user': user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+            })
+            plain_message = strip_tags(html_message)
+            to_email = user.email 
+            send_mail(
+                mail_subject,
+                plain_message,
+                settings.EMAIL_HOST_USER,
+                [to_email],
+                html_message=html_message,
+                fail_silently=False
+            )
             print('MADE IT TO FUCKING SAVE')
 
         variables['totalData']  = request.POST

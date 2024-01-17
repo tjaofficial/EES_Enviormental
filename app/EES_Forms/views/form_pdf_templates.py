@@ -3,11 +3,43 @@ from reportlab.lib.styles import getSampleStyleSheet
 from ..utils import time_change, date_change, date_time_change, truck_choices, area_choices, emptyInputs, road_choices, inventoryResponse, quarterParse
 from reportlab.lib import colors
 import json
-from ..models import formM_model
+from ..models import formM_model, braintreePlans
 import datetime
 import calendar
 
 styles = getSampleStyleSheet()
+
+def pdf_template_invoice(primaryData, userProf, title):
+    btPlan = braintreePlans.objects.get(planID=primaryData.plan_id)
+    print(primaryData)
+    tableData = [
+        [title],
+        ['Invoice Date','','','Invoice ID'],
+        [primaryData.created_at.date(), '', '', primaryData.id],
+        [''],
+        ['To'],
+        [userProf.company.company_name],
+        [primaryData.credit_card_details.cardholder_name],
+        [userProf.user.email],
+        [''],
+        ['Subscription'],
+        [btPlan.name, '', '', '$' + str(btPlan.price) + '.00'],
+        [primaryData.plan_id],
+        [primaryData.created_at.date()],
+        [''],
+        ['Paid with '+ primaryData.payment_instrument_type.replace('_',' ').capitalize(), '', '', 'Total', '$' + str(btPlan.price) + '.00'],
+        ['','','','Includes tax','$0.00'],
+        ['','','','Total charge','$' + str(btPlan.price) + '.00'],
+        ['Pleaser retain for your records.'],
+        ['MethodPlus US Voxol Universe LLC'],
+        ['Copyright (c) 2024 Voxol Universe LLC. All rights reserved.']
+    ]
+    tableColWidths = (100,100,100,100,100)
+    style = [
+        ('FONT', (0,0), (-1,0), 'Times-Bold', 22),
+    ]
+    
+    return tableData, tableColWidths, style 
 
 def pdf_template_A1(primaryData, secondaryData, title, subTitle):
     print(primaryData)
