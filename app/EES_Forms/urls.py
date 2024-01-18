@@ -13,6 +13,9 @@ urlpatterns = [
     
     ##---LANDNG PAGES-----
     path("FAQ", views.FAQ_view, name="FAQ"),
+    path("TAC", views.terms_and_conditions_view, name="TAC"),
+    path("privacy-policy", views.privacy_policy_view, name="privacyPolicy"),
+    path("included-forms", views.included_forms_view, name="includedForms"),
     path("contact-mp", views.landing_contact_view, name="landingContact"),
     path("register", views.landingRegister, name="register"),
     path("login", views.login_view, name="Login"),

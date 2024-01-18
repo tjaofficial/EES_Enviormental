@@ -1,11 +1,75 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% load sup_tags %}{% block list %}
-
+<link href="{% static 'ees_forms/style/primary/primaryInputs.css' %}" rel="stylesheet">
+<link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
+<script defer src="{% static 'ees_forms/script/hover_modal.js' %}"></script>
+<link href="{% static 'ees_forms/style/hover_modal.css' %}" rel="stylesheet">
 <div class="mainCont" style="width: 400px;">    
     <div class="card bottomOfPageMargin">
         <div class="cardHeader">Request New Form</div>
         <div class="contentCont">
-            <form method="POST" action="">
+            <form class='soft' method="POST" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h4>Form Information</h4><br>
+                {{form.name}}<br>
+                {{form.type}}<br>
+                <select name="frequency" required="" id="id_frequency" style="color:gray;" onchange="changeColor(this)">
+                    <option disabled value="" selected="">Form Frequency</option>
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quarterly">Quarterly </option>
+                    <option value="Semi-Annual">Semi-Annual</option>
+                    <option value="Annual">Annual</option>
+                </select><br>
+                {{form.how_data_is_collected}}<br>
+                {{form.inspection_of}}<br>
+                {{form.detailed_description}}<br>
+                <div style="text-align:center;">
+                    <h4>Upload Copy of Form</h4><br>
+                    {{form.form_example_file}}
+                </div><br><br>
+                <div style="font-size: 0.8rem; color: gray; display: inline-flex; height: 30px; justify-content: center; align-items: center; margin-bottom: 20px;">
+                    {{form.optimize}} <div style="margin-left: 4px;">Optimize Form</div><div id="hoverMarker" onmouseover="hoverdiv(event)" onmouseout="hoverdiv(event)" style="border: gray solid 1px; border-radius: 5px; width: 17px;margin-left: 4px;">?</div>
+                </div><br>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                <div id="hoverModal" class="hide">
+                    Optimize Form: By selecting this option you are allowing 
+                    MethodPlus designers to develop and design the style and 
+                    functionality of your form ONLINE. Once all the information 
+                    is submitted, the MethodPlus design department will contact you 
+                    within 1-2 business days to gather more detail about the
+                    "work-flow" for the form. We then create an input form optimize for
+                    the inspection or field work described. This design will only
+                    be for data collection form IN THE FIELD but the downloadable PDF file will be a
+                    duplicate of the example file you upload. If you perfer not to
+                    select this option, your form and PDF will be exactly the same
+                    as the example file you are sending.
+                </div>
                 
+
+                <h4>Contact Availability</h4><br>
+                <select name="callBack_days" required id="id_callBack_days" style="color:gray;" onchange="changeColor(this)">
+                    <option disabled value="" selected>Days Available</option>
+                    <option value="Everyday">Everyday</option>
+                    <option value="0">Mondays</option>
+                    <option value="1">Tuesdays</option>
+                    <option value="2">Wednesdays</option>
+                    <option value="3">Thursdays</option>
+                    <option value="4">Fridays</option>
+                    <option value="5">Saturdays</option>
+                    <option value="6">Sundays</option>
+                    <option value="Weekends">Weekends</option>
+                    <option value="Weekdays">Weekdays</option>
+                </select><br>
+                <div style="display:inline-flex;width: 330px;">
+                    <select style="width:100%; margin-right: 10px; color:gray;" name="callBack_time_freq" required="" id="id_callBack_time_freq" onchange="changeColor(this)">
+                        <option disabled value="" selected>select</option>
+                        <option value="before">Before</option>
+                        <option value="after">After</option>
+                    </select>
+                    <input style="width:100%;color:gray;" type="time" name="callBack_time" required="" id="id_callBack_time" onchange="changeColor(this)">
+                </div><br>
+                {% include "shared/components/submitButton.html" with label="request" %}
             </form>
         </div>
     </div>

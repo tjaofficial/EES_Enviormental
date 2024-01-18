@@ -32,12 +32,6 @@ header {
 .minWidth{
     min-width: 360px;
 }
-.whiteSheetCont{
-    width: 950px;
-    background: white;
-    height: calc(100vh - 57px - 32px - 18px);
-    box-shadow: black 0 0 20px -15px;
-}
 .footerContent{
     width: 100%;
     background: #1a3b52;

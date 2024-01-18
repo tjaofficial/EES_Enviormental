@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from ..forms import CreateUserForm, user_profile_form, bat_info_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, company_model
+from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, form_requests_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
@@ -208,6 +208,7 @@ def sup_dashboard_view(request, facility):
                 "od_30": od_30, 
                 "od_10": od_10, 
                 "od_5": od_5, 
+                'quarterly_percent': quarterly_percent,
                 'weekly_percent': weekly_percent, 
                 'monthly_percent': monthly_percent, 
                 'annually_percent': annually_percent, 
@@ -256,7 +257,8 @@ def sup_dashboard_view(request, facility):
         'A4data': A4data, 
         'A5data': A5data, 
         'push': push, 
-        'coke': coke, 
+        'coke': coke,
+        'quarterly_percent': quarterly_percent,
         'weekly_percent': weekly_percent, 
         'monthly_percent': monthly_percent, 
         'annually_percent': annually_percent, 
@@ -457,11 +459,26 @@ def form_request_view(request, facility):
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    form = form_requests_form
     
     if request.method == 'POST':
         answer = request.POST
-        if answer['facilitySelect'] != '':
-            return redirect('sup_dashboard', answer['facilitySelect'])
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
+        else:
+            dataCopy = request.POST.copy()
+            dataCopy['user'] = request.user
+            form = form_requests_form(dataCopy, request.FILES)
+            print(form.errors)
+            if form.is_valid():
+                A = form.save(commit=False)
+                A.form_example_url = A.form_example_file.url
+                A.user = request.user
+                A.save()
+                print('SAVED IT')
+                messages.success(request, 'Your request has been submitted. MethodPlus will contact you within 1-2 business days.')
+                return redirect('sup_dashboard', 'supervisor')
     return render(request, 'supervisor/request_form.html', {
         'facility': facility,
         'supervisor': supervisor, 
@@ -469,5 +486,6 @@ def form_request_view(request, facility):
         'unlock': unlock, 
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
+        'form': form
     })   
  

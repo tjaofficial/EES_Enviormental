@@ -1,0 +1,30 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block body %}
+<link href="{% static 'landing/style/landing_whiteSheet_layout.css' %}" rel="stylesheet">
+<div class='noOverflowCenter'>
+    <div class="whiteSheetCont" style='height:unset;'>
+        <div class="sheetHeader">Included Forms</div>
+        <div class="contentCont">
+            <h4>
+                Here you can see some of the many forms included 
+                in our MethodPlus+ service. If these aren't enough, remember to utilize 
+                our customs forms request page. Send us a template of your 
+                old hard-copy/paper forms and we will turn them into a digital 
+                masterpiece no extra charge!
+            </h4>
+            <h4>Take a look at some of forms you will have access to:</h4>
+            <ul>
+                {% for form in formData %}
+                    <li>{{form.header}} - {{form.title}}</li>
+                {% endfor %}
+                <li>STI SP001 - Annual Tank Inspection Checklist</li>
+                <li>API 653 - Tank Inspection Report</li>
+                <li>Daily Vehicle Inspection</li>
+                <li>...AND MANY MORE!</li>
+            </ul>
+            
+            Last updated: 12/12/2023
+        </div>
+    </div>
+</div>
+{% endblock %}

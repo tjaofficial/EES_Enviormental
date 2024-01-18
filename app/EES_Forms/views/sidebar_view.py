@@ -821,29 +821,6 @@ def sop_view(request, facility):
             A = form.save(commit=False)
             A.pdf_url = A.pdf_file.url
             A.save()
-        #         sop_file = request.FILES['pdf_file']
-        #         upload = sop_model(pdf_file=sop_file)
-        #         upload.save()
-        #         pdf_url = upload.file.url
-        #         name = request.POST['name']
-        #         revision_date = request.POST['revision_date']
-        #         print('SAVED')
-        #     else:
-        #         print('NOT SAVED')
-                
-                
-        # sop_file = request.FILES['pdf_link']
-        # image_type = request.POST['image_type']
-        # if settings.USE_S3:
-        #     upload = Upload(file=sop_file)
-        #     upload.save()
-        #     image_url = upload.file.url
-        # else:
-        #     fs = FileSystemStorage()
-        #     filename = fs.save(sop_file.name, sop_file)
-        #     image_url = fs.url(filename)
-
-            
     return render(request, 'shared/sops.html', {
         'sortedFacilityData':sortedFacilityData, 'notifs': notifs, 'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

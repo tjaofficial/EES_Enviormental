@@ -6,6 +6,7 @@
             {% include "shared/components/backArrow.html" with destination="dashboard"%}
             Facilities
         </div>
+        <div style="text-align:center; width:100%;margin-top:25px;">Need more forms? <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">Submit a form Request</a></div>
         {% if facilities|length > 0 %}
             <div class="contentCont center" style="padding: unset;">
                 {% for info in facilities %}

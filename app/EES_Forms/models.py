@@ -7259,11 +7259,28 @@ class FAQ_model(models.Model):
     section = models.CharField(max_length=75)
     question = models.CharField(max_length=150)
     answer = models.CharField(max_length=700)
-    link = models.CharField(max_length=30)
+    link = models.CharField(
+        max_length=30,
+        null=True, 
+        blank=True
+    )
     def __str__(self):
         return str(self.question)
   
 class form_requests_model(models.Model):
+    days_choices2 = (
+        ('','Days Available'),
+        ('Everyday', 'Everyday'),
+        ('0', 'Mondays'),
+        ('1', 'Tuesdays'),
+        ('2', 'Wednesdays'),
+        ('3', 'Thursdays'),
+        ('4', 'Fridays'),
+        ('5', 'Saturdays'),
+        ('6', 'Sundays'),
+        ('Weekends', 'Weekends'),
+        ('Weekdays', 'Weekdays'),
+    )
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT
@@ -7277,11 +7294,15 @@ class form_requests_model(models.Model):
         max_length=1000000,
         blank=True
     )
-    optimize = models.BooleanField(default=False)
+    optimize = models.BooleanField(
+        default=False,
+        null=True,
+        blank=True
+    )
     detailed_description = models.CharField(max_length=1000)
     callBack_days = models.CharField(
         max_length=30,
-        choices=days_choices
+        choices=days_choices2
     )
     callBack_time = models.TimeField(
         auto_now_add=False,

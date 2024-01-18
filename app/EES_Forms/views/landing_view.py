@@ -49,6 +49,20 @@ def FAQ_view(request):
         'sectionDict': sectionDict
     })
 
+def terms_and_conditions_view(request):
+
+    return render(request, 'landing/terms_and_conditions.html', {})
+
+def privacy_policy_view(request):
+
+    return render(request, 'landing/privacy_policy.html', {})
+
+def included_forms_view(request):
+    formData = Forms.objects.exclude(header='Waste Weekly Inspections')
+    return render(request, 'landing/included_forms.html', {
+        'formData': formData,
+    })
+
 def landing_contact_view(request):
     
     return render(request, 'landing/landing_contact.html', {})
