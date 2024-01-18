@@ -42,8 +42,14 @@ ul.messages li a.close {
 ul.messages li .closeAdd {
     color: #696969;
     float: right;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: bold;
     padding-right: 4px;
     margin-top: -7px;
+}
+ul.messages{
+    position: absolute;
+    z-index: 100;
+    width: 55%;
+    min-width: 422px;
 }

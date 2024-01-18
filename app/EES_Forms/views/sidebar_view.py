@@ -6,10 +6,11 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities, getFormID_w_newFormLabel
 from django.contrib.auth.decorators import login_required
 import os
 import ast
+from django.contrib import messages
 from django.conf import settings
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from .print_form_view import date_change
@@ -385,22 +386,25 @@ def search_forms_view(request, facility, access_page):
         
         if searchedText:
             form_list = formSubs.filter(Q(formID__form__icontains=searchedText) | Q(formID__frequency__icontains=searchedText) | Q(formID__title__icontains=searchedText)).order_by('formID')
+            forms = []
+            for subInfo in form_list:
+                for facilityForms in formIDandLabel:
+                    if subInfo.formID.id == facilityForms[0]: 
+                        forms.append((facilityForms, subInfo))
+            # forms = form_list
+            letterForms = []
 
-        forms = []
-        for subInfo in form_list:
-            for facilityForms in formIDandLabel:
-                if subInfo.formID.id == facilityForms[0]: 
-                    forms.append((facilityForms, subInfo))
-        # forms = form_list
-        letterForms = []
-
-        for x in forms:
-            if x[0][0] not in {26,27}:
-                letterForms.append([x[0][1], 'form' + x[1].formID.form.replace('-','') + '_model', x[1].formID])
-            else:
-                letterForms.append([x[0][1], x[1].formID.form.replace(' ', '_').lower() + '_model', x[1].formID])
-        print(letterForms)
-        return render(request, 'ees_forms/search_forms.html', {
+            for x in forms:
+                if x[0][0] not in {26,27}:
+                    letterForms.append([x[0][1], 'form' + x[1].formID.form.replace('-','') + '_model', x[1].formID])
+                else:
+                    letterForms.append([x[0][1], x[1].formID.form.replace(' ', '_').lower() + '_model', x[1].formID])
+            print(letterForms)
+        else:
+            messages.error(request,"Please enter a form 'Name' or 'Label' to search.")
+            return redirect('archive', facility)
+            
+        return render(request, 'shared/search_forms.html', {
             'notifs': notifs, 
             'sortedFacilityData': sortedFacilityData, 
             'options': options, 
@@ -421,7 +425,7 @@ def search_forms_view(request, facility, access_page):
             'client': client,
         })
     else:
-        return render(request, 'ees_forms/search_forms.html', {
+        return render(request, 'shared/search_forms.html', {
             'notifs': notifs, 
             'sortedFacilityData': sortedFacilityData, 
             'monthList': monthList, 
@@ -458,23 +462,38 @@ def issues_view(request, facility, form_name, form_date, access_page):
         facilityForms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    if not isinstance(form_name, int):
+        form_name_parsed = getFormID_w_newFormLabel(form_name, facilityForms)
+        if not form_name_parsed:
+            messages.error(request,'ERROR: ID-11850001. Contant Support Team')
+            return redirect('register')
+    else:
+        form_name_parsed = form_name
     
-    if access_page == 'form':
+    def create_link_elements():
         for facForms in facilityForms:
             formIDtemp = int(facForms[0])
             for facSubs in facilitySubs:
-                if formIDtemp == facSubs.formID.id and formIDtemp == int(form_name):
+                if formIDtemp == facSubs.formID.id and formIDtemp == form_name_parsed:
                     formLabel = facForms[1]
                     formID = int(facForms[0])
+                    main_url = facSubs.formID.frequency + '/' + facSubs.formID.link + '/'
                     if facSubs.formID.id in {24,25}:
                         weekendNameDict = {5:'saturday', 6: 'sunday'}
                         today = datetime.date.today().weekday()
                         for dayNumber in weekendNameDict:
                             if today == dayNumber:
                                 day = weekendNameDict[dayNumber]
-                        link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page + '/' + day
                     else:
-                        link = facSubs.formID.frequency + '/' + facSubs.formID.link + '/' + access_page   
+                        day = False
+                    return main_url, day, formLabel
+
+    if access_page == 'form':
+        main_url, day, formLabel = create_link_elements()
+        if day:
+            link = main_url + access_page + '/' + day
+        else:
+            link = main_url + access_page
         existing = False
         picker = 'n/a'
         
@@ -514,6 +533,11 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
+        main_url, day, formLabel = create_link_elements()
+        if day:
+            link = main_url + form_date + '/' + day
+        else:
+            link = main_url + form_date
         org = issues_model.objects.filter(date__exact=form_date)
         database_form = org[0]
         for entry in org:
@@ -521,7 +545,6 @@ def issues_view(request, facility, form_name, form_date, access_page):
                 if form_name == entry.form:
                     picker = entry
                     form = issues_form()
-                    link = ''
                     if client:
                         entry.viewed = True
                         entry.save()
@@ -596,8 +619,8 @@ def issues_view(request, facility, form_name, form_date, access_page):
                 updateSubmissionForm(facility, formID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
-    return render(request, "observer/issues_template.html", {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, 'form_name': form_name, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
+    return render(request, "shared/issues_template.html", {
+        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
     })
 
 @lock

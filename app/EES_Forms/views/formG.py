@@ -20,8 +20,8 @@ def formG1(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
+    now = datetime.datetime.now().date()
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = formG1_model.objects.all().order_by('-date')
@@ -31,12 +31,8 @@ def formG1(request, facility, selector):
     picker = issueForm_picker(facility, selector, formName)
     
     if unlock:
-        if len(profile) > 0:
-            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-            if same_user:
-                cert_date = request.user.user_profile_model.cert_date
-            else:
-                return redirect('IncompleteForms', facility)
+        if profile.exists():
+            cert_date = request.user.user_profile_model.cert_date
         else:
             return redirect('IncompleteForms', facility)
     
@@ -63,18 +59,13 @@ def formG1(request, facility, selector):
             existing = True
             search = True
         # ------check if database is empty----------
-        elif len(org) > 0 and len(org2) > 0:
+        elif org.exists() and org2.exists():
             database_form = org[0]
             database_form2 = org2[0]
             # -------check if there is a daily battery profile
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save == database_form.date:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
 
@@ -201,6 +192,10 @@ def formG1(request, facility, selector):
 
         if request.method == "POST":
             if existing:
+                if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
+                    dataCopy = request.POST.copy()
+                    dataCopy['canvas'] = exist_canvas
+                    form = formG1_form(dataCopy, instance=database_form)
                 form = formG1_form(request.POST, instance=database_form)
                 readings = formG1_readings_form(request.POST, instance=database_form2)
             else:
@@ -243,9 +238,8 @@ def formG1(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formG1.html", {
-        'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName
+        'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName
     })
-
 
 @lock
 def formG2(request, facility, selector):
@@ -255,8 +249,8 @@ def formG2(request, facility, selector):
     supervisor = setUnlockClientSupervisor(request.user)[2]
     existing = False
     search = False
-    now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
+    now = datetime.datetime.now().date()
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formG2_model.objects.all().order_by('-date')
@@ -266,12 +260,8 @@ def formG2(request, facility, selector):
     picker = issueForm_picker(facility, selector, formName)
     
     if unlock:
-        if len(profile) > 0:
-            same_user = user_profile_model.objects.filter(user__exact=request.user.id)
-            if same_user:
-                cert_date = request.user.user_profile_model.cert_date
-            else:
-                return redirect('IncompleteForms', facility)
+        if profile.exists():
+            cert_date = request.user.user_profile_model.cert_date
         else:
             return redirect('IncompleteForms', facility)
     
@@ -294,23 +284,16 @@ def formG2(request, facility, selector):
             existing = True
             search = True
         # ------check if database is empty----------
-        elif len(org) > 0 or len(org2) > 0:
+        elif org.exists() or org2.exists():
             database_form = org[0]
             database_form2 = org2[0]
             # -------check if there is a daily battery profile
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if todays_log.date_save.month == database_form.date.month:
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
+            if now == todays_log.date_save:
+                if todays_log.date_save.month == database_form.date.month:
+                    existing = True
             else:
                 batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
                 return redirect(batt_prof)
-        
         if search:
             database_form = ''
             exist_canvas = data.canvas
@@ -434,6 +417,10 @@ def formG2(request, facility, selector):
 
         if request.method == "POST":
             if existing:
+                if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
+                    dataCopy = request.POST.copy()
+                    dataCopy['canvas'] = exist_canvas
+                    form = formG2_form(dataCopy, instance=database_form)
                 form = formG2_form(request.POST, instance=database_form)
                 readings = formG2_readings_form(request.POST, instance=database_form2)
             else:
@@ -475,5 +462,5 @@ def formG2(request, facility, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/monthly/formG2.html", {
-        'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
+        'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

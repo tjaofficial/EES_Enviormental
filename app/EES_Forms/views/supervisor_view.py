@@ -449,4 +449,25 @@ def register_view(request, facility, access_page):
         'userInfo': userInfo,
         'addMoreRegistrations': addMoreRegistrations
     })
+   
+@lock
+def form_request_view(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    sortedFacilityData = getCompanyFacilities(request.user.username)
     
+    if request.method == 'POST':
+        answer = request.POST
+        if answer['facilitySelect'] != '':
+            return redirect('sup_dashboard', answer['facilitySelect'])
+    return render(request, 'supervisor/request_form.html', {
+        'facility': facility,
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+    })   
+ 

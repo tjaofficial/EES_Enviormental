@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{% static 'landing/style/landingPage_layout.css' %}" rel="stylesheet">
         <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
-        <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
         <script defer src="{% static 'landing/script/nav_bar.js' %}"></script>
         <title>MethodPlus+ Data Collection</title>
     </head>
@@ -15,15 +14,16 @@
             {% include 'landing/landingPage_navBar.html' %}
         </header>
         {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
-                        <span onclick="remove_messages(this)" class="closeAdd">&times;</span>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %}class="{{ message.tags }}"{% endif %} style="display:block;">
+                <span onclick="remove_messages(this)" class="closeAdd">&times;</span>
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
         {% endif %}
+        <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
         {% block body %}
         
         {% endblock %}
@@ -42,8 +42,8 @@
                     <h5>Popular</h5>
                     <div>
                         <ul>
-                            <li>Login</li>
-                            <li>Subscription & Pricing</li>
+                            <li><a href="{% url 'Login' %}">Login</a></li>
+                            <li><a href="{% url 'landing' %}#pricing">Subscription & Pricing</a></li>
                         </ul>
                     </div>
                 </div>
@@ -51,9 +51,9 @@
                     <h5>Our Company</h5>
                     <div>
                         <ul>
-                            <li>About Us</li>
+                            <li><a href="{% url 'landing' %}#about">About Us</a></li>
                             <li>Testimonials</li>
-                            <li>Subscription & Pricing</li>
+                            <li><a href="{% url 'landing' %}#pricing">Subscription & Pricing</a></li>
                             <li>Included Forms</li>
                             <li>New & Updates</li>
                             <li>Our Clients</li>

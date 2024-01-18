@@ -213,7 +213,14 @@ def landingRegister(request):
         profile_form = user_profile_form(new_data)
         print(len(request.POST['phone']))
         if len(request.POST['phone']) < 10:
-            profile_form.add_error('phone', ValidationError("The card has been declined."))
+            profile_form.add_error('phone', ValidationError("Please enter a valid phone number. (ie. 1234567890, (123)456-7890)"))
+            messages.error(request,"Please enter a valid phone number. (ie. 1234567890, (123)456-7890)")
+        if User.objects.filter(email=request.POST['email']).exists():
+            form.add_error('email', ValidationError("This email has already been used."))
+            messages.error(request,"This email has already been used. Please enter a different email.")
+        if User.objects.filter(username=request.POST['username'].lower()).exists():
+            form.add_error('username', ValidationError("This username already exists."))
+            messages.error(request,"This username already exists. Please enter a different username.")
         print(profile_form.errors)
         if form.is_valid() and profile_form.is_valid():
             user = form.save(commit=False)
@@ -266,6 +273,9 @@ def registerCompany(request):
         new_data['phone'] = finalPhone
         form = company_form(new_data)
         form2 = braintree_form(new_data)
+        if company_model.objects.filter(company_name=request.POST['company_name']).exists():
+            form.add_error('company_name', ValidationError("This Company already exists. Please choose a different company name or contact out Support Team."))
+            messages.error(request,"This Company already exists. Please choose a different company name or contact out Support Team.")
         if form.is_valid():
             companyNameCheck = company_model.objects.filter(company_name=request.POST['company_name'])
             if companyNameCheck.exists():

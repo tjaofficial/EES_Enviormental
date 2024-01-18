@@ -70,6 +70,9 @@
                             EES Personnel Notified:
                         </h4>&nbsp; {{ picker.notified }}
                     </div>
+                    <div>
+                        <a href="../../../{{link}}">Click here to view form</a>
+                    </div>
                     {% if unlock %}
                     <div style="text-align: right;">
                         <a href="{% url  'issues_view' facility picker.form picker.date 'edit' %}">

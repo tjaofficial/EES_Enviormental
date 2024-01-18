@@ -2209,3 +2209,23 @@ class FAQ_form(ModelForm):
         model = FAQ_model
         fields = ('__all__')
         widgets = {}
+        
+class request_forms_form(ModelForm):
+    class Meta:
+        model = form_requests_model
+        fields = ('__all__')
+        widgets = {
+            'user': forms.Select(),
+            'name': forms.TextInput(),
+            'type': forms.TextInput(),
+            'how_data_is_collected': forms.Textarea(),
+            'inspection_of': forms.Textarea(),
+            'form_example_file': forms.TextInput(),
+            'form_example_url': forms.TextInput(),
+            'optimize': forms.BooleanField(),
+            'detailed_description': forms.Textarea(),
+            'callBack_days': forms.TextInput(),
+            'callBack_time': forms.TextInput(),
+            'callBack_time_freq': forms.TextInput(),
+            'frequency': forms.TextInput(),
+        }

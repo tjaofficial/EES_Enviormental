@@ -251,6 +251,10 @@ def formA5(request, facility, selector):
 
         if request.method == "POST":
             if existing:
+                if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
+                    dataCopy = request.POST.copy()
+                    dataCopy['canvas'] = exist_canvas
+                    form = formA5_form(dataCopy, instance=database_form)
                 form = formA5_form(request.POST, instance=database_form)
                 readings = formA5_readings_form(request.POST, instance=database_form2)
             else:

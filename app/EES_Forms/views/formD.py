@@ -39,7 +39,7 @@ def formD(request, facility, selector):
             existing = True
             search = True
             unlock = True
-        elif len(submitted_forms) > 0:
+        elif submitted_forms.exists():
             database_form = submitted_forms[0]
             #print(database_form.whatever().values())
             starting_saturday = database_form.week_start
