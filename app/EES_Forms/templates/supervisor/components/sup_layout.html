@@ -29,6 +29,8 @@
         <script defer src="{% static 'ees_forms/script/notifications.js' %}"></script>
         <script defer src="{% static 'notifications/notifications.js' %}"></script>
         <script defer src="{% static 'ees_forms/script/headerDropDown.js' %}"></script>
+        <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
+        <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
         <link href="{% static 'ees_forms/style/sup_layout.css' %}" rel="stylesheet" />
         <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
         <link href="{% static 'ees_forms/style/sup_form.css' %}" rel="stylesheet" />
@@ -44,6 +46,16 @@
         {% include "supervisor/components/sup_sideBar.html" %}
         {% include "shared/components/headerDropDown.html" %}
         <div class="mainContentContainer">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %}class="{{ message.tags }}"{% endif %} style="display:block;">
+                    <span onclick="remove_messages(this)" class="closeAdd">&times;</span>
+                    {{ message }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             {% block list %}
             
             {% endblock %}

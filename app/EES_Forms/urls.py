@@ -2,31 +2,34 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    ##---ADMIN PAGES -------
-    path("admin-pages/addFAQ", views.admin_add_FAQ_view, name="adminFAQ"),
     ##---MAIN DASHBOARDS----
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
     path("adminDash", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
     
+    ##---ADMIN PAGES -------
+    path("admin-pages/addFAQ", views.admin_add_FAQ_view, name="adminFAQ"),
+    
     ##---LANDNG PAGES-----
     path("FAQ", views.FAQ_view, name="FAQ"),
+    path("TAC", views.terms_and_conditions_view, name="TAC"),
+    path("privacy-policy", views.privacy_policy_view, name="privacyPolicy"),
+    path("included-forms", views.included_forms_view, name="includedForms"),
     path("contact-mp", views.landing_contact_view, name="landingContact"),
-       
-    ##---REGISTRATION-----
-    path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
-    path("login", views.login_view, name="Login"),
     path("register", views.landingRegister, name="register"),
+    path("login", views.login_view, name="Login"),
+    path("register_company", views.registerCompany, name="companyReg"),
+    path("logout", views.logout_view, name="Logout"),
     path("activate/<str:uidb64>/<str:token>/", views.activate_view, name="activate"),
     path("reset/<str:uidb64>/<str:token>/", views.reset_password_activate_view, name="reset"),
-    path("register_company", views.registerCompany, name="companyReg"),
-    path("no_registration", views.valid_account_logout, name="no_registration"),
-    path("logout", views.logout_view, name="Logout"),
     path("request-password", views.request_password_view, name='requestPassword'),
     path("change-password", views.main_change_password, name='mainPasswordChange'),
+    
+    ##---SUPERVISOR PAGES-----
+    path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
-    path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
+    path("<str:facility>/request-form", views.form_request_view, name='requestForm'),
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
@@ -39,17 +42,20 @@ urlpatterns = [
     
     ##---BILLING
     path("billing/<str:step>", views.billing_view, name="billing"),
-
+    
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
     path('<str:facility>/about', views.about_view, name='about'),
     path('<str:facility>/safety', views.safety_view, name='safety'),
     path('<str:facility>/settings', views.settings_view, name='settings'),
     path('<str:facility>/form_select', views.facilityForm, name='facilityForms'),
     
+    ##---OBSERVER PAGES-------
     path("facility/", views.facility_select_view, name="facilitySelect"),
     path("<str:facility>/daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("<str:facility>/signature",views.signature,name="signature"),
 
+    ##---SHARED PAGES-----
+    path("<str:facility>/profile/<str:access_page>", views.profile, name="profile"),
     path("<str:facility>/Corrective-Action", views.corrective_action_view, name="Corrective-Action"),
     path("<str:facility>/schedule_view", views.schedule_view, name="Schedule"),
     path("<str:facility>/schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
@@ -106,6 +112,7 @@ urlpatterns = [
     path('<str:facility>/printIndex/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
     path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
     path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
+    path('billing-history/invoice/<str:invoiceID>', views.invoices, name='invoicePDF'),
 
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
 

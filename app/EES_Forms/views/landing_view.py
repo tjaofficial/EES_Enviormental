@@ -3,8 +3,11 @@ from ..models import braintreePlans, FAQ_model, Forms
 from .inital_form_add import add_forms_to_database
 
 def landing_page(request):
-    if Forms.objects.count() <= 5:
-        add_forms_to_database()
+    # IMPORTANT - THIS CHECKS IF DATABASE IS EMPTY AND ADD THE INITAL DATA
+    # DO NOT DELETE
+    add_forms_to_database()
+    
+    
     btPlans = braintreePlans.objects.all()
     print('hello')
     cPlan = []
@@ -44,6 +47,20 @@ def FAQ_view(request):
         sectionDict[section] = sectionGroup  
     return render(request, 'landing/FAQ.html', {
         'sectionDict': sectionDict
+    })
+
+def terms_and_conditions_view(request):
+
+    return render(request, 'landing/terms_and_conditions.html', {})
+
+def privacy_policy_view(request):
+
+    return render(request, 'landing/privacy_policy.html', {})
+
+def included_forms_view(request):
+    formData = Forms.objects.exclude(header='Waste Weekly Inspections')
+    return render(request, 'landing/included_forms.html', {
+        'formData': formData,
     })
 
 def landing_contact_view(request):

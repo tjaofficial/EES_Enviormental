@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{% static 'landing/style/landingPage_layout.css' %}" rel="stylesheet">
         <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
-        <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
         <script defer src="{% static 'landing/script/nav_bar.js' %}"></script>
         <title>MethodPlus+ Data Collection</title>
     </head>
@@ -15,19 +14,67 @@
             {% include 'landing/landingPage_navBar.html' %}
         </header>
         {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
-                        <span onclick="remove_messages(this)" class="closeAdd">&times;</span>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-            </ul>
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %}class="{{ message.tags }}"{% endif %} style="display:block;">
+                <span onclick="remove_messages(this)" class="closeAdd">&times;</span>
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
         {% endif %}
+        <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
         {% block body %}
         
         {% endblock %}
         <footer>
+            <div class="footerContent">
+                <div class="footerTiles">
+                    <h5>Contacts</h5>
+                    <div>
+                        9473 Chicken Drive<br>
+                        stamperd, MI, 48532<br>
+                        (pho)nen-umber<br>
+                        email@email.com
+                    </div>
+                </div>
+                <div class="footerTiles">
+                    <h5>Popular</h5>
+                    <div>
+                        <ul>
+                            <li><a href="{% url 'Login' %}">Login</a></li>
+                            <li><a href="{% url 'landing' %}#pricing">Subscription & Pricing</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footerTiles">
+                    <h5>Our Company</h5>
+                    <div>
+                        <ul>
+                            <li><a href="{% url 'landing' %}#about">About Us</a></li>
+                            <li>Testimonials</li>
+                            <li><a href="{% url 'landing' %}#pricing">Subscription & Pricing</a></li>
+                            <li><a href="{% url 'includedForms' %}">Included Forms</a></li>
+                            <li>New & Updates</li>
+                            <li>Our Clients</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footerTiles">
+                    <h5>Help Support</h5>
+                    <div>
+                        <ul>
+                            <li><a href="{% url 'TAC' %}">Terms & Conditions</a></li>
+                            <li><a href="{% url 'privacyPolicy' %}">Privacy Policy</a></li>
+                            <li><a href="{% url 'FAQ' %}">FAQs</a></li>
+                            <li>Custom Forms</li>
+                            <li>Website Tutorial</li>
+                            <li>Open Ticket</li>
+                            <li>Contact Us</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="container minWidth">
                 <p>&copy; 2024 MethodPlus+ | All rights reserved</p>
             </div>

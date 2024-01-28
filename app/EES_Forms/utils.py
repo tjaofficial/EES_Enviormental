@@ -585,6 +585,17 @@ def getFormID_w_oldFormLabel(formLabel):
         print('The input for getFormID_w_oldFormLabel() did not match any of the old labels.')
     return formID
 
+def getFormID_w_newFormLabel(formLabel, facilityForms):
+    for x in facilityForms:
+        if x[1] == formLabel:
+            formID = x[0]
+            break
+        else:
+            formID = False
+    if not formID:
+        print('The input for getFormID_w_newFormLabel() did not match any of the labels created by the user.')
+    return formID
+
 def createNotificationDatabase(facility, user, formID, date, notifSelector):
     todayNumb = datetime.date.today().weekday()
     nFacility = bat_info_model.objects.filter(facility_name=facility)

@@ -24,6 +24,9 @@ def formH(request, facility, selector):
     profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
+    today = datetime.date.today()
+    start_saturday = today - datetime.timedelta(days=today.weekday() + 2)
+    end_friday = start_saturday + datetime.timedelta(days=6)
     org = formH_model.objects.all().order_by('-date')
     org2 = formH_readings_model.objects.all().order_by('-form')
     orgFormL = org2.filter(comb_formL__exact=True)
@@ -62,7 +65,7 @@ def formH(request, facility, selector):
                 database_form2 = org2[0]
                 # -------check if there is a daily battery profile
                 if now == todays_log.date_save:
-                    if str(todays_log.date_save) == str(database_form.date):
+                    if start_saturday < database_form.date < end_friday:
                         existing = True
                 else:
                     batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
@@ -226,19 +229,19 @@ def formH(request, facility, selector):
 
         if request.method == "POST":
             if existing:
-                form = formH_form(request.POST, instance=database_form)
+                if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
+                    dataCopy = request.POST.copy()
+                    dataCopy['canvas'] = exist_canvas
+                    form = formH_form(dataCopy, instance=database_form)
+                else:
+                    form = formH_form(request.POST, instance=database_form)
                 readings = formH_readings_form(request.POST, instance=database_form2)
             else:
                 form = formH_form(request.POST)
                 readings = formH_readings_form(request.POST)
-
-            print(readings.errors)
             A_valid = form.is_valid()
             B_valid = readings.is_valid()
-            print(A_valid)
-            print(B_valid)
             if A_valid and B_valid:
-                print('CHECK 2')
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
                 A.facilityChoice = options
@@ -253,7 +256,6 @@ def formH(request, facility, selector):
                             A.ambient_temp_stop = 'same'
                         else:
                             A.ambient_temp_stop = weather['temperature']
-                        
                 A.save()
 
                 B.form = A

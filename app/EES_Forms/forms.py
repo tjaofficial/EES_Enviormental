@@ -175,13 +175,17 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
         
         widgets = {
-            'username': forms.TextInput(attrs={'placeholder': 'Username'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'E-mail', 'style':'width: 15rem;'}),
-            'password1': forms.TextInput(attrs={'type': 'password', 'placeholder': 'Password'}),
-            'password2': forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}),
-            'first_name': forms.TextInput(attrs={'placeholder': 'First Name'}),
-            'last_name': forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            'username': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Username', 'autofocus': False }),
+            'email': forms.EmailInput(attrs={'class': 'input', 'placeholder': 'E-mail', 'style':'width: 15rem;'}),
+            'password1': forms.TextInput(attrs={'class': 'input', 'type': 'password', 'placeholder': 'Password'}),
+            'password2': forms.PasswordInput(attrs={'class': 'input', 'placeholder': 'Confirm Password'}),
+            'first_name': forms.TextInput(attrs={'class': 'input', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Last Name'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'autofocus': False})
 
 
 class daily_battery_profile_form(ModelForm):
@@ -212,11 +216,11 @@ class user_profile_form(forms.ModelForm):
 
         widgets = {
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'profile_picture': forms.FileInput(attrs={'style': 'width: fit-content;'}),
-            'phone': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;', 'placeholder': '(123)456-7890'}),
-            'position': forms.Select(attrs={'oninput': 'cert_date1()', 'style': 'width: 160px;'}),
-            'company': forms.TextInput(attrs={'type': 'text', 'style': 'width: 150px;'}),
-            'certs': forms.TextInput(attrs={'type': 'text', 'style': 'width: 300px;'}),
+            'profile_picture': forms.FileInput(attrs={'class':'input', 'style': 'width: fit-content;'}),
+            'phone': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 150px;', 'placeholder': '(123)456-7890'}),
+            'position': forms.Select(attrs={'class':'input', 'oninput': 'cert_date1()', 'style': 'width: 160px;'}),
+            'company': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 150px;'}),
+            'certs': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 300px;'}),
         }
 
 
@@ -2205,3 +2209,23 @@ class FAQ_form(ModelForm):
         model = FAQ_model
         fields = ('__all__')
         widgets = {}
+        
+class form_requests_form(ModelForm):
+    class Meta:
+        model = form_requests_model
+        fields = ('__all__')
+        widgets = {
+            'user': forms.Select(),
+            'name': forms.TextInput(attrs={'placeholder':'Form Title'}),
+            'type': forms.TextInput(attrs={'placeholder':'Type (ie. Environmental, Structural, Mechanical...)'}),
+            'how_data_is_collected': forms.Textarea(attrs={'placeholder':'What is the method or process of collecting data for this form?'}),
+            'inspection_of': forms.Textarea(attrs={'placeholder':'Describe what is being inspected.'}),
+            'form_example_file': forms.FileInput(attrs={}),
+            'form_example_url': forms.TextInput(attrs={}),
+            'optimize': forms.CheckboxInput(),
+            'detailed_description': forms.Textarea(attrs={'placeholder':'Detailed description of form including any other notes or details of functionality.'}),
+            'callBack_days': forms.Select(attrs={'style':'width:50%;'}),
+            'callBack_time': forms.TimeInput(attrs={'type':'time'}),
+            'callBack_time_freq': forms.Select(attrs={}),
+            'frequency': forms.Select(attrs={}),
+        }

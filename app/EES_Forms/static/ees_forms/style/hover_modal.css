@@ -1,0 +1,15 @@
+.hide {
+    display: none;
+}
+#hoverModal{
+    position: absolute;
+    top: 428px;
+    right: 193px;
+    width: 450px;
+    background: rgb(238, 238, 238);
+    border-radius: 10px;
+    float: right;
+    font-size: 12px;
+    padding: 5px;
+    box-shadow: 0px 1px 10px 2px #00000055;
+}

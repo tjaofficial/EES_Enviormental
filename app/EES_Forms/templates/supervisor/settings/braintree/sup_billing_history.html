@@ -36,7 +36,7 @@
                             <td>{{x.created_at.date}}</td>
                             <td>{% if x.status == "settled" %}PAID{% else %}{{x.status}}{% endif %}</td>
                             <td>${{x.amount}}</td>
-                            <td><a href=#>View Invoice</a></td>
+                            <td><a href="{% url 'invoicePDF' x.id %}">View Invoice</a></td>
                         </tr>
                     {% endfor %}
                 </table>

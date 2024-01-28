@@ -1,0 +1,40 @@
+{% autoescape off %}
+<style>
+    .mainContEmail{
+        background-color: lightblue;
+        padding: 27px;
+        margin: auto;
+        width: 400px;
+        border-radius: 16px;
+    }
+    .cardHeader {
+        font-size: 20px;
+        font-weight: bolder;
+        padding: 1rem;
+        background-color: #253544;
+        color: white;
+        border-radius: 13px 13px 0px 0px;
+        text-align: center;
+        font-family: sans-serif;
+    }
+</style>
+<div style="background-color: #ebebeb; margin: auto; width: 524px; border-radius: 16px;">
+    <div style="font-size: 20px; font-weight: bolder; padding: 1rem; background-color: #253544; color: white; border-radius: 13px 13px 0px 0px; text-align: center; font-family: sans-serif;">
+        Welcome to MethodPlus+
+    </div>
+    <div style="padding: 27px;font-size: 18px; color:black;">
+        Hi {{ user.first_name|title }},<br>
+        <p>Your payment has been successfully processed and your subscription to MethodPlus+ has been confirmed.<br>
+        <p>You can access your subscription details in settings located within the <a href="http://{{domain}}{% url 'Account' 'supervisor' %}">Account Settings</a>. If you have any questions, please visit the <a href="http://{{domain}}{% url 'FAQ' %}">FAQ</a> section or contact our <a href="">Support Team</a>.</p><br>
+            
+        <p>Time to use your cutting-edge inspection form program designed to streamline and enhance the way you collect and manage critical data in real-time. Remember, MethodPlus+ is a powerful tool when it comes to collecting, storing, and viewing observation data. Take full advantage of all the functionality MethodPlus+ has to offer including tailored Forms to fit your needs.</p><br>
+
+        <p>Click below to get started with MethodPlus+</p><br>
+        <div style="margin:auto; text-align:center;">
+            <a href="http://{{domain}}{% url 'Register' 'supervisor' 'facility' %}">
+                <button class="primaryButton" id="submit">Get started</button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endautoescape %}
