@@ -7323,7 +7323,18 @@ class form_requests_model(models.Model):
     def __str__(self):
         return str(self.user) + ' - ' + str(self.name)
 
-
+class packets_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(
+        max_length=70
+    )
+    formList = models.CharField(
+        max_length=1000,
+        null=True,
+        blank=True
+    )
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.name)
   
     
 # class tank_library(models.Model):

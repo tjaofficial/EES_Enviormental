@@ -140,9 +140,9 @@ def formI(request, facility, selector):
 
             A_valid = form.is_valid()
             if A_valid:
-                form.save(commit=False)
-                form.facilityChoice = options
-                form.save()
+                A = form.save(commit=False)
+                A.facilityChoice = options
+                A.save()
 
                 B = []
                 for x in formI_model.objects.all():

@@ -123,9 +123,9 @@ def formD(request, facility, selector):
                 form = formD_form(request.POST)
             A_valid = form.is_valid()
             if A_valid:
-                form.save(commit=False)
-                form.facilityChoice = options
-                form.save()
+                A = form.save(commit=False)
+                A.facilityChoice = options
+                A.save()
                 
                 new_latest_form = formD_model.objects.all().order_by('-week_start')[0]
                 filled_out = True

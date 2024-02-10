@@ -596,7 +596,7 @@ class formA3_form(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'inop_ovens': forms.NumberInput(attrs={'oninput':'inoperable_ovens()', 'id': 'inop_ovens', 'class': 'input', 'type': 'number', 'style': 'width:35px; text-align: center;'}),
-            'inop_numbs': forms.TextInput(attrs={'oninput':'inoperable_ovens()', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
+            'inop_numbs': forms.TextInput(attrs={'oninput':'inoperable_ovens(); check_dampered_inoperable(this, "none", "none")', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
             'crew': forms.Select(attrs={'style': 'width:40px;'}),
             'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
             'om_start': forms.TimeInput(attrs={'oninput': 'offtake_time()', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
@@ -2229,3 +2229,16 @@ class form_requests_form(ModelForm):
             'callBack_time_freq': forms.Select(attrs={}),
             'frequency': forms.Select(attrs={}),
         }
+        
+class packets_form(ModelForm):
+    class Meta:
+        model = packets_model
+        fields = ('__all__')
+        widgets = {
+            'facilityChoice': forms.Select(),
+            'name': forms.TextInput(attrs={'type':'text', 'placeholder':'Enter packet name...'}),
+            'formList': forms.TextInput(),
+        }
+        
+        
+        

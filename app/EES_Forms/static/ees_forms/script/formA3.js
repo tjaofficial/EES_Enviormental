@@ -1,4 +1,4 @@
-
+const submitButton = document.getElementById('submit');
 /*****************************************
 Initial Page Load Setup
 *****************************************/
@@ -204,7 +204,7 @@ function createHTMLString(dataJSON, input_ID){
 
 function locationHTMLTemplate(value, target, locationIndex, resultInput){
     if(target == 'offtakes'){
-        var htmlTempate = `<select oninput="check_dampered_inoperable(this, '${target}', 'inputted')" data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}" style="margin-bottom:3px;">
+        var htmlTempate = `<select oninput="check_dampered_inoperable(this, '${target}', 'inputted');" data-locationIndex="${locationIndex}" data-resultKey="location" data-targetinput="${target}" data-resultInput="${resultInput}" style="margin-bottom:3px;">
                                 <option value="" ${value? 'selected': ''}>--</option>
                                 <option value="dampered_off" ${value === "dampered_off"? 'selected': ''}>D</option>
                                 <option value="cap" ${value === "cap"? 'selected': ''}>C</option>
@@ -393,63 +393,129 @@ setTimeout(
     
 function check_dampered_inoperable(elem, observed, action) {
     const inop_numbers = document.getElementById('inop_numbs').value.replaceAll(' ','').split(',');
-    if(observed == 'offtakes'){
-        var ovenData = JSON.parse(document.querySelectorAll("[id='offtakes']")[0].value)['data'];
-        var idAttachment = 'om'
-    } else {
-        var ovenData = JSON.parse(document.querySelectorAll("[id='lids']")[0].value)['data'];
-        var idAttachment = 'l'
-    }
-    if(action == "inputted"){
-        const tableAnswers = elem.parentNode.parentNode.parentNode.children;
-        var noOvensMatch1 = true;
-        for(var y=0;y<tableAnswers.length;y++){
-            var element = tableAnswers[y].children[0].children[0].value;
-            console.log(tableAnswers[y].children[1].children.length);
-            console.log(element);
-            for(let x=0;x<inop_numbers.length;x++){
-                let inopOvenNumber = inop_numbers[x];
-                if(parseInt(inopOvenNumber) == parseInt(element)){
-                    if(tableAnswers[y].children[1].children.length == 2){
-                        var locationValue = tableAnswers[y].children[1].children[0].value;
-                        if(locationValue == "dampered_off"){
-                            noOvensMatch1 = false;
-                            console.log('found one')
+    var noOvensMatch1offtakes = true;
+    var noOvensMatchlids = true;
+    if (elem.id == 'inop_numbs') {
+        var offtakesList = document.getElementById('offtakes_tableBody').children;
+        var lidsList = document.getElementById('offtakes_tableBody').children;
+        for(let v=0;v<inop_numbers.length;v++){
+            let inopOvenNumber = inop_numbers[v];
+            for(var w=0;w<offtakesList.length;w++){
+                var offtakeOven = offtakesList[w].children[0].children[0].value;
+                console.log(offtakeOven)
+                console.log(inopOvenNumber)
+                if (parseInt(offtakeOven) == parseInt(inopOvenNumber)){
+                    console.log('check 1')
+                    var offtakeSelections = offtakesList[w].children[1].children;
+                    for(var g=0;g<offtakeSelections.length;g++){
+                        var offtakesSingleSelection = offtakeSelections[g].value;
+                        if (offtakesSingleSelection == 'dampered_off'){
+                            console.log('check 2')
+                            noOvensMatch1offtakes = false;
                         }
                     }
                 }
             }
         }
-        if(noOvensMatch1){
-            document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+        for(let v=0;v<inop_numbers.length;v++){
+            let inopOvenNumber = inop_numbers[v];
+            for(var w=0;w<lidsList.length;w++){
+                var lidOven = lidsList[w].children[0].children[0].value;
+                if (parseInt(lidOven) == parseInt(inopOvenNumber)){
+                    console.log('check 3')
+                    var lidSelections = lidsList[w].children[1].children;
+                    for(var g=0;g<lidSelections.length;g++){
+                        var lidSingleSelection = lidSelections[g].value;
+                        if (lidSingleSelection == 'dampered_off'){
+                            console.log('check 4')
+                            noOvensMatchlids = false;
+                        }
+                    }
+                }
+            }
+        }
+        if(noOvensMatch1offtakes){
+            document.getElementById('om_damperPopup').style.visibility = 'hidden';
+            submitButton.disabled = false;
             console.log('No Ovens Match the Inoperable')
         } else {
-            document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+            document.getElementById('om_damperPopup').style.visibility = 'visible';
+            submitButton.disabled = true;
+            console.log('found one')
+        }
+        if(noOvensMatchlids){
+            document.getElementById('l_damperPopup').style.visibility = 'hidden';
+            submitButton.disabled = false;
+            console.log('No Ovens Match the Inoperable')
+        } else {
+            document.getElementById('l_damperPopup').style.visibility = 'visible';
+            submitButton.disabled = true;
+            console.log('found one')
         }
     } else {
-        try{
-            var noOvensMatch2 = true;
-            for(var x=0;x<inop_numbers.length;x++){
-                var inopOvenNumber = inop_numbers[x];
-                for(var i=0;i<ovenData.length;i++){
-                    var damperedOvenNumber = ovenData[i]['oven'];
-                    if(parseInt(inopOvenNumber) == parseInt(damperedOvenNumber || parseInt(inputValue) == parseInt(inopOvenNumber))){
-                        if(ovenData[i]['location'] == "dampered_off"){
-                            noOvensMatch2 = false;
-                            console.log('found one in ' + observed)
+        if(observed == 'offtakes'){
+            var ovenData = JSON.parse(document.querySelectorAll("[id='offtakes']")[0].value)['data'];
+            var idAttachment = 'om'
+        } else {
+            var ovenData = JSON.parse(document.querySelectorAll("[id='lids']")[0].value)['data'];
+            var idAttachment = 'l'
+        }
+        var noOvensMatch1 = true;
+        if(action == "inputted"){
+            const tableAnswers = elem.parentNode.parentNode.parentNode.children;
+            for(var y=0;y<tableAnswers.length;y++){
+                var element = tableAnswers[y].children[0].children[0].value;
+                for(let x=0;x<inop_numbers.length;x++){
+                    let inopOvenNumber = inop_numbers[x];
+                    if(parseInt(inopOvenNumber) == parseInt(element)){
+                        console.log('check 1')
+                        for (var z=0;z<tableAnswers[y].children[1].children.length;z++){
+                            var locationValue = tableAnswers[y].children[1].children[z].value;
+                            if(locationValue == "dampered_off"){
+                                noOvensMatch1 = false;
+                                console.log('chcek 2')
+                            }
                         }
                     }
                 }
             }
-            if(noOvensMatch2){
+            if(noOvensMatch1){
                 document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
-                console.log('No Ovens Match')
+                submitButton.disabled = false;
+                console.log('No Ovens Match the Inoperable')
             } else {
                 document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+                submitButton.disabled = true;
+                console.log('found one')
             }
-        } catch(err) {
-            document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
-            console.log("No Data Inputed for " + observed)
+        } else {
+            try{
+                var noOvensMatch2 = true;
+                for(var x=0;x<inop_numbers.length;x++){
+                    var inopOvenNumber = inop_numbers[x];
+                    for(var i=0;i<ovenData.length;i++){
+                        var damperedOvenNumber = ovenData[i]['oven'];
+                        if(parseInt(inopOvenNumber) == parseInt(damperedOvenNumber || parseInt(inputValue) == parseInt(inopOvenNumber))){
+                            if(ovenData[i]['location'] == "dampered_off"){
+                                noOvensMatch2 = false;
+                                console.log('found one in ' + observed)
+                            }
+                        }
+                    }
+                }
+                if(noOvensMatch2){
+                    document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+                    submitButton.disabled = false;
+                    console.log('No Ovens Match')
+                } else {
+                    submitButton.disabled = true;
+                    document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+                }
+            } catch(err) {
+                document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+                submitButton.disabled = false;
+                console.log("No Data Inputed for " + observed)
+            }
         }
     }
 }
@@ -470,6 +536,7 @@ function inoperable_ovens() {
     if (length_of_inop_numbers != inop){
         console.log('Error message')
         inop_message.style.display = "block";
+        submitButton.disabled = true;
     } else {
         var blank = false;
         for(let x=0;x<length_of_inop_numbers;x++){
@@ -481,8 +548,10 @@ function inoperable_ovens() {
         }
         if (blank) {
             inop_message.style.display = "block";
+            submitButton.disabled = true;
         } else {
             inop_message.style.display = "none";
+            submitButton.disabled = false;
         }
     }
 }

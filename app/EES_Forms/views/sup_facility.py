@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model
-from ..forms import facility_forms_form
+from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, packets_model
+from ..forms import facility_forms_form, packets_form
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -23,6 +23,9 @@ def facilityList(request, facility):
     facData = facility_forms_model.objects.all()
     formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    
+    packetData = packets_model.objects.all()
+    packetForm = packets_form
     
     newFacList = []
     for facil in facList:
@@ -54,14 +57,32 @@ def facilityList(request, facility):
             finalList.append((newFac[0], newFac[1]))
     if request.method == 'POST':
         answer = request.POST
-        if answer['facilitySelect'] != '':
+        if 'facilitySelect' in answer.keys():
             return redirect('sup_dashboard', answer['facilitySelect'])
+        elif 'newPacket' in answer.keys():
+            dataCopy = answer.copy()
+            facChocie = bat_info_model.objects.get(id=int(answer['facilityID']))
+            dataCopy['facilityChoice'] = facChocie
+            packetFormData = packetForm(dataCopy)
+            if packetFormData.is_valid():
+                packetFormData.save()
+            print(request.POST)
+            print('hello')
     return render(request, 'supervisor/sup_facilityList.html', {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'facilities': finalList
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'facility': facility, 
+        'unlock': unlock, 
+        'client': client, 
+        'supervisor': supervisor, 
+        'facilities': finalList,
+        'packetData': packetData,
+        'packetForm': packetForm,
+        'formData': formData,
     })
 
 @lock    
-def facilityForm(request, facility):
+def facilityForm(request, facility, packet):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -73,6 +94,8 @@ def facilityForm(request, facility):
     today = datetime.date.today()
     specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
+    print("-------------------------")
+    print(formList[0].form)
     facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     

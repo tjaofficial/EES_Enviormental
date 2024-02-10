@@ -1,5 +1,6 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/facilityList.js' %}"></script>
 <div class='mainCont' style="width: 50rem;">
     <div class="card">
         <div class="cardHeader">
@@ -13,6 +14,64 @@
                 <div class="facilityFormSec">
                     <div class="facilityFormHeader">
                         {{info.0.facility_name}}
+                    </div>
+                    <div>
+                        <table class="standardTable">
+                            <tr>
+                                <th class="underline headerFont" style="width: 20%;"></th>
+                                <th class="underline headerFont" style="width: 60%;">Packets</th>
+                                <th style="width: 20%;"></th>
+                            </tr>
+                            {% for packet in packetData %}
+                                {% if packet.facilityChoice.facility_name == info.0.facility_name %}
+                                <tr>
+                                    <td class="center"></td>
+                                    <td>
+                                        <div class="packet_button" style="display:flex;" onclick="show_formsList(this)">
+                                            <div style="width:100%;">{{packet.name}} - forms({{packet.formList|length}})</div>
+                                            <div style="width:60%; text-align: right;"><a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.name %}" style="text-decoration:underline;">edit</a></div>
+                                        </div>
+                                        {% if packet.formList %}
+                                        <table style="display:none;" class="standardTable">
+                                            <tr>
+                                                <th class="underline headerFont" style="width: 20%;">Label</th>
+                                                <th class="underline headerFont" style="width: 60%;">Form Title</th>
+                                                <th style="width: 20%;"></th>
+                                            </tr>
+                                            {% for x in hello %}
+                                                <tr>
+                                                    <td class="center">{{x.1}}</td>
+                                                    <td class="">{{x.2}}</td>
+                                                    <td class="center smallLink">
+                                                        <a href=#>
+                                                            edit
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                        {% else %}
+                                        <div class="contentCont center" style="display:none; padding: 0px 57px;">
+                                            No forms have been added. Add forms to this Packet by clicking 'edit' on the packet.
+                                        </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr>
+                                <form method='POST' action="">
+                                    {% csrf_token %}
+                                    <td class="center"><input type="hidden" name="facilityID" value="{{info.0.id}}"></td>
+                                    <td class="">{{packetForm.name}}<input style="margin-left:5px;" type="submit" name="newPacket" value="save"></td>
+                                    <td class="center smallLink">
+                                        <a href=#>
+                                            edit
+                                        </a>
+                                    </td>
+                                </form>
+                            </tr>
+                        </table>
                     </div>
                     <div class="">
                         {% if info.1|length > 0 %}
@@ -41,7 +100,7 @@
                         {% endif %}
                     </div>
                     <div class="smallLink" style="padding-top: 32px;">
-                        <a href="{% url 'facilityForms' info.0.facility_name %}">
+                        <a href="#">
                             add/remove forms
                         </a>
                     </div>
