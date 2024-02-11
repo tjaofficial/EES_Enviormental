@@ -30,6 +30,7 @@ urlpatterns = [
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
     path("<str:facility>/request-form", views.form_request_view, name='requestForm'),
+    path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
@@ -68,7 +69,6 @@ urlpatterns = [
     path("<str:facility>/Sop", views.sop_view, name="Sop"),
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
-    path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
     path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
 
     ##---FORMS

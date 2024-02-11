@@ -23,13 +23,14 @@
                                 <th style="width: 20%;"></th>
                             </tr>
                             {% for packet in packetData %}
-                                {% if packet.facilityChoice.facility_name == info.0.facility_name %}
+                            {% include 'supervisor/components/facility_packet_modal.html' with packID=forloop.counter %}
+                            {% if packet.facilityChoice.facility_name == info.0.facility_name %}
                                 <tr>
                                     <td class="center"></td>
                                     <td>
-                                        <div class="packet_button" style="display:flex;" onclick="show_formsList(this)">
+                                        <div class="packet_button" style="display:flex;" onclick="show_formsList(this)" data-selector="{{packet.name}}">
                                             <div style="width:100%;">{{packet.name}} - forms({{packet.formList|length}})</div>
-                                            <div style="width:60%; text-align: right;"><a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.name %}" style="text-decoration:underline;">edit</a></div>
+                                            <div style="width:60%; text-align: right;"><div onclick="open_packet_modal(this, {{ forloop.counter }})" style="text-decoration:underline;">edit</div></div>
                                         </div>
                                         {% if packet.formList %}
                                         <table style="display:none;" class="standardTable">
@@ -64,11 +65,11 @@
                                     {% csrf_token %}
                                     <td class="center"><input type="hidden" name="facilityID" value="{{info.0.id}}"></td>
                                     <td class="">{{packetForm.name}}<input style="margin-left:5px;" type="submit" name="newPacket" value="save"></td>
-                                    <td class="center smallLink">
+                                    {% comment %} <td class="center smallLink">
                                         <a href=#>
                                             edit
                                         </a>
-                                    </td>
+                                    </td> {% endcomment %}
                                 </form>
                             </tr>
                         </table>

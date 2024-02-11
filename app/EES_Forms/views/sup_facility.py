@@ -68,6 +68,11 @@ def facilityList(request, facility):
                 packetFormData.save()
             print(request.POST)
             print('hello')
+        elif 'sub_delete' in answer.keys():
+            packToDelete = packetData.get(id=answer['packID'])
+            packToDelete.delete()
+            return redirect(facilityList, facility)
+            
     return render(request, 'supervisor/sup_facilityList.html', {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
