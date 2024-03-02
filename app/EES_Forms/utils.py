@@ -893,4 +893,7 @@ def inventoryResponse(tagOn, sk):
     else:
         return "N/A"      
     
-    
+def get_facility_forms(facilityID):
+    facilityFormsString = facility_forms_model.objects.filter(facilityChoice__id=facilityID)
+    facilityFormsList = ast.literal_eval(facilityFormsString.formData)
+    return facilityFormsList

@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, packets_model
+from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, packets_model, form_settings_model
 from ..forms import facility_forms_form, packets_form
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities
+from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
+import json
 lock = login_required(login_url='Login')
 
 @lock
@@ -18,14 +19,21 @@ def facilityList(request, facility):
         return redirect('IncompleteForms', facility)
     if client:
         return redirect('c_dashboard', facility)
-    userProfData = user_profile_model.objects.all().filter(user__username=request.user.username)[0]
-    facList = bat_info_model.objects.all().filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
+    userProfData = user_profile_model.objects.get(user__username=request.user.username)
+    facList = bat_info_model.objects.filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
     facData = facility_forms_model.objects.all()
     formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     
     packetData = packets_model.objects.all()
     packetForm = packets_form
+    print(facility)
+    print(bat_info_model.objects.all())
+    #print(bat_info_model.objects.get(facility_name=facility))
+    
+    #facilityID = bat_info_model.objects.get(company__company_name=userProfData.company.company_name, facility_name=facility).id
+    
+    #facilityFormsList = get_facility_forms(facilityID)
     
     newFacList = []
     for facil in facList:
@@ -47,7 +55,7 @@ def facilityList(request, facility):
             for label in newFac[1]:
                 for singleForm in formData:
                     if label[0] == singleForm.id:
-                        labelList.append((label[0], label[1], singleForm.header + ' - ' + singleForm.title))
+                        labelList.append((label[0], label[1], singleForm.header + ' - ' + singleForm.title, singleForm))
             def myFunc(e):
                 return e[1]
             labelList.sort(key=myFunc)
@@ -55,15 +63,18 @@ def facilityList(request, facility):
             finalList.append((newFac[0], labelList))
         else:
             finalList.append((newFac[0], newFac[1]))
+    print(finalList)
     if request.method == 'POST':
         answer = request.POST
         if 'facilitySelect' in answer.keys():
             return redirect('sup_dashboard', answer['facilitySelect'])
         elif 'newPacket' in answer.keys():
             dataCopy = answer.copy()
-            facChocie = bat_info_model.objects.get(id=int(answer['facilityID']))
-            dataCopy['facilityChoice'] = facChocie
+            facChoice = bat_info_model.objects.get(id=int(answer['facilityID']))
+            dataCopy['facilityChoice'] = facChoice
+            dataCopy['frequency'] = 'Weekly'
             packetFormData = packetForm(dataCopy)
+            print(packetFormData.errors)
             if packetFormData.is_valid():
                 packetFormData.save()
             print(request.POST)
@@ -99,6 +110,8 @@ def facilityForm(request, facility, packet):
     today = datetime.date.today()
     specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
+    formSettingsModel = form_settings_model.objects.all()
+    packetQuery = packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
     print("-------------------------")
     print(formList[0].form)
     facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
@@ -139,7 +152,7 @@ def facilityForm(request, facility, packet):
                             toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
                             toBeDeleted.delete()
                         break
-    if len(facilityFormsData) > 0:
+    if facilityFormsData.exists:
         if facilityFormsData[0].formData:
             facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])
         else:
@@ -152,46 +165,79 @@ def facilityForm(request, facility, packet):
 
     if request.method == 'POST':
         answer = request.POST
-        for x in answer:
-            if x == 'facilitySelect':
-                return redirect('sup_dashboard', answer['facilitySelect'])
-        selectedList = []
+        print(answer)
+        #for all selected and fille in save as a dictionary for the packet
+        if 'facilitySelect' in answer.keys():
+            return redirect('sup_dashboard', answer['facilitySelect'])
+        selectedList = {}
         ## Builds the new list of forms selected and created a submission record
-        for item in range(len(formList)):
-            formIDlabel = 'forms' + str(item + 1)
-            formOrgLabel = 'formID' + str(item + 1)
-            try:
-                formID = int(request.POST[formIDlabel.replace(" ", "")])
-                fromOrg = request.POST[formOrgLabel.replace(" ", "")].upper()
+        for item in range(1, len(formList)):
+            formIDlabel = 'forms' + str(item)
+            formOrgLabel = 'formID' + str(item)
+            
+            if formIDlabel.replace(" ", "") in answer.keys():
+                formID = int(answer[formIDlabel.replace(" ", "")])
+                formLabel = answer[formOrgLabel.replace(" ", "")].upper()
+                formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
+                settingsDict = {}
+                for x in answer.keys():
+                    if x[0] == str(formID):
+                        settingsDict[x[1:]] = answer[x]
                 
-                selectedList.append((formID,fromOrg))    
+                if formSettingsQuery.exists():
+                    formSettingsQuery[0].settings = settingsDict
+                    formSettingsQuery[0].save()
+                    selectSettingID = formSettingsQuery[0].id
+                else:
+                    newSettings = form_settings_model(
+                        facilityChoice = specificFacility,
+                        formChoice = formList.get(id=formID),
+                        settings = settingsDict
+                    )
+                    newSettings.save()
+                    selectSettingID = newSettings.id
                 
                 doesSubExist(specificFacility, formID, "formID", False)
-            except:
+                
+                selectedList[formLabel] = {"formID": formID,"settingsID": selectSettingID}
+                print('made it')
+            else:
                 continue
         
-        ## Removes records for forms that arent selected anymore
-        if existing:
-            oldForms = []
-            for transfer in modelList:
-                oldForms.append(transfer)
-            different = set(oldForms).difference(selectedList)
+        packetQuery.formList = selectedList
+        packetQuery.save()
+        return redirect('facilityList', 'supervisor')
+        # ## Removes records for forms that arent selected anymore
+        # if existing:
+        #     oldForms = []
+        #     for transfer in modelList:
+        #         oldForms.append(transfer)
+        #     different = set(oldForms).difference(selectedList)
             
-            doesSubExist(specificFacility, different, "list", True)
+        #     doesSubExist(specificFacility, different, "list", True)
                 
-        dataCopy = request.POST.copy()
-        dataCopy['formData'] = selectedList
-        dataCopy['facilityChoice'] = specificFacility
+        # dataCopy = request.POST.copy()
+        # dataCopy['formData'] = selectedList
+        # dataCopy['facilityChoice'] = specificFacility
 
-        if existing:
-            form = facility_forms_form(dataCopy, instance=replaceModel)
-        else:
-            form = facility_forms_form(dataCopy)
+        # if existing:
+        #     form = facility_forms_form(dataCopy, instance=replaceModel)
+        # else:
+        #     form = facility_forms_form(dataCopy)
             
             
-        if form.is_valid():
-            form.save()
-            return redirect('facilityList', facility)
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect('facilityList', facility)
     return render (request, 'supervisor/facilityForms.html', {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'formList': formList, 'modelList': modelList,
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'facility': facility, 
+        'unlock': unlock, 
+        'client': client, 
+        'supervisor': supervisor, 
+        'formList': formList, 
+        'modelList': modelList,
+        'packet': packet,
+        'packetQuery': packetQuery.formList
     })

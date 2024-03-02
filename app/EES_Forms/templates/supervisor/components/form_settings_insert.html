@@ -1,0 +1,10 @@
+{% load static %}
+<script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
+<div id="settings{{count}}" style="margin-left: 32px; display:none;">
+{% if formID == 1 %}
+    Larry Car Quantity: <input name="{{formID}}larry_car_quantity" type="number"><br>
+{% elif formID == 7 %}
+    How many areas?(1-4) <input oninput="displayAreaFields(this, {{formID}})" name="{{formID}}number_of_areas" type="number" max="4" min="1"><br>
+    <div id="{{formID}}areaNames" style="display:none;"></div>
+{% endif %}
+</div>

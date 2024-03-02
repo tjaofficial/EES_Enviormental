@@ -2235,7 +2235,7 @@ class packets_form(ModelForm):
         model = packets_model
         fields = ('__all__')
         widgets = {
-            'facilityChoice': forms.Select(),
+            'facilityChoice': forms.Select(choices=frequent_choices),
             'name': forms.TextInput(attrs={'type':'text', 'placeholder':'Enter packet name...'}),
             'formList': forms.TextInput(),
         }

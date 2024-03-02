@@ -7328,13 +7328,26 @@ class packets_model(models.Model):
     name = models.CharField(
         max_length=70
     )
-    formList = models.CharField(
-        max_length=1000,
+    formList = models.JSONField(
         null=True,
         blank=True
     )
+    frequency = models.CharField(
+        max_length=30, 
+        choices=frequent_choices,
+        default='Weekly'
+    )
     def __str__(self):
         return str(self.id) + ' - ' + str(self.name)
+    
+class form_settings_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
+    formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
+    settings = models.JSONField(
+        default=dict
+    )
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.formChoice)
   
     
 # class tank_library(models.Model):

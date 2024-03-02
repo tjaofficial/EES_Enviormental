@@ -1,10 +1,11 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
 <div class='mainCont' style="width:1000px; max-width:unset;">
     <div class="card bottomOfPageMargin">
         <div class="cardHeader">
             {% include "shared/components/backArrow.html" with destination="facilityList"%}
-            Select Forms
+            Select Forms for {{packet}}
         </div>
         <div style='padding: 15px 32px;'>
             <div style="text-align:center; width:100%;margin-bottom:25px;">Don't see the form you want? <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">Submit a form Request</a></div>
@@ -20,16 +21,28 @@
                     </tr>
                     {% for form in formList %}
                     <tr>
-                        <td class="rowCheckMark"><input name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for x in modelList %}{% if x.0 == form.id %}checked{% endif %}{% endfor %}/></td>
-                        <td class="rowFormLabel"><input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for x in modelList %}{% if x.0 == form.id %}{{x.1}}{% endif %}{% endfor %}"/></td>
+                        <td class="rowCheckMark"><input onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}checked{% endif %}{% endfor %}/></td>
+                        <td class="rowFormLabel"><input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{key}}{% endif %}{% endfor %}"/></td>
                         <td class="rowFormID">{{form.id}} - </td>
                         <td class="rowFormType">{{form.header}}</td>
                         <td>{{form.title}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.id count=forloop.counter %}</td>
                     </tr>
                     {% endfor %}
                 </table>
                 <div class="center" style="margin-top:10px;">
                     <input type='submit' value='Save'/>
+                </div>
+            </form>
+            <form method='POST' action=''>
+                existing
+                <div>
+                    {{modelList}}
                 </div>
             </form>
         </div>
