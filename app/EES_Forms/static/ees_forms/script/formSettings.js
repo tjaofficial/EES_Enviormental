@@ -2,6 +2,7 @@ toggleSettings = (checkbox) => {
     const count = checkbox.dataset.count;
     const settingsCont = document.getElementById('settings' + String(count))
     if (checkbox.checked == true){
+        console.log(checkbox)
         settingsCont.style.display = 'block';
     } else {
         settingsCont.style.display = 'none';

@@ -1,0 +1,34 @@
+{% load static %}
+<style>
+    .left{
+        text-align: left;
+    }
+    .description{
+        font-weight: normal;
+        font-size: 13px;
+    }
+</style>
+{% if selector == "packets" %}
+    <h5 class="left">HELP: Packets</h5><br>
+    <p class="left description">
+        Packets are an easy way to put forms into 
+        organized groups. These packets can be 
+        used to print off groups of submitted 
+        inspection forms. To add a new packet, 
+        enter in a new "Packet Name" and click "save". 
+        Once saved, you will see a blue bar appear
+        with the new packet name. You can click "add" to
+        add new forms or click the blue bar to expand the packet
+        and see the existing forms within that
+        packet. To the right of the packet you will see
+        the settings option or the delete option.
+    </p>
+{% elif selector == "accountSettings" %}
+    <h5 class="left">HELP: Packets</h5><br>
+    <p class="left description">
+        Packets are an easy way to put forms 
+        into organized groups. These packets 
+        can be used to print off groups of 
+        filled out inspection forms.
+    </p>
+{% endif %}

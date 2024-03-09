@@ -39,11 +39,9 @@
                     <label for="formGroups">Choose Packet:</label>
                     <select name="formGroups" id="formGroups">
                         <option value="" selected>------</option>
-                        <option value="Coke Battery Daily Packet">Coke Battery Daily Packet</option>
-                        <option value="Facility Weekly Packet">Facility Weekly Packet</option>
-                        <!--<option value="monthly">Monthly</option>
-                        <option value="tanks">Monthly Tanks/Areas</option>
-                        <option value="waste">Waste Weekly</option>-->
+                        {% for packet in packetQuery %}
+                        <option value="{{packet.id}}">{{packet.name}}</option>
+                        {% endfor %}
                     </select>
                     <br><br>
                 </div>

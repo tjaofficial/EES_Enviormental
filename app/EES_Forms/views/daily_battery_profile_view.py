@@ -86,12 +86,16 @@ def facility_select_view(request):
         answer = request.POST['facility']
         daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer).order_by('-date_save')
         if answer != '':
-            if daily_prof.exists():
-                todays_log = daily_prof[0]
-                if now == todays_log.date_save:
-                    return redirect('IncompleteForms', answer)
-            batt_prof = '../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-            return redirect(batt_prof)
+            batteryQuery = bat_info_model.objects.get(facility_name=answer)
+            if batteryQuery.is_battery == 'yes' and batteryQuery.dashboard == 'battery':
+                if daily_prof.exists():
+                    todays_log = daily_prof[0]
+                    if now == todays_log.date_save:
+                        return redirect('IncompleteForms', answer)
+                batt_prof = '../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                return redirect(batt_prof)
+            elif batteryQuery.dashboard == "default":
+                return redirect('defaultDash', answer)
 
     return render(request, "observer/facility_select.html", {
         'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': profileFacs, 'loginPage': loginPage, 'profile': profile, 

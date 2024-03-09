@@ -35,6 +35,14 @@
                     {% include "supervisor/settings/settings_subscription.html" %}
                 </div>
             </div>
+            <div class="tabCont">
+                <div id="facility" class="settingsTab" onclick='openInformation(this)'>
+                    Facility Information
+                </div>   
+                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                    {% include "supervisor/settings/settings_facility.html" %}
+                </div>
+            </div>
         </div>
     </div>
 </div>

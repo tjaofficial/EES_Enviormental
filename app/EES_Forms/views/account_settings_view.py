@@ -260,7 +260,8 @@ def sup_account_view(request, facility):
         'listOfEmployees': listOfEmployees,
         'accountData': accountData,
         'active_registrations': active_registrations,
-        'braintreeData': braintreeData
+        'braintreeData': braintreeData,
+        'userProfileQuery': userProfileQuery
     })
     
 @lock

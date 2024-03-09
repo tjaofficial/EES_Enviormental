@@ -639,3 +639,19 @@ def IncompleteForms(request, facility):
         'sigName': sigName,
         'inopNumbsParse': inopNumbsParse
     })
+
+def default_dashboard(request, facility):
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if supervisor:
+        return redirect('sup_dashboard', facility)
+    elif client:
+        return redirect('c_dashboard')
+    
+    return render(request, 'observer/dashboards/obs_default_dash.html', {
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'facility': facility,
+    })

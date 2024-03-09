@@ -27,8 +27,6 @@ def facilityList(request, facility):
     
     packetData = packets_model.objects.all()
     packetForm = packets_form
-    print(facility)
-    print(bat_info_model.objects.all())
     #print(bat_info_model.objects.get(facility_name=facility))
     
     #facilityID = bat_info_model.objects.get(company__company_name=userProfData.company.company_name, facility_name=facility).id
@@ -63,7 +61,8 @@ def facilityList(request, facility):
             finalList.append((newFac[0], labelList))
         else:
             finalList.append((newFac[0], newFac[1]))
-    print(finalList)
+    print(packetData[0].formList)
+    
     if request.method == 'POST':
         answer = request.POST
         if 'facilitySelect' in answer.keys():
@@ -99,6 +98,7 @@ def facilityList(request, facility):
 
 @lock    
 def facilityForm(request, facility, packet):
+    print(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -163,6 +163,7 @@ def facilityForm(request, facility, packet):
         modelList = facilityFormsData
         replaceModel = facility_forms_model.objects.get(facilityChoice=specificFacility)
 
+    
     if request.method == 'POST':
         answer = request.POST
         print(answer)
@@ -178,24 +179,28 @@ def facilityForm(request, facility, packet):
             if formIDlabel.replace(" ", "") in answer.keys():
                 formID = int(answer[formIDlabel.replace(" ", "")])
                 formLabel = answer[formOrgLabel.replace(" ", "")].upper()
-                formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
+                formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID), packetChoice=packetQuery)
                 settingsDict = {}
                 for x in answer.keys():
                     if x[0] == str(formID):
                         settingsDict[x[1:]] = answer[x]
-                
+                print(settingsDict)
                 if formSettingsQuery.exists():
-                    formSettingsQuery[0].settings = settingsDict
-                    formSettingsQuery[0].save()
-                    selectSettingID = formSettingsQuery[0].id
+                    A = formSettingsQuery[0]
+                    A.settings = settingsDict
+                    A.save()
+                    selectSettingID = A.id
+                    print('updated')
                 else:
                     newSettings = form_settings_model(
                         facilityChoice = specificFacility,
                         formChoice = formList.get(id=formID),
-                        settings = settingsDict
+                        settings = settingsDict,
+                        packetChoice = packetQuery
                     )
                     newSettings.save()
                     selectSettingID = newSettings.id
+                    print('made new')
                 
                 doesSubExist(specificFacility, formID, "formID", False)
                 
@@ -239,5 +244,39 @@ def facilityForm(request, facility, packet):
         'formList': formList, 
         'modelList': modelList,
         'packet': packet,
-        'packetQuery': packetQuery.formList
+        'packetQuery': packetQuery.formList,
+        'formSettingsModel': formSettingsModel
     })
+    
+@lock
+def facility_form_settings(request, facility, packetID, formID, formLabel):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
+        return redirect('IncompleteForms', facility)
+    if client:
+        return redirect('c_dashboard', facility)
+    formData = Forms.objects.get(id=formID)
+    packetSettings = packets_model.objects.get(id=packetID)
+    for form in packetSettings.formList:
+        if form == formLabel:
+            settingsID = packetSettings.formList[form]['settingsID']
+            break
+    formSettings = form_settings_model.objects.get(id=settingsID).settings
+    
+    
+    return render (request, 'supervisor/facilityForms/facilityFormSettings.html', {
+        'notifs': notifs,
+        'facility': facility, 
+        'unlock': unlock, 
+        'client': client, 
+        'supervisor': supervisor, 
+        'formLabel': formLabel,
+        'formData': formData,
+        'formID': int(formID),
+        'formSettings': formSettings,
+        'packetSettings': packetSettings
+    })
+    

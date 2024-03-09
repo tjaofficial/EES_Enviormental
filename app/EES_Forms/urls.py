@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     ##---MAIN DASHBOARDS----
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
+    path("<str:facility>/default-dashboard", views.default_dashboard, name="defaultDash"),
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
     path("adminDash", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
@@ -31,6 +32,7 @@ urlpatterns = [
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
     path("<str:facility>/request-form", views.form_request_view, name='requestForm'),
     path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
+    path("<str:facility>/facilityFormSettings/<str:packetID>/<str:formID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
@@ -95,8 +97,8 @@ urlpatterns = [
     path("<str:facility>/Daily/formL/<str:selector>", views.formL, name="formL"),
     path("<str:facility>/Daily/formM/<str:selector>", views.formM, name="formM"),
     path("<str:facility>/Monthly/formN/<str:selector>", views.formN, name="formN"),
-    path("<str:facility>/Weekly/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
-    path("<str:facility>/Weekly/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
+    path("<str:facility>/Daily/formO/<str:selector>/<str:weekend_day>", views.formO, name="formO"),
+    path("<str:facility>/Daily/formP/<str:selector>/<str:weekend_day>", views.formP, name="formP"),
     path("<str:facility>/Monthly/spill_kits/<str:selector>", views.spill_kits, name="spill_kits"),
     path("<str:facility>/Monthly/spill_kits/<str:month>/<int:skNumber>/<str:selector>", views.spill_kits_inventory_form, name="skInventory"),
     path("<str:facility>/Quarterly/quarterly_trucks/<str:selector>", views.quarterly_trucks, name="quarterly_trucks"),

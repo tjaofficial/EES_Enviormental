@@ -1,0 +1,25 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}
+{% block list %}
+<div class='mainCont' style="width: 50rem;">
+    <div class="card">
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="dashboard"%}
+            Form {{formLabel}} settings
+        </div>
+        <div class="contentCont center" style="">
+            <div>
+                Change Label: <input type="text" name="newLabel" value="{{formLabel}}"><br>
+                Form: {{formData.header}} - {{formData.title}}
+            </div><br>
+    
+            <h4>Personalize Form Settings</h4>
+            Custom Title: <input type="text" name="customTitle"><br>
+            {% include 'supervisor/components/form_settings_insert.html' with formID=formID count='' %}
+            {% for x in y%}
+            {% endfor %}
+            {% for info in facilities %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
