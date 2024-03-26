@@ -1,0 +1,19 @@
+{% load static %}
+{% if page == 'facilityList' %}
+<div class="packet_button" style="display:flex;" data-selector="{{packet.name}}">
+    <div onclick="show_formsList(this)" style="width:100%;">
+        {{packet.name}} - forms({{packet.formList|length}})
+    </div>
+    <div style="text-decoration: underline;">
+        <a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.name %}">
+            add
+        </a>
+    </div>
+</div>
+{% elif page == 'obsDash' %}
+<div class="packet_button" style="display:flex;" data-selector="{{packet.name}}" data-packetID="{{packet.id}}">
+    <div onclick="show_formsList(this)" style="width:100%;">
+        {{packet.name}} - forms({{packet.formList|length}})
+    </div>
+</div>
+{% endif %}

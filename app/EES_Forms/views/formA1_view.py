@@ -40,15 +40,16 @@ def formA1(request, facility, selector):
             readings = database_model2
             existing = True
             search = True
-        elif org.exists() and org2.exists():
-            database_form = org[0]
-            database_form2 = org2[0]
-            if now == todays_log.date_save:
+        elif now == todays_log.date_save:
+            if org.exists() and org2.exists():
+                database_form = org[0]
+                database_form2 = org2[0]
                 if todays_log.date_save == database_form.date:
                     existing = True
-            else:
-                batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+        else:
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+        
         if search:
             database_form = ''
         else:

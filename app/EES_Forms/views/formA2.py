@@ -35,14 +35,14 @@ def formA2(request, facility, selector):
             data = database_model
             existing = True
             search = True
-        elif org.exists():
-            database_form = org[0]
-            if now == todays_log.date_save:
+        elif now == todays_log.date_save:
+            if org.exists():
+                database_form = org[0]
                 if todays_log.date_save == database_form.date:
                     existing = True
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                return redirect(batt_prof)
+        else:
+            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect(batt_prof)    
         if search:
             database_form = ''
             pSide_Raw_JSON = json.loads(data.p_leak_data)

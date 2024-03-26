@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model, bat_info_model, facility_forms_model, formSubmissionRecords_model
+from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, packets_model
 from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -648,10 +648,17 @@ def default_dashboard(request, facility):
         return redirect('sup_dashboard', facility)
     elif client:
         return redirect('c_dashboard')
-    
+    packetsQuery = packets_model.objects.filter(facilityChoice__facility_name=facility)
+    formData = Forms.objects.all()
+    today = datetime.datetime.today().date()
+    todaysName = today.strftime('%A')
+    print(today)
     return render(request, 'observer/dashboards/obs_default_dash.html', {
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
         'facility': facility,
+        'packetsQuery': packetsQuery,
+        'formData': formData,
+        'todaysName': todaysName
     })

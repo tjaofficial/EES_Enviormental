@@ -61,10 +61,6 @@ def formA5(request, facility, selector):
             if now == todays_log.date_save:
                 if str(todays_log.date_save) == str(database_form.date):
                     existing = True
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                return redirect(batt_prof)
 
         if search:
             database_form = ''
@@ -212,7 +208,7 @@ def formA5(request, facility, selector):
                 profile_form = user_profile_form()
             else:
                 initial_data = {
-                    'date': todays_log.date_save,
+                    'date': now,
                     'estab': options.facility_name,
                     'county': options.county,
                     'estab_no': options.estab_num,

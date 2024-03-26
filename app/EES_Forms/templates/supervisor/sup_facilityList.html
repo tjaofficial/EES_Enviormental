@@ -1,65 +1,7 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/packet_div.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/facilityList.js' %}"></script>
-<style>
-    .modalHolder{
-        background: #00000052;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-    }
-    .modal-content{
-        background: white;
-        border-radius: 19px;
-        margin: auto;
-        width: 500px;
-    }
-    .closeAdd {
-        color: #aaaaaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        padding-right: 15px;
-    }
-    .closeAdd2{
-        color: #aaaaaa;
-        font-size: 28px;
-        font-weight: bold;
-        padding-left: 5px;
-    }
-    .modalHeader {
-        background-color: #263544;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        border-top-left-radius: 17px;
-        border-top-right-radius: 17px;
-        color: white;
-        font-family: Arial, Helvetica, sans-serif;
-        font-weight: bolder;
-        font-size: 12px;
-        text-align: center;
-    }
-    .modalContent{
-        padding: 18px;
-    }
-    .infoBox{
-        border: solid 1px black;
-        border-radius: 6px;
-        padding: 11px;
-        position: absolute;
-        background: #dfe5e9;
-        width: 282px;
-        right: 15px;
-        top: 56px;
-        visibility: hidden;
-    }
-    .helpMark:hover + .infoBox{
-        visibility: visible;
-    }
-</style>
 <div class='mainCont' style="width: 50rem;">
     <div class="card">
         <div class="cardHeader">
@@ -129,7 +71,7 @@
                                 <tr>
                                     <td class="center"></td>
                                     <td>
-                                        <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}">
+                                        {% comment %} <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}">
                                             <div onclick="show_formsList(this)" style="width:100%;">
                                                 {{packet.name}} - forms({{packet.formList|length}})
                                             </div>
@@ -138,7 +80,8 @@
                                                     add
                                                 </a>
                                             </div>
-                                        </div>
+                                        </div> {% endcomment %}
+                                        {% include 'supervisor/facilityForms/packet_div.html' with page='facilityList' %}
                                         {% if packet.formList %}
                                         <table style="display:none;" class="standardTable">
                                             <tr>
@@ -167,7 +110,7 @@
                                         </table>
                                         {% else %}
                                         <div class="contentCont center" style="display:none; padding: 0px 57px;">
-                                            No forms have been added. Add forms to this Packet by clicking 'edit' on the packet.
+                                            No forms have been added. Add forms to this Packet by clicking 'add' on the packet.
                                         </div>
                                         {% endif %}
                                     </td>
