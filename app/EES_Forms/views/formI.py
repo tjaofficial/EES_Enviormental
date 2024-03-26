@@ -46,7 +46,7 @@ def formI(request, facility, selector):
             existing = True
             search = True
             filled_in = True
-        elif len(week_start_dates) > 0:
+        elif week_start_dates.exists():
             print('CHECK 3')
             database_model = week_start_dates[0]
             week = database_model.week_start

@@ -67,9 +67,6 @@ def formH(request, facility, selector):
                 if now == todays_log.date_save:
                     if start_saturday < database_form.date < end_friday:
                         existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                    return redirect(batt_prof)
             elif orgFormL.exists():
                 formName = 'H-L'
                 database_form2 = orgFormL[0]
@@ -196,7 +193,7 @@ def formH(request, facility, selector):
                 profile_form = user_profile_form()
             else:
                 initial_data = {
-                    'date': todays_log.date_save,
+                    'date': now,
                     'estab': options.facility_name,
                     'county': options.county,
                     'estab_no': options.estab_num,

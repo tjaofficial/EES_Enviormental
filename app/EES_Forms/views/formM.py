@@ -61,7 +61,6 @@ def formM(request, facility, selector):
                 if today_number in {0, 1, 2, 3, 4}:
                     if todays_log.date_save == database_form.date:
                         existing = True
-                        print("CHECK 1")
         if search:
             database_form = ''
             THEmonth = form.date.month
@@ -127,7 +126,7 @@ def formM(request, facility, selector):
                 print(initial_data)
             else:
                 initial_data = {
-                    'date': todays_log.date_save,
+                    'date': now,
                     'observer': full_name,
                     'cert_date': cert_date
                 }

@@ -20,7 +20,7 @@ def spill_kits(request, facility, selector):
     existing = False
     search = False
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     sk_form = spill_kits_form()
     full_name = request.user.get_full_name()
@@ -39,7 +39,7 @@ def spill_kits(request, facility, selector):
 
             existing = True
             search = True
-        elif len(org) > 0:
+        elif org.exists():
             print('CHECK 2')
             database_form = org[0]
             datetime_object = datetime.datetime.strptime(database_form.month, "%B")
@@ -59,11 +59,10 @@ def spill_kits(request, facility, selector):
             iFormList = json.dumps(iFormList)
         else:
             inventoryModel = spill_kit_inventory_model.objects.filter(date__month=now.month)
-            if len(inventoryModel) > 0:
+            if inventoryModel.exists():
                 for subForm in inventoryModel:
                     iFormList[subForm.skID] = [subForm.skID,stringToDate(subForm.date)]
                 iFormList = json.dumps(iFormList)
-            print(iFormList)
             if existing:
                 month = database_form.month
                 initial_data = {
@@ -230,7 +229,7 @@ def spill_kits(request, facility, selector):
                 month = month_name
                 initial_data = {
                     'observer': full_name,
-                    'date': todays_log.date_save,
+                    'date': now,
                     'month': month_name,
                 }
             data = spill_kits_form(initial=initial_data)

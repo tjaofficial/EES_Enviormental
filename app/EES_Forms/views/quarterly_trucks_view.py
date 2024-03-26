@@ -17,7 +17,7 @@ def quarterly_trucks(request, facility, selector):
     existing = False
     search = False
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    now = datetime.datetime.now()
+    now = datetime.datetime.now().date()
     today = datetime.date.today()
     submitted_forms = quarterly_trucks_model.objects.all().order_by('-date')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
@@ -43,20 +43,12 @@ def quarterly_trucks(request, facility, selector):
             existing = True
             search = True
             unlock = True
-        elif len(submitted_forms) > 0:
-            database_form = submitted_forms[0]
-            if now.month == todays_log.date_save.month:
-                if now.day == todays_log.date_save.day:
-                    if what_quarter(todays_log.date_save) == what_quarter(database_form.date):
-                        existing = True
-                else:
-                    batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                    return redirect(batt_prof)
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                return redirect(batt_prof)
+        elif now == todays_log.date_save.day:
+            if submitted_forms.exists():
+                database_form = submitted_forms[0]
+                if what_quarter(todays_log.date_save) == what_quarter(database_form.date):
+                    existing = True
+        
         if search:
             database_form = ''
         else:

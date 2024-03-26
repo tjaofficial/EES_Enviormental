@@ -66,10 +66,6 @@ def formG1(request, facility, selector):
             if now == todays_log.date_save:
                 if todays_log.date_save == database_form.date:
                     existing = True
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-                return redirect(batt_prof)
         
         if search:
             database_form = ''
@@ -159,7 +155,7 @@ def formG1(request, facility, selector):
                 readings_form = formG1_readings_form(initial=initial_data)
             else:
                 initial_data = {
-                    'date': todays_log.date_save,
+                    'date': now,
                     'estab': options.facility_name,
                     'county': options.county,
                     'estab_no': options.estab_num,
@@ -291,9 +287,6 @@ def formG2(request, facility, selector):
             if now == todays_log.date_save:
                 if todays_log.date_save.month == database_form.date.month:
                     existing = True
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                return redirect(batt_prof)
         if search:
             database_form = ''
             exist_canvas = data.canvas
@@ -384,7 +377,7 @@ def formG2(request, facility, selector):
                 profile_form = user_profile_form()
             else:
                 initial_data = {
-                    'date': todays_log.date_save,
+                    'date': now,
                     'estab': options.facility_name,
                     'county': options.county,
                     'estab_no': options.estab_num,

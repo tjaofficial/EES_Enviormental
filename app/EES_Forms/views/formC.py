@@ -59,9 +59,6 @@ def formC(request, facility, selector):
             if now == todays_log.date_save:
                 if todays_log.date_save == database_form.date:
                     existing = True
-            else:
-                batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                return redirect(batt_prof)
             
         if search:
             database_form = ''
@@ -139,7 +136,7 @@ def formC(request, facility, selector):
                 read = FormCReadForm(initial=initial_data)
             else:
                 initial_data = {
-                    'date': todays_log.date_save,
+                    'date': now,
                     'observer': full_name,
                     'cert_date': cert_date,
                 }
