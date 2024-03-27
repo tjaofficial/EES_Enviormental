@@ -237,7 +237,7 @@ def landingRegister(request):
 
             current_site = get_current_site(request)
             mail_subject = 'MethodPlus: Activate Your New Account'   
-            html_message = render_to_string('landing/acc_active_email.html', {  
+            html_message = render_to_string('email/acc_active_email.html', {  
                 'user': user,  
                 'domain': current_site.domain,  
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  

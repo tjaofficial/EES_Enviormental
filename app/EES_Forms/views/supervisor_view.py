@@ -10,6 +10,14 @@ from django.contrib.auth.models import Group
 import json
 from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations
 from ..decor import isSubActive
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode  
+from django.template.loader import render_to_string  
+from ..tokens import create_token
+from django.utils.html import strip_tags
+from django.core.exceptions import ValidationError
 
 lock = login_required(login_url='Login')
 
@@ -428,8 +436,65 @@ def register_view(request, facility, access_page):
     
     if request.method == 'POST':
         answer = request.POST
-        if answer['facilitySelect'] != '':
-            return redirect('sup_dashboard', answer['facilitySelect'])
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
+        if 'create_facility' in answer.keys():
+            copyPost = request.POST.copy()
+            copyPost['position'] = CLIENT_VAR
+            copyPost['company'] = userCompany
+            userFrom = CreateUserForm(copyPost)
+            userProfForm = user_profile_form(copyPost)
+            print(userFrom.errors)
+            print(userProfForm.errors)
+            if len(request.POST['phone']) < 10:
+                userProfForm.add_error('phone', ValidationError("Please enter a valid phone number. (ie. 1234567890, (123)456-7890)"))
+                messages.error(request,"Please enter a valid phone number. (ie. 1234567890, (123)456-7890)")
+            if User.objects.filter(email=request.POST['email']).exists():
+                userFrom.add_error('email', ValidationError("This email has already been used."))
+                messages.error(request,"This email has already been used. Please enter a different email.")
+            if User.objects.filter(username=request.POST['username'].lower()).exists():
+                userFrom.add_error('username', ValidationError("This username already exists."))
+                messages.error(request,"This username already exists. Please enter a different username.")
+            if userFrom.is_valid() and userProfForm.is_valid():
+                A = userFrom.save(commit=False)
+                A.is_active = False
+                A.save()
+                
+                B = userProfForm.save(commit=False)
+                B.user = A
+                B.is_active = False
+                B.save()
+                
+                group = Group.objects.get(name=CLIENT_VAR)
+                A.groups.add(group)
+
+                current_site = get_current_site(request)
+                mail_subject = 'MethodPlus: Activate Your New Account'   
+                html_message = render_to_string('email/acc_active_email.html', {  
+                    'user': A,  
+                    'domain': current_site.domain,  
+                    'uid':urlsafe_base64_encode(force_bytes(A.pk)),  
+                    'token':create_token(A),  
+                })  
+                plain_message = strip_tags(html_message)
+                to_email = userFrom.cleaned_data.get('email')  
+                send_mail(
+                    mail_subject,
+                    plain_message,
+                    settings.EMAIL_HOST_USER,
+                    [to_email],
+                    html_message=html_message,
+                    fail_silently=False
+                )
+                messages.success(request,"Please confirm your email address to complete the registration")
+                return redirect('Login')
+            else:
+                messages.error(request,"Please fix your inputs.")
+                return redirect('Register', facility, 'client')
+                
+                
+            
     return render(request, "supervisor/register.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 

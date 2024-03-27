@@ -652,7 +652,13 @@ def default_dashboard(request, facility):
     formData = Forms.objects.all()
     today = datetime.datetime.today().date()
     todaysName = today.strftime('%A')
-    print(today)
+    user = request.user
+    userProfQuery = user_profile_model.objects.all()
+    userCompany = userProfQuery.get(user=user).company
+    facilityContacts = user_profile_model.objects.filter(facilityChoice__facility_name=facility)
+    print(facilityContacts)
+
+
     return render(request, 'observer/dashboards/obs_default_dash.html', {
         'supervisor': supervisor, 
         "client": client, 

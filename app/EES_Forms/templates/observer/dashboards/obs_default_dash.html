@@ -2,6 +2,16 @@
 {% block list%}
 <link href="{% static 'ees_forms/style/packet_div.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
+<style>
+    .listStyle{
+        list-style-type: none;
+        margin-left: 40px;
+        padding: 5px;
+    }
+    .listStyle:hover{
+        background-color: #b5b5b54f;
+    }
+</style>
 <div class="mainCont forms" style="display:block;margin-top: 18px;">
     <div style="display: flex;justify-content: center;">
         <div class="card" style="min-width: 300px; width: 25%;">
@@ -10,18 +20,22 @@
                 {% comment %} <ul style="width: 253px;"> {% endcomment %}
                 <ul>
                     {% for packet in packetsQuery %}
-                    <li style="list-style-type: none;margin-top: 15px;">{% include 'supervisor/facilityForms/packet_div.html' with page='obsDash' %}</li>
+                    <li style="list-style-type: none;margin-top: 15px;">
+                        {% include 'supervisor/facilityForms/packet_div.html' with page='obsDash' %}
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
         <div class="card" style="min-width: 300px; width: 40%; margin-left: 18px;">
             <div style="padding: 20px;">
-                <h3>Packets:</h3>
+                <h3>Contacts:</h3>
                 {% comment %} <ul style="width: 253px;"> {% endcomment %}
                 <ul>
                     {% for packet in packetsQuery %}
-                    <li style="list-style-type: none;margin-top: 15px;">{% include 'supervisor/facilityForms/packet_div.html' with page='obsDash' %}</li>
+                    <li style="list-style-type: none;margin-top: 15px;">
+                        {% include 'supervisor/facilityForms/packet_div.html' with page='obsDash' %}
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -30,7 +44,7 @@
     <div style="display: flex;justify-content: center;">
         <div class='card' style="width: calc(65% + 18px); margin-top: 18px;">
             <div style="padding: 20px;">
-                <h3>PACKET_NAME:</h3>
+                <h3>{{facility}} Packets and Forms:</h3>
                 <ul>
                     {% for packet in packetsQuery %}
                     <li style="list-style-type: none;margin-top: 15px;">
@@ -42,7 +56,7 @@
                                     {% if x.id == form.formID %}
                                             <a href="{% if x.link != 'formO' and x.link != 'formP' %}{% url x.link facility 'form' %}{% elif x.link == 'formO' %}{% url x.link facility 'form' todaysName %}{% elif x.link == 'formO' %}{% url x.link facility 'form' todaysName %}{% endif %}">
                                                 {{action}}
-                                                <li style="list-style-type: none;">
+                                                <li class="listStyle">
                                                     {{key}} - {{x.header}} - {{x.title}}
                                                 </li>
                                             </a>
