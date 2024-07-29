@@ -446,6 +446,7 @@ def search_forms_view(request, facility, access_page):
 
 @lock
 def issues_view(request, facility, form_name, form_date, access_page):
+    print(form_name)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -462,13 +463,13 @@ def issues_view(request, facility, form_name, form_date, access_page):
         facilityForms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    if not isinstance(form_name, int):
+    try: 
+        form_name = int(form_name)
+        form_name_parsed = form_name
+    except:
         form_name_parsed = getFormID_w_newFormLabel(form_name, facilityForms)
         if not form_name_parsed:
             messages.error(request,'ERROR: ID-11850001. Contant Support Team')
-            return redirect('register')
-    else:
-        form_name_parsed = form_name
     
     def create_link_elements():
         for facForms in facilityForms:
@@ -486,10 +487,10 @@ def issues_view(request, facility, form_name, form_date, access_page):
                                 day = weekendNameDict[dayNumber]
                     else:
                         day = False
-                    return main_url, day, formLabel
+                    return main_url, day, formLabel, formID
 
     if access_page == 'form':
-        main_url, day, formLabel = create_link_elements()
+        main_url, day, formLabel, formID = create_link_elements()
         if day:
             link = main_url + access_page + '/' + day
         else:
@@ -533,7 +534,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
-        main_url, day, formLabel = create_link_elements()
+        main_url, day, formLabel, formID = create_link_elements()
         if day:
             link = main_url + form_date + '/' + day
         else:

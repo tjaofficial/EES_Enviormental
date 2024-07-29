@@ -2448,7 +2448,7 @@ class formE_model(models.Model):
         max_length=30,
         choices=yes_no_choices
     )
-    goose_neck_data = models.CharField(max_length=255)
+    goose_neck_data = models.CharField(max_length=10000)
 
     def __str__(self):
         return str(self.date)
