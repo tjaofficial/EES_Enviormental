@@ -432,16 +432,16 @@ class bat_info_model(models.Model):
         null=True,
         blank=True
     )
-    is_battery = models.CharField(
-        max_length=10,
-        choices=yes_no_choices,
-        default='no'
-    )
-    dashboard = models.CharField(
-        max_length=20,
-        null=True,
-        blank=True
-    )
+    # is_battery = models.CharField(
+    #     max_length=10,
+    #     choices=yes_no_choices,
+    #     default='no'
+    # )
+    # dashboard = models.CharField(
+    #     max_length=20,
+    #     null=True,
+    #     blank=True
+    # )
     
     def __str__(self):
         return self.facility_name
@@ -7348,24 +7348,24 @@ class packets_model(models.Model):
         default='Weekly'
     )
     def __str__(self):
-        return str(self.id) + ' - ' + str(self.name) + ' - ' + str(self.facilityChoice)
+        return str(self.id) + ' - ' + str(self.name)# + ' - ' + str(self.facilityChoice)
     
 class form_settings_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
     formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
-    packetChoice = models.ForeignKey(
-        packets_model, 
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
+    # packetChoice = models.ForeignKey(
+    #     packets_model, 
+    #     on_delete=models.CASCADE,
+    #     blank=True,
+    #     null=True
+    # )
     settings = models.JSONField(
         default=dict,
-        null=True,
-        blank=True
+        # null=True,
+        # blank=True
     )
     def __str__(self):
-        return str(self.id) + ' - ' + str(self.formChoice) + ' - ' + str(self.facilityChoice)
+        return str(self.id) + ' - ' + str(self.formChoice)# + ' - ' + str(self.facilityChoice)
   
     
 # class tank_library(models.Model):
