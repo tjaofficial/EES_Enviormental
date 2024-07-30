@@ -33,8 +33,6 @@ class Migration(migrations.Migration):
                 ('bat_height_label', models.CharField(blank=True, choices=[('ft', 'Feet'), ('m', 'Meters')], max_length=10, null=True)),
                 ('bat_main', models.CharField(blank=True, choices=[('single', 'Single'), ('double', 'Double')], max_length=10, null=True)),
                 ('bat_lids', models.IntegerField(blank=True, null=True)),
-                ('is_battery', models.CharField(choices=[('Yes', 'Yes'), ('No', 'No')], default='no', max_length=10)),
-                ('dashboard', models.CharField(blank=True, max_length=20, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -1111,7 +1109,6 @@ class Migration(migrations.Migration):
                 ('position', models.CharField(choices=[('observer', 'Observer'), ('supervisor', 'Supervisor'), ('client', 'Client')], max_length=75)),
                 ('certs', models.CharField(blank=True, max_length=300, null=True)),
                 ('colorMode', models.CharField(choices=[('dark', 'Dark Mode'), ('light', 'Light Mode')], default='light', max_length=5)),
-                ('is_active', models.BooleanField(default=False)),
                 ('company', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.company_model')),
                 ('facilityChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
@@ -1313,16 +1310,6 @@ class Migration(migrations.Migration):
                 ('box_interior_9_4', models.CharField(blank=True, choices=[('N/A', 'N/A'), ('Yes', 'Yes'), ('No', 'No')], max_length=4, null=True)),
                 ('box_exterior_9_4', models.CharField(blank=True, choices=[('N/A', 'N/A'), ('Yes', 'Yes'), ('No', 'No')], max_length=4, null=True)),
                 ('exhaust_9_4', models.CharField(blank=True, choices=[('N/A', 'N/A'), ('Yes', 'Yes'), ('No', 'No')], max_length=4, null=True)),
-                ('facilityChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='packets_model',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=70)),
-                ('formList', models.JSONField(blank=True, null=True)),
-                ('frequency', models.CharField(choices=[('Daily', 'Daily'), ('Weekly', 'Weekly'), ('Monthly', 'Monthly'), ('Quarterly', 'Quarterly '), ('Semi-Annual', 'Semi-Annual'), ('Annual', 'Annual')], default='Weekly', max_length=30)),
                 ('facilityChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
             ],
         ),
@@ -1631,7 +1618,6 @@ class Migration(migrations.Migration):
                 ('start_time', models.TimeField(blank=True)),
                 ('end_time', models.TimeField(blank=True)),
                 ('leaks', models.CharField(choices=[('Yes', 'Yes'), ('No', 'No')], max_length=30)),
-                ('goose_neck_data', models.CharField(max_length=255)),
                 ('facilityChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
             ],
         ),
@@ -1945,16 +1931,6 @@ class Migration(migrations.Migration):
                 ('percent_leaking', models.CharField(max_length=30)),
                 ('notes', models.CharField(max_length=30)),
                 ('facilityChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='form_settings_model',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('settings', models.JSONField(blank=True, default=dict, null=True)),
-                ('facilityChoice', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
-                ('formChoice', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.forms')),
-                ('packetChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.packets_model')),
             ],
         ),
         migrations.CreateModel(
