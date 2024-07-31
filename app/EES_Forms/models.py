@@ -7159,7 +7159,7 @@ class braintreePlans(models.Model):
     name = models.CharField(
         max_length=150
     )
-    price = models.IntegerField()
+    price = models.FloatField()
     description = models.CharField(
         max_length=150
     )
@@ -7333,7 +7333,7 @@ class form_requests_model(models.Model):
     def __str__(self):
         return str(self.user) + ' - ' + str(self.name)
 
-class packets_model(models.Model):
+class the_packets_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(
         max_length=70
@@ -7354,7 +7354,7 @@ class form_settings_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
     formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
     packetChoice = models.ForeignKey(
-        packets_model, 
+        the_packets_model, 
         on_delete=models.CASCADE,
         blank=True,
         null=True

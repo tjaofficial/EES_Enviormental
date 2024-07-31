@@ -13,15 +13,15 @@
                     <p>Facility: {{info.0.facility_name}}</p><br>
                     <p>Packet Name: {{packet.name}}</p><br>
                     <p>Frequency: {{packetForm.frequency}}</p><br>
-                    <select name="existingForms">
+                    {% comment %} <select name="existingForms">
                         <option value="">------</option>
                         {% for forms in info.1 %}
                         <option value="{{forms.3.id}}">EQUIPMENT_NAME - {{forms.2}}</option>
                         {% endfor %}
-                    </select>
+                    </select> {% endcomment %}
                     <br>
                     <div style="text-align: right;">
-                        <input id="submit{{packID}}" name="sub_delete" type="submit" value="Confirm Delete" disabled>
+                        <input id="submit{{packID}}" name="sub_delete" type="submit" value="Update">
                     </div>
                 </div>  
             </form>

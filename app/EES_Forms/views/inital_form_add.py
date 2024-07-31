@@ -7,18 +7,6 @@ from django.contrib.contenttypes.models import ContentType
 from ..utils import braintreeGateway
 
 def add_forms_to_database():
-    if braintreePlans.objects.count() == 0:
-        gateway = braintreeGateway()
-        plans = gateway.plan.all()
-        for plan in plans:
-            add_plan = braintreePlans(
-                planID = plans.id,
-                name = plans.name,
-                price = plans.price,
-                description = plans.descripton
-            )
-            add_plan.save()
-
     if Group.objects.count() < 3:
         today = datetime.date.today()
         GROUP_LIST = ['supervisor', 'client', 'observer']
@@ -32,10 +20,12 @@ def add_forms_to_database():
                 if model.name not in DONT_CHANGE:
                     print(model.name)
                     for perm in PERMISSION_LIST:
-                        codename_build = 'can_' + perm + '_' + model.name
-                        name_build = 'can '+ perm + ' ' + model.name      
+                        codename_build = perm + '_' + model.name
+                        name_build = 'Can '+ perm + ' ' + model.name 
+                        print(codename_build)  
+                        print(name_build) 
                         permission = Permission.objects.get(
-                            codename=codename_build,
+                            #codename=codename_build,
                             name=name_build,
                             content_type=model
                         )
@@ -409,3 +399,16 @@ def add_forms_to_database():
         spill_kits.save()
         quarterly_trucks.save()
         STI_SP001_monthly_inspection.save()
+        
+    if braintreePlans.objects.count() == 0:
+        gateway = braintreeGateway()
+        plans = gateway.plan.all()
+        print(plans)
+        for plan in plans:
+            add_plan = braintreePlans(
+                planID = plan.id,
+                name = plan.name,
+                price = plan.price,
+                description = plan.description
+            )
+            add_plan.save()

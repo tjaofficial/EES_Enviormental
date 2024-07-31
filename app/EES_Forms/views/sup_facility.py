@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, packets_model, form_settings_model
-from ..forms import facility_forms_form, packets_form
+from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
+from ..forms import facility_forms_form, the_packets_form
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -25,8 +25,8 @@ def facilityList(request, facility):
     formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     
-    packetData = packets_model.objects.all()
-    packetForm = packets_form
+    packetData = the_packets_model.objects.all()
+    packetForm = the_packets_form
     #print(bat_info_model.objects.get(facility_name=facility))
     
     #facilityID = bat_info_model.objects.get(company__company_name=userProfData.company.company_name, facility_name=facility).id
@@ -61,7 +61,6 @@ def facilityList(request, facility):
             finalList.append((newFac[0], labelList))
         else:
             finalList.append((newFac[0], newFac[1]))
-    print(packetData[0].formList)
     
     if request.method == 'POST':
         answer = request.POST
@@ -111,7 +110,7 @@ def facilityForm(request, facility, packet):
     specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
     formSettingsModel = form_settings_model.objects.all()
-    packetQuery = packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
+    packetQuery = the_packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
     print("-------------------------")
     print(formList[0].form)
     facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
@@ -152,7 +151,7 @@ def facilityForm(request, facility, packet):
                             toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
                             toBeDeleted.delete()
                         break
-    if facilityFormsData.exists:
+    if facilityFormsData.exists():
         if facilityFormsData[0].formData:
             facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])
         else:
@@ -259,7 +258,7 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
     if client:
         return redirect('c_dashboard', facility)
     formData = Forms.objects.get(id=formID)
-    packetSettings = packets_model.objects.get(id=packetID)
+    packetSettings = the_packets_model.objects.get(id=packetID)
     for form in packetSettings.formList:
         if form == formLabel:
             settingsID = packetSettings.formList[form]['settingsID']

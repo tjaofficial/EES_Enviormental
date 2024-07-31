@@ -2230,9 +2230,9 @@ class form_requests_form(ModelForm):
             'frequency': forms.Select(attrs={}),
         }
         
-class packets_form(ModelForm):
+class the_packets_form(ModelForm):
     class Meta:
-        model = packets_model
+        model = the_packets_model
         fields = ('__all__')
         widgets = {
             'facilityChoice': forms.Select(choices=frequent_choices),

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
-from ..models import Forms, bat_info_model, facility_forms_model, packets_model
+from ..models import Forms, bat_info_model, facility_forms_model, the_packets_model
 from ..forms import *
 from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -27,7 +27,7 @@ def printSelect(request, facility):
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
     
-    packetQuery = packets_model.objects.filter(facilityChoice__facility_name=facility)
+    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
     if len(facilityForms) == 0:

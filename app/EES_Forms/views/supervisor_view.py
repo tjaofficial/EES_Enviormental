@@ -380,7 +380,10 @@ def register_view(request, facility, access_page):
                     if not facilityModel.exists():    
                         A = form.save(commit=False)
                         A.company = userProf.company
-                        
+                        if request.POST['cokeBattery'] == 'true':
+                            A.dashboard = 'battery'
+                        else:
+                            A.dashboard = 'default'
                         A.save()
                         
                         messages.success(request, 'Facility Created')

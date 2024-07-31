@@ -63,7 +63,7 @@ admin.site.register(settings_model)
 admin.site.register(tokens_model)
 admin.site.register(FAQ_model)
 admin.site.register(form_requests_model)
-admin.site.register(packets_model)
+admin.site.register(the_packets_model)
 admin.site.register(form_settings_model)
 
 class EventAdmin(admin.ModelAdmin):

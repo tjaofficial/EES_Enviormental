@@ -86,8 +86,12 @@ def facility_select_view(request):
         answer = request.POST['facility']
         daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer).order_by('-date_save')
         if answer != '':
+            print('CHECK 01')
             batteryQuery = bat_info_model.objects.get(facility_name=answer)
-            if batteryQuery.is_battery == 'yes' and batteryQuery.dashboard == 'battery':
+            print(batteryQuery.is_battery)
+            print(batteryQuery.dashboard)
+            if batteryQuery.is_battery == 'Yes' and batteryQuery.dashboard == 'battery':
+                print('CHECK 02')
                 if daily_prof.exists():
                     todays_log = daily_prof[0]
                     if now == todays_log.date_save:
@@ -95,6 +99,7 @@ def facility_select_view(request):
                 batt_prof = '../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
                 return redirect(batt_prof)
             elif batteryQuery.dashboard == "default":
+                print('CHECK 03')
                 return redirect('defaultDash', answer)
 
     return render(request, "observer/facility_select.html", {
