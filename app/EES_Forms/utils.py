@@ -667,7 +667,7 @@ def displayNotifications(user, facility):
         nUserProfile = nUserProfile[0]
     allNotifs = notifications_model.objects.filter(facilityChoice__facility_name=facility, user=nUserProfile).order_by('-created_at')
     facForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    if facForms.exists():
+    if facForms.exists() and facForms[0].formData:
         formIDandLabel = ast.literal_eval(facForms[0].formData)
     unReadList = []
     readList = []

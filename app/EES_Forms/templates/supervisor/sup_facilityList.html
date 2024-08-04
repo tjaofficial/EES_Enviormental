@@ -16,7 +16,7 @@
                     <div class="facilityFormHeader">
                         {{info.0.facility_name}}
                     </div>
-                    {% comment %} <div class="">
+                    <div class="">
                         {% if info.1|length > 0 %}
                             <table class="standardTable">
                                 <tr>
@@ -38,15 +38,15 @@
                             </table>
                         {% else %}
                             <div class="contentCont center">
-                                No forms have been added. Add forms to this facility by clicking 'add/remove forms' below
+                                No forms have been added. Add forms to this facility by clicking 'add forms' below
                             </div>
                         {% endif %}
-                    </div> {% endcomment %}
-                    {% comment %} <div class="smallLink" style="padding-top: 32px;">
-                        <a href="">
-                            add/remove forms
+                    </div>
+                    <div class="smallLink" style="padding-top: 32px;">
+                        <a href="{% url 'addingForms' info.0.facility_name %}">
+                            add forms
                         </a>
-                    </div> {% endcomment %}
+                    </div>
                     <div>
                         <table class="standardTable">
                             <tr>

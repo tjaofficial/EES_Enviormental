@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, form_requests_model
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model, form_requests_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
@@ -384,7 +384,13 @@ def register_view(request, facility, access_page):
                             A.dashboard = 'battery'
                         else:
                             A.dashboard = 'default'
+                        
                         A.save()
+                        newfacilityForm = facility_forms_model(
+                            facilityChoice = A,
+                            formData = ''
+                        )
+                        newfacilityForm.save()
                         
                         messages.success(request, 'Facility Created')
                         return redirect('sup_dashboard', facility)

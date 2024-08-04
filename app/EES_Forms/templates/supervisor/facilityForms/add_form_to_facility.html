@@ -1,0 +1,109 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
+<script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
+<style>
+    .pageStyle{
+        padding: 9px;
+        background: lightblue;
+        border: 1px black solid;
+        text-decoration: underline;
+    }
+
+    .paginator{
+        display: flex;
+        justify-content: center;
+    }
+    .paginator a {
+        color: black;
+        float: left;
+        padding: 4px 12px;
+        text-decoration: none;
+        transition: background-color .3s;
+        font-size: 15px;
+      }
+    .paginator a.active {
+        background-color: #253544;
+        color: white;
+        border: 1px solid #253544;
+      }
+    .paginator a:hover:not(.active) {
+        background-color: #959595;
+    }
+    .formDataDisplay{
+        margin: auto;
+        width: 100%;
+        height: 457px;
+    }
+    .formRows{
+        height: 24px;
+    }
+    .formRows:hover{
+        background-color: #00000017;
+    }
+</style>
+<div class='mainCont' style="width:1000px; max-width:unset;">
+    <div class="card bottomOfPageMargin">
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="facilityList"%}
+            Select Forms to add to {{facility}}
+        </div>
+        <div style='padding: 15px 32px;'>
+            <div style="text-align:center; width:100%;margin-bottom:25px;">Don't see the form you want? <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">Submit a form Request</a></div>
+            <div>
+                <form method="GET" action="./add-forms">
+                    <input type="text" name="q" placeholder="search forms..."/><input type="submit" value="search"/>
+                </form>
+            </div>
+            <form method='POST' action=''>
+                {% csrf_token %}
+                <table class="formDataDisplay">
+                    <tr style="height: 24px; background: #3d516482;">
+                        <th style="width: 1%;"></th>
+                        <th style="width: 4%;"></th>
+                        <th style="width: 25%;">Form Type</th>
+                        <th style="width: 30%;">Description</th>
+                    </tr>
+                    {% for form in pageData %}
+                    <tr class="formRows">
+                        <td class="rowCheckMark"><input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}checked{% endif %}{% endfor %}/></td>
+                        <td class="rowFormID">{{form.id}} - </td>
+                        <td class="rowFormType">{{form.header}}</td>
+                        <td>{{form.title}}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.id count=forloop.counter %}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="paginator">
+                    {% if pageData.has_previous %}
+                        <a  href="?{% if query %}q={{query}}&{% endif %}page={{pageData.previous_page_number}}">&laquo</a>
+                    {% endif %}
+                    {% for i in pageData.paginator.page_range %}
+                        {% if pageData.number == i %}
+                        <a class="active">{{i}}</a>
+                        {% else %}
+                        <a  href="?{% if query %}q={{query}}&{% endif %}page={{i}}">{{i}}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pageData.has_next %}
+                    <a href="?{% if query %}q={{query}}&{% endif %}page={{pageData.next_page_number}}">&raquo</a>
+                    {% endif %}
+                </div>
+                <div class="center" style="margin-top:10px;">
+                    <input type='submit' value='Save'/>
+                </div>
+            </form>
+            <form method='POST' action=''>
+                existing
+                <div>
+                    {{modelList}}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
