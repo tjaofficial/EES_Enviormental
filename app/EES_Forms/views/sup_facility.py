@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
-from ..forms import facility_forms_form, the_packets_form
+from ..forms import facility_forms_form, the_packets_form, form_settings_form
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -27,15 +27,15 @@ def facilityList(request, facility):
     facData = facility_forms_model.objects.all()
     formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    
+    formSettingsModel = form_settings_model.objects.all()
     packetData = the_packets_model.objects.all()
     packetForm = the_packets_form
+
     #print(bat_info_model.objects.get(facility_name=facility))
     
     #facilityID = bat_info_model.objects.get(company__company_name=userProfData.company.company_name, facility_name=facility).id
     
     #facilityFormsList = get_facility_forms(facilityID)
-    
     newFacList = []
     for facil in facList:
         found = False
@@ -49,23 +49,27 @@ def facilityList(request, facility):
             newFacList.append((facil, facilityForms))
         else:
             newFacList.append((facil, []))
-        
+
     finalList = []
     for newFac in newFacList:
+        formSettingsModel = formSettingsModel.filter(facilityChoice=newFac[0])
         if len(newFac[1]) > 0:
             labelList = []
             for label in newFac[1]:
-                for singleForm in formData:
-                    if label == singleForm.id:
-                        labelList.append((label, label, singleForm.header + ' - ' + singleForm.title, singleForm))
+                for formSettings in formSettingsModel:
+                    if int(label) == formSettings.id:
+                        labelList.append((formSettings))
+                # labelList.append((label, label, singleForm.header + ' - ' + singleForm.title, singleForm))
+                # for singleForm in formData:
+                #     if label == singleForm.id:
             def myFunc(e):
-                return e[1]
+                return e.id
             labelList.sort(key=myFunc)
             
             finalList.append((newFac[0], labelList))
         else:
             finalList.append((newFac[0], newFac[1]))
-    
+    print(finalList)
     if request.method == 'POST':
         answer = request.POST
         if 'facilitySelect' in answer.keys():
@@ -261,13 +265,39 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
     if client:
         return redirect('c_dashboard', facility)
     formData = Forms.objects.get(id=formID)
-    packetSettings = the_packets_model.objects.get(id=packetID)
-    for form in packetSettings.formList:
-        if form == formLabel:
-            settingsID = packetSettings.formList[form]['settingsID']
-            break
-    formSettings = form_settings_model.objects.get(id=settingsID).settings
+    if packetID != 'facID':
+        packetSettings = the_packets_model.objects.get(id=packetID)
+    else:
+        packetSettings = False
     
+    if formLabel != 'none':
+        for form in packetSettings.formList:
+            if form == formLabel:
+                settingsID = packetSettings.formList[form]['settingsID']
+                break
+
+    selectedSettings = form_settings_model.objects.get(id=formID)
+    formSettings = selectedSettings.settings
+    print(formSettings)
+    
+    if request.method == "POST":
+        formWData = form_settings_form(request.POST, instance=selectedSettings)
+        print(formWData.clean)
+        print(formWData)
+        if formWData.is_valid():
+            A = formWData.save(commit=False)
+            for inputs in request.POST.keys():
+                if inputs[:9] == "settings_":
+                    settingsName = inputs[9:]
+                    A.settings[settingsName] = request.POST[inputs]
+                
+            print(A.settings)
+        
+            #formWData.save()
+            #return redirect('facilityList', 'supervisor')
+        else:
+            messages.error(request,"Check your inputs and make sure information was entered in correctly.")
+            
     
     return render (request, 'supervisor/facilityForms/facilityFormSettings.html', {
         'notifs': notifs,
@@ -279,7 +309,8 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
         'formData': formData,
         'formID': int(formID),
         'formSettings': formSettings,
-        'packetSettings': packetSettings
+        'packetSettings': packetSettings,
+        'packetID': packetID
     })
     
 @lock
@@ -350,13 +381,6 @@ def Add_Forms(request, facility):
                             toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
                             toBeDeleted.delete()
                         break
-    
-    #     existing = True
-    # if existing:
-    #     modelList = facilityFormsData
-    #     replaceModel = facility_forms_model.objects.get(facilityChoice=specificFacility)
-
-    
     if request.method == 'POST':
         answer = request.POST
         print(answer)
@@ -390,11 +414,6 @@ def Add_Forms(request, facility):
                             if existInp == newInp:
                                 if oldSettings[existInp] != settingsDict[newInp]:
                                     sameEntry = False
-                    # if not sameEntry:
-                    #     A.settings = settingsDict
-                    #     A.save()
-                    #     selectSettingID = A.id
-                    #     print('updated')
                 if not sameEntry:
                     newSettings = form_settings_model(
                         facilityChoice = specificFacility,

@@ -26,10 +26,10 @@
                                 </tr>
                                 {% for x in info.1 %}
                                     <tr>
-                                        <td class="center">{{x.1}}</td>
-                                        <td class="">{{x.2}}</td>
+                                        <td class="center">{{x.id}}</td>
+                                        <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
                                         <td class="center smallLink">
-                                            <a href=#>
+                                            <a href="{% url 'facilityFormSettings' info.0.facility_name 'facID' x.id 'none' %}">
                                                 edit
                                             </a>
                                         </td>

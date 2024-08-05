@@ -2240,5 +2240,17 @@ class the_packets_form(ModelForm):
             'formList': forms.TextInput(),
         }
         
+class form_settings_form(ModelForm):
+    class Meta:
+        model = form_settings_model
+        fields = ('__all__')
+        widgets = {
+            'facilityChoice': forms.Select(attrs={}),
+            'formChoice': forms.Select(attrs={}),
+            'packetChoice': forms.Select(attrs={}),
+            'settings': forms.TextInput(),
+        }
+        
+        
         
         
