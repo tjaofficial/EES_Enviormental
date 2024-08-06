@@ -35,7 +35,7 @@ def formA3(request, facility, selector):
             data = database_model
             existing = True
             search = True
-        elif now == todays_log.date_save.day:
+        elif now == todays_log.date_save:
             if org.exists():
                 database_form = org[0]
                 if todays_log.date_save == database_form.date:

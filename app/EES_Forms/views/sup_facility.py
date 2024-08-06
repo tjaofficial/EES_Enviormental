@@ -89,7 +89,15 @@ def facilityList(request, facility):
             packToDelete = packetData.get(id=answer['packID'])
             packToDelete.delete()
             return redirect(facilityList, facility)
+        elif 'packet_update' in answer.keys():
+            #receiving fsID and packetID in format of "27-6"
+            print(answer['packet_update'])
+            dataReceived = answer['packet_update'].split("-")
+            fsID = dataReceived[0]
+            packetID = dataReceived[1]
+            thePacket = packetData.get(id=packetID)
             
+            print('Updating Packet')
     return render(request, 'supervisor/sup_facilityList.html', {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
@@ -278,25 +286,25 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
 
     selectedSettings = form_settings_model.objects.get(id=formID)
     formSettings = selectedSettings.settings
-    print(formSettings)
-    
     if request.method == "POST":
-        formWData = form_settings_form(request.POST, instance=selectedSettings)
-        print(formWData.clean)
-        print(formWData)
-        if formWData.is_valid():
-            A = formWData.save(commit=False)
-            for inputs in request.POST.keys():
-                if inputs[:9] == "settings_":
-                    settingsName = inputs[9:]
-                    A.settings[settingsName] = request.POST[inputs]
+        if 'facilitySelect' in request.POST.keys():
+            return redirect('sup_dashboard', request.POST['facilitySelect'])
+        copyPOST = request.POST.copy()
+        copyPOST['facilityChoice'] = selectedSettings.facilityChoice
+        copyPOST['formChoice'] = selectedSettings.formChoice
+        copyPOST['settings'] = formSettings
+        for inputs in request.POST.keys():
+            if inputs[:9] == "settings_":
+                settingsName = inputs[9:]
+                copyPOST['settings'][settingsName] = request.POST[inputs]
                 
-            print(A.settings)
-        
-            #formWData.save()
-            #return redirect('facilityList', 'supervisor')
+        formWData = form_settings_form(copyPOST, instance=selectedSettings)
+        if formWData.is_valid():
+            formWData.save()
+            messages.success(request,"Form XXX was updated.")
+            return redirect('facilityList', 'supervisor')
         else:
-            messages.error(request,"Check your inputs and make sure information was entered in correctly.")
+            messages.error(request,"Check your inputs and make sure informationw as entered in correctly.")
             
     
     return render (request, 'supervisor/facilityForms/facilityFormSettings.html', {
