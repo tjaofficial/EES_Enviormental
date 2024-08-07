@@ -33,9 +33,9 @@
                                     <tr class="drag" id="drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
                                         <td class="center">{{x.id}}</td>
                                         <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
-                                        <td class="center smallLink">
-                                            <a href="{% url 'facilityFormSettings' info.0.facility_name 'facID' x.id 'none' %}">
-                                                edit
+                                        <td class="center smallLink"> 
+                                            <a href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}">
+                                               edit
                                             </a>
                                         </td>
                                     </tr>
@@ -105,7 +105,7 @@
                                                     <td class="center smallLink">
                                                         {% if form.formLabel == '' %}
                                                         {% else %}
-                                                            <a href="{% url 'facilityFormSettings' info.0.facility_name packet.id form.formID key %}">
+                                                            <a href="{% url 'facilityFormSettings' info.0.facility_name form.settingsID packet.id key %}">
                                                                 edit
                                                             </a>
                                                         {% endif %}
@@ -165,37 +165,37 @@
 </div>
 <script>
     //on hover big div box run this fucntion 
-function bang(elem){
-    console.log("hello")
-    const dragItemNumber = elem.id.slice(4);
-    let facilityNumber = elem.dataset.facid;//3
-    const dropZone = document.getElementById('dropZone'+String(facilityNumber));
-    dropZone.addEventListener('dragover', function(event){
-        event.preventDefault()
-    })
-    console.log(facilityNumber)
-    let totalForms = elem.dataset.totalforms;//29
-    console.log(totalForms)
-    for (let x=1;x<=parseInt(totalForms);x++){
-        console.log(x)
-        let itemBeingDraggedID = "drag" + String(x);
-        console.log(itemBeingDraggedID)
-        const dragItem = document.getElementById(itemBeingDraggedID);
-        console.log(dragItem)
-        
-        dragItem.addEventListener('dragstart',function(event){
-            console.log(event);
-            console.log(event.toElement.dataset.fsid);
-            event.dataTransfer.setData("Text", event.target.dataset.fsid);
+    function bang(elem){
+        console.log("hello")
+        const dragItemNumber = elem.id.slice(4);
+        let facilityNumber = elem.dataset.facid;//3
+        const dropZone = document.getElementById('dropZone'+String(facilityNumber));
+        dropZone.addEventListener('dragover', function(event){
+            event.preventDefault()
+        })
+        console.log(facilityNumber)
+        let totalForms = elem.dataset.totalforms;//29
+        console.log(totalForms)
+        for (let x=1;x<=parseInt(totalForms);x++){
+            console.log(x)
+            let itemBeingDraggedID = "drag" + String(x);
+            console.log(itemBeingDraggedID)
+            const dragItem = document.getElementById(itemBeingDraggedID);
+            console.log(dragItem)
+            
+            dragItem.addEventListener('dragstart',function(event){
+                console.log(event);
+                console.log(event.toElement.dataset.fsid);
+                event.dataTransfer.setData("Text", event.target.dataset.fsid);
+            })
+        }
+        dropZone.addEventListener('drop', function(event){
+            console.log(event.dataTransfer.getData("Text"))
+            //show_formsList_form(dropZone)
+            console.log(event.toElement.dataset.packetid)
+            document.getElementById('formSettingsID').value = String(event.dataTransfer.getData("Text"))+"-"+ event.toElement.dataset.packetid;
+            document.updatePacket.submit();
         })
     }
-    dropZone.addEventListener('drop', function(event){
-        console.log(event.dataTransfer.getData("Text"))
-        //show_formsList_form(dropZone)
-        console.log(event.toElement.dataset.packetid)
-        document.getElementById('formSettingsID').value = String(event.dataTransfer.getData("Text"))+"-"+ event.toElement.dataset.packetid;
-        document.updatePacket.submit();
-    })
-}
 </script>
 {% endblock %}

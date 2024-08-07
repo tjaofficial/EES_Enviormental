@@ -96,7 +96,17 @@ def facilityList(request, facility):
             fsID = dataReceived[0]
             packetID = dataReceived[1]
             thePacket = packetData.get(id=packetID)
-            
+            theSettings = formSettingsModel.get(id=fsID)
+            highestLabelNumb = 0
+            for label in thePacket.formList.keys():
+                noLabelTag = label[:9]
+                noLabelNumber = label[9:]
+                if noLabelTag == "no-label-":
+                    if int(noLabelNumber) > int(highestLabelNumb):
+                        highestLabelNumb = noLabelNumber
+            thePacket.formList["no-label-"+str(int(highestLabelNumb)+1)] = {"formID":theSettings.formChoice.id, "settingsID":fsID}
+            A = thePacket
+            A.save()
             print('Updating Packet')
     return render(request, 'supervisor/sup_facilityList.html', {
         'notifs': notifs, 
@@ -263,7 +273,7 @@ def facilityForm(request, facility, packet):
     })
     
 @lock
-def facility_form_settings(request, facility, packetID, formID, formLabel):
+def facility_form_settings(request, facility, fsID, packetID, formLabel):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -272,8 +282,10 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
         return redirect('IncompleteForms', facility)
     if client:
         return redirect('c_dashboard', facility)
-    formData = Forms.objects.get(id=formID)
-    if packetID != 'facID':
+    selectedSettings = form_settings_model.objects.get(id=fsID)
+    formData = Forms.objects.get(id=selectedSettings.formChoice.id)
+    #fsID = False
+    if packetID[:5] != 'facID':
         packetSettings = the_packets_model.objects.get(id=packetID)
     else:
         packetSettings = False
@@ -283,8 +295,7 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
             if form == formLabel:
                 settingsID = packetSettings.formList[form]['settingsID']
                 break
-
-    selectedSettings = form_settings_model.objects.get(id=formID)
+                
     formSettings = selectedSettings.settings
     if request.method == "POST":
         if 'facilitySelect' in request.POST.keys():
@@ -315,7 +326,7 @@ def facility_form_settings(request, facility, packetID, formID, formLabel):
         'supervisor': supervisor, 
         'formLabel': formLabel,
         'formData': formData,
-        'formID': int(formID),
+        'formID': int(formData.id),
         'formSettings': formSettings,
         'packetSettings': packetSettings,
         'packetID': packetID

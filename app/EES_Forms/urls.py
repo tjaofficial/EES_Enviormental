@@ -32,7 +32,7 @@ urlpatterns = [
     path("<str:facility>/password", views.change_password, name='PasswordChange'),
     path("<str:facility>/request-form", views.form_request_view, name='requestForm'),
     path("<str:facility>/facilitylist", views.facilityList, name="facilityList"),
-    path("<str:facility>/facilityFormSettings/<str:packetID>/<str:formID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
+    path("<str:facility>/facilityFormSettings/<str:fsID>/<str:packetID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
