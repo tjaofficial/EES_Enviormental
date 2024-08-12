@@ -88,6 +88,7 @@ def facility_select_view(request):
         if answer != '':
             print('CHECK 01')
             batteryQuery = bat_info_model.objects.get(facility_name=answer)
+            print(batteryQuery)
             print(batteryQuery.is_battery)
             print(batteryQuery.dashboard)
             if batteryQuery.is_battery == 'Yes' and batteryQuery.dashboard == 'battery':

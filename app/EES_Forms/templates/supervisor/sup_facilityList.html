@@ -28,15 +28,19 @@
                                     <th class="underline headerFont" style="width: 20%;">ID</th>
                                     <th class="underline headerFont" style="width: 60%;">Form Title</th>
                                     <th style="width: 20%;"></th>
+                                    <th style="width: 20%;"></th>
                                 </tr>
                                 {% for x in info.1 %}
+                                    {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
                                     <tr class="drag" id="drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
+                                        
                                         <td class="center">{{x.id}}</td>
                                         <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
-                                        <td class="center smallLink"> 
-                                            <a href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}">
+                                        <td class="center" style="display: inline-flex;"> 
+                                            <a class="smallLink" href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}">
                                                edit
                                             </a>
+                                            <span onclick="open_delete_facForm_modal(this, {{ forloop.counter }})" class="closeAdd2" style="margin-top: -10px;">&times;</span>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -88,11 +92,11 @@
                                         </div> {% endcomment %}
                                         {% include 'supervisor/facilityForms/packet_div.html' with page='facilityList' %}
                                         {% if packet.formList %}
-                                        <table style="display:none;" class="standardTable">
+                                        <table style="display:none;width: 95%;" class="standardTable">
                                             <tr>
-                                                <th class="underline headerFont" style="width: 20%;">Label</th>
-                                                <th class="underline headerFont" style="width: 60%;">Form Title</th>
-                                                <th style="width: 20%;"></th>
+                                                <th class="underline headerFont" style="width: 23%;">Label</th>
+                                                <th class="underline headerFont" style="width: 66%;">Form Title</th>
+                                                <th style="width: 11%;"></th>
                                             </tr>
                                             {% for key, form in packet.formList.items %}
                                                 <tr>
@@ -102,12 +106,13 @@
                                                             <td class="">{{x.header}} - {{x.title}}</td>
                                                         {% endif %}
                                                     {% endfor %}
-                                                    <td class="center smallLink">
+                                                    <td class="center smallLink" style="display: flex; justify-content: flex-end;">
                                                         {% if form.formLabel == '' %}
                                                         {% else %}
                                                             <a href="{% url 'facilityFormSettings' info.0.facility_name form.settingsID packet.id key %}">
                                                                 edit
                                                             </a>
+                                                            <span onclick="open_delete_facForm_modal(this, {{ forloop.counter }})" class="closeAdd2" style="margin-top: -10px;">&times;</span>
                                                         {% endif %}
                                                     </td>
                                                 </tr>

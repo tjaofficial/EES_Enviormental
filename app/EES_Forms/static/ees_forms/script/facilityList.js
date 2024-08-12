@@ -27,3 +27,11 @@ exit_modal = (packID, task) => {
 open_packet_modal = (elem, packID) => {
     document.getElementById('edit'+String(packID)).style.display = 'flex';
 }
+
+open_delete_facForm_modal = (elem, packID) => {
+    document.getElementById('deleteFacForm'+String(packID)).style.display = 'flex';
+}
+exit_modal = (packID, task) => {
+    var modalAdd = document.getElementById(task+String(packID));
+    modalAdd.style.display = "none";
+}

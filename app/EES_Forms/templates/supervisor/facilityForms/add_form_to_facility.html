@@ -48,7 +48,12 @@
             Select Forms to add to {{facility}}
         </div>
         <div style='padding: 15px 32px;'>
-            <div style="text-align:center; width:100%;margin-bottom:25px;">Don't see the form you want? <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">Submit a form Request</a></div>
+            <div style="text-align:center; width:100%;margin-bottom:25px;">
+                Don't see the form you want? 
+                <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">
+                    Submit a form Request
+                </a>
+            </div>
             <div>
                 <form method="GET" action="./add-forms">
                     <input type="text" name="q" placeholder="search forms..."/><input type="submit" value="search"/>

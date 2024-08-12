@@ -49,7 +49,7 @@ def facilityList(request, facility):
             newFacList.append((facil, facilityForms))
         else:
             newFacList.append((facil, []))
-
+    print(newFacList)
     finalList = []
     for newFac in newFacList:
         formSettingsModel = formSettingsModel.filter(facilityChoice=newFac[0])
@@ -69,7 +69,6 @@ def facilityList(request, facility):
             finalList.append((newFac[0], labelList))
         else:
             finalList.append((newFac[0], newFac[1]))
-    print(finalList)
     if request.method == 'POST':
         answer = request.POST
         if 'facilitySelect' in answer.keys():
@@ -88,6 +87,46 @@ def facilityList(request, facility):
         elif 'sub_delete' in answer.keys():
             packToDelete = packetData.get(id=answer['packID'])
             packToDelete.delete()
+            return redirect(facilityList, facility)
+        elif 'facForm_delete' in answer.keys():
+            facFormID = answer['facFormID']
+            facID = answer['facID']
+            #delete from all packets
+            for pac in packetData.filter(facilityChoice__id=facID):
+                deleteList = []
+                for setList in pac.formList:
+                    if facFormID == pac.formList[setList]['settingsID']:
+                        print('check 1')
+                        if setList not in deleteList:
+                            print('check 2')
+                            deleteList.append(setList)
+                print(deleteList)
+                for delForm in deleteList:
+                    print(pac.formList)
+                    print(pac.formList[delForm])
+                    del pac.formList[delForm]
+                    finalDelete = pac
+                    finalDelete.save()
+            #delete form facility forms model
+            thisFacilityForm = facData.get(facilityChoice__id=facID)
+            makeFacFormsListItems = ast.literal_eval(thisFacilityForm.formData[1:-1])
+            print("hello")
+            print(makeFacFormsListItems)
+            if isinstance(makeFacFormsListItems, int):
+                makeFacFormsList = [makeFacFormsListItems]
+            else:
+                makeFacFormsList = list(makeFacFormsListItems)#.split(',')
+            print(makeFacFormsList)
+            for ids in makeFacFormsList:
+                print(ids)
+                if int(ids) ==  int(facFormID):
+                    makeFacFormsList.remove(ids)
+            thisFacilityForm.formData = makeFacFormsList
+            facilityFormDelete = thisFacilityForm
+            facilityFormDelete.save()
+            #delete from form settings model
+            formToDelete = formSettingsModel.get(id=facFormID)
+            formToDelete.delete()
             return redirect(facilityList, facility)
         elif 'packet_update' in answer.keys():
             #receiving fsID and packetID in format of "27-6"
@@ -133,14 +172,23 @@ def facilityForm(request, facility, packet):
     modelList = ''
     today = datetime.date.today()
     specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
+    q = request.GET.get('q')
     formList = Forms.objects.all().order_by('form')
+    totalAmountofForms = len(formList)
+    if q:
+        formList = formList.filter(
+            Q(title__icontains=q) |
+            Q(header__icontains=q)
+        ).distinct()
     formSettingsModel = form_settings_model.objects.all()
     packetQuery = the_packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
     print("-------------------------")
     print(formList[0].form)
     facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    
+    p = Paginator(formList, 15)
+    page = request.GET.get('page')
+    pageData = p.get_page(page)
     def doesSubExist(facilityLog, value, selector, delete):
         if selector == "formID":
             for formData in Forms.objects.all():
@@ -196,7 +244,7 @@ def facilityForm(request, facility, packet):
             return redirect('sup_dashboard', answer['facilitySelect'])
         selectedList = {}
         ## Builds the new list of forms selected and created a submission record
-        for item in range(1, len(formList)):
+        for item in range(1, totalAmountofForms):
             formIDlabel = 'forms' + str(item)
             formOrgLabel = 'formID' + str(item)
             
@@ -269,7 +317,9 @@ def facilityForm(request, facility, packet):
         'modelList': modelList,
         'packet': packet,
         'packetQuery': packetQuery.formList,
-        'formSettingsModel': formSettingsModel
+        'formSettingsModel': formSettingsModel,
+        'pageData': pageData,
+        'query': q
     })
     
 @lock
@@ -301,6 +351,8 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
         if 'facilitySelect' in request.POST.keys():
             return redirect('sup_dashboard', request.POST['facilitySelect'])
         copyPOST = request.POST.copy()
+                
+        
         copyPOST['facilityChoice'] = selectedSettings.facilityChoice
         copyPOST['formChoice'] = selectedSettings.formChoice
         copyPOST['settings'] = formSettings
@@ -312,7 +364,15 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
         formWData = form_settings_form(copyPOST, instance=selectedSettings)
         if formWData.is_valid():
             formWData.save()
-            messages.success(request,"Form XXX was updated.")
+            if packetSettings:
+                newLabel = request.POST['newLabel']
+                if newLabel not in [formLabel, ""]:
+                    packetSettings.formList[newLabel] = packetSettings.formList[formLabel]
+                    del packetSettings.formList[formLabel]
+                    A = packetSettings
+                    A.save()
+                
+            messages.success(request,"The form settings were updated.")
             return redirect('facilityList', 'supervisor')
         else:
             messages.error(request,"Check your inputs and make sure informationw as entered in correctly.")
@@ -456,13 +516,18 @@ def Add_Forms(request, facility):
                 continue
             
             if facilityFormsData.exists():
-                if facilityFormsData[0].formData:
+                print(facilityFormsData[0].formData)
+                if facilityFormsData[0].formData and facilityFormsData[0].formData != '[]':
                     facilityFormsData2 = ast.literal_eval(facilityFormsData[0].formData[1:-1])
+                    makeFacFormsList = str(facilityFormsData2)[1:-1].split(',')
+                    print(makeFacFormsList)
+                    for oldForms in makeFacFormsList:
+                        if oldForms != '[]':
+                            if int(oldForms) not in selectedList:
+                                selectedList.append(int(oldForms))
                 else:
                     facilityFormsData2 = []
-            for oldForms in facilityFormsData2:
-                if oldForms not in selectedList:
-                    selectedList.append(oldForms)
+            
         print(selectedList)
         B = facilityFormsData[0]
         B.formData = selectedList

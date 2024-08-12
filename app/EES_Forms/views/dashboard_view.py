@@ -456,7 +456,7 @@ def IncompleteForms(request, facility):
         facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    
+    print(facilityFroms)
     all_incomplete_forms = []
     all_complete_forms = []
     daily_incomplete_forms = []
@@ -473,8 +473,9 @@ def IncompleteForms(request, facility):
     sannual_complete_forms = []
         
     for forms in facilityFroms:
+        print(forms)
         for sub in facilitySubs:
-            if forms[0] == sub.formID.id:
+            if forms == sub.formID.id:
                 sub.submitted = True
                 if sub.formID.frequency == 'Monthly':
                     numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]

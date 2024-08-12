@@ -435,7 +435,7 @@ class bat_info_model(models.Model):
     is_battery = models.CharField(
         max_length=10,
         choices=yes_no_choices,
-        default='no'
+        default='No'
     )
     dashboard = models.CharField(
         max_length=20,
