@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, the_packets_model
+from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, formG2_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, the_packets_model, form_settings_model
 from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -35,6 +35,7 @@ def IncompleteForms(request, facility):
     sigExisting = False
     sigName = ''
     facilityData = bat_info_model.objects.filter(facility_name=facility)[0]
+    facPackets = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
     if signatures.exists():
         if signatures[0].sign_date == today:
@@ -452,6 +453,18 @@ def IncompleteForms(request, facility):
 # --------Weather API Pull---------------
     weather = weatherDict(facilityData.city)
 # ---------Form Data--------------------
+    facFormsModel = facility_forms_model.objects.get(facilityChoice__facility_name=facility)
+    facFormsIDList = ast.literal_eval(facFormsModel.formData)
+    facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+    facFormList1 = []
+    for facFormID in facFormsIDList:
+        for formSetting in facFormsSettingsModel:
+            if int(facFormID) == formSetting.id:
+                facFormList1.append(formSetting)
+
+
+
+
     if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
@@ -638,7 +651,9 @@ def IncompleteForms(request, facility):
         'sigExisting': sigExisting,
         'facility': facility,
         'sigName': sigName,
-        'inopNumbsParse': inopNumbsParse
+        'inopNumbsParse': inopNumbsParse,
+        'facPackets': facPackets,
+        'facFormList1': facFormList1
     })
 
 def default_dashboard(request, facility):

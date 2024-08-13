@@ -145,6 +145,12 @@
 <section class="mainCont forms">
     <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
         <div class="cardHeader formList-headers">
+            <select name="formsDisplayed" onchange='' style="position: absolute; margin-right: 25rem;">
+                <option value="all">Facility Forms</option>
+                {% for pack in facPackets%}
+                    <option value="{{pack.id}}">{{pack.name}}</option>
+                {% endfor %}
+            </select>
             <h2 class="card_title">
                 Incomplete Forms
             </h2>
@@ -157,6 +163,37 @@
                 <option value="sAnnual">Semi-Annual Forms</option>
                 <option value="annual">Annual Forms</option>
             </select>
+        </div> 
+        <div>
+            {% for item in facFormList1 %}
+                {% if not item.subChoice.submitted %}
+                {{item.id}}
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/form">
+                    <div class="card_Form" style="margin-left: 50px;">
+                        <h3 class="card_Form_letter">
+                            {{item.id}}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>
+                                {{ item.formChoice.title }}
+                            </h3>
+                            <h4>
+                                {{ item.formChoice.frequency }}
+                            </h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.subChoice.dueDate}}
+                        </h4>       
+                    </div>      
+                </a>
+                {% endif %}
+            {% endfor %}
+            {% comment %} for forms in facility forms:
+                display all that are incomplete
+
+                if js input for frequency is change:
+                    for all datasets that are equal to the frequency:
+                        show them{% endcomment %}
         </div> 
         <div id='dailyIncomplete'>
             {% for item in sorting_array.2 %}
@@ -2219,6 +2256,31 @@
             <h2 class="card_title">
                 Complete Forms
             </h2>
+        </div>
+        <div>
+            {% for item in facFormList1 %}
+                {% if item.subChoice.submitted %}
+                {{item.id}}
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/form">
+                    <div class="card_Form" style="margin-left: 50px;">
+                        <h3 class="card_Form_letter">
+                            {{item.id}}
+                        </h3>
+                        <div class="card_Form_title">
+                            <h3>
+                                {{ item.formChoice.title }}
+                            </h3>
+                            <h4>
+                                {{ item.formChoice.frequency }}
+                            </h4>
+                        </div>
+                        <h4 class="card_Form_date">
+                            {{item.subChoice.dueDate}}
+                        </h4>       
+                    </div>      
+                </a>
+                {% endif %}
+            {% endfor %}
         </div>
         <div id='dailyComplete'>
             {% for item in sorting_array.3 %}

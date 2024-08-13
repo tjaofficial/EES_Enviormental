@@ -7359,6 +7359,12 @@ class form_settings_model(models.Model):
         blank=True,
         null=True
     )
+    subChoice = models.ForeignKey(
+        formSubmissionRecords_model, 
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
     settings = models.JSONField(
         default=dict,
         null=True,

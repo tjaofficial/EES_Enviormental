@@ -59,30 +59,32 @@
                     <input type="text" name="q" placeholder="search forms..."/><input type="submit" value="search"/>
                 </form>
             </div>
-            <form method='POST' action=''>
+            <form method='POST' action='' >
                 {% csrf_token %}
-                <table class="formDataDisplay">
-                    <tr style="height: 24px; background: #3d516482;">
-                        <th style="width: 1%;"></th>
-                        <th style="width: 4%;"></th>
-                        <th style="width: 25%;">Form Type</th>
-                        <th style="width: 30%;">Description</th>
-                    </tr>
-                    {% for form in pageData %}
-                    <tr class="formRows">
-                        <td class="rowCheckMark"><input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}checked{% endif %}{% endfor %}/></td>
-                        <td class="rowFormID">{{form.id}} - </td>
-                        <td class="rowFormType">{{form.header}}</td>
-                        <td>{{form.title}}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.id count=forloop.counter %}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                <div style="height: 457px;">
+                    <table class="formDataDisplay">
+                        <tr style="height: 24px; background: #3d516482;">
+                            <th style="width: 1%;"></th>
+                            <th style="width: 4%;"></th>
+                            <th style="width: 25%;">Form Type</th>
+                            <th style="width: 30%;">Description</th>
+                        </tr>
+                        {% for form in pageData %}
+                        <tr class="formRows">
+                            <td class="rowCheckMark"><input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}checked{% endif %}{% endfor %}/></td>
+                            <td class="rowFormID">{{form.id}} - </td>
+                            <td class="rowFormType">{{form.header}}</td>
+                            <td>{{form.title}}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.id count=forloop.counter %}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
                 <div class="paginator">
                     {% if pageData.has_previous %}
                         <a  href="?{% if query %}q={{query}}&{% endif %}page={{pageData.previous_page_number}}">&laquo</a>
@@ -100,12 +102,6 @@
                 </div>
                 <div class="center" style="margin-top:10px;">
                     <input type='submit' value='Save'/>
-                </div>
-            </form>
-            <form method='POST' action=''>
-                existing
-                <div>
-                    {{modelList}}
                 </div>
             </form>
         </div>

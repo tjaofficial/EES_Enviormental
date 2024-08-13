@@ -32,7 +32,7 @@
     .formDataDisplay{
         margin: auto;
         width: 100%;
-        height: 457px;
+        max-height: 457px;
     }
     .formRows{
         height: 24px;
@@ -49,10 +49,9 @@
         </div>
         <div style='padding: 15px 32px;'>
             <div style="text-align:center; width:100%;margin-bottom:25px;">
-                Don't see the form you want? 
-                <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">
-                    Submit a form Request
-                </a>
+                On this page you can add your personalized forms to PACKETS which make it easy to print groups of forms and organize data. 
+                Use the checkbox to select the form you would like to add to your
+                PACKET. Use the label column to add custom labels for organization (ie. numerical "1,2,3", alphabetical "A,B,C").
             </div>
             <div>
                 <form method="GET" action="./add-forms">
@@ -61,53 +60,49 @@
             </div>
             <form method='POST' action=''>
                 {% csrf_token %}
-                <table class="formDataDisplay">
-                    <tr style="height: 24px; background: #3d516482;">
-                        <th style="width: 1%;"></th>
-                        <th style="width: 2%;">Label</th>
-                        <th style="width: 4%;"></th>
-                        <th style="width: 25%;">Form Type</th>
-                        <th style="width: 30%;">Description</th>
-                    </tr>
-                    {% for form in pageData %}
-                    <tr class="formRows">
-                        <td class="rowCheckMark"><input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}checked{% endif %}{% endfor %}/></td>
-                        <td class="rowFormLabel"><input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{key}}{% endif %}{% endfor %}"/></td>
-                        <td class="rowFormID">{{form.id}} - </td>
-                        <td class="rowFormType">{{form.header}}</td>
-                        <td>{{form.title}}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.id count=forloop.counter %}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <div class="paginator">
-                    {% if pageData.has_previous %}
-                        <a  href="?{% if query %}q={{query}}&{% endif %}page={{pageData.previous_page_number}}">&laquo</a>
-                    {% endif %}
-                    {% for i in pageData.paginator.page_range %}
-                        {% if pageData.number == i %}
-                        <a class="active">{{i}}</a>
-                        {% else %}
-                        <a  href="?{% if query %}q={{query}}&{% endif %}page={{i}}">{{i}}</a>
-                        {% endif %}
-                    {% endfor %}
-                    {% if pageData.has_next %}
-                    <a href="?{% if query %}q={{query}}&{% endif %}page={{pageData.next_page_number}}">&raquo</a>
-                    {% endif %}
+                <div style="height: 457px;">
+                    <table class="formDataDisplay">
+                        <tr style="height: 24px; background: #3d516482;">
+                            <th style="width: 1%;"></th>
+                            <th style="width: 2%;">Label</th>
+                            <th style="width: 4%;"></th>
+                            <th style="width: 25%;">Form Type</th>
+                            <th style="width: 30%;">Description</th>
+                        </tr>
+                        {% for form in pageData %}
+                        <tr class="formRows">
+                            <td class="rowCheckMark">
+                                <input data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.formChoice.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.formChoice.id %}checked{% endif %}{% endfor %}/>
+                            </td>
+                            <td class="rowFormLabel">
+                                <input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for key, x in packetQuery.items %}{% if x.formID == form.formChoice.id %}{{key}}{% endif %}{% endfor %}"/>
+                            </td>
+                            <td class="rowFormID">{{form.id}} - </td>
+                            <td class="rowFormType">{{form.formChoice.header}}</td>
+                            <td>{{form.formChoice.title}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </div>
-                <div class="center" style="margin-top:10px;">
-                    <input type='submit' value='Save'/>
-                </div>
-            </form>
-            <form method='POST' action=''>
-                existing
                 <div>
-                    {{modelList}}
+                    <div class="paginator">
+                        {% if pageData.has_previous %}
+                            <a  href="?{% if query %}q={{query}}&{% endif %}page={{pageData.previous_page_number}}">&laquo</a>
+                        {% endif %}
+                        {% for i in pageData.paginator.page_range %}
+                            {% if pageData.number == i %}
+                            <a class="active">{{i}}</a>
+                            {% else %}
+                            <a  href="?{% if query %}q={{query}}&{% endif %}page={{i}}">{{i}}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pageData.has_next %}
+                        <a href="?{% if query %}q={{query}}&{% endif %}page={{pageData.next_page_number}}">&raquo</a>
+                        {% endif %}
+                    </div>
+                    <div class="center" style="margin-top:10px;">
+                        <input type='submit' value='Save'/>
+                    </div>
                 </div>
             </form>
         </div>

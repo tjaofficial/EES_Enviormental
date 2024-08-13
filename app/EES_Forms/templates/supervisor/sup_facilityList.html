@@ -112,7 +112,7 @@
                                                             <a href="{% url 'facilityFormSettings' info.0.facility_name form.settingsID packet.id key %}">
                                                                 edit
                                                             </a>
-                                                            <span onclick="open_delete_facForm_modal(this, {{ forloop.counter }})" class="closeAdd2" style="margin-top: -10px;">&times;</span>
+                                                            {% comment %} <span onclick="open_delete_facForm_modal(this, {{ forloop.counter }})" class="closeAdd2" style="margin-top: -10px;">&times;</span> {% endcomment %}
                                                         {% endif %}
                                                     </td>
                                                 </tr>

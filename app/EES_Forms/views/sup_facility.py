@@ -174,19 +174,31 @@ def facilityForm(request, facility, packet):
     specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
     q = request.GET.get('q')
     formList = Forms.objects.all().order_by('form')
-    totalAmountofForms = len(formList)
+    facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
+    formSettingsModel = form_settings_model.objects.all()
+    if facilityFormsData.exists():
+        if facilityFormsData[0].formData:
+            facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])
+        else:
+            facilityFormsData = []
+        existing = True
+    newFormList = []
+    for settingsAll in formSettingsModel.filter(facilityChoice=specificFacility):
+        for facFormsAll in facilityFormsData:
+            if settingsAll.id == int(facFormsAll):
+                newFormList.append(settingsAll)
+    
+    totalAmountofForms = len(newFormList)
     if q:
-        formList = formList.filter(
+        newFormList = newFormList.filter(
             Q(title__icontains=q) |
             Q(header__icontains=q)
         ).distinct()
-    formSettingsModel = form_settings_model.objects.all()
     packetQuery = the_packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
     print("-------------------------")
     print(formList[0].form)
-    facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    p = Paginator(formList, 15)
+    p = Paginator(newFormList, 15)
     page = request.GET.get('page')
     pageData = p.get_page(page)
     def doesSubExist(facilityLog, value, selector, delete):
@@ -224,12 +236,7 @@ def facilityForm(request, facility, packet):
                             toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
                             toBeDeleted.delete()
                         break
-    if facilityFormsData.exists():
-        if facilityFormsData[0].formData:
-            facilityFormsData = ast.literal_eval(facilityFormsData[0].formData[1:-1])
-        else:
-            facilityFormsData = []
-        existing = True
+    
     
     if existing:
         modelList = facilityFormsData
