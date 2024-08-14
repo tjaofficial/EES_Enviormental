@@ -77,7 +77,10 @@
                             <td class="rowFormLabel">
                                 <input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for key, x in packetQuery.items %}{% if x.formID == form.formChoice.id %}{{key}}{% endif %}{% endfor %}"/>
                             </td>
-                            <td class="rowFormID">{{form.id}} - </td>
+                            <td class="rowFormID">
+                                <input type="hidden" name="settingsID{{ forloop.counter }}" value="{{form.id}}">
+                                {{form.id}} - 
+                            </td>
                             <td class="rowFormType">{{form.formChoice.header}}</td>
                             <td>{{form.formChoice.title}}</td>
                         </tr>

@@ -462,7 +462,7 @@ def IncompleteForms(request, facility):
             if int(facFormID) == formSetting.id:
                 facFormList1.append(formSetting)
 
-
+    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
 
     if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
@@ -653,7 +653,9 @@ def IncompleteForms(request, facility):
         'sigName': sigName,
         'inopNumbsParse': inopNumbsParse,
         'facPackets': facPackets,
-        'facFormList1': facFormList1
+        
+        'facFormList1': facFormList1,
+        'packetQuery': packetQuery
     })
 
 def default_dashboard(request, facility):

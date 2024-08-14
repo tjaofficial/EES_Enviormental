@@ -164,6 +164,11 @@
                 <option value="annual">Annual Forms</option>
             </select>
         </div> 
+        {% for packet in packetQuery %}
+            <div id="{{packetID}}">
+                {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' %}
+            </div>
+        {% endfor %}
         <div>
             {% for item in facFormList1 %}
                 {% if not item.subChoice.submitted %}

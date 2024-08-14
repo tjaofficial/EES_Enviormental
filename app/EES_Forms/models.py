@@ -7120,7 +7120,7 @@ class formSubmissionRecords_model(models.Model):
     )
     submitted = models.BooleanField(default=False)
     def __str__(self):
-        return str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)
+        return str(self.id) + " - " + str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)
     
 class notifications_model(models.Model):
     facilityChoice = models.ForeignKey(

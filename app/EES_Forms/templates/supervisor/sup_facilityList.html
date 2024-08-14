@@ -101,9 +101,9 @@
                                             {% for key, form in packet.formList.items %}
                                                 <tr>
                                                     <td class="center">{{key}}</td>
-                                                    {% for x in formData %}
-                                                        {% if x.id == form.formID %}
-                                                            <td class="">{{x.header}} - {{x.title}}</td>
+                                                    {% for x in formSettingsModel %}
+                                                        {% if x.id == form.settingsID %}
+                                                            <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
                                                         {% endif %}
                                                     {% endfor %}
                                                     <td class="center smallLink" style="display: flex; justify-content: flex-end;">
