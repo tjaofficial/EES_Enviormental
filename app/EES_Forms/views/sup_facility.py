@@ -138,8 +138,12 @@ def facilityList(request, facility):
                     if int(noLabelNumber) > int(highestLabelNumb):
                         highestLabelNumb = noLabelNumber
             thePacket.formList["no-label-"+str(int(highestLabelNumb)+1)] = {"formID":theSettings.formChoice.id, "settingsID":fsID}
+            settingsEntry = form_settings_model.objects.get(id=fsID)
+            settingsEntry.settings['packets'].append(thePacket.id)
             A = thePacket
+            B = settingsEntry
             A.save()
+            B.save()
             print('Updating Packet')
     return render(request, 'supervisor/sup_facilityList.html', {
         'notifs': notifs, 
@@ -224,11 +228,16 @@ def facilityForm(request, facility, packet):
                 
                 selectedList[formLabel] = {"settingsID": settingsID}
                 print('made it')
+                settingsEntry = form_settings_model.objects.get(id=settingsID)
+                settingsEntry.settings["packets"].append(packetQuery.id)
+                A = settingsEntry
+                A.save()
             else:
                 continue
         
         packetQuery.formList = selectedList
         packetQuery.save()
+        
         return redirect('facilityList', 'supervisor')
         # ## Removes records for forms that arent selected anymore
         # if existing:
@@ -424,7 +433,7 @@ def Add_Forms(request, facility):
             if formInputName.replace(" ", "") in answer.keys():
                 formID = int(answer[formInputName.replace(" ", "")])
                 formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
-                settingsDict = {"active": "true"}
+                settingsDict = {"active": "true", "packets":[]}
                 for x in answer.keys():
                     if x[0] == str(formID):
                         settingsDict[x[1:]] = answer[x]

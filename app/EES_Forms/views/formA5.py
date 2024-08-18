@@ -12,7 +12,7 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
-def formA5(request, facility, selector):
+def formA5(request, facility, fsID, selector):
     formName = 5
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -310,7 +310,7 @@ def formA5(request, facility, selector):
                         issue_page = 'issue'
                     else:
                         issue_page = 'form'
-                    return redirect('issues_view', facility, str(formName), str(A.date), issue_page)
+                    return redirect('issues_view', facility, fsID, str(A.date), issue_page)
                 if selector != 'new':
                     createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)

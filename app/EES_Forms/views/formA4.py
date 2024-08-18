@@ -12,7 +12,7 @@ lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
-def formA4(request, facility, selector):
+def formA4(request, facility, fsID, selector):
     formName = 4
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -115,7 +115,7 @@ def formA4(request, facility, selector):
                         newSelector = 'issue'
                     else:
                         newSelector = 'form'
-                    issue_page = '../../issues_view/' + str(formName) + '/' + str(todays_log.date_save) + '/'+ newSelector
+                    issue_page = '../../issues_view/' + fsID + '/' + str(todays_log.date_save) + '/'+ newSelector
                     return redirect(issue_page)
                 elif finder.exists():
                     finder[0].delete()

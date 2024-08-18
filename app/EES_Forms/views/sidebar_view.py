@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model, User
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form
 import datetime
 import calendar
@@ -445,8 +445,7 @@ def search_forms_view(request, facility, access_page):
         })
 
 @lock
-def issues_view(request, facility, form_name, form_date, access_page):
-    print(form_name)
+def issues_view(request, facility, fsID, form_date, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -463,34 +462,48 @@ def issues_view(request, facility, form_name, form_date, access_page):
         facilityForms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    formSetting= form_settings_model.objects.get(id=fsID)
+    form_name = 0
+    print(formSetting)
     try: 
         form_name = int(form_name)
         form_name_parsed = form_name
     except:
         form_name_parsed = getFormID_w_newFormLabel(form_name, facilityForms)
         if not form_name_parsed:
-            messages.error(request,'ERROR: ID-11850001. Contant Support Team')
+            messages.error(request,'ERROR: ID-11850001. Contact Support Team')
     
     def create_link_elements():
         for facForms in facilityForms:
-            formIDtemp = int(facForms[0])
-            for facSubs in facilitySubs:
-                if formIDtemp == facSubs.formID.id and formIDtemp == form_name_parsed:
-                    formLabel = facForms[1]
-                    formID = int(facForms[0])
-                    main_url = facSubs.formID.frequency + '/' + facSubs.formID.link + '/'
-                    if facSubs.formID.id in {24,25}:
-                        weekendNameDict = {5:'saturday', 6: 'sunday'}
-                        today = datetime.date.today().weekday()
-                        for dayNumber in weekendNameDict:
-                            if today == dayNumber:
-                                day = weekendNameDict[dayNumber]
-                    else:
-                        day = False
-                    return main_url, day, formLabel, formID
-
+            print(facForms)
+            print('check 1')
+            settingsID = int(facForms)
+            print('check 5')
+            print(settingsID)
+            print(formSetting.formChoice.id)
+            if settingsID == formSetting.id:
+                print('check 2')
+                formID = int(formSetting.formChoice.id)
+                main_url = formSetting.formChoice.frequency + '/' + formSetting.formChoice.link + '/'
+                if formSetting.formChoice.id in {24,25}:
+                    print('check 3.1')
+                    weekendNameDict = {5:'saturday', 6: 'sunday'}
+                    today = datetime.date.today().weekday()
+                    for dayNumber in weekendNameDict:
+                        if today == dayNumber:
+                            day = weekendNameDict[dayNumber]
+                else:
+                    print('check 3.2')
+                    day = False
+                
+                print(main_url)
+                print(day)
+                print(formID)
+                print(settingsID)
+                print('shit')
+            return main_url, day, formID, settingsID
     if access_page == 'form':
-        main_url, day, formLabel, formID = create_link_elements()
+        main_url, day, formID, settingsID = create_link_elements()
         if day:
             link = main_url + access_page + '/' + day
         else:
@@ -501,7 +514,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
         if issueModel.exists():
             database_form = issueModel[0]
             if todays_log.date_save == database_form.date:
-                if database_form.form == formLabel:
+                if database_form.form == settingsID:
                     existing = True
         if existing:
             initial_data = {
@@ -515,7 +528,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
         else:             
             initial_data = {
                 'date': todays_log.date_save,
-                'form': formLabel
+                'form': settingsID
             }
             picker = ''
         form = issues_form(initial=initial_data)
@@ -534,7 +547,7 @@ def issues_view(request, facility, form_name, form_date, access_page):
 
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
-        main_url, day, formLabel, formID = create_link_elements()
+        main_url, day, formID, settingsID = create_link_elements()
         if day:
             link = main_url + form_date + '/' + day
         else:

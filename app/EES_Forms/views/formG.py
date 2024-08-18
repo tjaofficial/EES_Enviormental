@@ -13,7 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formG1(request, facility, selector):
+def formG1(request, facility, fsID, selector):
     formName = 17
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -238,7 +238,7 @@ def formG1(request, facility, selector):
     })
 
 @lock
-def formG2(request, facility, selector):
+def formG2(request, facility, fsID, selector):
     formName = 18
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]

@@ -1,3 +1,17 @@
+packetChange = (elem) => {
+    const packetID = String(elem.value);
+    const packetList = JSON.parse(elem.dataset.allpackets);
+    for(let x=0; x<packetList.length; x++){
+        let packIdFromList = packetList[x];
+        document.getElementById("i"+packIdFromList).style.display = 'none';
+        document.getElementById('i0').style.display = 'none';
+        document.getElementById("c"+packIdFromList).style.display = 'none';
+        document.getElementById('c0').style.display = 'none';
+    }
+    document.getElementById("i"+packetID).style.display = 'block';
+    document.getElementById("c"+packetID).style.display = 'block';
+}
+
 function sort() {
     const sortSelect = document.getElementById('cardDropdown').value;
     if (sortSelect == 'all') {

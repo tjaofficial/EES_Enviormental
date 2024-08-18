@@ -13,7 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formB(request, facility, selector):
+def formB(request, facility, fsID, selector):
     formName = 6
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]

@@ -1,21 +1,58 @@
 {% load static %}
+{% if complete == 'false' %}
 <div>
-    {% comment %} hello
-    {% for item in facFormList1 %}
-        {% if not item.subChoice.submitted %}
-            checken
-            {{item.packetChoice}}
-            {% if item.packetChoice.id == packetID %}
-            penis
-            {% endif %}
-        {% endif %}
-    {% endfor %} {% endcomment %}
     {% for key, form in packet.formList.items %}
-        {{form.settingsID}}
         {% for item in facFormList1 %}
-            {% if not item.id == form.settingsID %}
-                dickshit
+            {% if item.id == form.settingsID %}
+                {% if item.settings.active == 'true' and not item.subChoice.submitted %}
+                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{ item.id }}/form">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{key}}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.formChoice.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.formChoice.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.subChoice.dueDate}}
+                            </h4>       
+                        </div>      
+                    </a>
+                {% endif %}
             {% endif %}
         {% endfor %}
     {% endfor %}
 </div>
+{% else %}
+    {% for key, form in packet.formList.items %}
+        {% for item in facFormList1 %}
+            {% if item.id == form.settingsID %}
+                {% if item.settings.active == 'true' and item.subChoice.submitted %}
+                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{ item.id }}/form">
+                        <div class="card_Form" style="margin-left: 50px;">
+                            <h3 class="card_Form_letter">
+                                {{key}}
+                            </h3>
+                            <div class="card_Form_title">
+                                <h3>
+                                    {{ item.formChoice.title }}
+                                </h3>
+                                <h4>
+                                    {{ item.formChoice.frequency }}
+                                </h4>
+                            </div>
+                            <h4 class="card_Form_date">
+                                {{item.subChoice.dueDate}}
+                            </h4>       
+                        </div>      
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endif %}

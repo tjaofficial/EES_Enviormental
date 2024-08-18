@@ -12,7 +12,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formA1(request, facility, selector):
+def formA1(request, facility, fsID, selector):
     formName = 1
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
@@ -145,7 +145,7 @@ def formA1(request, facility, selector):
                         issue_page = 'issue'
                     else:
                         issue_page = 'form'
-                    return redirect('issues_view', facility, str(formName), str(database_form.date), issue_page)
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')        
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 

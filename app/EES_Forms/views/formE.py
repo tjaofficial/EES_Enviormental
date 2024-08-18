@@ -13,7 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formE(request, facility, selector):
+def formE(request, facility, fsID, selector):
     formName = 9
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -101,7 +101,7 @@ def formE(request, facility, selector):
                 A.save()
                 
                 if A.leaks == "Yes":
-                    issue_page = '../../issues_view/' + str(formName) + '/' + str(database_form.date) + '/form'
+                    issue_page = '../../issues_view/' + fsID + '/' + str(database_form.date) + '/form'
                     return redirect(issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)

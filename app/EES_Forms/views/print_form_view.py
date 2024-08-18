@@ -430,7 +430,7 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
     #                 else:
     #                     database_model = ''
     #                     continue
-    #             elif str(formName) == str(23): #this is form 'N'
+    #             elif fsID == str(23): #this is form 'N'
     #                 if parseDateStart <= x.date <= parseDateStop:
     #                     formsAndData[str(x.date)] = [x]
     #                     print(x)

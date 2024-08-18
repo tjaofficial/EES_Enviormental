@@ -463,7 +463,9 @@ def IncompleteForms(request, facility):
                 facFormList1.append(formSetting)
 
     packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
-
+    listOfAllPacketIDs = []
+    for anID in packetQuery:
+        listOfAllPacketIDs.append(anID.id)
 
     if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
@@ -655,7 +657,8 @@ def IncompleteForms(request, facility):
         'facPackets': facPackets,
         
         'facFormList1': facFormList1,
-        'packetQuery': packetQuery
+        'packetQuery': packetQuery,
+        'listOfAllPacketIDs': listOfAllPacketIDs
     })
 
 def default_dashboard(request, facility):

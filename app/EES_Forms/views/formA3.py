@@ -12,7 +12,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formA3(request, facility, selector):
+def formA3(request, facility, fsID, selector):
     formName = 3
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -125,14 +125,15 @@ def formA3(request, facility, selector):
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
                 A.save()
-
+                if not existing:
+                    database_form = A.date
                 if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
                     finder = issues_model.objects.filter(date=A.date, form='A-3').exists()
                     if finder:
                         issue_page = 'issue'
                     else:
                         issue_page = 'form'
-                    return redirect('issues_view', facility, str(formName), str(database_form.date), issue_page)
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
 

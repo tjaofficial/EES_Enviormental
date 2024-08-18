@@ -12,7 +12,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 
 @lock
-def formO(request, facility, selector, weekend_day):
+def formO(request, facility, fsID, selector, weekend_day):
     formName = 24
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -93,9 +93,9 @@ def formO(request, facility, selector, weekend_day):
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
                     finder = issues_model.objects.filter(date=A.date, form='O')
                     if finder:
-                        issue_page = '../../../issues_view/'+ str(formName) +'/' + str(todays_log.date_save) + '/issue'
+                        issue_page = '../../../issues_view/'+ fsID +'/' + str(todays_log.date_save) + '/issue'
                     else:
-                        issue_page = '../../../issues_view/'+ str(formName) +'/' + str(todays_log.date_save) + '/form'
+                        issue_page = '../../../issues_view/'+ fsID +'/' + str(todays_log.date_save) + '/form'
 
                     return redirect(issue_page)
 

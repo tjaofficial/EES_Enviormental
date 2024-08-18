@@ -6,7 +6,7 @@
         <div class="issue_card">
             <div class="cardHeader">
             {% if access_page == 'form' %}
-                {% include "shared/components/backArrow.html" with destination="corrective_action-form" link=link %}
+                {% comment %} {% include "shared/components/backArrow.html" with destination="corrective_action-form" link=link %} {% endcomment %}
                 Fill Out a Corrective Action Form
             {% elif access_page == 'issue' %}
                 {% include "shared/components/backArrow.html" with destination="corrective_action" %}

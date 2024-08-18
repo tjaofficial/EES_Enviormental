@@ -15,7 +15,7 @@ def showName(code):
             return pair[1]
 
 @lock
-def formM(request, facility, selector):
+def formM(request, facility, fsID, selector):
     formName = 22
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -156,9 +156,9 @@ def formM(request, facility, selector):
                 if int(B.pav_total) > 5 or int(B.unp_total) > 5 or int(B.par_total) > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     finder = issues_model.objects.filter(date=A.date, form='M')
                     if finder:
-                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/issue'
+                        issue_page = '../../issues_view/'+ fsID +'/' + str(database_form.date) + '/issue'
                     else:
-                        issue_page = '../../issues_view/'+ str(formName) +'/' + str(database_form.date) + '/form'
+                        issue_page = '../../issues_view/'+ fsID +'/' + str(database_form.date) + '/form'
 
                     return redirect(issue_page)
                 

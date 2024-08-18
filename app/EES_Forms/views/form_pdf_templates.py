@@ -187,7 +187,7 @@ def pdf_template_A2(primaryData, title, subTitle):
         ['', '', '', '                               ly X 100                     ' + str(primaryData.leaking_doors) + ' X 100', '', '', '', '', '', '', '', ''],
         ['', 'Percent Leaking Doors = ---------------------- = ------------------------ = ' + primaryData.percent_leaking, '', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '  Dt - Di - Dno              170 - ' + str(primaryData.inop_doors_eq) + ' - ' + str(primaryData.doors_not_observed), '', '', '', '', '', ''],
-        ['', 'Where: Ly = Leaking Doors Obsered, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
+        ['', 'Where: Ly = Leaking Doors Observed, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + primaryData.notes + '</para>', styles['Normal'])]
         
@@ -363,7 +363,7 @@ def pdf_template_A3(primaryData, title, subTitle):
         ['', '', '', '                                    Pve X 100                  ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
         ['', 'Percent Leaking Offtakes = ---------------------- = ------------------------ = ' + str(primaryData.om_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '           Povn(N - Ni) - Pno          4(85 - ' + str(primaryData.inop_ovens) + ') - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
-        ['', 'Where: Ly = Leaking Doors Obsered, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
+        ['', 'Where: Ly = Leaking Doors Observed, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + primaryData.notes + '</para>', styles['Normal'])]
     ]
