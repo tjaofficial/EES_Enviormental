@@ -154,7 +154,7 @@
             <h2 class="card_title">
                 Incomplete Forms
             </h2>
-            <select name="cardOrder" id="cardDropdown" onchange='sort()' style="position: absolute; margin-right: -26rem;">
+            {% comment %} <select name="cardOrder" id="cardDropdown" onchange='sort()' style="position: absolute; margin-right: -26rem;">
                 <option value="all">All Forms</option>
                 <option value="daily">Daily Forms</option>
                 <option value="weekly">Weekly Forms</option>
@@ -162,18 +162,17 @@
                 <option value="quarterly">Quarterly Forms</option>
                 <option value="sAnnual">Semi-Annual Forms</option>
                 <option value="annual">Annual Forms</option>
-            </select>
+            </select> {% endcomment %}
         </div> 
         {% for packet in packetQuery %}
             <div id="i{{packet.id}}" style="display: none;">
                 {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' complete='false' %}
             </div>
         {% endfor %}
-        <div id="i0" style="display: none;">
+        <div id="i0" style="display: block;">
             {% for item in facFormList1 %}
                 {% if not item.subChoice.submitted %}
-                {{item.id}}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/form">
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{item.id}}/form">
                     <div class="card_Form" style="margin-left: 50px;">
                         <h3 class="card_Form_letter">
                             {{item.id}}
@@ -192,6 +191,8 @@
                     </div>      
                 </a>
                 {% endif %}
+                {% empty %}
+                <h2 class="card_empty"> No Forms </h2>
             {% endfor %}
             {% comment %} for forms in facility forms:
                 display all that are incomplete
@@ -200,7 +201,7 @@
                     for all datasets that are equal to the frequency:
                         show them{% endcomment %}
         </div> 
-        <div id='dailyIncomplete'>
+        {% comment %} <div id='dailyIncomplete'>
             {% for item in sorting_array.2 %}
                 {% if item.0.formID.day_freq == 'Everyday'%}
                     {% if item.1|length >= 2 %}
@@ -2254,7 +2255,7 @@
                 {% empty %}
                 <h2 class="card_empty"> No Forms </h2>
             {% endfor %}     
-        </div>
+        </div> {% endcomment %}
     </div>            
     <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
         <div class="cardHeader formList-headers">
@@ -2267,11 +2268,10 @@
                 {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' complete='true' %}
             </div>
         {% endfor %}
-        <div id="c0" style="display: none;">
+        <div id="c0" style="display: block;">
             {% for item in facFormList1 %}
                 {% if item.subChoice.submitted %}
-                {{item.id}}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/form">
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{item.id}}/form">
                     <div class="card_Form" style="margin-left: 50px;">
                         <h3 class="card_Form_letter">
                             {{item.id}}
@@ -2290,9 +2290,11 @@
                     </div>      
                 </a>
                 {% endif %}
+                {% empty %}
+                <h2 class="card_empty"> No Forms </h2>
             {% endfor %}
         </div>
-        <div id='dailyComplete'>
+        {% comment %} <div id='dailyComplete'>
             {% for item in sorting_array.3 %}
                 {% if item.0.formID.day_freq == 'Everyday'%}
                     {% if item.1|length >= 2 %}
@@ -4328,7 +4330,7 @@
                 {% empty %}
                 <h2 class="card_empty"> No Forms </h2>
             {% endfor %}
-        </div>
+        </div> {% endcomment %}
     </div>
 </section>
 

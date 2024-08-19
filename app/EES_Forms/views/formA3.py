@@ -25,7 +25,7 @@ def formA3(request, facility, fsID, selector):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
     org = formA3_model.objects.all().order_by('-date')
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -125,10 +125,14 @@ def formA3(request, facility, fsID, selector):
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
                 A.save()
+                
+                issueFound = False
                 if not existing:
-                    database_form = A.date
-                if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0:
-                    finder = issues_model.objects.filter(date=A.date, form='A-3').exists()
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0: 
+                    issueFound = True
+                if issueFound:
                     if finder:
                         issue_page = 'issue'
                     else:
@@ -136,14 +140,25 @@ def formA3(request, facility, fsID, selector):
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
-
                 return redirect('IncompleteForms', facility)
-            print(form)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
         return redirect(batt_prof)
 
     return render(request, "shared/forms/daily/formA3.html", {
-        'picker': picker, 'options': options, "unlock": unlock,"search": search, "supervisor": supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, 'omSide_json': omSide_json, 'lSide_json': lSide_json, 'facility': facility
+        'picker': picker, 
+        'options': options, 
+        "unlock": unlock,
+        "search": search, 
+        "supervisor": supervisor, 
+        "back": back, 
+        'todays_log': todays_log, 
+        'data': data, 
+        'formName': formName, 
+        'profile': profile, 
+        'selector': selector, 
+        'client': client, 
+        'omSide_json': omSide_json, 
+        'lSide_json': lSide_json, 
+        'facility': facility
     })

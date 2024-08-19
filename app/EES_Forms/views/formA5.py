@@ -27,7 +27,7 @@ def formA5(request, facility, fsID, selector):
     org2 = formA5_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     if unlock:
         if profile.exists():
@@ -279,38 +279,28 @@ def formA5(request, facility, fsID, selector):
                         else:
                             A.ambient_temp_stop = weather['temperature']
                 A.facilityChoice = finalFacility
-                    
-
                 A.save()
-
                 B.form = A
                 B.save()
-
-                finder = issues_model.objects.filter(date=A.date, form='A-5').exists()
-                issueForm_exists = False
+                
+                if not existing:
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 issueFound = False
                 if B.o1_highest_opacity >= 10 or B.o1_average_6 >= 35 or B.o1_instant_over_20 == 'Yes' or B.o1_average_6_over_35 == 'Yes':
                     issueFound = True
-                    if finder:
-                        issueForm_exists = True
                 elif B.o2_highest_opacity >= 10 or B.o2_average_6 >= 35 or B.o2_instant_over_20 == 'Yes'  or B.o2_average_6_over_35 == 'Yes':
                     issueFound = True
-                    if finder:
-                        issueForm_exists = True
                 elif B.o3_highest_opacity >= 10 or B.o3_average_6 >= 35 or B.o3_instant_over_20 == 'Yes' or B.o3_average_6_over_35 == 'Yes':
                     issueFound = True
-                    if finder:
-                        issueForm_exists = True
                 elif B.o4_highest_opacity >= 10 or B.o4_average_6 >= 35 or B.o4_instant_over_20 == 'Yes' or B.o4_average_6_over_35 == 'Yes':
                     issueFound = True
-                    if finder:
-                        issueForm_exists = True
                 if issueFound:
-                    if issueForm_exists:
+                    if finder:
                         issue_page = 'issue'
                     else:
                         issue_page = 'form'
-                    return redirect('issues_view', facility, fsID, str(A.date), issue_page)
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 if selector != 'new':
                     createNotification(facility, request.user, formName, now, 'submitted')
                     updateSubmissionForm(facility, formName, True, todays_log.date_save)

@@ -25,7 +25,7 @@ def formA2(request, facility, fsID, selector):
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
     org = formA2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -112,20 +112,23 @@ def formA2(request, facility, fsID, selector):
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
                 A.save()
-                if A.notes not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/'+ fsID +'/' + str(database_form.date) + '/form'
-                    return redirect(issue_page)
-                if A.leaking_doors == 0:
-                    createNotification(facility, request.user, formName, now, 'submitted')
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
-                    return redirect('IncompleteForms', facility)
-                else:
-                    finder = issues_model.objects.filter(date=A.date, form='A-2')
+                
+                issueFound = False
+                if not existing:
+                    database_form = A
+                fsID = str(fsID)
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                if A.notes not in {'-', 'n/a', 'N/A'} or A.leaking_doors != 0:
+                    issueFound = True
+                if issueFound:
                     if finder:
-                        issue_page = '../../issues_view/'+ fsID +'/' + str(database_form.date) + '/issue'
+                        issue_page = 'issue'
                     else:
-                        issue_page = '../../issues_view/'+ fsID +'/' + str(database_form.date) + '/form'
-                    return redirect(issue_page)
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
+                createNotification(facility, request.user, formName, now, 'submitted')
+                updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                return redirect('IncompleteForms', facility)        
             else:
                 print("Form not valid")
     else:

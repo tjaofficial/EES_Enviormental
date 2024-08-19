@@ -274,7 +274,13 @@
                                     &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - <input type="number" name="inop_ovens" value="4" oninput="inoperable_ovens()" id="om_inop_ovens" class="input" style="width:35px; text-align: center;" required="">) - {{ data.l_not_observed }}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - 
+                                    {% if selector == 'form' %}
+                                    <input type="number" name="inop_ovens" value="4" oninput="inoperable_ovens()" id="om_inop_ovens" class="input" style="width:35px; text-align: center;" required="">
+                                    {% else %}
+                                    {{data.inop_ovens}}
+                                    {% endif %}
+                                    ) - {{ data.l_not_observed }}
                                 </td>
                                     <td></td>
                                     <td></td>
@@ -317,7 +323,13 @@
                                     &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - <input type="number" name="inop_ovens" value="4" oninput="inoperable_ovens()" id="l_inop_ovens" class="input" style="width:35px; text-align: center;" required="">) - {{ data.om_not_observed }}
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - 
+                                    {% if selector == 'form' %}
+                                    <input type="number" name="inop_ovens" value="4" oninput="inoperable_ovens()" id="l_inop_ovens" class="input" style="width:35px; text-align: center;" required="">
+                                    {% else %}
+                                    {{data.inop_ovens}}
+                                    {% endif %}
+                                    ) - {{ data.om_not_observed }}
                                 </td>
                                     <td></td>
                                     <td></td>

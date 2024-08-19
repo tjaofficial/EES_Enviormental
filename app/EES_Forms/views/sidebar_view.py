@@ -247,10 +247,13 @@ def search_forms_view(request, facility, access_page):
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     formSubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     if facilitiesForm.exists():
         formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
     if access_page != 'search':
+        fsID = int(access_page.split("-")[1])
+        access_page = access_page[:-4]
         if access_page != 'formN_model':
             chk_database = apps.get_model('EES_Forms', access_page).objects.count()
             print(apps.get_model('EES_Forms', access_page).objects.all())
@@ -273,8 +276,8 @@ def search_forms_view(request, facility, access_page):
                         database = ''
                     else:
                         for x in ModelForms:
-                            print('CHECK 1')
-                            if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title():
+                            if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.form == access_page[0:-6].replace('_', ' ').title() or x.link == access_page[:6]:
+                                print("The follow model can be used to find forms:")
                                 print(access_page)
                                 if x.frequency[0] == 'W':
                                     # THESE ARE WEEKLY FORMS
@@ -291,7 +294,7 @@ def search_forms_view(request, facility, access_page):
                                     # THESE ARE DAILY FORMS
                                     att_check = 1
                             else:
-                                print('no match')
+                                print('-')
                 except FieldError as e:
                     # THESE ARE FORMS USING WEEK
                     database = apps.get_model('EES_Forms', access_page).objects.all().filter(facilityChoice__facility_name=facility).order_by('-week_start')
@@ -303,7 +306,7 @@ def search_forms_view(request, facility, access_page):
                     else:
                         for x in ModelForms:
                             print(x)
-                            if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5]:
+                            if x.form == access_page[4] or x.form == access_page[4] + '-' + access_page[5] or x.link == access_page[:6]:
                                 # FORMS THAT ARE SINGLE DIDGITS
                                 print('it does)')
                                 if x.frequency[0] == 'D':
@@ -318,6 +321,7 @@ def search_forms_view(request, facility, access_page):
                 if att_check == 1:
                     for x in database:
                         mainList.append([access_page, x.date, x, 'Daily'])
+                        print(mainList)
                 elif att_check == 2:
                     for x in database:
                         mainList.append([access_page, x.week_start, x, 'Weekly'])
@@ -370,8 +374,10 @@ def search_forms_view(request, facility, access_page):
                     monthList.append((month.date.month, month.date.year, calendar.month_name[month.date.month],))
                     eliminator.append(month.date.month)
             print(monthList)
-
+    else:
+        mainList = ''
     if request.method == "POST":
+        print('found it----------------')
         passedData = request.POST
         if 'searched' in passedData.keys():
             searchedText = passedData['searched']
@@ -383,23 +389,42 @@ def search_forms_view(request, facility, access_page):
         mainList = ''
         weekend = False
         
-        
         if searchedText:
-            form_list = formSubs.filter(Q(formID__form__icontains=searchedText) | Q(formID__frequency__icontains=searchedText) | Q(formID__title__icontains=searchedText)).order_by('formID')
+            form_list = formSettingsModel.filter(Q(formChoice__form__icontains=searchedText) | Q(formChoice__frequency__icontains=searchedText) | Q(formChoice__title__icontains=searchedText)).order_by('id')
+            #form_list = formSubs.filter(Q(formID__form__icontains=searchedText) | Q(formID__frequency__icontains=searchedText) | Q(formID__title__icontains=searchedText)).order_by('formID')
+            print(form_list)
             forms = []
-            for subInfo in form_list:
+            for settignsEntry in form_list:
                 for facilityForms in formIDandLabel:
-                    if subInfo.formID.id == facilityForms[0]: 
-                        forms.append((facilityForms, subInfo))
+                    if settignsEntry.id == facilityForms:
+                        forms.append(settignsEntry)
+                        #forms.append((facilityForms, settignsEntry))
             # forms = form_list
+            print(forms)
             letterForms = []
-
             for x in forms:
-                if x[0][0] not in {26,27}:
-                    letterForms.append([x[0][1], 'form' + x[1].formID.form.replace('-','') + '_model', x[1].formID])
+                if x.formChoice.id not in {26,27}:
+                    modelTry1 = 'form' + x.formChoice.form.replace('-','') + '_model'
+                    modelTry2 = x.formChoice.link + '_model'
                 else:
-                    letterForms.append([x[0][1], x[1].formID.form.replace(' ', '_').lower() + '_model', x[1].formID])
-            print(letterForms)
+                    modelTry1 = x.formChoice.form.replace(' ', '_').lower() + '_model'
+                    modelTry2 = x.formChoice.link + '_model'
+                try:
+                    chk_database = apps.get_model('EES_Forms', modelTry1).objects.count()
+                    newModelName = True
+                except:
+                    chk_database = apps.get_model('EES_Forms', modelTry2).objects.count()
+                    newModelName = False
+                if newModelName:
+                    if x.formChoice.id not in {26,27}:
+                        letterForms.append([x, 'form' + x.formChoice.form.replace('-','') + '_model', x.formChoice])
+                    else:
+                        letterForms.append([x, x.formChoice.form.replace(' ', '_').lower() + '_model', x.formChoice])
+                else:
+                    if x.formChoice.id not in {26,27}:
+                        letterForms.append([x, x.formChoice.link + '_model', x.formChoice])
+                    else:
+                        letterForms.append([x, x.formChoice.link + '_model', x.formChoice])
         else:
             messages.error(request,"Please enter a form 'Name' or 'Label' to search.")
             return redirect('archive', facility)
@@ -437,9 +462,10 @@ def search_forms_view(request, facility, access_page):
             'readingsData': readingsData, 
             'profile': profile, 
             'access_page': access_page, 
-            'database': database, 
-            'database2': database2, 
-            'att_check': att_check, 
+            'fsID': fsID,
+            #'database': database, 
+            #'database2': database2, 
+            #'att_check': att_check, 
             'weekend': weekend, 
             'client': client,
         })
@@ -463,44 +489,33 @@ def issues_view(request, facility, fsID, form_date, access_page):
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     formSetting= form_settings_model.objects.get(id=fsID)
-    form_name = 0
+    form_name = fsID
+
     print(formSetting)
-    try: 
-        form_name = int(form_name)
-        form_name_parsed = form_name
-    except:
-        form_name_parsed = getFormID_w_newFormLabel(form_name, facilityForms)
-        if not form_name_parsed:
-            messages.error(request,'ERROR: ID-11850001. Contact Support Team')
+    # try: 
+    #     form_name = int(form_name)
+    #     form_name_parsed = form_name
+    # except:
+    #     form_name_parsed = getFormID_w_newFormLabel(form_name, facilityForms)
+    #     if not form_name_parsed:
+    #         messages.error(request,'ERROR: ID-11850001. Contact Support Team')
     
     def create_link_elements():
         for facForms in facilityForms:
-            print(facForms)
-            print('check 1')
             settingsID = int(facForms)
-            print('check 5')
-            print(settingsID)
-            print(formSetting.formChoice.id)
             if settingsID == formSetting.id:
-                print('check 2')
                 formID = int(formSetting.formChoice.id)
-                main_url = formSetting.formChoice.frequency + '/' + formSetting.formChoice.link + '/'
+                main_url = formSetting.formChoice.frequency + '/' + formSetting.formChoice.link + '/' + str(fsID) + '/'
                 if formSetting.formChoice.id in {24,25}:
-                    print('check 3.1')
                     weekendNameDict = {5:'saturday', 6: 'sunday'}
                     today = datetime.date.today().weekday()
                     for dayNumber in weekendNameDict:
                         if today == dayNumber:
                             day = weekendNameDict[dayNumber]
                 else:
-                    print('check 3.2')
                     day = False
-                
-                print(main_url)
-                print(day)
-                print(formID)
-                print(settingsID)
-                print('shit')
+            else:
+                continue
             return main_url, day, formID, settingsID
     if access_page == 'form':
         main_url, day, formID, settingsID = create_link_elements()
@@ -556,7 +571,8 @@ def issues_view(request, facility, fsID, form_date, access_page):
         database_form = org[0]
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                if form_name == entry.form:
+                if int(form_name) == int(entry.form):
+                    existing = True
                     picker = entry
                     form = issues_form()
                     if client:
@@ -603,36 +619,37 @@ def issues_view(request, facility, fsID, form_date, access_page):
             if todays_log.date_save == database_form.date:
                 if database_form.form == form_name:
                     existing = True
+    print(existing)
+    if existing:
+        initial_data = {
+            'form': database_form.form,
+            'issues': database_form.issues,
+            'notified': database_form.notified,
+            'time': database_form.time,
+            'date': database_form.date,
+            'cor_action': database_form.cor_action
+        }
+    else:
+        initial_data = {
+            'date': todays_log.date_save,
+            'form': form_name
+        }
+
+    form = issues_form(initial=initial_data)
+
+    if request.method == "POST":
+        dataCopy = request.POST.copy()
+        dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
         if existing:
-            initial_data = {
-                'form': database_form.form,
-                'issues': database_form.issues,
-                'notified': database_form.notified,
-                'time': database_form.time,
-                'date': database_form.date,
-                'cor_action': database_form.cor_action
-            }
+            data = issues_form(dataCopy, instance=database_form)
         else:
-            initial_data = {
-                'date': todays_log.date_save,
-                'form': form_name
-            }
+            data = issues_form(dataCopy)
+        if data.is_valid():
+            data.save()
 
-        form = issues_form(initial=initial_data)
+            updateSubmissionForm(facility, formID, True, todays_log.date_save)
 
-        if request.method == "POST":
-            dataCopy = request.POST.copy()
-            dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
-            if existing:
-                data = issues_form(dataCopy, instance=database_form)
-            else:
-                data = issues_form(dataCopy)
-            if data.is_valid():
-                data.save()
-
-                updateSubmissionForm(facility, formID, True, todays_log.date_save)
-
-                return redirect('IncompleteForms', facility)
+            return redirect('IncompleteForms', facility)
     return render(request, "shared/issues_template.html", {
         'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
     })

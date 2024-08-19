@@ -25,7 +25,7 @@ def formA4(request, facility, fsID, selector):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formA4_model.objects.all().order_by('-date')
     full_name = request.user.get_full_name()
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -104,25 +104,24 @@ def formA4(request, facility, fsID, selector):
             if form.is_valid():
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
-                
                 if A.leak_data == '{"data":[]}':
                     A.leak_data = "{}"
-                    
                 A.save()
-                finder = issues_model.objects.filter(facilityChoice__facility_name=facility, date=A.date, form='A-4')
-                if A.notes.lower() != 'no ve' or A.leak_data != "{}":
-                    if finder.exists():
-                        newSelector = 'issue'
-                    else:
-                        newSelector = 'form'
-                    issue_page = '../../issues_view/' + fsID + '/' + str(todays_log.date_save) + '/'+ newSelector
-                    return redirect(issue_page)
-                elif finder.exists():
-                    finder[0].delete()
                 
+                issueFound = False
+                if not existing:
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                if A.notes.lower() != 'no ve' or A.leak_data != "{}":
+                    issueFound = True
+                if issueFound:
+                    if finder:
+                        issue_page = 'issue'
+                    else:
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')
                 updateSubmissionForm(facility, formName, True, todays_log.date_save)
-
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

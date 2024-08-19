@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model, facility_forms_model
-from ..forms import formA1_form, formA1_readings_form
+from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
+from ..forms import form1_form, form1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected
 import ast
@@ -23,10 +23,10 @@ def formA1(request, facility, fsID, selector):
     now = datetime.datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = formA1_model.objects.all().order_by('-date')
-    org2 = formA1_readings_model.objects.all().order_by('-form')
+    org = form1_model.objects.all().order_by('-date')
+    org2 = form1_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -90,7 +90,7 @@ def formA1(request, facility, fsID, selector):
                     'comments': database_form2.comments,
                     'total_seconds': database_form2.total_seconds,
                 }
-                readings = formA1_readings_form(initial=initial_data)
+                readings = form1_readings_form(initial=initial_data)
             else:
                 initial_data = {
                     'date': todays_log.date_save,
@@ -99,16 +99,16 @@ def formA1(request, facility, fsID, selector):
                     'foreman': todays_log.foreman,
                     'facility_name': facility,
                 }
-                readings = formA1_readings_form()
+                readings = form1_readings_form()
 
-            data = formA1_form(initial=initial_data)
+            data = form1_form(initial=initial_data)
         if request.method == "POST":
             if existing:
-                form = formA1_form(request.POST, instance=database_form)
-                reads = formA1_readings_form(request.POST, instance=database_form2)
+                form = form1_form(request.POST, instance=database_form)
+                reads = form1_readings_form(request.POST, instance=database_form2)
             else:
-                form = formA1_form(request.POST)
-                reads = formA1_readings_form(request.POST)
+                form = form1_form(request.POST)
+                reads = form1_readings_form(request.POST)
 
             A_valid = form.is_valid()
             B_valid = reads.is_valid()
@@ -122,7 +122,9 @@ def formA1(request, facility, fsID, selector):
                 A.save()
                 B.save()
                 
-                finder = issues_model.objects.filter(date=A.date, form=formName).exists()
+                if not existing:
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
             #     if B.comments not in {'-', 'n/a', 'N/A'}:
             #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 

@@ -463,6 +463,66 @@ class Forms(models.Model):
     def __str__(self):
         return self.form
 
+class formSubmissionRecords_model(models.Model):
+    formID = models.ForeignKey(
+        Forms,
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
+    dueDate = models.DateField(auto_now=False, auto_now_add=False)
+    facilityChoice = models.ForeignKey(
+        bat_info_model,
+        on_delete=models.CASCADE, 
+        null=True
+    )
+    submitted = models.BooleanField(default=False)
+    def __str__(self):
+        return str(self.id) + " - " + str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)
+
+class the_packets_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(
+        max_length=70
+    )
+    formList = models.JSONField(
+        null=True,
+        blank=True
+    )
+    frequency = models.CharField(
+        max_length=30, 
+        choices=frequent_choices,
+        default='Weekly'
+    )
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.name) + ' - ' + str(self.facilityChoice)
+    
+class form_settings_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
+    formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
+    packetChoice = models.ForeignKey(
+        the_packets_model, 
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    subChoice = models.ForeignKey(
+        formSubmissionRecords_model, 
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    settings = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.formChoice) + ' - ' + str(self.facilityChoice)
+
+
+
+
 
 class formC_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
@@ -506,7 +566,6 @@ class formC_model(models.Model):
 
     def __str__(self):
         return str(self.date)
-
 
 class formC_readings_model(models.Model):
     form = models.OneToOneField(
@@ -565,7 +624,6 @@ class formC_readings_model(models.Model):
     def __str__(self):
         return str(self.form)
 
-
 class Profile(models.Model):
 
     Name = models.CharField(max_length=30)
@@ -573,7 +631,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class daily_battery_profile_model(models.Model):
     foreman = models.CharField(max_length=30)
@@ -586,7 +643,6 @@ class daily_battery_profile_model(models.Model):
 
     def __str__(self):
         return str(self.date_save) + " - " +str(self.facilityChoice)
-
 
 class user_profile_model(models.Model):
     user = models.OneToOneField(
@@ -643,7 +699,6 @@ class user_profile_model(models.Model):
     def __str__(self):
         return self.user.username
 
-
 class formA1_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     observer = models.CharField(
@@ -670,6 +725,12 @@ class formA1_model(models.Model):
         auto_now_add=False,
         auto_now=False,
         blank=True
+    )
+    formSettingsChoice = models.ForeignKey(
+        form_settings_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
     )
 
     def __str__(self):
@@ -7105,22 +7166,7 @@ class form26_model(models.Model):
     def __str__(self):
         return str(self.date) + ' - ' + str(self.skID)
     
-class formSubmissionRecords_model(models.Model):
-    formID = models.ForeignKey(
-        Forms,
-        on_delete=models.CASCADE, 
-        null=True
-    )
-    dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
-    dueDate = models.DateField(auto_now=False, auto_now_add=False)
-    facilityChoice = models.ForeignKey(
-        bat_info_model,
-        on_delete=models.CASCADE, 
-        null=True
-    )
-    submitted = models.BooleanField(default=False)
-    def __str__(self):
-        return str(self.id) + " - " + str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)
+
     
 class notifications_model(models.Model):
     facilityChoice = models.ForeignKey(
@@ -7333,45 +7379,7 @@ class form_requests_model(models.Model):
     def __str__(self):
         return str(self.user) + ' - ' + str(self.name)
 
-class the_packets_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.CharField(
-        max_length=70
-    )
-    formList = models.JSONField(
-        null=True,
-        blank=True
-    )
-    frequency = models.CharField(
-        max_length=30, 
-        choices=frequent_choices,
-        default='Weekly'
-    )
-    def __str__(self):
-        return str(self.id) + ' - ' + str(self.name) + ' - ' + str(self.facilityChoice)
-    
-class form_settings_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
-    formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
-    packetChoice = models.ForeignKey(
-        the_packets_model, 
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
-    subChoice = models.ForeignKey(
-        formSubmissionRecords_model, 
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
-    )
-    settings = models.JSONField(
-        default=dict,
-        null=True,
-        blank=True
-    )
-    def __str__(self):
-        return str(self.id) + ' - ' + str(self.formChoice) + ' - ' + str(self.facilityChoice)
+
   
     
 # class tank_library(models.Model):

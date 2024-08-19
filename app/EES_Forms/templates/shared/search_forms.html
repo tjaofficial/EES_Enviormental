@@ -17,7 +17,7 @@
                     {% for letterF in letterForms %}
                     <!--delete laterr-->{% if letterF.0.0 != 'F' %}
                         <li style="text-align: left;">
-                            <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{letterF.1 }}">
+                            <a style="font-size: 1.4rem;" href="../../../{{facility}}/search_forms/{{letterF.1 }}-{{letterF.0.id}}">
                                 Form {{ letterF.0 }} - {{ letterF.2.title }}
                             </a>
                         </li>
@@ -42,13 +42,13 @@
                         <ul style="height: auto; padding-bottom: 2rem;">
                             {% for item in mainList %}
                                 {% if item.0|slice:"0:4" == 'form' %}
-                                    <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                                    <a style="font-size: 1.4rem;" href="../{{item.3}}/form{% if item.0.5 == '_' %}{{ item.0.4 }}{% else %}{{ item.0.4 }}{{ item.0.5}}{% endif %}/{{fsID}}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
                                         <li style="text-align: left;">
                                             {{ item.1 }}
                                         </li>
                                     </a>
                                 {% else %}
-                                    <a style="font-size: 1.4rem;" href="../{{item.3}}/{{item.0|slice:"0:-6"}}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
+                                    <a style="font-size: 1.4rem;" href="../{{item.3}}/{{item.0|slice:'0:-6'}}/{{ item.1.year }}-{% if item.1.month < 10 %}0{{item.1.month}}{%else%}{{item.1.month}}{% endif %}-{% if item.1.day < 10 %}0{{item.1.day}}{%else%}{{item.1.day}}{% endif %}{% if weekend %}{{item.4}}{% else %}{% endif %}">
                                         <li style="text-align: left;">
                                             {{ item.1 }}
                                         </li>

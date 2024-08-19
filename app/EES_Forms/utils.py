@@ -745,14 +745,14 @@ def checkIfMoreRegistrations(user):
 
     return (total_registrations, addMore)
 
-def issueForm_picker(facility, date, formName):
+def issueForm_picker(facility, date, fsID):
     if date == 'form' or date == 'edit':
         return False
     parsedDate = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-    formLabel = getNewFormLabel_w_formID(facility, formName)
-    issueData = issues_model.objects.filter(date__exact=parsedDate, form=formLabel)
+    #formLabel = getNewFormLabel_w_formID(facility, fsID)
+    issueData = issues_model.objects.filter(date__exact=parsedDate, form=str(fsID))
     if issueData.exists():
-        issueData = issues_model.objects.get(date__exact=parsedDate, form=formLabel)
+        issueData = issues_model.objects.get(date__exact=parsedDate, form=str(fsID))
     else:
         issueData = False
     return issueData
