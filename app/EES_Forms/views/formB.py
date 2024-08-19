@@ -11,7 +11,6 @@ from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSuperv
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
-
 @lock
 def formB(request, facility, fsID, selector):
     formName = 6
@@ -43,7 +42,7 @@ def formB(request, facility, fsID, selector):
     weather = weatherDict(options.city)
     weather2 = json.dumps(weather)
     
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -200,8 +199,8 @@ def formB(request, facility, fsID, selector):
                 #        filled_out = False
                 #        break
                 if filled_out:
-                    createNotification(facility, request.user, formName, now, 'submitted')
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
                         subForm = formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility)[0]

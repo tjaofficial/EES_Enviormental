@@ -32,7 +32,7 @@ def formI(request, facility, fsID, selector):
     filled_in = False
     partial_form = False
     week = ''
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -161,15 +161,13 @@ def formI(request, facility, fsID, selector):
                             filled_in = False
 
                 if filled_in:
-                    createNotification(facility, request.user, formName, now, 'submitted')
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
 
                     return redirect('IncompleteForms', facility)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
-
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formI.html", {
         'picker': picker, 'facility': facility, "search": search, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'empty': data, 'week': week, 'opened': opened, 'end_week': end_week, 'selector': selector, 'profile': profile, 'submit': submit, 'filled_in': filled_in, 'formName': formName, "client": client, 'unlock': unlock, 'partial': partial_form
     })

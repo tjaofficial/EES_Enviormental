@@ -456,6 +456,8 @@ def IncompleteForms(request, facility):
     facFormsModel = facility_forms_model.objects.get(facilityChoice__facility_name=facility)
     facFormsIDList = ast.literal_eval(facFormsModel.formData)
     facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+    if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
+        facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     facFormList1 = []
     for facFormID in facFormsIDList:
         for formSetting in facFormsSettingsModel:
@@ -467,156 +469,228 @@ def IncompleteForms(request, facility):
     for anID in packetQuery:
         listOfAllPacketIDs.append(anID.id)
 
-    if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
-        facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
-    if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
-        facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    print(facilityFroms)
-    all_incomplete_forms = []
-    all_complete_forms = []
-    daily_incomplete_forms = []
-    daily_complete_forms = []
-    weekly_incomplete_forms = []
-    weekly_complete_forms = []
-    monthly_incomplete_forms = []
-    monthly_complete_forms = []
-    quarterly_incomplete_forms = []
-    quarterly_complete_forms = []
-    annual_incomplete_forms = []
-    annual_complete_forms = []
-    sannual_incomplete_forms = []
-    sannual_complete_forms = []
-        
-    for forms in facilityFroms:
-        print(forms)
-        for sub in facilitySubs:
-            if forms == sub.formID.id:
-                sub.submitted = True
-                if sub.formID.frequency == 'Monthly':
-                    numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]
-                    lastDayOfMonth = str(today.year) + '-' + str(today.month) + '-' + str(numbOfDaysInMonth)
-                    sub.dueDate = datetime.datetime.strptime(lastDayOfMonth, "%Y-%m-%d").date()
-                    dueDate = sub.dueDate
-                    if sub.dateSubmitted.year != dueDate.year or sub.dateSubmitted.month != dueDate.month:
-                        sub.submitted = False
-                    elif sub.dateSubmitted.day > numbOfDaysInMonth:
-                        sub.submitted = False
-                    sub.save()
-                elif sub.formID.frequency == 'Quarterly':
-                    if what_quarter(today) == 1:
-                        monthDue = 3
-                        yearDue = today.year
-                        dayDue =  calendar.monthrange(yearDue, monthDue)[1]
-                    elif what_quarter(today) == 2:
-                        monthDue = 6
-                        yearDue = today.year
-                        dayDue =  calendar.monthrange(yearDue, monthDue)[1]
-                    elif what_quarter(today) == 3:
-                        monthDue = 9
-                        yearDue = today.year
-                        dayDue =  calendar.monthrange(yearDue, monthDue)[1]
-                    elif what_quarter(today) == 4:
-                        monthDue = 12
-                        yearDue = today.year
-                        dayDue =  calendar.monthrange(yearDue, monthDue)[1]
-                    dateBuild = str(yearDue) + '-' + monthDayAdjust(monthDue) + '-' + monthDayAdjust(dayDue)
-                    sub.dueDate = datetime.datetime.strptime(dateBuild, "%Y-%m-%d").date()
-                    A = sub.dateSubmitted
-                    B = sub.dueDate
-                    if what_quarter(A) != what_quarter(B):
-                        sub.submitted = False
-                    sub.save()
-                elif sub.formID.frequency == 'Weekly':
-                    sub.dueDate = weekday_fri
-                    if todays_num in {0, 1, 2, 3, 4}:
-                        print('CHECK 1')
-                        if sub.formID.day_freq == 'Weekends':
-                            sub.dueDate = weekday_fri - datetime.timedelta(days=5)
-                        start_sat = weekday_fri - datetime.timedelta(days=6)
-                    else:
-                        start_sat = today - datetime.timedelta(days= todays_num - 5)
-                    A = sub.dateSubmitted
-                    B = sub.dueDate
-                    if sub.formID.day_freq == 'Weekends' and A != B:
-                        sub.submitted = False   
-                    elif A < start_sat or A > sub.dueDate:
-                        sub.submitted = False
-                    sub.save()
-                elif sub.formID.frequency == 'Daily':
-                    print(sub.formID)
-                    if sub.formID.weekend_only and todays_num not in {5,6}:
-                        print("CHECK 1")
-                        print(sub.submitted)
-                        sub.save()
-                        continue
-                    else:    
-                        print("CHECK 2")
-                        sub.dueDate = today
-                        A = sub.dateSubmitted
-                        B = sub.dueDate
-                        if today != A:
-                            print("CHECK 3")
-                            sub.submitted = False
-                        sub.save()
-                        print(sub.submitted)
-                    
-                if sub.formID.day_freq in {'Everyday', todays_num} or (todays_num in {5, 6} and sub.formID.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and sub.formID.day_freq == 'Weekdays'):
-                    if sub.submitted == False:
-                        if sub.formID.id in {17,18}:
-                            if len(facilitySubs.filter(formID__id=18)) > 0:
-                                g2_form = facilitySubs.filter(formID__id=18)[0]
-                                startOfWeek = weekday_fri - datetime.timedelta(days=6)
-                                if g2_form.submitted == True and startOfWeek <= g2_form.dateSubmitted <= weekday_fri:
-                                    continue
-                                else:
-                                    all_incomplete_forms.append((sub, forms[1]))
-                            else:
-                                all_incomplete_forms.append((sub, forms[1]))
-                        else:
-                            all_incomplete_forms.append((sub, forms[1]))
-                        if sub.formID.frequency == 'Daily':
-                            daily_incomplete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Weekly':
-                            weekly_incomplete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Monthly':
-                            monthly_incomplete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Quarterly':
-                            quarterly_incomplete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Annual':
-                            annual_incomplete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Semi-Annual':
-                            sannual_incomplete_forms.append((sub, forms[1]))
-                    elif sub.submitted == True: 
-                        all_complete_forms.append((sub, forms[1]))
-                        if sub.formID.frequency == 'Daily':
-                            daily_complete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Weekly':
-                            weekly_complete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Monthly':
-                            monthly_complete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Quarterly':
-                            quarterly_complete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Annual':
-                            annual_complete_forms.append((sub, forms[1]))
-                        elif sub.formID.frequency == 'Semi-Annual':
-                            sannual_complete_forms.append((sub, forms[1]))
+# ---------Update All Form Subs--------------------
+    for fsForm in facFormsSettingsModel:
+        sub = fsForm.subChoice
+        if sub.formID.frequency == 'Monthly':
+            numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]
+            lastDayOfMonth = str(today.year) + '-' + str(today.month) + '-' + str(numbOfDaysInMonth)
+            sub.dueDate = datetime.datetime.strptime(lastDayOfMonth, "%Y-%m-%d").date()
+            dueDate = sub.dueDate
+            if sub.dateSubmitted.year != dueDate.year or sub.dateSubmitted.month != dueDate.month:
+                sub.submitted = False
+            elif sub.dateSubmitted.day > numbOfDaysInMonth:
+                sub.submitted = False
+            sub.save()
+        elif sub.formID.frequency == 'Quarterly':
+            if what_quarter(today) == 1:
+                monthDue = 3
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            elif what_quarter(today) == 2:
+                monthDue = 6
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            elif what_quarter(today) == 3:
+                monthDue = 9
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            elif what_quarter(today) == 4:
+                monthDue = 12
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            dateBuild = str(yearDue) + '-' + monthDayAdjust(monthDue) + '-' + monthDayAdjust(dayDue)
+            sub.dueDate = datetime.datetime.strptime(dateBuild, "%Y-%m-%d").date()
+            A = sub.dateSubmitted
+            B = sub.dueDate
+            if what_quarter(A) != what_quarter(B):
+                sub.submitted = False
+            sub.save()
+        elif sub.formID.frequency == 'Weekly':
+            sub.dueDate = weekday_fri
+            if todays_num in {0, 1, 2, 3, 4}:
+                print('CHECK 1')
+                if sub.formID.day_freq == 'Weekends':
+                    sub.dueDate = weekday_fri - datetime.timedelta(days=5)
+                start_sat = weekday_fri - datetime.timedelta(days=6)
+            else:
+                start_sat = today - datetime.timedelta(days= todays_num - 5)
+            A = sub.dateSubmitted
+            B = sub.dueDate
+            if sub.formID.day_freq == 'Weekends' and A != B:
+                sub.submitted = False   
+            elif A < start_sat or A > sub.dueDate:
+                sub.submitted = False
+            sub.save()
+        elif sub.formID.frequency == 'Daily':
+            print(sub.formID)
+            if sub.formID.weekend_only and todays_num not in {5,6}:
+                print("CHECK 1")
+                print(sub.submitted)
+                sub.save()
+                continue
+            else:    
+                print("CHECK 2")
+                sub.dueDate = today
+                A = sub.dateSubmitted
+                B = sub.dueDate
+                if today != A:
+                    print("CHECK 3")
+                    sub.submitted = False
+                sub.save()
+                print(sub.submitted)
                 
-    sorting_array = [
-        all_incomplete_forms,
-        all_complete_forms,
-        daily_incomplete_forms,
-        daily_complete_forms,
-        weekly_incomplete_forms,
-        weekly_complete_forms,
-        monthly_incomplete_forms,
-        monthly_complete_forms,
-        quarterly_incomplete_forms,
-        quarterly_complete_forms,
-        annual_incomplete_forms,
-        annual_complete_forms,
-        sannual_incomplete_forms,
-        sannual_complete_forms,
-    ]
+#---------------Old sorting stuff-----------------------
+    # if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
+    #     facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
+    # # if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
+    # #     facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
+    # print(facilityFroms)
+    # all_incomplete_forms = []
+    # all_complete_forms = []
+    # daily_incomplete_forms = []
+    # daily_complete_forms = []
+    # weekly_incomplete_forms = []
+    # weekly_complete_forms = []
+    # monthly_incomplete_forms = []
+    # monthly_complete_forms = []
+    # quarterly_incomplete_forms = []
+    # quarterly_complete_forms = []
+    # annual_incomplete_forms = []
+    # annual_complete_forms = []
+    # sannual_incomplete_forms = []
+    # sannual_complete_forms = []
+        
+    # for forms in facilityFroms:
+    #     print(forms)
+    #     for sub in facilitySubs:
+    #         if forms == sub.formID.id:
+    #             sub.submitted = True
+    #             if sub.formID.frequency == 'Monthly':
+    #                 numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]
+    #                 lastDayOfMonth = str(today.year) + '-' + str(today.month) + '-' + str(numbOfDaysInMonth)
+    #                 sub.dueDate = datetime.datetime.strptime(lastDayOfMonth, "%Y-%m-%d").date()
+    #                 dueDate = sub.dueDate
+    #                 if sub.dateSubmitted.year != dueDate.year or sub.dateSubmitted.month != dueDate.month:
+    #                     sub.submitted = False
+    #                 elif sub.dateSubmitted.day > numbOfDaysInMonth:
+    #                     sub.submitted = False
+    #                 sub.save()
+    #             elif sub.formID.frequency == 'Quarterly':
+    #                 if what_quarter(today) == 1:
+    #                     monthDue = 3
+    #                     yearDue = today.year
+    #                     dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+    #                 elif what_quarter(today) == 2:
+    #                     monthDue = 6
+    #                     yearDue = today.year
+    #                     dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+    #                 elif what_quarter(today) == 3:
+    #                     monthDue = 9
+    #                     yearDue = today.year
+    #                     dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+    #                 elif what_quarter(today) == 4:
+    #                     monthDue = 12
+    #                     yearDue = today.year
+    #                     dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+    #                 dateBuild = str(yearDue) + '-' + monthDayAdjust(monthDue) + '-' + monthDayAdjust(dayDue)
+    #                 sub.dueDate = datetime.datetime.strptime(dateBuild, "%Y-%m-%d").date()
+    #                 A = sub.dateSubmitted
+    #                 B = sub.dueDate
+    #                 if what_quarter(A) != what_quarter(B):
+    #                     sub.submitted = False
+    #                 sub.save()
+    #             elif sub.formID.frequency == 'Weekly':
+    #                 sub.dueDate = weekday_fri
+    #                 if todays_num in {0, 1, 2, 3, 4}:
+    #                     print('CHECK 1')
+    #                     if sub.formID.day_freq == 'Weekends':
+    #                         sub.dueDate = weekday_fri - datetime.timedelta(days=5)
+    #                     start_sat = weekday_fri - datetime.timedelta(days=6)
+    #                 else:
+    #                     start_sat = today - datetime.timedelta(days= todays_num - 5)
+    #                 A = sub.dateSubmitted
+    #                 B = sub.dueDate
+    #                 if sub.formID.day_freq == 'Weekends' and A != B:
+    #                     sub.submitted = False   
+    #                 elif A < start_sat or A > sub.dueDate:
+    #                     sub.submitted = False
+    #                 sub.save()
+    #             elif sub.formID.frequency == 'Daily':
+    #                 print(sub.formID)
+    #                 if sub.formID.weekend_only and todays_num not in {5,6}:
+    #                     print("CHECK 1")
+    #                     print(sub.submitted)
+    #                     sub.save()
+    #                     continue
+    #                 else:    
+    #                     print("CHECK 2")
+    #                     sub.dueDate = today
+    #                     A = sub.dateSubmitted
+    #                     B = sub.dueDate
+    #                     if today != A:
+    #                         print("CHECK 3")
+    #                         sub.submitted = False
+    #                     sub.save()
+    #                     print(sub.submitted)
+                    
+    #             if sub.formID.day_freq in {'Everyday', todays_num} or (todays_num in {5, 6} and sub.formID.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and sub.formID.day_freq == 'Weekdays'):
+    #                 if sub.submitted == False:
+    #                     if sub.formID.id in {17,18}:
+    #                         if len(facilitySubs.filter(formID__id=18)) > 0:
+    #                             g2_form = facilitySubs.filter(formID__id=18)[0]
+    #                             startOfWeek = weekday_fri - datetime.timedelta(days=6)
+    #                             if g2_form.submitted == True and startOfWeek <= g2_form.dateSubmitted <= weekday_fri:
+    #                                 continue
+    #                             else:
+    #                                 all_incomplete_forms.append((sub, forms[1]))
+    #                         else:
+    #                             all_incomplete_forms.append((sub, forms[1]))
+    #                     else:
+    #                         all_incomplete_forms.append((sub, forms[1]))
+    #                     if sub.formID.frequency == 'Daily':
+    #                         daily_incomplete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Weekly':
+    #                         weekly_incomplete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Monthly':
+    #                         monthly_incomplete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Quarterly':
+    #                         quarterly_incomplete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Annual':
+    #                         annual_incomplete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Semi-Annual':
+    #                         sannual_incomplete_forms.append((sub, forms[1]))
+    #                 elif sub.submitted == True: 
+    #                     all_complete_forms.append((sub, forms[1]))
+    #                     if sub.formID.frequency == 'Daily':
+    #                         daily_complete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Weekly':
+    #                         weekly_complete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Monthly':
+    #                         monthly_complete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Quarterly':
+    #                         quarterly_complete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Annual':
+    #                         annual_complete_forms.append((sub, forms[1]))
+    #                     elif sub.formID.frequency == 'Semi-Annual':
+    #                         sannual_complete_forms.append((sub, forms[1]))
+                
+    # sorting_array = [
+    #     all_incomplete_forms,
+    #     all_complete_forms,
+    #     daily_incomplete_forms,
+    #     daily_complete_forms,
+    #     weekly_incomplete_forms,
+    #     weekly_complete_forms,
+    #     monthly_incomplete_forms,
+    #     monthly_complete_forms,
+    #     quarterly_incomplete_forms,
+    #     quarterly_complete_forms,
+    #     annual_incomplete_forms,
+    #     annual_complete_forms,
+    #     sannual_incomplete_forms,
+    #     sannual_complete_forms,
+    # ]
 
     if todays_num == 6:
         saturday = False
@@ -648,14 +722,13 @@ def IncompleteForms(request, facility):
         'weekend_list': weekend_list, 
         'weather': weather, 
         'saturday': saturday, 
-        'sorting_array': sorting_array,
+        #'sorting_array': sorting_array,
         "form_checkAll2": form_checkAll2,
         'sigExisting': sigExisting,
         'facility': facility,
         'sigName': sigName,
         'inopNumbsParse': inopNumbsParse,
         'facPackets': facPackets,
-        
         'facFormList1': facFormList1,
         'packetQuery': packetQuery,
         'listOfAllPacketIDs': listOfAllPacketIDs

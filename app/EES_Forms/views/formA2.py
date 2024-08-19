@@ -126,14 +126,14 @@ def formA2(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, formName, now, 'submitted')
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                createNotification(facility, request.user, fsID, now, 'submitted')
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)        
             else:
                 print("Form not valid")
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-        return redirect(batt_prof)
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
     return render(request, "shared/forms/daily/formA2.html", {
         'picker': picker, 'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility

@@ -28,7 +28,7 @@ def formG1(request, facility, fsID, selector):
     org2 = formG1_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     if unlock:
         if profile.exists():
@@ -221,18 +221,15 @@ def formG1(request, facility, fsID, selector):
 
                 B.form = A
                 B.save()
-                createNotification(facility, request.user, formName, now, 'submitted')
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
-
+                createNotification(facility, request.user, fsID, now, 'submitted')
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
             else:
                 print(form.errors)
                 print(readings.errors)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
-
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/weekly/formG1.html", {
         'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName
     })
@@ -253,7 +250,7 @@ def formG2(request, facility, fsID, selector):
     org2 = formG2_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     if unlock:
         if profile.exists():
@@ -443,17 +440,15 @@ def formG2(request, facility, fsID, selector):
 
                 B.form = A
                 B.save()
-                createNotification(facility, request.user, formName, now, 'submitted')
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                createNotification(facility, request.user, fsID, now, 'submitted')
+                updateSubmissionForm(fsID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
             else:
                 print(form.errors)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
-
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/monthly/formG2.html", {
         'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

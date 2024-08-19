@@ -27,7 +27,7 @@ def formD(request, facility, fsID, selector):
     end_week = last_saturday + one_week
     sunday = today - datetime.timedelta(days=1)
     submitted_forms = formD_model.objects.all().order_by('-week_start')
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -135,8 +135,8 @@ def formD(request, facility, fsID, selector):
                         break
 
                 if filled_out:
-                    createNotification(facility, request.user, formName, now, 'submitted')
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
                         subForm = formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility)[0]

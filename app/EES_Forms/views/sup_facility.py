@@ -229,7 +229,7 @@ def facilityForm(request, facility, packet):
                 selectedList[formLabel] = {"settingsID": settingsID}
                 print('made it')
                 settingsEntry = form_settings_model.objects.get(id=settingsID)
-                settingsEntry.settings["packets"].append(packetQuery.id)
+                settingsEntry.settings["packets"][str(packetQuery.id)] = formLabel
                 A = settingsEntry
                 A.save()
             else:
@@ -433,7 +433,7 @@ def Add_Forms(request, facility):
             if formInputName.replace(" ", "") in answer.keys():
                 formID = int(answer[formInputName.replace(" ", "")])
                 formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
-                settingsDict = {"active": "true", "packets":[]}
+                settingsDict = {"active": "true", "packets":{}}
                 for x in answer.keys():
                     if x[0] == str(formID):
                         settingsDict[x[1:]] = answer[x]

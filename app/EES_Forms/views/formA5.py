@@ -303,7 +303,7 @@ def formA5(request, facility, fsID, selector):
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 if selector != 'new':
                     createNotification(facility, request.user, formName, now, 'submitted')
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:

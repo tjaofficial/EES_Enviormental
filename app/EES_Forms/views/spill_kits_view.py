@@ -12,7 +12,7 @@ from ..utils import stringToDate, setUnlockClientSupervisor, updateSubmissionFor
 lock = login_required(login_url='Login')
 
 @lock
-def spill_kits(request, facility, selector):
+def spill_kits(request, facility, fsID, selector):
     formName = "26"
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -254,7 +254,7 @@ def spill_kits(request, facility, selector):
                         break
 
                 if filled_out:    
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
                     
                 return redirect('IncompleteForms', facility)
     else:

@@ -348,15 +348,12 @@ def stringToDate(date):
     parsed = str(date.year) + '-' + month + '-' + day
     return parsed
 
-def updateSubmissionForm(facility, formID, submitted, date):
-    if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID=formID).exists():
-        formSubmission = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID=formID)[0]
-        formSubmission.submitted = submitted
-        formSubmission.dateSubmitted = date
-        formSubmission.save()
-        print("YEAH IT SAVED")
-    else:
-        print("NO IT DIDNT SAVE")    
+def updateSubmissionForm(fsID, submitted, date):
+    formSettingsSub = form_settings_model.objects.get(id=int(fsID)).subChoice
+    formSettingsSub.submitted = submitted
+    formSettingsSub.dateSubmitted = date
+    formSettingsSub.save()
+    print("YEAH IT SAVED") 
 
 def setUnlockClientSupervisor(requestUserData):
     unlock = False
@@ -530,7 +527,8 @@ def ninetyDayPushTravels(facility):
         od_recent = overdue_closest(all_ovens_EXP)
     
         return {'30days': od_30, '10days': od_10, '5days': od_5, 'closest': od_recent, 'all': all_ovens_EXP}
-    return 'EMPTY'
+    else:
+        return {'30days': [], '10days': [], '5days': [], 'closest': [], 'all': []}
     
 def userColorMode(user):
     userProfile = user_profile_model.objects.filter(user__username=user.username)
@@ -555,49 +553,9 @@ def colorModeSwitch(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
-def getNewFormLabel_w_formID(facility, formID):
-    facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    if facilitiesForm.exists():
-        formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
-        for formPair in formIDandLabel:
-            if formID == formPair[0]:
-                formLabel = formPair[1]
-                return formLabel
-
-def getNewFormLabel_w_oldFormID(facility, formID):
-    facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    for x in Forms.objects.all():
-        if x.form.replace('-','') == formID:
-            formID = x.id
-    if facilitiesForm.exists():
-        formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
-        for formPair in formIDandLabel:
-            if formID == formPair[0]:
-                formLabel = formPair[1]
-                return formLabel
-            
-def getFormID_w_oldFormLabel(formLabel):
-    for x in parseFormList:
-        print(x)
-        if x[1] == formLabel:
-            formID = x[0]
-    if not formID:
-        print('The input for getFormID_w_oldFormLabel() did not match any of the old labels.')
-    return formID
-
-def getFormID_w_newFormLabel(formLabel, facilityForms):
-    for x in facilityForms:
-        if x[1] == formLabel:
-            formID = x[0]
-            break
-        else:
-            formID = False
-    if not formID:
-        print('The input for getFormID_w_newFormLabel() did not match any of the labels created by the user.')
-    return formID
-
-def createNotificationDatabase(facility, user, formID, date, notifSelector):
+def createNotificationDatabase(facility, user, fsID, date, notifSelector):
     todayNumb = datetime.date.today().weekday()
+    nFormSettings = form_settings_model.objects.get(id=fsID)
     nFacility = bat_info_model.objects.filter(facility_name=facility)
     if nFacility.exists():
         nFacility = nFacility[0]
@@ -615,7 +573,7 @@ def createNotificationDatabase(facility, user, formID, date, notifSelector):
     # modelData = apps.get_model('EES_Forms', ModelName).objects.all()
     newHeader =  notifSelector        
     if notifSelector == 'submitted':
-        nForms = getNewFormLabel_w_formID(facility, formID)    
+        formID = nFormSettings.formChoice.id
         if todayNumb in {5,6}:
             if todayNumb == 5:
                 todayName = 'Saturday'
@@ -623,11 +581,11 @@ def createNotificationDatabase(facility, user, formID, date, notifSelector):
                 todayName = 'Sunday'
         else:
             todayName = False
-        newNotifData = json.dumps({'formID': formID, 'date': str(date), 'weekend': todayName})
+        newNotifData = json.dumps({'settingsID': fsID, 'date': str(date), 'weekend': todayName})
     else:
         todayName = False
     if notifSelector == 'corrective':
-        newNotifData = json.dumps({'formID': formID, 'date': str(date)})
+        newNotifData = json.dumps({'settingsID': fsID, 'date': str(date)})
     elif notifSelector == '90days':
         newNotifData = json.dumps({'ovenNumber': formID, 'date': str(date)})
     elif notifSelector == 'messages':
@@ -646,7 +604,7 @@ def createNotificationDatabase(facility, user, formID, date, notifSelector):
         )
         if n not in companyUsers:
             n.save()
-    print("Form " + nForms + " notification was sent.")
+    print("Form " + str(nFormSettings.id) + " notification was sent.")
    
 def notificationCalc(user, facility):
     userProfile = user_profile_model.objects.filter(user__username=user.username)
@@ -666,9 +624,8 @@ def displayNotifications(user, facility):
     if nUserProfile.exists():
         nUserProfile = nUserProfile[0]
     allNotifs = notifications_model.objects.filter(facilityChoice__facility_name=facility, user=nUserProfile).order_by('-created_at')
-    facForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    if facForms.exists() and facForms[0].formData:
-        formIDandLabel = ast.literal_eval(facForms[0].formData)
+    facForms = get_facility_forms('facilityName', facility)
+    
     unReadList = []
     readList = []
     unReadNotifs = allNotifs.filter(clicked=False, hovered=False)
@@ -676,17 +633,17 @@ def displayNotifications(user, facility):
     if unReadNotifs.exists():
         for unRead in unReadNotifs:
             notifFormData = json.loads(unRead.formData)
-            for x in formIDandLabel:
-                if int(notifFormData['formID']) == int(x[0]):
-                    for y in formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=x[0]):
-                        parseForm = "form" + y.formID.link
-                        formPullData = (x, unRead, notifFormData, y.formID.link)
-                        unReadList.append(formPullData)   
+            for fsID in facForms:
+                if int(notifFormData['settingsID']) == int(fsID):
+                    settingEntry = form_settings_model.objects.get(id=int(fsID))
+                    formPullData = (settingEntry, unRead, notifFormData, settingEntry.formChoice.link)
+                    unReadList.append(formPullData)   
     print('__________________________________________________________')
+    print(unReadList)
     return {'notifCount': notifCount, 'unRead': unReadList, "read": readNotifs}
         
-def createNotification(facility, user, formID, date, notifSelector):
-    createNotificationDatabase(facility, user, formID, date, notifSelector)
+def createNotification(facility, user, fsID, date, notifSelector):
+    createNotificationDatabase(facility, user, fsID, date, notifSelector)
     facilityParse = 'notifications_' + facility.replace(" ","_")
     notifCount = str(notificationCalc(user, facility))
     channel_layer = get_channel_layer()
@@ -749,7 +706,6 @@ def issueForm_picker(facility, date, fsID):
     if date == 'form' or date == 'edit':
         return False
     parsedDate = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-    #formLabel = getNewFormLabel_w_formID(facility, fsID)
     issueData = issues_model.objects.filter(date__exact=parsedDate, form=str(fsID))
     if issueData.exists():
         issueData = issues_model.objects.get(date__exact=parsedDate, form=str(fsID))
@@ -893,7 +849,10 @@ def inventoryResponse(tagOn, sk):
     else:
         return "N/A"      
     
-def get_facility_forms(facilityID):
-    facilityFormsString = facility_forms_model.objects.filter(facilityChoice__id=facilityID)
+def get_facility_forms(selector, facilityID):
+    if selector == 'facilityName':
+        facilityFormsString = facility_forms_model.objects.get(facilityChoice__facility_name=facilityID)
+    elif selector == 'facilityID':
+        facilityFormsString = facility_forms_model.objects.get(facilityChoice__id=facilityID)
     facilityFormsList = ast.literal_eval(facilityFormsString.formData)
     return facilityFormsList

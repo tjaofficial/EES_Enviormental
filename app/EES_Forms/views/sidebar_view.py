@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities, getFormID_w_newFormLabel
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms
 from django.contrib.auth.decorators import login_required
 import os
 import ast
@@ -246,11 +246,9 @@ def search_forms_view(request, facility, access_page):
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    facilitiesForm = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    facilityForms = get_facility_forms('facilityName', facility)
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     formSubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    if facilitiesForm.exists():
-        formIDandLabel = ast.literal_eval(facilitiesForm[0].formData)
     if access_page != 'search':
         fsID = int(access_page.split("-")[1])
         access_page = access_page[:-4]
@@ -376,6 +374,7 @@ def search_forms_view(request, facility, access_page):
             print(monthList)
     else:
         mainList = ''
+        fsID = ''
     if request.method == "POST":
         print('found it----------------')
         passedData = request.POST
@@ -395,10 +394,10 @@ def search_forms_view(request, facility, access_page):
             print(form_list)
             forms = []
             for settignsEntry in form_list:
-                for facilityForms in formIDandLabel:
-                    if settignsEntry.id == facilityForms:
+                for facilityForm in facilityForms:
+                    if settignsEntry.id == facilityForm:
                         forms.append(settignsEntry)
-                        #forms.append((facilityForms, settignsEntry))
+                        #forms.append((facilityForm, settignsEntry))
             # forms = form_list
             print(forms)
             letterForms = []
@@ -481,11 +480,11 @@ def issues_view(request, facility, fsID, form_date, access_page):
     options = bat_info_model.objects.all()
     issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    facilityForms = get_facility_forms('facilityName', facility)
 
     if todays_log.exists():
         todays_log = todays_log[0]
-    if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
-        facilityForms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
+
     if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
         facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     formSetting= form_settings_model.objects.get(id=fsID)
@@ -557,9 +556,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                 data = issues_form(dataCopy)
             if data.is_valid():
                 data.save()
-
-                updateSubmissionForm(facility, formID, True, todays_log.date_save)
-
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
         main_url, day, formID, settingsID = create_link_elements()
@@ -603,10 +600,8 @@ def issues_view(request, facility, fsID, form_date, access_page):
             data = issues_form(dataCopy, instance=picker)
             if data.is_valid():
                 data.save()
-                
                 if access_page == 'resubmit':
-                    updateSubmissionForm(facility, formID, True, picker.date)
-                    
+                    updateSubmissionForm(fsID, True, picker.date)
                     return redirect('IncompleteForms', facility)
                 else:
                     return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
@@ -647,7 +642,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
         if data.is_valid():
             data.save()
 
-            updateSubmissionForm(facility, formID, True, todays_log.date_save)
+            updateSubmissionForm(fsID, True, todays_log.date_save)
 
             return redirect('IncompleteForms', facility)
     return render(request, "shared/issues_template.html", {

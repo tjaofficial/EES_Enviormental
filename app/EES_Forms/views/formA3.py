@@ -139,7 +139,7 @@ def formA3(request, facility, fsID, selector):
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, formName, now, 'submitted')
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

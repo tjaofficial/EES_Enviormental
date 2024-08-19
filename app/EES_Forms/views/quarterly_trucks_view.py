@@ -9,7 +9,7 @@ from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSuperv
 lock = login_required(login_url='Login')
 
 @lock
-def quarterly_trucks(request, facility, selector):
+def quarterly_trucks(request, facility, fsID, selector):
     formName = "27"
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -21,7 +21,7 @@ def quarterly_trucks(request, facility, selector):
     today = datetime.date.today()
     submitted_forms = quarterly_trucks_model.objects.all().order_by('-date')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     def what_quarter(input):
         if input.month in {1,2,3}:
@@ -116,7 +116,7 @@ def quarterly_trucks(request, facility, selector):
                         filled_out = False  # -change this back to false
                         break
                 if filled_out:
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)

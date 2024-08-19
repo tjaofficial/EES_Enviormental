@@ -10,7 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
 from ..models import facility_forms_model, issues_model, user_profile_model
-from ..utils import parseFormList, getCompanyFacilities, getNewFormLabel_w_formID, getFormID_w_oldFormLabel, date_change, time_change, date_time_change, road_choices, truck_choices, area_choices, emptyInputs, quarterParse, inventoryResponse
+from ..utils import parseFormList, getCompanyFacilities, date_change, time_change, date_time_change, road_choices, truck_choices, area_choices, emptyInputs, quarterParse, inventoryResponse
 import json
 import io
 import datetime
@@ -225,7 +225,6 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
                 
             heightGroup = (5,17,18,19)
             
-            #issueFormID = getNewFormLabel_w_formID(facility, itemID) #getFormID_w_oldFormLabel(itemID)
             try:
                 issueForm = issues_model.objects.filter(date=formData.date, form=formID)
             except:
@@ -544,7 +543,7 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
     #         print(itemID)
     #         # try:
     #         #     int(item)
-    #         issueFormID = getNewFormLabel_w_formID(facility, itemID) #getFormID_w_oldFormLabel(itemID)
+    #         issueFormID = something with fsID(facility, itemID) #getFormID_w_oldFormLabel(itemID)
     #         try:
     #             issueForm = issues_model.objects.filter(date=data.date, form=issueFormID)
     #         except:

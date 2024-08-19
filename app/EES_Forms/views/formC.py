@@ -27,7 +27,7 @@ def formC(request, facility, fsID, selector):
     org = formC_model.objects.all().order_by('-date')
     org2 = formC_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
 
     if profile.exists():
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
@@ -163,23 +163,24 @@ def formC(request, facility, fsID, selector):
                 A.save()
                 B.save()
 
+                issueFound = False
+                if not existing:
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if B.form.average_t > 5 or B.form.average_p > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
-                    finder = issues_model.objects.filter(date=A.date, form='C')
+                    issueFound = True
+                if issueFound:
                     if finder:
-                        issue_page = '../../issues_view/'+fsID+'/' + str(database_form.date) + '/issue'
+                        issue_page = 'issue'
                     else:
-                        issue_page = '../../issues_view/'+fsID+'/' + str(database_form.date) + '/form'
-
-                    return redirect(issue_page)
-                createNotification(facility, request.user, formName, now, 'submitted')
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
-
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
+                createNotification(facility, request.user, fsID, now, 'submitted')
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
-
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formC.html", {
         'picker': picker, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'form': form, 'read': read, "back": back, 'profile': profile, 'selector': selector, 'formName': formName, 'facility': facility
     })

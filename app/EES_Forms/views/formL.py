@@ -29,7 +29,7 @@ def formL(request, facility, fsID, selector):
     today_number = today.weekday()
     opened = True
     week_start_dates = formL_model.objects.all().order_by('-week_start')
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     # -----check if Daily Battery Profile
     if daily_prof.exists():
@@ -231,20 +231,18 @@ def formL(request, facility, fsID, selector):
                         else:
                             filled_in = False
                 if filled_in:
-                    updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    updateSubmissionForm(fsID, True, todays_log.date_save)
 
                     return redirect('IncompleteForms', facility)
                 else:
                     parseNewDate = todays_log.date_save - datetime.timedelta(days=1)
-                    createNotification(facility, request.user, formName, now, 'submitted')
-                    updateSubmissionForm(facility, formName, True, parseNewDate)
+                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    updateSubmissionForm(fsID, True, parseNewDate)
 
                     return redirect('IncompleteForms', facility)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
-
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formL.html", {
         'picker': picker, 'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "selector": selector, 'profile': profile, 'opened': opened, 'formName': formName, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })

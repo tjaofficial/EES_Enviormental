@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formE_model, bat_info_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formE_model, bat_info_model, issues_model
 from ..forms import formE_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -26,7 +26,7 @@ def formE(request, facility, fsID, selector):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = formE_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     
     # THIS IS TO TRANSITION THE MIGRATIONS NEED THIS TEMPORARILY ASK TOBE
     # for x in daily_prof:
@@ -100,16 +100,24 @@ def formE(request, facility, fsID, selector):
                 A.facilityChoice = options
                 A.save()
                 
+                issueFound = False
+                if not existing:
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if A.leaks == "Yes":
-                    issue_page = '../../issues_view/' + fsID + '/' + str(database_form.date) + '/form'
-                    return redirect(issue_page)
-                createNotification(facility, request.user, formName, now, 'submitted')
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
+                    issueFound = True
+                if issueFound:
+                    if finder:
+                        issue_page = 'issue'
+                    else:
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
+                createNotification(facility, request.user, fsID, now, 'submitted')
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-        return redirect(batt_prof)
-
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formE.html", {
         'picker': picker, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
     })

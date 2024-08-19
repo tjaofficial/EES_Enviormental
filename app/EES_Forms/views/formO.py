@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formO_model, bat_info_model
 from ..forms import formO_form
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor,createNotification
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -26,7 +26,7 @@ def formO(request, facility, fsID, selector, weekend_day):
     full_name = request.user.get_full_name()
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     month_name = calendar.month_name[today.month]
-    picker = issueForm_picker(facility, selector, formName)
+    picker = issueForm_picker(facility, selector, fsID)
     org = formO_model.objects.all().order_by('-date')
 
     if weekend_day == 'saturday':
@@ -89,23 +89,25 @@ def formO(request, facility, fsID, selector, weekend_day):
                 A = data.save(commit=False)
                 A.facilityChoice = options
                 A.save()
-
+                
+                issueFound = False
+                if not existing:
+                    database_form = A
+                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
-                    finder = issues_model.objects.filter(date=A.date, form='O')
+                    issueFound = True
+                if issueFound:
                     if finder:
-                        issue_page = '../../../issues_view/'+ fsID +'/' + str(todays_log.date_save) + '/issue'
+                        issue_page = 'issue'
                     else:
-                        issue_page = '../../../issues_view/'+ fsID +'/' + str(todays_log.date_save) + '/form'
-
-                    return redirect(issue_page)
-
-                updateSubmissionForm(facility, formName, True, todays_log.date_save)
-
+                        issue_page = 'form'
+                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
+                createNotification(facility, request.user, fsID, now, 'submitted')
+                updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
-        batt_prof = '../../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', 'login', batt_prof_date)
     return render(request, "shared/forms/weekly/formO.html", {
         'picker': picker, 'facility': facility, 'data': data, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'profile': profile, 'weekend_day': weekend_day
     })

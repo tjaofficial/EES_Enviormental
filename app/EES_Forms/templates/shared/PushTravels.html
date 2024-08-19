@@ -37,36 +37,52 @@
                     </tr>
                     <tr>
                         <td class="dataLanes" style='border-bottom-left-radius: 15px; padding-bottom: 30px;'>
+                            {% if od_30|length == 0 %}
+                            NONE
+                            {% else %}
                             {% for day in od_30 %}
                                 {% if day.2 == 0 %}
                                 {% else %}
                                     #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
                                 {% endif %}
                             {% endfor %}
+                            {% endif %}
                         </td>
                         <td class="dataLanes" style='padding-bottom: 30px;'>
+                            {% if od_10|length == 0 %}
+                            NONE
+                            {% else %}
                             {% for day in od_10 %}
                                 {% if day.2 == 0 %}
                                 {% else %}
                                     #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
                                     {% endif %}
                             {% endfor %}
+                            {% endif %}
                         </td>
                         <td class="dataLanes" style='padding-bottom: 30px;'>
+                            {% if od_5|length == 0 %}
+                            NONE
+                            {% else %}
                             {% for day in od_5 %}
                                 {% if day.2 == 0 %}
                                 {% else %}
                                     #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
                                     {% endif %}
                             {% endfor %}
+                            {% endif %}
                         </td>
                         <td class="dataLanes" style='border-bottom-right-radius: 15px; padding-bottom: 30px;'>
+                            {% if od_recent|length == 0 %}
+                            NONE
+                            {% else %}
                             {% for x in od_recent %}
                                 {% if x.2 == 0 %}
                                 {% else %}
                                     #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
                                 {% endif %}
                             {% endfor %}
+                            {% endif %}
                         </td>
                     </tr>
                 </table>
