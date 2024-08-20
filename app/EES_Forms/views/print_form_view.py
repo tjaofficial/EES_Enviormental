@@ -9,8 +9,8 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
-from ..models import facility_forms_model, issues_model, user_profile_model
-from ..utils import parseFormList, getCompanyFacilities, date_change, time_change, date_time_change, road_choices, truck_choices, area_choices, emptyInputs, quarterParse, inventoryResponse
+from ..models import facility_forms_model, issues_model, user_profile_model,form_settings_model
+from ..utils import get_facility_forms, parseFormList, getCompanyFacilities, date_change, time_change, date_time_change, road_choices, truck_choices, area_choices, emptyInputs, quarterParse, inventoryResponse
 import json
 import io
 import datetime
@@ -50,8 +50,14 @@ class PageNumCanvas(canvas.Canvas):
 @lock
 def form_PDF(request, facility, formGroup, formIdentity, formDate):
     userProfile = user_profile_model.objects.get(user=request.user)
-    facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    forms_and_labels = ast.literal_eval(facilityForms[0].formData)
+    facilityForms = get_facility_forms('facilityName', facility)
+    formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+    forms_and_labels = []
+    for facForm in facilityForms:
+        for settingsForm in formSettingsQuery:
+            if facForm == settingsForm.id:
+                packetKey = str(list(settingsForm.settings['packets'])[0])
+                forms_and_labels.append((settingsForm.id, settingsForm.settings['packets'][packetKey]))
     print(forms_and_labels)
     allForms = Forms.objects.all()
     ## Group Choices = (sinlge, coke_battery, facility_weekly)
@@ -73,14 +79,15 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
         formsBeingUsed = []
     elif formGroup == 'waste':
         formsBeingUsed = []
-    print("The formID's being used are listed below:")
+    print("The fsID's being used are listed below:")
     print(formsBeingUsed)
     print("_________________________________")
     elems = []
-    for formID in formsBeingUsed:
-        print("Now running process for form: " + str(formID))
-        formID = int(formID)
-        formInformation = allForms.get(id=formID)
+    for fsID in formsBeingUsed:
+        print("Now running process for form: " + str(fsID))
+        fsEntry = formSettingsQuery.get(id=fsID)
+        formID = fsEntry.formChoice.id
+        formInformation = fsEntry.formChoice
         formModelName = formInformation.link + '_model'
         try:
             formModel = apps.get_model('EES_Forms', formModelName)
@@ -160,7 +167,7 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
                 print(str(formID) + ' is a double database...')
                 formSecondaryData = formsAndData[listForm][1]
             for label in forms_and_labels:
-                if formID == label[0]:
+                if fsEntry.id == label[0]:
                     formLabel = label[1]
             
             styles = getSampleStyleSheet()
@@ -226,9 +233,9 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             heightGroup = (5,17,18,19)
             
             try:
-                issueForm = issues_model.objects.filter(date=formData.date, form=formID)
+                issueForm = issues_model.objects.filter(date=formData.date, form=fsEntry.id)
             except:
-                issueForm = issues_model.objects.filter(date=formData.week_start, form=formID)
+                issueForm = issues_model.objects.filter(date=formData.week_start, form=fsEntry.id)
                 
             if issueForm.exists():
                 issueSpace = len(tableData)

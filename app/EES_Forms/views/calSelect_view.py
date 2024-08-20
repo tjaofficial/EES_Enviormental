@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import Calendar2, checkIfFacilitySelected, get_facility_forms
-from ..models import the_packets_model
+from ..models import the_packets_model, form_settings_model
 import ast
 import datetime
 import calendar
@@ -26,14 +26,13 @@ def calSelect(request, facility, type, forms, year, month):
     month_number = list(calendar.month_name).index(monthConvert)
     month_number = int(month_number)
     facilityForms = get_facility_forms('facilityName', facility)
-    print(forms.upper())
-    if forms.upper().isupper():
-        groupForm = True
-    else:
-        groupForm = False
+    
+    
     if type == 'group':  
         groupForm = True
         packetsQuery = the_packets_model.objects.get(id=int(forms))
+    else:
+        groupForm = False
         
     print(groupForm)
 
@@ -57,17 +56,14 @@ def calSelect(request, facility, type, forms, year, month):
     calend.setfirstweekday(6)
     
     if groupForm:
-        formSelect = forms
+        formSelect = str(forms)
         # if forms == "Coke Battery Daily Packet":
         #     formSelect = ((1,"A1"),(2,"A2"),(3,"A3"),(4,"A4"),(5,"A5"))
         print('not single form')
         print(forms)
     else:
-        for x in facilityForms:
-            if x == int(forms):
-                formSelect = x
-                print(formSelect)
-                break
+        formSelect = int(forms)
+        print(formSelect)
             
     html_cal = calend.formatmonth(year, month, year, formSelect, facility, withyear=True)
     

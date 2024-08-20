@@ -180,51 +180,52 @@ class Calendar2(HTMLCalendar):
                 return day
         print("COntinued....")
         forms_html = "<ul>"
-         
-        if selectedForm == "Coke Battery Daily Packet":
-            print("Starting to find Forms that exist on this day for daily...")
-            print(forms)
-            aPacketFormList = []
-            for iForms in forms:
-                print(iForms.date)
-                print(day)
-                if iForms.date.day == day:
+        print(selectedForm)
+        print(forms)
+        if isinstance(selectedForm, str):
+            packetsEntry = the_packets_model.objects.get(id=int(selectedForm))
+            if packetsEntry.frequency == 'Daily':
+                print("Starting to find Forms that exist on this day for daily...")
+                print(forms)
+                aPacketFormList = []
+                for iForms in forms:
                     print(iForms.date)
-                    aPacketFormList.append(iForms)
-            print(aPacketFormList)
-            for h in aPacketFormList:
-                if h.date.year == year:
-                    selectedFormDate = h
-                    forms_html += "<a href='../../../../printIndex/coke_battery/multi/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
-                    break
-        elif selectedForm == "Facility Weekly Packet":
-            print("Starting to find Forms that exist on this day for weekly...")
-            print(forms)
-            wPacketFormList = []
-            for iForms in forms:
-                try:
+                    print(day)
                     if iForms.date.day == day:
-                        wPacketFormList.append(iForms)
-                except:
-                    if iForms.week_start.day == day:
-                        wPacketFormList.append(iForms)
-            for h in wPacketFormList:
-                try:
+                        print(iForms.date)
+                        aPacketFormList.append(iForms)
+                print(aPacketFormList)
+                for h in aPacketFormList:
                     if h.date.year == year:
                         selectedFormDate = h
-                        forms_html += "<a href='../../../../printIndex/facility_weekly/multi/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        forms_html += "<a href='../../../../printIndex/coke_battery/multi/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                         break
-                except:
-                    if h.week_start.year == year:
-                        selectedFormDate = h
-                        forms_html += "<a href='../../../../printIndex/facility_weekly/multi/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
-                        break
-            
-        else:
-            # selectedForm = selectedForm.upper()
-            print(selectedForm)
-            if selectedForm[2]:
+            elif packetsEntry.frequency == 'Weekly':
+                print("Starting to find Forms that exist on this day for weekly...")
                 print(forms)
+                wPacketFormList = []
+                for iForms in forms:
+                    try:
+                        if iForms.date.day == day:
+                            wPacketFormList.append(iForms)
+                    except:
+                        if iForms.week_start.day == day:
+                            wPacketFormList.append(iForms)
+                for h in wPacketFormList:
+                    try:
+                        if h.date.year == year:
+                            selectedFormDate = h
+                            forms_html += "<a href='../../../../printIndex/facility_weekly/multi/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            break
+                    except:
+                        if h.week_start.year == year:
+                            selectedFormDate = h
+                            forms_html += "<a href='../../../../printIndex/facility_weekly/multi/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
+                            break
+            elif packetsEntry.frequency == 'Monthly':
+                print('Monthly')
+        else:
+            if selectedForm[1]:
                 forms_from_day = forms.filter(date__day=day)
                 for form in forms_from_day:
                     if form.date.year == year:
@@ -233,7 +234,8 @@ class Calendar2(HTMLCalendar):
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"        
+        
         forms_html += "</ul>"
         
         if day == 0:
@@ -254,48 +256,72 @@ class Calendar2(HTMLCalendar):
         """
         Return a formatted month as a table.
         """
-        facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-        formList = ast.literal_eval(facilityForms[0].formData)
-        ogFormID = forms[0]
+        formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+        formList = get_facility_forms('facilityName', facility)
+        #ogFormID = forms
         
         print("start")
         print(forms)
-        print(isinstance(forms, tuple))
-        if not isinstance(forms, tuple):
-            if forms == "Coke Battery Daily Packet":
-                aPacket = ["1","2","3","4","5"]
-                packetExists = []
-                for aForm in aPacket:
-                    modelSelect = "formA" + aForm + "_model"
-                    print(modelSelect)
-                    chk_database = apps.get_model('EES_Forms', modelSelect).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-                    if chk_database.exists():
-                        packetExists.extend(chk_database)
-                print(packetExists)
-            elif forms == "Facility Weekly Packet":
-                wPacket = formList
-                packetExists = []
-                for indivForms in wPacket:
-                    formID = indivForms[0]
-                    formInformation = Forms.objects.get(id=formID)
-                    name_of_model = formInformation.link + "_model"
-                    if formID == 23:
-                        chk_database = formM_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-                    else:
-                        try:#### ----- Set up a code to switch over to a number based model instead of labels
-                            chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-                        except:
-                            chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
+        if isinstance(forms, str):
+            print("This is a Packet Print for packetID "+forms)
+            packetsEntry = the_packets_model.objects.get(id=int(forms))
+            allFormsSettingsList = []
+            for pacForm in packetsEntry.formList:
+                pacfsID = packetsEntry.formList[pacForm]['settingsID']
+                for settingsEntry in formSettingsQuery:
+                    if pacfsID == settingsEntry.id:
+                        allFormsSettingsList.append(settingsEntry)
+            print(allFormsSettingsList)
+            packetExists = []
+            for iFormSettings in allFormsSettingsList:
+                formID = iFormSettings.formChoice.id
+                formInformation = iFormSettings.formChoice
+                name_of_model = formInformation.link + "_model"
+                if formID == 23:
+                    chk_database = formM_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                else:
+                    try:#### ----- Set up a code to switch over to a number based model instead of labels
+                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                    except:
+                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
+                
+                if chk_database.exists():
+                    packetExists.extend(chk_database)
+            # if forms == "Coke Battery Daily Packet":
+            #     aPacket = ["1","2","3","4","5"]
+            #     packetExists = []
+            #     for aForm in aPacket:
+            #         modelSelect = "formA" + aForm + "_model"
+            #         print(modelSelect)
+            #         chk_database = apps.get_model('EES_Forms', modelSelect).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+            #         if chk_database.exists():
+            #             packetExists.extend(chk_database)
+            #     print(packetExists)
+            # elif forms == "Facility Weekly Packet":
+            #     wPacket = formList
+            #     packetExists = []
+            #     for indivForms in wPacket:
+            #         formID = indivForms[0]
+            #         formInformation = Forms.objects.get(id=formID)
+            #         name_of_model = formInformation.link + "_model"
+            #         if formID == 23:
+            #             chk_database = formM_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+            #         else:
+            #             try:#### ----- Set up a code to switch over to a number based model instead of labels
+            #                 chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+            #             except:
+            #                 chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
                     
-                    if chk_database.exists():
-                        packetExists.extend(chk_database)
+            #         if chk_database.exists():
+            #             packetExists.extend(chk_database)
             selectedForm = forms
             chk_database = packetExists
-        else:
-            formID = forms[0]
-            formInformation = Forms.objects.get(id=formID)
-            name_of_model = formInformation.link + "_model"
-            if formID == 23:
+        elif isinstance(forms, int):
+            for x in formSettingsQuery:
+                if x.id == forms:
+                    fsEntry = x
+            name_of_model = fsEntry.formChoice.link + "_model"
+            if fsEntry.formChoice.id == 23:
                 chk_database = apps.get_model('EES_Forms', "formM_model").objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
                 print(formM_model.objects.all())
                 originalStyle = True
@@ -308,9 +334,11 @@ class Calendar2(HTMLCalendar):
                     print("CHECK 1.2")
                     chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
                     originalStyle = False
-            makeList = list(forms)
+            makeList = [forms]
             makeList.append(originalStyle)
             selectedForm = tuple(makeList)
+        else:
+            print("not a packet or form")
         print("<--------------------------")
         try:
             events = Event.objects.filter(date__month=themonth)

@@ -30,7 +30,7 @@
                     <select name="forms" id="forms">
                         <option value="" selected>------</option>
                         {% for x in selectList %}
-                        <option value="{{x.0}}">{{x.1}}</option>
+                        <option value="{{x.id}}">{{x.id}} - {{x.formChoice.title}}</option>
                         {% endfor %}
                     </select>
                     <br><br>

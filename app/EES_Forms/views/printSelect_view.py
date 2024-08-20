@@ -6,7 +6,7 @@ from ..forms import *
 from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import ast
-from ..utils import Calendar, checkIfFacilitySelected, getCompanyFacilities
+from ..utils import Calendar, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
 import datetime
 
 lock = login_required(login_url='Login')
@@ -26,17 +26,19 @@ def printSelect(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    
+    formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    facilityForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
+    facilityForms = get_facility_forms('facilityName', facility)
+    selectList = []
     if len(facilityForms) == 0:
-        selectList = []
         print('No facility forms have been assigned/No facility has been selected')
     else:
         print('something is in here')
-        facilityForms = facilityForms[0]
-        parseList = ast.literal_eval(facilityForms.formData)
+        for fsID in facilityForms:
+            for settingsEntry in formSettingsQuery:
+                if int(fsID) == settingsEntry.id:
+                    selectList.append(settingsEntry)
 
     if request.method == "POST":
         answer = request.POST
@@ -100,7 +102,7 @@ def printSelect(request, facility):
         'sortedFacilityData': sortedFacilityData, 
         'options': options, 
         'facility': facility, 
-        'selectList': parseList, 
+        'selectList': selectList, 
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
