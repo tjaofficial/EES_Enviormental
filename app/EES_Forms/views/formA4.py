@@ -111,12 +111,16 @@ def formA4(request, facility, fsID, selector):
                 issueFound = False
                 if not existing:
                     database_form = A
+                fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if A.notes.lower() != 'no ve' or A.leak_data != "{}":
                     issueFound = True
                 if issueFound:
                     if finder:
-                        issue_page = 'issue'
+                        if selector == 'form':
+                            issue_page = 'resubmit'
+                        else:
+                            issue_page = 'issue'
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)

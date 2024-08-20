@@ -5,7 +5,7 @@
         {{packet.name}} - forms({{packet.formList|length}})
     </div>
     <div style="text-decoration: underline;">
-        <a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.name %}">
+        <a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.id %}">
             add/remove
         </a>
     </div>

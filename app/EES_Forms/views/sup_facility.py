@@ -80,6 +80,12 @@ def facilityList(request, facility):
             print('hello')
         elif 'sub_delete' in answer.keys():
             packToDelete = packetData.get(id=answer['packID'])
+            formSettingsQuery = form_settings_model.objects.filter(facilityChoice__id=packToDelete.facilityChoice.id)
+            for pacForms in packToDelete.formList:
+                for formSettingsEntry in formSettingsQuery:
+                    if packToDelete.formList[pacForms]['settingsID'] == formSettingsEntry.id:
+                        del formSettingsEntry.settings['packets'][str(packToDelete.id)]
+                        formSettingsEntry.save()
             packToDelete.delete()
             return redirect(facilityList, facility)
         elif 'facForm_delete' in answer.keys():
@@ -118,9 +124,10 @@ def facilityList(request, facility):
             thisFacilityForm.formData = makeFacFormsList
             facilityFormDelete = thisFacilityForm
             facilityFormDelete.save()
-            #delete from form settings model
+            #Change acive from "true" to 'false' to archive form from settings model
             formToDelete = formSettingsModel.get(id=facFormID)
-            formToDelete.delete()
+            formToDelete.settings['active'] = "false"
+            formToDelete.save()
             return redirect(facilityList, facility)
         elif 'packet_update' in answer.keys():
             #receiving fsID and packetID in format of "27-6"
@@ -137,7 +144,7 @@ def facilityList(request, facility):
                 if noLabelTag == "no-label-":
                     if int(noLabelNumber) > int(highestLabelNumb):
                         highestLabelNumb = noLabelNumber
-            thePacket.formList["no-label-"+str(int(highestLabelNumb)+1)] = {"formID":theSettings.formChoice.id, "settingsID":fsID}
+            thePacket.formList["no-label-"+str(int(highestLabelNumb)+1)] = {"settingsID":fsID}
             settingsEntry = form_settings_model.objects.get(id=fsID)
             settingsEntry.settings['packets'].append(thePacket.id)
             A = thePacket
@@ -173,7 +180,7 @@ def facilityForm(request, facility, packet):
     formList = Forms.objects.all().order_by('form')
     facilityFormsData = facility_forms_model.objects.get(facilityChoice=specificFacility)
     formSettingsModel = form_settings_model.objects.all()
-    packetQuery = the_packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
+    packetQuery = the_packets_model.objects.get(id=packet)
     if facilityFormsData.formData:
         facilityFormList = ast.literal_eval(facilityFormsData.formData[1:-1])
     else:
@@ -269,8 +276,8 @@ def facilityForm(request, facility, packet):
         'client': client, 
         'supervisor': supervisor, 
         'formList': formList, 
-        'packet': packet,
-        'packetQuery': packetQuery.formList,
+        'packet': packetQuery,
+        'packetFormList': packetQuery.formList,
         'formSettingsModel': formSettingsModel,
         'pageData': pageData,
         'query': q

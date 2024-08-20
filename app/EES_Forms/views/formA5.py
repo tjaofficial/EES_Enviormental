@@ -285,6 +285,7 @@ def formA5(request, facility, fsID, selector):
                 
                 if not existing:
                     database_form = A
+                fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 issueFound = False
                 if B.o1_highest_opacity >= 10 or B.o1_average_6 >= 35 or B.o1_instant_over_20 == 'Yes' or B.o1_average_6_over_35 == 'Yes':
@@ -297,7 +298,10 @@ def formA5(request, facility, fsID, selector):
                     issueFound = True
                 if issueFound:
                     if finder:
-                        issue_page = 'issue'
+                        if selector == 'form':
+                            issue_page = 'resubmit'
+                        else:
+                            issue_page = 'issue'
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)

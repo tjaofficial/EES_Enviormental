@@ -365,57 +365,6 @@
             </div>
         </div>
     </div>
-    {% else %}
-    <div id='card2'>
-        <div id="login" class='dataCont' style='display: block;'>
-            <div class='cardHeader' style='display:flex;'>
-                <a href="{% url 'Contacts' facility %}">
-                    <svg style="color: white; width: 2rem; text-align: left;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path></svg>
-                </a>
-                <h1 style='margin: auto; padding-right: 30px;'>Edit {{ userInfo.first_name }}'s Profile</h1>
-            </div>
-            <form method="POST" action="" enctype="multipart/form-data" style='padding:22px;'>
-                {% csrf_token %}
-                {% if pic %}
-                <div style="text-align: center; width: 300px; height: 300px; margin: auto;">
-                    <img class="prof_pic_view" style='height:100%;width:100%;' src="../../../media/{{pic}}"/>
-                    <br><br>
-                </div>
-                <br>
-                <div>
-                    <a style='color:red; font-size:10px;' href="{% url 'DeleteProf' facility userProfileInfo.id %}">delete</a>
-                </div>
-                <br>
-                {% else %}
-                <div style="text-align: center; ">
-                    <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                    </svg>
-                    <br>
-                </div>
-                {% endif %}
-                
-                <div class='formCont'>
-                    {{ userData2.profile_picture }}<br><br>
-                    {{ userData2.phone.label }}: {{ userData2.phone }}<br><br>
-                    Work {{ userData2.position.label }}: {{ userData2.position }}<br><br>
-                    <div id='certDateDiv' style='display: none;'>
-                        {{ userData2.cert_date.label }}: {{ userData2.cert_date }}<br><br>
-                    </div>
-                    <div id='certs'>
-                        Certifications: {{ userData2.certs }}<br>
-                        <p>(Separate each certification with a comma ",")</p>
-                    </div>
-                </div>
-                <br>
-                <input type="submit" name="edit_user">
-            </form>
-
-            {% for message in messages %}
-                <p>{{message}}</p>
-            {% endfor%}
-        </div>
-    </div>
     {% endif %}
 </body>
 {% endblock %}

@@ -129,12 +129,16 @@ def formA3(request, facility, fsID, selector):
                 issueFound = False
                 if not existing:
                     database_form = A
+                fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if A.notes not in {'-', 'n/a', 'N/A'} or int(A.om_leaks) > 0 or int(A.l_leaks) > 0: 
                     issueFound = True
                 if issueFound:
                     if finder:
-                        issue_page = 'issue'
+                        if selector == 'form':
+                            issue_page = 'resubmit'
+                        else:
+                            issue_page = 'issue'
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)

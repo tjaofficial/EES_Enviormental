@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, Textarea
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 import datetime
 from .models import *
@@ -166,13 +166,40 @@ class FormCReadForm(ModelForm):
             'salt_12': forms.TextInput(attrs={'required': False, 'id': 'salt_12', 'oninput': 'salt_average()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
         }
 
+class UpdateUserForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = (
+            'username', 
+            'email',
+            'first_name', 
+            'last_name'
+        )
+        
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Username', 'autofocus': False }),
+            'email': forms.EmailInput(attrs={'class': 'input', 'placeholder': 'E-mail', 'style':'width: 15rem;'}),
+            'first_name': forms.TextInput(attrs={'class': 'input', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Last Name'}),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'autofocus': False})
 
 class CreateUserForm(UserCreationForm):
     password1 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     password2 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+        fields = (
+            'username', 
+            'email', 
+            'password1', 
+            'password2', 
+            'first_name', 
+            'last_name'
+        )
         
         widgets = {
             'username': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Username', 'autofocus': False }),

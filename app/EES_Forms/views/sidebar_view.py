@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
-from ..forms import issues_form, events_form, sop_form
+from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
 import calendar
 from django.core.exceptions import FieldError
@@ -481,24 +481,11 @@ def issues_view(request, facility, fsID, form_date, access_page):
     issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = get_facility_forms('facilityName', facility)
-
+    existing = False
     if todays_log.exists():
         todays_log = todays_log[0]
-
-    if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
-        facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     formSetting= form_settings_model.objects.get(id=fsID)
-    form_name = fsID
 
-    print(formSetting)
-    # try: 
-    #     form_name = int(form_name)
-    #     form_name_parsed = form_name
-    # except:
-    #     form_name_parsed = getFormID_w_newFormLabel(form_name, facilityForms)
-    #     if not form_name_parsed:
-    #         messages.error(request,'ERROR: ID-11850001. Contact Support Team')
-    
     def create_link_elements():
         for facForms in facilityForms:
             settingsID = int(facForms)
@@ -568,7 +555,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
         database_form = org[0]
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                if int(form_name) == int(entry.form):
+                if int(fsID) == int(entry.form):
                     existing = True
                     picker = entry
                     form = issues_form()
@@ -576,13 +563,13 @@ def issues_view(request, facility, fsID, form_date, access_page):
                         entry.viewed = True
                         entry.save()
     elif access_page == 'edit' or access_page == 'resubmit':
-        org = issues_model.objects.all().order_by('-date')
+        org = issues_model.objects.filter(form=fsID).order_by('-date')
         database_form = org[0]
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                if form_name == entry.form:
-                    picker = entry
-                    link = ''
+                picker = entry
+                link = ''
+                existing=True
         initial_data = {
             'form': picker.form,
             'issues': picker.issues,
@@ -604,7 +591,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                     updateSubmissionForm(fsID, True, picker.date)
                     return redirect('IncompleteForms', facility)
                 else:
-                    return redirect('../../../issues_view/' + form_name + '/' + form_date + '/issue')
+                    return redirect('issues_view', facility, fsID, form_date, 'issue')
     else:
         existing = False
         picker = 'n/a'
@@ -612,9 +599,9 @@ def issues_view(request, facility, fsID, form_date, access_page):
             org = issues_model.objects.all().order_by('-date')
             database_form = org[0]
             if todays_log.date_save == database_form.date:
-                if database_form.form == form_name:
+                if database_form.form == fsID:
                     existing = True
-    print(existing)
+
     if existing:
         initial_data = {
             'form': database_form.form,
@@ -627,7 +614,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
     else:
         initial_data = {
             'date': todays_log.date_save,
-            'form': form_name
+            'form': fsID
         }
 
     form = issues_form(initial=initial_data)
@@ -641,12 +628,22 @@ def issues_view(request, facility, fsID, form_date, access_page):
             data = issues_form(dataCopy)
         if data.is_valid():
             data.save()
-
             updateSubmissionForm(fsID, True, todays_log.date_save)
-
             return redirect('IncompleteForms', facility)
     return render(request, "shared/issues_template.html", {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'form': form, 'access_page': access_page, 'picker': picker, "form_date": form_date, 'link': link, 'profile': profile, "unlock": unlock, "client": client, "supervisor": supervisor
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'options': options, 
+        'facility': facility, 
+        'form': form, 
+        'access_page': access_page, 
+        'picker': picker, 
+        "form_date": form_date, 
+        'link': link, 
+        'profile': profile, 
+        "unlock": unlock, 
+        "client": client, 
+        "supervisor": supervisor
     })
 
 @lock
@@ -706,6 +703,75 @@ def event_add_view(request, facility):
     })
 
 @lock
+def profile_edit_view(request, facility, userID):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if client:
+        return redirect('c_dashboard')
+    elif unlock:
+        return redirect('IncompleteForms', facility)
+    
+    user_profiles = user_profile_model.objects.all()
+    pic = ''
+    
+    if user_profiles.filter(user__id__exact=userID).exists():
+        userProfileInfo = user_profiles.get(user__id__exact=userID)
+        userInfo = User.objects.all().get(id__exact=userID)
+        pic = userProfileInfo.profile_picture
+        if userProfileInfo.phone:
+            number = userProfileInfo.phone[2:]
+            first = number[:3]
+            middle = number[3:6]
+            end = number[6:]
+            parseNumber = '(' + first + ')' + middle + '-'+ end
+        else:
+            parseNumber = ''
+        
+    if request.method == 'POST':
+        answer = request.POST
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
+        if request.POST.get('edit_user', False):
+            print('CHECK 3')
+            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            new_data = request.POST.copy()
+            new_data['phone'] = finalPhone
+            new_data['company'] = userProfileInfo.company
+            new_data['date_joined'] = userInfo.date_joined
+            new_data['is_active'] = userInfo.is_active
+            new_data['groups'] = userInfo.groups.all()[0]
+            B = UserChangeForm(
+                new_data,
+                instance=userInfo
+            )
+            A = user_profile_form(
+                new_data, 
+                request.FILES, 
+                instance=userProfileInfo
+            )
+            print(A.errors)
+            print(B.errors)
+            if A.is_valid() and B.is_valid():
+                A.save()
+                B.save()
+                return redirect('Contacts', facility)
+    return render(request, "supervisor/profile_edits.html", {
+        'facility': facility,
+        'notifs': notifs, 
+        "unlock": unlock, 
+        "client": client, 
+        "supervisor": supervisor,
+        'pic': pic, 
+        'userInfo': userInfo,
+        'userProfileInfo': userProfileInfo,
+        'parseNumber': parseNumber
+    })
+
+
+@lock
 def event_detail_view(request, facility, access_page, event_id):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
@@ -751,7 +817,6 @@ def event_detail_view(request, facility, access_page, event_id):
             print(request.POST)
             data = events_form(request.POST, instance=data_pull)
             print(data)
-            print('pork')
             print(data.errors)
             if data.is_valid():
                 A = data.save(commit=False)
@@ -850,7 +915,8 @@ def sop_view(request, facility):
     return render(request, 'shared/sops.html', {
         'sortedFacilityData':sortedFacilityData, 'notifs': notifs, 'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
     })
-    
+   
+@lock 
 def formsProgress(request, facility, section):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
@@ -859,62 +925,35 @@ def formsProgress(request, facility, section):
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if unlock:
         return redirect('IncompleteForms', facility)
-    existsing = False
-        
-    allForms = Forms.objects.all().order_by('form')
-    clientForms = facility_forms_model.objects.filter(facilityChoice__facility_name=facility)
-    formSubmissions = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    
-    if len(clientForms) > 0:
-        clientForms = ast.literal_eval(clientForms[0].formData)
-        existing = True
-    else:
-        clientForms = 'none'
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+    clientForms = get_facility_forms('facilityName', facility)
     print(clientForms)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
     
-    
     for formInfo in clientForms:
-        print("Cross Reference " + str(formInfo[0]) + "...")
-        for x in allForms:
+        print("Cross Reference " + str(formInfo) + "...")
+        for x in formSettingsModel:
             print("With " + str(x.id) + "...")
-            for submissions in formSubmissions:
-                if formInfo[0] == x.id and submissions.formID.id == x.id:
-                        print("Found a MATCH! Adding to finalList.")
-                        formTitle = x.header + ' - ' + x.title
-                        if x.frequency == 'Daily':
-                            finalList['Daily'].append((formInfo[1], formTitle, submissions.submitted))
-                        elif x.frequency == 'Weekly':
-                            finalList['Weekly'].append((formInfo[1], formTitle, submissions.submitted))
-                        elif x.frequency == 'Monthly':
-                            finalList['Monthly'].append((formInfo[1], formTitle, submissions.submitted))
-                        elif x.frequency == 'Quarterly':
-                            finalList['Quarterly'].append((formInfo[1], formTitle, submissions.submitted))
-                        elif x.frequency == 'Anually':
-                            finalList['Annually'].append((formInfo[1], formTitle, submissions.submitted))
-    
-    # if existing:
-    #     for form in allForms:
-    #         formTitle = form.header + ' - ' + form.title
-    #         if form.frequency == 'Daily':
-    #             finalList['Daily'].append((form.form, formTitle, form.submitted))
-    #         elif form.frequency == 'Weekly':
-    #             finalList['Weekly'].append((form.form, formTitle, form.submitted))
-    #         elif form.frequency == 'Monthly':
-    #             finalList['Monthly'].append((form.form, formTitle, form.submitted))
-    #         elif form.frequency == 'Quarterly':
-    #             finalList['Quarterly'].append((form.form, formTitle, form.submitted))
-    #         elif form.frequency == 'Anually':
-    #             finalList['Annually'].append((form.form, formTitle, form.submitted))
-       
+            if formInfo == x.id:
+                print("Found a MATCH! Adding to finalList.")
+                formTitle = x.formChoice.header + ' - ' + x.formChoice.title
+                if x.formChoice.frequency == 'Daily':
+                    finalList['Daily'].append((formInfo, formTitle, x.subChoice.submitted))
+                elif x.formChoice.frequency == 'Weekly':
+                    finalList['Weekly'].append((formInfo, formTitle, x.subChoice.submitted))
+                elif x.formChoice.frequency == 'Monthly':
+                    finalList['Monthly'].append((formInfo, formTitle, x.subChoice.submitted))
+                elif x.formChoice.frequency == 'Quarterly':
+                    finalList['Quarterly'].append((formInfo, formTitle, x.subChoice.submitted))
+                elif x.formChoice.frequency == 'Anually':
+                    finalList['Annually'].append((formInfo, formTitle, x.subChoice.submitted))
     for each in finalList:
         if len(finalList[each]) == 0:
             finalList[each] = 'No forms added'
         else:
             def myFunc(e):
                 return e[0]
-            finalList[each].sort(key=myFunc)
-                
+            finalList[each].sort(key=myFunc)          
     print(finalList)
     if request.method == 'POST':
         answer = request.POST

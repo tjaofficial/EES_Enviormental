@@ -27,7 +27,7 @@ function getid(obj) {
 
     // }
     if (supervisor == "True"){
-        var editButton = "<a href='../../" + facility + "/Register/" + userID + "'><div id='edit'>Edit</div></a>";
+        var editButton = "<a href='../../" + facility + "/profileEdits/" + userID + "'><div id='edit'>Edit</div></a>";
     } else {
         var editButton = "";
     }

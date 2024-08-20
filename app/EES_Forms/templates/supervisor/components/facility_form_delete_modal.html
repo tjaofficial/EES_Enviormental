@@ -17,12 +17,12 @@
                     </p>
                     <br>
                     <p>Please type "delete" below and confirm</p><br>
-                    <input id="deletePacket{{packID}}" oninput="checkDeletePacket(this, {{packID}})" type="text" name="theTextSubmitted" style="width: 250px;" required/>
+                    <input id="deletePacket{{packID}}" oninput="checkDeletePacket(this, {{packID}}, 'f')" type="text" name="theTextSubmitted" style="width: 250px;" required/>
                     <input id="facFormID" type="hidden" name="facFormID" value="{{x.id}}"/>
                     <input id="facID" type="hidden" name="facID" value="{{info.0.id}}"/>
                     <br>
                     <div style="text-align: right;">
-                        <input id="submit{{packID}}" name="facForm_delete" type="submit" value="Confirm Delete" disabled>
+                        <input id="fSubmit{{packID}}" name="facForm_delete" type="submit" value="Confirm Delete" disabled>
                     </div>
                 </div>  
             </form>

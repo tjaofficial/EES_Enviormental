@@ -45,7 +45,7 @@
     <div class="card bottomOfPageMargin">
         <div class="cardHeader">
             {% include "shared/components/backArrow.html" with destination="facilityList"%}
-            Select Forms for {{packet}}
+            Select Forms for {{packet.name}}
         </div>
         <div style='padding: 15px 32px;'>
             <div style="text-align:center; width:100%;margin-bottom:25px;">
@@ -72,10 +72,10 @@
                         {% for form in pageData %}
                         <tr class="formRows">
                             <td class="rowCheckMark">
-                                <input data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.formChoice.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.formChoice.id %}checked{% endif %}{% endfor %}/>
+                                <input data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.formChoice.id}}" {% for key, x in packetFormList.items %}{% if x.settingsID == form.id %}checked{% endif %}{% endfor %}/>
                             </td>
                             <td class="rowFormLabel">
-                                <input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for key, x in packetQuery.items %}{% if x.formID == form.formChoice.id %}{{key}}{% endif %}{% endfor %}"/>
+                                <input type="text" name="formID{{ forloop.counter }}" style="width:50px;text-align: center;" value="{% for key, x in packetFormList.items %}{% if x.settingsID == form.id %}{{key}}{% endif %}{% endfor %}"/>
                             </td>
                             <td class="rowFormID">
                                 <input type="hidden" name="settingsID{{ forloop.counter }}" value="{{form.id}}">

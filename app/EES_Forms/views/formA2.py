@@ -122,7 +122,10 @@ def formA2(request, facility, fsID, selector):
                     issueFound = True
                 if issueFound:
                     if finder:
-                        issue_page = 'issue'
+                        if selector == 'form':
+                            issue_page = 'resubmit'
+                        else:
+                            issue_page = 'issue'
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)

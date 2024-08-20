@@ -124,27 +124,26 @@ def formA1(request, facility, fsID, selector):
                 
                 if not existing:
                     database_form = A
+                fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
             #     if B.comments not in {'-', 'n/a', 'N/A'}:
             #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
 
             #         return redirect (issue_page)
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
-                issueForm_exists = False
                 issueFound = False
                 if B.total_seconds >= 55:
                     issueFound = True
-                    if finder:
-                        issueForm_exists = True
                 else:
                     for x in sec:
                         if 10 <= x:
                             issueFound = True
-                            if finder:
-                                issueForm_exists = True
                 if issueFound:
-                    if issueForm_exists:
-                        issue_page = 'issue'
+                    if finder:
+                        if selector == 'form':
+                            issue_page = 'resubmit'
+                        else:
+                            issue_page = 'issue'
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
