@@ -139,5 +139,20 @@ def formA2(request, facility, fsID, selector):
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
     return render(request, "shared/forms/daily/formA2.html", {
-        'picker': picker, 'options': options, "search": search, "unlock": unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'data': data, 'formName': formName, 'profile': profile, 'selector': selector, 'client': client, "pSide_json": pSide_json, 'cSide_json': cSide_json, 'facility': facility
+        'picker': picker, 
+        'options': options, 
+        "search": search, 
+        "unlock": unlock, 
+        'supervisor': supervisor, 
+        "back": back, 
+        'todays_log': todays_log, 
+        'data': data, 
+        'formName': formName, 
+        'profile': profile, 
+        'selector': selector, 
+        'client': client, 
+        "pSide_json": pSide_json, 
+        'cSide_json': cSide_json, 
+        'facility': facility,
+        'fsID': fsID
     })

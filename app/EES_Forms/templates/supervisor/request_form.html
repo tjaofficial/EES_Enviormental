@@ -5,7 +5,10 @@
 <link href="{% static 'ees_forms/style/hover_modal.css' %}" rel="stylesheet">
 <div class="mainCont" style="width: 400px;">    
     <div class="card bottomOfPageMargin">
-        <div class="cardHeader">Request New Form</div>
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="facilityList"%}
+            Request New Form
+        </div>
         <div class="contentCont">
             <form class='soft' method="POST" action="" enctype="multipart/form-data">
                 {% csrf_token %}

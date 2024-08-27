@@ -1,7 +1,7 @@
 {% load static %}
 {% if page == 'facilityList' %}
 <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}" data-packetid="{{packet.id}}">
-    <div id="dropZone{{info.0.id}}" data-packetid="{{packet.id}}" onclick="show_formsList(this)" style="width:100%;">
+    <div id="dropZone{{packet.id}}" data-packetid="{{packet.id}}" onclick="show_formsList(this)" style="width:100%;">
         {{packet.name}} - forms({{packet.formList|length}})
     </div>
     <div style="text-decoration: underline;">

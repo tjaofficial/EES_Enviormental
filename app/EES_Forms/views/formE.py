@@ -122,5 +122,5 @@ def formE(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formE.html", {
-        'picker': picker, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
+        'fsID': fsID, 'picker': picker, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
     })

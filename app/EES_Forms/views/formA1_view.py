@@ -169,6 +169,7 @@ def formA1(request, facility, fsID, selector):
         'formName': formName, 
         'selector': selector,
         'picker': picker,
+        'fsID': fsID
     })
 
 

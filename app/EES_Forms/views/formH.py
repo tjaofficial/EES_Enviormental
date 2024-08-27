@@ -265,5 +265,5 @@ def formH(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/weekly/formH.html", {
-        'picker': picker, 'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "supervisor": supervisor, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
+        'fsID': fsID, 'picker': picker, 'facility': facility, 'selector': selector, 'weather': weather2, "exist_canvas": exist_canvas, "supervisor": supervisor, "search": search, "existing": existing, "back": back, 'data': data, 'profile_form': profile_form, 'profile': profile, 'todays_log': todays_log, 'formName': formName, 'client': client, 'unlock': unlock, 'readings_form': readings_form,
     })

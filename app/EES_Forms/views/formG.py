@@ -231,7 +231,7 @@ def formG1(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/weekly/formG1.html", {
-        'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName
+        'fsID': fsID, 'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName
     })
 
 @lock
@@ -450,5 +450,5 @@ def formG2(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/monthly/formG2.html", {
-        'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
+        'fsID': fsID, 'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
     })

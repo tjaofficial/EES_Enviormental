@@ -164,5 +164,6 @@ def formA3(request, facility, fsID, selector):
         'client': client, 
         'omSide_json': omSide_json, 
         'lSide_json': lSide_json, 
-        'facility': facility
+        'facility': facility,
+        'fsID': fsID
     })

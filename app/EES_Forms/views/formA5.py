@@ -316,5 +316,21 @@ def formA5(request, facility, fsID, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/daily/formA5.html", {
-        'picker': picker, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, "exist_canvas": exist_canvas, "back": back, 'todays_log': todays_log, 'data': data, 'profile_form': profile_form, 'readings_form': readings_form, 'formName': formName, 'selector': selector, 'client': client, 'unlock': unlock, 'facility': facility
+        'picker': picker, 
+        'weather': weather2, 
+        "supervisor": supervisor, 
+        "search": search, 
+        "existing": existing, 
+        "exist_canvas": exist_canvas, 
+        "back": back, 
+        'todays_log': todays_log, 
+        'data': data, 
+        'profile_form': profile_form, 
+        'readings_form': readings_form, 
+        'formName': formName, 
+        'selector': selector, 
+        'client': client, 
+        'unlock': unlock, 
+        'facility': facility,
+        'fsID': fsID
     })

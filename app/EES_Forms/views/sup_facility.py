@@ -30,6 +30,7 @@ def facilityList(request, facility):
     formSettingsModel = form_settings_model.objects.all()
     packetData = the_packets_model.objects.all()
     packetForm = the_packets_form
+
     newFacList = []
     for facil in facList:
         found = False
@@ -65,6 +66,7 @@ def facilityList(request, facility):
             finalList.append((newFac[0], newFac[1]))
     if request.method == 'POST':
         answer = request.POST
+        print(answer)
         if 'facilitySelect' in answer.keys():
             return redirect('sup_dashboard', answer['facilitySelect'])
         elif 'newPacket' in answer.keys():
@@ -79,14 +81,17 @@ def facilityList(request, facility):
             print(request.POST)
             print('hello')
         elif 'sub_delete' in answer.keys():
+            print('delete-packet')
             packToDelete = packetData.get(id=answer['packID'])
+            print(packToDelete)
             formSettingsQuery = form_settings_model.objects.filter(facilityChoice__id=packToDelete.facilityChoice.id)
-            for pacForms in packToDelete.formList:
-                for formSettingsEntry in formSettingsQuery:
-                    if packToDelete.formList[pacForms]['settingsID'] == formSettingsEntry.id:
-                        del formSettingsEntry.settings['packets'][str(packToDelete.id)]
-                        formSettingsEntry.save()
-            packToDelete.delete()
+            if len(packToDelete.formList) == 0:
+                for pacForms in packToDelete.formList:
+                    for formSettingsEntry in formSettingsQuery:
+                        if packToDelete.formList[pacForms]['settingsID'] == formSettingsEntry.id:
+                            del formSettingsEntry.settings['packets'][str(packToDelete.id)]
+                            formSettingsEntry.save()
+                packToDelete.delete()
             return redirect(facilityList, facility)
         elif 'facForm_delete' in answer.keys():
             facFormID = answer['facFormID']
@@ -132,6 +137,7 @@ def facilityList(request, facility):
         elif 'packet_update' in answer.keys():
             #receiving fsID and packetID in format of "27-6"
             print(answer['packet_update'])
+            print('packetUpdate')
             dataReceived = answer['packet_update'].split("-")
             fsID = dataReceived[0]
             packetID = dataReceived[1]
@@ -144,9 +150,10 @@ def facilityList(request, facility):
                 if noLabelTag == "no-label-":
                     if int(noLabelNumber) > int(highestLabelNumb):
                         highestLabelNumb = noLabelNumber
-            thePacket.formList["no-label-"+str(int(highestLabelNumb)+1)] = {"settingsID":fsID}
-            settingsEntry = form_settings_model.objects.get(id=fsID)
-            settingsEntry.settings['packets'].append(thePacket.id)
+            formNoLabelParse = "no-label-"+str(int(highestLabelNumb)+1)
+            thePacket.formList[formNoLabelParse] = {"settingsID":int(fsID)}
+            settingsEntry = form_settings_model.objects.get(id=int(fsID))
+            settingsEntry.settings['packets'][str(thePacket.id)] = formNoLabelParse
             A = thePacket
             B = settingsEntry
             A.save()
@@ -163,7 +170,7 @@ def facilityList(request, facility):
         'packetData': packetData,
         'packetForm': packetForm,
         'formData': formData,
-        'formSettingsModel': formSettingsModel
+        'formSettingsModel': formSettingsModel,
     })
 
 @lock    
@@ -223,6 +230,16 @@ def facilityForm(request, facility, packet):
             return redirect('sup_dashboard', answer['facilitySelect'])
         selectedList = {}
         ## Builds the new list of forms selected and created a submission record
+        fsIDsFromInputs = []
+        for allKeys in answer.keys():
+            if allKeys[:5] == 'forms':
+                inputID = allKeys[5:]
+                fsIDsFromInputs.append(answer['settingsID'+inputID])
+        for pacs in packetQuery.formList:
+            if str(packetQuery.formList[pacs]['settingsID']) not in fsIDsFromInputs:
+                B = form_settings_model.objects.get(id=int(packetQuery.formList[pacs]['settingsID']))
+                del B.settings['packets'][str(packetQuery.id)]
+                B.save()
         for item in range(1, totalAmountofForms+1):
             formIDlabel = 'forms' + str(item)
             formOrgLabel = 'formID' + str(item)
@@ -236,12 +253,19 @@ def facilityForm(request, facility, packet):
                 selectedList[formLabel] = {"settingsID": settingsID}
                 print('made it')
                 settingsEntry = form_settings_model.objects.get(id=settingsID)
-                settingsEntry.settings["packets"][str(packetQuery.id)] = formLabel
+                settingsEntryPacks = settingsEntry.settings["packets"]
+                print(settingsEntryPacks.keys())
+                print(packetQuery.id)
+                
+                settingsEntryPacks[str(packetQuery.id)] = formLabel
                 A = settingsEntry
                 A.save()
             else:
                 continue
+            
         
+                
+                
         packetQuery.formList = selectedList
         packetQuery.save()
         
@@ -312,11 +336,12 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
         if 'facilitySelect' in request.POST.keys():
             return redirect('sup_dashboard', request.POST['facilitySelect'])
         copyPOST = request.POST.copy()
-                
-        
         copyPOST['facilityChoice'] = selectedSettings.facilityChoice
         copyPOST['formChoice'] = selectedSettings.formChoice
         copyPOST['settings'] = formSettings
+        copyPOST['subChoice'] = selectedSettings.subChoice
+        if str(packetID) in formSettings['packets'].keys():
+            formSettings['packets'][str(packetID)] = request.POST['newLabel']
         for inputs in request.POST.keys():
             if inputs[:9] == "settings_":
                 settingsName = inputs[9:]

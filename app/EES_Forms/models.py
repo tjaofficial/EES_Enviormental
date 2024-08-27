@@ -487,7 +487,8 @@ class the_packets_model(models.Model):
     )
     formList = models.JSONField(
         null=True,
-        blank=True
+        blank=True,
+        default=dict
     )
     frequency = models.CharField(
         max_length=30, 

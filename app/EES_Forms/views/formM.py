@@ -176,5 +176,5 @@ def formM(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formM.html", {
-        'picker': picker, "existing": existing, 'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
+        'fsID': fsID, 'picker': picker, "existing": existing, 'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
     })

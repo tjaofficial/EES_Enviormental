@@ -212,5 +212,5 @@ def formB(request, facility, fsID, selector):
 
         return redirect(batt_prof)
     return render(request, "shared/forms/daily/formB.html", {
-        'picker': picker, 'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
+        'fsID': fsID, 'picker': picker, 'weather': weather2, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, "back": back, 'todays_log': todays_log, 'end_week': end_week, 'data': data, 'profile': profile, 'selector': selector, 'formName': formName, "freq": freq, 'facility': facility
     })

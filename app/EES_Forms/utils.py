@@ -198,7 +198,7 @@ class Calendar2(HTMLCalendar):
                 for h in aPacketFormList:
                     if h.date.year == year:
                         selectedFormDate = h
-                        forms_html += "<a href='../../../../printIndex/coke_battery/multi/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        forms_html += "<a href='../../../../printIndex/coke_battery/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                         break
             elif packetsEntry.frequency == 'Weekly':
                 print("Starting to find Forms that exist on this day for weekly...")
@@ -214,13 +214,15 @@ class Calendar2(HTMLCalendar):
                 for h in wPacketFormList:
                     try:
                         if h.date.year == year:
+                            print('check 1')
                             selectedFormDate = h
-                            forms_html += "<a href='../../../../printIndex/facility_weekly/multi/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            print('check 2')
+                            forms_html += "<a href='../../../../printIndex/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                             break
                     except:
                         if h.week_start.year == year:
                             selectedFormDate = h
-                            forms_html += "<a href='../../../../printIndex/facility_weekly/multi/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
                             break
             elif packetsEntry.frequency == 'Monthly':
                 print('Monthly')
