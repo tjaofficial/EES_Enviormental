@@ -521,10 +521,6 @@ class form_settings_model(models.Model):
     def __str__(self):
         return str(self.id) + ' - ' + str(self.formChoice) + ' - ' + str(self.facilityChoice)
 
-
-
-
-
 class formC_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(auto_now_add=False, auto_now=False)
@@ -4723,6 +4719,7 @@ class issues_model(models.Model):
         blank=True,
     )
     cor_action = models.CharField(max_length=150)
+    out_of_compliance = models.BooleanField(default=False)
     viewed = models.BooleanField(default=False)
 
     def __str__(self):

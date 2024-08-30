@@ -316,7 +316,8 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
     if unlock:
         return redirect('IncompleteForms', facility)
     if client:
-        return redirect('c_dashboard', facility)
+        userProfile = user_profile_model.objects.get(user=request.user)
+        return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
     selectedSettings = form_settings_model.objects.get(id=fsID)
     formData = Forms.objects.get(id=selectedSettings.formChoice.id)
     #fsID = False

@@ -100,9 +100,10 @@
 <div id="notifDropdown" class="profileDropdown" style="display: none; max-height: 41rem; overflow: scroll;">
     {% for notif in notifs.unRead %}
     <a href="{% if notif.3 == 'formO' or notif.3 == 'formP'%}{% url notif.3 facility notif.2.settingsID notif.2.date notif.2.weekend|lower %}{% else %}{% url notif.3 facility notif.2.settingsID notif.2.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.1.id}}">  
-        <div id="notifColor" class="notifCont" style="{% if not notif.1.hovered %}background-color: #ffff00ad;{% endif %}">
+        <div id="notifColor" class="notifCont" style="{% if notif.1.header == 'compliance' %}{% if not notif.1.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.1.hovered %}background-color: #ffff00ad;{% endif %}">
             <div class="notifHeader">
-                {{notif.1.get_header_display}} - {{notif.0.1}}
+                {{notif.1.get_header_display}}<br>
+                {{notif.0.formChoice.title}}
             </div>
             <div class="notifNote">
                 {{notif.1.notes}}{{notif.1.body}}

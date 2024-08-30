@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor2
 from django.contrib.auth.decorators import login_required
 import os
 import ast
@@ -472,16 +472,21 @@ def search_forms_view(request, facility, access_page):
 @lock
 def issues_view(request, facility, fsID, form_date, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
     profile = user_profile_model.objects.all()
+    now = datetime.datetime.now().date()
     todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all()
     issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = get_facility_forms('facilityName', facility)
     existing = False
+    complince = False
+    notifSelector = ['corrective', 'submitted']
+    if access_page[-1] == 'c':
+        compliance = True
+        notifSelector.append('compliance')
+        access_page = access_page[:-2]
     if todays_log.exists():
         todays_log = todays_log[0]
     formSetting= form_settings_model.objects.get(id=fsID)
@@ -537,6 +542,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
         if request.method == "POST":
             dataCopy = request.POST.copy()
             dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
+            dataCopy["out_of_compliance"] = compliance
             if existing:
                 data = issues_form(dataCopy, instance=database_form)
             else:
@@ -584,10 +590,14 @@ def issues_view(request, facility, fsID, form_date, access_page):
         if request.method == "POST":
             dataCopy = request.POST.copy()
             dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
+            dataCopy["out_of_compliance"] = compliance
             data = issues_form(dataCopy, instance=picker)
             if data.is_valid():
                 data.save()
+                print(data.save().id)
                 if access_page == 'resubmit':
+                    for notifSel in notifSelector:
+                        createNotification(request, facility, request.user, fsID, now, notifSel, data.save())
                     updateSubmissionForm(fsID, True, picker.date)
                     return redirect('IncompleteForms', facility)
                 else:
@@ -627,7 +637,10 @@ def issues_view(request, facility, fsID, form_date, access_page):
         else:
             data = issues_form(dataCopy)
         if data.is_valid():
+            print('check #1')
             data.save()
+            createNotification(facility, request.user, fsID, now, 'submitted')
+            createNotification(facility, request.user, fsID, now, 'corrective')
             updateSubmissionForm(fsID, True, todays_log.date_save)
             return redirect('IncompleteForms', facility)
     return render(request, "shared/issues_template.html", {
@@ -774,9 +787,7 @@ def profile_edit_view(request, facility, userID):
 @lock
 def event_detail_view(request, facility, access_page, event_id):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
@@ -857,9 +868,7 @@ def handlePhone(number):
 @lock
 def shared_contacts_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
     options = bat_info_model.objects.all()
     companyOfUser = user_profile_model.objects.get(user=request.user).company
     sortedFacilityData = getCompanyFacilities(request.user.username)

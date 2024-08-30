@@ -9,14 +9,17 @@ import requests
 import json
 import braintree
 import os
+import calendar
 from django.shortcuts import redirect
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from django.http import HttpResponse
-from django.utils.encoding import force_str
-from django.contrib.auth import get_user_model
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
+from django.contrib.sites.shortcuts import get_current_site  
+from django.template.loader import render_to_string 
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
 
 #from .admin import EventAdmin
 
@@ -383,7 +386,7 @@ def updateSubmissionForm(fsID, submitted, date):
     formSettingsSub.submitted = submitted
     formSettingsSub.dateSubmitted = date
     formSettingsSub.save()
-    print("YEAH IT SAVED") 
+    print("Updated Submission was saved...") 
 
 def setUnlockClientSupervisor(requestUserData):
     unlock = False
@@ -398,6 +401,36 @@ def setUnlockClientSupervisor(requestUserData):
         
     return (unlock, client, supervisor)
 
+def setUnlockClientSupervisor2(requestUserData):
+    unlock = False
+    client = False
+    supervisor = False
+    if requestUserData.groups.filter(name=OBSER_VAR):
+        unlock = True
+    if requestUserData.groups.filter(name=CLIENT_VAR):
+        client = True
+    if requestUserData.groups.filter(name=SUPER_VAR) or requestUserData.is_superuser:
+        supervisor = True
+        
+    return unlock, client, supervisor
+
+def userGroupRedirect(user, permissions):
+    userGroup = user.groups.all()[0]
+    if str(userGroup) in permissions:
+        if userGroup == OBSER_VAR:
+            return redirect('facilitySelect')
+        elif userGroup == CLIENT_VAR:
+            userProfile = user_profile_model.objects.get(user=user)
+            return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
+        elif userGroup == SUPER_VAR:
+            return redirect('sup_dashboard', SUPER_VAR)
+        
+def tryExceptFormDatabases(formID, model, facility):
+    if len(model) > 0:
+        return form_settings_model.objects.get(facilityChoice__facility_name=facility, formChoice=formID)
+    else:
+        return False
+            
 def weatherDict(city):
     # request the API data and convert the JSON to Python data types
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
@@ -584,6 +617,7 @@ def colorModeSwitch(request):
     return redirect(request.META['HTTP_REFERER'])
 
 def createNotificationDatabase(facility, user, fsID, date, notifSelector):
+    print('notif - check 1')
     todayNumb = datetime.date.today().weekday()
     nFormSettings = form_settings_model.objects.get(id=fsID)
     nFacility = bat_info_model.objects.filter(facility_name=facility)
@@ -614,7 +648,7 @@ def createNotificationDatabase(facility, user, fsID, date, notifSelector):
         newNotifData = json.dumps({'settingsID': fsID, 'date': str(date), 'weekend': todayName})
     else:
         todayName = False
-    if notifSelector == 'corrective':
+    if notifSelector in ['corrective', 'compliance']:
         newNotifData = json.dumps({'settingsID': fsID, 'date': str(date)})
     elif notifSelector == '90days':
         newNotifData = json.dumps({'ovenNumber': formID, 'date': str(date)})
@@ -668,11 +702,12 @@ def displayNotifications(user, facility):
                     settingEntry = form_settings_model.objects.get(id=int(fsID))
                     formPullData = (settingEntry, unRead, notifFormData, settingEntry.formChoice.link)
                     unReadList.append(formPullData)   
-    print('__________________________________________________________')
-    print(unReadList)
+    print('______Notificitons______________________________________________')
+
     return {'notifCount': notifCount, 'unRead': unReadList, "read": readNotifs}
         
-def createNotification(facility, user, fsID, date, notifSelector):
+def createNotification(facility, user, fsID, date, notifSelector, issueID):
+    print('notif1 - check 1')
     createNotificationDatabase(facility, user, fsID, date, notifSelector)
     facilityParse = 'notifications_' + facility.replace(" ","_")
     notifCount = str(notificationCalc(user, facility))
@@ -684,6 +719,39 @@ def createNotification(facility, user, fsID, date, notifSelector):
             'facility': facility
         }
     )
+    if notifSelector == 'compliance':
+        print('mail check 1')
+        fsEntry = form_settings_model.objects.get(id=issueID.form)
+        userProfile = user_profile_model.objects.get(user=user)
+        sendToList = []
+        facProfileQuery = user_profile_model.objects.filter(facilityChoice__facility_name=facility)
+        supProfileQuery = user_profile_model.objects.filter(company=userProfile.company, position='supervisor')
+        for person in facProfileQuery:
+            sendToList.append(person)
+        for person in supProfileQuery:
+            sendToList.append(person)
+        print(sendToList)   
+        mail_subject = 'MethodPlus: COMPLIANCE ISSUES'   
+        current_site = get_current_site(request)
+        for recipient in sendToList:
+            html_message = render_to_string('email/compliance_email.html', {  
+                'user': recipient,  
+                'domain': current_site.domain,
+                'form': fsEntry,
+                'issue': issueID
+            })
+            plain_message = strip_tags(html_message)
+            to_email = recipient.user.email 
+            print(to_email)
+            send_mail(
+                mail_subject,
+                plain_message,
+                settings.EMAIL_HOST_USER,
+                [to_email],
+                html_message=html_message,
+                fail_silently=False
+            )
+            print('mail check 2')
     
 def checkIfFacilitySelected(user, facility):
     if facility != 'supervisor':
@@ -886,3 +954,456 @@ def get_facility_forms(selector, facilityID):
         facilityFormsString = facility_forms_model.objects.get(facilityChoice__id=facilityID)
     facilityFormsList = ast.literal_eval(facilityFormsString.formData)
     return facilityFormsList
+
+def create_starting_forms():
+    # ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------
+    today = datetime.date.today()
+    if Forms.objects.count() <= 5:
+        A1 = Forms(
+            form=1,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formA1",
+            header="Method 303",
+            title="Charging",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        A2 = Forms(
+            form=2,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formA2",
+            header="Method 303",
+            title="Doors",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        A3 = Forms(
+            form=3,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formA3",
+            header="Method 303",
+            title="Lids and Offtakes",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        A4 = Forms(
+            form=4,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formA4",
+            header="Method 303",
+            title="Collection Main",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        A5 = Forms(
+            form=5,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formA5",
+            header="Method 9B",
+            title="Push Travels",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        B = Forms(
+            form=6,
+            frequency="Daily",
+            day_freq='Weekdays',
+            weekdays_only=True,
+            weekend_only=False,
+            link="formB",
+            header="Method 9",
+            title="Fugitive Dust Inspection",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        C = Forms(
+            form=7,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formC",
+            header="Method 9",
+            title="Method 9D - Coal Field",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        D = Forms(
+            form=8,
+            frequency="Weekly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formD",
+            header="Method 9",
+            title="Random Truck Inspection",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        E = Forms(
+            form=9,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formE",
+            header="Method 9",
+            title="Gooseneck Inspection",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F1 = Forms(
+            form=10,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF1",
+            header="Waste Weekly Inspections",
+            title="SIF / K087 Process Area (Satellite)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F2 = Forms(
+            form=11,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF2",
+            header="Waste Weekly Inspections",
+            title="#1 Shop (Satellite Accumulation)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F3 = Forms(
+            form=12,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF3",
+            header="Waste Weekly Inspections",
+            title="#2 Shop (Satellite Accumulation)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F4 = Forms(
+            form=13,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF4",
+            header="Waste Weekly Inspections",
+            title="Battery (Satellite Accumulation)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F5 = Forms(
+            form=14,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF5",
+            header="Waste Weekly Inspections",
+            title="Bio Plant (Satellite Accumulation)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F6 = Forms(
+            form=15,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF6",
+            header="Waste Weekly Inspections",
+            title="No. 8 Tank Area (Satellite Accumulation)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        F7 = Forms(
+            form=16,
+            frequency="Weekly",
+            day_freq='Wednesdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formF7",
+            header="Waste Weekly Inspections",
+            title="Booster Pad (90-Day Accumulation)",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        G1 = Forms(
+            form=17,
+            frequency="Weekly",
+            day_freq='Weekdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formG1",
+            header="PECS Baghouse Stack",
+            title="Method 9/Non-Certified Observations",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        G2 = Forms(
+            form=18,
+            frequency="Monthly",
+            day_freq='Weekdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formG2",
+            header="PECS Baghouse Stack",
+            title="Method 9B",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        H = Forms(
+            form=19,
+            frequency="Weekly",
+            day_freq='Weekdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formH",
+            header="Method 9",
+            title="Method 9 - Combustion Stack",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        I = Forms(
+            form=20,
+            frequency="Daily",
+            day_freq='Weekdays',
+            weekdays_only=True,
+            weekend_only=False,
+            link="formI",
+            header="Sampling",
+            title="Quench Water Sampling Form",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        L = Forms(
+            form=21,
+            frequency="Daily",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formL",
+            header="Method 9",
+            title="Visual Emissions Observations",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        M = Forms(
+            form=22,
+            frequency="Daily",
+            day_freq='Weekdays',
+            weekdays_only=True,
+            weekend_only=False,
+            link="formM",
+            header="Method 9D",
+            title="Method 9D Observation",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        N = Forms(
+            form=23,
+            frequency="Monthly",
+            day_freq='Weekdays',
+            weekdays_only=False,
+            weekend_only=False,
+            link="formN",
+            header="Fugitive Dust Inspection",
+            title="Method 9D Monthly Checklist",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        O = Forms(
+            form=24,
+            frequency="Weekly",
+            day_freq='Weekends',
+            weekdays_only=False,
+            weekend_only=True,
+            link="formO",
+            header="Stormwater Observation Form",
+            title="MP 108A",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        P = Forms(
+            form=25,
+            frequency="Weekly",
+            day_freq='Weekends',
+            weekdays_only=False,
+            weekend_only=True,
+            link="formP",
+            header="Outfall Observation Form",
+            title="Outfall 008",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        spill_kits = Forms(
+            form=26,
+            frequency="Monthly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="spill_kits",
+            header="Spill Kits Form",
+            title="Inspection Check List",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        quarterly_trucks = Forms(
+            form=27,
+            frequency="Quarterly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="quarterly_trucks",
+            header="Quarterly Trucks Form",
+            title="Inspection Check List",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
+        STI_SP001_monthly_inspection = Forms(
+            form=28,
+            frequency="Monthly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="form28",
+            header="STI SP001",
+            title="Monthly Tank Inspection Checklist",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False
+        )
+
+        A1.save()
+        A2.save()
+        A3.save()
+        A4.save()
+        A5.save()
+        B.save()
+        C.save()
+        D.save()
+        E.save()
+        F1.save()
+        F2.save()
+        F3.save()
+        F4.save()
+        F5.save()
+        F6.save()
+        F7.save()
+        G1.save()
+        G2.save()
+        H.save()
+        I.save()
+        L.save()
+        M.save()
+        N.save()
+        O.save()
+        P.save()
+        spill_kits.save()
+        quarterly_trucks.save()
+        STI_SP001_monthly_inspection.save()
+        
+def updateAllFormSubmissions(facility):
+    facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+    today = datetime.date.today()
+    todays_num = today.weekday()
+    weekday_fri = today + datetime.timedelta(days=4 - todays_num)
+    for fsForm in facFormsSettingsModel:
+        sub = fsForm.subChoice
+        if sub.formID.frequency == 'Monthly':
+            numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]
+            lastDayOfMonth = str(today.year) + '-' + str(today.month) + '-' + str(numbOfDaysInMonth)
+            sub.dueDate = datetime.datetime.strptime(lastDayOfMonth, "%Y-%m-%d").date()
+            dueDate = sub.dueDate
+            if sub.dateSubmitted.year != dueDate.year or sub.dateSubmitted.month != dueDate.month:
+                sub.submitted = False
+            sub.save()
+        elif sub.formID.frequency == 'Quarterly':
+            if what_quarter(today) == 1:
+                monthDue = 3
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            elif what_quarter(today) == 2:
+                monthDue = 6
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            elif what_quarter(today) == 3:
+                monthDue = 9
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            elif what_quarter(today) == 4:
+                monthDue = 12
+                yearDue = today.year
+                dayDue =  calendar.monthrange(yearDue, monthDue)[1]
+            dateBuild = str(yearDue) + '-' + monthDayAdjust(monthDue) + '-' + monthDayAdjust(dayDue)
+            sub.dueDate = datetime.datetime.strptime(dateBuild, "%Y-%m-%d").date()
+            A = sub.dateSubmitted
+            B = sub.dueDate
+            if what_quarter(A) != what_quarter(B):
+                sub.submitted = False
+            sub.save()
+        elif sub.formID.frequency == 'Weekly':
+            sub.dueDate = weekday_fri
+            if todays_num in {0, 1, 2, 3, 4}:
+                if sub.formID.day_freq == 'Weekends':
+                    sub.dueDate = weekday_fri - datetime.timedelta(days=5)
+                start_sat = weekday_fri - datetime.timedelta(days=6)
+            else:
+                start_sat = today - datetime.timedelta(days= todays_num - 5)
+            A = sub.dateSubmitted
+            B = sub.dueDate
+            if sub.formID.day_freq == 'Weekends' and A != B:
+                sub.submitted = False   
+            elif A < start_sat or A > sub.dueDate:
+                sub.submitted = False
+            sub.save()
+        elif sub.formID.frequency == 'Daily':
+            if sub.formID.weekend_only and todays_num not in {5,6}:
+                sub.save()
+                continue
+            else:    
+                sub.dueDate = today
+                A = sub.dateSubmitted
+                B = sub.dueDate
+                if today != A:
+                    sub.submitted = False
+                sub.save()
+                
+def what_quarter(input):
+    if input.month in {1,2,3}:
+        return 1
+    if input.month in {4,5,6}:
+        return 2
+    if input.month in {7,8,9}:
+        return 3
+    if input.month in {10,11,12}:
+        return 4
+
+def monthDayAdjust(input):
+    if len(str(input)) == 1:
+        return '0'+str(input)
+    else:
+        return str(input)

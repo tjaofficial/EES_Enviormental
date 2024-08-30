@@ -1,30 +1,37 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..models import issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, Forms, User, user_profile_model, bat_info_model
+from ..models import issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, form_settings_model, User, user_profile_model, bat_info_model
 import datetime
 import json
 import requests
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases
 
 lock = login_required(login_url='Login')
 
 @lock
 def client_dashboard_view(request, facility):
+    permissions = [CLIENT_VAR]
+    userGroupRedirect(request.user, permissions)
+    notifs = checkIfFacilitySelected(request.user, facility)
     options = bat_info_model.objects.all()
     supervisor = False
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
     supervisor = setUnlockClientSupervisor(request.user)[2]
-    if unlock:
-        return redirect('facilitySelect')
-    if supervisor:
-        return redirect('sup_dashboard', SUPER_VAR)
     formA1 = formA1_readings_model.objects.all().order_by('-form')
     formA2 = formA2_model.objects.all().order_by('-date')
     formA3 = formA3_model.objects.all().order_by('-date')
     formA4 = formA4_model.objects.all().order_by('-date')
     formA5 = formA5_readings_model.objects.all().order_by('-form')
+    fsID1 = tryExceptFormDatabases(1,formA1, facility)
+    fsID2 = tryExceptFormDatabases(2,formA2, facility) 
+    fsID3 = tryExceptFormDatabases(3,formA3, facility)
+    fsID4 = tryExceptFormDatabases(4,formA4, facility)
+    fsID5 = tryExceptFormDatabases(5,formA5, facility)
+    fsIDs = [fsID1,fsID2,fsID3,fsID4,fsID5]
+    print(fsIDs)
+    
     reads = formA5_readings_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
@@ -307,6 +314,7 @@ def client_dashboard_view(request, facility):
                 if answer['facilitySelect'] != '':
                     return redirect('sup_dashboard', answer['facilitySelect'])
             return render(request, "supervisor/sup_dashboard.html", {
+                'notifs': notifs,
                 'facility': facility, 
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
@@ -322,6 +330,7 @@ def client_dashboard_view(request, facility):
                 "client": client, 
                 'unlock': unlock,
                 'sortedFacilityData': sortedFacilityData,
+                'fsIDs': fsIDs
             })
     if request.method == 'POST':
         answer = request.POST
@@ -329,6 +338,7 @@ def client_dashboard_view(request, facility):
             return redirect('sup_dashboard', answer['facilitySelect'])
         
     return render(request, "supervisor/sup_dashboard.html", {
+        'notifs': notifs,
         'facility': facility, 
         'form_enteredA5': form_enteredA5, 
         'form_enteredA4': form_enteredA4, 
@@ -362,5 +372,6 @@ def client_dashboard_view(request, facility):
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
-        'sortedFacilityData': sortedFacilityData, 
+        'sortedFacilityData': sortedFacilityData,
+        'fsIDs': fsIDs
     })

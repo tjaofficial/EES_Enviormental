@@ -66,7 +66,6 @@
                                 <th class="nameColumn center">Name</th>
                                 <th class="phoneColumn center">Phone</th>
                                 <th class="emailColumn center">Email</th>
-                                <th class="certColumn center">Certification Date</th>
                             </tr>
                             {% for person in organized_list %}
                                 {% if person.1.position == "client" %}
@@ -99,7 +98,6 @@
                                             <td class="nameColumn center">{{ person.1.user.first_name }} {{ person.1.user.last_name }}</td>
                                             <td class="phoneColumn center">{{ person.3 }}</td>
                                             <td class="emailColumn center">{{ person.1.user.email }}</td>
-                                            <td class="certColumn center">{{ person.1.cert_date }}</td>
                                         </tr>
                                     {% endif %}
                                 {% endif %}

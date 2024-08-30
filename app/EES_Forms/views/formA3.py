@@ -142,7 +142,7 @@ def formA3(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, formName, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted')
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:

@@ -114,12 +114,15 @@ def formA2(request, facility, fsID, selector):
                 A.save()
                 
                 issueFound = False
+                compliance = False
                 if not existing:
                     database_form = A
                 fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if A.notes not in {'-', 'n/a', 'N/A'} or A.leaking_doors != 0:
                     issueFound = True
+                    if A.leaking_doors > 8:
+                        compliance = True
                 if issueFound:
                     if finder:
                         if selector == 'form':
@@ -128,6 +131,9 @@ def formA2(request, facility, fsID, selector):
                             issue_page = 'issue'
                     else:
                         issue_page = 'form'
+                    
+                    if compliance:
+                        issue_page = issue_page + "-c"
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, fsID, now, 'submitted')
                 updateSubmissionForm(fsID, True, todays_log.date_save)

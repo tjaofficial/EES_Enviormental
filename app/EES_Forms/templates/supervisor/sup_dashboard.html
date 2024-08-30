@@ -131,7 +131,7 @@
     <div id="fromAInfo" class="card longest">
         <div class="card-title">Todays Forms</div>
         <div class="nested">
-            <a class="no_link_css"  {% if form_enteredA1 %} href="shared/forms/daily/formA1/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{fsIDs.0}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A1card' class="inner-card formA_card">
                     {% if form_enteredA1 %}<p id='A1overlay' class="formA_overlay">Click for<br> Form A-1</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-1 - Charges</div>
@@ -168,7 +168,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA2 %} href="shared/forms/daily/formA2/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA2 %} href="Daily/formA2/{{fsIDs.1}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A2card' class="inner-card formA_card">
                     {% if form_enteredA2 %}<p id='A2overlay' class="formA_overlay">Click for<br> Form A-2</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-2 - Doors</div>
@@ -224,7 +224,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA3 %} href="shared/forms/daily/formA3/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA3 %} href="Daily/formA3/{{fsIDs.2}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A3card' class="inner-card formA_card">
                     {% if form_enteredA3 %}<p id='A3overlay' class="formA_overlay">Click for<br> Form A-3</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
@@ -280,7 +280,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA4 %} href="shared/forms/daily/formA4/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA4 %} href="Daily/formA4/{{fsIDs.3}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A4card' class="inner-card formA_card">
                     {% if form_enteredA4 %}<p id='A4overlay' class="formA_overlay">Click for<br> Form A-4</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-4 - Collection Main</div>
@@ -329,7 +329,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA5 %} href="shared/forms/daily/formA5/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA5 %} href="Daily/formA5/{{fsIDs.4}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A5card' class="inner-card formA_card">
                     {% if form_enteredA5 %}<p id='A5overlay' class="formA_overlay">Click for<br> Form A-5</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-5 - Push Travels</div>
@@ -368,11 +368,36 @@
         <div class="card-title">7 Day - Total Charges Graph</div>
         {% if facility != 'supervisor' %}
         <div id='canvasHolder'>
-            <canvas id="myChart" responsive="true" maintainAspectRatio='false' aria-label="big_chart" role="img" height="130%" style='margin: auto;'></canvas>
+            <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+            <script>
+                const xValues = {{ top7yValues }};
+                const yValues = {{ top7xValues }};
+
+                new Chart("myChart", {
+                    type: "line",
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            fill: false,
+                            lineTension: 0,
+                            backgroundColor: "rgba(0,0,255,1.0)",
+                            borderColor: "rgba(0,0,255,0.1)",
+                            data: yValues
+                        }]
+                    },
+                    options: {
+                        legend: {display: false},
+                        scales: {
+                            yAxes: [{ticks: {min: 0, max:18}}],
+                        }
+                    }
+                });
+            </script>
         </div>
         {% else %}
         NO FACILITY SELECTED
         {% endif %}
+        
         <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
             {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
         </div>
@@ -423,7 +448,7 @@
             {% if facility != 'supervisor' %}
                 {% for x in ca_forms %}
                     <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
-                        <li class="sideAlign">
+                        <li class="sideAlign" {% if client %}style="{% if not x.viewed %}{% if x.out_of_compliance %}background-color: #ff8c8c{% else %}background-color: #ebee17;{% endif %}{% else %} background-color: white;{% endif %}"{% endif %}>
                             <div class="ca_indie">
                                 <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
                                     {{ x.date }} - {{ x.form }}

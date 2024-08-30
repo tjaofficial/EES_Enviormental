@@ -2,13 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
-from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model, form_requests_model
+from ..models import bat_info_model, issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model, form1_readings_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 from django.contrib import messages
 from django.contrib.auth.models import Group
 import json
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor2
 from ..decor import isSubActive
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
@@ -24,17 +24,23 @@ lock = login_required(login_url='Login')
 @lock
 @isSubActive
 def sup_dashboard_view(request, facility):
+    permissions = [SUPER_VAR]
+    userGroupRedirect(request.user, permissions)
+    updateAllFormSubmissions(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
-    if unlock:
-        return redirect('IncompleteForms', facility)
-    formA1 = formA1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    formA1 = form1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
     formA2 = formA2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     formA3 = formA3_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     formA4 = formA4_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     formA5 = formA5_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+    fsID1 = tryExceptFormDatabases(1,formA1, facility)
+    fsID2 = tryExceptFormDatabases(2,formA2, facility) 
+    fsID3 = tryExceptFormDatabases(3,formA3, facility)
+    fsID4 = tryExceptFormDatabases(4,formA4, facility)
+    fsID5 = tryExceptFormDatabases(5,formA5, facility)
+    fsIDs = [fsID1,fsID2,fsID3,fsID4,fsID5]
+    print(fsIDs)
     reads = formA5_readings_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
@@ -69,6 +75,15 @@ def sup_dashboard_view(request, facility):
     form_enteredA5 = False
     today = datetime.date.today()
     todays_num = today.weekday()
+    #---------- Graph Data ---------------------
+    top7xValues = []
+    top7yValues = []
+    top7Query = form1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
+    
+    for chargeEntry in top7Query:
+        top7xValues.append(int(chargeEntry.total_seconds))
+        top7yValues.append([chargeEntry.form.date.month, chargeEntry.form.date.day, chargeEntry.form.date.year])
+    print('hello')
     # -------PROGRESS PERCENTAGES -----------------
     if facility != 'supervisor':
         daily_percent = calculateProgessBar(facility, 'Daily')
@@ -227,7 +242,10 @@ def sup_dashboard_view(request, facility):
                 'sortedFacilityData': sortedFacilityData,
                 'colorMode': colorMode,
                 'userMode': userMode,
-                'notifs': notifs
+                'notifs': notifs,
+                'fsIDs': fsIDs,
+                'top7xValues': top7xValues,
+                'top7yValues': top7yValues
             })
     if request.method == 'POST':
         answer = request.POST
@@ -277,7 +295,10 @@ def sup_dashboard_view(request, facility):
         'sortedFacilityData': sortedFacilityData, 
         'colorMode': colorMode,
         'userMode': userMode,
-        'notifs': notifs
+        'notifs': notifs,
+        'fsIDs': fsIDs,
+        'top7xValues': top7xValues,
+        'top7yValues': top7yValues
     })
 
 @lock
