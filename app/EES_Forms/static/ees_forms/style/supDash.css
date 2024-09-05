@@ -1,3 +1,7 @@
+.cardPadd{
+    padding: 1rem;
+}
+
 .mainAppCont{
     margin: 0px 13px 13px 13px;
 }
@@ -171,9 +175,9 @@
 .card.halfs{
     grid-row: span 7;
     grid-column: span 4;
-    min-height: 351.891px;
-    max-height: 351.891px;
-    height: 100%;
+    /* min-height: 351.891px;
+    max-height: 351.891px; */
+    height: 400px;
 }
 .card.eighths{
     grid-row: span 5;
@@ -184,17 +188,20 @@
     grid-column: span 6;
 }
 .card-title{
-    padding-top: 1rem;
-    padding-left: 1rem;
+    /* padding-top: 1rem;
+    padding-left: 1rem; */
     font-size: 1rem;
     font-family: sans-serif;
+    padding-bottom: 10px;
 }
-#canvasHolder{
-    position: relative;
+.canvasHolder{
+    /* position: relative;
     margin: auto;
-    width: 100%;
-    height: calc(100% - 34px);
-    padding: 24px;
+    width: 100%; */
+    padding: 14px;
+    border: #00000024 solid 1px;
+    border-radius: 6px;
+    height: calc(100% - 1rem - 11px);
 }
 .dataStyle:hover{
     background: gray;
@@ -261,4 +268,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.btn-chart{
+    padding: 2px 14px;
+    border-radius: 5px;
+    border: 1px #80808057 solid;
 }

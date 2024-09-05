@@ -84,7 +84,7 @@
     </div>
 {% else %}
 <div class="grid-dashboard">
-    <div id="progress" class="card skinny">
+    <div id="progress" class="card skinny cardPadd">
         <div class="grid-sliders progress_bars_whole">
             <a href="./progress/daily#DailyProg">
                 <div class="skillBar progress_bar_div">
@@ -128,7 +128,7 @@
             </a>-->
         </div>
     </div>
-    <div id="fromAInfo" class="card longest">
+    <div id="fromAInfo" class="card longest cardPadd">
         <div class="card-title">Todays Forms</div>
         <div class="nested">
             <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{fsIDs.0}}/{{ date }}" {% else %} {% endif %}>
@@ -364,84 +364,39 @@
             </a>
         </div>
     </div>
-    <div id="latestActivity3" class="card halfs">
-        <div class="card-title">7 Day - Total Charges Graph</div>
-        {% if facility != 'supervisor' %}
-        <div id='canvasHolder'>
-            <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-            <script>
-                const xValues = {{ top7yValues }};
-                const yValues = {{ top7xValues }};
-
-                new Chart("myChart", {
-                    type: "line",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                            fill: false,
-                            lineTension: 0,
-                            backgroundColor: "rgba(0,0,255,1.0)",
-                            borderColor: "rgba(0,0,255,0.1)",
-                            data: yValues
-                        }]
-                    },
-                    options: {
-                        legend: {display: false},
-                        scales: {
-                            yAxes: [{ticks: {min: 0, max:18}}],
-                        }
-                    }
-                });
-            </script>
-        </div>
-        {% else %}
-        NO FACILITY SELECTED
-        {% endif %}
-        
-        <div id='graph-xaxis-data1' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.0.form.date.month }}/{{ recent_logs.0.form.date.day }}
-        </div>
-        <div id='graph-xaxis-data2' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.1.form.date.month }}/{{ recent_logs.1.form.date.day }}
-        </div>
-        <div id='graph-xaxis-data3' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.2.form.date.month }}/{{ recent_logs.2.form.date.day }}
-        </div>
-        <div id='graph-xaxis-data4' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.3.form.date.month }}/{{ recent_logs.3.form.date.day }}
-        </div>
-        <div id='graph-xaxis-data5' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.4.form.date.month }}/{{ recent_logs.4.form.date.day }}
-        </div>
-        <div id='graph-xaxis-data6' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.5.form.date.month }}/{{ recent_logs.4.form.date.day }}
-        </div>
-        <div id='graph-xaxis-data7' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.6.form.date.month }}/{{ recent_logs.4.form.date.day }}
-        </div>
-        <div id='graph-yaxis-data1' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.0.total_seconds }}
-        </div>
-        <div id='graph-yaxis-data2' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.1.total_seconds }}
-        </div>
-        <div id='graph-yaxis-data3' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.2.total_seconds }}
-        </div>
-        <div id='graph-yaxis-data4' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.3.total_seconds }}
-        </div>
-        <div id='graph-yaxis-data5' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.4.total_seconds }}
-        </div>
-        <div id='graph-yaxis-data6' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.5.total_seconds }}
-        </div>
-        <div id='graph-yaxis-data7' style="height:100%; width:100%;" hidden="true">
-            {{ recent_logs.6.total_seconds }}
+    <div id="latestActivity3" class="card halfs cardPadd">
+        <div>
+            <div class="card-title">
+                7 Day - Total Charges Graph
+                <div style="float: right;">
+                    <button id="charge-btn" class="btn-chart">Charges</button>
+                    <input id="charge-values" type='hidden' data-xvalues="{{ top7xValues }}" data-yvalues="{{ top7yValues }}">
+                    <button id="door-btn" class="btn-chart">Doors</button>
+                    <input id="door-values" type='hidden' data-xvalues="{{ top7xValuesD }}" data-yvalues="{{ top7yValuesD }}">
+                    <button id="lid-btn" class="btn-chart">Lids</button>
+                    <input id="lid-values" type='hidden' data-xvalues="{{ top7xValuesL }}" data-yvalues="{{ top7yValuesL }}">
+                    <input id="last7days" type="hidden" data-sevendays="{{last7days}}">
+                    <input id="today" type="hidden" data-sevendays="{{today}}">
+                </div>
+            </div>
+            {% if facility != 'supervisor' %}
+            <div id='charges-holder' class="canvasHolder" style="display: block;">
+                <canvas id="charges-chart"></canvas>
+            </div>
+            <div id='doors-holder' class="canvasHolder" style="display: none;">
+                <canvas id="doors-chart"></canvas>
+            </div>
+            <div id='lids-holder' class="canvasHolder" style="display: none;">
+                <canvas id="lids-chart"></canvas>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+            
+            {% else %}
+            NO FACILITY SELECTED
+            {% endif %}
         </div>
     </div>
-    <div id="corrective_actions" class="card quarters">
+    <div id="corrective_actions" class="card quarters cardPadd">
         <div class="card-title">Latest Issues/Corrective Actions</div>
         <div class="ca_holder">
             <ul>
@@ -473,7 +428,7 @@
             </a>
         </div>
     </div>
-    <div id="battery_weather" class="card quarters">
+    <div id="battery_weather" class="card quarters cardPadd">
         <div class="card-title">Todays Battery/Weather Info.</div>
         <div style="padding:10px; height: calc(100% - 34px); width:100%;">
             <div style="overflow: scroll;" class="grid-battery-weather center bat_weather_class">
@@ -551,7 +506,7 @@
             </div>
         </div>
     </div>
-    <div id="latestActivity4" class="card custom">
+    <div id="latestActivity4" class="card custom cardPadd">
         <div class="card-title" style="display: flex;">
             <div>90 Day Push Travel Evaluation</div>
             <div style="position: relative; right: -59%;">
@@ -588,7 +543,7 @@
             </div>
         </div>
     </div>
-    <div id="observers" class="card custom2">
+    <div id="observers" class="card custom2 cardPadd">
         <div class="card-title">Contacts</div>
         <div class="grid-observers">
             <div class="grid-observ_header">

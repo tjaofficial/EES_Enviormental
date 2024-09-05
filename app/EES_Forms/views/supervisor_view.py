@@ -44,6 +44,7 @@ def sup_dashboard_view(request, facility):
     reads = formA5_readings_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
+    last7days = now - datetime.timedelta(days=6)
     options = bat_info_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
     colorMode = userColorMode(request.user)[0]  
@@ -78,12 +79,28 @@ def sup_dashboard_view(request, facility):
     #---------- Graph Data ---------------------
     top7xValues = []
     top7yValues = []
-    top7Query = form1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
-    
+    top7Query = formA1[:7]
     for chargeEntry in top7Query:
         top7xValues.append(int(chargeEntry.total_seconds))
-        top7yValues.append([chargeEntry.form.date.month, chargeEntry.form.date.day, chargeEntry.form.date.year])
-    print('hello')
+        top7yValues.append(str(chargeEntry.form.date))
+    top7yValues = json.dumps(top7yValues)
+
+    top7xValuesD = []
+    top7yValuesD = []
+    top7QueryD = formA2[:7]
+    for doorEntry in top7QueryD:
+        top7xValuesD.append(int(doorEntry.leaking_doors))
+        top7yValuesD.append(str(doorEntry.date))
+    top7yValuesD = json.dumps(top7yValuesD)
+        
+    top7xValuesL = []
+    top7yValuesL = []
+    top7QueryL = formA3[:7]
+    for lidEntry in top7QueryL:
+        top7xValuesL.append(int(lidEntry.l_leaks))
+        top7yValuesL.append(str(lidEntry.date))
+    top7yValuesL = json.dumps(top7yValuesL)
+    
     # -------PROGRESS PERCENTAGES -----------------
     if facility != 'supervisor':
         daily_percent = calculateProgessBar(facility, 'Daily')
@@ -245,7 +262,13 @@ def sup_dashboard_view(request, facility):
                 'notifs': notifs,
                 'fsIDs': fsIDs,
                 'top7xValues': top7xValues,
-                'top7yValues': top7yValues
+                'top7yValues': top7yValues,
+                'top7xValuesD': top7xValuesD,
+                'top7yValuesD': top7yValuesD,
+                'top7xValuesL': top7xValuesL,
+                'top7yValuesL': top7yValuesL,
+                'last7days': str(last7days),
+                'today': str(now)
             })
     if request.method == 'POST':
         answer = request.POST
@@ -298,7 +321,13 @@ def sup_dashboard_view(request, facility):
         'notifs': notifs,
         'fsIDs': fsIDs,
         'top7xValues': top7xValues,
-        'top7yValues': top7yValues
+        'top7yValues': top7yValues,
+        'top7xValuesD': top7xValuesD,
+        'top7yValuesD': top7yValuesD,
+        'top7xValuesL': top7xValuesL,
+        'top7yValuesL': top7yValuesL,
+        'last7days': str(last7days),
+        'today': str(now)
     })
 
 @lock

@@ -132,8 +132,10 @@ def formA1(request, facility, fsID, selector):
             #         return redirect (issue_page)
                 sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
                 issueFound = False
+                compliance = False
                 if B.total_seconds >= 55:
                     issueFound = True
+                    compliance = True
                 else:
                     for x in sec:
                         if 10 <= x:
@@ -146,6 +148,10 @@ def formA1(request, facility, fsID, selector):
                             issue_page = 'issue'
                     else:
                         issue_page = 'form'
+                    
+                    if compliance:
+                        issue_page = issue_page + "-c"
+                        
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 createNotification(facility, request.user, fsID, now, 'submitted', False)        
                 updateSubmissionForm(fsID, True, todays_log.date_save)
