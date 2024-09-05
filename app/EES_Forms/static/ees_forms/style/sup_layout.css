@@ -58,9 +58,9 @@ a {
     margin-bottom: .3rem;
 }
 .dataFont{
-    font-size: 1rem;
+    font-size: 1.3rem;
     text-align: center;
-    padding-right:1rem;
+    /* padding-right:1rem; */
     font-weight: 100;
 }
 .dataFont.number{
@@ -72,7 +72,7 @@ a {
 }
 
 .miniFont{
-    font-size: .8rem;
+    font-size: 1rem;
     font-weight: 100;
     text-align: center;
 }
@@ -139,7 +139,7 @@ a {
     padding: 0rem 1rem;
 }
 .ca_holder ul{
-    height: 10.5rem;
+    height: 19.75rem;;
     overflow: scroll;
     width: 100%;
 }

@@ -487,6 +487,8 @@ def issues_view(request, facility, fsID, form_date, access_page):
         compliance = True
         notifSelector.append('compliance')
         access_page = access_page[:-2]
+    else:
+        compliance = False
     if todays_log.exists():
         todays_log = todays_log[0]
     formSetting= form_settings_model.objects.get(id=fsID)

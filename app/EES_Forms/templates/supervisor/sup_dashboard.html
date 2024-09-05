@@ -137,31 +137,42 @@
                     <div class="card-title inner_font">Form A-1 - Charges</div>
                     <div class="dataHold todayFormsCenter">
                         {% if A1data %}
-                        <div class="grid-dataMini2">
-                            <p class="miniFont title number">1</p> 
-                            <p class="miniFont">Oven #{{ A1data.c1_no }}</p> 
-                            <p class="miniFont title">{{ A1data.c1_sec }} sec</p> 
-
-                            <p class="miniFont title number">2</p> 
-                            <p class="miniFont title">Oven #{{ A1data.c2_no }}</p> 
-                            <p class="miniFont title">{{ A1data.c2_sec }} sec</p> 
-
-                            <p class="miniFont title number">3</p> 
-                            <p class="miniFont title">Oven #{{ A1data.c3_no }}</p> 
-                            <p class="miniFont title">{{ A1data.c3_sec }} sec</p> 
-
-                            <p class="miniFont title number">4</p> 
-                            <p class="miniFont title">Oven #{{ A1data.c4_no }}</p> 
-                            <p class="miniFont title">{{ A1data.c4_sec }} sec</p> 
-
-                            <p class="miniFont title number">5</p> 
-                            <p class="miniFont title">Oven #{{ A1data.c5_no }}</p> 
-                            <p class="miniFont title">{{ A1data.c5_sec }} sec</p> 
+                        <div class="form1View">
+                            <table>
+                                <tr>
+                                    <td class="miniFont title number A1count">1</td> 
+                                    <td class="miniFont A1oven">Oven #{{ A1data.c1_no }}</td> 
+                                    <td class="miniFont title A1sec">{{ A1data.c1_sec }} sec</td>
+                                </tr>
+                                <tr>
+                                    <td class="miniFont title number">2</td> 
+                                    <td class="miniFont title">Oven #{{ A1data.c2_no }}</td> 
+                                    <td class="miniFont title">{{ A1data.c2_sec }} sec</td> 
+                                </tr>
+                                <tr>
+                                    <td class="miniFont title number">3</td> 
+                                    <td class="miniFont title">Oven #{{ A1data.c3_no }}</td> 
+                                    <td class="miniFont title">{{ A1data.c3_sec }} sec</td> 
+                                </tr>
+                                <tr>
+                                    <td class="miniFont title number">4</td> 
+                                    <td class="miniFont title">Oven #{{ A1data.c4_no }}</td> 
+                                    <td class="miniFont title">{{ A1data.c4_sec }} sec</td> 
+                                </tr>
+                                <tr>
+                                    <td class="miniFont title number">5</td> 
+                                    <td class="miniFont title">Oven #{{ A1data.c5_no }}</td> 
+                                    <td class="miniFont title">{{ A1data.c5_sec }} sec</td> 
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="dataFont" style="padding-top: 17px;">{{ A1data.total_seconds }} Total Seconds</td>
+                                </tr>
+                            </table>
                         </div>
-                        <br>
+                        {% comment %} <br>
                         <div class="dataSingle"> 
                             <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
-                        </div>
+                        </div> {% endcomment %}
                         {% else %}
                         <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
                         {% endif %}
@@ -174,27 +185,30 @@
                     <div class="card-title inner_font">Form A-2 - Doors</div>
                     <div class="{% if A2data %}grid-double{% else %}dataHold todayFormsCenter{% endif %}">
                         {% if A2data %}
-                        <div class="dataHold2" style="margin-top:0.3rem;">
+                        <div class="dataHold2">
                             <div class="dataSingle" style="justify-content: left;">
                                 <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
                             </div>
                             <hr>
-                            <div class="gridLeaks dataSingle">
-                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
-                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
-                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">zone:</p>
-                            </div>
+                            <table class="dataSingle">
+                                <tr>
+                                    <td class="miniFont A2cols" style="text-align: center;color: #9f9f9f;">oven:</td>
+                                    <td class="miniFont A2cols" style="text-align: center;color: #9f9f9f;">location:</td>
+                                    <td class="miniFont A2cols" style="text-align: center;color: #9f9f9f;">zone:</td>
+                                </tr>
+                            
                             {% if push.data %}
                                 {% for leaks in push.data %}
-                                    <div class="gridLeaks">
-                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                        <p class="dataFont miniFont">{{ leaks.location }}</p>
-                                        <p class="dataFont miniFont">{{ leaks.zone }}</p>
-                                    </div>
+                                    <tr class="">
+                                        <td class="miniFont">#{{ leaks.oven }}</td>
+                                        <td class="miniFont">{{ leaks.location }}</td>
+                                        <td class="miniFont">{{ leaks.zone }}</td>
+                                    </tr>
                                 {% endfor %}
                             {% else %}
                                 <p class="miniFont" style="text-align:center;">No Ovens Found Leaking</p>
                             {% endif %}
+                            </table>
                         </div>
                         <div class="dataHold2" style="margin-top:0.3rem;">
                             <div class="dataSingle" style="justify-content: left;">

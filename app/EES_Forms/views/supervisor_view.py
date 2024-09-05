@@ -41,7 +41,6 @@ def sup_dashboard_view(request, facility):
     fsID5 = tryExceptFormDatabases(5,formA5, facility)
     fsIDs = [fsID1,fsID2,fsID3,fsID4,fsID5]
     print(fsIDs)
-    reads = formA5_readings_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
     last7days = now - datetime.timedelta(days=6)
@@ -51,7 +50,6 @@ def sup_dashboard_view(request, facility):
     userMode = userColorMode(request.user)[1]
     userProfile = user_profile_model.objects.get(user__id=request.user.id)
     userCompany = userProfile.company
-    
     if options.exists():
         options = options[0]
     
@@ -77,28 +75,54 @@ def sup_dashboard_view(request, facility):
     today = datetime.date.today()
     todays_num = today.weekday()
     #---------- Graph Data ---------------------
+    dateList = []
+    dateListD = []
+    dateListL = []
     top7xValues = []
     top7yValues = []
     top7Query = formA1[:7]
-    for chargeEntry in top7Query:
-        top7xValues.append(int(chargeEntry.total_seconds))
-        top7yValues.append(str(chargeEntry.form.date))
+    for x in range(0,6):
+        if today + datetime.timedelta(days=x) not in dateList:
+            dateList.append(today - datetime.timedelta(days=x))
+            dateListD.append(today - datetime.timedelta(days=x))
+            dateListL.append(today - datetime.timedelta(days=x))
+    for dates in dateList:
+        for chargeEntry in top7Query:
+            if chargeEntry.form.date == dates:
+                top7xValues.append(int(chargeEntry.total_seconds))
+                top7yValues.append(str(chargeEntry.form.date))
+                break
+        if str(dates) not in top7yValues:
+            top7xValues.append(int(0))
+            top7yValues.append(str(dates))
     top7yValues = json.dumps(top7yValues)
 
     top7xValuesD = []
     top7yValuesD = []
     top7QueryD = formA2[:7]
-    for doorEntry in top7QueryD:
-        top7xValuesD.append(int(doorEntry.leaking_doors))
-        top7yValuesD.append(str(doorEntry.date))
+    for dates in dateList:
+        for doorEntry in top7QueryD:
+            if doorEntry.date == dates:
+                top7xValuesD.append(int(doorEntry.leaking_doors))
+                top7yValuesD.append(str(doorEntry.date))
+                break
+        if str(dates) not in top7yValuesD:
+            top7xValuesD.append(int(0))
+            top7yValuesD.append(str(dates))
     top7yValuesD = json.dumps(top7yValuesD)
         
     top7xValuesL = []
     top7yValuesL = []
     top7QueryL = formA3[:7]
-    for lidEntry in top7QueryL:
-        top7xValuesL.append(int(lidEntry.l_leaks))
-        top7yValuesL.append(str(lidEntry.date))
+    for dates in dateList:
+        for lidEntry in top7QueryL:
+            if lidEntry.date == dates:
+                top7xValuesL.append(int(lidEntry.l_leaks))
+                top7yValuesL.append(str(lidEntry.date))
+                break
+        if str(dates) not in top7yValuesL:
+            top7xValuesL.append(int(0))
+            top7yValuesL.append(str(dates))
     top7yValuesL = json.dumps(top7yValuesL)
     
     # -------PROGRESS PERCENTAGES -----------------
@@ -238,6 +262,7 @@ def sup_dashboard_view(request, facility):
                     return redirect(request.META['HTTP_REFERER'])
 
             return render(request, "supervisor/sup_dashboard.html", {
+                'notifs': notifs,
                 'facility': facility, 
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
@@ -245,10 +270,6 @@ def sup_dashboard_view(request, facility):
                 'profile': allContacts, 
                 'weather': weather, 
                 'od_recent': od_recent,
-                "od_30": od_30, 
-                "od_10": od_10, 
-                "od_5": od_5, 
-                'quarterly_percent': quarterly_percent,
                 'weekly_percent': weekly_percent, 
                 'monthly_percent': monthly_percent, 
                 'annually_percent': annually_percent, 
@@ -257,10 +278,8 @@ def sup_dashboard_view(request, facility):
                 "client": client, 
                 'unlock': unlock,
                 'sortedFacilityData': sortedFacilityData,
-                'colorMode': colorMode,
-                'userMode': userMode,
-                'notifs': notifs,
                 'fsIDs': fsIDs,
+                'quarterly_percent': quarterly_percent,
                 'top7xValues': top7xValues,
                 'top7yValues': top7yValues,
                 'top7xValuesD': top7xValuesD,
@@ -268,7 +287,9 @@ def sup_dashboard_view(request, facility):
                 'top7xValuesL': top7xValuesL,
                 'top7yValuesL': top7yValuesL,
                 'last7days': str(last7days),
-                'today': str(now)
+                'today': str(now),
+                'colorMode': colorMode,
+                'userMode': userMode,
             })
     if request.method == 'POST':
         answer = request.POST
@@ -281,6 +302,7 @@ def sup_dashboard_view(request, facility):
             
         
     return render(request, "supervisor/sup_dashboard.html", {
+        'notifs': notifs,
         'facility': facility, 
         'form_enteredA5': form_enteredA5, 
         'form_enteredA4': form_enteredA4, 
@@ -307,18 +329,15 @@ def sup_dashboard_view(request, facility):
         'A5data': A5data, 
         'push': push, 
         'coke': coke,
-        'quarterly_percent': quarterly_percent,
         'weekly_percent': weekly_percent, 
         'monthly_percent': monthly_percent, 
         'annually_percent': annually_percent, 
         'daily_percent': daily_percent, 
+        'quarterly_percent': quarterly_percent,
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
         'sortedFacilityData': sortedFacilityData, 
-        'colorMode': colorMode,
-        'userMode': userMode,
-        'notifs': notifs,
         'fsIDs': fsIDs,
         'top7xValues': top7xValues,
         'top7yValues': top7yValues,
@@ -327,7 +346,9 @@ def sup_dashboard_view(request, facility):
         'top7xValuesL': top7xValuesL,
         'top7yValuesL': top7yValuesL,
         'last7days': str(last7days),
-        'today': str(now)
+        'today': str(now),
+        'colorMode': colorMode,
+        'userMode': userMode,
     })
 
 @lock
