@@ -1,6 +1,5 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/supDash.css' %}" rel="stylesheet" />
-<script defer src="{% static 'ees_forms/script/sup_dashboard_chart.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/sup_dashboard.js' %}"></script>
 
 {% if facility == 'supervisor' %}
@@ -393,7 +392,6 @@
                     <input id="today" type="hidden" data-sevendays="{{today}}">
                 </div>
             </div>
-            {% if facility != 'supervisor' %}
             <div id='charges-holder' class="canvasHolder" style="display: block;">
                 <canvas id="charges-chart"></canvas>
             </div>
@@ -404,10 +402,7 @@
                 <canvas id="lids-chart"></canvas>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-            
-            {% else %}
-            NO FACILITY SELECTED
-            {% endif %}
+            <script defer src="{% static 'ees_forms/script/sup_dashboard_chart.js' %}"></script>
         </div>
     </div>
     <div id="corrective_actions" class="card quarters cardPadd">

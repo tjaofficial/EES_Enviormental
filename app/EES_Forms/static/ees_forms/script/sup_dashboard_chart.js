@@ -99,8 +99,6 @@ function createChargeChart(){
 createChargeChart();
 function createDoorChart(){
     chartOptions.scales.y.title.text = 'leaks';
-    
-    console.log(chartOptions.scales.y) 
     const DxValues = doorX;
     const DyValues = doorY;
     const doorsData = {
