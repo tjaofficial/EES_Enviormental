@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formL_model, bat_info_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, form21_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
@@ -28,7 +28,7 @@ def formL(request, facility, fsID, selector):
     end_week = last_saturday + one_week
     today_number = today.weekday()
     opened = True
-    week_start_dates = formL_model.objects.all().order_by('-week_start')
+    week_start_dates = form21_model.objects.all().order_by('-week_start')
     picker = issueForm_picker(facility, selector, fsID)
     
     # -----check if Daily Battery Profile
@@ -53,7 +53,7 @@ def formL(request, facility, fsID, selector):
             # -----check if the days data has been filled in
             home = []
             filled_in = False
-            for x in formL_model.objects.all():
+            for x in form21_model.objects.all():
                 ## print(last_saturday)
                 if x.week_start == last_saturday:
                     home.append((x.time_4, 4))
@@ -204,7 +204,7 @@ def formL(request, facility, fsID, selector):
                 B = []
                 print(last_saturday)
                 
-                for x in formL_model.objects.all():
+                for x in form21_model.objects.all():
                     if today_number not in {5,6}:
                         if x.week_start == last_saturday:
                             B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4))
@@ -236,7 +236,7 @@ def formL(request, facility, fsID, selector):
                     return redirect('IncompleteForms', facility)
                 else:
                     parseNewDate = todays_log.date_save - datetime.timedelta(days=1)
-                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    createNotification(facility, request.user, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, parseNewDate)
 
                     return redirect('IncompleteForms', facility)

@@ -96,11 +96,11 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             print('')
         except:
             if formID == 23:
-                formModel = apps.get_model('EES_Forms', 'formM_model')
+                formModel = apps.get_model('EES_Forms', 'form22_model')
                 formModel = formModel.objects.filter(facilityChoice__facility_name=facility)
                 print('Using form 22 data to create form 23.')
                 print('')  
-                print("Pulling all submitted data for " + facility + " from "+ 'formM_model')
+                print("Pulling all submitted data for " + facility + " from "+ 'form22_model')
             else:
                 print("Could not find a model with the name " + formModelName + " for formID " + str(formID))
                 continue

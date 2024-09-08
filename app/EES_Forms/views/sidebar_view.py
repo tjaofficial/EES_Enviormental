@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, formA2_model, formA3_model, formA4_model, formA5_readings_model, bat_info_model, formM_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, form2_model, form3_model, form4_model, formA5_readings_model, bat_info_model, form22_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
 import calendar
@@ -364,7 +364,7 @@ def search_forms_view(request, facility, access_page):
             database=''
             database2=''
             att_check=''
-            queryN = formM_model.objects.all().filter(facilityChoice__facility_name=facility)
+            queryN = form22_model.objects.all().filter(facilityChoice__facility_name=facility)
             monthList = []
             eliminator =[]
             for month in queryN:
@@ -498,7 +498,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
             settingsID = int(facForms)
             if settingsID == formSetting.id:
                 formID = int(formSetting.formChoice.id)
-                main_url = formSetting.formChoice.frequency + '/' + formSetting.formChoice.link + '/' + str(fsID) + '/'
+                main_url = formSetting.formChoice.frequency + '/' + str(fsID) + '/'
                 if formSetting.formChoice.id in {24,25}:
                     weekendNameDict = {5:'saturday', 6: 'sunday'}
                     today = datetime.date.today().weekday()

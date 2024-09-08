@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formM_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, form22_model
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import setUnlockClientSupervisor
@@ -22,10 +22,10 @@ def formN(request, facility, fsID, selector):
     now = datetime.datetime.now().date()
     today = datetime.date.today()
     month_name = calendar.month_name[today.month]
-    form_pull = formM_model.objects.filter(date__month=today.month, facilityChoice__facility_name=facility)
+    form_pull = form22_model.objects.filter(date__month=today.month, facilityChoice__facility_name=facility)
 
     if selector != 'form':
-        form_pull = formM_model.objects.filter(date__month=selector[0], facilityChoice__facility_name=facility)
+        form_pull = form22_model.objects.filter(date__month=selector[0], facilityChoice__facility_name=facility)
         month_name = calendar.month_name[int(selector[0])]
     
     paved_loc = []

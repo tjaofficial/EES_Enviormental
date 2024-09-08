@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formD_model, bat_info_model, formSubmissionRecords_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, form8_model, bat_info_model, formSubmissionRecords_model
 from ..forms import formD_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
@@ -26,7 +26,7 @@ def formD(request, facility, fsID, selector):
     one_week = datetime.timedelta(days=6)
     end_week = last_saturday + one_week
     sunday = today - datetime.timedelta(days=1)
-    submitted_forms = formD_model.objects.all().order_by('-week_start')
+    submitted_forms = form8_model.objects.all().order_by('-week_start')
     picker = issueForm_picker(facility, selector, fsID)
     
     if daily_prof.exists():
@@ -127,7 +127,7 @@ def formD(request, facility, fsID, selector):
                 A.facilityChoice = options
                 A.save()
                 
-                new_latest_form = formD_model.objects.all().order_by('-week_start')[0]
+                new_latest_form = form8_model.objects.all().order_by('-week_start')[0]
                 filled_out = True
                 for items in new_latest_form.whatever().values():
                     if items is None or items == '':
@@ -135,7 +135,7 @@ def formD(request, facility, fsID, selector):
                         break
 
                 if filled_out:
-                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    createNotification(facility, request.user, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():

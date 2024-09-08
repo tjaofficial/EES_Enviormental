@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, formB_model, bat_info_model, formSubmissionRecords_model
+from ..models import user_profile_model, daily_battery_profile_model, form6_model, bat_info_model, formSubmissionRecords_model
 from ..forms import Forms, formB_form
 import requests
 import json
@@ -36,7 +36,7 @@ def formB(request, facility, fsID, selector):
     elif today.month == 10 and fridayDate.month == (today.month + 1):
         freq = True
 
-    week_start_dates = formB_model.objects.all().order_by('-week_start')
+    week_start_dates = form6_model.objects.all().order_by('-week_start')
 
     # Weather API Pull
     weather = weatherDict(options.city)
@@ -199,7 +199,7 @@ def formB(request, facility, fsID, selector):
                 #        filled_out = False
                 #        break
                 if filled_out:
-                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    createNotification(facility, request.user, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():

@@ -866,7 +866,7 @@ class form1_model(models.Model):
 
 class formA1_readings_model(models.Model):
     form = models.OneToOneField(
-        formA1_model,
+        form1_model,
         on_delete=models.CASCADE,
         primary_key=True,
     )

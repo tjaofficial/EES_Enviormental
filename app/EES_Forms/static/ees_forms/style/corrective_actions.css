@@ -29,9 +29,10 @@
     text-decoration: underline;
 }
 .CR_paragraph {
-    text-align: justify; 
+    text-align: justify;
     width: 100%;
     font-size: 17px;
+    padding: 0px 29px;
 }
 .CR_body {
     text-align: center;

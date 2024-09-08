@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formM_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
@@ -29,7 +29,7 @@ def formM(request, facility, fsID, selector):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     today = datetime.date.today()
     today_number = today.weekday()
-    org = formM_model.objects.all().order_by('-date')
+    org = form22_model.objects.all().order_by('-date')
     org2 = formM_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
@@ -168,7 +168,7 @@ def formM(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 #updateSubmissionForm(facility, 23, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)

@@ -11,7 +11,7 @@ now = datetime.datetime.now()
 
 class SubFormC1(ModelForm):
     class Meta:
-        model = formC_model
+        model = form7_model
         fields = (
             'date', 
             'truck_sel', 
@@ -282,7 +282,7 @@ class bat_info_form(ModelForm):
 
 class formA1_form(ModelForm):
     class Meta:
-        model = formA1_model
+        model = form1_model
         fields = (
             'observer',
             'date',
@@ -482,7 +482,7 @@ class form1_readings_form(ModelForm):
 
 class formA2_form(ModelForm):
     class Meta:
-        model = formA2_model
+        model = form2_model
         fields = ('__all__')
         widgets = {
             'p_traverse_time_min': forms.NumberInput(attrs={
@@ -617,7 +617,7 @@ class formA2_form(ModelForm):
 
 class formA3_form(ModelForm):
     class Meta:
-        model = formA3_model
+        model = form3_model
         fields = ('__all__')
         widgets = {
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
@@ -657,7 +657,7 @@ class formA3_form(ModelForm):
 
 class formA4_form(ModelForm):
     class Meta:
-        model = formA4_model
+        model = form4_model
         fields = ('__all__')
         widgets = {
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
@@ -678,7 +678,7 @@ class formA4_form(ModelForm):
 
 class formA5_form(ModelForm):
     class Meta:
-        model = formA5_model
+        model = form5_model
         fields = ('__all__')
         widgets = {
             'process_equip1': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 250px;'}),
@@ -908,7 +908,7 @@ class formA5_readings_form(ModelForm):
  
 class formB_form(ModelForm):
     class Meta:
-        model = formB_model
+        model = form6_model
         fields = ('__all__')
         widgets = {
             'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
@@ -1026,7 +1026,7 @@ class formB_form(ModelForm):
     
 class formD_form(ModelForm):
     class Meta:
-        model = formD_model
+        model = form8_model
         fields = (
             'week_start',
             'week_end',
@@ -1119,7 +1119,7 @@ class formD_form(ModelForm):
   
 class formE_form(ModelForm):
     class Meta:
-        model = formE_model
+        model = form9_model
         fields = (
             'observer',
             'date',
@@ -1464,7 +1464,7 @@ class formF7_form(ModelForm):
 
 class formG1_form(ModelForm):
     class Meta:
-        model = formG1_model
+        model = form17_model
         fields = ('__all__')
         
         widgets = {
@@ -1536,7 +1536,7 @@ class formG1_readings_form(ModelForm):
 
 class formG2_form(ModelForm):
     class Meta:
-        model = formG2_model
+        model = form18_model
         fields = ('__all__')
         
         widgets = {
@@ -1609,7 +1609,7 @@ class formG2_readings_form(ModelForm):
         
 class formH_form(ModelForm):
     class Meta:
-        model = formH_model
+        model = form19_model
         fields = ('__all__')
         
         widgets = {
@@ -1708,7 +1708,7 @@ class formH_readings_form(ModelForm):
         
 class formI_form(ModelForm):
     class Meta:
-        model = formI_model
+        model = form20_model
         fields = ('__all__')
         
         widgets = {
@@ -1794,7 +1794,7 @@ class formL_form(ModelForm):
             #name_3 = True
             #name_4 = True
         
-        model = formL_model
+        model = form21_model
         fields = ('__all__')
         
         widgets = {
@@ -1818,7 +1818,7 @@ class formL_form(ModelForm):
        
 class formM_form(ModelForm):
     class Meta:
-        model = formM_model
+        model = form22_model
         fields = (
             'date',
             'paved',
@@ -1898,7 +1898,7 @@ class formM_readings_form(ModelForm):
         }
 class formO_form(ModelForm):
     class Meta:
-        model = formO_model
+        model = form24_model
         fields = ('__all__')
         widgets = {
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
@@ -1919,7 +1919,7 @@ class formO_form(ModelForm):
         }
 class formP_form(ModelForm):
     class Meta:
-        model = formP_model
+        model = form25_model
         fields = ('__all__')
         widgets = {
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, formP_model, bat_info_model
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form25_model, bat_info_model
 from ..forms import formP_form
 from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 import calendar
@@ -27,7 +27,7 @@ def formP(request, facility, fsID, selector, weekend_day):
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     month_name = calendar.month_name[today.month]
     picker = issueForm_picker(facility, selector, fsID)
-    org = formP_model.objects.all().order_by('-date')
+    org = form25_model.objects.all().order_by('-date')
 
     if weekend_day == 'saturday':
         ss_filler = 5
@@ -105,7 +105,7 @@ def formP(request, facility, fsID, selector, weekend_day):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:

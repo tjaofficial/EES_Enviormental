@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA2_model, bat_info_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form2_model, bat_info_model
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -24,7 +24,7 @@ def formA2(request, facility, fsID, selector):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
-    org = formA2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    org = form2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
@@ -135,7 +135,7 @@ def formA2(request, facility, fsID, selector):
                     if compliance:
                         issue_page = issue_page + "-c"
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)        
             else:

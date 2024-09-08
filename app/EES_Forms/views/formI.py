@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formI_model, bat_info_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, form20_model, bat_info_model
 from ..forms import formI_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
@@ -26,7 +26,7 @@ def formI(request, facility, fsID, selector):
     one_week = datetime.timedelta(days=4)
     end_week = last_monday + one_week
     today_number = today.weekday()
-    week_start_dates = formI_model.objects.all().order_by('-week_start')
+    week_start_dates = form20_model.objects.all().order_by('-week_start')
     opened = True
     submit = True
     filled_in = False
@@ -53,7 +53,7 @@ def formI(request, facility, fsID, selector):
             # ------- check if todays data has been filled in or not
             home = []
 
-            for x in formI_model.objects.all():
+            for x in form20_model.objects.all():
                 if x.week_start == last_monday:
                     home.append((x.time_4, 4))
                     home.append((x.time_3, 3))
@@ -145,7 +145,7 @@ def formI(request, facility, fsID, selector):
                 A.save()
 
                 B = []
-                for x in formI_model.objects.all():
+                for x in form20_model.objects.all():
                     if x.week_start == last_monday:
                         B.append((4, x.time_4, x.obser_4))
                         B.append((3, x.time_3, x.obser_3))
@@ -161,7 +161,7 @@ def formI(request, facility, fsID, selector):
                             filled_in = False
 
                 if filled_in:
-                    createNotification(facility, request.user, fsID, now, 'submitted')
+                    createNotification(facility, request.user, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)
 
                     return redirect('IncompleteForms', facility)

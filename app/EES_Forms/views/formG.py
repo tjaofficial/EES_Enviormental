@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, formG1_model, formG1_readings_model, formG2_model, user_profile_model, daily_battery_profile_model, formG2_readings_model, bat_info_model
+from ..models import Forms, form17_model, formG1_readings_model, form18_model, user_profile_model, daily_battery_profile_model, formG2_readings_model, bat_info_model
 from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readings_form, user_profile_form
 import requests
 import json
@@ -24,7 +24,7 @@ def formG1(request, facility, fsID, selector):
     profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
-    org = formG1_model.objects.all().order_by('-date')
+    org = form17_model.objects.all().order_by('-date')
     org2 = formG1_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
@@ -221,7 +221,7 @@ def formG1(request, facility, fsID, selector):
 
                 B.form = A
                 B.save()
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
             else:
@@ -246,7 +246,7 @@ def formG2(request, facility, fsID, selector):
     profile = user_profile_model.objects.filter(user__exact=request.user.id)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = formG2_model.objects.all().order_by('-date')
+    org = form18_model.objects.all().order_by('-date')
     org2 = formG2_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
@@ -440,7 +440,7 @@ def formG2(request, facility, fsID, selector):
 
                 B.form = A
                 B.save()
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

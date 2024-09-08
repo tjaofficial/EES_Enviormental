@@ -283,7 +283,7 @@ class Calendar2(HTMLCalendar):
                 formInformation = iFormSettings.formChoice
                 name_of_model = formInformation.link + "_model"
                 if formID == 23:
-                    chk_database = formM_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                    chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
                 else:
                     try:#### ----- Set up a code to switch over to a number based model instead of labels
                         chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
@@ -310,7 +310,7 @@ class Calendar2(HTMLCalendar):
             #         formInformation = Forms.objects.get(id=formID)
             #         name_of_model = formInformation.link + "_model"
             #         if formID == 23:
-            #             chk_database = formM_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+            #             chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
             #         else:
             #             try:#### ----- Set up a code to switch over to a number based model instead of labels
             #                 chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
@@ -327,8 +327,8 @@ class Calendar2(HTMLCalendar):
                     fsEntry = x
             name_of_model = fsEntry.formChoice.link + "_model"
             if fsEntry.formChoice.id == 23:
-                chk_database = apps.get_model('EES_Forms', "formM_model").objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-                print(formM_model.objects.all())
+                chk_database = apps.get_model('EES_Forms', "form22_model").objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                print(form22_model.objects.all())
                 originalStyle = True
             else:
                 try:
@@ -415,8 +415,8 @@ def setUnlockClientSupervisor2(requestUserData):
     return unlock, client, supervisor
 
 def userGroupRedirect(user, permissions):
-    userGroup = user.groups.all()[0]
-    if str(userGroup) in permissions:
+    userGroup = str(user.groups.all()[0])
+    if userGroup not in permissions:
         if userGroup == OBSER_VAR:
             return redirect('facilitySelect')
         elif userGroup == CLIENT_VAR:
@@ -424,7 +424,18 @@ def userGroupRedirect(user, permissions):
             return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
         elif userGroup == SUPER_VAR:
             return redirect('sup_dashboard', SUPER_VAR)
-        
+
+def sendToDash(user):
+    userGroup = str(user.groups.all()[0])
+    if userGroup == OBSER_VAR:
+        return redirect('facilitySelect')
+    elif userGroup == CLIENT_VAR:
+        userProfile = user_profile_model.objects.get(user=user)
+        print('doskdhjflksdjflksfj')
+        return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
+    elif userGroup == SUPER_VAR:
+        return redirect('sup_dashboard', SUPER_VAR)
+
 def tryExceptFormDatabases(formID, model, facility):
     if len(model) > 0:
         return form_settings_model.objects.get(facilityChoice__facility_name=facility, formChoice=formID)
@@ -965,7 +976,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formA1",
+            link="form1",
             header="Method 303",
             title="Charging",
             due_date=today,
@@ -977,7 +988,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formA2",
+            link="form2",
             header="Method 303",
             title="Doors",
             due_date=today,
@@ -989,7 +1000,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formA3",
+            link="form3",
             header="Method 303",
             title="Lids and Offtakes",
             due_date=today,
@@ -1001,7 +1012,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formA4",
+            link="form4",
             header="Method 303",
             title="Collection Main",
             due_date=today,
@@ -1013,7 +1024,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formA5",
+            link="form5",
             header="Method 9B",
             title="Push Travels",
             due_date=today,
@@ -1025,7 +1036,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=True,
             weekend_only=False,
-            link="formB",
+            link="form6",
             header="Method 9",
             title="Fugitive Dust Inspection",
             due_date=today,
@@ -1037,7 +1048,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formC",
+            link="form7",
             header="Method 9",
             title="Method 9D - Coal Field",
             due_date=today,
@@ -1049,7 +1060,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formD",
+            link="form8",
             header="Method 9",
             title="Random Truck Inspection",
             due_date=today,
@@ -1061,7 +1072,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formE",
+            link="form9",
             header="Method 9",
             title="Gooseneck Inspection",
             due_date=today,
@@ -1073,7 +1084,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF1",
+            link="form10",
             header="Waste Weekly Inspections",
             title="SIF / K087 Process Area (Satellite)",
             due_date=today,
@@ -1085,7 +1096,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF2",
+            link="form11",
             header="Waste Weekly Inspections",
             title="#1 Shop (Satellite Accumulation)",
             due_date=today,
@@ -1097,7 +1108,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF3",
+            link="form12",
             header="Waste Weekly Inspections",
             title="#2 Shop (Satellite Accumulation)",
             due_date=today,
@@ -1109,7 +1120,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF4",
+            link="form13",
             header="Waste Weekly Inspections",
             title="Battery (Satellite Accumulation)",
             due_date=today,
@@ -1121,7 +1132,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF5",
+            link="form14",
             header="Waste Weekly Inspections",
             title="Bio Plant (Satellite Accumulation)",
             due_date=today,
@@ -1133,7 +1144,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF6",
+            link="form15",
             header="Waste Weekly Inspections",
             title="No. 8 Tank Area (Satellite Accumulation)",
             due_date=today,
@@ -1145,7 +1156,7 @@ def create_starting_forms():
             day_freq='Wednesdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formF7",
+            link="form16",
             header="Waste Weekly Inspections",
             title="Booster Pad (90-Day Accumulation)",
             due_date=today,
@@ -1157,7 +1168,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formG1",
+            link="form17",
             header="PECS Baghouse Stack",
             title="Method 9/Non-Certified Observations",
             due_date=today,
@@ -1169,7 +1180,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formG2",
+            link="form18",
             header="PECS Baghouse Stack",
             title="Method 9B",
             due_date=today,
@@ -1181,7 +1192,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formH",
+            link="form19",
             header="Method 9",
             title="Method 9 - Combustion Stack",
             due_date=today,
@@ -1193,7 +1204,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=True,
             weekend_only=False,
-            link="formI",
+            link="form20",
             header="Sampling",
             title="Quench Water Sampling Form",
             due_date=today,
@@ -1205,7 +1216,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="formL",
+            link="form21",
             header="Method 9",
             title="Visual Emissions Observations",
             due_date=today,
@@ -1217,7 +1228,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=True,
             weekend_only=False,
-            link="formM",
+            link="form22",
             header="Method 9D",
             title="Method 9D Observation",
             due_date=today,
@@ -1229,7 +1240,7 @@ def create_starting_forms():
             day_freq='Weekdays',
             weekdays_only=False,
             weekend_only=False,
-            link="formN",
+            link="form23",
             header="Fugitive Dust Inspection",
             title="Method 9D Monthly Checklist",
             due_date=today,
@@ -1241,7 +1252,7 @@ def create_starting_forms():
             day_freq='Weekends',
             weekdays_only=False,
             weekend_only=True,
-            link="formO",
+            link="form24",
             header="Stormwater Observation Form",
             title="MP 108A",
             due_date=today,
@@ -1253,7 +1264,7 @@ def create_starting_forms():
             day_freq='Weekends',
             weekdays_only=False,
             weekend_only=True,
-            link="formP",
+            link="form25",
             header="Outfall Observation Form",
             title="Outfall 008",
             due_date=today,

@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA3_model, bat_info_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form3_model, bat_info_model
 from ..forms import formA3_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification, sendToDash
+from django.contrib import messages
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
-
 
 @lock
 def formA3(request, facility, fsID, selector):
@@ -24,17 +24,22 @@ def formA3(request, facility, fsID, selector):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     full_name = request.user.get_full_name()
-    org = formA3_model.objects.all().order_by('-date')
+    org = form3_model.objects.all().order_by('-date')
     picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
+            database_model = False
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
-            data = database_model
-            existing = True
-            search = True
+            if database_model:
+                data = database_model
+                existing = True
+                search = True
+            else:
+                messages.error(request,"ERROR: ID-11850002. Contact Support Team.")
+                return sendToDash(request.user)
         elif now == todays_log.date_save:
             if org.exists():
                 database_form = org[0]
@@ -142,7 +147,7 @@ def formA3(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:

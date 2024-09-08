@@ -76,11 +76,11 @@ urlpatterns = [
     path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
 
     ##---FORMS
-    path("<str:facility>/Daily/formA1/<int:fsID>/<str:selector>", views.formA1, name="formA1"),
-    path("<str:facility>/Daily/formA2/<int:fsID>/<str:selector>", views.formA2, name="formA2"),
-    path("<str:facility>/Daily/formA3/<int:fsID>/<str:selector>", views.formA3, name="formA3"),
-    path("<str:facility>/Daily/formA4/<int:fsID>/<str:selector>", views.formA4, name="formA4"),
-    path("<str:facility>/Daily/formA5/<int:fsID>/<str:selector>", views.formA5, name="formA5"),
+    path("<str:facility>/Daily/formA1/<int:fsID>/<str:selector>", views.formA1, name="form1"),
+    path("<str:facility>/Daily/formA2/<int:fsID>/<str:selector>", views.formA2, name="form2"),
+    path("<str:facility>/Daily/<int:fsID>/<str:selector>", views.formA3, name="form3"),
+    path("<str:facility>/Daily/formA4/<int:fsID>/<str:selector>", views.formA4, name="form4"),
+    path("<str:facility>/Daily/formA5/<int:fsID>/<str:selector>", views.formA5, name="form5"),
     path("<str:facility>/Daily/formB/<int:fsID>/<str:selector>", views.formB, name="formB"),
     path("<str:facility>/Daily/formC/<int:fsID>/<str:selector>", views.formC, name="formC"),
     path("<str:facility>/Weekly/formD/<int:fsID>/<str:selector>", views.formD, name="formD"),

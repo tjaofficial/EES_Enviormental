@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, formA4_model, bat_info_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form4_model, bat_info_model
 from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
@@ -23,7 +23,7 @@ def formA4(request, facility, fsID, selector):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = formA4_model.objects.all().order_by('-date')
+    org = form4_model.objects.all().order_by('-date')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
@@ -124,7 +124,7 @@ def formA4(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, fsID, now, 'submitted')
+                createNotification(facility, request.user, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:

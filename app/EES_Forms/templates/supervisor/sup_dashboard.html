@@ -128,7 +128,7 @@
         </div>
     </div>
     <div id="fromAInfo" class="card longest cardPadd">
-        <div class="card-title">Todays Forms</div>
+        <div class="card-title headerBottomPadding">Todays Forms</div>
         <div class="nested">
             <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{fsIDs.0}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A1card' class="inner-card formA_card">
@@ -136,44 +136,40 @@
                     <div class="card-title inner_font">Form A-1 - Charges</div>
                     <div class="dataHold todayFormsCenter">
                         {% if A1data %}
-                        <div class="form1View">
-                            <table>
-                                <tr>
-                                    <td class="miniFont title number A1count">1</td> 
-                                    <td class="miniFont A1oven">Oven #{{ A1data.c1_no }}</td> 
-                                    <td class="miniFont title A1sec">{{ A1data.c1_sec }} sec</td>
-                                </tr>
-                                <tr>
-                                    <td class="miniFont title number">2</td> 
-                                    <td class="miniFont title">Oven #{{ A1data.c2_no }}</td> 
-                                    <td class="miniFont title">{{ A1data.c2_sec }} sec</td> 
-                                </tr>
-                                <tr>
-                                    <td class="miniFont title number">3</td> 
-                                    <td class="miniFont title">Oven #{{ A1data.c3_no }}</td> 
-                                    <td class="miniFont title">{{ A1data.c3_sec }} sec</td> 
-                                </tr>
-                                <tr>
-                                    <td class="miniFont title number">4</td> 
-                                    <td class="miniFont title">Oven #{{ A1data.c4_no }}</td> 
-                                    <td class="miniFont title">{{ A1data.c4_sec }} sec</td> 
-                                </tr>
-                                <tr>
-                                    <td class="miniFont title number">5</td> 
-                                    <td class="miniFont title">Oven #{{ A1data.c5_no }}</td> 
-                                    <td class="miniFont title">{{ A1data.c5_sec }} sec</td> 
-                                </tr>
-                                <tr>
-                                    <td colspan="3" class="dataFont" style="padding-top: 17px;">{{ A1data.total_seconds }} Total Seconds</td>
-                                </tr>
-                            </table>
-                        </div>
-                        {% comment %} <br>
-                        <div class="dataSingle"> 
-                            <p class="dataFont">{{ A1data.total_seconds }} Total Seconds</p> 
-                        </div> {% endcomment %}
+                            <div class="form1View">
+                                <table>
+                                    <tr>
+                                        <td class="miniFont title number A1count">1</td> 
+                                        <td class="miniFont A1oven">Oven #{{ A1data.c1_no }}</td> 
+                                        <td class="miniFont title A1sec">{{ A1data.c1_sec }} sec</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="miniFont title number">2</td> 
+                                        <td class="miniFont title">Oven #{{ A1data.c2_no }}</td> 
+                                        <td class="miniFont title">{{ A1data.c2_sec }} sec</td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="miniFont title number">3</td> 
+                                        <td class="miniFont title">Oven #{{ A1data.c3_no }}</td> 
+                                        <td class="miniFont title">{{ A1data.c3_sec }} sec</td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="miniFont title number">4</td> 
+                                        <td class="miniFont title">Oven #{{ A1data.c4_no }}</td> 
+                                        <td class="miniFont title">{{ A1data.c4_sec }} sec</td> 
+                                    </tr>
+                                    <tr>
+                                        <td class="miniFont title number">5</td> 
+                                        <td class="miniFont title">Oven #{{ A1data.c5_no }}</td> 
+                                        <td class="miniFont title">{{ A1data.c5_sec }} sec</td> 
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" class="dataFont" style="padding-top: 17px;">{{ A1data.total_seconds }} Total Seconds</td>
+                                    </tr>
+                                </table>
+                            </div>
                         {% else %}
-                        <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-1 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">NO FORM A-1 SUBMITTED FOR<br> {{ facility }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -182,57 +178,30 @@
                 <div id='A2card' class="inner-card formA_card">
                     {% if form_enteredA2 %}<p id='A2overlay' class="formA_overlay">Click for<br> Form A-2</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-2 - Doors</div>
-                    <div class="{% if A2data %}grid-double{% else %}dataHold todayFormsCenter{% endif %}">
+                    <div class="leakSectionHolder">
                         {% if A2data %}
-                        <div class="dataHold2">
-                            <div class="dataSingle" style="justify-content: left;">
-                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
+                            <div class="leakingSections" style="width: 40%;">
+                                <div class="categUnderline">
+                                    Push Side<br>
+                                    Leaks
+                                </div>
+                                <div class="leakNumberFont">
+                                    {{pLeaks}}
+                                </div>
                             </div>
-                            <hr>
-                            <table class="dataSingle">
-                                <tr>
-                                    <td class="miniFont A2cols" style="text-align: center;color: #9f9f9f;">oven:</td>
-                                    <td class="miniFont A2cols" style="text-align: center;color: #9f9f9f;">location:</td>
-                                    <td class="miniFont A2cols" style="text-align: center;color: #9f9f9f;">zone:</td>
-                                </tr>
-                            
-                            {% if push.data %}
-                                {% for leaks in push.data %}
-                                    <tr class="">
-                                        <td class="miniFont">#{{ leaks.oven }}</td>
-                                        <td class="miniFont">{{ leaks.location }}</td>
-                                        <td class="miniFont">{{ leaks.zone }}</td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <p class="miniFont" style="text-align:center;">No Ovens Found Leaking</p>
-                            {% endif %}
-                            </table>
-                        </div>
-                        <div class="dataHold2" style="margin-top:0.3rem;">
-                            <div class="dataSingle" style="justify-content: left;">
-                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Doors - Push Side</p>
+                            <div class="leakingSections" style="width: 40%;">
+                                <div class="categUnderline">
+                                    Coke Side<br>
+                                    Leaks
+                                </div>
+                                <div class="leakNumberFont">
+                                    {{cLeaks}}
+                                </div>
                             </div>
-                            <hr>
-                            <div class="gridLeaks dataSingle">
-                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
-                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
-                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">zone:</p>
-                            </div>
-                            {% if coke.data %}
-                                {% for leaks in coke.data %}
-                                    <div class="gridLeaks">
-                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                        <p class="dataFont miniFont">{{ leaks.location }}</p>
-                                        <p class="dataFont miniFont">{{ leaks.zone }}</p>
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <p class="miniFont" style="text-align:center;">No Ovens Found Leaking</p>
-                            {% endif %}
-                        </div>
                         {% else %}
-                        <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-2 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                        <p class="miniFont" style="text-align:center;">
+                            NO FORM A-2 SUBMITTED FOR<br> {{ facility }}
+                        </p>
                         {% endif %}
                     </div>
                 </div>
@@ -241,54 +210,30 @@
                 <div id='A3card' class="inner-card formA_card">
                     {% if form_enteredA3 %}<p id='A3overlay' class="formA_overlay">Click for<br> Form A-3</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
-                    <div class="{% if A3data %}grid-double{% else %}dataHold todayFormsCenter{% endif %}">
+                    <div class="leakSectionHolder">
                         {% if A3data %}
-                        <div class="dataHold2" style="margin-top: 0.3rem;">
-                            <div class="dataSingle" style="justify-content: left;">
-                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Lids</p>
+                            <div class="leakingSections">
+                                <div class="categUnderline">
+                                    Leaking<br>
+                                    Lids
+                                </div>
+                                <div class="leakNumberFont">
+                                    {{A3data.l_leaks}}
+                                </div>
                             </div>
-                            <hr>
-                            <div class="gridLeaks dataSingle">
-                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">oven:</p>
-                                <p class="miniFont" style="text-align: center;color: #9f9f9f;">location:</p>
+                            <div class="leakingSections">
+                                <div class="categUnderline">
+                                    Leaking<br>
+                                    Offtakes
+                                </div>
+                                <div class="leakNumberFont">
+                                    {{A3data.om_leaks}}
+                                </div>
                             </div>
-                            {% if lids.data %}
-                                {% for leaks in lids.data %}
-                                    <div class="gridLeaks">
-                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                        {% for where in leaks.location %}
-                                            <p class="dataFont miniFont">{{ where }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <p class="miniFont" style="text-align:center;">No Lids Found Leaking</p>
-                            {% endif %}
-                        </div>
-                        <div class="dataHold2" style="margin-top: 0.3rem;">
-                            <div class="dataSingle" style="justify-content: left;">
-                                <p class="dataFont" style="font-size:.74rem;">List of Leaking Standpipes</p>
-                            </div>
-                            <hr>
-                            <div class="gridLeaks dataSingle">
-                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">oven:</p>
-                                <p class="miniFont" style="text-align: center; color: #9f9f9f;">location:</p>
-                            </div>
-                            {% if offtakes.data %}
-                                {% for leaks in offtakes.data %}
-                                    <div class="gridLeaks">
-                                        <p class="dataFont miniFont">#{{ leaks.oven }}</p>
-                                        {% for where in leaks.location %}
-                                            <p class="dataFont miniFont">{{ where }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <p class="miniFont" style="text-align:center;">No Standpipes Found Leaking</p>
-                            {% endif %}
-                        </div>
                         {% else %}
-                        <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-3 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">
+                                NO FORM A-3 SUBMITTED FOR<br> {{ facility }}
+                            </p>
                         {% endif %}
                     </div>
                 </div>
@@ -299,45 +244,41 @@
                     <div class="card-title inner_font">Form A-4 - Collection Main</div>
                     <div class="dataHold todayFormsCenter">
                         {% if A4data %}
-                        <div class="dataSingle"> 
-                            <p class="dataFont">Pressures</p>
-                        </div>
-                        <hr>
-                        <div class="grid-dataMini">
-                            <p class="miniFont title">Collection Main #1:</p>
-                            <p class="miniFont data">{% if A4data %}{{ A4data.main_1 }}{% else %}
-                                N/A
-                            {% endif %}</p>
-                        
-                            <p class="miniFont title">Collection Main #2:</p>
-                            <p class="miniFont data">{% if A4data %}{{ A4data.main_2 }}{% else %}
-                                N/A
-                            {% endif %}</p>
-                        
-                            <p class="miniFont title">Collection Main #3:</p>
-                            <p class="miniFont data">{% if A4data %}{{ A4data.main_3 }}{% else %}
-                                N/A
-                            {% endif %}</p>
-                        
-                            <p class="miniFont title">Collection Main #4:</p>
-                            <p class="miniFont data">{% if A4data %}{{ A4data.main_4 }}{% else %}
-                                N/A
-                            {% endif %}</p>
-                        
-                            <p class="miniFont title">Suction Main Pressure:</p>
-                            <p class="miniFont data">{% if A4data %}{{ A4data.suction_main }}{% else %}
-                                N/A
-                            {% endif %}</p>
-                        </div>
-                        <hr>
-                        <div class="dataSingle"> 
-                            <p class="dataFont" style="padding-top:.24rem;">
-                                Notes:<br>
-                                {{ A4data.notes }}
-                            </p>
-                        </div>
+                            <div class="grid-dataMini">
+                                <p class="miniFont2 title">Collection Main #1:</p>
+                                <p class="miniFont data">{% if A4data %}{{ A4data.main_1 }}{% else %}
+                                    N/A
+                                {% endif %}</p>
+                            
+                                <p class="miniFont2 title">Collection Main #2:</p>
+                                <p class="miniFont data">{% if A4data %}{{ A4data.main_2 }}{% else %}
+                                    N/A
+                                {% endif %}</p>
+                            
+                                <p class="miniFont2 title">Collection Main #3:</p>
+                                <p class="miniFont data">{% if A4data %}{{ A4data.main_3 }}{% else %}
+                                    N/A
+                                {% endif %}</p>
+                            
+                                <p class="miniFont2 title">Collection Main #4:</p>
+                                <p class="miniFont data">{% if A4data %}{{ A4data.main_4 }}{% else %}
+                                    N/A
+                                {% endif %}</p>
+                            
+                                <p class="miniFont2 title">Suction Main Pressure:</p>
+                                <p class="miniFont data">{% if A4data %}{{ A4data.suction_main }}{% else %}
+                                    N/A
+                                {% endif %}</p>
+                            </div>
+                            <hr style="width: 100%;">
+                            <div class="dataSingle"> 
+                                <p class="dataFont" style="padding-top:.24rem; font-size: 0.8rem;">
+                                    Notes:<br>
+                                    {{ A4data.notes }}
+                                </p>
+                            </div>
                         {% else %}
-                        <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-4 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">NO FORM A-4 SUBMITTED FOR<br> {{ facility }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -351,7 +292,7 @@
                         <div class="dataSingle"> 
                             <p class="dataFont">Push Travels</p>
                         </div>
-                        <hr>
+                        <hr style="width:100%;">
                         <div class="grid-dataMini3">
                             <p class="miniFont title number">1</p> 
                             <p class="miniFont">Oven #{{ A5data.o1 }}</p> 
@@ -370,7 +311,7 @@
                             <p class="miniFont title">{{ A5data.o4_highest_opacity }}%</p> 
                         </div>
                         {% else %}
-                        <p class="miniFont" style="text-align:center;">{% if facility == 'supervisor' %}NO FACILITY SELECTED{% else %}NO FORM A-5 SUBMITTED FOR<br> {{ facility }}{% endif %}</p>
+                            <p class="miniFont" style="text-align:center;">NO FORM A-5 SUBMITTED FOR<br> {{ facility }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -379,7 +320,7 @@
     </div>
     <div id="latestActivity3" class="card halfs cardPadd">
         <div>
-            <div class="card-title">
+            <div class="card-title headerBottomPadding">
                 7 Day - Total Charges Graph
                 <div style="float: right;">
                     <button id="charge-btn" class="btn-chart">Charges</button>
@@ -406,7 +347,7 @@
         </div>
     </div>
     <div id="corrective_actions" class="card quarters cardPadd">
-        <div class="card-title">Latest Issues/Corrective Actions</div>
+        <div class="card-title headerBottomPadding">Latest Issues/Corrective Actions</div>
         <div class="ca_holder">
             <ul>
             {% if facility != 'supervisor' %}
@@ -438,7 +379,7 @@
         </div>
     </div>
     <div id="battery_weather" class="card quarters cardPadd">
-        <div class="card-title">Todays Battery/Weather Info.</div>
+        <div class="card-title headerBottomPadding">Todays Battery/Weather Info.</div>
         <div style="padding:10px; height: calc(100% - 34px); width:100%;">
             <div style="overflow: scroll;" class="grid-battery-weather center bat_weather_class">
                 {% if facility != 'supervisor' %}
@@ -515,8 +456,8 @@
             </div>
         </div>
     </div>
-    <div id="latestActivity4" class="card custom cardPadd">
-        <div class="card-title" style="display: flex;">
+    <div id="latestActivity4" class="card halfs cardPadd">
+        <div class="card-title headerBottomPadding" style="display: flex;">
             <div>90 Day Push Travel Evaluation</div>
             <div style="position: relative; right: -59%;">
                 <a style="text-decoration: underline;" href="{% url 'pt_admin1' facility %}">see all</a>
@@ -552,8 +493,8 @@
             </div>
         </div>
     </div>
-    <div id="observers" class="card custom2 cardPadd">
-        <div class="card-title">Contacts</div>
+    <div id="observers" class="card halfs cardPadd">
+        <div class="card-title headerBottomPadding">Contacts</div>
         <div class="grid-observers">
             <div class="grid-observ_header">
                 <p></p>

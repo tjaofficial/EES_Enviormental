@@ -3,7 +3,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from ..utils import time_change, date_change, date_time_change, truck_choices, area_choices, emptyInputs, road_choices, inventoryResponse, quarterParse
 from reportlab.lib import colors
 import json
-from ..models import formM_model, braintreePlans
+from ..models import form22_model, braintreePlans
 import datetime
 import calendar
 
@@ -1853,7 +1853,7 @@ def pdf_template_23(formDate, facility):
     newDateN = str(parseDateN.year) + '-' + str(parseDateN.month) + '-' + '01'
     parseDateStart = datetime.datetime.strptime(newDateN, "%Y-%m-%d").date()
     parseDateStop = parseDateStart + datetime.timedelta(days=(daysInMonth[1] - 1))
-    dataN = formM_model.objects.filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
+    dataN = form22_model.objects.filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
     new = 'Fugitive Dust Inspection'
     titleN = 'Method 9D Monthly Checklist - (N)'
     subTitleN = 'Facility Name: ' + facility

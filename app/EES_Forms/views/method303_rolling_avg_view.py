@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from ..models import Forms, user_profile_model, daily_battery_profile_model, formA1_readings_model, formA2_model, formA3_model, bat_info_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, formA1_readings_model, form2_model, form3_model, bat_info_model
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -27,8 +27,8 @@ def method303_rolling_avg(request, facility):
 
     def form_compile(daily_prof):
         formA1 = formA1_readings_model.objects.all()
-        formA2 = formA2_model.objects.all()
-        formA3 = formA3_model.objects.all()
+        formA2 = form2_model.objects.all()
+        formA3 = form3_model.objects.all()
         i = 1
         for date_select in daily_prof:
             for logA1 in formA1:

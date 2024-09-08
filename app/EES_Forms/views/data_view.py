@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import formA3_model, formA2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, formA5_model, Forms
+from ..models import form3_model, form2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, form5_model, Forms
 from django.apps import apps
 from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 
@@ -19,7 +19,7 @@ def pt_admin1_view(request, facility):
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
-    data = formA5_model.objects.all()
+    data = form5_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
 
     # -------90 DAY PUSH ----------------
@@ -195,8 +195,8 @@ def method303_rolling_avg(request, facility):
     print("hello")
     def form_compile(daily_prof):
         formA1 = formA1_readings_model.objects.all()
-        formA2 = formA2_model.objects.all()
-        formA3 = formA3_model.objects.all()
+        formA2 = form2_model.objects.all()
+        formA3 = form3_model.objects.all()
         i = 1
         print("CHECK 1")
         for date_select in daily_prof:

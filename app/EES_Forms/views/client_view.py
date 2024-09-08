@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from ..models import issues_model, formA1_readings_model, formA2_model, formA3_model, Event, formA4_model, formA5_readings_model, daily_battery_profile_model, form1_readings_model, User, user_profile_model, bat_info_model
+from ..models import issues_model, formA1_readings_model, form2_model, form3_model, Event, form4_model, formA5_readings_model, daily_battery_profile_model, form1_readings_model, User, user_profile_model, bat_info_model
 import datetime
 import json
 import requests
@@ -19,9 +19,9 @@ def client_dashboard_view(request, facility):
     supervisor = False
     unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
     formA1 = form1_readings_model.objects.all().order_by('-form')
-    formA2 = formA2_model.objects.all().order_by('-date')
-    formA3 = formA3_model.objects.all().order_by('-date')
-    formA4 = formA4_model.objects.all().order_by('-date')
+    formA2 = form2_model.objects.all().order_by('-date')
+    formA3 = form3_model.objects.all().order_by('-date')
+    formA4 = form4_model.objects.all().order_by('-date')
     formA5 = formA5_readings_model.objects.all().order_by('-form')
     fsID1 = tryExceptFormDatabases(1,formA1, facility)
     fsID2 = tryExceptFormDatabases(2,formA2, facility) 
@@ -175,65 +175,53 @@ def client_dashboard_view(request, facility):
                 else:
                     A1data = ""
 
+                A2data = ""
+                push = ""
+                coke = ""
+                pLeaks = 0
+                cLeaks = 0
                 if formA2.exists():
-                    most_recent_A2 = formA2[0].date
-                    if most_recent_A2 == today:
-                        A2data = formA2[0]
-                        if A2data.p_leak_data and A2data.c_leak_data:
-                            push = json.loads(A2data.p_leak_data)
-                            coke = json.loads(A2data.c_leak_data)
-                        else:
-                            push = ""
-                            coke = ""
+                    most_recent_A2 = formA2[0]
+                    if most_recent_A2.date == today:
+                        A2data = most_recent_A2
+                        if most_recent_A2.p_leak_data and most_recent_A2.c_leak_data:
+                            push = json.loads(most_recent_A2.p_leak_data)
+                            coke = json.loads(most_recent_A2.c_leak_data)
+                            try:
+                                pLeaks = len(push['data'])
+                            except:
+                                pLeaks = 0
+                            try:
+                                cLeaks = len(coke['data'])
+                            except:
+                                cLeaks = 0
                         form_enteredA2 = True
-                    else:
-                        A2data = ""
-                        push = ""
-                        coke = ""
-                else:
-                    A2data = ""
-                    push = ""
-                    coke = ""
 
+                A3data = ""
+                lids = ""
+                offtakes = ""
                 if formA3.exists():
-                    most_recent_A3 = formA3[0].date
-                    if most_recent_A3 == today:
-                        A3data = formA3[0]
-                        if A3data.l_leak_json and A3data.om_leak_json:
-                            lids = json.loads(A3data.l_leak_json)
-                            offtakes = json.loads(A3data.om_leak_json)
-                        else:
-                            lids = ""
-                            offtakes = ""
+                    most_recent_A3 = formA3[0]
+                    if most_recent_A3.date == today:
+                        A3data = most_recent_A3
+                        if most_recent_A3.l_leak_json and most_recent_A3.om_leak_json:
+                            lids = json.loads(most_recent_A3.l_leak_json)
+                            offtakes = json.loads(most_recent_A3.om_leak_json)
                         form_enteredA3 = True
-                    else:
-                        A3data = ""
-                        lids = ""
-                        offtakes = ""
-                else:
-                    A3data = ""
-                    lids = ""
-                    offtakes = ""
 
+                A4data = ""
                 if formA4.exists():
                     most_recent_A4 = formA4[0].date
                     if most_recent_A4 == today:
                         A4data = formA4[0]
                         form_enteredA4 = True
-                    else:
-                        A4data = ""
-                else:
-                    A4data = ""
 
+                A5data = ""
                 if formA5.exists():
                     most_recent_A5 = formA5[0].form.date
                     if most_recent_A5 == today:
                         A5data = formA5[0]
                         form_enteredA5 = True
-                    else:
-                        A5data = ""
-                else:
-                    A5data = ""
         else:
             formA4 = ""
             todays_log = ''
@@ -321,5 +309,7 @@ def client_dashboard_view(request, facility):
         'top7xValuesL': top7xValuesL,
         'top7yValuesL': top7yValuesL,
         'last7days': str(last7days),
-        'today': str(now)
+        'today': str(now),
+        'pLeaks': pLeaks,
+        'cLeaks': cLeaks
     })
