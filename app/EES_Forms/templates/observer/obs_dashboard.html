@@ -172,7 +172,7 @@
         <div id="i0" style="display: block;">
             {% for item in facFormList1 %}
                 {% if not item.subChoice.submitted %}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{item.id}}/form">
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form">
                     <div class="card_Form" style="margin-left: 50px;">
                         <h3 class="card_Form_letter">
                             {{item.id}}
@@ -2271,7 +2271,7 @@
         <div id="c0" style="display: block;">
             {% for item in facFormList1 %}
                 {% if item.subChoice.submitted %}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{item.id}}/form">
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form">
                     <div class="card_Form" style="margin-left: 50px;">
                         <h3 class="card_Form_letter">
                             {{item.id}}

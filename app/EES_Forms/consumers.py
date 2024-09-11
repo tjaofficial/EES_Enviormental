@@ -16,7 +16,7 @@ class NotifConsumer(AsyncWebsocketConsumer):
     
     async def receive(self, text_data):
         data_from_form_json = json.loads(text_data)
-        #print('Message', data_from_form_json['notifID'])
+        print('Message', data_from_form_json['notifID'])
         if 'notifID' in data_from_form_json.keys():
             notifID = data_from_form_json['notifID']
             selector = data_from_form_json['selector']

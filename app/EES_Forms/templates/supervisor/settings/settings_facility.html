@@ -1,64 +1,67 @@
 <div class="centerFlex">
     <table class="tableClass">
-        {% for facilities in sortedFacilityData %}
-            <tr class='tableSpacer'>
-                <td colspan="2" class="cellData">
-                    {{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}
-                </td>
-            </tr>
-            {% comment %} <tr colspan="2" class='tableSpacer'>
-                <td class="labelClass">Address:</td>
-            </tr>
-            <tr colspan="2" class="tableSpacer">
-                <td colspan="2" class="cellData">
-                    {{ facilities.address }}<br>
-                    {{ facilities.city }}, {{ facilities.state }}
-                </td>
-            </tr>
-            <tr class='tableSpacer'>
-                <td colspan="2" class="labelClass">List of registered clients at facility:</td>
-            </tr>
-            {% for person in userProfileQuery %}
-                {% if person.facilityChoice.facility_name == facilities.facility_name and person.company == facilities.company %}
-                    <tr class='tableSpacer'>
-                        <td colspan="2" class="cellData">- {{person.user.first_name}} {{person.user.last_name}}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            <tr class='tableSpacer'>
-                <td colspan="2" class="labelClass">Is this facility a Coke Battery:</td>
-            </tr>
-            <tr class='tableSpacer'>
-                <td colspan="2" class="cellData">{{accountData.phone}}</td>
-            </tr>
-            <tr class='tableSpacer'>
-                <td colspan="2" class="labelClass">Dashboard:</td>
-            </tr>
-            <tr class='tableSpacer'>
-                <td colspan="2" class="cellData">
-                    <select name="defaultDashbaord">
-                        <option value="">-----</option>
-                        <option value="battery">Coke Battery</option>
-                        <option value="supervisor">Supervisor</option>
-                    </select>
-                </td>
-            </tr> {% endcomment %}
-            <tr class='tableSpacer'>
-                <th colspan=2 class='' style="width: 30%;">Company Options</th>
-            </tr>
-            <tr class='tableSpacer'>
-                <td class="labelClass2" style="text-align: center;" colspan=2>
-                    <a href="{% url 'accountUpdate' facility 'company' %}">Update Company Details</a><br>
-                    <a href="{% url 'Register' facility 'observer' %}">Add Employee</a><br>
-                    <a href="{% url 'Register' facility 'facility' %}">Add Client Facility</a><br>
-                    <a href="{% url 'Register' facility 'client' %}">Add Client Profile</a><br>
-                    {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
-                </td>
-            </tr>
-            <tr class='tableSpacer'>
-                <td colspan="2" class="labelClass"><hr></td>
-            </tr>
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Select Facility:</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">
+                {% for facilities in sortedFacilityData %}
+                    <a href="{% url 'selectedFacilitySettings' facility facilities.id %}">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a>
+                {% endfor %}
+            </td>
+        </tr>
+        {% comment %} <tr colspan="2" class='tableSpacer'>
+            <td class="labelClass">Address:</td>
+        </tr>
+        <tr colspan="2" class="tableSpacer">
+            <td colspan="2" class="cellData">
+                {{ facilities.address }}<br>
+                {{ facilities.city }}, {{ facilities.state }}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass">List of registered clients at facility:</td>
+        </tr>
+        {% for person in userProfileQuery %}
+            {% if person.facilityChoice.facility_name == facilities.facility_name and person.company == facilities.company %}
+                <tr class='tableSpacer'>
+                    <td colspan="2" class="cellData">- {{person.user.first_name}} {{person.user.last_name}}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass">Is this facility a Coke Battery:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">{{accountData.phone}}</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass">Dashboard:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">
+                <select name="defaultDashbaord">
+                    <option value="">-----</option>
+                    <option value="battery">Coke Battery</option>
+                    <option value="supervisor">Supervisor</option>
+                </select>
+            </td>
+        </tr> {% endcomment %}
+        <tr class='tableSpacer'>
+            <th colspan=2 class='' style="width: 30%;">Company Options</th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass2" style="text-align: center;" colspan=2>
+                <a href="{% url 'accountUpdate' facility 'company' %}">Update Company Details</a><br>
+                <a href="{% url 'Register' facility 'observer' %}">Add Employee</a><br>
+                <a href="{% url 'Register' facility 'facility' %}">Add Client Facility</a><br>
+                <a href="{% url 'Register' facility 'client' %}">Add Client Profile</a><br>
+                {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
         <tr class='tableSpacer'>
             <th colspan=2 class='' style="width: 30%;">Account Options</th>
         </tr>

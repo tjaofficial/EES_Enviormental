@@ -7,6 +7,7 @@ const notifSocket = new WebSocket(url)
 
 notifSocket.onmessage = function(event) {
     let messageData = JSON.parse(event.data)
+    console.log(messageData)
     // showNotificationFunction(messageData.count)
 };
 
@@ -22,12 +23,14 @@ function setNotificationHover(e) {
         'notifID': e.id,
         'selector': 'hover'
     }))
+    console.log('Hovered Notif')
 }
 function setNotificationClick(e) {
     notifSocket.send(JSON.stringify({
         'notifID': e.id,
         'selector': 'click'
     }))
+    console.log('Clicked Notif')
 }
 
 notifSocket.onopen = (event) => {

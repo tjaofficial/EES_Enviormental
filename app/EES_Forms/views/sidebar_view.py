@@ -12,7 +12,7 @@ import os
 import ast
 from django.contrib import messages
 from django.conf import settings
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, USE_S3
 from .print_form_view import date_change
 lock = login_required(login_url='Login')
 
@@ -551,6 +551,8 @@ def issues_view(request, facility, fsID, form_date, access_page):
                 data = issues_form(dataCopy)
             if data.is_valid():
                 data.save()
+                for notifSel in notifSelector:
+                    createNotification(facility, request, fsID, now, notifSel, data.save())
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
@@ -599,9 +601,9 @@ def issues_view(request, facility, fsID, form_date, access_page):
                 print(data.save().id)
                 if access_page == 'resubmit':
                     for notifSel in notifSelector:
-                        createNotification(request, facility, request.user, fsID, now, notifSel, data.save())
+                        createNotification(facility, request, fsID, now, notifSel, data.save())
                     updateSubmissionForm(fsID, True, picker.date)
-                    return redirect('IncompleteForms', facility)
+                    #return redirect('IncompleteForms', facility)
                 else:
                     return redirect('issues_view', facility, fsID, form_date, 'issue')
     else:
@@ -631,20 +633,20 @@ def issues_view(request, facility, fsID, form_date, access_page):
 
     form = issues_form(initial=initial_data)
 
-    if request.method == "POST":
-        dataCopy = request.POST.copy()
-        dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
-        if existing:
-            data = issues_form(dataCopy, instance=database_form)
-        else:
-            data = issues_form(dataCopy)
-        if data.is_valid():
-            print('check #1')
-            data.save()
-            createNotification(facility, request.user, fsID, now, 'submitted')
-            createNotification(facility, request.user, fsID, now, 'corrective')
-            updateSubmissionForm(fsID, True, todays_log.date_save)
-            return redirect('IncompleteForms', facility)
+    # if request.method == "POST":
+    #     dataCopy = request.POST.copy()
+    #     dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
+    #     if existing:
+    #         data = issues_form(dataCopy, instance=database_form)
+    #     else:
+    #         data = issues_form(dataCopy)
+    #     if data.is_valid():
+    #         print('check #1')
+    #         data.save()
+    #         createNotification(facility, request, fsID, now, 'submitted')
+    #         createNotification(facility, request, fsID, now, 'corrective')
+    #         updateSubmissionForm(fsID, True, todays_log.date_save)
+    #         return redirect('IncompleteForms', facility)
     return render(request, "shared/issues_template.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
@@ -924,7 +926,16 @@ def sop_view(request, facility):
             A.pdf_url = A.pdf_file.url
             A.save()
     return render(request, 'shared/sops.html', {
-        'sortedFacilityData':sortedFacilityData, 'notifs': notifs, 'options': options, 'facility': facility, 'sops': sops, 'sopForm': sopForm, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'sortedFacilityData':sortedFacilityData, 
+        'notifs': notifs, 
+        'options': options, 
+        'facility': facility, 
+        'sops': sops, 
+        'sopForm': sopForm, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'AWS': USE_S3
     })
    
 @lock 

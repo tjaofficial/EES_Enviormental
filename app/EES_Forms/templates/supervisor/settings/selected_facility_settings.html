@@ -1,0 +1,250 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
+<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/selected_facility_settings.css' %}" rel="stylesheet">
+<script defer src="{% static 'ees_forms/script/selected_facility_settings.js' %}"></script>
+<div style='margin:auto; width: 42rem;'>
+    <div class="card" style='margin-bottom: 50px;'>
+        <div class="cardHeader">
+            {% include "shared/components/backArrow.html" with destination="dashboard"%}
+            {{facilityInfo}} Settings
+        </div>
+        {% comment %} <div id="addModal" class="modalAdd">
+            <div id="cancelReg" class="modal-content" style="width: 64%;">
+                <span class="closeAdd">&times;</span>
+                <div class='modalHeader'>
+                    <h1>Cancel Registration for <span class="registerName"></span>?</h1>
+                </div>
+                <div class='modalContent'>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div style="color:black;text-align:justify;">
+                            Are you sure you would like to cancel your registration for <span class="registerName"></span>? Once cancelled, <span class="registerName"></span> will only have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
+                            <br><br>
+                            <p>Please type "cancel" below and confirm</p><br>
+                            <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
+                            <input id="registerID" type="hidden" name="registerID" value=""/>
+                            <br>
+                            <div style="text-align: right;">
+                                <input id="submit" type="submit" value="Confirm Cancellation" disabled>
+                            </div>
+                        </div>  
+                    </form>
+                </div>
+            </div>
+        </div> {% endcomment %}
+        <div style="padding: 15px 32px;">
+            <div class="centerFlex" style="height:unset;">
+                <table name="facilityInfo" class="tableClass">
+                    <tr class='tableSpacer'>
+                        <th colspan="2" class='' style="width: 30%;">
+                            Facility Information:
+                        </th>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">Facility Name:</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass2 cellData">{{facilityInfo.facility_name}}</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">Facility Address:</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass2 cellData">{{facilityInfo.address}}</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass2 cellData">{{facilityInfo.city}}, {{facilityInfo.state}} {{accountData.zipcode}}</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">District:</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass2 cellData">{{facilityInfo.district}}</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">County:</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass2 cellData">{{facilityInfo.county}}</td>
+                    </tr>
+                </table>
+                {% if facilityInfo.is_battery %}
+                <table name="batterySettings" class="tableClass">
+                    <tr class='tableSpacer'>
+                        <td colspan="2" class="labelClass"><hr></td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <th colspan="2" class='' style="width: 30%;">
+                            Battery Settings:
+                        </th>
+                    </tr class='tableSpacer'>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">
+                            Battery No.: {{facilityInfo.bat_num}}
+                        </td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">
+                            Establishment No.: {{facilityInfo.estab_num}}
+                        </td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">
+                            Height: {{facilityInfo.bat_height}}{%if facilityInfo.bat_height_label == 'feet'%}ft{% else %}m{% endif %}
+                        </td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">
+                            Battery Main: {{facilityInfo.bat_main}}
+                        </td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">
+                            Battery Lids: {{facilityInfo.bat_lids}}
+                        </td>
+                    </tr>
+                </table>
+                {% endif %}
+                <table name="facilitySettings" class="tableClass">
+                    <tr class='tableSpacer'>
+                        <td colspan="2" class="labelClass"><hr></td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <th colspan="2" class='' style="width: 30%;">
+                            Facility Accounts:
+                        </th>
+                    </tr>
+                    {% for employee in clientUserProfs %}
+                    <tr class='tableSpacer'>
+                        <td colspan="2" class="cellData">
+                            - {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}
+                            <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}">
+                                (remove)
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <table name="batteryDashSettings" class="tableClass">
+                    <tr class='tableSpacer'>
+                        <td colspan="2" class="labelClass"><hr></td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <th colspan="2" class='' style="width: 30%;">
+                            Battery Dashboard Settings:
+                        </th>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td class="labelClass">Display Tiles:</td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <td colspan="2" class='' style="width: 30%;">
+                            {% comment %} - 100, progress bar (yes or no)<br>
+                            - 50, Graphs with check boxes of which ones you want if yes to graphs has been selected<br>
+                            - 25, Corrective Actions<br>
+                            - 25, Battery/Weather Issues<br>
+                            - 50, 90 Days Push<br>
+                            - 50, Contacts<br> {% endcomment %}
+                            <div>
+                                <label class="container">Progress Bar (Pick 4)
+                                    <input onclick="openSubCategory(this)" type="checkbox" data-subcat="progress">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <div id="progress" style="padding-left: 40px; display:none;">
+                                    <label class="container">Daily Forms
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Weekly Forms
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Monthly Forms
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Quarterly Forms
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Annual Forms
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <label class="container">Data Graphs
+                                <input onclick="openSubCategory(this)" type="checkbox" checked="checked" data-subcat="graphs">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div id="graphs" style="padding-left: 40px;">
+                                <div style="padding-left: 25px; margin-left: 18px;">
+                                    Select Frequency:
+                                    <select onchange="showGraphDates(this)" name="graph-frequency" data-subcat="graphdates">
+                                        <option value="weekly" selected>Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="annually">Annually</option>
+                                        <option value="dates">Select Dates</option>
+                                    </select>
+                                    <div id="graphdates" style="padding-left: 40px; display:none;">
+                                        Starting Date: <input type="date" name="graphStart"><br>
+                                        Ending Date: <input type="date" name="graphStop">
+                                    </div>
+                                </div>
+                                <div style="padding-left: 25px; margin-left: 18px;">
+                                    Select Graphs:<br>
+                                
+                                    <label class="container">Charges
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Doors
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">Lids
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="container">90 Day Push/Travels
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <label class="container">Corrective Actions
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="container">Battery Weather Info.
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="container">90 Day Push Schedule
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <label class="container">Contacts
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                <table name="notifSettings" class="tableClass">
+                    <tr class='tableSpacer'>
+                        <td colspan="2" class="labelClass"><hr></td>
+                    </tr>
+                    <tr class='tableSpacer'>
+                        <th colspan="2" class='' style="width: 30%;">
+                            Notification Settings:
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

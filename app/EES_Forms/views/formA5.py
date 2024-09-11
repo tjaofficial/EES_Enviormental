@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, form5_model, formA5_readings_model, issues_model, bat_info_model
+from ..models import user_profile_model, daily_battery_profile_model, Forms, form5_model, form5_readings_model, issues_model, bat_info_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import requests
 import json
@@ -24,7 +24,7 @@ def formA5(request, facility, fsID, selector):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = form5_model.objects.all().order_by('-date')
-    org2 = formA5_readings_model.objects.all().order_by('-form')
+    org2 = form5_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     exist_canvas = ''
     picker = issueForm_picker(facility, selector, fsID)
@@ -306,7 +306,7 @@ def formA5(request, facility, fsID, selector):
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
                 if selector != 'new':
-                    createNotification(facility, request.user, fsID, now, 'submitted', False)
+                    createNotification(facility, request, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

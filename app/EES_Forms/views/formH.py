@@ -257,7 +257,7 @@ def formH(request, facility, fsID, selector):
 
                 B.form = A
                 B.save()
-                createNotification(facility, request.user, fsID, now, 'submitted', False)
+                createNotification(facility, request, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)

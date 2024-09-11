@@ -691,7 +691,7 @@ class formA5_form(ModelForm):
             'ambient_temp_stop': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 40px; text-align: center;'}),
             'plume_opacity_determined_stop': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 250px;'}),
             'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
             'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'cert_date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
@@ -706,7 +706,7 @@ class formA5_form(ModelForm):
         }
 class formA5_readings_form(ModelForm):
     class Meta:
-        model = formA5_readings_model
+        model = form5_readings_model
         fields = (
             'o1_1_reads',
             'o1_2_reads',
@@ -1480,7 +1480,7 @@ class formG1_form(ModelForm):
             'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
             'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
@@ -1492,7 +1492,7 @@ class formG1_form(ModelForm):
         }      
 class formG1_readings_form(ModelForm):
     class Meta:
-        model = formG1_readings_model
+        model = form17_readings_model
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
@@ -1552,7 +1552,7 @@ class formG2_form(ModelForm):
             'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
             'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
@@ -1564,7 +1564,7 @@ class formG2_form(ModelForm):
         }
 class formG2_readings_form(ModelForm):
     class Meta:
-        model = formG2_readings_model
+        model = form18_readings_model
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
@@ -1625,7 +1625,7 @@ class formH_form(ModelForm):
             'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center;'}),
+            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
             'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
@@ -1637,7 +1637,7 @@ class formH_form(ModelForm):
         }
 class formH_readings_form(ModelForm):
     class Meta:
-        model = formH_readings_model
+        model = form19_readings_model
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
@@ -1852,49 +1852,49 @@ class formM_form(ModelForm):
         }
 class formM_readings_form(ModelForm):
     class Meta:
-        model = formM_readings_model
+        model = form22_readings_model
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
             'pav_1' : forms.TextInput(attrs={'oninput':'paved_average()', 'oninput':'autoFillZeros(id_pav_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_2' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_3' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_4' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_5' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_6' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_7' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_8' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_9' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_10' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_11' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_12' : forms.TextInput(attrs={'oninput':'paved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_2' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_3' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_4' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_5' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_6' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_7' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_8' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_9' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_10' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_11' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_12' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
             'unp_1' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'oninput':'autoFillZeros(id_unp_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_2' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_3' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_4' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_5' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_6' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_7' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_8' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_9' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_10' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_11' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_12' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_2' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_3' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_4' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_5' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_6' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_7' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_8' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_9' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_10' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_11' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_12' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
             'par_1' : forms.TextInput(attrs={'oninput':'parking_average()', 'oninput':'autoFillZeros(id_par_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_2' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_3' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_4' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_5' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_6' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_7' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_8' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_9' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_10' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_11' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_12' : forms.TextInput(attrs={'oninput':'parking_average()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_total' : forms.TextInput(attrs={'oninput':'paved_average()', 'type':'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_total' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'type':'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_total' : forms.TextInput(attrs={'oninput':'parking_average()', 'type':'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_2' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_3' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_4' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_5' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_6' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_7' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_8' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_9' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_10' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_11' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_12' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_total' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_total' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_total' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
         }
 class formO_form(ModelForm):
     class Meta:

@@ -99,7 +99,7 @@
     margin-top: .7rem;
 }
 .dataHold{
-    width: 75%;
+    /* width: 75%; */
     margin: auto;
     height: 11rem;
     margin-top: 0.3rem;
@@ -290,6 +290,8 @@
     width: 100%;
     justify-content: center;
     height: 92%;
+    align-content: center;
+    flex-wrap: wrap;
 }
 .leakingSections{
     width: 34%;

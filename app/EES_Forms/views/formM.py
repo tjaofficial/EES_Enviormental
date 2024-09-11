@@ -168,7 +168,7 @@ def formM(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request.user, fsID, now, 'submitted', False)
+                createNotification(facility, request, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 #updateSubmissionForm(facility, 23, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)

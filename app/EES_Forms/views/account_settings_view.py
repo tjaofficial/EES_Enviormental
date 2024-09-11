@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
-from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans
+from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
 from ..forms import CreateUserForm, user_profile_form, company_form
 import datetime
 import braintree
@@ -569,4 +569,67 @@ def sup_billing_history(request, facility):
         'facility': facility,
         'notifs': notifs,
         'collection': collection
+    })
+    
+@lock
+def sup_facility_settings(request, facility, facilityID):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock = setUnlockClientSupervisor(request.user)[0]
+    client = setUnlockClientSupervisor(request.user)[1]
+    supervisor = setUnlockClientSupervisor(request.user)[2]
+    if unlock:
+        return redirect('IncompleteForms', facility)
+    braintreeData = braintree_model.objects.filter(user__id=request.user.id)
+    if braintreeData.exists():
+        braintreeData = braintreeData.get(user__id=request.user.id)
+    else:
+        print('handle if there is no braintree entry')
+    facilityInfo = bat_info_model.objects.get(id=facilityID)
+    clientUserProfs = user_profile_model.objects.filter(facilityChoice=facilityInfo)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    facility = 'supervisor'
+    userProfileQuery = user_profile_model.objects.all()
+    accountData = userProfileQuery.get(user__id=request.user.id)
+    userCompany = accountData.company
+    listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
+    active_registrations = len(listOfEmployees.filter(company__braintree__status='active'))
+
+    dateStart = "1900-01-01"
+    dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
+        
+    if request.method == "POST":
+        data = request.POST
+        if 'facilitySelect' in data.keys():
+            if data['facilitySelect'] != '':
+                return redirect('sup_dashboard', data['facilitySelect'])
+        else:
+            print(data)
+            selectedRegister = userProfileQuery.get(id=int(data['registerID']))
+            selectedRegister.company.braintree.status = "active"
+            selectedRegister.save()
+            return redirect("Account", facility)
+    return render(request, 'supervisor/settings/selected_facility_settings.html',{
+        'notifs': notifs,
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'facility': facility,
+        
+        'facilityInfo': facilityInfo,
+        'clientUserProfs': clientUserProfs,
+        
+        'accountData': accountData,
+        'listOfEmployees': listOfEmployees,
+        'accountData': accountData,
+        'active_registrations': active_registrations,
+        'braintreeData': braintreeData,
+        'userProfileQuery': userProfileQuery
     })

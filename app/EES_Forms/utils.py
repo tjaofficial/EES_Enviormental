@@ -173,7 +173,8 @@ class Calendar2(HTMLCalendar):
     def formatday(self, day, weekday, events, year, forms, selectedForm):
         """
         Return a day as a table cell.
-        """        
+        """    
+        eventCell = False    
         def formatTheDayNumber(day):
             day = str(day)
             if len(day) == 1:
@@ -202,6 +203,7 @@ class Calendar2(HTMLCalendar):
                     if h.date.year == year:
                         selectedFormDate = h
                         forms_html += "<a href='../../../../printIndex/coke_battery/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        eventCell = True
                         break
             elif packetsEntry.frequency == 'Weekly':
                 print("Starting to find Forms that exist on this day for weekly...")
@@ -221,11 +223,13 @@ class Calendar2(HTMLCalendar):
                             selectedFormDate = h
                             print('check 2')
                             forms_html += "<a href='../../../../printIndex/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            eventCell = True
                             break
                     except:
                         if h.week_start.year == year:
                             selectedFormDate = h
                             forms_html += "<a href='../../../../printIndex/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
+                            eventCell = True
                             break
             elif packetsEntry.frequency == 'Monthly':
                 print('Monthly')
@@ -235,18 +239,24 @@ class Calendar2(HTMLCalendar):
                 for form in forms_from_day:
                     if form.date.year == year:
                         forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                        eventCell = True
             else:
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"        
+                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
+                        eventCell = True
         
         forms_html += "</ul>"
         
         if day == 0:
             return '<td class="noday">&nbsp;</td>'  # day outside month
         else:
-            return '<td class="hover %s">%d%s</td>' % (self.cssclasses[weekday], day, forms_html)
+            if eventCell:
+                return '<td style="background:#517d8e70;" class="hover %s">%d%s</td>' % (self.cssclasses[weekday], day, forms_html)
+            else:
+                return '<td class="hover %s">%d%s</td>' % (self.cssclasses[weekday], day, forms_html)
+            
 
  
     def formatweek(self, theweek, events, year, forms, selectedForm):
@@ -717,8 +727,9 @@ def displayNotifications(user, facility):
 
     return {'notifCount': notifCount, 'unRead': unReadList, "read": readNotifs}
         
-def createNotification(facility, user, fsID, date, notifSelector, issueID):
+def createNotification(facility, request, fsID, date, notifSelector, issueID):
     print('notif1 - check 1')
+    user = request.user
     createNotificationDatabase(facility, user, fsID, date, notifSelector)
     facilityParse = 'notifications_' + facility.replace(" ","_")
     notifCount = str(notificationCalc(user, facility))

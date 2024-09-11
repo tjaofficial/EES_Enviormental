@@ -263,11 +263,22 @@ def spill_kits(request, facility, fsID, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/monthly/spillkits_form.html", {
-        'iFormList': iFormList, 'month': month, 'facility': facility, 'sk_form': data, 'selector': selector, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, 'search': search, 'existing': existing, 
+        'iFormList': iFormList, 
+        'month': month, 
+        'facility': facility, 
+        'sk_form': data, 
+        'selector': selector, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
+        'formName': formName, 
+        'search': search, 
+        'existing': existing,
+        'fsID': fsID
     })
 
 @lock
-def spill_kits_inventory_form(request, facility, month, skNumber, selector):
+def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector):
     formName = "spill_kits_inventory"
     unlock = False
     client = False
@@ -418,8 +429,22 @@ def spill_kits_inventory_form(request, facility, month, skNumber, selector):
         if form.is_valid():
             form.save()
             
-            return redirect('spill_kits', facility, "form")
+            return redirect('spill_kits', facility, fsID, "form")
                 
     return render(request, "shared/forms/monthly/spillKits_inventoryForm.html",{
-        'full_name': full_name,'skNumber': skNumber, 'skForm': skForm, 'facility': facility, 'supervisor': supervisor, "client": client, 'unlock': unlock, 'formName': formName, "data": data, "search": search, "existing": existing, "data2": data2, "formAttached": formAttached, "selector": selector
+        'full_name': full_name,
+        'skNumber': skNumber, 
+        'skForm': skForm, 
+        'facility': facility, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
+        'formName': formName, 
+        "data": data, 
+        "search": search, 
+        "existing": existing, 
+        "data2": data2, 
+        "formAttached": formAttached, 
+        "selector": selector,
+        'fsID': fsID
     })

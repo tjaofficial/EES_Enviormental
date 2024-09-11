@@ -236,7 +236,7 @@ def formL(request, facility, fsID, selector):
                     return redirect('IncompleteForms', facility)
                 else:
                     parseNewDate = todays_log.date_save - datetime.timedelta(days=1)
-                    createNotification(facility, request.user, fsID, now, 'submitted', False)
+                    createNotification(facility, request, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, parseNewDate)
 
                     return redirect('IncompleteForms', facility)

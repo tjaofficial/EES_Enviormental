@@ -27,7 +27,7 @@ function rows_true() {
 function showInventorySK() {
     const month = document.getElementById("linkMonth").dataset.month;
     const iList = JSON.parse(document.getElementById('iColor').dataset.inventory);
-
+    const fsID = document.getElementById('fsID').dataset.fsid;
     for(var i=1; i<=21; i++) {
         if (selector == "form"){
             var tagOn = document.getElementById('id_sk' + String(i) + '_tag_on').value;
@@ -38,11 +38,11 @@ function showInventorySK() {
             console.log("CHECK 1")
             var linkSel = iList[i][1];
             console.log(linkSel)
-            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/"+linkSel+"'>Complete</a>"
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='../../26/inventory/"+ fsID +"/"+month+"/"+String(i)+"/"+linkSel+"'>Complete</a>"
             document.getElementById("kit" + String(i)).style.backgroundColor = "green"
         } else if (String(tagOn) == "No") {
             console.log("CHECK 2")
-            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i)+"/form'>Incomplete</a>"
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='../../26/inventory/"+ fsID +"/"+month+"/"+String(i)+"/form'>Incomplete</a>"
             document.getElementById("kit" + String(i)).style.backgroundColor = "yellow"
         } else {
             console.log("CHECK 3")
@@ -55,7 +55,7 @@ showInventorySK();
 function showInventorySKUT() {
     const month = document.getElementById("linkMonth").dataset.month;
     const iList = JSON.parse(document.getElementById('iColor').dataset.inventory);
-
+    const fsID = document.getElementById('fsID').dataset.fsid;
     for(var i=22; i<=26; i++) {
         if (selector == "form"){
             var tagOn = document.getElementById('id_skut' + String(i) + '_tag_on').value;
@@ -64,10 +64,10 @@ function showInventorySKUT() {
         }
         if(String(tagOn) == "No" && iList[i-1]) {
             var linkSel = iList[i-1][1];
-            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i+1)+"/"+linkSel+"'>Complete</a>"
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='../../26/inventory/"+ fsID +"/"+month+"/"+String(i+1)+"/"+linkSel+"'>Complete</a>"
             document.getElementById("kit" + String(i)).style.backgroundColor = "green"
         } else if (String(tagOn) == "No") {
-            document.getElementById("kit" + String(i)).innerHTML = "<a href='./"+month+"/"+String(i+1)+"/form'>Incomplete</a>"
+            document.getElementById("kit" + String(i)).innerHTML = "<a href='../../26/inventory/"+ fsID +"/"+month+"/"+String(i+1)+"/form'>Incomplete</a>"
             document.getElementById("kit" + String(i)).style.backgroundColor = "yellow"
         } else {
             console.log("CHECK 3")

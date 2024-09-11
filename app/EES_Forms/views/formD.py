@@ -135,7 +135,7 @@ def formD(request, facility, fsID, selector):
                         break
 
                 if filled_out:
-                    createNotification(facility, request.user, fsID, now, 'submitted', False)
+                    createNotification(facility, request, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)
                 else:
                     if formSubmissionRecords_model.objects.filter(formID__id=formName, facilityChoice__facility_name=facility).exists():
