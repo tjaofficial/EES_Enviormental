@@ -369,7 +369,9 @@ def register_view(request, facility, access_page):
         addMoreRegistrations = False
 
     if supervisor:
+        print('check 1')
         if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
+            print('check 2')
             if user_profiles.filter(user__id__exact=access_page).exists():
                 userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
                 userInfo = User.objects.all().filter(id__exact=access_page)[0]
@@ -393,6 +395,7 @@ def register_view(request, facility, access_page):
                 }
                 userData2 = user_profile_form(initial=initial_data)   
         else:
+            print('check 3')
             form = CreateUserForm()
             profile_form = user_profile_form()
             
@@ -403,165 +406,171 @@ def register_view(request, facility, access_page):
             userFacility = options.filter(company=userProf.company)
             if userFacility.exists():
                 facilityLink = True
-        if request.method == 'POST':
-            check_1 = request.POST.get('create_user', False)
-            check_2 = request.POST.get('create_facility', False)
-            check_3 = request.POST.get('edit_user', False)
-            check_4 = request.POST.get('create_client', False)
-            if check_1:
-                print('CHECK 1')
-                finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
-                new_data = request.POST.copy()
-                new_data['phone'] = finalPhone
-                new_data['username'] = request.POST['username'].lower()
-                form = CreateUserForm(new_data)
-                profile_form = user_profile_form(new_data)
-                if form.is_valid() and profile_form.is_valid():
-                    user = form.save()
-                    profile = profile_form.save(commit=False)
-                    profile.user = user
-                    profile.company = userCompany
-                    profile.save()
-
-                    group = Group.objects.get(name=profile.position)
-                    user.groups.add(group)
-
-                    user = form.cleaned_data.get('username')
-                    messages.success(request, 'Account was created for ' + user)
-                    return redirect('sup_dashboard', facility)
-                else:
-                    messages.error(request, "The Information Entered Was Invalid.")
-            elif check_2:
-                print(request.POST)
-                form = bat_info_form(request.POST)
-                profile_form = ''
-                if form.is_valid():
-                    print(request.POST['facility_name'])
-                    facilityModel = bat_info_model.objects.filter(facility_name=request.POST['facility_name'])
-                    if not facilityModel.exists():    
-                        A = form.save(commit=False)
-                        A.company = userProf.company
-                        if request.POST['cokeBattery'] == 'true':
-                            A.dashboard = 'battery'
-                        else:
-                            A.dashboard = 'default'
-                        
-                        A.save()
-                        newfacilityForm = facility_forms_model(
-                            facilityChoice = A,
-                            formData = ''
-                        )
-                        newfacilityForm.save()
-                        
-                        messages.success(request, 'Facility Created')
-                        return redirect('sup_dashboard', facility)
-                    else:
-                        messages.error(request, "The facility name you have entered is taken, please choose different name")
-                        print('need error message response for matching Facility names, choose different name')
-                        print(messages)
-                        return redirect('Register', facility, 'facility')
-            elif check_3:
-                print('CHECK 3')
-                finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
-                new_data = request.POST.copy()
-                new_data['phone'] = finalPhone
-                new_data['company'] = userProfileInfo.company
-                A = user_profile_form(new_data, request.FILES, instance=userProfileInfo)
-                if A.is_valid():
-                    A.save()
-                    return redirect('Contacts', facility)
-            elif check_4:
-                print('CHECK 4')
-                facility = bat_info_model.objects.all().filter(id=request.POST['facilityChoice'])[0]
-                finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
-                new_data = request.POST.copy()
-                new_data['phone'] = finalPhone
-                new_data['position'] = 'client'
-                A = user_profile_form(new_data)
-                B = CreateUserForm(new_data)
-                if A.is_valid() and B.is_valid():
-                    user = B.save()
-                    profile = A.save(commit=False)
-                    profile.user = user
-                    profile.company = userProf.company
-                    
-                    profile.save()
-                    
-                    group = Group.objects.get(name=profile.position)
-                    user.groups.add(group)
-
-                    user = B.cleaned_data.get('username')
-                    messages.success(request, 'Account was created for ' + user)
-
-                    return redirect('Contacts', facility)
-            else:
-                print('TOO FAR')
-                
     elif request.user.groups.filter(name=CLIENT_VAR):
         return redirect('c_dashboard')
     elif request.user.groups.filter(name=OBSER_VAR):
         return redirect('IncompleteForms', facility)
     else:
         return redirect('no_registration')
-    
-    if request.method == 'POST':
-        answer = request.POST
-        if 'facilitySelect' in answer.keys():
-            if answer['facilitySelect'] != '':
-                return redirect('sup_dashboard', answer['facilitySelect'])
-        if 'create_facility' in answer.keys():
-            copyPost = request.POST.copy()
-            copyPost['position'] = CLIENT_VAR
-            copyPost['company'] = userCompany
-            userFrom = CreateUserForm(copyPost)
-            userProfForm = user_profile_form(copyPost)
-            print(userFrom.errors)
-            print(userProfForm.errors)
-            if len(request.POST['phone']) < 10:
-                userProfForm.add_error('phone', ValidationError("Please enter a valid phone number. (ie. 1234567890, (123)456-7890)"))
-                messages.error(request,"Please enter a valid phone number. (ie. 1234567890, (123)456-7890)")
-            if User.objects.filter(email=request.POST['email']).exists():
-                userFrom.add_error('email', ValidationError("This email has already been used."))
-                messages.error(request,"This email has already been used. Please enter a different email.")
-            if User.objects.filter(username=request.POST['username'].lower()).exists():
-                userFrom.add_error('username', ValidationError("This username already exists."))
-                messages.error(request,"This username already exists. Please enter a different username.")
-            if userFrom.is_valid() and userProfForm.is_valid():
-                A = userFrom.save(commit=False)
-                A.is_active = False
-                A.save()
-                
-                B = userProfForm.save(commit=False)
-                B.user = A
-                B.is_active = False
-                B.save()
-                
-                group = Group.objects.get(name=CLIENT_VAR)
-                A.groups.add(group)
 
-                current_site = get_current_site(request)
-                mail_subject = 'MethodPlus: Activate Your New Account'   
-                html_message = render_to_string('email/acc_active_email.html', {  
-                    'user': A,  
-                    'domain': current_site.domain,  
-                    'uid':urlsafe_base64_encode(force_bytes(A.pk)),  
-                    'token':create_token(A),  
-                })  
-                plain_message = strip_tags(html_message)
-                to_email = userFrom.cleaned_data.get('email')  
-                send_mail(
-                    mail_subject,
-                    plain_message,
-                    settings.EMAIL_HOST_USER,
-                    [to_email],
-                    html_message=html_message,
-                    fail_silently=False
-                )
-                messages.success(request,"Please confirm your email address to complete the registration")
-                return redirect('Login')
+
+    if request.method == 'POST':
+        check_1 = request.POST.get('create_user', False)
+        check_2 = request.POST.get('create_facility', False)
+        check_3 = request.POST.get('edit_user', False)
+        check_4 = request.POST.get('create_client', False)
+        if check_1:
+            print('CHECK 1')
+            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            new_data = request.POST.copy()
+            new_data['phone'] = finalPhone
+            new_data['username'] = request.POST['username'].lower()
+            form = CreateUserForm(new_data)
+            profile_form = user_profile_form(new_data)
+            if form.is_valid() and profile_form.is_valid():
+                user = form.save()
+                profile = profile_form.save(commit=False)
+                profile.user = user
+                profile.company = userCompany
+                profile.save()
+
+                group = Group.objects.get(name=profile.position)
+                user.groups.add(group)
+
+                user = form.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+                return redirect('sup_dashboard', facility)
             else:
-                messages.error(request,"Please fix your inputs.")
-                return redirect('Register', facility, 'client')
+                messages.error(request, "The Information Entered Was Invalid.")
+        elif check_2:
+            print(request.POST)
+            copyRequest = request.POST.copy()
+            copyRequest['is_battery'] = request.POST['cokeBattery']
+            form = bat_info_form(copyRequest)
+            profile_form = ''
+            print(form.errors)
+            if form.is_valid():
+                print(request.POST['facility_name'])
+                facilityModel = bat_info_model.objects.filter(facility_name=request.POST['facility_name'])
+                if not facilityModel.exists():    
+                    A = form.save(commit=False)
+                    A.company = userProf.company
+                    if request.POST['cokeBattery'] == 'Yes':
+                        A.dashboard = 'battery'
+                    else:
+                        A.dashboard = 'default'
+                    
+                    A.save()
+                    newfacilityForm = facility_forms_model(
+                        facilityChoice = A,
+                        formData = ''
+                    )
+                    newfacilityForm.save()
+                    
+                    messages.success(request, 'Facility Created')
+                    return redirect('sup_dashboard', facility)
+                else:
+                    messages.error(request, "The facility name you have entered is taken, please choose different name")
+                    print('need error message response for matching Facility names, choose different name')
+                    print(messages)
+                    return redirect('Register', facility, 'facility')
+        elif check_3:
+            print('CHECK 3')
+            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            new_data = request.POST.copy()
+            new_data['phone'] = finalPhone
+            new_data['company'] = userProfileInfo.company
+            A = user_profile_form(new_data, request.FILES, instance=userProfileInfo)
+            if A.is_valid():
+                A.save()
+                return redirect('Contacts', facility)
+        elif check_4:
+            print('CHECK 4')
+            facility = bat_info_model.objects.all().filter(id=request.POST['facilityChoice'])[0]
+            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            new_data = request.POST.copy()
+            new_data['phone'] = finalPhone
+            new_data['position'] = 'client'
+            A = user_profile_form(new_data)
+            B = CreateUserForm(new_data)
+            if A.is_valid() and B.is_valid():
+                user = B.save()
+                profile = A.save(commit=False)
+                profile.user = user
+                profile.company = userProf.company
+                
+                profile.save()
+                
+                group = Group.objects.get(name=profile.position)
+                user.groups.add(group)
+
+                user = B.cleaned_data.get('username')
+                messages.success(request, 'Account was created for ' + user)
+
+                return redirect('Contacts', facility)
+        else:
+            print('TOO FAR')
+                
+    
+    
+    # if request.method == 'POST':
+    #     answer = request.POST
+    #     if 'facilitySelect' in answer.keys():
+    #         if answer['facilitySelect'] != '':
+    #             return redirect('sup_dashboard', answer['facilitySelect'])
+    #     if 'create_facility' in answer.keys():
+    #         copyPost = request.POST.copy()
+    #         copyPost['position'] = CLIENT_VAR
+    #         copyPost['company'] = userCompany
+    #         userFrom = CreateUserForm(copyPost)
+    #         userProfForm = user_profile_form(copyPost)
+    #         print(userFrom.errors)
+    #         print(userProfForm.errors)
+    #         if len(request.POST['phone']) < 10:
+    #             userProfForm.add_error('phone', ValidationError("Please enter a valid phone number. (ie. 1234567890, (123)456-7890)"))
+    #             messages.error(request,"Please enter a valid phone number. (ie. 1234567890, (123)456-7890)")
+    #         if User.objects.filter(email=request.POST['email']).exists():
+    #             userFrom.add_error('email', ValidationError("This email has already been used."))
+    #             messages.error(request,"This email has already been used. Please enter a different email.")
+    #         if User.objects.filter(username=request.POST['username'].lower()).exists():
+    #             userFrom.add_error('username', ValidationError("This username already exists."))
+    #             messages.error(request,"This username already exists. Please enter a different username.")
+    #         if userFrom.is_valid() and userProfForm.is_valid():
+    #             A = userFrom.save(commit=False)
+    #             A.is_active = False
+    #             A.save()
+                
+    #             B = userProfForm.save(commit=False)
+    #             B.user = A
+    #             B.is_active = False
+    #             B.save()
+                
+    #             group = Group.objects.get(name=CLIENT_VAR)
+    #             A.groups.add(group)
+
+    #             current_site = get_current_site(request)
+    #             mail_subject = 'MethodPlus: Activate Your New Account'   
+    #             html_message = render_to_string('email/acc_active_email.html', {  
+    #                 'user': A,  
+    #                 'domain': current_site.domain,  
+    #                 'uid':urlsafe_base64_encode(force_bytes(A.pk)),  
+    #                 'token':create_token(A),  
+    #             })  
+    #             plain_message = strip_tags(html_message)
+    #             to_email = userFrom.cleaned_data.get('email')  
+    #             send_mail(
+    #                 mail_subject,
+    #                 plain_message,
+    #                 settings.EMAIL_HOST_USER,
+    #                 [to_email],
+    #                 html_message=html_message,
+    #                 fail_silently=False
+    #             )
+    #             messages.success(request,"Please confirm your email address to complete the registration")
+    #             return redirect('Login')
+    #         else:
+    #             messages.error(request,"Please fix your inputs.")
+    #             return redirect('Register', facility, 'client')
                 
                 
             

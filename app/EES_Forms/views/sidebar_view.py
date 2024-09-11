@@ -949,7 +949,6 @@ def formsProgress(request, facility, section):
         return redirect('IncompleteForms', facility)
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     clientForms = get_facility_forms('facilityName', facility)
-    print(clientForms)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
     
     for formInfo in clientForms:

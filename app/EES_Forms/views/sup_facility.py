@@ -5,7 +5,7 @@ from ..forms import facility_forms_form, the_packets_form, form_settings_form
 import ast
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
+from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 import json
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -33,17 +33,8 @@ def facilityList(request, facility):
 
     newFacList = []
     for facil in facList:
-        found = False
-        for line in facData:
-            if facil == line.facilityChoice:
-                if line.formData:
-                    facilityForms = ast.literal_eval(line.formData)
-                    print(facilityForms)
-                    found = True
-        if found:
-            newFacList.append((facil, facilityForms))
-        else:
-            newFacList.append((facil, []))
+        facilityForms = get_facility_forms('facilityID', facil.id)
+        newFacList.append((facil, facilityForms))
     print(newFacList)
     finalList = []
     for newFac in newFacList:
@@ -114,13 +105,7 @@ def facilityList(request, facility):
                     finalDelete.save()
             #delete form facility forms model
             thisFacilityForm = facData.get(facilityChoice__id=facID)
-            makeFacFormsListItems = ast.literal_eval(thisFacilityForm.formData[1:-1])
-            print("hello")
-            print(makeFacFormsListItems)
-            if isinstance(makeFacFormsListItems, int):
-                makeFacFormsList = [makeFacFormsListItems]
-            else:
-                makeFacFormsList = list(makeFacFormsListItems)#.split(',')
+            makeFacFormsList = changeStringListIntoList(thisFacilityForm.formData)
             print(makeFacFormsList)
             for ids in makeFacFormsList:
                 print(ids)
@@ -185,14 +170,9 @@ def facilityForm(request, facility, packet):
     q = request.GET.get('q')
     specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
-    facilityFormsData = facility_forms_model.objects.get(facilityChoice=specificFacility)
     formSettingsModel = form_settings_model.objects.all()
     packetQuery = the_packets_model.objects.get(id=packet)
-    if facilityFormsData.formData:
-        facilityFormList = ast.literal_eval(facilityFormsData.formData[1:-1])
-    else:
-        facilityFormList = []
-    
+    facilityFormList = get_facility_forms('facilityID', specificFacility.id)
     # Compares the existing forms added to the facility
     # and all the formSettings entries related to the 
     # facilty. Basically this is pulling all the formSettings
@@ -503,16 +483,10 @@ def Add_Forms(request, facility):
             
             if facilityFormsData.exists():
                 print(facilityFormsData[0].formData)
-                if facilityFormsData[0].formData and facilityFormsData[0].formData != '[]':
-                    facilityFormsData2 = ast.literal_eval(facilityFormsData[0].formData[1:-1])
-                    makeFacFormsList = str(facilityFormsData2)[1:-1].split(',')
-                    print(makeFacFormsList)
-                    for oldForms in makeFacFormsList:
-                        if oldForms != '[]':
-                            if int(oldForms) not in selectedList:
-                                selectedList.append(int(oldForms))
-                else:
-                    facilityFormsData2 = []
+                returnFacList = changeStringListIntoList(facilityFormsData[0].formData)
+                for oldForms in returnFacList:
+                    if int(oldForms) not in selectedList:
+                        selectedList.append(int(oldForms))
             
         print(selectedList)
         B = facilityFormsData[0]

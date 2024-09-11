@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import Calendar2, checkIfFacilitySelected, get_facility_forms
+from ..utils import Calendar2, checkIfFacilitySelected
 from ..models import the_packets_model, form_settings_model
 import ast
 import datetime
@@ -25,7 +25,6 @@ def calSelect(request, facility, type, forms, year, month):
     monthConvert = calendar.month_name[month]
     month_number = list(calendar.month_name).index(monthConvert)
     month_number = int(month_number)
-    facilityForms = get_facility_forms('facilityName', facility)
     
     
     if type == 'group':  
@@ -49,7 +48,6 @@ def calSelect(request, facility, type, forms, year, month):
     else:
         next_month = month_number + 1
         next_year = year
-    print(facilityForms)
         
     date = datetime.datetime.now()
     calend = Calendar2()

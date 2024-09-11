@@ -260,7 +260,22 @@ class pt_admin1_form(ModelForm):
 class bat_info_form(ModelForm):
     class Meta:
         model = bat_info_model
-        fields = ('bat_num', 'total_ovens', 'facility_name', 'county', 'estab_num', 'equip_location', 'address', 'state', 'district', 'bat_height', 'bat_height_label', 'bat_main', 'bat_lids', 'city')
+        fields = (
+            'bat_num', 
+            'total_ovens', 
+            'facility_name', 
+            'county', 
+            'estab_num', 
+            'equip_location', 
+            'address', 
+            'state', 
+            'district', 
+            'bat_height', 
+            'bat_height_label', 
+            'bat_main', 
+            'bat_lids', 
+            'city',
+            'is_battery')
 
         widgets = {
             'bat_num': forms.NumberInput(attrs={'class':'input', 'type': 'number','style': 'width: 7rem;'}),
@@ -277,6 +292,7 @@ class bat_info_form(ModelForm):
             'bat_height_label': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
             'bat_main': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
             'bat_lids': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;'}),
+            'is_battery': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
         }
 
 

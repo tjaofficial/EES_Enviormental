@@ -9,9 +9,8 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
-from ..models import facility_forms_model, issues_model, user_profile_model,form_settings_model, the_packets_model
-from ..utils import get_facility_forms, parseFormList, getCompanyFacilities, date_change, time_change, date_time_change, road_choices, truck_choices, area_choices, emptyInputs, quarterParse, inventoryResponse
-import json
+from ..models import issues_model, user_profile_model,form_settings_model, the_packets_model
+from ..utils import date_change, time_change
 import io
 import datetime
 import calendar
@@ -50,7 +49,6 @@ class PageNumCanvas(canvas.Canvas):
 @lock
 def form_PDF(request, facility, formGroup, formIdentity, formDate):
     userProfile = user_profile_model.objects.get(user=request.user)
-    facilityForms = get_facility_forms('facilityName', facility)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
 
     if formGroup == 'single':

@@ -974,7 +974,7 @@ def get_facility_forms(selector, facilityID):
         facilityFormsString = facility_forms_model.objects.get(facilityChoice__facility_name=facilityID)
     elif selector == 'facilityID':
         facilityFormsString = facility_forms_model.objects.get(facilityChoice__id=facilityID)
-    facilityFormsList = ast.literal_eval(facilityFormsString.formData)
+    facilityFormsList = changeStringListIntoList(facilityFormsString.formData)
     return facilityFormsList
 
 def create_starting_forms():
@@ -1429,3 +1429,22 @@ def monthDayAdjust(input):
         return '0'+str(input)
     else:
         return str(input)
+    
+def changeStringListIntoList(ffFormData):
+    facilityForms = ffFormData
+    if facilityForms:
+        if facilityForms == '[]':
+            returnList = []
+        else:
+            facilityForms = ast.literal_eval(facilityForms[1:-1])
+            if str(facilityForms)[0] != "(":
+                returnList = [facilityForms]
+            else:
+                returnList = []
+                for x in facilityForms:
+                    returnList.append(x)     
+    else:
+        returnList = []
+        # messages.error(request,'ERROR: ID-11850003 Contact Support Team')
+    
+    return returnList
