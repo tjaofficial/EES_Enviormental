@@ -1,0 +1,91 @@
+{% if selector == 'form' %}
+<form method="POST" name="batteryForm">
+    {% if facilityInfo.is_battery %}
+    <table name="batterySettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" class='' style="width: 30%;">
+                Battery Settings:
+            </th>
+        </tr class='tableSpacer'>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Battery No.: {{facilityInfo.bat_num}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Establishment No.: {{facilityInfo.estab_num}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Height: {{facilityInfo.bat_height}}{%if facilityInfo.bat_height_label == 'feet'%}ft{% else %}m{% endif %}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Battery Main: {{facilityInfo.bat_main}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Battery Lids: {{facilityInfo.bat_lids}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td style="text-align: center;">
+                <input type="submit" name="batterySave" value="save">
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+</form>
+{% else %}
+<form method="POST" name="batteryForm">
+    {% if facilityInfo.is_battery %}
+    <table name="batterySettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" class='' style="width: 30%;">
+                Battery Settings:
+            </th>
+        </tr class='tableSpacer'>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Battery No.: {{facilityInfo.bat_num}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Establishment No.: {{facilityInfo.estab_num}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Height: {{facilityInfo.bat_height}}{%if facilityInfo.bat_height_label == 'feet'%}ft{% else %}m{% endif %}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Battery Main: {{facilityInfo.bat_main}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Battery Lids: {{facilityInfo.bat_lids}}
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td style="text-align: center;">
+                <a href=#>edit</a>
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+</form>
+{% endif %}

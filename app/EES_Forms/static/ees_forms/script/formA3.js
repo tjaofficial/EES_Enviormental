@@ -361,7 +361,7 @@ function om_equation() {
           om_inops = document.getElementById('inop_ovens').value,
           om_not_obs = document.getElementById('om_not_observed').value;
     
-    const equate = (parseInt(om_leaks) * 100)/(4*(85 - parseInt(om_inops)) - parseInt(om_not_obs));
+    const equate = (parseInt(om_leaks) * 100)/(2*(85 - parseInt(om_inops)) - parseInt(om_not_obs));
     
     document.getElementById('om_percent_leaking').value = parseFloat(equate).toFixed(3);
 }

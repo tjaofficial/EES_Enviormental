@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
-from ..forms import CreateUserForm, user_profile_form, company_form
+from ..forms import CreateUserForm, user_profile_form, company_form,bat_info_form
 import datetime
 import braintree
+import json
 
 
 lock = login_required(login_url='Login')
@@ -572,7 +573,7 @@ def sup_billing_history(request, facility):
     })
     
 @lock
-def sup_facility_settings(request, facility, facilityID):
+def sup_facility_settings(request, facility, facilityID, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock = setUnlockClientSupervisor(request.user)[0]
     client = setUnlockClientSupervisor(request.user)[1]
@@ -584,17 +585,35 @@ def sup_facility_settings(request, facility, facilityID):
         braintreeData = braintreeData.get(user__id=request.user.id)
     else:
         print('handle if there is no braintree entry')
-    facilityInfo = bat_info_model.objects.get(id=facilityID)
-    clientUserProfs = user_profile_model.objects.filter(facilityChoice=facilityInfo)
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    facInfoMain = bat_info_model.objects.get(id=facilityID)
+    clientUserProfs = user_profile_model.objects.filter(facilityChoice=facInfoMain)
+    facilityInfo = ''
+
+    if selector == 'faci':
+        initial_data = {
+            'bat_num': facInfoMain.bat_num, 
+            'total_ovens': facInfoMain.total_ovens, 
+            'facility_name': facInfoMain.facility_name, 
+            'county': facInfoMain.county, 
+            'estab_num': facInfoMain.estab_num, 
+            'equip_location': facInfoMain.equip_location, 
+            'address': facInfoMain.address, 
+            'state': facInfoMain.state, 
+            'district': facInfoMain.district, 
+            'bat_height': facInfoMain.bat_height, 
+            'bat_height_label': facInfoMain.bat_height_label, 
+            'bat_main': facInfoMain.bat_main, 
+            'bat_lids': facInfoMain.bat_lids, 
+            'city': facInfoMain.city,
+            'is_battery': facInfoMain.is_battery
+        }
+        facilityInfo = bat_info_form(initial=initial_data)
+    elif selector == 'batd':
+        facilityInfo = facInfoMain.settings
+
+
+
+
     facility = 'supervisor'
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
@@ -606,25 +625,92 @@ def sup_facility_settings(request, facility, facilityID):
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
         
     if request.method == "POST":
-        data = request.POST
-        if 'facilitySelect' in data.keys():
-            if data['facilitySelect'] != '':
-                return redirect('sup_dashboard', data['facilitySelect'])
+        answer = request.POST
+        print(answer)
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
         else:
-            print(data)
-            selectedRegister = userProfileQuery.get(id=int(data['registerID']))
-            selectedRegister.company.braintree.status = "active"
-            selectedRegister.save()
-            return redirect("Account", facility)
+            if 'facilityInfoSave' in answer.keys():
+                form = bat_info_form(answer, instance=facInfoMain)
+                if form.is_valid():
+                    form.save()
+                    #print('saved it')
+                    return redirect('selectedFacilitySettings', facility, facilityID, 'main')
+            elif 'batteryDashForm' in answer.keys():
+                facInfoMain.settings['batteryDash'] = {}
+                batDashSettings = facInfoMain.settings['batteryDash']
+                progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
+                if 'progressBar' in answer.keys():
+                    if answer['progressBar'] == 'true':
+                        batDashSettings['progressBar'] = {}
+                        for progOpt in progressOptions:
+                            progInput = False
+                            if progOpt in answer.keys():
+                                if answer[progOpt] == 'true':
+                                    progInput = True
+                            batDashSettings['progressBar'][progOpt] = progInput
+                else:
+                    batDashSettings['progressBar'] = False
+                if 'graphs' in answer.keys():
+                    if answer['graphs'] == 'true':
+                        batDashSettings['graphs'] = {}
+                        graphOptions = ['charges', 'doors', 'lids', 'graph90dayPT']
+                        if answer['graphFrequency'] == 'dates':
+                            batDashSettings['graphs']['graphFrequency'] = {
+                                'graphStart': answer['graphStart'],
+                                'graphStop': answer['graphStop'],
+                            }
+                        else:
+                            batDashSettings['graphs']['graphFrequency'] = answer['graphFrequency']
+                        batDashSettings['graphs']['dataChoice'] = {}
+                        for graphOpt in graphOptions:
+                            graphInput = False
+                            if graphOpt in answer.keys():
+                                if answer[graphOpt] == 'true':
+                                    graphInput = True
+                            batDashSettings['graphs']['dataChoice'][graphOpt] = {'show': graphInput, 'type': 'bar'}
+                else:
+                    batDashSettings['graphs'] = False
+                if 'correctiveActions' in answer.keys():
+                    if answer['correctiveActions'] == 'true':
+                        batDashSettings['correctiveActions'] = True
+                else:
+                    batDashSettings['correctiveActions'] = False
+                if 'infoWeather' in answer.keys():
+                    if answer['infoWeather'] == 'true':
+                        batDashSettings['infoWeather'] = True
+                else:
+                    batDashSettings['infoWeather'] = False
+                if '90dayPT' in answer.keys():
+                    if answer['90dayPT'] == 'true':
+                        batDashSettings['90dayPT'] = True
+                else:
+                    batDashSettings['90dayPT'] = False
+                if 'contacts' in answer.keys():
+                    if answer['contacts'] == 'true':
+                        batDashSettings['contacts'] = True
+                else:
+                    batDashSettings['contacts'] = False
+                print(batDashSettings)
+                
+                A  = facInfoMain
+                A.setting = json.dumps(batDashSettings)
+                A.save()
+                return redirect('selectedFacilitySettings', facility, facilityID, 'main')
+
     return render(request, 'supervisor/settings/selected_facility_settings.html',{
         'notifs': notifs,
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
         'facility': facility,
+        'facilityID': facilityID,
         
         'facilityInfo': facilityInfo,
+        'facInfoMain': facInfoMain,
         'clientUserProfs': clientUserProfs,
+        'selector': selector,
         
         'accountData': accountData,
         'listOfEmployees': listOfEmployees,

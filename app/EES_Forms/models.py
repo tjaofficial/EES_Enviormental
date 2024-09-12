@@ -442,7 +442,11 @@ class bat_info_model(models.Model):
         null=True,
         blank=True
     )
-    
+    settings = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
     def __str__(self):
         return self.facility_name
 
@@ -792,6 +796,11 @@ class user_profile_model(models.Model):
     )
     is_active = models.BooleanField(
         default=False
+    )
+    settings = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
     )
     def __str__(self):
         return self.user.username
@@ -10012,6 +10021,7 @@ class form_requests_model(models.Model):
 
     def __str__(self):
         return str(self.user) + ' - ' + str(self.name)
+
 
 # class tank_library(models.Model):
 #     title = models.CharField(max_length=40)

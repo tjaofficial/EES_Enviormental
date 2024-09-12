@@ -1,0 +1,57 @@
+{% if selector == 'form' %}
+<form method="POST" name="facilitySettingsForm">
+    <table name="facilitySettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" class='' style="width: 30%;">
+                Facility Accounts:
+            </th>
+        </tr>
+        {% for employee in clientUserProfs %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">
+                - {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}
+                <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}">
+                    (remove)
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class='tableSpacer'>
+            <td style="text-align: center;">
+                <input type="submit" name="facilitySettingsSave" value="save">
+            </td>
+        </tr>
+    </table>
+</form>
+{% else %}
+<form method="POST" name="facilitySettingsForm">
+    <table name="facilitySettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" class='' style="width: 30%;">
+                Facility Accounts:
+            </th>
+        </tr>
+        {% for employee in clientUserProfs %}
+        <tr class='tableSpacer'>
+            <td colspan="2" class="cellData">
+                - {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}
+                <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}">
+                    (remove)
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class='tableSpacer'>
+            <td style="text-align: center;">
+                <a href=#>edit</a>
+            </td>
+        </tr>
+    </table>
+</form>
+{% endif %}

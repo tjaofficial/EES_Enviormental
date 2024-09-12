@@ -6,7 +6,7 @@
         <tr class='tableSpacer'>
             <td colspan="2" class="cellData">
                 {% for facilities in sortedFacilityData %}
-                    <a href="{% url 'selectedFacilitySettings' facility facilities.id %}">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a>
+                    <a href="{% url 'selectedFacilitySettings' facility facilities.id 'main' %}">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a><br>
                 {% endfor %}
             </td>
         </tr>

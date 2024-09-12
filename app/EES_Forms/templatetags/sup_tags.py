@@ -1,6 +1,7 @@
 from django import template
 from ..models import the_packets_model
 import json
+import datetime
 register = template.Library()
 
 @register.filter(name="is_string")
@@ -23,3 +24,13 @@ def list_of_packets(facility):
         listOfPacketIDs.append(allPacs.id)
     listOfPacketIDs = json.dumps(listOfPacketIDs)
     return listOfPacketIDs
+
+@register.filter(name='string')
+def string(item):
+    item = str(item)
+    return item
+
+@register.filter(name='dateParse')
+def dateParse(string):
+    parseDate = datetime.datetime.strptime(string, "%Y-%m-%d").date()
+    return parseDate

@@ -1,0 +1,102 @@
+{% if selector == 'form' %}
+<form method="POST" name="notifForm">
+    <table name="notifSettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" style="width: 30%;">
+                Notification Settings:
+            </th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Send me notifications for:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" style="width: 30%;">
+                <div>
+                    <label class="container">Deviations - Out of Compliance
+                        <input type="checkbox" value="compliance" name="compliance">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Deviations
+                        <input type="checkbox" value="deviations" name="deviations">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Submitted Forms
+                        <input type="checkbox" value="submitted" name="submitted">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">10 Day Push Travel Warnings
+                        <input type="checkbox" value="10_day_pt" name="10_day_pt">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">5 Day Push Travel Warnings
+                        <input type="checkbox" value="5_day_pt" name="5_day_pt">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td style="text-align: center;">
+                <input type="submit" name="notifSave" value="save">
+            </td>
+        </tr>
+    </table>
+</form>
+{% else %}
+<form method="POST" name="notifForm">
+    <table name="notifSettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" class='' style="width: 30%;">
+                Notification Settings:
+            </th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">Send me notifications for:</td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td colspan="2" class='' style="width: 30%;">
+                {% comment %} 
+                - Deviations - Out of Compliance 
+                - Deviations
+                - Submitted Forms
+                - 10 Day Push Travel Warnings
+                - 5 Day Push Travel Warnings 
+                {% endcomment %}
+                <div>
+                    <label class="container">Deviations - Out of Compliance
+                        <input type="checkbox" value="compliance" name="compliance">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Deviations
+                        <input type="checkbox" value="deviations" name="deviations">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">Submitted Forms
+                        <input type="checkbox" value="submitted" name="submitted">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">10 Day Push Travel Warnings
+                        <input type="checkbox" value="10_dayPush" name="10_dayPush">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="container">5 Day Push Travel Warnings
+                        <input type="checkbox" value="5_dayPush" name="5_dayPush">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
+            <td style="text-align: center;">
+                <a href=#>edit</a>
+            </td>
+        </tr>
+    </table>
+</form>
+{% endif %}

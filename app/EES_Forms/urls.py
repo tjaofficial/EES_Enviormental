@@ -43,7 +43,7 @@ urlpatterns = [
     path("<str:facility>/account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
     path("<str:facility>/subscription/change", views.sup_change_subscription, name="subscriptionChange"),
     path("<str:facility>/subscription/billing", views.sup_billing_history, name="billingHistory"),
-    path("<str:facility>/account/facility-settings/<int:facilityID>", views.sup_facility_settings, name="selectedFacilitySettings"),
+    path("<str:facility>/account/facility-settings/<int:facilityID>/<str:selector>", views.sup_facility_settings, name="selectedFacilitySettings"),
     
     ##---BILLING
     path("billing/<str:step>", views.billing_view, name="billing"),
