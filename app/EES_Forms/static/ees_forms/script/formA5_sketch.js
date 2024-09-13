@@ -68,6 +68,7 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
         
     });
     sketchpad.smoothing = 0.2;
+    sketchpad.adaptiveStroke = false;
   
     drawImgToCanvas(canvas, imageElem);
     
@@ -96,8 +97,7 @@ function sketchPopup(elemClicked, blankImage, renderedImage){
   
   function drawImgToCanvas(canvas, imageElem){
     const ctx = canvas.getContext('2d');
-      ctx.drawImage(imageElem, 0, 0, imageElem.width, imageElem.height,
-                          0, 0, canvas.width, canvas.height);
+      ctx.drawImage(imageElem, 0, 0, canvas.width, canvas.height);
   }
 
   function newImageObject(imageURL)
