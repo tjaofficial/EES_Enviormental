@@ -52,6 +52,55 @@ parseFormList = [
     (26, "R"),
     (27, "Q"),  
 ]
+defaultBatteryDashSettings = {
+    'progressBar': {
+        'progressDaily': True,
+        'progressWeekly': True,
+        'progressMonthly': True,
+        'progressQuarterly': True,
+        'progressAnnually': False,
+    },
+    'graphs': {
+        'graphFrequencyData': {
+            'frequency': 'weekly',
+            'dates': False
+            },
+        'dataChoice': {
+            'charges': {
+                'show': True,
+                'type': 'bar'
+            },
+            'doors': {
+                'show': True,
+                'type': 'bar'
+            },
+            'lids': {
+                'show': True,
+                'type': 'bar'
+            },
+            'graph90dayPT': {
+                'show': False,
+                'type': 'bar'
+            },
+        }
+    },
+    'correctiveActions': True,
+    'infoWeather': True,
+    '90dayPT': True,
+    'contacts': True
+}
+defaultNotifications = {
+        'compliance': True,
+        'deviations': True,
+        'submitted': True,
+        '10_day_pt': False,
+        '5_day_pt': False
+}
+
+defaultUserSettings = {
+    'colorMode': 'light',
+    'landingDash': 'default'
+}
 
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):

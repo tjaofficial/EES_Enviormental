@@ -30,6 +30,16 @@ function initital_count(){
 }
 initital_count();
 
+function initialCrossOut(){
+    const counter = document.getElementById('progress').dataset.count;
+    if (counter == 4) {
+        disableInput(true);
+    } else if (counter == 3) {
+        disableInput(false);
+    }
+}
+initialCrossOut()
+
 function stopAtFour(elem){
     const counter = document.getElementById('progress').dataset.count;
     if (elem){
@@ -47,7 +57,6 @@ function stopAtFour(elem){
 }
 
 function disableInput(disable){
-    const progOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
     for (let x=0; x < progOptions.length; x++) {
         const option = progOptions[x]
         const selObject = document.getElementById(option)

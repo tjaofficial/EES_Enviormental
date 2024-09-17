@@ -5,15 +5,20 @@
 <link href="{% static 'ees_forms/style/selected_facility_settings.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/selected_facility_settings.js' %}"></script>
-{% if selector == 'main' %}
 <style>
     .container input:checked ~ .checkmark {
         background-color: gray;
     }
 </style>
-{% else %}
+{% if selector == 'batd' %}
 <style>
-    .container input:checked ~ .checkmark {
+    #batteryDashSettings .container input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+</style>
+{% elif selector == 'noti' %}
+<style>
+    #notifSettings .container input:checked ~ .checkmark {
         background-color: #2196F3;
     }
 </style>
@@ -21,33 +26,9 @@
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
         <div class="cardHeader">
-            {% include "shared/components/backArrow.html" with destination="dashboard"%}
+            {% include "shared/components/backArrow.html" with destination="accountSettings"%}
             {{facInfoMain}} Settings
         </div>
-        {% comment %} <div id="addModal" class="modalAdd">
-            <div id="cancelReg" class="modal-content" style="width: 64%;">
-                <span class="closeAdd">&times;</span>
-                <div class='modalHeader'>
-                    <h1>Cancel Registration for <span class="registerName"></span>?</h1>
-                </div>
-                <div class='modalContent'>
-                    <form action="" method="POST">
-                        {% csrf_token %}
-                        <div style="color:black;text-align:justify;">
-                            Are you sure you would like to cancel your registration for <span class="registerName"></span>? Once cancelled, <span class="registerName"></span> will only have access to the features described in your subscription until the end of the current billing period (<span id="registerEnding"></span>).
-                            <br><br>
-                            <p>Please type "cancel" below and confirm</p><br>
-                            <input id="cancelText" oninput="checkCancelText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
-                            <input id="registerID" type="hidden" name="registerID" value=""/>
-                            <br>
-                            <div style="text-align: right;">
-                                <input id="submit" type="submit" value="Confirm Cancellation" disabled>
-                            </div>
-                        </div>  
-                    </form>
-                </div>
-            </div>
-        </div> {% endcomment %}
         <div style="padding: 15px 32px;">
             <div class="centerFlex" style="height:unset;">
                 {% include '../components/settings_facilityInfo_form.html' with page=selector %}

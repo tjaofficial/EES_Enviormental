@@ -1,6 +1,7 @@
-{% if selector == 'form' %}
-<form method="POST" name="notifForm">
-    <table name="notifSettings" class="tableClass">
+<form method="POST" name="notifForm" id="notifForm">
+    {% csrf_token %}
+    {% if page == 'noti' %}
+    <table id="notifSettings" name="notifSettings" class="tableClass">
         <tr class='tableSpacer'>
             <td colspan="2" class="labelClass"><hr></td>
         </tr>
@@ -10,43 +11,48 @@
             </th>
         </tr>
         <tr class='tableSpacer'>
+            <td class="labelClass">
+                Reset default settings: <span style="cursor:pointer;" onclick="setdefault()">click here</span>
+                <input id="defaultNotif" type="hidden" name="defaultNotif" value=false>
+                <script>
+                    function setdefault(){
+                        document.getElementById('defaultNotif').value = true;
+                        document.getElementById('notifForm').submit();
+                    }
+                </script>
+            </td>
+        </tr>
+        <tr class='tableSpacer'>
             <td class="labelClass">Send me notifications for:</td>
         </tr>
         <tr class='tableSpacer'>
             <td colspan="2" style="width: 30%;">
                 <div>
                     <label class="container">Deviations - Out of Compliance
-                        <input type="checkbox" value="compliance" name="compliance">
+                        <input id="compliance" type="checkbox" value="true" {% if facilityInfo.notifications.compliance %}checked{% endif %} name="compliance">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">Deviations
-                        <input type="checkbox" value="deviations" name="deviations">
+                        <input id="deviations" type="checkbox" value="true" {% if facilityInfo.notifications.deviations %}checked{% endif %} name="deviations">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">Submitted Forms
-                        <input type="checkbox" value="submitted" name="submitted">
+                        <input id="submitted" type="checkbox" value="true" {% if facilityInfo.notifications.submitted %}checked{% endif %} name="submitted">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">10 Day Push Travel Warnings
-                        <input type="checkbox" value="10_day_pt" name="10_day_pt">
+                        <input id="10_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.10_day_pt %}checked{% endif %} name="10_day_pt">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">5 Day Push Travel Warnings
-                        <input type="checkbox" value="5_day_pt" name="5_day_pt">
+                        <input id="5_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.5_day_pt %}checked{% endif %} name="5_day_pt">
                         <span class="checkmark"></span>
                     </label>
                 </div>
             </td>
         </tr>
-        <tr class='tableSpacer'>
-            <td style="text-align: center;">
-                <input type="submit" name="notifSave" value="save">
-            </td>
-        </tr>
     </table>
-</form>
-{% else %}
-<form method="POST" name="notifForm">
+    {% else %}
     <table name="notifSettings" class="tableClass">
         <tr class='tableSpacer'>
             <td colspan="2" class="labelClass"><hr></td>
@@ -61,42 +67,37 @@
         </tr>
         <tr class='tableSpacer'>
             <td colspan="2" class='' style="width: 30%;">
-                {% comment %} 
-                - Deviations - Out of Compliance 
-                - Deviations
-                - Submitted Forms
-                - 10 Day Push Travel Warnings
-                - 5 Day Push Travel Warnings 
-                {% endcomment %}
                 <div>
                     <label class="container">Deviations - Out of Compliance
-                        <input type="checkbox" value="compliance" name="compliance">
+                        <input disabled id="compliance" type="checkbox" value="true" {% if facilityInfo.notifications.compliance %}checked{% endif %} name="compliance">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">Deviations
-                        <input type="checkbox" value="deviations" name="deviations">
+                        <input disabled id="deviations" type="checkbox" value="true" {% if facilityInfo.notifications.deviations %}checked{% endif %} name="deviations">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">Submitted Forms
-                        <input type="checkbox" value="submitted" name="submitted">
+                        <input disabled id="submitted" type="checkbox" value="true" {% if facilityInfo.notifications.submitted %}checked{% endif %} name="submitted">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">10 Day Push Travel Warnings
-                        <input type="checkbox" value="10_dayPush" name="10_dayPush">
+                        <input disabled id="10_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.10_day_pt %}checked{% endif %} name="10_dayPush">
                         <span class="checkmark"></span>
                     </label>
                     <label class="container">5 Day Push Travel Warnings
-                        <input type="checkbox" value="5_dayPush" name="5_dayPush">
+                        <input disabled id="5_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.5_day_pt %}checked{% endif %} name="5_dayPush">
                         <span class="checkmark"></span>
                     </label>
                 </div>
             </td>
         </tr>
-        <tr class='tableSpacer'>
-            <td style="text-align: center;">
-                <a href=#>edit</a>
-            </td>
-        </tr>
     </table>
+    {% endif %}
+    <center>
+    {% if page == 'noti' %}
+    <input type="submit" name="notifSettingsForm" value="save">
+    {% else %}
+    <a href="{% url 'selectedFacilitySettings' facility facilityID 'noti' %}#notifSettings">edit</a>
+    {% endif %}
+    </center>
 </form>
-{% endif %}

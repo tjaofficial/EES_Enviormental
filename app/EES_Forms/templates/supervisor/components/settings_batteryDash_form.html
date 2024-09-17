@@ -1,9 +1,9 @@
 {% load static %}{% load sup_tags %}
 <script defer src="{% static 'ees_forms/script/settings_batteryDash_form.js' %}"></script>
-<form method="POST" name="batteryDashForm">
+<form method="POST" name="batteryDashForm" id="batteryDashForm">
     {% csrf_token %}
     {% if page == 'batd' %}
-    <table name="batteryDashSettings" class="tableClass">
+    <table id="batteryDashSettings" name="batteryDashSettings" class="tableClass">
         <tr class='tableSpacer'>
             <td colspan="2" class="labelClass"><hr></td>
         </tr>
@@ -11,6 +11,18 @@
             <th colspan="2" style="width: 30%;">
                 Battery Dashboard Settings:
             </th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Reset default settings: <span style="cursor:pointer;" onclick="setdefault()">click here</span>
+                <input id="defaultBatteryDash" type="hidden" name="defaultBatteryDash" value=false>
+                <script>
+                    function setdefault(){
+                        document.getElementById('defaultBatteryDash').value = true;
+                        document.getElementById('batteryDashForm').submit();
+                    }
+                </script>
+            </td>
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass">Display Tiles:</td>
@@ -40,7 +52,7 @@
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Annual Forms
-                            <input id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressAnnual %}checked{% endif %}>
+                            <input id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressAnnually %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
@@ -52,33 +64,33 @@
                 <div id="graphs" style="padding-left: 40px;">
                     <div style="padding-left: 25px; margin-left: 18px;">
                         Select Frequency:
-                        <select onchange="showGraphDates(this)" name="graphFrequency" data-subcat="graphDates">
-                            <option value="weekly" {% if facInfoMain.settings.batteryDash.graphs.graphFrequency == 'weekly' %}selected{% endif %}>Weekly</option>
-                            <option value="monthly" {% if facInfoMain.settings.batteryDash.graphs.graphFrequency == 'monthly' %}selected{% endif %}>Monthly</option>
-                            <option value="annually" {% if facInfoMain.settings.batteryDash.graphs.graphFrequency == 'annually' %}selected{% endif %}>Annually</option>
-                            <option value="dates" selected="{% if facInfoMain.settings.batteryDash.graphs.graphFrequency|string|slice:'0:1' == '{' %}true{% endif %}">Select Dates</option>
+                        <select id="graphFrequency" onchange="showGraphDates(this)" name="graphFrequency" data-subcat="graphDates">
+                            <option value="weekly" {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'weekly' %}selected{% endif %}>Weekly</option>
+                            <option value="monthly" {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'monthly' %}selected{% endif %}>Monthly</option>
+                            <option value="annually" {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'annually' %}selected{% endif %}>Annually</option>
+                            <option value="dates" {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'dates' %}selected{% endif %}>Select Dates</option>
                         </select>
-                        <div id="graphDates" style="padding-left: 40px; {% if facInfoMain.settings.batteryDash.graphs.graphFrequency|string|slice:'0:1' == '{' %}display:block;{% else %}display:none;{% endif %}">
-                            Starting Date: <input id="graphStart" type="date" name="graphStart" {% if facInfoMain.settings.batteryDash.graphs.graphFrequency|string|slice:'0:1' == '{' %}value="{{facInfoMain.settings.batteryDash.graphs.graphFrequency.graphStart|dateParse|date:'c'}}"{% endif %} required><br>
-                            Ending Date: <input id="graphStop" type="date" name="graphStop" {% if facInfoMain.settings.batteryDash.graphs.graphFrequency|string|slice:'0:1' == '{' %}value="{{facInfoMain.settings.batteryDash.graphs.graphFrequency.graphStop|dateParse|date:'c'}}"{% endif %} required>
+                        <div id="graphDates" style="padding-left: 40px; {% if facInfoMain.settings.batteryDash.graphs.graphFrequencyData.frequency == 'dates' %}display:block;{% else %}display:none;{% endif %}">
+                            Starting Date: <input id="graphStart" type="date" name="graphStart" {% if facInfoMain.settings.batteryDash.graphs.graphFrequencyData.frequency == 'dates' %}value="{% if facInfoMain.settings.batteryDash.graphs.graphFrequencyData.dates.graphStart != '' %}{{facInfoMain.settings.batteryDash.graphs.graphFrequencyData.dates.graphStart|dateParse|date:'c'}}{% endif %}"{% endif %}><br>
+                            Ending Date: <input id="graphStop" type="date" name="graphStop" {% if facInfoMain.settings.batteryDash.graphs.graphFrequencyData.frequency == 'dates' %}value="{% if facInfoMain.settings.batteryDash.graphs.graphFrequencyData.dates.graphStop != '' %}{{facInfoMain.settings.batteryDash.graphs.graphFrequencyData.dates.graphStop|dateParse|date:'c'}}{% endif %}"{% endif %}>
                         </div>
                     </div>
                     <div style="padding-left: 25px; margin-left: 18px;">
                         Select Graphs:<br>
                         <label class="container">Charges
-                            <input name="charges" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.charges %}checked{% endif %}>
+                            <input name="charges" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.charges.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Doors
-                            <input name="doors" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.doors %}checked{% endif %}>
+                            <input name="doors" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.doors.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Lids
-                            <input name="lids" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.lids %}checked{% endif %}>
+                            <input name="lids" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.lids.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">90 Day Push/Travels
-                            <input name="graph90dayPT" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.90dayPT %}checked{% endif %}>
+                            <input name="graph90dayPT" value="true" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.90dayPT.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
@@ -119,93 +131,87 @@
             <td colspan="2" style="width: 30%;">
                 <div>
                     <label class="container">Progress Bar (Pick 4)
-                        <input disabled id="progressBar" name="progressBar" onclick="openSubCategory(this)" {% if facInfoMain.settings.batteryDash.progressBar %}checked{% endif %} type="checkbox" data-subcat="progress">
+                        <input disabled id="progressBar" name="progressBar" onclick="openSubCategory(this)" {% if facilityInfo.batteryDash.progressBar %}checked{% endif %} type="checkbox" data-subcat="progress">
                         <span class="checkmark"></span>
                     </label>
                     <div id="progress" style="padding-left: 40px; display:none;" data-count="0">
                         <label class="container">Daily Forms
-                            <input disabled id="progressDaily" name="progressDaily" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressDaily %}checked{% endif %}>
+                            <input disabled id="progressDaily" name="progressDaily" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facilityInfo.batteryDash.progressBar.progressDaily %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Weekly Forms
-                            <input disabled id="progressWeekly" name="progressWeekly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressWeekly %}checked{% endif %}>
+                            <input disabled id="progressWeekly" name="progressWeekly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facilityInfo.batteryDash.progressBar.progressWeekly %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Monthly Forms
-                            <input disabled id="progressMonthly" name="progressMonthly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressMonthly %}checked{% endif %}>
+                            <input disabled id="progressMonthly" name="progressMonthly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facilityInfo.batteryDash.progressBar.progressMonthly %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Quarterly Forms
-                            <input disabled id="progressQuarterly" name="progressQuarterly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressQuarterly %}checked{% endif %}>
+                            <input disabled id="progressQuarterly" name="progressQuarterly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facilityInfo.batteryDash.progressBar.progressQuarterly %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Annual Forms
-                            <input disabled id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facInfoMain.settings.batteryDash.progressBar.progressAnnually %}checked{% endif %}>
+                            <input disabled id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if facilityInfo.batteryDash.progressBar.progressAnnually %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
                 <label class="container">Data Graphs
-                    <input disabled id="graphsTile" name="graphs" onclick="openSubCategory(this)" type="checkbox" {% if facInfoMain.settings.batteryDash.graphs %}checked{% endif %} data-subcat="graphs">
+                    <input disabled id="graphsTile" name="graphs" onclick="openSubCategory(this)" type="checkbox" {% if facilityInfo.batteryDash.graphs %}checked{% endif %} data-subcat="graphs">
                     <span class="checkmark"></span>
                 </label>
                 <div id="graphs" style="padding-left: 40px;">
                     <div style="padding-left: 25px; margin-left: 18px;">
-                        Select Frequency: {% if facInfoMain.settings.batteryDash.graphs.graphFrequency|string|slice:"0:1" == "{" %}{{facInfoMain.settings.batteryDash.graphs.graphFrequency.graphStart}} - {{facInfoMain.settings.batteryDash.graphs.graphFrequency.graphStop}}{% else %}{{facInfoMain.settings.batteryDash.graphs.graphFrequency|title}}{% endif %}
-                        {% if facInfoMain.settings.batteryDash.graphs.graphFrequency == 'dates' %}
-                        <div id="graphdates" style="padding-left: 40px;">
-                            Starting Date: <input type="date" name="graphStart"><br>
-                            Ending Date: <input type="date" name="graphStop">
-                        </div>
-                        {% endif %}
+                        <input type="hidden" id="graphFrequency" name="graphFrequency" data-subcat="graphDates" value="main">
+                        Select Frequency: {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'dates' %}{{facilityInfo.batteryDash.graphs.graphFrequencyData.dates.graphStart}} - {{facilityInfo.batteryDash.graphs.graphFrequencyData.dates.graphStop}}{% else %}{{facilityInfo.batteryDash.graphs.graphFrequencyData.frequency|title}}{% endif %}
                     </div>
                     <div style="padding-left: 25px; margin-left: 18px;">
                         Select Graphs:<br>
                     
                         <label class="container">Charges
-                            <input disabled type="checkbox" name="Charges" value="true" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.charges %}checked{% endif %}>
+                            <input disabled type="checkbox" name="Charges" value="true" {% if facilityInfo.batteryDash.graphs.dataChoice.charges.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Doors
-                            <input disabled type="checkbox" name="Doors" value="true" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.doors %}checked{% endif %}>
+                            <input disabled type="checkbox" name="Doors" value="true" {% if facilityInfo.batteryDash.graphs.dataChoice.doors.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Lids
-                            <input disabled type="checkbox" name="Lids" value="true" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.lids %}checked{% endif %}>
+                            <input disabled type="checkbox" name="Lids" value="true" {% if facilityInfo.batteryDash.graphs.dataChoice.lids.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">90 Day Push/Travels
-                            <input disabled type="checkbox" name="graph90dayPT" value="true" {% if facInfoMain.settings.batteryDash.graphs.dataChoice.90dayPT %}checked{% endif %}>
+                            <input disabled type="checkbox" name="graph90dayPT" value="true" {% if facilityInfo.batteryDash.graphs.dataChoice.90dayPT.show %}checked{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
                 <label class="container">Corrective Actions
-                    <input disabled type="checkbox" name="correctiveActions" value="true" {% if facInfoMain.settings.batteryDash.correctiveActions %}checked{% endif %}>
+                    <input disabled type="checkbox" name="correctiveActions" value="true" {% if facilityInfo.batteryDash.correctiveActions %}checked{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">Battery Weather Info.
-                    <input disabled type="checkbox" name="infoWeather" value="true" {% if facInfoMain.settings.batteryDash.infoWeather %}checked{% endif %}>
+                    <input disabled type="checkbox" name="infoWeather" value="true" {% if facilityInfo.batteryDash.infoWeather %}checked{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">90 Day Push Schedule
-                    <input disabled type="checkbox" name="90dayPT" value="true" {% if facInfoMain.settings.batteryDash.90dayPT %}checked{% endif %}>
+                    <input disabled type="checkbox" name="90dayPT" value="true" {% if facilityInfo.batteryDash.90dayPT %}checked{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">Contacts
-                    <input disabled type="checkbox" name="contacts" value="true" {% if facInfoMain.settings.batteryDash.contacts %}checked{% endif %}>
+                    <input disabled type="checkbox" name="contacts" value="true" {% if facilityInfo.batteryDash.contacts %}checked{% endif %}>
                     <span class="checkmark"></span>
                 </label>
             </td>
         </tr>
     </table>
-    
     {% endif %}
     <center>
     {% if page == 'batd' %}
         <input type="submit" name="batteryDashForm" value="save">
     {% else %}
-        <a href="{% url 'selectedFacilitySettings' facility facilityID 'batd' %}">edit</a>
+        <a href="{% url 'selectedFacilitySettings' facility facilityID 'batd' %}#batteryDashSettings">edit</a>
     {% endif %}
     </center>
 </form>

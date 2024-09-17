@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, checkIfMoreRegistrations
+from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
 from ..forms import CreateUserForm, user_profile_form, company_form,bat_info_form
 import datetime
@@ -608,9 +608,8 @@ def sup_facility_settings(request, facility, facilityID, selector):
             'is_battery': facInfoMain.is_battery
         }
         facilityInfo = bat_info_form(initial=initial_data)
-    elif selector == 'batd':
+    elif selector in ['batd', 'noti', 'main']:
         facilityInfo = facInfoMain.settings
-
 
 
 
@@ -657,12 +656,18 @@ def sup_facility_settings(request, facility, facilityID, selector):
                         batDashSettings['graphs'] = {}
                         graphOptions = ['charges', 'doors', 'lids', 'graph90dayPT']
                         if answer['graphFrequency'] == 'dates':
-                            batDashSettings['graphs']['graphFrequency'] = {
-                                'graphStart': answer['graphStart'],
-                                'graphStop': answer['graphStop'],
+                            batDashSettings['graphs']['graphFrequencyData'] = {
+                                'frequency': answer['graphFrequency'],
+                                'dates': {
+                                    'graphStart': answer['graphStart'],
+                                    'graphStop': answer['graphStop']
+                                }
                             }
                         else:
-                            batDashSettings['graphs']['graphFrequency'] = answer['graphFrequency']
+                            batDashSettings['graphs']['graphFrequencyData'] = {
+                                'frequency': answer['graphFrequency'],
+                                'dates': False
+                            }
                         batDashSettings['graphs']['dataChoice'] = {}
                         for graphOpt in graphOptions:
                             graphInput = False
@@ -695,10 +700,34 @@ def sup_facility_settings(request, facility, facilityID, selector):
                 print(batDashSettings)
                 
                 A  = facInfoMain
-                A.setting = json.dumps(batDashSettings)
                 A.save()
                 return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-
+            elif 'notifSettingsForm' in answer.keys():
+                facInfoMain.settings['notifications'] = {}
+                notificatoinSettingsData = facInfoMain.settings['notifications']
+                notifOptions = ['compliance', 'deviations', 'submitted', '10_day_pt', '5_day_pt']
+                for notifOp in notifOptions:
+                    notificatoinSettingsData[notifOp] = False
+                    if notifOp in answer.keys():
+                        if answer[notifOp] == 'true':
+                            notificatoinSettingsData[notifOp] = True
+                            
+                A = facInfoMain
+                A.save()
+                return redirect('selectedFacilitySettings', facility, facilityID, 'main')
+            elif 'defaultBatteryDash' in answer.keys():
+                if answer['defaultBatteryDash'] == 'true':
+                    A  = facInfoMain
+                    A.settings['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
+                    A.save()
+                    return redirect('selectedFacilitySettings', facility, facilityID, 'main')
+            elif 'defaultNotif' in answer.keys():
+                if answer['defaultNotif'] == 'true':
+                    A  = facInfoMain
+                    A.settings['notifications'] = json.loads(json.dumps(defaultNotifications))
+                    A.save()
+                    return redirect('selectedFacilitySettings', facility, facilityID, 'main')
+            
     return render(request, 'supervisor/settings/selected_facility_settings.html',{
         'notifs': notifs,
         'supervisor': supervisor, 
