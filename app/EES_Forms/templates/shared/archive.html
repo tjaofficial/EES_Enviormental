@@ -1,26 +1,69 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list %}{% load static %}
-<link href="{% static 'ees_forms/style/searchForms.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
 {% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
-<div class="mainCont mainContCenter" style="width: 43rem;">
-    <div class="card">
-        <div class="cardHeader">
-            {% include "shared/components/backArrow.html" with destination="dashboard" %}
-            {% if facility != 'supervisor' %}
-            <form action="search_forms/search" method="POST" class=''>
-                {% csrf_token %}
-                <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
-                {% include "shared/components/submitButton.html" with label="search" %}
-            </form>
-            {% else %}
-            NO FACILITY SELECTED
-            {% endif %}
-        </div>
-        <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+<div class="mainCont mainContCenter" style="width: 845px; align-items:unset; position:relative; padding-bottom: 48px; left:unset;">
+    <div style="width: 55rem;">
+        <div class="card">
+            <div class="cardHeader"> 
+                {% include "shared/components/backArrow.html" with destination="dashboard"%}
+                Archive Search
+            </div>
+            <div class='contentCont'>
+                <form method="GET" action="./archive" style="text-align: center;">
+                    <div class="CR_dataCont">
+                        <div class="inputCont">
+                            Search Form Label or ID <br>
+                            <input type="search" name="archiveForm" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                        </div>
+                        <div class="inputCont">
+                            Search Month/Year<br>
+                            <input type="month" name="archiveMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
+                        </div>
+                        <div class="inputCont">
+                            Search Date<br>
+                            <input type="date" name="archiveDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        {% include "shared/components/submitButton.html" with label="search" %}
+                    </div>
+                </form>
+            </div>
+        </div><br>
+        <div class="card">
+            <div class="cardHeader">
+                {% if facility != 'supervisor' %}
+                Searched Forms
+                {% else %}
+                NO FACILITY SELECTED
+                {% endif %}
+            </div>
+            <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+                hello
+                {% for items in finalList %}
+                    <li>{{items.1}} - {{items.0.date}}</li>
+                {% endfor %}
+            </div>
+        </div><br>
+        <div class="card">
+            <div class="cardHeader">
+                {% include "shared/components/backArrow.html" with destination="dashboard" %}
+                {% if facility != 'supervisor' %}
+                <form action="search_forms/search" method="POST" class=''>
+                    {% csrf_token %}
+                    <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
+                    {% include "shared/components/submitButton.html" with label="search" %}
+                </form>
+                {% else %}
+                NO FACILITY SELECTED
+                {% endif %}
+            </div>
+            <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+            </div>
         </div>
     </div>
 </div>

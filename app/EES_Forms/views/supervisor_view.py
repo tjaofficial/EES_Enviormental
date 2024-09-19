@@ -77,9 +77,9 @@ def sup_dashboard_view(request, facility):
     todays_num = today.weekday()
     #---------- Graph Data ---------------------
     print('litty')
-    if options.exists():
+    if facility != 'supervisor':
         graphSettings = options.settings['batteryDash']['graphs']
-        setGraphRange = graphSettings['graphFrequency']
+        setGraphRange = graphSettings['graphFrequencyData']
         canvasData = {}
         dateList = []
         def rangeNumber(rangeID):
@@ -98,11 +98,11 @@ def sup_dashboard_view(request, facility):
                 for x in range(0,ranID):
                     dateList.append(datetime.datetime.strptime(str(today.year) + "-" + "01-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
             else:
-                ranID = abs((datetime.datetime.strptime(setGraphRange['graphStart'], "%Y-%m-%d").date() - datetime.datetime.strptime(setGraphRange['graphStop'], "%Y-%m-%d").date()).days)
+                ranID = abs((datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() - datetime.datetime.strptime(setGraphRange['dates']['graphStop'], "%Y-%m-%d").date()).days)
                 for x in range(0,ranID):
-                    dateList.append(datetime.datetime.strptime(setGraphRange['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                    dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
             return dateList
-        dateList = rangeNumber(setGraphRange)
+        dateList = rangeNumber(setGraphRange['frequency'])
         for gStuff in graphSettings['dataChoice']:
             if gStuff == 'graph90dayPT':
                 continue
@@ -113,36 +113,38 @@ def sup_dashboard_view(request, facility):
                     'yValues': [],
                     'type': graphSettings['dataChoice'][gStuff]['type'],
                 }
-            xValues = []
-            yValues = []
-            for dates in dateList:
-                if gStuff == 'charges':
-                    useModel = formA1.filter(form__date=dates)
-                    if useModel.exists():
-                        xValues.append(int(useModel[0].total_seconds))
-                        yValues.append(str(useModel[0].form.date))
-                elif gStuff == 'doors':
-                    useModel = formA2.filter(date=dates)
-                    if useModel.exists():
-                        xValues.append(int(useModel[0].leaking_doors))
-                        yValues.append(str(useModel[0].date))
-                elif gStuff == 'lids':
-                    useModel = formA3.filter(date=dates)
-                    if useModel.exists():
-                        xValues.append(int(useModel[0].l_leaks))
-                        yValues.append(str(useModel[0].date))
-                if str(dates) not in yValues:
-                    xValues.append(int(0))
-                    yValues.append(str(dates))
-            canvasData[gStuff]['xValues'] = xValues
-            canvasData[gStuff]['yValues'] = yValues
+                xValues = []
+                yValues = []
+                for dates in dateList:
+                    if gStuff == 'charges':
+                        useModel = formA1.filter(form__date=dates)
+                        if useModel.exists():
+                            xValues.append(int(useModel[0].total_seconds))
+                            yValues.append(str(useModel[0].form.date))
+                    elif gStuff == 'doors':
+                        useModel = formA2.filter(date=dates)
+                        if useModel.exists():
+                            xValues.append(int(useModel[0].leaking_doors))
+                            yValues.append(str(useModel[0].date))
+                    elif gStuff == 'lids':
+                        useModel = formA3.filter(date=dates)
+                        if useModel.exists():
+                            xValues.append(int(useModel[0].l_leaks))
+                            yValues.append(str(useModel[0].date))
+                    if str(dates) not in yValues:
+                        xValues.append(int(0))
+                        yValues.append(str(dates))
+                canvasData[gStuff]['xValues'] = xValues
+                canvasData[gStuff]['yValues'] = yValues
         graphData = {
             'canvasData': canvasData,
             'today': str(today),
             'frequency': setGraphRange, 
         }
+        graphDataDump = json.dumps(graphData)
     else:
         graphData = ''
+        graphDataDump = ''
     # -------PROGRESS PERCENTAGES -----------------
     if facility != 'supervisor':
         daily_percent = calculateProgessBar(facility, 'Daily')
@@ -291,7 +293,8 @@ def sup_dashboard_view(request, facility):
                 'today': str(now),
                 'colorMode': colorMode,
                 'userMode': userMode,
-                'options': options
+                'options': options,
+                'graphDataDump': graphDataDump
             })
     if request.method == 'POST':
         answer = request.POST
@@ -348,7 +351,8 @@ def sup_dashboard_view(request, facility):
         'userMode': userMode,
         'pLeaks': pLeaks,
         'cLeaks': cLeaks,
-        'options': options
+        'options': options,
+        'graphDataDump': graphDataDump
     })
 
 @lock
@@ -435,11 +439,14 @@ def register_view(request, facility, access_page):
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['username'] = request.POST['username'].lower()
-            form = CreateUserForm(new_data)
-            profile_form = user_profile_form(new_data)
-            if form.is_valid() and profile_form.is_valid():
-                user = form.save()
-                profile = profile_form.save(commit=False)
+            A = CreateUserForm(new_data)
+            B = user_profile_form(new_data)
+            print()
+            if A.is_valid() and B.is_valid():
+                user = A.save(commit=False)
+                user.is_active = False
+                user.save()
+                profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userCompany
                 profile.save()
@@ -447,8 +454,27 @@ def register_view(request, facility, access_page):
                 group = Group.objects.get(name=profile.position)
                 user.groups.add(group)
 
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + user)
+                username = A.cleaned_data.get('username')
+                
+                current_site = get_current_site(request)
+                mail_subject = 'MethodPlus: Activate Your New Account'   
+                html_message = render_to_string('email/acc_active_email.html', {  
+                    'user': user,  
+                    'domain': current_site.domain,  
+                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                    'token':create_token(user),  
+                })  
+                plain_message = strip_tags(html_message)
+                to_email = A.cleaned_data.get('email')  
+                send_mail(
+                    mail_subject,
+                    plain_message,
+                    settings.EMAIL_HOST_USER,
+                    [to_email],
+                    html_message=html_message,
+                    fail_silently=False
+                )
+                messages.success(request, 'Account was created for ' + username + ". An activation link has been sent to their email.")
                 return redirect('sup_dashboard', facility)
             else:
                 messages.error(request, "The Information Entered Was Invalid.")
@@ -496,27 +522,46 @@ def register_view(request, facility, access_page):
                 return redirect('Contacts', facility)
         elif check_4:
             print('CHECK 4')
-            facility = bat_info_model.objects.all().filter(id=request.POST['facilityChoice'])[0]
+            facility = bat_info_model.objects.filter(id=request.POST['facilityChoice'])[0]
             finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['position'] = 'client'
-            A = user_profile_form(new_data)
-            B = CreateUserForm(new_data)
+            A = CreateUserForm(new_data)
+            B = user_profile_form(new_data)
             if A.is_valid() and B.is_valid():
-                user = B.save()
-                profile = A.save(commit=False)
+                user = A.save(commit=False)
+                user.is_active = False
+                user.save()
+                profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userProf.company
-                
                 profile.save()
                 
                 group = Group.objects.get(name=profile.position)
                 user.groups.add(group)
 
-                user = B.cleaned_data.get('username')
-                messages.success(request, 'Account was created for ' + user)
-
+                username = A.cleaned_data.get('username')
+                
+                current_site = get_current_site(request)
+                mail_subject = 'MethodPlus: Activate Your New Account'   
+                html_message = render_to_string('email/acc_active_email.html', {  
+                    'user': user,  
+                    'domain': current_site.domain,  
+                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                    'token':create_token(user),  
+                })  
+                plain_message = strip_tags(html_message)
+                to_email = A.cleaned_data.get('email')  
+                send_mail(
+                    mail_subject,
+                    plain_message,
+                    settings.EMAIL_HOST_USER,
+                    [to_email],
+                    html_message=html_message,
+                    fail_silently=False
+                )
+                messages.success(request, 'Account was created for ' + username + ". An activation link has been sent to their email.")
                 return redirect('Contacts', facility)
         else:
             print('TOO FAR')

@@ -115,7 +115,6 @@
                     <h1 style="padding: 1rem;">Register New Facility</h1>
                     <hr style="width: 450px; margin: auto;">
                 </div>
-                
                 <br>
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -244,9 +243,6 @@
                                         </span>
                                     </div>
                                 </div>
-                                
-                                
-                                
                             </div>
                         </li>
                     </div>
@@ -352,7 +348,7 @@
                             </li>
                             
                         </div>           
-                        <center><input type="submit" name="create_facility"></center>
+                        <center><input type="submit" name="create_client"></center>
                     </form>
 
                     {% for message in messages %}

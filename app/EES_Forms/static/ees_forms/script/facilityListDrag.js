@@ -2,6 +2,7 @@
 function bang(elem){
     //console.log("hello")
     const dragItemNumber = elem.id.slice(4);
+
     let facilityNumber = elem.dataset.facid;//3
     let packetIDList = JSON.parse(elem.dataset.packlist);
     //console.log(elem.dataset.packlist)
@@ -13,6 +14,7 @@ function bang(elem){
             event.preventDefault()
         })
         dropZone.addEventListener('drop', function(event){
+            //console.log(event)
             //console.log(event.dataTransfer.getData("Text"))
             //show_formsList_form(dropZone)
             //console.log(event.toElement.dataset.packetid)
@@ -25,7 +27,7 @@ function bang(elem){
     //console.log(totalForms)
     for (let x=1;x<=parseInt(totalForms);x++){
         //console.log(x)
-        let itemBeingDraggedID = "drag" + String(x);
+        let itemBeingDraggedID = String(facilityNumber) + "drag" + String(x);
         //console.log(itemBeingDraggedID)
         const dragItem = document.getElementById(itemBeingDraggedID);
         //console.log(dragItem)

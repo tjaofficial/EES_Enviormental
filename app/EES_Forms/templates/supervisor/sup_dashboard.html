@@ -334,7 +334,8 @@
     
     {% if options.settings.batteryDash.graphs %}
     <div id="latestActivity3" class="card halfs cardPadd">
-        <input id="today" type="hidden" data-sevendays="{{graphData.today}}">
+        <input id="today" type="hidden" data-sevendays="{{graphData.today}}" value="{{graphDataDump}}">
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
         <div>
             <div class="card-title headerBottomPadding">
                 7 Day - Total {% for key, graph in graphData.canvasData.items %}{% if forloop.counter == 1 %}{{key|title}}{% endif %}{% endfor %} Graph
@@ -345,23 +346,118 @@
                     {% endfor %}
                 </div>
             </div>
-            {% for key, graph in graphData.canvasData.items %}
-            <div id='{{key}}-holder' class="canvasHolder" style="display:{% if forloop.counter == 1 %}block{% else %}none{% endif %};">
-                <canvas id="{{key}}-chart"></canvas>
+                {% for key, graph in graphData.canvasData.items %}
+                    <div id='{{key}}-holder' class="canvasHolder" style="{% if forloop.counter == 1 %}display:block{% else %}display:none{% endif %};">
+                        <canvas id="{{key}}-chart"></canvas>
+                    </div>
+                    {% if forloop.counter == 1 %}
+                        <script>
+                            const canvasData = JSON.parse(document.getElementById('today').value).canvasData;
+                            for (var i in canvasData){
+                                console.log(canvasData[i])
+                                createGraph(canvasData[i]);
+                                break
+                            }
+                            function createGraph(selector) {
+                                const chartOptions = {
+                                    legend: {display: false},
+                                    scales: {
+                                        x: {
+                                            type: 'time',
+                                            time: {
+                                                unit: 'day',
+                                                parser: 'yyyy-MM-dd'
+                                            },
+                                            min: selector.yValues[0],
+                                            max: selector.yValues[-1]
+                                        },
+                                        y: {
+                                            min: 0,
+                                            title: {
+                                                display: true
+                                            }
+                                            
+                                        }
+                                    },
+                                    maintainAspectRatio: false
+                                };
+                                if (selector.graphID == 'charges'){
+                                    chartOptions.scales.y.title.text = 'seconds';
+                                } else if (selector.graphID == 'doors'){
+                                    chartOptions.scales.y.title.text = 'leaks';
+                                } else if (selector.graphID == 'lids'){
+                                    chartOptions.scales.y.title.text = 'leaks';
+                                }
+                                const xValues = selector.xValues;
+                                const yValues = selector.yValues;
+                                const graphData = {
+                                    labels: yValues,
+                                    datasets: [{
+                                        fill: false,
+                                        lineTension: 0,
+                                        backgroundColor: "rgba(0,0,255,1.0)",
+                                        borderColor: "rgba(0,0,255,0.1)",
+                                        data: xValues
+                                    }]
+                                }
+                                const chartAreaBackgroundColor = {
+                                    id:'chartAreaBackgroundColor',
+                                    beforeDraw(chart, args, plugins) {
+                                        const { ctx, chartArea: {top, bottom, left, right, width, height}, scales: {x,y} } = chart;
+                                        
+                                        ctx.save();
+                                        var theLine = 55;
+                                        if (y.getValueForPixel(top) > theLine) {
+                                            var redTop = y.getValueForPixel(top);
+                                        } else {
+                                            var redTop = theLine;
+                                        }
+                                        var redBottom = theLine;
+                                        if (y.getValueForPixel(top) > theLine) {
+                                            var greenTop = theLine;
+                                        } else {
+                                            var greenTop = y.getValueForPixel(top);
+                                        }
+                                        if (y.getValueForPixel(bottom) > 0) {
+                                            var greenBottom = y.getValueForPixel(bottom);
+                                        } else {
+                                            var greenBottom = 0;
+                                        }
+                                        bgColors(redBottom, redTop,"rgba(255,26,104,0.2)")
+                                        bgColors(greenBottom, greenTop,"rgba(75,192,192,0.2)")
+                                        
+                                        function bgColors(low, high, color){
+                                            ctx.fillStyle = color;
+                                            ctx.fillRect(left, y.getPixelForValue(high), width, y.getPixelForValue(low) - y.getPixelForValue(high))
+                                        }
+                                    }
+                                }
+                                const chargesConfig = {
+                                    type: selector.type,
+                                    data: graphData,
+                                    options: chartOptions,
+                                    plugins: [chartAreaBackgroundColor]
+                                }
+                                new Chart(
+                                    String(selector.graphID) + "-chart",
+                                    chargesConfig
+                                    );
+                                }
+                        </script>
+                    {% endif %}
+                {% endfor %}
             </div>
-            {% endfor %}
+            
+            <script defer src="{% static 'ees_forms/script/sup_dashboard_chart.js' %}"></script>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-        <script defer src="{% static 'ees_forms/script/sup_dashboard_chart.js' %}"></script>
-    </div>
-    {% endif %}
-    {% if options.settings.batteryDash.correctiveActions %}
-    <div id="corrective_actions" class="card quarters cardPadd">
-        <div class="card-title headerBottomPadding">Latest Issues/Corrective Actions</div>
-        <div class="ca_holder">
-            <ul>
-            {% if facility != 'supervisor' %}
-                {% for x in ca_forms %}
+        {% endif %}
+        {% if options.settings.batteryDash.correctiveActions %}
+        <div id="corrective_actions" class="card quarters cardPadd">
+            <div class="card-title headerBottomPadding">Latest Issues/Corrective Actions</div>
+            <div class="ca_holder">
+                <ul>
+                    {% if facility != 'supervisor' %}
+                    {% for x in ca_forms %}
                     <a href="issues_view/{{x.form}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
                         <li class="sideAlign" {% if client %}style="{% if not x.viewed %}{% if x.out_of_compliance %}background-color: #ff8c8c{% else %}background-color: #ebee17;{% endif %}{% else %} background-color: white;{% endif %}"{% endif %}>
                             <div class="ca_indie">

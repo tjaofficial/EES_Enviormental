@@ -20,10 +20,7 @@ lock = login_required(login_url='Login')
 @lock
 def corrective_action_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
-    
+    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
     issueForm_query = request.GET.get('issueForm')
     issueMonth_query = request.GET.get('issueMonth')
     issueDate_query = request.GET.get('issueDate')
@@ -214,12 +211,89 @@ def schedule_view(request, facility):
 @lock
 def archive_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
+    archiveForm_query = request.GET.get('archiveForm')
+    archiveMonth_query = request.GET.get('archiveMonth')
+    archiveDate_query = request.GET.get('archiveDate')
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility, settings__active='true')
+    varPull = [
+        archiveForm_query,
+        archiveMonth_query,
+        archiveDate_query,
+    ]
+    
+    def getFsSearchID(itemSearched, fsModel):
+        if itemSearched != '' and itemSearched is not None:
+            fsList = []
+            itemSearched = int(itemSearched)
+            print('check 1')
+            idSearchData = Forms.objects.get(id=itemSearched)
+            link = str(idSearchData.link) + '_model'
+            chk_database = apps.get_model('EES_Forms', link).objects.filter(facilityChoice__facility_name=facility)
+            for item in chk_database:
+                fsList.append((item, itemSearched))
+            return fsList
+        else:
+            return "none"
+    
+    def getFsSearchLabel(itemSearched, fsModel):
+        if itemSearched != '' and itemSearched is not None:
+            fsList = []
+            print('Starting to search labels...')
+            for fs in fsModel:
+                fsPackets = fs.settings['packets']
+                for packetLabel in fsPackets:
+                    if fsPackets[packetLabel] == itemSearched:
+                        fsList.append(fs)
+                        print('Found... PacketID: ' + str(packetLabel) + " and fsID: " + str(fs.id))
+            return fsList
+        else:
+            return "none"
+                            
+    def getFsSearchMonthYear(itemSearched, fsModel):
+        if itemSearched != "" and itemSearched is not None:
+            itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m").date()
+            formIDList = []
+            for fs in fsModel:
+                formIDList.append(fs.formChoice.id)
+            modelsList = []
+            for model in apps.get_models():
+                if model.__name__[:4] == "form" and model.__name__[-6:] == '_model' and model.__name__[4:-6]:
+                    modelName = model.__name__[4:-6]
+                    if str(modelName) in str(formIDList):
+                        modelsList.append((model, int(modelName)))
+            fsList = []
+            for item in modelsList:
+                try:
+                    chk_database = item[0].objects.filter(date__month=itemSearched.month, date__year=itemSearched.year)
+                except:
+                    chk_database = item[0].objects.filter(week_start__month=itemSearched.month, week_start__year=itemSearched.year)
+                for iForm in chk_database:
+                    fsList.append((iForm, item[1]))
+            return fsList  
+        else:
+            return "none"
+    
+    labelQueryList = getFsSearchID(archiveForm_query, formSettingsModel)
+    #IDQueryList = getFsSearchLabel(archiveForm_query, formSettingsModel)
+    monthYearQueryList = getFsSearchMonthYear(archiveMonth_query, formSettingsModel)
+    dateQueryList = []
+    
+    finalList = []
+    for sort1 in monthYearQueryList:
+        if sort1 not in finalList:
+            finalList.append(sort1)
+    for sort2 in labelQueryList:
+        if sort2 not in finalList:
+            finalList.append(sort1)
+            
+    print(labelQueryList)
+    print(finalList)
+    #hello = getFsSearch(archiveForm_query, formSettingsModel)
+    print('chiecklsj')
     if request.method == 'POST':
         answer = request.POST
         if supervisor:
@@ -230,7 +304,15 @@ def archive_view(request, facility):
                 colorModeSwitch(request)
 
     return render(request, 'shared/archive.html', {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'options': options, 
+        'facility': facility, 
+        'profile': profile, 
+        'client': client, 
+        "supervisor": supervisor, 
+        "unlock": unlock, 
+        'finalList': finalList
     })
 
 @lock
@@ -786,7 +868,6 @@ def profile_edit_view(request, facility, userID):
         'userProfileInfo': userProfileInfo,
         'parseNumber': parseNumber
     })
-
 
 @lock
 def event_detail_view(request, facility, access_page, event_id):

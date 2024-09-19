@@ -1,8 +1,7 @@
-const todayDate = document.getElementById('today').dataset.today;
 const chargeCanvas = document.getElementById('charges-holder'),
 doorCanvas = document.getElementById('doors-holder'),
 lidCanvas = document.getElementById('lids-holder');
-
+console.log(canvasData.length)
 
 function createGraph(selector) {
     const chartOptions = {
@@ -92,16 +91,16 @@ function createGraph(selector) {
 
 function changeGraph(change){
     if (change.graphID == 'charges'){
-        doorCanvas.style.display = 'none';
-        chargeCanvas.style.display = 'block';
-        lidCanvas.style.display = 'none';
+        changeDoor = (doorCanvas) ? doorCanvas.style.display = 'none' : 'none';
+        changeCharge = (chargeCanvas) ? chargeCanvas.style.display = 'block' : 'none';
+        changeLid = (lidCanvas) ? lidCanvas.style.display = 'none' : 'none';
     } else if (change.graphID == 'doors'){
-        doorCanvas.style.display = 'block';
-        chargeCanvas.style.display = 'none';
-        lidCanvas.style.display = 'none';
+        changeDoor = (doorCanvas) ? doorCanvas.style.display = 'block' : 'none';
+        changeCharge = (chargeCanvas) ? chargeCanvas.style.display = 'none' : 'none';
+        changeLid = (lidCanvas) ? lidCanvas.style.display = 'none' : 'none';
     } else if (change.graphID == 'lids'){
-        doorCanvas.style.display = 'none';
-        chargeCanvas.style.display = 'none';
-        lidCanvas.style.display = 'block';
+        changeDoor = (doorCanvas) ? doorCanvas.style.display = 'none' : 'none';
+        changeCharge = (chargeCanvas) ? chargeCanvas.style.display = 'none' : 'none';
+        changeLid = (lidCanvas) ? lidCanvas.style.display = 'block' : 'none';
     }
 }

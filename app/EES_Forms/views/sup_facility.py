@@ -27,7 +27,7 @@ def facilityList(request, facility):
     facData = facility_forms_model.objects.all()
     formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    formSettingsModel = form_settings_model.objects.all()
+    formSettingsModelOG = form_settings_model.objects.all()
     packetData = the_packets_model.objects.all()
     packetForm = the_packets_form
 
@@ -38,7 +38,7 @@ def facilityList(request, facility):
     print(newFacList)
     finalList = []
     for newFac in newFacList:
-        formSettingsModel = formSettingsModel.filter(facilityChoice=newFac[0])
+        formSettingsModel = formSettingsModelOG.filter(facilityChoice__id=newFac[0].id)
         if len(newFac[1]) > 0:
             labelList = []
             for label in newFac[1]:
@@ -115,7 +115,7 @@ def facilityList(request, facility):
             facilityFormDelete = thisFacilityForm
             facilityFormDelete.save()
             #Change acive from "true" to 'false' to archive form from settings model
-            formToDelete = formSettingsModel.get(id=facFormID)
+            formToDelete = formSettingsModelOG.get(id=facFormID)
             formToDelete.settings['active'] = "false"
             formToDelete.save()
             return redirect(facilityList, facility)
@@ -127,7 +127,7 @@ def facilityList(request, facility):
             fsID = dataReceived[0]
             packetID = dataReceived[1]
             thePacket = packetData.get(id=packetID)
-            theSettings = formSettingsModel.get(id=fsID)
+            theSettings = formSettingsModelOG.get(id=fsID)
             highestLabelNumb = 0
             for label in thePacket.formList.keys():
                 noLabelTag = label[:9]
