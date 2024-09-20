@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import form3_model, form2_model, formA1_readings_model, user_profile_model, daily_battery_profile_model, formA5_readings_model, form5_model, Forms
+from ..models import form3_model, form2_model, form1_readings_model, user_profile_model, daily_battery_profile_model, form5_readings_model, form5_model, Forms
 from django.apps import apps
 from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 
@@ -23,7 +23,7 @@ def pt_admin1_view(request, facility):
     sortedFacilityData = getCompanyFacilities(request.user.username)
 
     # -------90 DAY PUSH ----------------
-    all_db_reads = formA5_readings_model.objects.all()
+    all_db_reads = form5_readings_model.objects.all()
     pushTravelsData = ninetyDayPushTravels(facility)
     od_30 = pushTravelsData['30days']
     od_10 = pushTravelsData['10days']
@@ -61,7 +61,7 @@ def pt_admin1_view(request, facility):
 
 
 def pt_mth_input(request, facility):
-    submitted_ordered = formA5_readings_model.objects.all()
+    submitted_ordered = form5_readings_model.objects.all()
     now = datetime.datetime.now()
     today = datetime.date.today()
 
@@ -195,7 +195,7 @@ def method303_rolling_avg(request, facility):
     A = []
     print("hello")
     def form_compile(daily_prof):
-        formA1 = formA1_readings_model.objects.all()
+        formA1 = form1_readings_model.objects.all()
         formA2 = form2_model.objects.all()
         formA3 = form3_model.objects.all()
         i = 1

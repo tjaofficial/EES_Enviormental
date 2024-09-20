@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, form7_model, formC_readings_model, Forms, bat_info_model
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, form7_model, form7_readings_model, Forms, bat_info_model
 from ..forms import SubFormC1, FormCReadForm
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -25,7 +25,7 @@ def formC(request, facility, fsID, selector):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     org = form7_model.objects.all().order_by('-date')
-    org2 = formC_readings_model.objects.all().order_by('-form')
+    org2 = form7_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
 

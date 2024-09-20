@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, formM_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
+from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, form22_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
@@ -30,7 +30,7 @@ def formM(request, facility, fsID, selector):
     today = datetime.date.today()
     today_number = today.weekday()
     org = form22_model.objects.all().order_by('-date')
-    org2 = formM_readings_model.objects.all().order_by('-form')
+    org2 = form22_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
 

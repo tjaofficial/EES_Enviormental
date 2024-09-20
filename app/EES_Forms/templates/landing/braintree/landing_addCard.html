@@ -1,7 +1,7 @@
 {% extends 'landing/landingPage_layout.html' %}{% load static %}{% block body %}
 <link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
-<div class="mainCont" style="width: 46rem;">
+<div class="mainCont" style="width: 46rem; margin: 10rem auto;">
     <div class="card">
         <div class="cardHeader">
             Add New Card
@@ -77,7 +77,7 @@
                         <input id="pState" type="hidden" name="state"/>
                         <input id="pZipCode" type="hidden" name="zipCode"/>
                         <input id="pPaymentSelected" type="hidden" name="paymentSelected" value="card-new"/>
-                        <input id="postButton" type="submit" value="Confirm Subscription"/>
+                        <input id="postButton" type="submit" value="Confirm Card Details"/>
                     </form>
                 </div>
             </div>

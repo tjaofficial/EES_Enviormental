@@ -560,7 +560,7 @@ def calculateProgessBar(facility, frequency):
     return percent_completed 
 
 def ninetyDayPushTravels(facility):
-    all_db_reads = formA5_readings_model.objects.filter(form__facilityChoice__facility_name=facility)
+    all_db_reads = form5_readings_model.objects.filter(form__facilityChoice__facility_name=facility)
     if all_db_reads.exists():
         def all_ovens(reads):
             A = []

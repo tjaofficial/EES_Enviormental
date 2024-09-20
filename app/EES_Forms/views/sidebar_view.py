@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, formA1_readings_model, form2_model, form3_model, form4_model, formA5_readings_model, bat_info_model, form22_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, form1_readings_model, form2_model, form3_model, form4_model, form5_readings_model, bat_info_model, form22_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
 import calendar

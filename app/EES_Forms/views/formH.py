@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import Forms, user_profile_model, daily_battery_profile_model, form19_model, formH_readings_model, bat_info_model
+from ..models import Forms, user_profile_model, daily_battery_profile_model, form19_model, form19_readings_model, bat_info_model
 from ..forms import formH_form, user_profile_form, formH_readings_form
 import requests
 import json
@@ -28,7 +28,7 @@ def formH(request, facility, fsID, selector):
     start_saturday = today - datetime.timedelta(days=today.weekday() + 2)
     end_friday = start_saturday + datetime.timedelta(days=6)
     org = form19_model.objects.all().order_by('-date')
-    org2 = formH_readings_model.objects.all().order_by('-form')
+    org2 = form19_readings_model.objects.all().order_by('-form')
     orgFormL = org2.filter(comb_formL__exact=True)
     full_name = request.user.get_full_name()
     exist_canvas = ''

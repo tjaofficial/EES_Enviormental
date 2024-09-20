@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import datetime
-from ..models import issues_model, daily_battery_profile_model, formA1_model, formA1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
-from ..forms import form1_form, form1_readings_form
+from ..models import issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
+from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected
 import ast
@@ -90,7 +90,7 @@ def formA1(request, facility, fsID, selector):
                     'comments': database_form2.comments,
                     'total_seconds': database_form2.total_seconds,
                 }
-                readings = form1_readings_form(initial=initial_data)
+                readings = formA1_readings_form(initial=initial_data)
             else:
                 initial_data = {
                     'date': todays_log.date_save,
@@ -99,16 +99,16 @@ def formA1(request, facility, fsID, selector):
                     'foreman': todays_log.foreman,
                     'facility_name': facility,
                 }
-                readings = form1_readings_form()
+                readings = formA1_readings_form()
 
-            data = form1_form(initial=initial_data)
+            data = formA1_form(initial=initial_data)
         if request.method == "POST":
             if existing:
-                form = form1_form(request.POST, instance=database_form)
-                reads = form1_readings_form(request.POST, instance=database_form2)
+                form = formA1_form(request.POST, instance=database_form)
+                reads = formA1_readings_form(request.POST, instance=database_form2)
             else:
-                form = form1_form(request.POST)
-                reads = form1_readings_form(request.POST)
+                form = formA1_form(request.POST)
+                reads = formA1_readings_form(request.POST)
 
             A_valid = form.is_valid()
             B_valid = reads.is_valid()

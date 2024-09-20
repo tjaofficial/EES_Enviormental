@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from ..models import user_profile_model, formA5_readings_model, Forms, daily_battery_profile_model, signature_model, form18_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, the_packets_model, form_settings_model
+from ..models import user_profile_model, form5_readings_model, Forms, daily_battery_profile_model, signature_model, form18_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, the_packets_model, form_settings_model
 from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor2, create_starting_forms,get_facility_forms, updateAllFormSubmissions, checkIfFacilitySelected
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
