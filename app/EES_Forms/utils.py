@@ -251,7 +251,7 @@ class Calendar2(HTMLCalendar):
                 for h in aPacketFormList:
                     if h.date.year == year:
                         selectedFormDate = h
-                        forms_html += "<a href='../../../../printIndex/coke_battery/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        forms_html += "<a href='../../../../printIndex/daily/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                         eventCell = True
                         break
             elif packetsEntry.frequency == 'Weekly':

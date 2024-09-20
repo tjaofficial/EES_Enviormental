@@ -19,7 +19,7 @@
                     Profile
                 </div>
             </a>
-            <a href="{% url 'about' facility%}">
+            {% comment %} <a href="{% url 'about' facility%}">
                 <div class="sidebar_item modeTextColor">
                     <div class="sidebar_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -28,7 +28,7 @@
                     </div>
                     About
                 </div>
-            </a>
+            </a> {% endcomment %}
             <a href="{% url 'safety' facility%}">
                 <div class="sidebar_item modeTextColor">
                     <div class="sidebar_svg">

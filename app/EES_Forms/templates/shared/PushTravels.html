@@ -9,84 +9,77 @@
 </div>
 <div class="mainCont mainContCenter gap">
     <div id="pusht_travels" style="text-align: center; margin: auto;">    
-        <div class="ptHolder">
-            <div class='headerTitle'>
-               TODAY: {{ todays_log.date_save }}
+        <div class="card">
+            <div class='cardHeader'>
+               90 Day Push Travel Schedule
             </div>
             <br>
-            <div>
-                <table class='tableStyle'>
-                    <tr>
-                        <th colspan="4" class='headerTable'>
-                            OVERDUE
-                        </th>
-                    </tr>
-                    <tr>
-                        <td class="dataLanes">
-                            Less Than 30 Days Left
-                        </td>
-                        <td class="dataLanes">
-                            Less Than 10 Days Left
-                        </td>
-                        <td class="dataLanes">
-                            Less Than 5 Days Left
-                        </td>
-                        <td class="dataLanes">
-                            Closest Oven Due
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="dataLanes" style='border-bottom-left-radius: 15px; padding-bottom: 30px;'>
-                            {% if od_30|length == 0 %}
-                            NONE
+            <table class='tableStyle'>
+                <tr>
+                    <td class="dataLanes">
+                        Due Less Than 30 Days
+                    </td>
+                    <td class="dataLanes">
+                        Due Less Than 10 Days
+                    </td>
+                    <td class="dataLanes">
+                        Due Less Than 5 Days
+                    </td>
+                    <td class="dataLanes">
+                        Closest Oven Due
+                    </td>
+                </tr>
+                <tr>
+                    <td class="dataLanes" style='height:130px;border-bottom-left-radius: 15px; padding-bottom: 30px;'>
+                        {% if od_30|length == 0 %}
+                        NONE
+                        {% else %}
+                        {% for day in od_30 %}
+                            {% if day.2 == 0 %}
                             {% else %}
-                            {% for day in od_30 %}
-                                {% if day.2 == 0 %}
-                                {% else %}
-                                    #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
+                            {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="dataLanes" style='height:130px;padding-bottom: 30px;'>
+                        {% if od_10|length == 0 %}
+                        NONE
+                        {% else %}
+                        {% for day in od_10 %}
+                            {% if day.2 == 0 %}
+                            {% else %}
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
                                 {% endif %}
-                            {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td class="dataLanes" style='padding-bottom: 30px;'>
-                            {% if od_10|length == 0 %}
-                            NONE
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="dataLanes" style='height:130px;padding-bottom: 30px;'>
+                        {% if od_5|length == 0 %}
+                        NONE
+                        {% else %}
+                        {% for day in od_5 %}
+                            {% if day.2 == 0 %}
                             {% else %}
-                            {% for day in od_10 %}
-                                {% if day.2 == 0 %}
-                                {% else %}
-                                    #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                                    {% endif %}
-                            {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td class="dataLanes" style='padding-bottom: 30px;'>
-                            {% if od_5|length == 0 %}
-                            NONE
-                            {% else %}
-                            {% for day in od_5 %}
-                                {% if day.2 == 0 %}
-                                {% else %}
-                                    #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
-                                    {% endif %}
-                            {% endfor %}
-                            {% endif %}
-                        </td>
-                        <td class="dataLanes" style='border-bottom-right-radius: 15px; padding-bottom: 30px;'>
-                            {% if od_recent|length == 0 %}
-                            NONE
-                            {% else %}
-                            {% for x in od_recent %}
-                                {% if x.2 == 0 %}
-                                {% else %}
-                                    #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
+                                #{{ day.0 }}&nbsp; - &nbsp;{{ day.2 }}<br>
                                 {% endif %}
-                            {% endfor %}
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="dataLanes" style='height:130px;border-bottom-right-radius: 15px; padding-bottom: 30px;'>
+                        {% if od_recent|length == 0 %}
+                        NONE
+                        {% else %}
+                        {% for x in od_recent %}
+                            {% if x.2 == 0 %}
+                            {% else %}
+                                #{{ x.0 }}&nbsp; - &nbsp;{{ x.2 }}<br>
                             {% endif %}
-                        </td>
-                    </tr>
-                </table>
-            </div>
+                        {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
         </div>
         <br>
         <a href="shared/forms/daily/formA5/new" >

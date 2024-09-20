@@ -215,7 +215,8 @@ def archive_view(request, facility):
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    archiveForm_query = request.GET.get('archiveForm')
+    archiveForm_query = request.GET.get('archiveFormID')
+    archiveFormLabel_query = request.GET.get('archiveFormLabel')
     archiveMonth_query = request.GET.get('archiveMonth')
     archiveDate_query = request.GET.get('archiveDate')
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility, settings__active='true')
@@ -228,71 +229,141 @@ def archive_view(request, facility):
     def getFsSearchID(itemSearched, fsModel):
         if itemSearched != '' and itemSearched is not None:
             fsList = []
+            idSearchData = False
             itemSearched = int(itemSearched)
             print('check 1')
-            idSearchData = Forms.objects.get(id=itemSearched)
-            link = str(idSearchData.link) + '_model'
+            for fs in fsModel:
+                if fs.formChoice.id == itemSearched:
+                    idSearchData = fs
+                    break
+            link = str(idSearchData.formChoice.link) + '_model'
             chk_database = apps.get_model('EES_Forms', link).objects.filter(facilityChoice__facility_name=facility)
             for item in chk_database:
-                fsList.append((item, itemSearched))
+                fsList.append((item, idSearchData))
             return fsList
         else:
             return "none"
     
     def getFsSearchLabel(itemSearched, fsModel):
         if itemSearched != '' and itemSearched is not None:
-            fsList = []
+            fsList1 = []
             print('Starting to search labels...')
             for fs in fsModel:
                 fsPackets = fs.settings['packets']
                 for packetLabel in fsPackets:
                     if fsPackets[packetLabel] == itemSearched:
-                        fsList.append(fs)
-                        print('Found... PacketID: ' + str(packetLabel) + " and fsID: " + str(fs.id))
-            return fsList
+                        if fs not in fsList1:
+                            fsList1.append(fs)
+                            print("Found... fsID: " + str(fs.id))
+            modelsList = []
+            for model in apps.get_models():
+                for fsSort in fsList1:
+                    if model.__name__[:4] == "form" and model.__name__[-6:] == '_model':
+                        modelName = model.__name__[4:-6]
+                        if str(modelName) == str(fsSort.formChoice.id):
+                            modelsList.append((model, fsSort))
+            fsList = []
+            for item in modelsList:
+                chk_database = item[0].objects.filter(facilityChoice__facility_name=facility)
+                for iForm in chk_database:
+                    duple = (iForm, item[1].formChoice)
+                    if duple not in fsList:
+                        fsList.append((iForm, item[1]))
+            return fsList  
         else:
             return "none"
                             
     def getFsSearchMonthYear(itemSearched, fsModel):
         if itemSearched != "" and itemSearched is not None:
             itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m").date()
-            formIDList = []
-            for fs in fsModel:
-                formIDList.append(fs.formChoice.id)
+            # formIDList = []
+            # for fs in fsModel:
+            #     formIDList.append((fs.formChoice.id, fs))
+            # print(formIDList)
             modelsList = []
             for model in apps.get_models():
-                if model.__name__[:4] == "form" and model.__name__[-6:] == '_model' and model.__name__[4:-6]:
-                    modelName = model.__name__[4:-6]
-                    if str(modelName) in str(formIDList):
-                        modelsList.append((model, int(modelName)))
+                for fs in fsModel:
+                    if model.__name__[:4] == "form" and model.__name__[-6:] == '_model':
+                        modelName = model.__name__[4:-6]
+                        if str(modelName) == str(fs.formChoice.id):
+                            modelsList.append((model, fs))
             fsList = []
             for item in modelsList:
                 try:
-                    chk_database = item[0].objects.filter(date__month=itemSearched.month, date__year=itemSearched.year)
+                    chk_database = item[0].objects.filter(Q(date__month=itemSearched.month) & Q(date__year=itemSearched.year))
                 except:
-                    chk_database = item[0].objects.filter(week_start__month=itemSearched.month, week_start__year=itemSearched.year)
+                    chk_database = item[0].objects.filter(Q(week_start__month=itemSearched.month) & Q(week_start__year=itemSearched.year))
                 for iForm in chk_database:
-                    fsList.append((iForm, item[1]))
+                    duple = (iForm, item[1].formChoice)
+                    if duple not in fsList:
+                        fsList.append((iForm, item[1]))
             return fsList  
         else:
             return "none"
-    
-    labelQueryList = getFsSearchID(archiveForm_query, formSettingsModel)
-    #IDQueryList = getFsSearchLabel(archiveForm_query, formSettingsModel)
+ 
+    def getFsSearchDate(itemSearched, fsModel):
+        if itemSearched != "" and itemSearched is not None:
+            itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m-%d").date()
+            modelsList = []
+            for model in apps.get_models():
+                for fs in fsModel:
+                    if model.__name__[:4] == "form" and model.__name__[-6:] == '_model':
+                        modelName = model.__name__[4:-6]
+                        if str(modelName) == str(fs.formChoice.id):
+                            modelsList.append((model, fs))
+            fsList = []
+            for item in modelsList:
+                try:
+                    chk_database = item[0].objects.filter(date=itemSearched)
+                except:
+                    chk_database = item[0].objects.filter(week_start=itemSearched)
+                for iForm in chk_database:
+                    duple = (iForm, item[1].formChoice)
+                    if duple not in fsList:
+                        fsList.append((iForm, item[1]))
+            return fsList  
+        else:
+            return "none"
+      
+    IDQueryList = getFsSearchID(archiveForm_query, formSettingsModel)
+    labelQueryList = getFsSearchLabel(archiveFormLabel_query, formSettingsModel)
     monthYearQueryList = getFsSearchMonthYear(archiveMonth_query, formSettingsModel)
-    dateQueryList = []
+    dateQueryList = getFsSearchDate(archiveDate_query, formSettingsModel)
     
+    sortList = []
     finalList = []
-    for sort1 in monthYearQueryList:
-        if sort1 not in finalList:
-            finalList.append(sort1)
-    for sort2 in labelQueryList:
-        if sort2 not in finalList:
-            finalList.append(sort1)
-            
-    print(labelQueryList)
+    diffrentOnes = [6,8,20,21]
+    if monthYearQueryList != 'none':
+        finalList = monthYearQueryList
+    if IDQueryList != 'none':
+        if len(finalList) == 0:
+            finalList = IDQueryList
+        else:
+            for sort2 in IDQueryList:
+                if sort2 in finalList:
+                    sortList.append(sort2)
+            finalList = sortList
+            sortList = []
+    if labelQueryList != 'none':
+        if len(finalList) == 0:
+            finalList = labelQueryList
+        else:
+            for sort3 in labelQueryList:
+                if sort3 in finalList:
+                    sortList.append(sort3)
+            finalList = sortList
+            sortList = []
+    if dateQueryList != 'none':
+        if len(finalList) == 0:
+            finalList = dateQueryList
+        else:
+            for sort4 in dateQueryList:
+                if sort4 in finalList:
+                    sortList.append(sort4)
+            finalList = sortList
+    
+    
     print(finalList)
-    #hello = getFsSearch(archiveForm_query, formSettingsModel)
     print('chiecklsj')
     if request.method == 'POST':
         answer = request.POST
@@ -312,7 +383,8 @@ def archive_view(request, facility):
         'client': client, 
         "supervisor": supervisor, 
         "unlock": unlock, 
-        'finalList': finalList
+        'finalList': finalList,
+        'diffrentOnes': diffrentOnes
     })
 
 @lock

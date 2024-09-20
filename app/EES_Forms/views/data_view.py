@@ -31,6 +31,7 @@ def pt_admin1_view(request, facility):
     od_recent = pushTravelsData['closest']
     all_ovens = pushTravelsData['all']
     
+    print(od_recent)
     if request.method == 'POST':
         answer = request.POST
         if 'facilitySelect' in answer.keys():

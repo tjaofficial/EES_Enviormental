@@ -50,12 +50,20 @@ class PageNumCanvas(canvas.Canvas):
 def form_PDF(request, facility, formGroup, formIdentity, formDate):
     userProfile = user_profile_model.objects.get(user=request.user)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-
+    packetBeingPrinted = ''
     if formGroup == 'single':
         formSettingsEntry = formSettingsQuery.get(id=int(formIdentity))
         formsBeingUsed = [('none',formSettingsEntry)]
     elif formGroup == 'coke_battery':
         formsBeingUsed = ['1', '2', '3', '4', '5']
+    elif formGroup == 'daily':
+        formsBeingUsed = []
+        packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
+        packetFormList = packetBeingPrinted.formList
+        for packs in packetFormList:
+            for settingsForm in formSettingsQuery:
+                if packetFormList[packs]['settingsID'] == settingsForm.id:
+                    formsBeingUsed.append((packs ,settingsForm))
     elif formGroup == 'facility_weekly':
         formsBeingUsed = []
         packetFormList = the_packets_model.objects.get(id=formIdentity).formList
@@ -112,6 +120,10 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             endDateString = str(formDateParsed.year) + "-" + str(formDateParsed.month) + "-" + str(monthDays[1])
             startDate = datetime.datetime.strptime(startDateString, "%Y-%m-%d").date()
             endDate = datetime.datetime.strptime(endDateString, "%Y-%m-%d").date()
+        elif formGroup == 'daily':
+            formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
+            startDate = formDateParsed
+            endDate = formDateParsed
         else:
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             endDate = formDateParsed
@@ -169,6 +181,9 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
             elif formGroup == 'coke_battery':
                 fileName = "form_1_packet.pdf"
                 documentTitle = "form_1_packet"
+            elif formGroup == 'daily':
+                fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
+                documentTitle = str(packetBeingPrinted.name)
             elif formGroup == 'facility_weekly':
                 fileName = "facility_weekly_packet.pdf"
                 documentTitle = "facility_weekly_packet"

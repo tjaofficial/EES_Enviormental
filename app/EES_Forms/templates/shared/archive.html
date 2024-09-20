@@ -16,8 +16,12 @@
                 <form method="GET" action="./archive" style="text-align: center;">
                     <div class="CR_dataCont">
                         <div class="inputCont">
-                            Search Form Label or ID <br>
-                            <input type="search" name="archiveForm" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                            Search Form ID<br>
+                            <input type="search" name="archiveFormID" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                        </div>
+                        <div class="inputCont">
+                            Search Form Label<br>
+                            <input type="search" name="archiveFormLabel" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
                             Search Month/Year<br>
@@ -43,26 +47,15 @@
                 {% endif %}
             </div>
             <div class="contentCont" style="min-width: 400px; min-height: 500px;">
-                hello
+                <ul style="text-align: left;">
                 {% for items in finalList %}
-                    <li>{{items.1}} - {{items.0.date}}</li>
+                    {% if items.1.formChoice.id in diffrentOnes %}
+                        <li style="list-style-type: disc;">- <a href="{% url items.1.formChoice.link facility items.1.id items.0.week_start %}">{{link}}{{items.1.id}} - ({% for key, label in items.1.settings.packets.items %}{% if forloop.last %}{{label}}{% else %}{{label}}, {% endif %}{% endfor %}) - {{items.1.formChoice.header}} - {{items.1.formChoice.title}} - {{items.0.week_start}}</a></li>
+                    {% else %}
+                        <li style="list-style-type: disc;">- <a href="{% url items.1.formChoice.link facility items.1.id items.0.date %}">{{link}}{{items.1.id}} - ({% for key, label in items.1.settings.packets.items %}{% if forloop.last %}{{label}}{% else %}{{label}}, {% endif %}{% endfor %}) - {{items.1.formChoice.header}} - {{items.1.formChoice.title}} - {{items.0.date}}</a></li>
+                    {% endif %}
                 {% endfor %}
-            </div>
-        </div><br>
-        <div class="card">
-            <div class="cardHeader">
-                {% include "shared/components/backArrow.html" with destination="dashboard" %}
-                {% if facility != 'supervisor' %}
-                <form action="search_forms/search" method="POST" class=''>
-                    {% csrf_token %}
-                    <input class='searchInput' type='search' placeholder="Type Search Here" name="searched"/>
-                    {% include "shared/components/submitButton.html" with label="search" %}
-                </form>
-                {% else %}
-                NO FACILITY SELECTED
-                {% endif %}
-            </div>
-            <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+                </ul>
             </div>
         </div>
     </div>

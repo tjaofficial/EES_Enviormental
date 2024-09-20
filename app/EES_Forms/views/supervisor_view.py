@@ -160,6 +160,7 @@ def sup_dashboard_view(request, facility):
         annually_percent = False
     # -------90 DAY PUSH ----------------
     pushTravelsData = ninetyDayPushTravels(facility)
+    print(pushTravelsData)
     if pushTravelsData == 'EMPTY':
         od_30 = ''
         od_10 = ''
@@ -171,6 +172,7 @@ def sup_dashboard_view(request, facility):
         od_10 = pushTravelsData['10days']
         od_5 = pushTravelsData['5days']
         od_recent = pushTravelsData['closest']
+        print(od_5)
         all_ovens = pushTravelsData['all']
     # ----CONTACTS-----------------
     allContacts = user_profile_model.objects.filter(company=userCompany)
@@ -294,7 +296,10 @@ def sup_dashboard_view(request, facility):
                 'colorMode': colorMode,
                 'userMode': userMode,
                 'options': options,
-                'graphDataDump': graphDataDump
+                'graphDataDump': graphDataDump,
+                "od_30": od_30, 
+                "od_10": od_10, 
+                "od_5": od_5, 
             })
     if request.method == 'POST':
         answer = request.POST

@@ -3,7 +3,7 @@
     padding: 5px; 
     border: 2px solid #513b3b00;
     width: 15rem;
-    background-color: #dfe5e9;
+    background-color: #ffffff;
 }
 .ptHolder {
     font-family: Arial, Helvetica, sans-serif;
@@ -35,7 +35,7 @@
     border-top-right-radius: 15px;
 }
 .table2Style {
-    background-color: #253544;
+    /* background-color: #253544; */
     width: 44rem;
     padding: 30px;
     border-radius: 15px;
@@ -44,14 +44,16 @@
     height: 40px; 
     padding-left: 30px; 
     padding-right: 30px;
-    background-color: #dfe5e9;
+    background-color: #ffffff;
     border-bottom: 2px #0000001a solid;
 }
 .dataLanes2Header {
     height: 40px; 
     padding-left: 30px; 
     padding-right: 30px;
-    background-color: #8295a5;
+    background-color: #253544;
     padding-top: 12px;
     padding-bottom: 12px;
+    color: white;
+    font-weight: lighter;
 }
