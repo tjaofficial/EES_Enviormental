@@ -9,7 +9,7 @@ import calendar
 from django.contrib import messages
 from django.contrib.auth.models import Group
 import json
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor2
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor2, defaultSettingsParsed, defaultBatteryDashSettings
 from ..decor import isSubActive
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
@@ -496,8 +496,10 @@ def register_view(request, facility, access_page):
                 if not facilityModel.exists():    
                     A = form.save(commit=False)
                     A.company = userProf.company
+                    A.settings = defaultSettingsParsed
                     if request.POST['cokeBattery'] == 'Yes':
                         A.dashboard = 'battery'
+                        A.settings['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
                     else:
                         A.dashboard = 'default'
                     

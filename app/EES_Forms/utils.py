@@ -22,7 +22,6 @@ from django.conf import settings
 from django.contrib import messages
 
 #from .admin import EventAdmin
-
 parseFormList = [
     (1, "A1"),
     (2, "A2"),
@@ -96,6 +95,12 @@ defaultNotifications = {
         '10_day_pt': False,
         '5_day_pt': False
 }
+
+defaultSettings = {
+    'batteryDash': False,
+    'notifications': defaultNotifications
+}
+defaultSettingsParsed = json.loads(json.dumps(defaultSettings))
 
 defaultUserSettings = {
     'colorMode': 'light',
@@ -1309,7 +1314,7 @@ def create_starting_forms():
         O = Forms(
             form=24,
             frequency="Weekly",
-            day_freq='Weekends',
+            day_freq='Daily',
             weekdays_only=False,
             weekend_only=True,
             link="form24",
@@ -1320,7 +1325,7 @@ def create_starting_forms():
             submitted=False,)
         P = Forms(
             form=25,
-            frequency="Weekly",
+            frequency="Daily",
             day_freq='Weekends',
             weekdays_only=False,
             weekend_only=True,

@@ -10,7 +10,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.contrib import messages
 from django.contrib.auth.models import Group
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, EMAIL_HOST
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, EMAIL_HOST_USER
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes, force_str
@@ -149,7 +149,7 @@ def request_password_view(request):
                     send_mail(
                         mail_subject,
                         plain_message,
-                        settings.EMAIL_HOST_USER,
+                        EMAIL_HOST_USER,
                         [to_email],
                         html_message=html_message,
                         fail_silently=False
@@ -248,7 +248,7 @@ def landingRegister(request):
             send_mail(
                 mail_subject,
                 plain_message,
-                settings.EMAIL_HOST_USER,
+                EMAIL_HOST_USER,
                 [to_email],
                 html_message=html_message,
                 fail_silently=False

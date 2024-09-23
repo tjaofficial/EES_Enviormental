@@ -28,13 +28,6 @@ def IncompleteForms(request, facility):
     facilityData = bat_info_model.objects.filter(facility_name=facility)[0]
     facPackets = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
-    if signatures.exists():
-        if signatures[0].sign_date == today:
-            sigExisting = True
-            sigName = signatures[0].supervisor
-    # If there are less than 5 forms when first starting this program
-    # this will create the base forms for EES Coke.
-    create_starting_forms()
     # -------90 DAY PUSH ----------------
     pushTravelsData = ninetyDayPushTravels(facility)
     if pushTravelsData == 'EMPTY':
