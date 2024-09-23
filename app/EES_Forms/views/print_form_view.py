@@ -47,16 +47,17 @@ class PageNumCanvas(canvas.Canvas):
         self.drawRightString(200*mm, 10*mm, page)
       
 @lock
-def form_PDF(request, facility, formGroup, formIdentity, formDate):
+def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
     userProfile = user_profile_model.objects.get(user=request.user)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     packetBeingPrinted = ''
-    if formGroup == 'single':
-        formSettingsEntry = formSettingsQuery.get(id=int(formIdentity))
-        formsBeingUsed = [('none',formSettingsEntry)]
-    elif formGroup == 'coke_battery':
-        formsBeingUsed = ['1', '2', '3', '4', '5']
-    elif formGroup == 'daily':
+    if type == 'single' and formGroup == 'daily':
+        formID_Label = formIdentity.split('-')
+        formID = int(formID_Label[0])
+        label = formID_Label[1]
+        formSettingsEntry = formSettingsQuery.get(id=int(formID))
+        formsBeingUsed = [(label,formSettingsEntry)]
+    elif formGroup == 'daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
         packetFormList = packetBeingPrinted.formList
@@ -182,8 +183,12 @@ def form_PDF(request, facility, formGroup, formIdentity, formDate):
                 fileName = "form_1_packet.pdf"
                 documentTitle = "form_1_packet"
             elif formGroup == 'daily':
-                fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
-                documentTitle = str(packetBeingPrinted.name)
+                if type == 'single':
+                    fileName = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)+".pdf"
+                    documentTitle = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)
+                else:
+                    fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
+                    documentTitle = str(packetBeingPrinted.name)
             elif formGroup == 'facility_weekly':
                 fileName = "facility_weekly_packet.pdf"
                 documentTitle = "facility_weekly_packet"

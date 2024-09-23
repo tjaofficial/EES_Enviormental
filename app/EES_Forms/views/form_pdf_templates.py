@@ -331,7 +331,11 @@ def pdf_template_A3(primaryData, title, subTitle):
         for omleak in om_leaks:
             text = ''
             for letters in omleak['location']:
+                if letters == 'dampered_off':
+                    letters = 'dampered'
                 text += letters + ','
+            if text != '':
+                text = text[:-1]
             tableData.insert(9,['', '', omleak['oven'], text, '', '', '', '', '', '', '', ''],),
         spaced = len(om_leaks) 
         spacedOm = len(om_leaks)
@@ -362,7 +366,7 @@ def pdf_template_A3(primaryData, title, subTitle):
         ['', '', '', '', '          Povn(N - Ni) - Pno        4(85 - ' + str(primaryData.inop_ovens) + ') - ' + str(primaryData.l_not_observed), '', '', '', '', '', '', ''],
         ['', '', '', '                                    Pve X 100                  ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
         ['', 'Percent Leaking Offtakes = ---------------------- = ------------------------ = ' + str(primaryData.om_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '           Povn(N - Ni) - Pno          4(85 - ' + str(primaryData.inop_ovens) + ') - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
+        ['', '', '', '', '           Povn(N - Ni) - Pno          2(85 - ' + str(primaryData.inop_ovens) + ') + 0 - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
         ['', 'Where: Ly = Leaking Doors Observed, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + primaryData.notes + '</para>', styles['Normal'])]

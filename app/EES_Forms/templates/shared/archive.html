@@ -50,7 +50,11 @@
                 <ul style="text-align: left;">
                 {% for items in finalList %}
                     {% if items.1.formChoice.id in diffrentOnes %}
-                        <li style="list-style-type: disc;">- <a href="{% url items.1.formChoice.link facility items.1.id items.0.week_start %}">{{link}}{{items.1.id}} - ({% for key, label in items.1.settings.packets.items %}{% if forloop.last %}{{label}}{% else %}{{label}}, {% endif %}{% endfor %}) - {{items.1.formChoice.header}} - {{items.1.formChoice.title}} - {{items.0.week_start}}</a></li>
+                        {% if items.1.formChoice.id == diffrentOnes.4 or items.1.formChoice.id == diffrentOnes.5 %}
+                            <li style="list-style-type: disc;">- <a href="{% url items.1.formChoice.link facility items.1.id items.0.date  items.0.date|date:'l'|lower %}">{{link}}{{items.1.id}} - ({% for key, label in items.1.settings.packets.items %}{% if forloop.last %}{{label}}{% else %}{{label}}, {% endif %}{% endfor %}) - {{items.1.formChoice.header}} - {{items.1.formChoice.title}} - {{items.0.date}}</a></li>
+                        {% else %}
+                            <li style="list-style-type: disc;">- <a href="{% url items.1.formChoice.link facility items.1.id items.0.week_start %}">{{link}}{{items.1.id}} - ({% for key, label in items.1.settings.packets.items %}{% if forloop.last %}{{label}}{% else %}{{label}}, {% endif %}{% endfor %}) - {{items.1.formChoice.header}} - {{items.1.formChoice.title}} - {{items.0.week_start}}</a></li>
+                        {% endif %}
                     {% else %}
                         <li style="list-style-type: disc;">- <a href="{% url items.1.formChoice.link facility items.1.id items.0.date %}">{{link}}{{items.1.id}} - ({% for key, label in items.1.settings.packets.items %}{% if forloop.last %}{{label}}{% else %}{{label}}, {% endif %}{% endfor %}) - {{items.1.formChoice.header}} - {{items.1.formChoice.title}} - {{items.0.date}}</a></li>
                     {% endif %}

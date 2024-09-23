@@ -114,7 +114,7 @@ urlpatterns = [
     path("<str:facility>/admin_data", views.admin_data_view, name="admin_data"),
 
     ##---PRINTING
-    path('<str:facility>/printIndex/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
+    path('<str:facility>/printIndex/<str:type>/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
     path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
     path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
     path('billing-history/invoice/<str:invoiceID>', views.invoices, name='invoicePDF'),

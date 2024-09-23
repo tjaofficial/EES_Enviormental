@@ -11,8 +11,17 @@
                 {% csrf_token %}
                 <div style="color:black;text-align:justify;">
                     <p>Facility: {{info.0.facility_name}}</p><br>
-                    <p>Packet Name: {{packet.name}}</p><br>
-                    <p>Frequency: {{packetForm.frequency}}</p><br>
+                    <p>Packet Name: <input value="{{packet.name}}" type="text" name="name" placeholder="Enter packet name..." maxlength="70" required id="id_name">
+                        <input type="hidden" name="packID" value="{{packet.id}}"></p><br>
+                    <p>Frequency: <select name="frequency" id="id_frequency">
+                        <option value="Daily" {% if packet.frequency == 'Daily' %}selected{% endif %}>Daily</option>
+                        <option value="Weekly" {% if packet.frequency == 'Weekly' %}selected{% endif %}="">Weekly</option>
+                        <option value="Monthly" {% if packet.frequency == 'Monthly' %}selected{% endif %}>Monthly</option>
+                        <option value="Quarterly" {% if packet.frequency == 'Quarterly' %}selected{% endif %}>Quarterly </option>
+                        <option value="Semi-Annual" {% if packet.frequency == 'Semi-Annual' %}selected{% endif %}>Semi-Annual</option>
+                        <option value="Annual" {% if packet.frequency == 'Annual' %}selected{% endif %}>Annual</option>
+                      
+                      </select></p><br>
                     {% comment %} <select name="existingForms">
                         <option value="">------</option>
                         {% for forms in info.1 %}
@@ -21,7 +30,7 @@
                     </select> {% endcomment %}
                     <br>
                     <div style="text-align: right;">
-                        <input id="submit{{packID}}" name="sub_delete" type="submit" value="Update">
+                        <input id="submit{{packID}}" name="pack_settings" type="submit" value="Update">
                     </div>
                 </div>  
             </form>

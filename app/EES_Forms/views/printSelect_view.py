@@ -5,7 +5,7 @@ from ..models import Forms, bat_info_model, facility_forms_model, the_packets_mo
 from ..forms import *
 from django.core.exceptions import FieldError
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-import ast
+import json
 from ..utils import Calendar, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
 import datetime
 
@@ -31,6 +31,13 @@ def printSelect(request, facility):
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = get_facility_forms('facilityName', facility)
     selectList = []
+    fsList = []
+    for fs in formSettingsQuery:
+        labelList = []
+        for label in fs.settings['packets']:
+            labelList.append((fs.settings['packets'][label], int(label)))
+        fsList.append((fs.id, labelList))
+    formSettingsQueryJson = json.dumps(fsList)
     if len(facilityForms) == 0:
         print('No facility forms have been assigned/No facility has been selected')
     else:
@@ -46,20 +53,24 @@ def printSelect(request, facility):
         if 'facilitySelect' in answer.keys():
             if answer['facilitySelect'] != '':
                 return redirect('PrintSelect', answer['facilitySelect'])
-        inputDate = datetime.datetime.strptime(request.POST["monthSel"], "%Y-%m").date()
-        if request.POST['type'] == 'single':
+        inputDate = datetime.datetime.strptime(answer["monthSel"], "%Y-%m").date()
+        if answer['type'] == 'single':
             print('HFLSKDJFLSKJDFLKSJDF--------')
             print(forms)
             if int(forms) == 23:
                 print('yes its 23')
-                formDate = request.POST['monthSel']
+                formDate = answer['monthSel']
                 formGroup = 'single'
                 formIdentity = forms
                 
                 return redirect('printIndex', facility, formGroup, formIdentity, formDate)
-            return redirect("CalSelect", facility, request.POST['type'], request.POST['forms'], inputDate.year, inputDate.month)
-        elif request.POST['type'] == "group":
-            return redirect("CalSelect", facility, request.POST['type'], request.POST['formGroups'], inputDate.year, inputDate.month)
+            if str(answer['formLabels']) == str(forms):
+                return redirect("CalSelect", facility, answer['type'], forms, inputDate.year, inputDate.month)
+            else:
+                forms = str(forms) + '-' + str(answer['formLabels'])
+                return redirect("CalSelect", facility, answer['type'], forms, inputDate.year, inputDate.month)
+        elif answer['type'] == "group":
+            return redirect("CalSelect", facility, answer['type'], answer['formGroups'], inputDate.year, inputDate.month)
             
         try:
             if forms != '':
@@ -72,21 +83,21 @@ def printSelect(request, facility):
                 mainModel = apps.get_model('EES_Forms', formCheck)
                     
                 try:
-                    filtered = mainModel.objects.filter(date=request.POST['formDate'])
+                    filtered = mainModel.objects.filter(date=answer['formDate'])
                 except FieldError as e:
-                    filtered = mainModel.objects.filter(week_start=request.POST['formDate'])
+                    filtered = mainModel.objects.filter(week_start=answer['formDate'])
                 
                 if len(filtered) == 0:
                     alertMessage = '*FORM DOES NOT EXIST PLEASE SELECT ANOTHER DATE*'
                 else:
                     alertMessage = ''
             
-            typeFormDate = '/' + request.POST['type'] + '-' + request.POST['formDate']
+            typeFormDate = '/' + answer['type'] + '-' + answer['formDate']
                 
-            if forms == '' and request.POST['formGroups'] != '':
-                formGroups = '/' + request.POST['formGroups']
+            if forms == '' and answer['formGroups'] != '':
+                formGroups = '/' + answer['formGroups']
                 craftUrl = 'printIndex' + formGroups + typeFormDate
-            elif request.POST['formGroups'] == '' and forms != '':
+            elif answer['formGroups'] == '' and forms != '':
                 forms = '/' + forms.capitalize()
                 craftUrl = 'printIndex' + forms + typeFormDate
 
@@ -107,5 +118,6 @@ def printSelect(request, facility):
         "client": client, 
         'unlock': unlock, 
         'alertMessage': alertMessage,
-        'packetQuery': packetQuery
+        'packetQuery': packetQuery,
+        'formSettingsQuery': formSettingsQueryJson
     })

@@ -224,7 +224,7 @@ class Calendar2(HTMLCalendar):
         super(Calendar2, self).__init__()
         self.events = events
  
-    def formatday(self, day, weekday, events, year, forms, selectedForm):
+    def formatday(self, day, weekday, events, year, type, label, forms, selectedForm):
         """
         Return a day as a table cell.
         """    
@@ -256,7 +256,11 @@ class Calendar2(HTMLCalendar):
                 for h in aPacketFormList:
                     if h.date.year == year:
                         selectedFormDate = h
-                        forms_html += "<a href='../../../../printIndex/daily/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        if type == 'single':
+                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        else:
+                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                        
                         eventCell = True
                         break
             elif packetsEntry.frequency == 'Weekly':
@@ -276,13 +280,13 @@ class Calendar2(HTMLCalendar):
                             print('check 1')
                             selectedFormDate = h
                             print('check 2')
-                            forms_html += "<a href='../../../../printIndex/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                             eventCell = True
                             break
                     except:
                         if h.week_start.year == year:
                             selectedFormDate = h
-                            forms_html += "<a href='../../../../printIndex/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
                             eventCell = True
                             break
             elif packetsEntry.frequency == 'Monthly':
@@ -292,13 +296,16 @@ class Calendar2(HTMLCalendar):
                 forms_from_day = forms.filter(date__day=day)
                 for form in forms_from_day:
                     if form.date.year == year:
-                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                        if type == 'single':
+                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                        else:
+                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
                         eventCell = True
             else:
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../printIndex/" + type + "/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
                         eventCell = True
         
         forms_html += "</ul>"
@@ -313,25 +320,34 @@ class Calendar2(HTMLCalendar):
             
 
  
-    def formatweek(self, theweek, events, year, forms, selectedForm):
+    def formatweek(self, theweek, events, year, type, label, forms, selectedForm):
         """
         Return a complete week as a table row.
         """
-        s = ''.join(self.formatday(d, wd, events, year, forms, selectedForm) for (d, wd) in theweek)
+        s = ''.join(self.formatday(d, wd, events, year, type, label, forms, selectedForm) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
         
  
-    def formatmonth(self, theyear, themonth, year, forms, facility, withyear=True):
+    def formatmonth(self, theyear, themonth, year, type, forms, facility, withyear=True):
         """
         Return a formatted month as a table.
         """
         formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
         formList = get_facility_forms('facilityName', facility)
         #ogFormID = forms
+        if type == 'single':
+            try:
+                forms = int(forms)
+                formPacket = False
+            except:
+                formsList = forms.split('-')
+                forms = int(formsList[0])
+                formPacket = formsList[1]
         
         print("start")
         print(forms)
-        if isinstance(forms, str):
+        if isinstance(forms, str) and type == 'group':
+            label = False
             print("This is a Packet Print for packetID "+forms)
             packetsEntry = the_packets_model.objects.get(id=int(forms))
             allFormsSettingsList = []
@@ -385,10 +401,14 @@ class Calendar2(HTMLCalendar):
             #             packetExists.extend(chk_database)
             selectedForm = forms
             chk_database = packetExists
-        elif isinstance(forms, int):
+        elif isinstance(forms, int) and type == "single":
             for x in formSettingsQuery:
                 if x.id == forms:
                     fsEntry = x
+                    if formPacket:
+                        label = x.settings['packets'][formPacket]
+                    else:
+                        label = x.id
             name_of_model = fsEntry.formChoice.link + "_model"
             if fsEntry.formChoice.id == 23:
                 chk_database = apps.get_model('EES_Forms', "form22_model").objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
@@ -424,7 +444,7 @@ class Calendar2(HTMLCalendar):
         a(self.formatweekheader())
         a('\n')
         for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(week, events, year, chk_database, selectedForm))
+            a(self.formatweek(week, events, year, type, label, chk_database, selectedForm))
             a('\n')
         a('</table>')
         a('\n')

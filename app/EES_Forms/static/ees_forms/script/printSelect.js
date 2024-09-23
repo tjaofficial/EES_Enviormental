@@ -39,3 +39,25 @@ function selectGroupLis() {
 function selectPrintLis() {
     document.getElementById('printButton').style.visibility = 'visible';
 }
+
+function showLabels(elem){
+    const fsQuery = JSON.parse(document.getElementById('fsData').dataset.fsquery)
+    console.log(elem.value)
+    console.log(fsQuery.length)
+    let html = ''
+    html += `<option value="` + elem.value + `">`+ elem.value + `</option>`
+    for (let x=0; x<fsQuery.length; x++){
+        let fsForm = fsQuery[x];
+        console.log(fsForm)
+        if (elem.value == fsForm[0]){
+            for (let i=0; i<fsForm[1].length; i++){
+                let label = fsForm[1][i][0];
+                let packID = fsForm[1][i][1]
+                html += `<option value="` + packID + `">`+ label + `</option>`
+            }
+        }
+    }
+    console.log(html)
+    document.getElementById('selLabel').style.display = 'block';
+    document.getElementById('formLabels').innerHTML = html;
+}

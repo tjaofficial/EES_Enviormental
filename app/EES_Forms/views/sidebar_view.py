@@ -227,12 +227,15 @@ def archive_view(request, facility):
     ]
     
     def getFsSearchID(itemSearched, fsModel):
-        if itemSearched != '' and itemSearched is not None:
+        if itemSearched != '' and itemSearched is not None and fsModel.exists():
             fsList = []
             idSearchData = False
             itemSearched = int(itemSearched)
             print('check 1')
+            print(fsModel)
             for fs in fsModel:
+                print(fs.formChoice.id)
+                print(itemSearched)
                 if fs.formChoice.id == itemSearched:
                     idSearchData = fs
                     break
@@ -245,7 +248,7 @@ def archive_view(request, facility):
             return "none"
     
     def getFsSearchLabel(itemSearched, fsModel):
-        if itemSearched != '' and itemSearched is not None:
+        if itemSearched != '' and itemSearched is not None and fsModel.exists():
             fsList1 = []
             print('Starting to search labels...')
             for fs in fsModel:
@@ -274,7 +277,7 @@ def archive_view(request, facility):
             return "none"
                             
     def getFsSearchMonthYear(itemSearched, fsModel):
-        if itemSearched != "" and itemSearched is not None:
+        if itemSearched != "" and itemSearched is not None and fsModel.exists():
             itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m").date()
             # formIDList = []
             # for fs in fsModel:
@@ -302,7 +305,7 @@ def archive_view(request, facility):
             return "none"
  
     def getFsSearchDate(itemSearched, fsModel):
-        if itemSearched != "" and itemSearched is not None:
+        if itemSearched != "" and itemSearched is not None and fsModel.exists():
             itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m-%d").date()
             modelsList = []
             for model in apps.get_models():
@@ -332,7 +335,7 @@ def archive_view(request, facility):
     
     sortList = []
     finalList = []
-    diffrentOnes = [6,8,20,21]
+    diffrentOnes = [6,8,20,21,24,25]
     if monthYearQueryList != 'none':
         finalList = monthYearQueryList
     if IDQueryList != 'none':

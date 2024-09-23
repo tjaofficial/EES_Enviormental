@@ -60,10 +60,10 @@ def calSelect(request, facility, type, forms, year, month):
         print('not single form')
         print(forms)
     else:
-        formSelect = int(forms)
+        formSelect = str(forms)
         print(formSelect)
             
-    html_cal = calend.formatmonth(year, month, year, formSelect, facility, withyear=True)
+    html_cal = calend.formatmonth(year, month, year, type, formSelect, facility, withyear=True)
     
     # if request.method == "POST":
     #     typeFormDate = '/' + request.POST['type'] + '-' + request.POST['formDate']

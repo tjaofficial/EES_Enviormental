@@ -27,7 +27,7 @@
                 <br>
                 <div id='selForm' style='display:none;'>
                     <label for="forms">Choose Form:</label>
-                    <select name="forms" id="forms">
+                    <select name="forms" id="forms" onchange="showLabels(this)">
                         <option value="" selected>------</option>
                         {% for x in selectList %}
                         <option value="{{x.id}}">{{x.id}} - {{x.formChoice.title}}</option>
@@ -35,6 +35,7 @@
                     </select>
                     <br><br>
                 </div>
+                <span display="none" id="fsData" data-fsquery="{{formSettingsQuery}}">
                 <div id='selGroup' style='display:none;'>
                     <label for="formGroups">Choose Packet:</label>
                     <select name="formGroups" id="formGroups">
@@ -42,6 +43,12 @@
                         {% for packet in packetQuery %}
                         <option value="{{packet.id}}">{{packet.name}}</option>
                         {% endfor %}
+                    </select>
+                    <br><br>
+                </div>
+                <div id='selLabel' style='display:none;'>
+                    <label for="formLabels">Choose Label:</label>
+                    <select name="formLabels" id="formLabels">
                     </select>
                     <br><br>
                 </div>

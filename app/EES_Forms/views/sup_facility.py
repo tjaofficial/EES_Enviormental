@@ -144,6 +144,12 @@ def facilityList(request, facility):
             A.save()
             B.save()
             print('Updating Packet')
+        elif 'pack_settings' in answer.keys():
+            packEntry = packetData.get(id=answer['packID'])
+            packEntry.frequency = answer['frequency']
+            packEntry.name = answer['name']
+            packEntry.save()
+            return redirect(facilityList, facility)
     return render(request, 'supervisor/sup_facilityList.html', {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
