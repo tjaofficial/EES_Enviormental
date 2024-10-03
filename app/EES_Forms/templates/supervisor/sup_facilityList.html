@@ -7,6 +7,7 @@
         background: #0000ff3d;
     }
 </style>
+<input type="hidden" id="totalFacilities" value="{{sortedFacilityData|length}}">
 <div class='mainCont' style="width: 50rem;">
     <div class="card">
         <div class="cardHeader">
@@ -17,7 +18,7 @@
         {% if facilities|length > 0 %}
             <div class="contentCont center" style="padding: unset;">
                 {% for info in facilities %}
-                <div class="facilityFormSec" onmouseenter="bang(this)" data-facid="{{info.0.id}}" data-totalforms="{{info.1|length}}" data-packlist="{{info.0.facility_name|list_of_packets}}">
+                <div class="facilityFormSec" id="facility{{forloop.counter}}" data-facid="{{info.0.id}}" data-totalforms="{{info.1|length}}" data-packlist="{{info.0.facility_name|list_of_packets}}">
                     <div class="facilityFormHeader">
                         {{info.0.facility_name}}
                     </div>
@@ -33,7 +34,6 @@
                                 {% for x in info.1 %}
                                     {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
                                     <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
-                                        
                                         <td class="center">{{x.id}}</td>
                                         <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
                                         <td class="center" style="display: inline-flex;"> 

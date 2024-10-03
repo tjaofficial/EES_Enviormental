@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect # type: ignore
 from ..models import user_profile_model, form5_readings_model, Forms, daily_battery_profile_model, signature_model, form18_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, the_packets_model, form_settings_model
-from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor2, create_starting_forms,get_facility_forms, updateAllFormSubmissions, checkIfFacilitySelected
-from django.contrib.auth.decorators import login_required
+from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, create_starting_forms,get_facility_forms, updateAllFormSubmissions, checkIfFacilitySelected
+from django.contrib.auth.decorators import login_required # type: ignore
 from django.conf import settings
 import datetime
 import requests
@@ -16,7 +16,7 @@ lock = login_required(login_url='Login')
 def IncompleteForms(request, facility):
     permissions = [OBSER_VAR]
     userGroupRedirect(request.user, permissions)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
     todays_num = today.weekday()
@@ -200,7 +200,7 @@ def default_dashboard(request, facility):
     permissions = [OBSER_VAR]
     userGroupRedirect(request.user, permissions)
     updateAllFormSubmissions(facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     packetsQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
     formData = Forms.objects.all()
     today = datetime.datetime.today().date()

@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form2_model, bat_info_model
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm,setUnlockClientSupervisor, createNotification
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification, checkIfFacilitySelected, getFacSettingsInfo
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -14,9 +14,9 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formA2(request, facility, fsID, selector):
     formName = 2
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    notifs = checkIfFacilitySelected(request.user, facility)
+    freq = getFacSettingsInfo(fsID)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     search = False
     existing = False
     now = datetime.datetime.now().date()
@@ -150,6 +150,8 @@ def formA2(request, facility, fsID, selector):
         "search": search, 
         "unlock": unlock, 
         'supervisor': supervisor, 
+        'notifs': notifs,
+        'freq': freq,
         "back": back, 
         'todays_log': todays_log, 
         'data': data, 

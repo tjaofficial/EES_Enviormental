@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
 from ..forms import facility_forms_form, the_packets_form, form_settings_form
 import ast
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 import json
@@ -15,9 +15,7 @@ lock = login_required(login_url='Login')
 @lock
 def facilityList(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     if client:
@@ -129,6 +127,11 @@ def facilityList(request, facility):
             thePacket = packetData.get(id=packetID)
             theSettings = formSettingsModelOG.get(id=fsID)
             highestLabelNumb = 0
+            for label in thePacket.formList:
+                settingsID = thePacket.formList[label]['settingsID']
+                if int(settingsID) == int(fsID):
+                    messages.error(request,"The selected form is already been added to the packet.")
+                    return redirect(facilityList, facility)
             for label in thePacket.formList.keys():
                 noLabelTag = label[:9]
                 noLabelNumber = label[9:]
@@ -144,6 +147,7 @@ def facilityList(request, facility):
             A.save()
             B.save()
             print('Updating Packet')
+            messages.success(request,"The selected form has been added to the packet.")
         elif 'pack_settings' in answer.keys():
             packEntry = packetData.get(id=answer['packID'])
             packEntry.frequency = answer['frequency']
@@ -161,15 +165,13 @@ def facilityList(request, facility):
         'packetData': packetData,
         'packetForm': packetForm,
         'formData': formData,
-        'formSettingsModel': formSettingsModel,
+        'formSettingsModel': formSettingsModelOG,
     })
 
 @lock    
 def facilityForm(request, facility, packet):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     today = datetime.date.today()
@@ -296,9 +298,7 @@ def facilityForm(request, facility, packet):
 @lock
 def facility_form_settings(request, facility, fsID, packetID, formLabel):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     if client:
@@ -368,9 +368,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
 @lock
 def Add_Forms(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     if client:

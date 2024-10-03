@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect # type: ignore
 from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, form1_readings_model, form2_model, form3_model, form4_model, form5_readings_model, bat_info_model, form22_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
@@ -6,8 +6,8 @@ import calendar
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from django.apps import apps
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor2
-from django.contrib.auth.decorators import login_required
+from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor
+from django.contrib.auth.decorators import login_required # type: ignore
 import os
 import ast
 from django.contrib import messages
@@ -20,7 +20,7 @@ lock = login_required(login_url='Login')
 @lock
 def corrective_action_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     issueForm_query = request.GET.get('issueForm')
     issueMonth_query = request.GET.get('issueMonth')
     issueDate_query = request.GET.get('issueDate')
@@ -151,9 +151,7 @@ def corrective_action_view(request, facility):
 @lock
 def calendar_view(request, facility, year, month):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     try:
@@ -211,7 +209,7 @@ def schedule_view(request, facility):
 @lock
 def archive_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = bat_info_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
@@ -393,9 +391,7 @@ def archive_view(request, facility):
 @lock
 def search_forms_view(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     readingsData = False
     ModelForms = Forms.objects.all()
     weekend = False
@@ -629,7 +625,7 @@ def search_forms_view(request, facility, access_page):
 @lock
 def issues_view(request, facility, fsID, form_date, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     now = datetime.datetime.now().date()
     todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
@@ -823,9 +819,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
 @lock
 def event_add_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = bat_info_model.objects.all()
     companyData = user_profile_model.objects.get(user__id=request.user.id).company
     listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
@@ -879,9 +873,7 @@ def event_add_view(request, facility):
 @lock
 def profile_edit_view(request, facility, userID):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if client:
         return redirect('c_dashboard')
     elif unlock:
@@ -947,7 +939,7 @@ def profile_edit_view(request, facility, userID):
 @lock
 def event_detail_view(request, facility, access_page, event_id):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
@@ -1028,7 +1020,7 @@ def handlePhone(number):
 @lock
 def shared_contacts_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = bat_info_model.objects.all()
     companyOfUser = user_profile_model.objects.get(user=request.user).company
     sortedFacilityData = getCompanyFacilities(request.user.username)
@@ -1067,9 +1059,7 @@ def shared_contacts_view(request, facility):
 @lock
 def sop_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     options = bat_info_model.objects.all()
     sops = sop_model.objects.all().order_by('name')
@@ -1097,9 +1087,7 @@ def sop_view(request, facility):
 @lock 
 def formsProgress(request, facility, section):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if unlock:
         return redirect('IncompleteForms', facility)

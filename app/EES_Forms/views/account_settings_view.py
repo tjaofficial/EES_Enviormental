@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 from django.db.models import Q
 from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
@@ -14,9 +14,7 @@ lock = login_required(login_url='Login')
 @lock
 def sup_select_subscription(request, facility, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     user = request.user
@@ -217,9 +215,7 @@ def sup_select_subscription(request, facility, selector):
 @lock
 def sup_account_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     braintreeData = braintree_model.objects.filter(user__id=request.user.id)
@@ -268,9 +264,7 @@ def sup_account_view(request, facility):
 @lock
 def sup_card_update(request, facility, action, planId=False, seats=False):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     accountData = user_profile_model.objects.get(user__id=request.user.id)
@@ -440,9 +434,7 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
 @lock
 def sup_update_account(request, facility, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
@@ -510,9 +502,7 @@ def sup_update_account(request, facility, selector):
 @lock
 def sup_change_subscription(request, facility):   
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
@@ -551,9 +541,7 @@ def sup_change_subscription(request, facility):
 @lock  
 def sup_billing_history(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
@@ -575,9 +563,7 @@ def sup_billing_history(request, facility):
 @lock
 def sup_facility_settings(request, facility, facilityID, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     braintreeData = braintree_model.objects.filter(user__id=request.user.id)

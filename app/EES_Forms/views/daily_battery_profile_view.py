@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import daily_battery_profile_model, user_profile_model, bat_info_model
 from ..forms import daily_battery_profile_form
@@ -12,9 +12,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def daily_battery_profile_view(request, facility, access_page, date):
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     now = datetime.datetime.now().date()
     form = daily_battery_profile_form
@@ -75,9 +73,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
 
 @lock
 def facility_select_view(request):
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profileFacs = getCompanyFacilities(request.user.username)
     profile = user_profile_model.objects.all()
     loginPage = True

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import user_profile_model, company_model, braintreePlans
 from ..utils import braintreeGateway
 import datetime

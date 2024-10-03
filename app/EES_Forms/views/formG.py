@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import Forms, form17_model, form17_readings_model, form18_model, user_profile_model, daily_battery_profile_model, form18_readings_model, bat_info_model
 from ..forms import formG1_form, formG2_form, formG1_readings_form, formG2_readings_form, user_profile_form
-import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -15,9 +14,9 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formG1(request, facility, fsID, selector):
     formName = 17
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     now = datetime.datetime.now().date()
@@ -231,15 +230,33 @@ def formG1(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/weekly/formG1.html", {
-        'fsID': fsID, 'picker': picker, 'facility': facility, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName
+        'fsID': fsID, 
+        'picker': picker, 
+        'facility': facility, 
+        'notifs': notifs,
+        'freq': freq,
+        "exist_canvas": exist_canvas, 
+        'weather': weather2, 
+        "supervisor": supervisor, 
+        "search": search, 
+        "existing": existing, 
+        'client': client, 
+        'unlock': unlock, 
+        'readings_form': readings_form, 
+        "back": back, 
+        'data': data, 
+        'profile_form': profile_form, 
+        'selector': selector, 
+        'todays_log': todays_log, 
+        'formName': formName
     })
 
 @lock
 def formG2(request, facility, fsID, selector):
     formName = 18
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     now = datetime.datetime.now().date()
@@ -450,5 +467,23 @@ def formG2(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/monthly/formG2.html", {
-        'fsID': fsID, 'picker': picker, "exist_canvas": exist_canvas, 'weather': weather2, "supervisor": supervisor, "search": search, "existing": existing, 'client': client, 'unlock': unlock, 'readings_form': readings_form, "back": back, 'data': data, 'profile_form': profile_form,  'selector': selector, 'todays_log': todays_log, 'formName': formName, 'facility': facility, 
+        'fsID': fsID, 
+        'picker': picker, 
+        "exist_canvas": exist_canvas, 
+        'weather': weather2, 
+        "supervisor": supervisor, 
+        "search": search, 
+        "existing": existing, 
+        'client': client, 
+        'unlock': unlock, 
+        'readings_form': readings_form, 
+        "back": back, 
+        'data': data, 
+        'profile_form': profile_form, 
+        'selector': selector, 
+        'todays_log': todays_log, 
+        'formName': formName, 
+        'facility': facility,
+        'notifs': notifs,
+        'freq': freq
     })

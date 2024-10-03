@@ -1,19 +1,19 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import daily_battery_profile_model, user_profile_model, quarterly_trucks_model, Forms, bat_info_model
 from ..forms import quarterly_trucks_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 
 @lock
 def quarterly_trucks(request, facility, fsID, selector):
     formName = "27"
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
@@ -124,5 +124,15 @@ def quarterly_trucks(request, facility, fsID, selector):
         return redirect(batt_prof)
             
     return render(request, "shared/forms/quarterly/quarterly_trucks.html", {
-        'picker': picker, 'facility': facility, "search": search, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'formName': formName, 'selector': selector, 'data': data
+        'picker': picker, 
+        'facility': facility, 
+        'notifs': notifs,
+        'freq': freq,
+        "search": search, 
+        "client": client, 
+        'unlock': unlock, 
+        'supervisor': supervisor, 
+        'formName': formName, 
+        'selector': selector, 
+        'data': data
     })

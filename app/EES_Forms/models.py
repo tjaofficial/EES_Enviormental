@@ -1,10 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django.db import models # type: ignore
+from django.contrib.auth.models import User # type: ignore
 from datetime import datetime, timedelta
-from django.core.exceptions import ValidationError
-from django.urls import reverse
+from django.core.exceptions import ValidationError # type: ignore
+from django.urls import reverse # type: ignore
 import datetime
-from phonenumber_field.modelfields import PhoneNumberField
 
 quarter_choices = (
     ('1', '1st'),

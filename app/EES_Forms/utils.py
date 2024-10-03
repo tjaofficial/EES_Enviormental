@@ -2,24 +2,24 @@ from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from .models import *
 from datetime import datetime as dtime, date, time
-from django.db.models import Q
-from django.apps import apps
+from django.db.models import Q # type: ignore
+from django.apps import apps # type: ignore
 import ast
-import requests
+import requests # type: ignore
 import json
-import braintree
+import braintree # type: ignore
 import os
 import calendar
-from django.shortcuts import redirect
+from django.shortcuts import redirect # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from django.contrib.sites.shortcuts import get_current_site  
-from django.template.loader import render_to_string 
-from django.utils.html import strip_tags
-from django.core.mail import send_mail
-from django.conf import settings
-from django.contrib import messages
+from channels.layers import get_channel_layer # type: ignore
+from asgiref.sync import async_to_sync # type: ignore
+from django.contrib.sites.shortcuts import get_current_site   # type: ignore
+from django.template.loader import render_to_string  # type: ignore
+from django.utils.html import strip_tags # type: ignore
+from django.core.mail import send_mail # type: ignore
+from django.conf import settings # type: ignore
+from django.contrib import messages # type: ignore
 
 #from .admin import EventAdmin
 parseFormList = [
@@ -257,9 +257,9 @@ class Calendar2(HTMLCalendar):
                     if h.date.year == year:
                         selectedFormDate = h
                         if type == 'single':
-                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
                         
                         eventCell = True
                         break
@@ -297,9 +297,9 @@ class Calendar2(HTMLCalendar):
                 for form in forms_from_day:
                     if form.date.year == year:
                         if type == 'single':
-                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/daily/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
                         eventCell = True
             else:
                 forms_from_day = forms.filter(week_start__day=day)
@@ -472,20 +472,20 @@ def updateSubmissionForm(fsID, submitted, date):
     formSettingsSub.save()
     print("Updated Submission was saved...") 
 
-def setUnlockClientSupervisor(requestUserData):
-    unlock = False
-    client = False
-    supervisor = False
-    if requestUserData.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if requestUserData.groups.filter(name=CLIENT_VAR):
-        client = True
-    if requestUserData.groups.filter(name=SUPER_VAR) or requestUserData.is_superuser:
-        supervisor = True
+# def setUnlockClientSupervisor(requestUserData):
+#     unlock = False
+#     client = False
+#     supervisor = False
+#     if requestUserData.groups.filter(name=OBSER_VAR):
+#         unlock = True
+#     if requestUserData.groups.filter(name=CLIENT_VAR):
+#         client = True
+#     if requestUserData.groups.filter(name=SUPER_VAR) or requestUserData.is_superuser:
+#         supervisor = True
         
-    return (unlock, client, supervisor)
+#     return (unlock, client, supervisor)
 
-def setUnlockClientSupervisor2(requestUserData):
+def setUnlockClientSupervisor(requestUserData):
     unlock = False
     client = False
     supervisor = False
@@ -1522,3 +1522,9 @@ def changeStringListIntoList(ffFormData):
         # messages.error(request,'ERROR: ID-11850003 Contact Support Team')
     
     return returnList
+
+def getFacSettingsInfo(fsID):
+    fsPull = form_settings_model.objects.get(id=int(fsID))
+    return fsPull
+
+

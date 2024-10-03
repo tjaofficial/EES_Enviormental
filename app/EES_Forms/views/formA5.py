@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, Forms, form5_model, form5_readings_model, issues_model, bat_info_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
-import requests
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -14,9 +13,9 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formA5(request, facility, fsID, selector):
     formName = 5
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     now = datetime.datetime.now().date()
@@ -332,5 +331,7 @@ def formA5(request, facility, fsID, selector):
         'client': client, 
         'unlock': unlock, 
         'facility': facility,
+        'notifs': notifs,
+        'freq': freq,
         'fsID': fsID
     })

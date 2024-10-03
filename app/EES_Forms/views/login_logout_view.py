@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect # type: ignore
 from django.http import HttpResponseNotFound, HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib.auth import authenticate, login
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model, braintree_model, User

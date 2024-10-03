@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect # type: ignore
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import form3_model, form2_model, form1_readings_model, user_profile_model, daily_battery_profile_model, form5_readings_model, form5_model, Forms
@@ -10,9 +10,7 @@ profile = user_profile_model.objects.all()
 
 
 def pt_admin1_view(request, facility):
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     allForms = Forms.objects.all()
     today = datetime.date.today()
     now = datetime.datetime.now()

@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 from ..forms import spill_kits_form, spill_kit_inventory_form
 from ..models import daily_battery_profile_model, Forms, spill_kits_model, bat_info_model, spill_kit_inventory_model
 import datetime
@@ -7,16 +7,16 @@ import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 import ast
-from ..utils import stringToDate, setUnlockClientSupervisor, updateSubmissionForm
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, stringToDate, setUnlockClientSupervisor, updateSubmissionForm
 
 lock = login_required(login_url='Login')
 
 @lock
 def spill_kits(request, facility, fsID, selector):
     formName = "26"
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
@@ -274,23 +274,16 @@ def spill_kits(request, facility, fsID, selector):
         'formName': formName, 
         'search': search, 
         'existing': existing,
-        'fsID': fsID
+        'fsID': fsID,
+        'notifs': notifs,
+        'freq': freq
     })
 
 @lock
 def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector):
     formName = "spill_kits_inventory"
-    unlock = False
-    client = False
-    supervisor = False
-    search = False
-    existing = False
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     
     count_bp = daily_battery_profile_model.objects.count()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
@@ -446,5 +439,6 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
         "data2": data2, 
         "formAttached": formAttached, 
         "selector": selector,
-        'fsID': fsID
+        'fsID': fsID,
+        'notifs': notifs
     })

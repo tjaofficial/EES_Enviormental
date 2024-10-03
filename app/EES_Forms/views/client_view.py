@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import issues_model, form1_readings_model, form2_model, form3_model, Event, form4_model, form5_readings_model, daily_battery_profile_model, form1_readings_model, User, user_profile_model, bat_info_model
 import datetime
 import json
 import requests
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import setUnlockClientSupervisor2, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases,updateAllFormSubmissions, ninetyDayPushTravels
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases,updateAllFormSubmissions, ninetyDayPushTravels
 
 lock = login_required(login_url='Login')
 
@@ -17,7 +17,7 @@ def client_dashboard_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     options = bat_info_model.objects.all()
     supervisor = False
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     formA1 = form1_readings_model.objects.all().order_by('-form')
     formA2 = form2_model.objects.all().order_by('-date')
     formA3 = form3_model.objects.all().order_by('-date')

@@ -1,0 +1,62 @@
+<div id="delete3" class="modalHolder" style="display: flex;">
+    <script>
+        let formName = {{formName}}
+        let variable = String(formName) + '_tempFormData'
+        console.log(variable)
+        const storedObject = JSON.parse(localStorage[variable]);
+        console.log(storedObject.data.labelSelect)
+        delete storedObject.data.labelSelect
+        //localStorage = storedObject;
+        console.log(JSON.stringify(storedObject))
+        localStorage.setItem(variable, JSON.stringify(storedObject))
+    </script>
+    <div id="cancelReg" class="modal-content">
+        <span onclick="exit_modal()" class="closeAdd">&times;</span>
+        <div class='modalHeader'>
+            <h1><span class="registerName">Print</span></h1>
+        </div>
+        <div class='modalContent'>
+            <form action="" method="POST">
+                {% csrf_token %}
+                Select form label you would like to print:
+                <select id="labelSelect" onchange="labelPick()">
+                    <option value="" selected>------</option>
+                    {% for key, label in freq.settings.packets.items  %}
+                        {% if label|slice:"0:2" != 'no' %}
+                            <option value="{{key}}">{{label}}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select><br><br>
+                <div style="text-align: right;">
+                    <input style="padding: 0px 5px;" type="submit" value="PRINT">
+                    <a id="linkButton" href="{% url 'printIndex' facility 'single' formGroup.formChoice.frequency fsID selector %}" target="_blank" onclick="refreshPage()">
+                        <div class="button-8" role="button" style='height:25px;'>PRINT</div>
+                    </a>
+                    <script>
+                        function labelPick() {
+                            const linkButton = document.getElementById('linkButton');
+                            let value = document.getElementById('labelSelect').value;
+                            var fsID = "{{ fsID }}",
+                            facility = "{{ facility }}",
+                            formGroup = "{{ formGroup.formChoice.frequency }}",
+                            selector = "{{ selector }}";
+                            let newPassVar = fsID + "-" + value
+                            console.log(newPassVar)
+                            let html = "printIndex"
+                            html += "/single/" + formGroup + "/" + newPassVar + "/" + selector
+                            console.log(html)
+                            linkButton.href = "../../../" + html
+                        }
+                        labelPick();
+                        function refreshPage() {
+                            // Open the new page in a new tab
+                            const link = document.getElementById('linkButton').href;
+                            window.open(link, '_blank');
+                            window.location.reload();
+                        }
+                    </script>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form21_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -13,9 +13,9 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formL(request, facility, fsID, selector):
     formName = 21
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     now = datetime.datetime.now().date()
@@ -244,5 +244,24 @@ def formL(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formL.html", {
-        'fsID': fsID, 'picker': picker, 'facility': facility, 'search': search, "back": back, 'todays_log': todays_log, 'empty': data, 'this_week_saturday': this_week_saturday, 'last_saturday': last_saturday, 'end_week': end_week, 'filled_in': filled_in, "selector": selector, 'profile': profile, 'opened': opened, 'formName': formName, 'supervisor': supervisor, "client": client, 'unlock': unlock
+        'fsID': fsID, 
+        'picker': picker, 
+        'facility': facility, 
+        'notifs': notifs,
+        'freq': freq,
+        'search': search, 
+        "back": back, 
+        'todays_log': todays_log, 
+        'empty': data, 
+        'this_week_saturday': this_week_saturday, 
+        'last_saturday': last_saturday, 
+        'end_week': end_week, 
+        'filled_in': filled_in, 
+        "selector": selector, 
+        'profile': profile, 
+        'opened': opened, 
+        'formName': formName, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock
     })

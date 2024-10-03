@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 from django.apps import apps
 from ..models import Forms, bat_info_model, facility_forms_model, the_packets_model
 from ..forms import *

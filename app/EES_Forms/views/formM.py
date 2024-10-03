@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, form22_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -17,9 +17,9 @@ def showName(code):
 @lock
 def formM(request, facility, fsID, selector):
     formName = 22
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     THEmonth = False
@@ -176,5 +176,24 @@ def formM(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formM.html", {
-        'fsID': fsID, 'picker': picker, "existing": existing, 'facility': facility, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'now': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'read': form2, 'formName': formName, 'search': search, 'THEmonth': THEmonth, 'paved_roads': paved_roads, 'unpaved_roads': unpaved_roads, 'parking_lots': parking_lots,
+        'fsID': fsID, 
+        'picker': picker, 
+        "existing": existing, 
+        'facility': facility, 
+        'notifs': notifs,
+        'freq': freq,
+        "client": client, 
+        'unlock': unlock, 
+        'supervisor': supervisor, 
+        'now': todays_log, 
+        'form': form, 
+        'selector': selector, 
+        'profile': profile, 
+        'read': form2, 
+        'formName': formName, 
+        'search': search, 
+        'THEmonth': THEmonth, 
+        'paved_roads': paved_roads, 
+        'unpaved_roads': unpaved_roads, 
+        'parking_lots': parking_lots,
     })

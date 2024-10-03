@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import user_profile_model, Forms
 from ..forms import user_profile_form
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected
@@ -12,9 +12,7 @@ lock = login_required(login_url='Login')
 @lock
 def profile(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     existing = False
     today = datetime.date.today()

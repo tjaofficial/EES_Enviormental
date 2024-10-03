@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect # type: ignore
 from ..models import signature_model, daily_battery_profile_model, bat_info_model
 from ..forms import signature_form
 import datetime

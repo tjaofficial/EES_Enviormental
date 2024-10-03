@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form9_model, bat_info_model, issues_model
 from ..forms import formE_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 
@@ -15,9 +15,9 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formE(request, facility, fsID, selector):
     formName = 9
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    freq = getFacSettingsInfo(fsID)
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
     now = datetime.datetime.now().date()
@@ -122,5 +122,21 @@ def formE(request, facility, fsID, selector):
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formE.html", {
-        'fsID': fsID, 'picker': picker, "client": client, 'unlock': unlock, 'supervisor': supervisor, 'existing': existing, "back": back, 'todays_log': todays_log, 'form': form, 'selector': selector, 'profile': profile, 'formName': formName, 'leak_JSON': goose_neck_data_JSON, 'search': search, 'facility': facility
+        'fsID': fsID, 
+        'picker': picker, 
+        "client": client, 
+        'unlock': unlock, 
+        'supervisor': supervisor, 
+        'existing': existing, 
+        "back": back, 
+        'todays_log': todays_log, 
+        'form': form, 
+        'selector': selector, 
+        'profile': profile, 
+        'formName': formName, 
+        'leak_JSON': goose_neck_data_JSON, 
+        'search': search, 
+        'facility': facility,
+        'notifs': notifs,
+        'freq': freq
     })

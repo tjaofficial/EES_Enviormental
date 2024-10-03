@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
 from django.conf import settings
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
 from ..models import bat_info_model, issues_model, form1_readings_model, form2_model, form3_model, Event, form4_model, form5_readings_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model, form1_readings_model
@@ -9,7 +9,7 @@ import calendar
 from django.contrib import messages
 from django.contrib.auth.models import Group
 import json
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor2, defaultSettingsParsed, defaultBatteryDashSettings
+from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultSettingsParsed, defaultBatteryDashSettings
 from ..decor import isSubActive
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
@@ -29,7 +29,7 @@ def sup_dashboard_view(request, facility):
     userGroupRedirect(request.user, permissions)
     updateAllFormSubmissions(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor2(request.user)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     formA1 = form1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
     formA2 = form2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     formA3 = form3_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
@@ -364,9 +364,7 @@ def sup_dashboard_view(request, facility):
 @isSubActive
 def register_view(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = bat_info_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     user_profiles = user_profile_model.objects.all()
@@ -661,9 +659,7 @@ def register_view(request, facility, access_page):
 @lock
 def form_request_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    unlock = setUnlockClientSupervisor(request.user)[0]
-    client = setUnlockClientSupervisor(request.user)[1]
-    supervisor = setUnlockClientSupervisor(request.user)[2]
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     form = form_requests_form
     

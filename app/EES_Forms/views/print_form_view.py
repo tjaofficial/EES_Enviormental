@@ -1,14 +1,14 @@
 from ..models import Forms
-from django.shortcuts import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.apps import apps
-from django.http import HttpResponseNotFound
-from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, PageBreak
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch, mm
-from reportlab.pdfgen import canvas
+from django.shortcuts import HttpResponse # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
+from django.apps import apps # type: ignore
+from django.http import HttpResponseNotFound # type: ignore
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, PageBreak # type: ignore
+from reportlab.lib.pagesizes import letter # type: ignore
+from reportlab.lib import colors # type: ignore
+from reportlab.lib.styles import getSampleStyleSheet # type: ignore
+from reportlab.lib.units import inch, mm # type: ignore
+from reportlab.pdfgen import canvas # type: ignore
 from ..models import issues_model, user_profile_model,form_settings_model, the_packets_model
 from ..utils import date_change, time_change
 import io
@@ -48,16 +48,18 @@ class PageNumCanvas(canvas.Canvas):
       
 @lock
 def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
+    print(type)
+    print(formGroup)
     userProfile = user_profile_model.objects.get(user=request.user)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     packetBeingPrinted = ''
-    if type == 'single' and formGroup == 'daily':
+    if formGroup == 'Daily' and type == 'single':
         formID_Label = formIdentity.split('-')
         formID = int(formID_Label[0])
         label = formID_Label[1]
         formSettingsEntry = formSettingsQuery.get(id=int(formID))
         formsBeingUsed = [(label,formSettingsEntry)]
-    elif formGroup == 'daily' and type == 'group':
+    elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
         packetFormList = packetBeingPrinted.formList
@@ -74,7 +76,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                     formsBeingUsed.append((packs ,settingsForm))
             # if fForms[0] == 23:
             #     continue
-    elif formGroup == 'monthly':
+    elif formGroup == 'Monthly':
         formsBeingUsed = ['G2', 'Spill Kits']
     elif formGroup == 'tanks':
         formsBeingUsed = []
@@ -115,20 +117,20 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
         except:
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m").date()
-        if formGroup == 'single' and formInformation.frequency == 'Monthly':
+        if type == 'single' and formInformation.frequency == 'Monthly':
             monthDays = calendar.monthrange(formDateParsed.year, formDateParsed.month)
             startDateString = str(formDateParsed.year) + "-" + str(formDateParsed.month) + "-01"
             endDateString = str(formDateParsed.year) + "-" + str(formDateParsed.month) + "-" + str(monthDays[1])
             startDate = datetime.datetime.strptime(startDateString, "%Y-%m-%d").date()
             endDate = datetime.datetime.strptime(endDateString, "%Y-%m-%d").date()
-        elif formGroup == 'daily':
+        elif formInformation.frequency == 'Daily':
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             startDate = formDateParsed
             endDate = formDateParsed
         else:
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             endDate = formDateParsed
-            if formGroup not in ['single', 'coke_battery']:
+            if type not in ['single', 'coke_battery']:
                 startingDayNumb = int(userProfile.company.settings.weekly_start_day)
                 amountOfDaysToStartingDay = (startingDayNumb-formDateParsed.weekday())
                 if formDateParsed.weekday() < startingDayNumb:
@@ -182,7 +184,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             elif formGroup == 'coke_battery':
                 fileName = "form_1_packet.pdf"
                 documentTitle = "form_1_packet"
-            elif formGroup == 'daily':
+            elif formGroup == 'Daily':
                 if type == 'single':
                     fileName = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)+".pdf"
                     documentTitle = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)
