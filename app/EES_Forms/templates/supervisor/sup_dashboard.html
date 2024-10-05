@@ -143,7 +143,7 @@
     <div id="fromAInfo" class="card longest cardPadd">
         <div class="card-title headerBottomPadding">Todays Forms</div>
         <div class="nested">
-            <a class="no_link_css" {% if form_enteredA1 %} href="Daily/formA1/{{fsIDs.0}}/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA1 %} href="Daily/1/{{fsIDs.0.id}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A1card' class="inner-card formA_card">
                     {% if form_enteredA1 %}<p id='A1overlay' class="formA_overlay">Click for<br> Form A-1</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-1 - Charges</div>
@@ -187,7 +187,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA2 %} href="Daily/formA2/{{fsIDs.1}}/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA2 %} href="Daily/2/{{fsIDs.1.id}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A2card' class="inner-card formA_card">
                     {% if form_enteredA2 %}<p id='A2overlay' class="formA_overlay">Click for<br> Form A-2</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-2 - Doors</div>
@@ -219,7 +219,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA3 %} href="Daily/formA3/{{fsIDs.2}}/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA3 %} href="Daily/3/{{fsIDs.2.id}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A3card' class="inner-card formA_card">
                     {% if form_enteredA3 %}<p id='A3overlay' class="formA_overlay">Click for<br> Form A-3</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
@@ -251,7 +251,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA4 %} href="Daily/formA4/{{fsIDs.3}}/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA4 %} href="Daily/4/{{fsIDs.3.id}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A4card' class="inner-card formA_card">
                     {% if form_enteredA4 %}<p id='A4overlay' class="formA_overlay">Click for<br> Form A-4</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-4 - Collection Main</div>
@@ -296,7 +296,7 @@
                     </div>
                 </div>
             </a>
-            <a class="no_link_css" {% if form_enteredA5 %} href="Daily/formA5/{{fsIDs.4}}/{{ date }}" {% else %} {% endif %}>
+            <a class="no_link_css" {% if form_enteredA5 %} href="Daily/5/{{fsIDs.4.id}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A5card' class="inner-card formA_card">
                     {% if form_enteredA5 %}<p id='A5overlay' class="formA_overlay">Click for<br> Form A-5</p>{% else%}{% endif %}
                     <div class="card-title inner_font">Form A-5 - Push Travels</div>

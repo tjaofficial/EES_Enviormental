@@ -1,24 +1,23 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from django.conf import settings
+from django.conf import settings # type: ignore
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
 from ..models import bat_info_model, issues_model, form1_readings_model, form2_model, form3_model, Event, form4_model, form5_readings_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model, form1_readings_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 import calendar
-from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib import messages # type: ignore
+from django.contrib.auth.models import Group # type: ignore
 import json
 from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultSettingsParsed, defaultBatteryDashSettings
 from ..decor import isSubActive
-from django.core.mail import send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode  
-from django.template.loader import render_to_string  
-from ..tokens import create_token
-from django.utils.html import strip_tags
-from django.core.exceptions import ValidationError
+from django.core.mail import send_mail # type: ignore
+from django.contrib.sites.shortcuts import get_current_site # type: ignore
+from django.utils.encoding import force_bytes # type: ignore
+from django.utils.http import urlsafe_base64_encode  # type: ignore
+from django.template.loader import render_to_string  # type: ignore
+from ..tokens import create_token # type: ignore
+from django.utils.html import strip_tags # type: ignore
 
 lock = login_required(login_url='Login')
 
@@ -85,9 +84,9 @@ def sup_dashboard_view(request, facility):
         def rangeNumber(rangeID):
             dateList = []
             if rangeID == 'weekly':
-                ranID = 7
+                ranID = 6
                 oneWeekAgo = today - datetime.timedelta(days=ranID)
-                for x in range(0,ranID):
+                for x in range(0,ranID+1):
                     dateList.append(oneWeekAgo + datetime.timedelta(days=x))
             elif rangeID == 'monthly':
                 ranID = calendar.monthrange(today.year,today.month)[1]
@@ -103,6 +102,8 @@ def sup_dashboard_view(request, facility):
                     dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
             return dateList
         dateList = rangeNumber(setGraphRange['frequency'])
+        print('hello')
+        print(dateList)
         for gStuff in graphSettings['dataChoice']:
             if gStuff == 'graph90dayPT':
                 continue
@@ -569,71 +570,7 @@ def register_view(request, facility, access_page):
                 messages.success(request, 'Account was created for ' + username + ". An activation link has been sent to their email.")
                 return redirect('Contacts', facility)
         else:
-            print('TOO FAR')
-                
-    
-    
-    # if request.method == 'POST':
-    #     answer = request.POST
-    #     if 'facilitySelect' in answer.keys():
-    #         if answer['facilitySelect'] != '':
-    #             return redirect('sup_dashboard', answer['facilitySelect'])
-    #     if 'create_facility' in answer.keys():
-    #         copyPost = request.POST.copy()
-    #         copyPost['position'] = CLIENT_VAR
-    #         copyPost['company'] = userCompany
-    #         userFrom = CreateUserForm(copyPost)
-    #         userProfForm = user_profile_form(copyPost)
-    #         print(userFrom.errors)
-    #         print(userProfForm.errors)
-    #         if len(request.POST['phone']) < 10:
-    #             userProfForm.add_error('phone', ValidationError("Please enter a valid phone number. (ie. 1234567890, (123)456-7890)"))
-    #             messages.error(request,"Please enter a valid phone number. (ie. 1234567890, (123)456-7890)")
-    #         if User.objects.filter(email=request.POST['email']).exists():
-    #             userFrom.add_error('email', ValidationError("This email has already been used."))
-    #             messages.error(request,"This email has already been used. Please enter a different email.")
-    #         if User.objects.filter(username=request.POST['username'].lower()).exists():
-    #             userFrom.add_error('username', ValidationError("This username already exists."))
-    #             messages.error(request,"This username already exists. Please enter a different username.")
-    #         if userFrom.is_valid() and userProfForm.is_valid():
-    #             A = userFrom.save(commit=False)
-    #             A.is_active = False
-    #             A.save()
-                
-    #             B = userProfForm.save(commit=False)
-    #             B.user = A
-    #             B.is_active = False
-    #             B.save()
-                
-    #             group = Group.objects.get(name=CLIENT_VAR)
-    #             A.groups.add(group)
-
-    #             current_site = get_current_site(request)
-    #             mail_subject = 'MethodPlus: Activate Your New Account'   
-    #             html_message = render_to_string('email/acc_active_email.html', {  
-    #                 'user': A,  
-    #                 'domain': current_site.domain,  
-    #                 'uid':urlsafe_base64_encode(force_bytes(A.pk)),  
-    #                 'token':create_token(A),  
-    #             })  
-    #             plain_message = strip_tags(html_message)
-    #             to_email = userFrom.cleaned_data.get('email')  
-    #             send_mail(
-    #                 mail_subject,
-    #                 plain_message,
-    #                 settings.EMAIL_HOST_USER,
-    #                 [to_email],
-    #                 html_message=html_message,
-    #                 fail_silently=False
-    #             )
-    #             messages.success(request,"Please confirm your email address to complete the registration")
-    #             return redirect('Login')
-    #         else:
-    #             messages.error(request,"Please fix your inputs.")
-    #             return redirect('Register', facility, 'client')
-                
-                
-            
+            print('TOO FAR')        
     return render(request, "supervisor/register.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 

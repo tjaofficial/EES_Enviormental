@@ -1,19 +1,15 @@
 from django.shortcuts import render, redirect # type: ignore
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, form1_readings_model, form2_model, form3_model, form4_model, form5_readings_model, bat_info_model, form22_model, facility_forms_model, formSubmissionRecords_model, form_settings_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, bat_info_model, form22_model, formSubmissionRecords_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
 import calendar
-from django.core.exceptions import FieldError
-from django.db.models import Q
-from django.apps import apps
+from django.core.exceptions import FieldError # type: ignore
+from django.db.models import Q # type: ignore
+from django.apps import apps # type: ignore
 from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required # type: ignore
-import os
-import ast
-from django.contrib import messages
-from django.conf import settings
+from django.contrib import messages # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, USE_S3
-from .print_form_view import date_change
 lock = login_required(login_url='Login')
 
 
@@ -651,7 +647,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
             settingsID = int(facForms)
             if settingsID == formSetting.id:
                 formID = int(formSetting.formChoice.id)
-                main_url = formSetting.formChoice.frequency + '/' + str(fsID) + '/'
+                main_url = formSetting.formChoice.frequency + '/' + str(formID) + '/' + str(fsID) + '/'
                 if formSetting.formChoice.id in {24,25}:
                     weekendNameDict = {5:'saturday', 6: 'sunday'}
                     today = datetime.date.today().weekday()

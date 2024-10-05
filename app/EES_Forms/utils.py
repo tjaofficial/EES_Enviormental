@@ -107,6 +107,18 @@ defaultUserSettings = {
     'landingDash': 'default'
 }
 
+packetSettings = {
+    'formsList': {
+        "B": {"settingsID": 6}, 
+        "C": {"settingsID": 7}, 
+        "D": {"settingsID": 8}
+    },
+    'settings': {
+        'weekly_start_day': 'saturday',
+        'frequency': 'Weekly'
+    }
+}
+
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
     emptyDB = False
@@ -257,9 +269,9 @@ class Calendar2(HTMLCalendar):
                     if h.date.year == year:
                         selectedFormDate = h
                         if type == 'single':
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
                         
                         eventCell = True
                         break
@@ -280,13 +292,13 @@ class Calendar2(HTMLCalendar):
                             print('check 1')
                             selectedFormDate = h
                             print('check 2')
-                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
                             eventCell = True
                             break
                     except:
                         if h.week_start.year == year:
                             selectedFormDate = h
-                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"' target='_blank'>Submitted Packet</a><br>"
                             eventCell = True
                             break
             elif packetsEntry.frequency == 'Monthly':
@@ -297,15 +309,15 @@ class Calendar2(HTMLCalendar):
                 for form in forms_from_day:
                     if form.date.year == year:
                         if type == 'single':
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
                         eventCell = True
             else:
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/" + type + "/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../printIndex/" + type + "/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"' target='_blank'>Submitted Form</a><br>"
                         eventCell = True
         
         forms_html += "</ul>"
@@ -351,8 +363,8 @@ class Calendar2(HTMLCalendar):
             print("This is a Packet Print for packetID "+forms)
             packetsEntry = the_packets_model.objects.get(id=int(forms))
             allFormsSettingsList = []
-            for pacForm in packetsEntry.formList:
-                pacfsID = packetsEntry.formList[pacForm]['settingsID']
+            for pacForm in packetsEntry.settings["formsList"]:
+                pacfsID = packetsEntry.settings["formsList"][pacForm]['settingsID']
                 for settingsEntry in formSettingsQuery:
                     if pacfsID == settingsEntry.id:
                         allFormsSettingsList.append(settingsEntry)

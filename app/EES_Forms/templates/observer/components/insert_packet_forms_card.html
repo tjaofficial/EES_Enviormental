@@ -1,7 +1,7 @@
 {% load static %}
 {% if complete == 'false' %}
 <div>
-    {% for key, form in packet.formList.items %}
+    {% for key, form in packet.settings["formsList"].items %}
         {% for item in facFormList1 %}
             {% if item.id == form.settingsID %}
                 {% if item.settings.active == 'true' and not item.subChoice.submitted %}
@@ -31,7 +31,7 @@
     {% endfor %}
 </div>
 {% else %}
-    {% for key, form in packet.formList.items %}
+    {% for key, form in packet.settings["formsList"].items %}
         {% for item in facFormList1 %}
             {% if item.id == form.settingsID %}
                 {% if item.settings.active == 'true' and item.subChoice.submitted %}

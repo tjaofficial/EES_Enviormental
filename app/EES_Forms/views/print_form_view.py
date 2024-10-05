@@ -62,14 +62,14 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
     elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
-        packetFormList = packetBeingPrinted.formList
+        packetFormList = packetBeingPrinted.settings["formsList"]
         for packs in packetFormList:
             for settingsForm in formSettingsQuery:
                 if packetFormList[packs]['settingsID'] == settingsForm.id:
                     formsBeingUsed.append((packs ,settingsForm))
-    elif formGroup == 'facility_weekly':
+    elif formGroup == 'facility_weekly' and type == 'group':
         formsBeingUsed = []
-        packetFormList = the_packets_model.objects.get(id=formIdentity).formList
+        packetFormList = the_packets_model.objects.get(id=formIdentity).settings["formsList"]
         for packs in packetFormList:
             for settingsForm in formSettingsQuery:
                 if packetFormList[packs]['settingsID'] == settingsForm.id:

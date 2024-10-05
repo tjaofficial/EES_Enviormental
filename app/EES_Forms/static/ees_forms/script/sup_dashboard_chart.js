@@ -4,6 +4,7 @@ lidCanvas = document.getElementById('lids-holder');
 console.log(canvasData.length)
 
 function createGraph(selector) {
+    console.log(selector)
     const chartOptions = {
         legend: {display: false},
         scales: {

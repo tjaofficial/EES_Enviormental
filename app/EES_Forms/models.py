@@ -488,7 +488,7 @@ class the_packets_model(models.Model):
     name = models.CharField(
         max_length=70
     )
-    formList = models.JSONField(
+    settings = models.JSONField(
         null=True,
         blank=True,
         default=dict

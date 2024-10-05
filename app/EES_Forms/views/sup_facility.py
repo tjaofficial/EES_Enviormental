@@ -74,10 +74,10 @@ def facilityList(request, facility):
             packToDelete = packetData.get(id=answer['packID'])
             print(packToDelete)
             formSettingsQuery = form_settings_model.objects.filter(facilityChoice__id=packToDelete.facilityChoice.id)
-            if len(packToDelete.formList) == 0:
-                for pacForms in packToDelete.formList:
+            if len(packToDelete.settings["formsList"]) == 0:
+                for pacForms in packToDelete.settings["formsList"]:
                     for formSettingsEntry in formSettingsQuery:
-                        if packToDelete.formList[pacForms]['settingsID'] == formSettingsEntry.id:
+                        if packToDelete.settings["formsList"][pacForms]['settingsID'] == formSettingsEntry.id:
                             del formSettingsEntry.settings['packets'][str(packToDelete.id)]
                             formSettingsEntry.save()
                 packToDelete.delete()
@@ -88,17 +88,17 @@ def facilityList(request, facility):
             #delete from all packets
             for pac in packetData.filter(facilityChoice__id=facID):
                 deleteList = []
-                for setList in pac.formList:
-                    if facFormID == pac.formList[setList]['settingsID']:
+                for setList in pac.settings["formsList"]:
+                    if facFormID == pac.settings["formsList"][setList]['settingsID']:
                         print('check 1')
                         if setList not in deleteList:
                             print('check 2')
                             deleteList.append(setList)
                 print(deleteList)
                 for delForm in deleteList:
-                    print(pac.formList)
-                    print(pac.formList[delForm])
-                    del pac.formList[delForm]
+                    print(pac.settings["formsList"])
+                    print(pac.settings["formsList"][delForm])
+                    del pac.settings["formsList"][delForm]
                     finalDelete = pac
                     finalDelete.save()
             #delete form facility forms model
@@ -127,19 +127,19 @@ def facilityList(request, facility):
             thePacket = packetData.get(id=packetID)
             theSettings = formSettingsModelOG.get(id=fsID)
             highestLabelNumb = 0
-            for label in thePacket.formList:
-                settingsID = thePacket.formList[label]['settingsID']
+            for label in thePacket.settings["formsList"]:
+                settingsID = thePacket.settings["formsList"][label]['settingsID']
                 if int(settingsID) == int(fsID):
                     messages.error(request,"The selected form is already been added to the packet.")
                     return redirect(facilityList, facility)
-            for label in thePacket.formList.keys():
+            for label in thePacket.settings["formsList"].keys():
                 noLabelTag = label[:9]
                 noLabelNumber = label[9:]
                 if noLabelTag == "no-label-":
                     if int(noLabelNumber) > int(highestLabelNumb):
                         highestLabelNumb = noLabelNumber
             formNoLabelParse = "no-label-"+str(int(highestLabelNumb)+1)
-            thePacket.formList[formNoLabelParse] = {"settingsID":int(fsID)}
+            thePacket.settings["formsList"][formNoLabelParse] = {"settingsID":int(fsID)}
             settingsEntry = form_settings_model.objects.get(id=int(fsID))
             settingsEntry.settings['packets'][str(thePacket.id)] = formNoLabelParse
             A = thePacket
@@ -223,9 +223,9 @@ def facilityForm(request, facility, packet):
             if allKeys[:5] == 'forms':
                 inputID = allKeys[5:]
                 fsIDsFromInputs.append(answer['settingsID'+inputID])
-        for pacs in packetQuery.formList:
-            if str(packetQuery.formList[pacs]['settingsID']) not in fsIDsFromInputs:
-                B = form_settings_model.objects.get(id=int(packetQuery.formList[pacs]['settingsID']))
+        for pacs in packetQuery.settings["formsList"]:
+            if str(packetQuery.settings["formsList"][pacs]['settingsID']) not in fsIDsFromInputs:
+                B = form_settings_model.objects.get(id=int(packetQuery.settings["formsList"][pacs]['settingsID']))
                 del B.settings['packets'][str(packetQuery.id)]
                 B.save()
         for item in range(1, totalAmountofForms+1):
@@ -254,7 +254,7 @@ def facilityForm(request, facility, packet):
         
                 
                 
-        packetQuery.formList = selectedList
+        packetQuery.settings["formsList"] = selectedList
         packetQuery.save()
         
         return redirect('facilityList', 'supervisor')
@@ -289,7 +289,7 @@ def facilityForm(request, facility, packet):
         'supervisor': supervisor, 
         'formList': formList, 
         'packet': packetQuery,
-        'packetFormList': packetQuery.formList,
+        'packetFormList': packetQuery.settings["formsList"],
         'formSettingsModel': formSettingsModel,
         'pageData': pageData,
         'query': q
@@ -313,9 +313,9 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
         packetSettings = False
     
     if formLabel != 'none':
-        for form in packetSettings.formList:
+        for form in packetSettings.settings['formList']:
             if form == formLabel:
-                settingsID = packetSettings.formList[form]['settingsID']
+                settingsID = packetSettings.settings['formList'][form]['settingsID']
                 break
                 
     formSettings = selectedSettings.settings
@@ -340,8 +340,8 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             if packetSettings:
                 newLabel = request.POST['newLabel']
                 if newLabel not in [formLabel, ""]:
-                    packetSettings.formList[newLabel] = packetSettings.formList[formLabel]
-                    del packetSettings.formList[formLabel]
+                    packetSettings.settings['formList'][newLabel] = packetSettings.settings['formList'][formLabel]
+                    del packetSettings.settings['formList'][formLabel]
                     A = packetSettings
                     A.save()
                 
