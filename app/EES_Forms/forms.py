@@ -2179,7 +2179,7 @@ class the_packets_form(ModelForm):
         widgets = {
             'facilityChoice': forms.Select(choices=frequent_choices),
             'name': forms.TextInput(attrs={'type':'text', 'placeholder':'Enter packet name...'}),
-            'formList': forms.TextInput(),
+            'settings': forms.TextInput(),
         }
         
 class form_settings_form(ModelForm):

@@ -33,8 +33,9 @@ class Migration(migrations.Migration):
                 ('bat_height_label', models.CharField(blank=True, choices=[('ft', 'Feet'), ('m', 'Meters')], max_length=10, null=True)),
                 ('bat_main', models.CharField(blank=True, choices=[('single', 'Single'), ('double', 'Double')], max_length=10, null=True)),
                 ('bat_lids', models.IntegerField(blank=True, null=True)),
-                ('is_battery', models.CharField(choices=[('Yes', 'Yes'), ('No', 'No')], default='no', max_length=10)),
+                ('is_battery', models.CharField(choices=[('Yes', 'Yes'), ('No', 'No')], default='No', max_length=10)),
                 ('dashboard', models.CharField(blank=True, max_length=20, null=True)),
+                ('settings', models.JSONField(blank=True, default=dict, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -136,7 +137,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='formA5_model',
+            name='form5_model',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField(blank=True)),
@@ -1955,6 +1956,7 @@ class Migration(migrations.Migration):
                 ('facilityChoice', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.bat_info_model')),
                 ('formChoice', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.forms')),
                 ('packetChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.the_packets_model')),
+                ('subChoice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='EES_Forms.formsubmissionrecords_model')),
             ],
         ),
         migrations.CreateModel(
