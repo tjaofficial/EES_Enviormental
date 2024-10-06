@@ -1,16 +1,11 @@
-from django.shortcuts import render, redirect # type: ignore
-from ..models import user_profile_model, form5_readings_model, Forms, daily_battery_profile_model, signature_model, form18_model, bat_info_model, facility_forms_model, formSubmissionRecords_model, the_packets_model, form_settings_model
-from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, create_starting_forms,get_facility_forms, updateAllFormSubmissions, checkIfFacilitySelected
+from django.shortcuts import render # type: ignore
+from ..models import user_profile_model, Forms, daily_battery_profile_model, signature_model, bat_info_model, the_packets_model, form_settings_model
+from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
 from django.contrib.auth.decorators import login_required # type: ignore
-from django.conf import settings
 import datetime
-import requests
-import calendar
-import ast
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
 lock = login_required(login_url='Login')
-
 
 @lock
 def IncompleteForms(request, facility):
@@ -28,6 +23,11 @@ def IncompleteForms(request, facility):
     facilityData = bat_info_model.objects.filter(facility_name=facility)[0]
     facPackets = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
+    # ------- Signatures ---------------- 
+    if signatures.exists():
+        if signatures[0].sign_date == today:
+            sigExisting = True
+            sigName = signatures[0].supervisor
     # -------90 DAY PUSH ----------------
     pushTravelsData = ninetyDayPushTravels(facility)
     if pushTravelsData == 'EMPTY':

@@ -23,7 +23,15 @@
         text-align: center; 
         font-size: 15px; 
     }
-
+    .opacityLabel{
+        font-size: 15px;
+        text-align: right;
+        border: 1px solid black;
+        padding-right: 13px;
+    }
+    .bold{
+        font-weight: bold;
+    }
 </style>
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/formM.css' %}" rel="stylesheet" />
@@ -41,7 +49,7 @@
     <div class="mainCont">
         {% csrf_token %}
         <div class="card" id="card_fitter">
-            {% include "shared/components/print_button.html" %}
+            {% include "shared/components/print_button.html" with formGroup=freq %}
             <div class="paper_fitter" style="padding: 3rem;">
                 {% include "shared/components/backArrow.html" with destination="form" %}
                 <div style="width:100%; text-align: right;">
@@ -103,29 +111,29 @@
                         <th></th>
                     </tr>
                 </table>
-                
-                
-                <table style="border-collapse: collapse; margin-left: 1rem; margin-right: 1rem;">
+                <table style="border-collapse: collapse; margin-left: 1rem; margin-right: 1rem; font-size: 15px;">
                     <tr>
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="5" class="formM_box1">
-                            PAVED:{% if existing %} 
-                                        {% if selector == "form" %}
-                                            {{ form.paved }}
-                                        {% else %}
-                                            {% for pair in paved_roads %}
-                                                {% if pair.0 == form.paved.value %}
-                                                    {{ pair.1 }}
-                                                    we did it
-                                                {% endif %}
-                                            {% endfor %}
+                        <td colspan="3" class="formM_box5">
+                            <span class="bold">PAVED: </span>
+                            {% if existing %} 
+                                {% if selector == "form" %}
+                                    {{ form.paved }}
+                                {% else %}
+                                    {% for pair in paved_roads %}
+                                        {% if pair.0 == form.paved %}
+                                            {{ pair.1 }}
                                         {% endif %}
-                                    {% else %}
-                                        {{form.paved}}
-                                    {% endif %}
-                                    &nbsp; &nbsp;&nbsp; &nbsp;Start Time:{{ form.pav_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.pav_stop }}
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {{form.paved}}
+                            {% endif %}
+                        </td>
+                        <td colspan="3" class="formM_box1">
+                            <span class="bold">Start Time: </span>{{ form.pav_start }} &nbsp; &nbsp; <span class="bold">End Time: </span>{{ form.pav_stop }}
                             <span class="pav_popup_class" id="pav_timePopup">Please Change Time</span>
                         </td>
                     </tr>
@@ -182,7 +190,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                        <td colspan="5" class="opacityLabel">3-minute Average Opacity (sum of the 12 readings above/12) </td>
                         <td id="formM_box2">
                             {{ read.pav_total }}
                         </td>
@@ -191,22 +199,24 @@
                         <td style="height: 35px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="5" class="formM_box1">
-                            UNPAVED:{% if existing %}
-                                        {% if selector == "form" %}
-                                            {{ form.unpaved }}
-                                        {% else %}
-                                            {% for pair in unpaved_roads %}
-                                                {% if pair.0 == form.unpaved %}
-                                                    {{ pair.1 }}
-                                                {% endif %}
-                                            {% endfor %}
+                        <td colspan="3" class="formM_box5">
+                            <span class="bold">UNPAVED: </span>
+                            {% if existing %}
+                                {% if selector == "form" %}
+                                    {{ form.unpaved }}
+                                {% else %}
+                                    {% for pair in unpaved_roads %}
+                                        {% if pair.0 == form.unpaved %}
+                                            {{ pair.1 }}
                                         {% endif %}
-                                    {% else %}
-                                        {{form.unpaved}}
-                                    {% endif %} 
-                                    &nbsp; &nbsp; &nbsp; &nbsp;
-                            Start Time:{{ form.unp_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.unp_stop }}
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {{form.unpaved}}
+                            {% endif %} 
+                        </td>
+                        <td colspan="3" class="formM_box1">
+                            <span class="bold">Start Time: </span>{{ form.unp_start }} &nbsp; &nbsp; <span class="bold">End Time: </span>{{ form.unp_stop }}
                             <span class="unp_popup_class" id="unp_timePopup">Please Change Time</span>
                         </td>
                     </tr>
@@ -267,7 +277,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                        <td colspan="5" class="opacityLabel">3-minute Average Opacity (sum of the 12 readings above/12) </td>
                         <td id="formM_box2">
                             {{ read.unp_total}}
                         </td>
@@ -276,22 +286,24 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr>
-                        <td colspan="5" class="formM_box1">
-                            PARKING LOT:{% if existing %} 
-                                            {% if selector == "form" %}
-                                                {{ form.parking }}
-                                            {% else %}
-                                                {% for pair in parking_lots %}
-                                                    {% if pair.0 == form.parking %}
-                                                        {{ pair.1 }}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% else %}
-                                            {{form.parking}}
-                                        {% endif %} 
-                                        &nbsp; &nbsp; &nbsp; &nbsp;
-                            Start Time:{{ form.par_start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; End Time:{{ form.par_stop }}
+                        <td colspan="3" class="formM_box5">
+                            <span class="bold">PARKING LOT: </span>
+                            {% if existing %} 
+                                {% if selector == "form" %}
+                                    {{ form.parking }}
+                                {% else %}
+                                    {% for pair in parking_lots %}
+                                        {% if pair.0 == form.parking %}
+                                            {{ pair.1 }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {{form.parking}}
+                            {% endif %} 
+                        </td>
+                        <td colspan="3" class="formM_box1">
+                            <span class="bold">Start Time: </span>{{ form.par_start }} &nbsp; &nbsp; <span class="bold">End Time: </span>{{ form.par_stop }}
                             <span class="par_popup_class" id="par_timePopup">Please Change Time</span>
                         </td>
                     </tr>
@@ -352,7 +364,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="5" style="font-size: 20px; border: 1px solid black;">3-minute Average Opacity (sum of the 12 readings above/12) </td>
+                        <td colspan="5" class="opacityLabel">3-minute Average Opacity (sum of the 12 readings above/12) </td>
                         <td id="formM_box2">
                             {{ read.par_total }}
                         </td>
@@ -361,25 +373,25 @@
                         <td style="height: 40px" > </td>
                     </tr> 
                     <tr style="text-align: center;">
-                        <td colspan="6" style="font-size: 25px;">
-                            Observer:{{ form.observer }} Certified Date:{{ form.cert_date }}
+                        <td colspan="6" style="font-size: 17px; font-weight: bold;">
+                            Observer: <span style="font-weight: normal;">{{ form.observer }}</span> &nbsp;&nbsp;&nbsp;Certified Date: <span style="font-weight: normal;">{{ form.cert_date }}</span>
                         </td>
                     </tr>
                     <tr>
                         <td style="height: 40px" > </td>
                     </tr> 
-                    <tr style="text-align: center; font-size: 20px;">
+                    <tr style="text-align: center; font-size: 17px;">
                         <td colspan="6">
                             <strong>
                                 If 3-minute average opacity > 5%,
                             </strong> <br>
-                            notify Enviornmental Engineer and contact Fugitive Dust Supplier for Dust Supression
+                            Notify environmental engineer and contact Fugitive Dust Supplier for Dust Supression
                         </td>
                     </tr>
                     <tr>
                         <td style="height: 40px" > </td>
                     </tr> 
-                    <tr style="font-size: 20px;">
+                    <tr style="font-size: 17px;">
                         <td>
                             Comments:
                         </td>

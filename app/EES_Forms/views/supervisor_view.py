@@ -76,76 +76,77 @@ def sup_dashboard_view(request, facility):
     todays_num = today.weekday()
     #---------- Graph Data ---------------------
     print('litty')
+    graphData = ''
+    graphDataDump = ''
     if facility != 'supervisor':
-        graphSettings = options.settings['batteryDash']['graphs']
-        setGraphRange = graphSettings['graphFrequencyData']
-        canvasData = {}
-        dateList = []
-        def rangeNumber(rangeID):
+        if options.settings['batteryDash']:
+            graphSettings = options.settings['batteryDash']['graphs']
+            setGraphRange = graphSettings['graphFrequencyData']
+        
+            canvasData = {}
             dateList = []
-            if rangeID == 'weekly':
-                ranID = 6
-                oneWeekAgo = today - datetime.timedelta(days=ranID)
-                for x in range(0,ranID+1):
-                    dateList.append(oneWeekAgo + datetime.timedelta(days=x))
-            elif rangeID == 'monthly':
-                ranID = calendar.monthrange(today.year,today.month)[1]
-                for x in range(0,ranID):
-                    dateList.append(datetime.datetime.strptime(str(today.year) + "-" + str(today.month) + "-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
-            elif rangeID == 'annually':
-                ranID = 365 + calendar.isleap(today.year)
-                for x in range(0,ranID):
-                    dateList.append(datetime.datetime.strptime(str(today.year) + "-" + "01-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
-            else:
-                ranID = abs((datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() - datetime.datetime.strptime(setGraphRange['dates']['graphStop'], "%Y-%m-%d").date()).days)
-                for x in range(0,ranID):
-                    dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
-            return dateList
-        dateList = rangeNumber(setGraphRange['frequency'])
-        print('hello')
-        print(dateList)
-        for gStuff in graphSettings['dataChoice']:
-            if gStuff == 'graph90dayPT':
-                continue
-            if graphSettings['dataChoice'][gStuff]['show']:
-                canvasData[gStuff] = {
-                    'graphID': gStuff,
-                    'xValues': [],
-                    'yValues': [],
-                    'type': graphSettings['dataChoice'][gStuff]['type'],
-                }
-                xValues = []
-                yValues = []
-                for dates in dateList:
-                    if gStuff == 'charges':
-                        useModel = formA1.filter(form__date=dates)
-                        if useModel.exists():
-                            xValues.append(int(useModel[0].total_seconds))
-                            yValues.append(str(useModel[0].form.date))
-                    elif gStuff == 'doors':
-                        useModel = formA2.filter(date=dates)
-                        if useModel.exists():
-                            xValues.append(int(useModel[0].leaking_doors))
-                            yValues.append(str(useModel[0].date))
-                    elif gStuff == 'lids':
-                        useModel = formA3.filter(date=dates)
-                        if useModel.exists():
-                            xValues.append(int(useModel[0].l_leaks))
-                            yValues.append(str(useModel[0].date))
-                    if str(dates) not in yValues:
-                        xValues.append(int(0))
-                        yValues.append(str(dates))
-                canvasData[gStuff]['xValues'] = xValues
-                canvasData[gStuff]['yValues'] = yValues
-        graphData = {
-            'canvasData': canvasData,
-            'today': str(today),
-            'frequency': setGraphRange, 
-        }
-        graphDataDump = json.dumps(graphData)
-    else:
-        graphData = ''
-        graphDataDump = ''
+            def rangeNumber(rangeID):
+                dateList = []
+                if rangeID == 'weekly':
+                    ranID = 6
+                    oneWeekAgo = today - datetime.timedelta(days=ranID)
+                    for x in range(0,ranID+1):
+                        dateList.append(oneWeekAgo + datetime.timedelta(days=x))
+                elif rangeID == 'monthly':
+                    ranID = calendar.monthrange(today.year,today.month)[1]
+                    for x in range(0,ranID):
+                        dateList.append(datetime.datetime.strptime(str(today.year) + "-" + str(today.month) + "-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                elif rangeID == 'annually':
+                    ranID = 365 + calendar.isleap(today.year)
+                    for x in range(0,ranID):
+                        dateList.append(datetime.datetime.strptime(str(today.year) + "-" + "01-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                else:
+                    ranID = abs((datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() - datetime.datetime.strptime(setGraphRange['dates']['graphStop'], "%Y-%m-%d").date()).days)
+                    for x in range(0,ranID):
+                        dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                return dateList
+            dateList = rangeNumber(setGraphRange['frequency'])
+            print('hello')
+            print(dateList)
+            for gStuff in graphSettings['dataChoice']:
+                if gStuff == 'graph90dayPT':
+                    continue
+                if graphSettings['dataChoice'][gStuff]['show']:
+                    canvasData[gStuff] = {
+                        'graphID': gStuff,
+                        'xValues': [],
+                        'yValues': [],
+                        'type': graphSettings['dataChoice'][gStuff]['type'],
+                    }
+                    xValues = []
+                    yValues = []
+                    for dates in dateList:
+                        if gStuff == 'charges':
+                            useModel = formA1.filter(form__date=dates)
+                            if useModel.exists():
+                                xValues.append(int(useModel[0].total_seconds))
+                                yValues.append(str(useModel[0].form.date))
+                        elif gStuff == 'doors':
+                            useModel = formA2.filter(date=dates)
+                            if useModel.exists():
+                                xValues.append(int(useModel[0].leaking_doors))
+                                yValues.append(str(useModel[0].date))
+                        elif gStuff == 'lids':
+                            useModel = formA3.filter(date=dates)
+                            if useModel.exists():
+                                xValues.append(int(useModel[0].l_leaks))
+                                yValues.append(str(useModel[0].date))
+                        if str(dates) not in yValues:
+                            xValues.append(int(0))
+                            yValues.append(str(dates))
+                    canvasData[gStuff]['xValues'] = xValues
+                    canvasData[gStuff]['yValues'] = yValues
+            graphData = {
+                'canvasData': canvasData,
+                'today': str(today),
+                'frequency': setGraphRange, 
+            }
+            graphDataDump = json.dumps(graphData)
     # -------PROGRESS PERCENTAGES -----------------
     if facility != 'supervisor':
         daily_percent = calculateProgessBar(facility, 'Daily')

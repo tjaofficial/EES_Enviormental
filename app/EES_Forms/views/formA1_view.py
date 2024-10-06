@@ -13,6 +13,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA1(request, facility, fsID, selector):
+    print(selector)
     formName = 1
     notifs = checkIfFacilitySelected(request.user, facility)
     freq = getFacSettingsInfo(fsID)

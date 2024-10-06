@@ -48,9 +48,9 @@
                     {% for packet in packetsQuery %}
                     <li style="list-style-type: none;margin-top: 15px;">
                         {% include 'supervisor/facilityForms/packet_div.html' with page='obsDash' %}
-                        {% if packet.settings.formsList %}
+                        {% if packet.formList.formsList %}
                         <ul>
-                            {% for key, form in packet.settings.formsList.items %}
+                            {% for key, form in packet.formList.formsList.items %}
                                 {% for x in formData %}
                                     {% if x.id == form.formID %}
                                             <a href="{% if x.link != 'formO' and x.link != 'formP' %}{% url x.link facility 'form' %}{% elif x.link == 'formO' %}{% url x.link facility 'form' todaysName %}{% elif x.link == 'formO' %}{% url x.link facility 'form' todaysName %}{% endif %}">

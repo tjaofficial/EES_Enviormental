@@ -133,7 +133,7 @@ def formD(request, facility, fsID, selector):
                     if items is None or items == '':
                         filled_out = False  # -change this back to false
                         break
-
+                print(filled_out)
                 if filled_out:
                     createNotification(facility, request, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)

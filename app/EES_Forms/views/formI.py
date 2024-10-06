@@ -40,7 +40,6 @@ def formI(request, facility, fsID, selector):
             submit = False
             for x in week_start_dates:
                 if str(x.week_start) == str(selector):
-                    print('CHECK 2')
                     database_model = x
             data = database_model
             existing = True

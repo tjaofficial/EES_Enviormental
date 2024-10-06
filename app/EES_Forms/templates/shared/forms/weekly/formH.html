@@ -35,10 +35,7 @@
     <form class="mainCont" action="" method="POST">
         {% csrf_token %}
         <div class="card" id="card_fitter">
-            {% if selector == 'form' or selector == 'formL'%}
-            {% else %}
-            {% include "shared/components/print_button.html" %}
-            {% endif %}
+            {% include "shared/components/print_button.html" with formGroup=freq %}
             <div class="paper_fitter" style="padding: 3rem;">
                 {% include "shared/components/backArrow.html" with destination="form" %}
                 <div id="ptInfo">

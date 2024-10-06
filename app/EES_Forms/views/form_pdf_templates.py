@@ -1,7 +1,7 @@
-from reportlab.platypus import Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
-from ..utils import time_change, date_change, date_time_change, truck_choices, area_choices, emptyInputs, road_choices, inventoryResponse, quarterParse
-from reportlab.lib import colors
+from reportlab.platypus import Paragraph # type: ignore
+from reportlab.lib.styles import getSampleStyleSheet # type: ignore
+from ..utils import time_change, date_change, date_time_change, truck_choices, area_choices, emptyInputs, road_choices, inventoryResponse, quarterParse, formBNone
+from reportlab.lib import colors # type: ignore
 import json
 from ..models import form22_model, braintreePlans
 import datetime
@@ -134,14 +134,24 @@ def pdf_template_A2(primaryData, title, subTitle):
         spacedP = 1
         spacedC = 1
     elif p_leaks != '' and c_leaks == '':
+        count = 1
         for pleak in p_leaks:
-            tableData.insert(9,['', '', pleak['oven'], pleak['location'], pleak['zone'], '', '', '', '', '', '', ''],),
+            if count == len(p_leaks):
+                tableData.insert(9,['', '', pleak['oven'], pleak['location'], pleak['zone'], '', '', 'No Leaks', '', '', '', ''],)
+            else:
+                tableData.insert(9,['', '', pleak['oven'], pleak['location'], pleak['zone'], '', '', '', '', '', '', ''],)
+            count += 1
         spaced = len(p_leaks) 
         spacedP = len(p_leaks)
         spacedC = 1
     elif c_leaks != '' and p_leaks == '':
+        count = 1
         for cleak in c_leaks:
-            tableData.insert(9,['', '', '', '', '', '', '', cleak['oven'], cleak['location'], cleak['zone'],'', '', '', ''],),
+            if count == len(c_leaks):
+                tableData.insert(9,['', '', 'No Leaks', '', '', '', '', cleak['oven'], cleak['location'], cleak['zone'],'', ''],)
+            else:
+                tableData.insert(9,['', '', '', '', '', '', '', cleak['oven'], cleak['location'], cleak['zone'],'', ''],)
+            count += 1
         spaced = len(c_leaks)
         spacedP = 1
         spacedC = len(c_leaks)
@@ -262,9 +272,9 @@ def pdf_template_A2(primaryData, title, subTitle):
         ('BOX', (9,17 + spaced), (10,18 + spaced), 1, colors.black),
     ]
     if p_leaks == '':
-        style.append(('SPAN', (2,9), (4,8 + spaced)),)
+        style.append(('SPAN', (2,9), (4,8 + spacedP)),)
     if c_leaks == '':
-        style.append(('SPAN', (7,9), (9,8 + spaced)),)
+        style.append(('SPAN', (7,9), (9,8 + spacedC)),)
 
     if p_leaks != '' and c_leaks != '':
         del style[19]
@@ -752,7 +762,7 @@ def pdf_template_6(primaryData, title, subTitle, formInformation):
         ['Inspectors Initials', primaryData.observer_0, primaryData.observer_1, primaryData.observer_2, primaryData.observer_3, primaryData.observer_4],
         ['Time', time_change(primaryData.time_0), time_change(primaryData.time_1), time_change(primaryData.time_2), time_change(primaryData.time_3), time_change(primaryData.time_4)],
         ['Weather Conditions', primaryData.weather_0, primaryData.weather_1, primaryData.weather_2, primaryData.weather_3, primaryData.weather_4],
-        ['Wind Speeds', str(primaryData.wind_speed_0) + ' mph', str(primaryData.wind_speed_1) + ' mph', str(primaryData.wind_speed_2) + ' mph', str(primaryData.wind_speed_3) + ' mph', str(primaryData.wind_speed_4) + ' mph'],
+        ['Wind Speeds', formBNone(primaryData.wind_speed_0), formBNone(primaryData.wind_speed_1), formBNone(primaryData.wind_speed_2), formBNone(primaryData.wind_speed_3), formBNone(primaryData.wind_speed_4)],
         #grid start (0,9)
         [Paragraph('<para><b>Raw Material Storage and Transportation</b> - 5 days/week March-October, 1 day/week November-February</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('Was fugitive dust observed in the raw material storage and transportation area?', styles['Normal']), primaryData.fugitive_dust_observed_0, primaryData.fugitive_dust_observed_1, primaryData.fugitive_dust_observed_2, primaryData.fugitive_dust_observed_3, primaryData.fugitive_dust_observed_4],
@@ -770,14 +780,14 @@ def pdf_template_6(primaryData, title, subTitle, formInformation):
         #grid start (0,21)
         [Paragraph('<para><b>Sprayed Storage Piles</b> - 1 days/week January-December</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('Average barrier thickness on storage piles surfaces:', styles['Normal']), primaryData.barrier_thickness_0, primaryData.barrier_thickness_1, primaryData.barrier_thickness_2, primaryData.barrier_thickness_3, primaryData.barrier_thickness_4],
-        [Paragraph('Supressant surface quality:', styles['Normal']), primaryData.loader_lowered_0, primaryData.loader_lowered_1, primaryData.loader_lowered_2, primaryData.loader_lowered_3, primaryData.loader_lowered_4],
-        [Paragraph('Does supressant on piles have a crust to prevent visible emissions?', styles['Normal']), primaryData.loader_lowered_0, primaryData.loader_lowered_1, primaryData.loader_lowered_2, primaryData.loader_lowered_3, primaryData.loader_lowered_4],
-        [Paragraph('If no, when was the additional supressant compound applied?', styles['Normal']), primaryData.loader_lowered_0, primaryData.loader_lowered_1, primaryData.loader_lowered_2, primaryData.loader_lowered_3, primaryData.loader_lowered_4],
-        [Paragraph('Comments regarding any of the above inspections:', styles['Normal']), primaryData.loader_lowered_0, primaryData.loader_lowered_1, primaryData.loader_lowered_2, primaryData.loader_lowered_3, primaryData.loader_lowered_4],
+        [Paragraph('Supressant surface quality:', styles['Normal']), primaryData.surface_quality_0, primaryData.surface_quality_1, primaryData.surface_quality_2, primaryData.surface_quality_3, primaryData.surface_quality_4],
+        [Paragraph('Does supressant on piles have a crust to prevent visible emissions?', styles['Normal']), primaryData.surpressant_crust_0, primaryData.surpressant_crust_1, primaryData.surpressant_crust_2, primaryData.surpressant_crust_3, primaryData.surpressant_crust_4],
+        [Paragraph('If no, when was the additional supressant compound applied?', styles['Normal']), primaryData.additional_surpressant_0, primaryData.additional_surpressant_1, primaryData.additional_surpressant_2, primaryData.additional_surpressant_3, primaryData.additional_surpressant_4],
+        [Paragraph('Comments regarding any of the above inspections:', styles['Normal']), primaryData.comments_0, primaryData.comments_1, primaryData.comments_2, primaryData.comments_3, primaryData.comments_4],
         #grid start (0,27)
         [Paragraph('<para><b>Outdoor Conveying Transfer Points</b> - 1 days/week January-December</para>', styles['Normal']), '', '', '', '', ''],
-        [Paragraph('Wharf - General Housekeeping of Area (Good or Needs Housekeeping)? Any Spills?', styles['Normal']), primaryData.loader_lowered_0, primaryData.loader_lowered_1, primaryData.loader_lowered_2, primaryData.loader_lowered_3, primaryData.loader_lowered_4],
-        [Paragraph('Breeze - General Housekeeping of Area (Good or Needs Housekeeping)? Any Spills?', styles['Normal']), primaryData.loader_lowered_0, primaryData.loader_lowered_1, primaryData.loader_lowered_2, primaryData.loader_lowered_3, primaryData.loader_lowered_4],
+        [Paragraph('Wharf - General Housekeeping of Area (Good or Needs Housekeeping)? Any Spills?', styles['Normal']), primaryData.wharf_0, primaryData.wharf_1, primaryData.wharf_2, primaryData.wharf_3, primaryData.wharf_4],
+        [Paragraph('Breeze - General Housekeeping of Area (Good or Needs Housekeeping)? Any Spills?', styles['Normal']), primaryData.breeze_0, primaryData.breeze_1, primaryData.breeze_2, primaryData.breeze_3, primaryData.breeze_4],
         
     ]
     tableColWidths = (270,60,60,60,60,60)
@@ -2046,8 +2056,8 @@ def pdf_template_24(primaryData, title, subTitle):
     ]
     return tableData, tableColWidths, style
 
-def pdf_template_25(primaryData, title, subTitle, formInformation):
-    title = 'Outfall 008 Observation Form' + ' - Form (' + formInformation.form + ')'
+def pdf_template_25(primaryData, title, subTitle):
+    #title = 'Outfall 008 Observation Form' + ' - Form (' + formInformation.form + ')'
     tableData = [
         [title],
         [subTitle],

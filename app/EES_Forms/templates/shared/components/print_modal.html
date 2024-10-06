@@ -1,14 +1,13 @@
 <div id="delete3" class="modalHolder" style="display: flex;">
+    <div id="selector" data-selector="{{ selector }}"></div>
     <script>
-        let formName = {{formName}}
-        let variable = String(formName) + '_tempFormData'
-        console.log(variable)
-        const storedObject = JSON.parse(localStorage[variable]);
-        console.log(storedObject.data.labelSelect)
-        delete storedObject.data.labelSelect
-        //localStorage = storedObject;
-        console.log(JSON.stringify(storedObject))
-        localStorage.setItem(variable, JSON.stringify(storedObject))
+        let formName2 = {{formName}}
+        let variable = String(formName2) + '_tempFormData'
+        if (localStorage[variable]){
+            const storedObject = JSON.parse(localStorage[variable]);
+            delete storedObject.data.labelSelect
+            localStorage.setItem(variable, JSON.stringify(storedObject))
+        }
     </script>
     <div id="cancelReg" class="modal-content">
         <span onclick="exit_modal()" class="closeAdd">&times;</span>
@@ -28,8 +27,7 @@
                     {% endfor %}
                 </select><br><br>
                 <div style="text-align: right;">
-                    <input style="padding: 0px 5px;" type="submit" value="PRINT">
-                    <a id="linkButton" href="{% url 'printIndex' facility 'single' formGroup.formChoice.frequency fsID selector %}" target="_blank" onclick="refreshPage()">
+                    <a id="linkButton" href="{% url 'printIndex' facility 'single' formGroup fsID selector %}" target="_blank" onclick="refreshPage()">
                         <div class="button-8" role="button" style='height:25px;'>PRINT</div>
                     </a>
                     <script>
@@ -41,10 +39,8 @@
                             formGroup = "{{ formGroup.formChoice.frequency }}",
                             selector = "{{ selector }}";
                             let newPassVar = fsID + "-" + value
-                            console.log(newPassVar)
                             let html = "printIndex"
                             html += "/single/" + formGroup + "/" + newPassVar + "/" + selector
-                            console.log(html)
                             linkButton.href = "../../../" + html
                         }
                         labelPick();

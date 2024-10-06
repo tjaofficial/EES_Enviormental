@@ -12,7 +12,7 @@
 <div id="paperSize">
     <div class="mainCont">
         <div class="card" id="card_fitter" style="width: 60%;">
-            {% include "shared/components/print_button.html" %}
+            {% include "shared/components/print_button.html" with formGroup=freq %}
             <div class="paper_fitter" style="padding: 3rem; width: 100%;">
                 {% include "shared/components/backArrow.html" with destination="form" %}
                 <div style="width:100%; text-align: right;">

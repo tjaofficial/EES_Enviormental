@@ -30,9 +30,11 @@ def formL(request, facility, fsID, selector):
     opened = True
     week_start_dates = form21_model.objects.all().order_by('-week_start')
     picker = issueForm_picker(facility, selector, fsID)
-    
+    print('titty')
+    print(isinstance(today_number, int))
     # -----check if Daily Battery Profile
     if daily_prof.exists():
+        print('check 1')
         todays_log = daily_prof[0]
         # -------check if access is for Form or Edit
         if selector not in ('form', 'edit'):
@@ -67,7 +69,10 @@ def formL(request, facility, fsID, selector):
                 if days[0]:
                     if days[1] == today_number:
                         filled_in = True
+        
             # ------check if today is a Weekday
+            print('titty1')
+            print(today_number)
             if today_number not in {5, 6}:
                 new_saturday = ''
                 new_sunday = ''
@@ -82,6 +87,7 @@ def formL(request, facility, fsID, selector):
                         filled_in = False
             # ------check if today is a Saturday
             elif today_number == 5:
+                print('check 2')
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if selector == 'form':
                     if this_week_saturday == today:
@@ -115,6 +121,17 @@ def formL(request, facility, fsID, selector):
                         filled_in = False
                     else:
                         print('error - Editing a form that does not exist in the data base')
+        else:
+            if today_number not in {5, 6}:
+                new_saturday = ''
+                new_sunday = ''
+            elif today_number == 5:
+                new_saturday = True
+                new_sunday = ''
+            else:
+                new_saturday = ''
+                new_sunday = True
+            
         if existing:
             initial_data = {
                 'week_start': database_model.week_start,

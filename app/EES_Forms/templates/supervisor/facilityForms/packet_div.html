@@ -2,7 +2,7 @@
 {% if page == 'facilityList' %}
 <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}" data-packetid="{{packet.id}}">
     <div class="packetBars" id="dropZone{{packet.id}}" data-packetid="{{packet.id}}" data-facid="{{info.0.id}}" onclick="show_formsList(this)" style="width:100%; cursor: pointer;">
-        {{packet.name}} - forms({{packet.settings.formsList|length}})
+        {{packet.name}} - forms({{packet.formList.formsList|length}})
     </div>
     <div style="text-decoration: underline;">
         <a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.id %}">
@@ -13,7 +13,7 @@
 {% elif page == 'obsDash' %}
 <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}" data-packetID="{{packet.id}}">
     <div onclick="show_formsList(this)" style="width:100%;">
-        {{packet.name}} - forms({{packet.settings.formsList|length}})
+        {{packet.name}} - forms({{packet.formList.formsList|length}})
     </div>
 </div>
 {% endif %}

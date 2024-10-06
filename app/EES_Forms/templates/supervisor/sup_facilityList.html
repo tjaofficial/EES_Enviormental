@@ -82,7 +82,7 @@
                                     <td>
                                         {% comment %} <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}">
                                             <div onclick="show_formsList(this)" style="width:100%;">
-                                                {{packet.name}} - forms({{packet.settings.formsList|length}})
+                                                {{packet.name}} - forms({{packet.formList.formsList|length}})
                                             </div>
                                             <div style="text-decoration: underline;">
                                                 <a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.name %}">
@@ -91,14 +91,14 @@
                                             </div>
                                         </div> {% endcomment %}
                                         {% include 'supervisor/facilityForms/packet_div.html' with page='facilityList' %}
-                                        {% if packet.settings.formsList %}
+                                        {% if packet.formList.formsList %}
                                         <table style="display:none;width: 95%;" class="standardTable">
                                             <tr>
                                                 <th class="underline headerFont" style="width: 23%;">Label</th>
                                                 <th class="underline headerFont" style="width: 66%;">Form Title</th>
                                                 <th style="width: 11%;"></th>
                                             </tr>
-                                            {% for key, form in packet.settings.formsList.items %}
+                                            {% for key, form in packet.formList.formsList.items %}
                                                 <tr>
                                                     <td class="center">{{key}}</td>
                                                     {% for x in formSettingsModel %}

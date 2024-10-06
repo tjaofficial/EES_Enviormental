@@ -115,7 +115,7 @@ packetSettings = {
     },
     'settings': {
         'weekly_start_day': 'saturday',
-        'frequency': 'Weekly'
+        'frequency': 'weekly'
     }
 }
 
@@ -254,7 +254,8 @@ class Calendar2(HTMLCalendar):
         print(forms)
         if isinstance(selectedForm, str):
             packetsEntry = the_packets_model.objects.get(id=int(selectedForm))
-            if packetsEntry.frequency == 'Daily':
+            packFreq = packetsEntry.formList['settings']['frequency'].capitalize()
+            if packFreq == 'Daily':
                 print("Starting to find Forms that exist on this day for daily...")
                 print(forms)
                 aPacketFormList = []
@@ -275,7 +276,7 @@ class Calendar2(HTMLCalendar):
                         
                         eventCell = True
                         break
-            elif packetsEntry.frequency == 'Weekly':
+            elif packFreq == 'Weekly':
                 print("Starting to find Forms that exist on this day for weekly...")
                 print(forms)
                 wPacketFormList = []
@@ -292,16 +293,16 @@ class Calendar2(HTMLCalendar):
                             print('check 1')
                             selectedFormDate = h
                             print('check 2')
-                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
                             eventCell = True
                             break
                     except:
                         if h.week_start.year == year:
                             selectedFormDate = h
-                            forms_html += "<a href='../../../../printIndex/" + type + "/facility_weekly/"+ str(selectedForm) +"/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"' target='_blank'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"' target='_blank'>Submitted Packet</a><br>"
                             eventCell = True
                             break
-            elif packetsEntry.frequency == 'Monthly':
+            elif packFreq == 'Monthly':
                 print('Monthly')
         else:
             if selectedForm[1]:
@@ -311,13 +312,13 @@ class Calendar2(HTMLCalendar):
                         if type == 'single':
                             forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
                         eventCell = True
             else:
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/" + type + "/single/" + str(selectedForm[0]) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"' target='_blank'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"' target='_blank'>Submitted Form</a><br>"
                         eventCell = True
         
         forms_html += "</ul>"
@@ -363,8 +364,8 @@ class Calendar2(HTMLCalendar):
             print("This is a Packet Print for packetID "+forms)
             packetsEntry = the_packets_model.objects.get(id=int(forms))
             allFormsSettingsList = []
-            for pacForm in packetsEntry.settings["formsList"]:
-                pacfsID = packetsEntry.settings["formsList"][pacForm]['settingsID']
+            for pacForm in packetsEntry.formList["formsList"]:
+                pacfsID = packetsEntry.formList["formsList"][pacForm]['settingsID']
                 for settingsEntry in formSettingsQuery:
                     if pacfsID == settingsEntry.id:
                         allFormsSettingsList.append(settingsEntry)
@@ -1474,13 +1475,14 @@ def updateAllFormSubmissions(facility):
                 sub.submitted = False
             sub.save()
         elif sub.formID.frequency == 'Weekly':
-            sub.dueDate = weekday_fri
             if todays_num in {0, 1, 2, 3, 4}:
                 if sub.formID.day_freq == 'Weekends':
                     sub.dueDate = weekday_fri - datetime.timedelta(days=5)
                 start_sat = weekday_fri - datetime.timedelta(days=6)
+                sub.dueDate = weekday_fri
             else:
                 start_sat = today - datetime.timedelta(days= todays_num - 5)
+                sub.dueDate = start_sat + datetime.timedelta(days=11 - todays_num)
             A = sub.dateSubmitted
             B = sub.dueDate
             if sub.formID.day_freq == 'Weekends' and A != B:
@@ -1538,5 +1540,15 @@ def changeStringListIntoList(ffFormData):
 def getFacSettingsInfo(fsID):
     fsPull = form_settings_model.objects.get(id=int(fsID))
     return fsPull
+
+def formBNone(input):
+    if str(input) in ['none', False, '']:
+        answer = 'none'
+    else:
+        answer = str(input) + ' mph'
+    return answer
+
+
+
 
 

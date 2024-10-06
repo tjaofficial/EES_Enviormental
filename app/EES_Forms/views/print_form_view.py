@@ -14,7 +14,7 @@ from ..utils import date_change, time_change
 import io
 import datetime
 import calendar
-import ast
+import time
 from .form_pdf_templates import *
 
 lock = login_required(login_url='Login')
@@ -62,14 +62,15 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
     elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
-        packetFormList = packetBeingPrinted.settings["formsList"]
+        packetFormList = packetBeingPrinted.formList["formsList"]
         for packs in packetFormList:
             for settingsForm in formSettingsQuery:
                 if packetFormList[packs]['settingsID'] == settingsForm.id:
                     formsBeingUsed.append((packs ,settingsForm))
-    elif formGroup == 'facility_weekly' and type == 'group':
+    elif formGroup == 'Weekly' and type == 'group':
         formsBeingUsed = []
-        packetFormList = the_packets_model.objects.get(id=formIdentity).settings["formsList"]
+        packetQuery = the_packets_model.objects.get(id=formIdentity)
+        packetFormList = packetQuery.formList["formsList"]
         for packs in packetFormList:
             for settingsForm in formSettingsQuery:
                 if packetFormList[packs]['settingsID'] == settingsForm.id:
@@ -127,6 +128,19 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             startDate = formDateParsed
             endDate = formDateParsed
+        elif formGroup == 'Weekly':
+            formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
+            endDate = formDateParsed
+            if type not in ['single', 'coke_battery']:
+                weekly_start_day = packetQuery.formList['settings']['weekly_start_day']
+                startingDayNumb = time.strptime(weekly_start_day, "%A").tm_wday
+                amountOfDaysToStartingDay = (startingDayNumb-formDateParsed.weekday())
+                if formDateParsed.weekday() < startingDayNumb:
+                    amountOfDaysToStartingDay = amountOfDaysToStartingDay-7
+                startDate = formDateParsed + datetime.timedelta(days=amountOfDaysToStartingDay)
+                endDate = startDate + datetime.timedelta(days=6)
+            else:   
+                startDate = formDateParsed
         else:
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             endDate = formDateParsed
@@ -191,9 +205,9 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                 else:
                     fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
                     documentTitle = str(packetBeingPrinted.name)
-            elif formGroup == 'facility_weekly':
+            elif formGroup == 'Weekly':
                 fileName = "facility_weekly_packet.pdf"
-                documentTitle = "facility_weekly_packet"
+                documentTitle = str(formLabel) + "facility_weekly_packet"
             title = formInformation.header + ' ' + formInformation.title + ' - Form (' + str(formLabel) + ')'
             subTitle = 'Facility Name: ' + facility
             #always the same on all A-forms
@@ -238,7 +252,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             if formID == 24:
                 tableData, tableColWidths, style = pdf_template_24(formData, title, subTitle)
             if formID == 25:
-                tableData, tableColWidths, style = pdf_template_25(formData, title, subTitle, formInformation)
+                tableData, tableColWidths, style = pdf_template_25(formData, title, subTitle)
             if formID == 26:
                 tableData, tableColWidths, style = pdf_template_26(formData, title, subTitle, formInformation)
             if formID == 27:

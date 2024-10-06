@@ -26,14 +26,14 @@ def formB(request, facility, fsID, selector):
     last_monday = today - datetime.timedelta(days=today.weekday())
     one_week = datetime.timedelta(days=4)
     end_week = last_monday + one_week
-    freq = False
+    freq2 = False
     fridayDate = today + datetime.timedelta(days=(4 - today.weekday()))
     if 2 < today.month < 11:
-        freq = True
+        freq2 = True
     elif today.month == 2 and fridayDate.month == (today.month + 1):
-        freq = True
+        freq2 = True
     elif today.month == 10 and fridayDate.month == (today.month + 1):
-        freq = True
+        freq2 = True
 
     week_start_dates = form6_model.objects.all().order_by('-week_start')
 
@@ -226,6 +226,7 @@ def formB(request, facility, fsID, selector):
         'selector': selector, 
         'formName': formName, 
         'notifs': notifs,
+        'freq2': freq2,
         'freq': freq,
         'facility': facility
     })

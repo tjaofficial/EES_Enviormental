@@ -1,7 +1,7 @@
 {% load static %}
 {% if complete == 'false' %}
 <div>
-    {% for key, form in packet.settings.formsList.items %}
+    {% for key, form in packet.formList.formsList.items %}
         {% for item in facFormList1 %}
             {% if item.id == form.settingsID %}
                 {% if item.settings.active == 'true' and not item.subChoice.submitted %}
@@ -31,11 +31,11 @@
     {% endfor %}
 </div>
 {% else %}
-    {% for key, form in packet.settings.formsList.items %}
+    {% for key, form in packet.formList.formsList.items %}
         {% for item in facFormList1 %}
             {% if item.id == form.settingsID %}
                 {% if item.settings.active == 'true' and item.subChoice.submitted %}
-                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.link }}/{{ item.id }}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
+                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{ item.id }}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                         <div class="card_Form" style="margin-left: 50px;">
                             <h3 class="card_Form_letter">
                                 {{key}}
@@ -49,7 +49,7 @@
                                 </h4>
                             </div>
                             <h4 class="card_Form_date">
-                                {{item.subChoice.dueDate}}
+                                {{item.subChoice.dateSubmitted}}
                             </h4>       
                         </div>      
                     </a>

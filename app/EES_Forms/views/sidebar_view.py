@@ -233,10 +233,11 @@ def archive_view(request, facility):
                 if fs.formChoice.id == itemSearched:
                     idSearchData = fs
                     break
-            link = str(idSearchData.formChoice.link) + '_model'
-            chk_database = apps.get_model('EES_Forms', link).objects.filter(facilityChoice__facility_name=facility)
-            for item in chk_database:
-                fsList.append((item, idSearchData))
+            if idSearchData:
+                link = str(idSearchData.formChoice.link) + '_model'
+                chk_database = apps.get_model('EES_Forms', link).objects.filter(facilityChoice__facility_name=facility)
+                for item in chk_database:
+                    fsList.append((item, idSearchData))
             return fsList
         else:
             return "none"
@@ -752,7 +753,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                     for notifSel in notifSelector:
                         createNotification(facility, request, fsID, now, notifSel, data.save())
                     updateSubmissionForm(fsID, True, picker.date)
-                    #return redirect('IncompleteForms', facility)
+                    return redirect('IncompleteForms', facility)
                 else:
                     return redirect('issues_view', facility, fsID, form_date, 'issue')
     else:

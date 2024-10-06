@@ -173,7 +173,7 @@
         <div id="i0" style="display: block;">
             {% for item in facFormList1 %}
                 {% if not item.subChoice.submitted %}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form">
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                     <div class="card_Form" style="margin-left: 50px;">
                         <h3 class="card_Form_letter">
                             {{item.id}}
@@ -2272,7 +2272,7 @@
         <div id="c0" style="display: block;">
             {% for item in facFormList1 %}
                 {% if item.subChoice.submitted %}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form">
+                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                     <div class="card_Form" style="margin-left: 50px;">
                         <h3 class="card_Form_letter">
                             {{item.id}}
@@ -2286,7 +2286,7 @@
                             </h4>
                         </div>
                         <h4 class="card_Form_date">
-                            {{item.subChoice.dueDate}}
+                            {{item.subChoice.dateSubmitted}}
                         </h4>       
                     </div>      
                 </a>

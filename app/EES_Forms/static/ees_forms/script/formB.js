@@ -173,7 +173,7 @@ function individual_day() {
     document.getElementById('id_breeze_4').required = name_4;
 }
 function month_select() {
-    const freq = document.getElementById('frequency').dataset.frequency;
+    const freq = document.getElementById('frequency2').dataset.frequency;
     if (freq == 'True') {
         auto_fill_section_1();
         auto_fill_section_2();
