@@ -5,6 +5,8 @@
         {% for item in facFormList1 %}
             {% if item.id == form.settingsID %}
                 {% if item.settings.active == 'true' and not item.subChoice.submitted %}
+                    {% comment %} {% if todays_num in [5,6] and item.formChoice.frequency %}
+                    {% if todays_num in [0,1,2,3,4] and item.formChoice.frequency %} {% endcomment %}
                     <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{ item.id }}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                         <div class="card_Form" style="margin-left: 50px;">
                             <h3 class="card_Form_letter">

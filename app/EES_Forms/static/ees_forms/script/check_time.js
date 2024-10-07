@@ -69,17 +69,17 @@ function timecheck_c5() {
 /*************
  FORM C - COAL FIELD
 *************/
-function formC_timeCheck_truck(){
-    check_time('truck_start_time', 'truck_stop_time', 'truck_timePopup')
+function formC_timeCheck_area1(){
+    check_time('areaStartTime1', 'areaStopTime1', 'area1_timePopup')
 }
-function formC_timeCheck_area(){
-    check_time('area_start_time', 'area_stop_time', 'area_timePopup')
+function formC_timeCheck_area2(){
+    check_time('areaStartTime2', 'areaStopTime2', 'area2_timePopup')
 }
-function formC_timeCheck_storage(){
-    check_time('id_sto_start_time', 'id_sto_stop_time', 'storage_timePopup')
+function formC_timeCheck_area3(){
+    check_time('areaStartTime3', 'areaStopTime3', 'area3_timePopup')
 }
-function formC_timeCheck_salt(){
-    check_time('id_salt_start_time', 'id_salt_stop_time', 'salt_timePopup')
+function formC_timeCheck_area4(){
+    check_time('areaStartTime4', 'areaStopTime4', 'area4_timePopup')
 }
 
 

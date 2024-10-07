@@ -22,9 +22,6 @@ inputEventListener(input_select_textarea_combined_array);
 
 
 function inputEventListener(array){
-    
-
-    
     for(let elem in array) {  
         item = array[elem];
         if(item.id){
@@ -38,21 +35,13 @@ function saveToLocal(event){
     const formName = document.getElementById('formName').dataset.form;
     const tempSaveKey = formName+"_tempFormData";
     const currentDate = Date.now();
-    
     const formTempData = localStorage.getItem(tempSaveKey)?JSON.parse(localStorage.getItem(tempSaveKey)): {"Experation":currentDate, data:{}};
     const elem = event.target;
-
-
     formTempData.data[elem.id] = elem.value;
-
-
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
-    
-
 }
 
 function clearStorage(tempSaveKey, currentDate){
-
     const formattedcurrentDate = new Date(currentDate);
     const formTempData = localStorage.getItem(tempSaveKey);
     if(formTempData){
@@ -65,19 +54,16 @@ function clearStorage(tempSaveKey, currentDate){
 }
 
 function fillForm(tempSaveKey){
-
     const formTempData = localStorage.getItem(tempSaveKey);
     if(formTempData){
         const object = JSON.parse(formTempData);
         dataObject = object.data;
         for(let key in dataObject) {
             if(dataObject[key]){ 
-                    let inputValue = document.getElementById(key).value 
-                    if(!inputValue || inputValue !== {}){
-                        document.getElementById(key).value = dataObject[key];
-                    }                    //= 
-                
-                //}
+                let inputValue = document.getElementById(key).value 
+                if(!inputValue || inputValue != {}){
+                    document.getElementById(key).value = dataObject[key];
+                }
             }
             
         }

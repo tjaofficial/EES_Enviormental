@@ -15,6 +15,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formG1(request, facility, fsID, selector):
     formName = 17
     freq = getFacSettingsInfo(fsID)
+    personalizedSettings = freq.settings["settings"]
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
@@ -163,14 +164,13 @@ def formG1(request, facility, fsID, selector):
                     'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
-                    'process_equip1': "-",
-                    'process_equip2': "-",
-                    'op_mode1': "normal",
-                    'op_mode2': "normal",
-                    'emission_point_start': "Above Stack",
-                    'emission_point_stop': "Same",
-                    'height_above_ground': "100",
-                    'height_rel_observer': "100",
+                    'process_equip1': personalizedSettings['process_equip1'],
+                    'process_equip2': personalizedSettings['process_equip2'],
+                    'op_mode1': personalizedSettings['operating_mode1'],
+                    'op_mode2': personalizedSettings['operating_mode2'],
+                    'emission_point_start': personalizedSettings['describe_emissions_point_start'],
+                    'emission_point_stop': personalizedSettings['describe_emissions_point_stop'],
+                    'height_above_ground': personalizedSettings['height_above_ground_level'],
                     'water_drolet_present': "No",
                     'water_droplet_plume': "N/A",
                     'describe_background_start': "Skies",
@@ -255,6 +255,7 @@ def formG1(request, facility, fsID, selector):
 def formG2(request, facility, fsID, selector):
     formName = 18
     freq = getFacSettingsInfo(fsID)
+    personalizedSettings = freq.settings["settings"]
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
@@ -400,14 +401,13 @@ def formG2(request, facility, fsID, selector):
                     'city': options.city,
                     'observer': full_name,
                     'cert_date': cert_date,
-                    'process_equip1': "-",
-                    'process_equip2': "-",
-                    'op_mode1': "normal",
-                    'op_mode2': "normal",
-                    'emission_point_start': "Above Stack",
-                    'emission_point_stop': "Same",
-                    'height_above_ground': "150",
-                    'height_rel_observer': "150",
+                    'process_equip1': personalizedSettings['process_equip1'],
+                    'process_equip2': personalizedSettings['process_equip2'],
+                    'op_mode1': personalizedSettings['operating_mode1'],
+                    'op_mode2': personalizedSettings['operating_mode2'],
+                    'emission_point_start': personalizedSettings['describe_emissions_point_start'],
+                    'emission_point_stop': personalizedSettings['describe_emissions_point_stop'],
+                    'height_above_ground': personalizedSettings['height_above_ground_level'],
                     'water_drolet_present': "No",
                     'water_droplet_plume': "N/A",
                     'describe_background_start': "Skies",

@@ -65,29 +65,29 @@ function check_oven_numb() {
                 commentIncluded = false;
             }
             if (parseInt(oven1) == 84 && parseInt(oven2) == 1 || parseInt(oven1) == 85 && parseInt(oven2) == 2) {
-                console.log("Check 1")
-                console.log(commentIncluded)
+                //console.log("Check 1")
+                //console.log(commentIncluded)
                 document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
                 document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
             } else if (parseInt(oven2) == parseInt(oven1) + 2) {
-                console.log("Check 2")
-                console.log(commentIncluded)
+                //console.log("Check 2")
+                //console.log(commentIncluded)
                 document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
                 document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
             } else if (parseInt(oven1) >= parseInt(oven2)) {
-                console.log("Check 3")
-                console.log(commentIncluded)
+                //console.log("Check 3")
+                //console.log(commentIncluded)
                 document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'visible';
                 commentIncluded = false;
                 document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
             } else if (parseInt(oven2) == parseInt(oven1) + 1) {
-                console.log("Check 4")
-                console.log(commentIncluded)
+                //console.log("Check 4")
+                //console.log(commentIncluded)
                 document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'visible';
                 commentIncluded = false;
                 document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
             } else if (parseInt(oven2) > parseInt(oven1) + 2) {
-                console.log("Check 5")
+                //console.log("Check 5")
                 document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
                 var commentSet = false;
                 document.getElementById("comment_skip_id" + String(i)).style.visibility = 'visible';
@@ -97,7 +97,7 @@ function check_oven_numb() {
                 document.getElementById("comment_skip_id" + String(i)).dataset.inputValue2 = parseInt(oven2);
                 
                 function comment_add() {
-                    console.log("Check 5.1")
+                    //console.log("Check 5.1")
                     const inputValue1 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue1;
                     const inputValue2 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue2;
                     for (let x=parseInt(inputValue1)+2; x<parseInt(inputValue2); x+=2) {
@@ -110,38 +110,38 @@ function check_oven_numb() {
                 }
 
                 function check_comments() {
-                    console.log("Check 5.2")
+                    //console.log("Check 5.2")
                     const inputValue1 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue1;
                     const inputValue2 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue2;
                     var commentsInput = document.getElementById("comments").value;
                     
                     for (let x=parseInt(inputValue1)+2; x<parseInt(inputValue2); x+=2) {
                         if (commentsInput.includes('Oven #' + String(x) + ' was skipped.')) {
-                            console.log("Check 5.2.1")
+                            //console.log("Check 5.2.1")
                             document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
                             commentSet = true;
                         } else {
-                            console.log("Check 5.2.2")
+                            //console.log("Check 5.2.2")
                             commentSet = false;
                         }
                     }
                     commentList.push(commentSet)
                 }
                 check_comments();
-                console.log(commentIncluded)
+                //console.log(commentIncluded)
             } else {
                 document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
                 document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
             }
         }
-        console.log(commentList)
-        if (commentIncluded && !commentList.includes(false)) {
-            console.log("Check END.1")
-            document.getElementById("submitButton").disabled = false;
-        } else {
-            console.log("Check END.2")
-            document.getElementById("submitButton").disabled = true;
-        }
+        // console.log(commentList)
+        // if (commentIncluded && !commentList.includes(false)) {
+        //     console.log("Check END.1")
+        //     document.getElementById("submit").disabled = false;
+        // } else {
+        //     console.log("Check END.2")
+        //     document.getElementById("submit").disabled = true;
+        // }
     }
 }
 check_oven_numb();

@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
 from ..forms import the_packets_form, form_settings_form
+from .form_settings_builds import form7settings
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
+import json
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
@@ -448,11 +450,26 @@ def Add_Forms(request, facility):
             if formInputName.replace(" ", "") in answer.keys():
                 formID = int(answer[formInputName.replace(" ", "")])
                 formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
-                settingsDict = {"active": "true", "packets":{}}
+                settingsDict = {"active": "true", "packets":{}, "settings":{}}
                 for x in answer.keys():
-                    if x[0] == str(formID):
-                        settingsDict[x[1:]] = answer[x]
+                    if len(x.split("-")) > 1:
+                        requestFormID = x.split("-")[0]
+                        requestInputName = x.split("-")[1]
+                        if requestFormID == str(formID):
+                            settingsDict["settings"][requestInputName] = answer[x]
+
+                keysList = []
+                for setts in answer.keys():
+                    if len(setts.split("-")) > 1:
+                        requestFormID = setts.split("-")[0]
+                        if requestFormID == str(formID):
+                            keysList.append(setts)
+                if formID == 7:
+                    settingsDict["settings"] = form7settings(keysList, request.POST)
+
+
                 print(settingsDict)
+                settingsDict = json.loads(json.dumps(settingsDict))
                 sameEntry = False
                 if formSettingsQuery.exists():
                     A = formSettingsQuery[0]

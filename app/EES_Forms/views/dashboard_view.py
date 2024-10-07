@@ -9,6 +9,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def IncompleteForms(request, facility):
+    formName = "obs_dash"
     permissions = [OBSER_VAR]
     userGroupRedirect(request.user, permissions)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
@@ -56,11 +57,22 @@ def IncompleteForms(request, facility):
     # ---------Form Data--------------------
     facFormsIDList = get_facility_forms('facilityName', facility)
     facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-    facFormList1 = []
+    facFormList2 = []
     for facFormID in facFormsIDList:
-        for formSetting in facFormsSettingsModel:
-            if int(facFormID) == formSetting.id:
-                facFormList1.append(formSetting)
+        try:
+            facFormList2.append(facFormsSettingsModel.get(id=int(facFormID)))
+        except:
+            continue
+
+    facFormList1 = []
+    for fsID in facFormList2:
+        formInfo = fsID.formChoice
+        if todays_num in [5,6] and formInfo.day_freq in ['5', '6', 'Weekends', 'Everyday']:
+            if formInfo.weekend_only and not formInfo.weekdays_only or not formInfo.weekend_only and not formInfo.weekdays_only:
+                facFormList1.append(fsID)
+        elif todays_num in [0,1,2,3,4] and formInfo.day_freq in ['0','1','2','3','4','Weekdays','Everyday']:
+            if formInfo.weekdays_only and not formInfo.weekend_only or not formInfo.weekdays_only and not formInfo.weekend_only:
+                facFormList1.append(fsID)
 
     packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
     listOfAllPacketIDs = []
@@ -192,7 +204,8 @@ def IncompleteForms(request, facility):
         'facPackets': facPackets,
         'facFormList1': facFormList1,
         'packetQuery': packetQuery,
-        'listOfAllPacketIDs': listOfAllPacketIDs
+        'listOfAllPacketIDs': listOfAllPacketIDs,
+        'formName': formName
     })
 
 @lock

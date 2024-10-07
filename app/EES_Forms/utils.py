@@ -119,6 +119,73 @@ packetSettings = {
     }
 }
 
+g1Settings = {
+    'height_above_ground_level': 120,
+    'describe_emissions_point_start': 'Above Stack',
+    'describe_emissions_point_stop': 'Same',
+    'process_equip1': "PECS Baghouse Stack",
+    'operating_mode1': "normal",
+    'process_equip2': "-",
+    'operating_mode2': "-",
+}
+
+g2Settings = {
+    'height_above_ground_level': 120,
+    'describe_emissions_point_start': 'Above Stack',
+    'describe_emissions_point_stop': 'Same',
+    'process_equip1': "PECS Baghouse Stack",
+    'operating_mode1': "normal",
+    'process_equip2': "-",
+    'operating_mode2': "-",
+}
+
+hSettings = {
+    'height_above_ground_level': 350,
+    'describe_emissions_point_start': 'Above Stack',
+    'describe_emissions_point_stop': 'Same',
+    'process_equip1': "Combustion Stack",
+    'operating_mode1': "normal",
+    'process_equip2': "-",
+    'operating_mode2': "-",
+}
+cSettings = {
+    "custom_name": "Coal Field Inspections", 
+    "number_of_areas": "4", 
+    "area1": {
+        "name": "Trucks",
+        "number_of_options": 7,
+        "options": {
+            "Contractor": "meat",
+            "#5": "meat",
+            "#6": "meat",
+            "#7": "meat",
+            "#9": "meat",
+            "Dozer": "meat",
+            "Water Truck": "meat"
+        }
+    }, 
+    "area2": {
+        "name": "Coal Storage Areas",
+        "number_of_options": 5,
+        "options": {
+            "Panther Eagle": "meat",
+            "Kepler": "meat",
+            "Rock Lick": "meat",
+            "McClure": "meat",
+            "Elk Valley": "meat"
+        }
+    }, 
+    "area3": {
+        "name": "Area B Coke Storage",
+        "number_of_options": 0,
+        "options": {}
+    }, 
+    "area4": {
+        "name": "Salt Pile",
+        "number_of_options": 0,
+        "options": {}
+    }
+}
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
     emptyDB = False

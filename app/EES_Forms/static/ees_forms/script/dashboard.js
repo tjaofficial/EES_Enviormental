@@ -1,3 +1,17 @@
+const initial_ID = localStorage.obs_dashboard
+const packetList = JSON.parse(document.getElementById('packetSelect').dataset.allpackets)
+document.getElementById('packetSelect').value = initial_ID
+for(let x=0; x<packetList.length; x++){
+    let packIdFromList = packetList[x];
+    document.getElementById("i"+packIdFromList).style.display = 'none';
+    document.getElementById('i0').style.display = 'none';
+    document.getElementById("c"+packIdFromList).style.display = 'none';
+    document.getElementById('c0').style.display = 'none';
+}
+document.getElementById("i"+String(initial_ID)).style.display = 'block';
+document.getElementById("c"+String(initial_ID)).style.display = 'block';
+console.log(initial_ID)
+
 packetChange = (elem) => {
     const packetID = String(elem.value);
     const packetList = JSON.parse(elem.dataset.allpackets);
@@ -8,10 +22,10 @@ packetChange = (elem) => {
         document.getElementById("c"+packIdFromList).style.display = 'none';
         document.getElementById('c0').style.display = 'none';
     }
+    localStorage.setItem('obs_dashboard', packetID)
     document.getElementById("i"+packetID).style.display = 'block';
     document.getElementById("c"+packetID).style.display = 'block';
 }
-
 // function sort() {
 //     const sortSelect = document.getElementById('cardDropdown').value;
 //     if (sortSelect == 'all') {

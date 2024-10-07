@@ -1,15 +1,17 @@
 function wind_placeholder(){
     const d = new Date();
     let day = d.getDay();
-    let input_Id = 'id_wind_speed_' + String(day - 1);
-    const weather = document.getElementById('weather').value;
-    const wind_input = document.getElementById(input_Id).value;
-    const weatherJson = JSON.parse(weather);
-    if (!wind_input) {
-        document.getElementById(input_Id).placeholder = weatherJson.wind_speed;
-        document.getElementById(input_Id).style.backgroundColor = '#FFFA8B';
-    } else {
-        document.getElementById(input_Id).style.backgroundColor = '#3c983c85';
+    if (day != 0 & day != 6){
+        let input_Id = 'id_wind_speed_' + String(day - 1);
+        const weather = document.getElementById('weather').value;
+        const wind_input = document.getElementById(input_Id).value;
+        const weatherJson = JSON.parse(weather);
+        if (!wind_input) {
+            document.getElementById(input_Id).placeholder = weatherJson.wind_speed;
+            document.getElementById(input_Id).style.backgroundColor = '#FFFA8B';
+        } else {
+            document.getElementById(input_Id).style.backgroundColor = '#3c983c85';
+        }
     }
 }
 wind_placeholder();

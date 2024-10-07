@@ -1,4 +1,4 @@
-from django import template
+from django import template # type: ignore
 from ..models import the_packets_model
 import json
 import datetime

@@ -527,18 +527,6 @@ class form_settings_model(models.Model):
 class form7_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(auto_now_add=False, auto_now=False)
-    truck_sel = models.CharField(max_length=30, choices=truck_choices)
-    area_sel = models.CharField(max_length=30, choices=area_choices)
-    truck_start_time = models.TimeField()
-    truck_stop_time = models.TimeField()
-    area_start_time = models.TimeField()
-    area_stop_time = models.TimeField()
-    sto_start_time = models.TimeField(
-        blank = True, null=True
-    )
-    sto_stop_time = models.TimeField(blank = True, null=True)
-    salt_start_time = models.TimeField(blank = True, null=True)
-    salt_stop_time = models.TimeField(blank = True, null=True)
     observer = models.CharField(
         max_length=30
     )
@@ -549,10 +537,26 @@ class form7_model(models.Model):
     comments = models.CharField(
         max_length=600
     )
-    average_t = models.FloatField(blank=True)
-    average_p = models.FloatField(blank=True)
-    average_storage = models.FloatField(blank=True, null=True)
-    average_salt = models.FloatField(blank=True, null=True)
+    area_json_1 = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    area_json_2 =models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    area_json_3 =models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    area_json_4 =models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
 
     def clean_t(self):
         if self.truck_start_time > self.truck_stop_time:

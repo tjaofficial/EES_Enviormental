@@ -2,48 +2,75 @@
 <script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
 <div id="settings{{count}}" style="{% if count != '' %}margin-left: 32px;{% endif %}{% with isBreak=1 %}{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{ isBreak|add:'1' }}{% endif %}{% endfor %}{% if isBreak == 2 %}display:block;{% else %}display:none;{% endif %}{% endwith %}">
 {% if formID == 1 %}
-        Custom Title:<input type='text' class="customName" name="{{formID}}custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        Larry Car quantity: <input name="{{formID}}larry_car_quantity" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.larry_car_quantity}}{% endif %}{% endfor %}{% endif %}{% endfor %}" type="number"><br>
+        Custom Title:<input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+        Larry Car quantity: <input name="{{formID}}-larry_car_quantity" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.larry_car_quantity}}{% endif %}{% endfor %}{% endif %}{% endfor %}" type="number"><br>
         Larry Car organized by: 
-        <select name="{{formID}}organize_larry_car">
+        <select name="{{formID}}-organize_larry_car">
             <option value="">------</option>
             <option value="numbered" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_larry_car == 'numbered' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Numbered</option>
             <option value="lettered" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_larry_car == 'lettered' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Lettered</option>
         </select><br>
-        Order of ovens: <select name="{{formID}}organize_ovens">
+        Order of ovens: <select name="{{formID}}-organize_ovens">
             <option value="">------</option>
             <option value="sequential" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_ovens == 'sequential' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Sequential</option>
             <option value="every_other" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_ovens == 'every_other' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Every-Other</option>
             <option value="alternating" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_ovens == 'alternating' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Alternating</option>
         </select>
 {% elif formID == 3 %}
-        Custom Title: <input type='text' class="customName" name="{{formID}}custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        One pass option: <select name="{{formID}}one_pass">
+        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+        One pass option: <select name="{{formID}}-one_pass">
             <option value="">------</option>
             <option value="yes" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'yes' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Yes</option>
             <option value="no" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'no' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>No</option>
         </select><br>
 {% elif formID == 5 %}
-        Custom Title: <input type='text' class="customName" name="{{formID}}custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        Larry Car Quantity: <input name="{{formID}}larry_car_quantity" type="number"><br>
+        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+        Larry Car Quantity: <input name="{{formID}}-larry_car_quantity" type="number"><br>
 {% elif formID == 7 %}
-        Custom Title: <input type='text' class="customName" name="{{formID}}custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        How many areas?(1-4) <input oninput="displayAreaFields(this, {{formID}})" name="{{formID}}number_of_areas" type="number" max="4" min="1" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.number_of_areas}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        <div id="{{formID}}areaNames" style="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}display:block;{% else %}display:none;{% endif %}{% endfor %}">
-            {% for key, x in packetQuery.items %}
-                {% if x.formID == form.id %}
-                    {% for settings in formSettingsModel %}
-                        {% if settings.id == x.settingsID %}
-                            {% with number_of_areas=settings.settings.number_of_areas|to_int %}
-                                {% for i in number_of_areas|get_range %}
-                                    Name of area {{ i }}: <input name='{{formID}}area{{i}}' type='text' value="{% for key2, set in settings.settings.items %}{% if key2.4 == i|slugify %}{{set}}{% endif %}{% endfor %}" required><br>
-                                {% endfor %}
-                            {% endwith %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </div>
+    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    How many areas?(1-4) <input oninput="displayAreaFields(this, {{formID}})" name="{{formID}}-number_of_areas" type="number" max="4" min="1" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.number_of_areas}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    <div id="{{formID}}-areaNames" style="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}display:block;{% else %}display:none;{% endif %}{% endfor %}">
+        {% for key, x in packetQuery.items %}
+            {% if x.formID == form.id %}
+                {% for settings in formSettingsModel %}
+                    {% if settings.id == x.settingsID %}
+                        {% with number_of_areas=settings.settings.number_of_areas|to_int %}
+                            {% for i in number_of_areas|get_range %}
+                                Name of area {{ i }}: <input name='{{formID}}area{{i}}' type='text' value="{% for key2, set in settings.settings.items %}{% if key2.4 == i|slugify %}{{set}}{% endif %}{% endfor %}" required><br>
+                            {% endfor %}
+                        {% endwith %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% elif formID == 17 %}
+    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.height_above_ground_level}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_start}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_stop}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+{% elif formID == 18 %}
+    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.height_above_ground_level}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_start}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_stop}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+{% elif formID == 19 %}
+    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.height_above_ground_level}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_start}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_stop}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+    Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
 {% endif %}
 {% if count == '' %}
     <div style="width:150px; margin:auto;">

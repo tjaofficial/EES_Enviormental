@@ -10,7 +10,7 @@
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
-
+<div id="selector" data-selector="{{selector}}"></div>
 <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
 <div class="mainCont gap" style="max-width:none;padding-top:2rem;">
   <form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px">
@@ -22,7 +22,7 @@
         <table style="border-collapse: collapse; margin: auto">
           <tr>
             <th id="boxTitle" colspan="6" style="text-align: center">
-              Method 303 Charging - Form (A-1)
+              {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
             </th>
             <th></th>
           </tr>

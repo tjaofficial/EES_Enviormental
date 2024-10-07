@@ -19,8 +19,8 @@
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/formG2.js' %}"></script>
 <link href="{% static 'ees_forms/style/formG2.css' %}" rel="stylesheet" />
-<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/method9B.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/formA5_sketch.js' %}"></script>
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
@@ -42,9 +42,7 @@
                             <table style="border-collapse: collapse;">
                                 <tr>
                                     <th id="boxTitle" colspan="15" style="text-align: center;">
-                                        Visible Emission Observation Form - (G-2)<br>
-                                        Method 9B<br>
-                                        PECS Baghouse Stack
+                                        {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
                                     </th>
                                     <th></th>
                                 </tr>
@@ -154,7 +152,7 @@
                                         HEIGHT RELATIVE TO OBSERVER<br>{{ data.height_rel_observer }}ft.
                                     </td>
                                     <td id="sketchBox" colspan="3" rowspan="7" data-filledSketch = "{{exist_canvas}}" data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer" data-selector={{selector}}>
-                                        <div>
+                                        <div class="formImageContainer">
                                             <div id='imgspinner' class="loader"></div>
                                             {% if selector == 'form' %}
                                                 {{data.canvas}}

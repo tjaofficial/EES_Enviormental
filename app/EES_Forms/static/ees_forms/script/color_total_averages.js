@@ -1,6 +1,8 @@
 function get_average(opac_id, total_id, amount) {
     if (parseInt(amount) == 12) {
         list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    } else if (parseInt(amount) == 11) {
+        list = [0,1,2,3,4,5,6,7,8,9,10,11]
     } else if (parseInt(amount) == 24) {
         list = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
     }
@@ -11,7 +13,7 @@ function get_average(opac_id, total_id, amount) {
         const the_opac  = document.getElementById(opac_id + opacities).value;
         the_total += parseInt(the_opac);
     }
-    if (parseInt(amount) == 12) {
+    if (parseInt(amount) == 12 || parseInt(amount) == 11) {
         const theAverage = (the_total / 12).toFixed(3);
         document.getElementById(total_id).placeholder = theAverage;
         const id_param = document.getElementById(total_id).id;
@@ -41,23 +43,22 @@ function stop_light(average, id_param) {
 /*************
  FORM C - COAL FIELD
 *************/
-function truck_average(){
-    get_average('TRead', 'average_t', 12);
+function area1_average(){
+    get_average('area1Read', 'areaAverage1', 11);
 }
-function area_average(){
-    get_average('ARead', 'average_p', 12);
+function area2_average(){
+    get_average('area2Read', 'areaAverage2', 11);
 }
-function storage_average(){
-    get_average('storage_', 'average_storage', 12);
+function area3_average(){
+    get_average('area3Read', 'areaAverage3', 11);
 }
-function salt_average(){
-    get_average('salt_', 'average_salt', 12);
+function area4_average(){
+    get_average('area4Read', 'areaAverage4', 11);
 }
-
-truck_average();
-area_average();
-storage_average();
-salt_average();
+area1_average();
+area2_average();
+area3_average();
+area4_average();
 
 /*************
  FORM M - ROADS AND AREAS

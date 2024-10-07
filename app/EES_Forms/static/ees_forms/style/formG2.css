@@ -77,3 +77,9 @@ span.sideWord{
     margin-left: -15px;
     margin-top: -59px;
 }
+.formImageContainer{
+    width:100%;
+}
+.formImageContainer > img{
+    width:100%;
+}

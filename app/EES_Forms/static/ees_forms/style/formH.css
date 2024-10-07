@@ -91,3 +91,9 @@ span.sideWord{
     border-style: solid;
     border-color: #555 transparent transparent transparent;
   }
+.formImageContainer{
+    width:100%;
+}
+.formImageContainer > img{
+    width:100%;
+}

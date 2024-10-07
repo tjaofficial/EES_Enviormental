@@ -30,11 +30,11 @@ def formL(request, facility, fsID, selector):
     opened = True
     week_start_dates = form21_model.objects.all().order_by('-week_start')
     picker = issueForm_picker(facility, selector, fsID)
+    sunday_last_sat = today - datetime.timedelta(days=1)
     print('titty')
     print(isinstance(today_number, int))
     # -----check if Daily Battery Profile
     if daily_prof.exists():
-        print('check 1')
         todays_log = daily_prof[0]
         # -------check if access is for Form or Edit
         if selector not in ('form', 'edit'):
@@ -87,7 +87,6 @@ def formL(request, facility, fsID, selector):
                         filled_in = False
             # ------check if today is a Saturday
             elif today_number == 5:
-                print('check 2')
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if selector == 'form':
                     if this_week_saturday == today:
@@ -106,7 +105,6 @@ def formL(request, facility, fsID, selector):
             else:
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if selector == 'form':
-                    sunday_last_sat = today - datetime.timedelta(days=1)
                     if this_week_saturday == sunday_last_sat:
                         existing = True
                     else:
@@ -115,7 +113,6 @@ def formL(request, facility, fsID, selector):
                         
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
                 elif selector == "edit":
-                    sunday_last_sat = today - datetime.timedelta(days=1)
                     if this_week_saturday == sunday_last_sat:
                         existing = True
                         filled_in = False

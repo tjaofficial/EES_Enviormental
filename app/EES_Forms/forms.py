@@ -14,52 +14,17 @@ class SubFormC1(ModelForm):
         model = form7_model
         fields = (
             'date', 
-            'truck_sel', 
-            'area_sel', 
-            'truck_start_time', 
-            'truck_stop_time', 
-            'area_start_time', 
-            'area_stop_time', 
             'observer', 
             'cert_date', 
             'comments', 
-            'average_t', 
-            'average_p',
-            'sto_start_time',
-            'sto_stop_time',
-            'salt_start_time',
-            'salt_stop_time',
-            'average_storage',
-            'average_salt',
         )
         
         widgets = {
             'date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'truck_start_time': forms.TimeInput(attrs={'id': 'truck_start_time', 'oninput': 'formC_timeCheck_truck()', 'class': 'input', 'type': 'time'}),
-            'truck_stop_time': forms.TimeInput(attrs={'id': 'truck_stop_time', 'oninput': 'formC_timeCheck_truck()', 'class': 'input', 'type': 'time'}),
-            'area_start_time': forms.TimeInput(attrs={'id': 'area_start_time', 'oninput': 'formC_timeCheck_area()', 'class': 'input', 'type': 'time'}),
-            'area_stop_time': forms.TimeInput(attrs={'id': 'area_stop_time', 'oninput': 'formC_timeCheck_area()', 'class': 'input', 'type': 'time'}),
-            'sto_start_time': forms.TimeInput(attrs={'oninput': 'formC_timeCheck_storage()', 'class': 'input', 'type': 'time', 'required': False}),
-            'sto_stop_time': forms.TimeInput(attrs={'required': False, 'oninput': 'formC_timeCheck_storage()', 'class': 'input', 'type': 'time'}),
-            'salt_start_time': forms.TimeInput(attrs={'required': False, 'oninput': 'formC_timeCheck_salt()', 'class': 'input', 'type': 'time'}),
-            'salt_stop_time': forms.TimeInput(attrs={'required': False, 'oninput': 'formC_timeCheck_salt()', 'class': 'input', 'type': 'time'}),
-            'truck_sel': forms.Select(attrs={'style': 'width: 100px;'}),
-            'area_sel': forms.Select(attrs={'style': 'width: 130px;'}),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'comments': Textarea(attrs={'rows': 7, 'cols': 125}),
-            'average_t': forms.NumberInput(attrs={'oninput': 'truck_average()', 'id': 'average_t', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-            'average_p': forms.NumberInput(attrs={'oninput': 'area_average()', 'id': 'average_p', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-            'average_storage': forms.NumberInput(attrs={'required': False, 'oninput': 'storage_average()', 'id': 'average_storage', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'average_salt': forms.NumberInput(attrs={'required': False, 'oninput': 'salt_average()', 'id': 'average_salt', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
         }
-
-        def clean(self):
-            cleaned_data = super().clean()
-            start_time = cleaned_data.get("truck_start_time")
-            end_time = cleaned_data.get("truck_stop_time")
-            if end_time < start_time:
-                raise forms.ValidationError("End time should be later than start time.")
 
 
 class FormCReadForm(ModelForm):
