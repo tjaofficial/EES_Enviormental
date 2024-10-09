@@ -69,12 +69,14 @@
                                 <tr>
                                     <td colspan="2" style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px;'>
                                         {{cats.name}}:
+                                        {% if cats.number_of_options != 0 %}
                                         <select name="areaName{{keys|slice:'4:'}}" style="width: 100px;" required="" id="areaName{{keys|slice:'4:'}}">
                                             <option value="" {% if existing %}selected="false"{% endif %}>---------</option>
                                             {% for num, ops in cats.options.items %}
                                                 <option value="{{ops}}"{% if existing %}selected="{% if keys|slice:'4:' == '1' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName1}}{% endif %}{% elif keys|slice:'4:' == '2' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName2}}{% endif %}{% elif keys|slice:'4:' == '3' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName3}}{% endif %}{% elif keys|slice:'4:' == '4' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName4}}{% endif %}{% endif %}"{% endif %}>{{ops}}</option>
                                             {% endfor %}
                                         </select>
+                                        {% endif %}
                                     </td>
                                     <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
                                         Start Time: <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaStartTime1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaStartTime2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaStartTime3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaStartTime4}}{% endif %}"{% endif %} type="time" name="areaStartTime{{keys|slice:'4:'}}" id="areaStartTime{{keys|slice:'4:'}}" oninput="formC_timeCheck_area{{keys|slice:'4:'}}()" class="input" required> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 

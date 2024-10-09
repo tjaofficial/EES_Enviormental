@@ -6,17 +6,16 @@
             {% include "shared/components/backArrow.html" with destination="facilityList"%}
             Form Settings
         </div>
-        <div class="contentCont center" style="">
+        <div class="contentCont center" style="padding:22px;">
             <form method="POST">
                 {% csrf_token %}
                 <div>
                     {% if packetID != 'facID' %}Change Label: <input type="text" name="newLabel" value="{{formLabel}}"><br>{% endif %}
                     Form: {{formData.header}} - {{formData.title}}
                 </div><br>
-        
-                <h4>Personalize Form Settings</h4>
-                Custom Title: <input type="text" name="settings_custom_name"><br>
-                {% include 'supervisor/components/form_settings_insert.html' with formID=formID count='' %}
+{% comment %}         
+                <h4>Personalize Form Settings</h4> {% endcomment %}
+                {% include 'supervisor/components/form_settings_insert.html' with formID=formID count="" %}
                 {% for x in y%}
                 {% endfor %}
                 {% for info in facilities %}

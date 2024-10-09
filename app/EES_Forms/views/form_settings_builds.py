@@ -4,29 +4,33 @@ def form7settings(keysList, requestPost):
     settings = {}
     print(keysList)
     for key in keysList:
-        pairLen = len(key.split("-"))
-        pairFormID = key.split("-")[0]
-        mainLabel = key.split("-")[1]
-        secondaryLabel = False
-        print(pairFormID)
-        print(mainLabel)
-        if pairLen == 3:
-            secondaryLabel = key.split("-")[2]
-            print(secondaryLabel)
-        
-        if mainLabel == 'custom_name' or mainLabel == 'number_of_areas':
-            settings[mainLabel] = requestPost[key]
-        elif mainLabel[:-1] == 'area':
-            if mainLabel not in settings.keys():
-                settings[mainLabel] = {}
-                settings[mainLabel]['options'] = {}
-                if not secondaryLabel:
-                    settings[mainLabel]['name'] = requestPost[key]
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            pairLen = len(key.split("-"))
+            pairFormID = key.split("-")[0]
+            mainLabel = key.split("-")[1]
+            secondaryLabel = False
+            print(pairFormID)
+            print(mainLabel)
             if pairLen == 3:
-                if secondaryLabel == 'optionsQty':
-                    settings[mainLabel]['number_of_options'] = requestPost[key]
-                else:
-                    settings[mainLabel]['options'][str(secondaryLabel[6:])] = str(requestPost[key])
+                secondaryLabel = key.split("-")[2]
+                print(secondaryLabel)
+            
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = requestPost[key]
+            elif mainLabel == 'number_of_areas':
+                settings[mainLabel] = int(requestPost[key])
+            elif mainLabel[:-1] == 'area':
+                if mainLabel not in settings.keys():
+                    settings[mainLabel] = {}
+                    settings[mainLabel]['options'] = {}
+                    if not secondaryLabel:
+                        settings[mainLabel]['name'] = requestPost[key]
+                if pairLen == 3:
+                    if secondaryLabel == 'optionsQty':
+                        settings[mainLabel]['number_of_options'] = int(requestPost[key])
+                    else:
+                        if requestPost[key]:
+                            settings[mainLabel]['options'][str(secondaryLabel[6:])] = str(requestPost[key])
     return json.loads(json.dumps(settings))
                 
 

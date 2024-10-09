@@ -6,6 +6,7 @@ from .form_settings_builds import form7settings
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 import json
+from .form_settings_builds import form7settings
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
@@ -307,6 +308,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
     selectedSettings = form_settings_model.objects.get(id=fsID)
     formData = Forms.objects.get(id=selectedSettings.formChoice.id)
     #fsID = False
+    print(formData.id)
     if packetID[:5] != 'facID':
         packetSettings = the_packets_model.objects.get(id=packetID)
     else:
@@ -322,33 +324,35 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
     if request.method == "POST":
         if 'facilitySelect' in request.POST.keys():
             return redirect('sup_dashboard', request.POST['facilitySelect'])
-        copyPOST = request.POST.copy()
-        copyPOST['facilityChoice'] = selectedSettings.facilityChoice
-        copyPOST['formChoice'] = selectedSettings.formChoice
-        copyPOST['settings'] = formSettings
-        copyPOST['subChoice'] = selectedSettings.subChoice
-        if str(packetID) in formSettings['packets'].keys():
-            formSettings['packets'][str(packetID)] = request.POST['newLabel']
-        for inputs in request.POST.keys():
-            if inputs[:9] == "settings_":
-                settingsName = inputs[9:]
-                copyPOST['settings'][settingsName] = request.POST[inputs]
-                
-        formWData = form_settings_form(copyPOST, instance=selectedSettings)
-        if formWData.is_valid():
-            formWData.save()
-            if packetSettings:
-                newLabel = request.POST['newLabel']
-                if newLabel not in [formLabel, ""]:
-                    packetSettings.formList['formsList'][newLabel] = packetSettings.formList['formsList'][formLabel]
-                    del packetSettings.formList['formsList'][formLabel]
-                    A = packetSettings
-                    A.save()
-                
-            messages.success(request,"The form settings were updated.")
-            return redirect('facilityList', 'supervisor')
         else:
-            messages.error(request,"Check your inputs and make sure informationw as entered in correctly.")
+            copyPOST = request.POST.copy()
+            copyPOST['facilityChoice'] = selectedSettings.facilityChoice
+            copyPOST['formChoice'] = selectedSettings.formChoice
+            copyPOST['subChoice'] = selectedSettings.subChoice
+            keysList = []
+            for inputs in request.POST.keys():
+                keysList.append(inputs)
+            if formData.id == 7:
+                settingsDict = form7settings(keysList, request.POST)
+            settingsChange = selectedSettings.settings
+            settingsChange['settings'] = settingsDict
+            copyPOST['settings'] = settingsChange
+            formWData = form_settings_form(copyPOST, instance=selectedSettings)
+            if formWData.is_valid():
+                print('it fucking saved')
+                formWData.save()
+                messages.success(request,"The form settings were updated.")
+                return redirect('facilityList', 'supervisor')
+            #     if packetSettings:
+            #         newLabel = request.POST['newLabel']
+            #         if newLabel not in [formLabel, ""]:
+            #             packetSettings.formList['formsList'][newLabel] = packetSettings.formList['formsList'][formLabel]
+            #             del packetSettings.formList['formsList'][formLabel]
+            #             A = packetSettings
+            #             A.save()
+                    
+            else:
+                messages.error(request,"Check your inputs and make sure informationw as entered in correctly.")
             
     
     return render (request, 'supervisor/facilityForms/facilityFormSettings.html', {

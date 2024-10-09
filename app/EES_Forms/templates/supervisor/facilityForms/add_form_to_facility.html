@@ -72,7 +72,7 @@
                         </tr>
                         {% for form in pageData %}
                         <tr class="formRows">
-                            <td class="rowCheckMark"><input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}checked{% endif %}{% endfor %}/></td>
+                            <td class="rowCheckMark"><input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{ forloop.counter }}" name="forms{{ forloop.counter }}" type="checkbox" value="{{form.id}}"/></td>
                             <td class="rowFormID">{{form.id}} - </td>
                             <td class="rowFormType">{{form.header}}</td>
                             <td>{{form.title}}</td>

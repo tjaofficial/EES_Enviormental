@@ -47,21 +47,15 @@ def formC(request, facility, fsID, selector):
                 if str(x.date) == str(selector):
                     database_model = x
             form = database_model
-            # for x in org2:
-            #     if str(x.form.date) == str(selector):
-            #         database_model2 = x
-            # read = database_model2
             existing = True
             search = True
         # ------check if database is empty----------
         elif org.exists():
             database_form = org[0]
-            #database_form2 = org2[0]
             # -------check if there is a daily battery profile
             if now == todays_log.date_save:
                 if todays_log.date_save == database_form.date:
                     existing = True
-            
         if search:
             database_form = ''
         else:
@@ -106,19 +100,6 @@ def formC(request, facility, fsID, selector):
                             area['readings']['11']
                         ]
                     }
-                    #     'area' + x + 'Read0': area['readings']['1'],
-                    #     'area' + x + 'Read1': area['readings']['2'],
-                    #     'area' + x + 'Read2': area['readings']['3'],
-                    #     'area' + x + 'Read3': area['readings']['4'],
-                    #     'area' + x + 'Read4': area['readings']['5'],
-                    #     'area' + x + 'Read5': area['readings']['6'],
-                    #     'area' + x + 'Read6': area['readings']['7'],
-                    #     'area' + x + 'Read7': area['readings']['8'],
-                    #     'area' + x + 'Read8': area['readings']['9'],
-                    #     'area' + x + 'Read9': area['readings']['10'],
-                    #     'area' + x + 'Read10': area['readings']['11'],
-                    #     'area' + x + 'Read11': area['readings']['12'],
-                    # }
                     initial_data.update(intital_adding)
                     readsData.update(initial_data_dict)
             else:
@@ -127,8 +108,7 @@ def formC(request, facility, fsID, selector):
                     'observer': full_name,
                     'cert_date': cert_date,
                 }
-                #read = FormCReadForm()
-
+                readsData = {}
             form = SubFormC1(initial=initial_data)
         if request.method == "POST":
             copyRequest = request.POST.copy()
@@ -160,16 +140,12 @@ def formC(request, facility, fsID, selector):
 
             if existing:
                 CData = SubFormC1(copyRequest, instance=database_form)
-                #CReadings = FormCReadForm(copyRequest, instance=database_form2)
             else:
-                #CReadings = FormCReadForm(copyRequest)
                 CData = SubFormC1(copyRequest)
 
-            
-            #A_valid = CReadings.is_valid()
-            B_valid = CData.is_valid()
+            A_valid = CData.is_valid()
 
-            if B_valid:
+            if A_valid:
                 A = CData.save(commit=False)
                 A.facilityChoice = options
                 for x in range(1,areaCount+1):
@@ -183,10 +159,7 @@ def formC(request, facility, fsID, selector):
                         A.area_json_3 = areaJson
                     elif x == "4":
                         A.area_json_4 = areaJson
-                #B = CReadings.save(commit=False)
-                #B.form = A
                 A.save()
-                #B.save()
 
                 issueFound = False
                 if not existing:

@@ -1,0 +1,23 @@
+.formCont{
+    background-color: #80808026;
+    border-radius: 12px;
+    padding: 20px;
+}
+.innerFormCont{
+    text-align:left; 
+    margin: auto;
+    /* display: flex; 
+    justify-content: center; */
+}
+.input_number{
+    width: 40px;
+}
+.input_text{
+    width: 175px;
+}
+.choiceCont{
+    padding-left: 35px;
+}
+.choiceCont input{
+    margin-top: 10px;
+}
