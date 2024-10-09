@@ -28,7 +28,7 @@ def formC(request, facility, fsID, selector):
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
     areaCount = int(freq.settings['settings']['number_of_areas'])
-
+    print(selector)
     if profile.exists():
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
         if same_user:
@@ -60,12 +60,14 @@ def formC(request, facility, fsID, selector):
             database_form = ''
         else:
             if existing:
+                print('check 1')
                 initial_data = {
                     'date': database_form.date,
                     'observer': database_form.observer,
                     'cert_date': database_form.cert_date,
                     'comments': database_form.comments
                 }
+                initial_areas = {}
                 readsData = {}
                 for x in range(1, areaCount+1):
                     x = str(x)
@@ -78,12 +80,14 @@ def formC(request, facility, fsID, selector):
                     elif x == "4":
                         area = database_form.area_json_4
                     intital_adding = {
-                        'areaName' + x: area['selection'],
-                        'areaStartTime' + x: area['start_time'],
-                        'areaStopTime' + x: area['stop_time'],
-                        'areaAverage' + x: area['average'],
-                        'area' + x + 'Read0': area['readings']['1'],
+                        x: {
+                            'name': area['selection'],
+                            'startTime': area['start_time'],
+                            'stopTime': area['stop_time'],
+                            'average': area['average'],
+                        }
                     }
+                    print(intital_adding)
                     initial_data_dict = {
                         x: [
                             area['readings']['1'], 
@@ -100,15 +104,18 @@ def formC(request, facility, fsID, selector):
                             area['readings']['11']
                         ]
                     }
-                    initial_data.update(intital_adding)
+                    initial_areas.update(intital_adding)
                     readsData.update(initial_data_dict)
+                print(initial_areas)
             else:
+                print('check 2')
                 initial_data = {
                     'date': now,
                     'observer': full_name,
                     'cert_date': cert_date,
                 }
                 readsData = {}
+                intital_adding = {}
             form = SubFormC1(initial=initial_data)
         if request.method == "POST":
             copyRequest = request.POST.copy()
@@ -200,5 +207,6 @@ def formC(request, facility, fsID, selector):
         'freq': freq,
         'existing': existing,
         'initial_data': initial_data,
-        'readsData': readsData
+        'readsData': readsData,
+        #'initial_areas': initial_areas
     })

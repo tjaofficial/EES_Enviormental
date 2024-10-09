@@ -25,7 +25,6 @@ function get_average(opac_id, total_id, amount) {
         stop_light(theAverage, id_param);
     }
 }
-
 function stop_light(average, id_param) {
     const inputAverage = document.getElementById(id_param).value;
     if (inputAverage) {
@@ -55,10 +54,20 @@ function area3_average(){
 function area4_average(){
     get_average('area4Read', 'areaAverage4', 11);
 }
-area1_average();
-area2_average();
-area3_average();
-area4_average();
+if (formName == 7) {
+    if (document.getElementById('areaCont1').style.display == 'block'){
+        area1_average();
+    }
+    if (document.getElementById('areaCont1').style.display == 'block'){
+        area2_average();
+    }
+    if (document.getElementById('areaCont1').style.display == 'block'){
+        area3_average();
+    }
+    if (document.getElementById('areaCont1').style.display == 'block'){
+        area4_average();
+    }
+}
 
 /*************
  FORM M - ROADS AND AREAS
@@ -79,4 +88,6 @@ function parking_average(){
 function comb_averages() {
     get_average('id_comb_read_', 'id_comb_average', 24);
 }
-comb_averages()
+if (formName == 19) {
+    comb_averages()
+}

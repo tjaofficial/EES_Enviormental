@@ -64,69 +64,82 @@
                         <tr>
                             <td style="height: 40px" > </td>
                         </tr> 
+                    </table>
                         {% for keys, cats in freq.settings.settings.items %}
                             {% if keys|slice:":4" == 'area' %}
-                                <tr>
-                                    <td colspan="2" style='border-left: 1px black solid; border-top: 1px black solid; padding-left: 6px;'>
+                            <div class="areaCont">
+                                <div style="padding: 15px 22px; display:none;" id="areaLabel{{keys|slice:'4:'}}" onclick="add_areas(this, {{keys|slice:'4:'}})">{{cats.name}} (Click to add)</div>
+                                <div id="areaCont{{keys|slice:'4:'}}">    
+                                    <div style="padding: 15px 22px;">
                                         {{cats.name}}:
-                                        {% if cats.number_of_options != 0 %}
-                                        <select name="areaName{{keys|slice:'4:'}}" style="width: 100px;" required="" id="areaName{{keys|slice:'4:'}}">
-                                            <option value="" {% if existing %}selected="false"{% endif %}>---------</option>
-                                            {% for num, ops in cats.options.items %}
-                                                <option value="{{ops}}"{% if existing %}selected="{% if keys|slice:'4:' == '1' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName1}}{% endif %}{% elif keys|slice:'4:' == '2' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName2}}{% endif %}{% elif keys|slice:'4:' == '3' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName3}}{% endif %}{% elif keys|slice:'4:' == '4' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName4}}{% endif %}{% endif %}"{% endif %}>{{ops}}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {% if cats.number_of_options != 0 and selector == 'form' %}
+                                            <select id="areaName{{keys|slice:'4:'}}" name="areaName{{keys|slice:'4:'}}" style="width: 100px;" required="" id="areaName{{keys|slice:'4:'}}">
+                                                <option value="" {% if existing %}selected="false"{% endif %}>---------</option>
+                                                {% for num, ops in cats.options.items %}
+                                                    <option value="{{ops}}"{% if existing %}selected="{% if keys|slice:'4:' == '1' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName1}}{% endif %}{% elif keys|slice:'4:' == '2' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName2}}{% endif %}{% elif keys|slice:'4:' == '3' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName3}}{% endif %}{% elif keys|slice:'4:' == '4' %}{% if initial_data.areaName1 == ops %}{{initial_data.areaName4}}{% endif %}{% endif %}"{% endif %}>{{ops}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            {% with sliced_key=keys|slice:'4:' %}
+                                                {{ readsData|get_item:sliced_key}}
+                                            {% endwith %}
                                         {% endif %}
-                                    </td>
-                                    <td colspan="3" style="text-align: center; font-size: 15px; border-top: 1px black solid; border-right: 1px black solid;">
-                                        Start Time: <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaStartTime1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaStartTime2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaStartTime3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaStartTime4}}{% endif %}"{% endif %} type="time" name="areaStartTime{{keys|slice:'4:'}}" id="areaStartTime{{keys|slice:'4:'}}" oninput="formC_timeCheck_area{{keys|slice:'4:'}}()" class="input" required> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                                        End Time: <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaStopTime1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaStopTime2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaStopTime3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaStopTime4}}{% endif %}"{% endif %}type="time" name="areaStopTime{{keys|slice:'4:'}}" id="areaStopTime{{keys|slice:'4:'}}" oninput="formC_timeCheck_area{{keys|slice:'4:'}}()" class="input" required>
+                                        <span style="margin-left: 30px;">Start Time: <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaStartTime1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaStartTime2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaStartTime3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaStartTime4}}{% endif %}"{% endif %} type="time" name="areaStartTime{{keys|slice:'4:'}}" id="areaStartTime{{keys|slice:'4:'}}" oninput="formC_timeCheck_area{{keys|slice:'4:'}}()" class="input" required></span>
+                                        <span style="margin-left: 30px;">End Time: <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaStopTime1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaStopTime2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaStopTime3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaStopTime4}}{% endif %}"{% endif %}type="time" name="areaStopTime{{keys|slice:'4:'}}" id="areaStopTime{{keys|slice:'4:'}}" oninput="formC_timeCheck_area{{keys|slice:'4:'}}()" class="input" required></span>
                                         <span class="truck_popup_class" id="area{{keys|slice:'4:'}}_timePopup">Please Change Time</span>
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td id="boxc1">MIN/SEC</td>
-                                    <td id="boxc1">0</td>
-                                    <td id="boxc1">15</td>
-                                    <td id="boxc1">30</td>
-                                    <td id="boxc1">45</td>
-                                </tr>
-                                <tr>
-                                    <td id="boxc1">0</td>
-                                    <td id="boxc1">
-                                        <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.area1Read0}}{% elif keys|slice:'4:' == '2' %}{{initial_data.area2Read0}}{% elif keys|slice:'4:' == '3' %}{{initial_data.area3Read0}}{% elif keys|slice:'4:' == '4' %}{{initial_data.area4Read0}}{% endif %}"{% endif %} type="text" name="area{{keys|slice:'4:'}}Read0" id="area{{keys|slice:'4:'}}Read0" oninput="area{{keys|slice:'4:'}}_average(); autoFillZeros(area{{keys|slice:'4:'}}Read0.id);" class="input" style="width: 50px; text-align: center;" maxlength="3" required>
-                                    </td>
-                                    {% with range="eleven" %}
-                                        {% for i in range|rangeFrom1 %}
-                                            <td id="boxc1">
-                                                <input {% if existing and selector == 'form' %}value="{% with sliced_key=keys|slice:'4:' %}{{ readsData|get_item:sliced_key|get_list_item:i }}{% endwith %}"{% endif %} type="text" name="area{{keys|slice:'4:'}}Read{{i}}" id="area{{keys|slice:'4:'}}Read{{i}}" oninput="area{{keys|slice:'4:'}}_average()" class="input" style="width: 50px; text-align: center;" maxlength="3" required="">
-                                            </td>
-                                            {% if i == 3 %}
-                                                </tr>
-                                                <tr>
-                                                    <td id="boxc1">1</td>
-                                            {% elif i == 7 %}
-                                                </tr>
-                                                <tr>
-                                                    <td id="boxc1">2</td>
-                                            {% elif i == 11 %}
-                                                </tr>
-                                            {% endif %} 
-                                        {% endfor %}
-                                    {% endwith %}
-                                <tr>
-                                    <td colspan="5" style="font-size: 15px; text-align: right; border: 1px solid black; padding-right: 13px;">
-                                        3-minute Average Opacity (sum of the 12 readings above/12)
-                                    </td>
-                                    <td id="boxc1">
-                                        <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaAverage1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaAverage2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaAverage3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaAverage4}}{% endif %}"{% endif %}type="number" name="areaAverage{{keys|slice:'4:'}}" oninput="area{{keys|slice:'4:'}}_average()" id="areaAverage{{keys|slice:'4:'}}" class="input" style="width: 50px; text-align: center; background-color: rgb(255, 250, 139);" required step="any" placeholder="NaN">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="height: 35px" > </td>
-                                </tr> 
+                                        <span style="float: right;" onclick="remove_area(this, {{keys|slice:'4:'}})" class='remove_link'>remove</span>
+                                    </div>
+                                    <div class="areaTableCont">
+                                        <table class="areaTable">
+                                            <tr>
+                                                <td id="boxc2" style="font-size:13px;">MIN/SEC</td>
+                                                <td id="boxc1">0</td>
+                                                <td id="boxc1">15</td>
+                                                <td id="boxc1">30</td>
+                                                <td id="boxc1">45</td>
+                                            </tr>
+                                            <tr>
+                                                <td id="boxc2">0</td>
+                                                <td id="boxc1">
+                                                    <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.area1Read0}}{% elif keys|slice:'4:' == '2' %}{{initial_data.area2Read0}}{% elif keys|slice:'4:' == '3' %}{{initial_data.area3Read0}}{% elif keys|slice:'4:' == '4' %}{{initial_data.area4Read0}}{% endif %}"{% endif %} type="text" name="area{{keys|slice:'4:'}}Read0" id="area{{keys|slice:'4:'}}Read0" oninput="area{{keys|slice:'4:'}}_average(); autoFillZeros(area{{keys|slice:'4:'}}Read0.id);" class="input" maxlength="3" required>
+                                                </td>
+                                                {% with range="eleven" %}
+                                                    {% for i in range|rangeFrom1 %}
+                                                        <td id="boxc1">
+                                                            {% if selector == 'form' %}
+                                                                <input {% if existing %}value="{% with sliced_key=keys|slice:'4:' %}{{ readsData|get_item:sliced_key|get_list_item:i }}{% endwith %}"{% endif %} type="text" name="area{{keys|slice:'4:'}}Read{{i}}" id="area{{keys|slice:'4:'}}Read{{i}}" oninput="area{{keys|slice:'4:'}}_average()" class="input" maxlength="3" required="">
+                                                            {% else %}
+                                                                {% with sliced_key=keys|slice:'4:' %}
+                                                                    {{ readsData|get_item:sliced_key }}
+                                                                {% endwith %}
+                                                            {% endif %}
+                                                            
+                                                        </td>
+                                                        {% if i == 3 %}
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="boxc2">1</td>
+                                                        {% elif i == 7 %}
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="boxc2">2</td>
+                                                        {% elif i == 11 %}
+                                                            </tr>
+                                                        {% endif %} 
+                                                    {% endfor %}
+                                                {% endwith %}
+                                            <tr>
+                                                <td colspan="4" class="boxc3">
+                                                    3-minute Average Opacity (sum of the 12 readings above/12):
+                                                </td>
+                                                <td id="boxc1">
+                                                    <input {% if existing %}value="{% if keys|slice:'4:' == '1' %}{{initial_data.areaAverage1}}{% elif keys|slice:'4:' == '2' %}{{initial_data.areaAverage2}}{% elif keys|slice:'4:' == '3' %}{{initial_data.areaAverage3}}{% elif keys|slice:'4:' == '4' %}{{initial_data.areaAverage4}}{% endif %}"{% endif %}type="number" name="areaAverage{{keys|slice:'4:'}}" oninput="area{{keys|slice:'4:'}}_average()" id="areaAverage{{keys|slice:'4:'}}" class="input" style="background-color: rgb(255, 250, 139); width: 95px;" required step="any" placeholder="NaN">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                             {% endif %}
                         {% endfor %}
 
@@ -454,6 +467,7 @@
                                 {{ form.average_salt }}
                             </td>
                         </tr>{% endcomment %}
+                    <table>
                         <tr>
                             <td style="height: 40px" > </td>
                         </tr> 
@@ -470,7 +484,7 @@
                             <td style="height: 40px" > </td>
                         </tr> 
                         <tr style="font-size: 20px;">
-                            <td>Comments:</td>
+                            <td colspan=2>Comments:</td>
                         </tr>
                         <tr style="font-size: 20px;text-align: center;">
                             <td colspan="6">{{ form.comments }}</td>

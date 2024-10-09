@@ -129,8 +129,7 @@ def formI(request, facility, fsID, selector):
                 'week_end': end_week
             }
             data = formI_form(initial=initial_data)
-        print(data)
-        print(database_model)
+
         if request.method == "POST":
             if existing:
                 form = formI_form(request.POST, instance=database_model)

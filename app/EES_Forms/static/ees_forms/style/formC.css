@@ -1,21 +1,29 @@
 #boxc1{
     align-content: center;
     text-align: center;
-    border: 1px solid black;
-    width: 170px;
+    border: 1px solid #0000002e;
+    width: 148px;
     height: 35px;
+    padding: 7px 15px;
+}
+#boxc2{
+    align-content: center;
+    text-align: center;
+    border: 1px solid #0000002e;
+    width: 100px;
+    height: 35px;
+}
+.boxc3{
+    font-size: 15px; 
+    text-align: right; 
+    border: 1px solid #0000002e; 
+    padding-right: 13px;
 }
 #boxTitle{
     font-size: 30px;
 }
-.area_table{
-    display: none;
-}
-.salt_table{
-    display: none;
-}
 .remove_link{
-    width: 161px;
+    width: 70px;
     text-align: right;
     color: red;
 }
@@ -69,4 +77,53 @@
   border-width: 5px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
+}
+
+.areaCont{
+    background-color: #dfe5e9;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 2px 2px 17px 0px #8080804a;
+    border: #0000002e solid 1px;
+    margin-top: 50px;
+    width: 850px;
+}
+.areaTable{
+    /* border-collapse: collapse; */
+    margin: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px #0000002e solid;
+    border-radius: 11px;
+    background: white;
+}
+.areaTable input{
+    width: 73px;
+    text-align: center;
+    padding: 5px 4px;
+    border-radius: 11px;
+    font-size: 19px;
+}
+.areaTable tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+    
+.areaTable tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+.areaTable tr:first-child td:first-child {
+    border-top-left-radius: 10px;
+}
+    
+.areaTable tr:first-child td:last-child {
+    border-top-right-radius: 10px;
+}
+.areaTable tr:first-child td{
+    background-color: #70889e;
+}
+.areaTableCont{
+    display: flex; 
+    justify-content: center; 
+    height: 17rem;
+    width: 100%;
 }
