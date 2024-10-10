@@ -8,6 +8,7 @@ def get_item(dictionary, key):
 
 @register.filter
 def get_list_item(lst, index):
+    print(lst)
     try:
         return lst[index]
     except (IndexError, KeyError):

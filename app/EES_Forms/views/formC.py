@@ -60,6 +60,11 @@ def formC(request, facility, fsID, selector):
             database_form = ''
         else:
             if existing:
+                areaFilled1 = 0
+                dataBaseInputList = [database_form.area_json_1, database_form.area_json_2, database_form.area_json_3, database_form.area_json_4]
+                for inputData in dataBaseInputList:
+                    if inputData != {}:
+                        areaFilled1 += 1
                 print('check 1')
                 initial_data = {
                     'date': database_form.date,
@@ -69,7 +74,7 @@ def formC(request, facility, fsID, selector):
                 }
                 initial_areas = {}
                 readsData = {}
-                for x in range(1, areaCount+1):
+                for x in range(1, areaFilled1+1):
                     x = str(x)
                     if x == "1":
                         area = database_form.area_json_1
@@ -107,6 +112,7 @@ def formC(request, facility, fsID, selector):
                     initial_areas.update(intital_adding)
                     readsData.update(initial_data_dict)
                 print(initial_areas)
+                print(readsData)
             else:
                 print('check 2')
                 initial_data = {
@@ -119,7 +125,11 @@ def formC(request, facility, fsID, selector):
             form = SubFormC1(initial=initial_data)
         if request.method == "POST":
             copyRequest = request.POST.copy()
-            for x in range(1,areaCount+1):
+            areaFilled = 0
+            for formKeys in request.POST.keys():
+                if formKeys[:8] == 'areaName':
+                    areaFilled += 1
+            for x in range(1,areaFilled+1):
                 x = str(x)
                 areaSetup= {
                     "selection": request.POST['areaName' + x],
@@ -155,7 +165,7 @@ def formC(request, facility, fsID, selector):
             if A_valid:
                 A = CData.save(commit=False)
                 A.facilityChoice = options
-                for x in range(1,areaCount+1):
+                for x in range(1,areaFilled+1):
                     x = str(x)
                     areaJson = copyRequest['area_json_' + x]
                     if x == "1":
@@ -208,5 +218,5 @@ def formC(request, facility, fsID, selector):
         'existing': existing,
         'initial_data': initial_data,
         'readsData': readsData,
-        #'initial_areas': initial_areas
+        'initial_areas': initial_areas
     })

@@ -1,3 +1,7 @@
+if(!localStorage['obs_dashboard']){
+    localStorage.setItem('obs_dashboard', 0)
+}
+
 const initial_ID = localStorage.obs_dashboard
 const packetList = JSON.parse(document.getElementById('packetSelect').dataset.allpackets)
 document.getElementById('packetSelect').value = initial_ID

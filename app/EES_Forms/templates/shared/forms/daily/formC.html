@@ -62,7 +62,7 @@
                             <th></th>
                         </tr>
                         <tr>
-                            <td style="height: 40px" > </td>
+                            <td style="height: 40px"></td>
                         </tr> 
                     </table>
                         {% for keys, cats in freq.settings.settings.items %}
@@ -107,7 +107,22 @@
                                                     {% for i in range|rangeFrom1 %}
                                                         <td id="boxc1">
                                                             {% if selector == 'form' %}
-                                                                <input {% if existing %}value="{% with sliced_key=keys|slice:'4:' %}{{ readsData|get_item:sliced_key|get_list_item:i }}{% endwith %}"{% endif %} type="text" name="area{{keys|slice:'4:'}}Read{{i}}" id="area{{keys|slice:'4:'}}Read{{i}}" oninput="area{{keys|slice:'4:'}}_average()" class="input" maxlength="3" required="">
+                                                                <input 
+                                                                    {% if existing %}
+                                                                        {% for name, checkArea in initial_areas.items %}
+                                                                            {% if name == keys|slice:'4:' %}
+                                                                                value="{% with sliced_key=keys|slice:'4:' %}{{ readsData|get_item:sliced_key|get_list_item:i }}{% endwith %}"
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %} 
+                                                                    type="text" 
+                                                                    name="area{{keys|slice:'4:'}}Read{{i}}" 
+                                                                    id="area{{keys|slice:'4:'}}Read{{i}}" 
+                                                                    oninput="area{{keys|slice:'4:'}}_average()" 
+                                                                    class="input" 
+                                                                    maxlength="3" 
+                                                                    required=""
+                                                                >
                                                             {% else %}
                                                                 {% with sliced_key=keys|slice:'4:' %}
                                                                     {{ readsData|get_item:sliced_key }}
