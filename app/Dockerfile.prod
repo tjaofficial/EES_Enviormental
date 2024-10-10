@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM python:3 as builder
+FROM python:3.12-slim as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -12,20 +12,31 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 & Pillow dependencies
-#RUN apk update \
-    #&& apk add --virtual build-deps postgresql-dev gcc python3-dev musl-dev \
-    #&& apk add jpeg-dev zlib-dev libjpeg
+# Install system-level dependencies for Pillow and psycopg2
+RUN apt-get update && apt-get install -y \
+    libjpeg-dev \
+    zlib1g-dev \
+    libpq-dev \
+    build-essential \
+    python3-dev \
+    libfreetype6-dev \
+    liblcms2-dev \
+    libwebp-dev \
+    tcl8.6-dev \
+    tk8.6-dev \
+    python3-tk \
+    pkg-config \
+    --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-
-# lint
+# Upgrade pip
 RUN pip install --upgrade pip
-#RUN pip install flake8==3.9.2
-COPY . .
-#RUN flake8 --ignore=E501,F401 .
 
-# install dependencies
+# Copy the requirements.txt file
 COPY ./requirements.txt .
+
+# Install dependencies and create wheel files
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 
@@ -34,7 +45,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 #########
 
 # pull official base image
-FROM python:3
+FROM python:3.12-slim
 
 # create directory for the app user
 RUN mkdir -p /home/app
@@ -42,28 +53,41 @@ RUN mkdir -p /home/app
 # create the app user
 RUN addgroup --system app && adduser --system app --ingroup app
 
-# create the appropriate directories
+# set environment variables
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
+
+# create app directories
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
+
+# set the working directory to the app home
 WORKDIR $APP_HOME
 
-# install dependencies
-#RUN apk update && apk add libpq jpeg-dev zlib-dev libjpeg
+# Install runtime dependencies (e.g., for psycopg2)
+RUN apt-get update && apt-get install -y \
+    libjpeg62-turbo \
+    zlib1g \
+    libpq5 \
+    --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy wheel files and install Python dependencies
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
+# Install additional tools (if necessary)
 RUN apt-get update \
-    && apt-get install -yyq netcat-traditional
+    && apt-get install -y netcat-traditional
 
 # copy entrypoint.prod.sh
 COPY ./entrypoint.prod.sh .
 RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.prod.sh
 RUN chmod +x $APP_HOME/entrypoint.prod.sh
 
-# copy project
+# copy project files
 COPY . $APP_HOME
 
 # chown all the files to the app user
