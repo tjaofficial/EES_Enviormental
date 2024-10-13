@@ -117,7 +117,7 @@ paved_roads = (
     ('p5', 'Coke Plant Road'),
     ('p6', 'Coke Plant Mech Road'),
     ('p7', 'North Gate Area'),
-    ('p8', 'Compund Road'),
+    ('p8', 'Compound Road'),
     ('p9', 'Gap Gate Road'),
     ('p10', '#3 Ore Dock Road'),
     ('p11', 'River Road'),

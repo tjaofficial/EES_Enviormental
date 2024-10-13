@@ -1,3 +1,11 @@
+function zero_option_name(elem, key, name){
+    if (elem.value){
+        document.getElementById('areaName' + key).name = 'areaName' + key;
+    } else {
+        document.getElementById('areaName' + key).name = "none" + key;
+    }
+}
+
 function add_areas(elem, areaNum) {
     const areaCont = elem.nextElementSibling;
     areaCont.style.display = 'block';

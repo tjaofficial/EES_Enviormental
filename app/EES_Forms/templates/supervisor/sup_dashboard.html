@@ -1,4 +1,4 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}{% load formC_tags %}
 <link href="{% static 'ees_forms/style/supDash.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/sup_dashboard.js' %}"></script>
 
@@ -83,10 +83,10 @@
     </div>
 {% else %}
 <div class="grid-dashboard">
-    {% if options.settings.batteryDash.progressBar %}
+    {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
     <div id="progress" class="card skinny cardPadd">
         <div class="grid-sliders progress_bars_whole">
-            {% if options.settings.batteryDash.progressBar.progressDaily %}
+            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressDaily' %}
             <a href="./progress/daily#DailyProg">
                 <div class="skillBar progress_bar_div">
                     <p>Daily Progress</p>
@@ -96,7 +96,7 @@
                 </div>
             </a>
             {% endif %}
-            {% if options.settings.batteryDash.progressBar.progressWeekly %}
+            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressWeekly' %}
             <a href="./progress/weekly#WeeklyProg">
                 <div class="skillBar progress_bar_div">
                     <p>Weekly Progress</p>
@@ -106,7 +106,7 @@
                 </div>
             </a>
             {% endif %}
-            {% if options.settings.batteryDash.progressBar.progressMonthly %}
+            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressMonthly' %}
             <a href="./progress/monthly#MonthlyProg">
                 <div class="skillBar progress_bar_div">
                     <p>Monthly Progress</p>
@@ -116,7 +116,7 @@
                 </div>
             </a>
             {% endif %}
-            {% if options.settings.batteryDash.progressBar.progressQuarterly %}
+            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressQuarterly' %}
             <a href="./progress/quarterly#QuarterlyProg">
                     <div class="skillBar progress_bar_div">
                     <p>Quarterly Progress</p>
@@ -126,7 +126,7 @@
                 </div> 
             </a>
             {% endif %}
-            {% if options.settings.batteryDash.progressBar.progressAnnually %}
+            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressAnnually' %}
             <a href="./progress/annually#AnnuallyProg">
                 <div class="skillBar progress_bar_div">
                     <p>Annually Progress</p>
@@ -141,7 +141,9 @@
     {% endif %}
     
     <div id="fromAInfo" class="card longest cardPadd">
-        <div class="card-title headerBottomPadding">Todays Forms</div>
+        <div class="card-title headerBottomPadding">
+            Todays Forms
+        </div>
         <div class="nested">
             <a class="no_link_css" {% if form_enteredA1 %} href="Daily/1/{{fsIDs.0.id}}/{{ date }}" {% else %} {% endif %}>
                 <div id='A1card' class="inner-card formA_card">
@@ -332,7 +334,7 @@
         </div>
     </div>
     
-    {% if options.settings.batteryDash.graphs %}
+    {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'graphs' %}
     <div id="latestActivity3" class="card halfs cardPadd">
         <input id="today" type="hidden" data-sevendays="{{graphData.today}}" value="{{graphDataDump}}">
         <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
@@ -451,7 +453,7 @@
             <script defer src="{% static 'ees_forms/script/sup_dashboard_chart.js' %}"></script>
         </div>
         {% endif %}
-        {% if options.settings.batteryDash.correctiveActions %}
+        {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'correctiveActions' %}
         <div id="corrective_actions" class="card quarters cardPadd">
             <div class="card-title headerBottomPadding">Latest Issues/Corrective Actions</div>
             <div class="ca_holder">
@@ -485,7 +487,7 @@
         </div>
     </div>
     {% endif %}
-    {% if options.settings.batteryDash.infoWeather %}
+    {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'infoWeather' %}
     <div id="battery_weather" class="card quarters cardPadd">
         <div class="card-title headerBottomPadding">Todays Battery/Weather Info.</div>
         <div style="padding:10px; height: calc(100% - 34px); width:100%;">
@@ -565,7 +567,7 @@
         </div>
     </div>
     {% endif %}
-    {% if options.settings.batteryDash.90dayPT %}
+    {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'90dayPT' %}
     <div id="latestActivity4" class="card halfs cardPadd">
         <div class="card-title headerBottomPadding" style="display: flex;">
             <div>90 Day Push Travel Evaluation</div>
@@ -604,7 +606,7 @@
         </div>
     </div>
     {% endif %}
-    {% if options.settings.batteryDash.contacts %}
+    {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'contacts' %}
     <div id="observers" class="card halfs cardPadd">
         <div class="card-title headerBottomPadding">Contacts</div>
         <div class="grid-observers">

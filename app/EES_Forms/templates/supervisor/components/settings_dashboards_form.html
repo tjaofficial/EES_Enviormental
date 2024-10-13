@@ -1,0 +1,31 @@
+{% load static %}
+<script defer src="{% static 'ees_forms/script/settings_dashboard_select.js' %}"></script>
+<form method="POST" name="DashForm" id="DashForm">
+    {% csrf_token %}
+    <table id="DashSettings" name="DashSettings" class="tableClass">
+        <tr class='tableSpacer'>
+            <td colspan="2" class="labelClass"><hr></td>
+        </tr>
+        <tr class='tableSpacer'>
+            <th colspan="2" style="width: 30%;">
+                Dashboard Settings:
+            </th>
+        </tr>
+        <tr class='tableSpacer'>
+            <td class="labelClass">
+                Choose dashboard:
+                <select id="dashSelect" onchange="changeOptions(this)" name="dashSelect" data-dashops="{{dashDict}}">
+                    {% for key, name in dashDict.items %}
+                    <option value="{{key}}" {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'weekly' %}selected{% endif %}>{{name}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </table>
+    <div id="batteryDashCont" style="display:none;">
+        {% include '../components/settings_batteryDash_form.html' with page=page %}
+    </div>
+    <div id="formsDashCont" style="display:none;">
+        {% include '../components/settings_formsDash_form.html' with page=page %}
+    </div>
+</form>

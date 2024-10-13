@@ -1,4 +1,4 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}{% load formC_tags %}
 <script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">
@@ -32,7 +32,7 @@
         <div style="padding: 15px 32px;">
             <div class="centerFlex" style="height:unset;">
                 {% include '../components/settings_facilityInfo_form.html' with page=selector %}
-                {% include '../components/settings_batteryDash_form.html' with page=selector %}
+                {% include '../components/settings_dashboards_form.html' with page=selector %}
                 {% include '../components/settings_notif_form.html' with page=selector %}
                 {% include '../components/settings_facilitySettings_form.html' with page=selector %}
             </div>

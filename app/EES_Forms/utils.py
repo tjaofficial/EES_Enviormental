@@ -10,6 +10,8 @@ import json
 import braintree # type: ignore
 import os
 import calendar
+import random
+import string
 from django.shortcuts import redirect # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from channels.layers import get_channel_layer # type: ignore
@@ -51,6 +53,14 @@ parseFormList = [
     (26, "R"),
     (27, "Q"),  
 ]
+dashDict = {
+    'formsDash': True, 
+    'batteryDash': False
+}
+dashDictOptions = {
+    'formsDash': 'Default', 
+    'batteryDash': 'Battery'
+}
 defaultBatteryDashSettings = {
     'progressBar': {
         'progressDaily': True,
@@ -63,7 +73,7 @@ defaultBatteryDashSettings = {
         'graphFrequencyData': {
             'frequency': 'weekly',
             'dates': False
-            },
+        },
         'dataChoice': {
             'charges': {
                 'show': True,
@@ -95,13 +105,14 @@ defaultNotifications = {
         '10_day_pt': False,
         '5_day_pt': False
 }
-
 defaultSettings = {
-    'batteryDash': False,
+    'dashboard': {
+        'formsDash': True,
+        'batteryDash': False,
+    },
     'notifications': defaultNotifications
 }
 defaultSettingsParsed = json.loads(json.dumps(defaultSettings))
-
 defaultUserSettings = {
     'colorMode': 'light',
     'landingDash': 'default'
@@ -1615,7 +1626,46 @@ def formBNone(input):
         answer = str(input) + ' mph'
     return answer
 
+def generate_random_string(length=12):
+    letters_and_digits = string.ascii_letters + string.digits
+    return ''.join(random.choice(letters_and_digits) for i in range(length))
 
+def change_dashboard_setting(dashboard_pick, observer):
+    profileSetDash = {
+        'formsDash': True, 
+        'batteryDash': False
+    }
+    for key in dashDict.keys():
+        if dashboard_pick == key:
+            if not observer:
+                profileSetDash[key] = defaultBatteryDashSettings
+            else:
+                profileSetDash[key] = True
+        else:
+            profileSetDash[key] = False
+    return profileSetDash
 
+def setDefaultSettings(profile, superUsername):
+    createSettings = {'dashboard':{}}
+    companyFacilities = getCompanyFacilities(superUsername)
+    for facility in companyFacilities:
+        createSettings['dashboard'][str(facility.id)] = dashDict
+        if facility.is_battery == 'Yes':
+            if profile.position != OBSER_VAR:
+                createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', False)
+            else:
+                createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', True)
+    createSettings['notifications'] = defaultNotifications
+    return createSettings
 
-
+def get_braintree_query(user):
+    profileData = user_profile_model.objects.get(user=user)
+    brainTreeQuery = braintree_model.objects.all()
+    if brainTreeQuery.exists():
+        for btEntry in brainTreeQuery:
+            leadSupervisor = user_profile_model.objects.get(user=btEntry.user)
+            if leadSupervisor.company.id == profileData.company.id:
+                return btEntry
+    else:
+        print('handle if there is zero braintree entries')
+        return False

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from django.db.models import Q
-from ..utils import checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
+from django.db.models import Q # type: ignore
+from ..utils import get_braintree_query, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
 from ..forms import CreateUserForm, user_profile_form, company_form,bat_info_form
 import datetime
-import braintree
+import braintree # type: ignore
 import json
 
 
@@ -218,11 +218,7 @@ def sup_account_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
-    braintreeData = braintree_model.objects.filter(user__id=request.user.id)
-    if braintreeData.exists():
-        braintreeData = braintreeData.get(user__id=request.user.id)
-    else:
-        print('handle if there is no braintree entry')
+    braintreeData = get_braintree_query(request.user)
         
     facility = 'supervisor'
     sortedFacilityData = getCompanyFacilities(request.user.username)
@@ -572,6 +568,7 @@ def sup_facility_settings(request, facility, facilityID, selector):
     else:
         print('handle if there is no braintree entry')
     facInfoMain = bat_info_model.objects.get(id=facilityID)
+    #userProf = user_profile_model.objects.get(user__id=request.user.id)
     clientUserProfs = user_profile_model.objects.filter(facilityChoice=facInfoMain)
     facilityInfo = ''
 
@@ -622,9 +619,9 @@ def sup_facility_settings(request, facility, facilityID, selector):
                     form.save()
                     #print('saved it')
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'batteryDashForm' in answer.keys():
-                facInfoMain.settings['batteryDash'] = {}
-                batDashSettings = facInfoMain.settings['batteryDash']
+            elif 'batteryDashSave' in answer.keys():
+                accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = {}
+                batDashSettings = accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash']
                 progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
                 if 'progressBar' in answer.keys():
                     if answer['progressBar'] == 'true':
@@ -685,12 +682,12 @@ def sup_facility_settings(request, facility, facilityID, selector):
                     batDashSettings['contacts'] = False
                 print(batDashSettings)
                 
-                A  = facInfoMain
+                A  = accountData
                 A.save()
                 return redirect('selectedFacilitySettings', facility, facilityID, 'main')
             elif 'notifSettingsForm' in answer.keys():
-                facInfoMain.settings['notifications'] = {}
-                notificatoinSettingsData = facInfoMain.settings['notifications']
+                accountData.settings['notifications'] = {}
+                notificatoinSettingsData = accountData.settings['notifications']
                 notifOptions = ['compliance', 'deviations', 'submitted', '10_day_pt', '5_day_pt']
                 for notifOp in notifOptions:
                     notificatoinSettingsData[notifOp] = False
@@ -698,18 +695,18 @@ def sup_facility_settings(request, facility, facilityID, selector):
                         if answer[notifOp] == 'true':
                             notificatoinSettingsData[notifOp] = True
                             
-                A = facInfoMain
+                A = accountData
                 A.save()
                 return redirect('selectedFacilitySettings', facility, facilityID, 'main')
             elif 'defaultBatteryDash' in answer.keys():
                 if answer['defaultBatteryDash'] == 'true':
-                    A  = facInfoMain
-                    A.settings['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
+                    A  = accountData
+                    A.settings['dashBoard'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.username)['dashboard']))
                     A.save()
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
             elif 'defaultNotif' in answer.keys():
                 if answer['defaultNotif'] == 'true':
-                    A  = facInfoMain
+                    A  = accountData
                     A.settings['notifications'] = json.loads(json.dumps(defaultNotifications))
                     A.save()
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
@@ -721,16 +718,16 @@ def sup_facility_settings(request, facility, facilityID, selector):
         'unlock': unlock,
         'facility': facility,
         'facilityID': facilityID,
-        
+        'facilityIDString': str(facilityID),
         'facilityInfo': facilityInfo,
         'facInfoMain': facInfoMain,
         'clientUserProfs': clientUserProfs,
         'selector': selector,
-        
         'accountData': accountData,
         'listOfEmployees': listOfEmployees,
         'accountData': accountData,
         'active_registrations': active_registrations,
         'braintreeData': braintreeData,
-        'userProfileQuery': userProfileQuery
+        'userProfileQuery': userProfileQuery,
+        'dashDict': json.loads(json.dumps(dashDictOptions))
     })

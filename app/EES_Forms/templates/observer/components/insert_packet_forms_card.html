@@ -27,9 +27,11 @@
                     </a>
                 {% endif %}
             {% endif %}
+            {% empty %}
+            <h2 class="card_empty no_forms"> No Forms </h2>
         {% endfor %}
         {% empty %}
-                <h2 class="card_empty"> No Forms </h2>
+        <h2 class="card_empty no_forms"> No Forms </h2>
     {% endfor %}
 </div>
 {% else %}
@@ -57,8 +59,10 @@
                     </a>
                 {% endif %}
             {% endif %}
+            {% empty %}
+            <h2 class="card_empty no_forms"> No Forms </h2>
         {% endfor %}
         {% empty %}
-                <h2 class="card_empty"> No Forms </h2>
+        <h2 class="card_empty no_forms"> No Forms </h2>
     {% endfor %}
 {% endif %}

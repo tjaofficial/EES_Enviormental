@@ -9,7 +9,7 @@ import calendar
 from django.contrib import messages # type: ignore
 from django.contrib.auth.models import Group # type: ignore
 import json
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultSettingsParsed, defaultBatteryDashSettings
+from ..utils import setDefaultSettings, defaultBatteryDashSettings, defaultSettings, setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultSettingsParsed, defaultBatteryDashSettings, generate_random_string
 from ..decor import isSubActive
 from django.core.mail import send_mail # type: ignore
 from django.contrib.sites.shortcuts import get_current_site # type: ignore
@@ -79,8 +79,9 @@ def sup_dashboard_view(request, facility):
     graphData = ''
     graphDataDump = ''
     if facility != 'supervisor':
-        if options.settings['batteryDash']:
-            graphSettings = options.settings['batteryDash']['graphs']
+        if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
+            baseIterations = userProfile.settings['dashboard'][str(options.id)]
+            graphSettings = baseIterations['batteryDash']['graphs']
             setGraphRange = graphSettings['graphFrequencyData']
         
             canvasData = {}
@@ -162,7 +163,6 @@ def sup_dashboard_view(request, facility):
         annually_percent = False
     # -------90 DAY PUSH ----------------
     pushTravelsData = ninetyDayPushTravels(facility)
-    print(pushTravelsData)
     if pushTravelsData == 'EMPTY':
         od_30 = ''
         od_10 = ''
@@ -302,6 +302,7 @@ def sup_dashboard_view(request, facility):
                 "od_30": od_30, 
                 "od_10": od_10, 
                 "od_5": od_5, 
+                'userProfile': userProfile
             })
     if request.method == 'POST':
         answer = request.POST
@@ -359,7 +360,8 @@ def sup_dashboard_view(request, facility):
         'pLeaks': pLeaks,
         'cLeaks': cLeaks,
         'options': options,
-        'graphDataDump': graphDataDump
+        'graphDataDump': graphDataDump,
+        'userProfile': userProfile
     })
 
 @lock
@@ -444,6 +446,9 @@ def register_view(request, facility, access_page):
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['username'] = request.POST['username'].lower()
+            randoPass = generate_random_string()
+            new_data['password1'] = randoPass
+            new_data['password2'] = randoPass
             A = CreateUserForm(new_data)
             B = user_profile_form(new_data)
             print()
@@ -454,6 +459,7 @@ def register_view(request, facility, access_page):
                 profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userCompany
+                profile.settings = setDefaultSettings(profile, request.user.username)
                 profile.save()
 
                 group = Group.objects.get(name=profile.position)
@@ -468,6 +474,7 @@ def register_view(request, facility, access_page):
                     'domain': current_site.domain,  
                     'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                     'token':create_token(user),  
+                    'randoPass': randoPass
                 })  
                 plain_message = strip_tags(html_message)
                 to_email = A.cleaned_data.get('email')  
@@ -534,6 +541,9 @@ def register_view(request, facility, access_page):
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['position'] = 'client'
+            randoPass = generate_random_string()
+            new_data['password1'] = randoPass
+            new_data['password2'] = randoPass
             A = CreateUserForm(new_data)
             B = user_profile_form(new_data)
             if A.is_valid() and B.is_valid():
@@ -543,6 +553,7 @@ def register_view(request, facility, access_page):
                 profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userProf.company
+                profile.settings = setDefaultSettings(profile, request.user.username)
                 profile.save()
                 
                 group = Group.objects.get(name=profile.position)
@@ -557,6 +568,7 @@ def register_view(request, facility, access_page):
                     'domain': current_site.domain,  
                     'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
                     'token':create_token(user),  
+                    'randoPass': randoPass
                 })  
                 plain_message = strip_tags(html_message)
                 to_email = A.cleaned_data.get('email')  

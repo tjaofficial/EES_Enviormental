@@ -10,121 +10,126 @@
 .card_empty {
     color: rgba(0, 0, 0, 0.404);
   }
-  .card_Form {
-    padding: 0 1rem;
-    height: 4rem;
-    color: #001011;
-    display: grid;
-    grid-template-columns: 2rem 1fr 6rem 6rem;
-    align-items: center;
-    border-bottom: 1px solid #70798C24;
-  }
-  .card_Form_letter {
-    display: flex;
-    height: 2em;
-    width: 2em;
-    color: #263544;
-    border-radius: 50%;
-    background-color: #bdc7d1;
-    align-items: center;
-    justify-content: center;
-  }
-  .card_Form_title {
-    padding-left: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-  .card_Form_title h3 {
-    font-weight: unset;
-  }
-  .card_Form_title h3:hover {
-    text-decoration: underline;
-  }
-  .card_Form_title h4 {
-    font-size: 0.75rem;
-    font-weight: unset;
-  }
-  .card_Form_date {
-    font-size: 0.75rem;
-    font-weight: unset;
-    text-align: right;
-    padding-right: 1rem;
-  }
-  .card_Form_progress {
-    width: 4rem;
-    height: 0.25rem;
-    border-radius: 0.125rem;
-    background-color: #ff8282;
-    overflow: hidden;
-  }
-  .card_Form_bar {
-    height: 100%;
-    width: 50%;
-    background-color: #98C9A3;
-  }
-  .forms {
-    max-width: 1536px;
-    margin: auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .card2 {
-    font-family: Arial, Helvetica, sans-serif;
-    width: 267px;
-    background-color: white;
-    box-shadow: #0000007d 4px 7px 12px 3px;
-    margin: 2rem;
-    height: fit-content;
-    border-radius: 1rem;
-  }
-  .card2_header {
-    padding: 0 1rem;
-    display: grid;
-    align-items: center;
-    height: 3rem;
+.card_Form {
+  padding: 0 1rem;
+  height: 4rem;
+  color: #001011;
+  display: grid;
+  grid-template-columns: 2rem 1fr 6rem 6rem;
+  align-items: center;
+  border-bottom: 1px solid #70798C24;
+}
+.card_Form_letter {
+  display: flex;
+  height: 2em;
+  width: 2em;
+  color: #263544;
+  border-radius: 50%;
+  background-color: #bdc7d1;
+  align-items: center;
+  justify-content: center;
+}
+.card_Form_title {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.card_Form_title h3 {
+  font-weight: unset;
+}
+.card_Form_title h3:hover {
+  text-decoration: underline;
+}
+.card_Form_title h4 {
+  font-size: 0.75rem;
+  font-weight: unset;
+}
+.card_Form_date {
+  font-size: 0.75rem;
+  font-weight: unset;
+  text-align: right;
+  padding-right: 1rem;
+}
+.card_Form_progress {
+  width: 4rem;
+  height: 0.25rem;
+  border-radius: 0.125rem;
+  background-color: #ff8282;
+  overflow: hidden;
+}
+.card_Form_bar {
+  height: 100%;
+  width: 50%;
+  background-color: #98C9A3;
+}
+.forms {
+  max-width: 1536px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.card2 {
+  font-family: Arial, Helvetica, sans-serif;
+  width: 267px;
+  background-color: white;
+  box-shadow: #0000007d 4px 7px 12px 3px;
+  margin: 2rem;
+  height: fit-content;
+  border-radius: 1rem;
+}
+.card2_header {
+  padding: 0 1rem;
+  display: grid;
+  align-items: center;
+  height: 3rem;
+  text-align: center;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  background-color: #263544;
+  width: 100%;
+  color: white;
+}
+.card2_header select {
+  height: 1.5rem;
+}
+.card2_title {
+  font-size: 1rem;
+}
+.card2_empty {
+  color: rgba(0, 0, 0, 0.404);
+}
+.card2_Form {
+  padding: 0 1rem;
+  color: #001011;
+  align-items: center;
     text-align: center;
-    border-top-right-radius: 1rem;
-    border-top-left-radius: 1rem;
-    background-color: #263544;
-    width: 100%;
-    color: white;
-  }
-  .card2_header select {
-    height: 1.5rem;
-  }
-  .card2_title {
-    font-size: 1rem;
-  }
-  .card2_empty {
-    color: rgba(0, 0, 0, 0.404);
-  }
-  .card2_Form {
-    padding: 0 1rem;
-    color: #001011;
-    align-items: center;
-      text-align: center;
-      margin-bottom: 15px;
-      margin-top: 15px;
-  }
-  .card3_Form {
-    padding: 0 1rem;
-    color: #001011;
-    align-items: center;
-      text-align: center;
-      margin-bottom: 15px;
-      margin-top: 15px;
-  }
-  .card2_Form h4 {
-    font-size: 0.75rem;
-    font-weight: unset;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.card3_Form {
+  padding: 0 1rem;
+  color: #001011;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+.card2_Form h4 {
+  font-size: 0.75rem;
+  font-weight: unset;
   color: darkgray;
-      text-align: center;
-  }
-  .card3_Form h4 {
-    font-size: 0.75rem;
-    font-weight: unset;
+  text-align: center;
+}
+.card3_Form h4 {
+  font-size: 0.75rem;
+  font-weight: unset;
   color: darkgray;
-      text-align: center;
-  }
+  text-align: center;
+}
+
+.no_forms{
+  text-align: center;
+  padding: 30px;
+}

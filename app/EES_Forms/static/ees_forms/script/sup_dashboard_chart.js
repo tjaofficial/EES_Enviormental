@@ -1,7 +1,6 @@
 const chargeCanvas = document.getElementById('charges-holder'),
 doorCanvas = document.getElementById('doors-holder'),
 lidCanvas = document.getElementById('lids-holder');
-console.log(canvasData.length)
 
 function createGraph(selector) {
     console.log(selector)

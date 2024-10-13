@@ -41,12 +41,10 @@ def formC(request, facility, fsID, selector):
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            initial_data = ''
-            readsData = {}
             for x in org:
                 if str(x.date) == str(selector):
                     database_model = x
-            form = database_model
+            formModelEntry = database_model
             existing = True
             search = True
         # ------check if database is empty----------
@@ -56,79 +54,80 @@ def formC(request, facility, fsID, selector):
             if now == todays_log.date_save:
                 if todays_log.date_save == database_form.date:
                     existing = True
-        if search:
-            database_form = ''
-        else:
-            if existing:
-                areaFilled1 = 0
-                dataBaseInputList = [database_form.area_json_1, database_form.area_json_2, database_form.area_json_3, database_form.area_json_4]
-                for inputData in dataBaseInputList:
-                    if inputData != {}:
-                        areaFilled1 += 1
-                print('check 1')
-                initial_data = {
-                    'date': database_form.date,
-                    'observer': database_form.observer,
-                    'cert_date': database_form.cert_date,
-                    'comments': database_form.comments
-                }
-                initial_areas = {}
-                readsData = {}
-                for x in range(1, areaFilled1+1):
-                    x = str(x)
-                    if x == "1":
-                        area = database_form.area_json_1
-                    elif x == "2":
-                        area = database_form.area_json_2
-                    elif x == "3":
-                        area = database_form.area_json_3
-                    elif x == "4":
-                        area = database_form.area_json_4
+                    formModelEntry = database_form
+        
+        if existing:
+            areaFilled1 = 0
+            initial_areas = {}
+            readsData = {}
+            dataBaseInputList = [formModelEntry.area_json_1, formModelEntry.area_json_2, formModelEntry.area_json_3, formModelEntry.area_json_4]
+            for inputData in dataBaseInputList:
+                if inputData != {}:
+                    areaFilled1 += 1
+            print('check 1')
+            initial_data = {
+                'date': formModelEntry.date.strftime("%Y-%m-%d"),
+                'observer': formModelEntry.observer,
+                'cert_date': formModelEntry.cert_date.strftime("%Y-%m-%d"),
+                'comments': formModelEntry.comments
+            }
+            for x in range(1, areaFilled1+1):
+                x = str(x)
+                if x == "1":
+                    area = formModelEntry.area_json_1
+                elif x == "2":
+                    area = formModelEntry.area_json_2
+                elif x == "3":
+                    area = formModelEntry.area_json_3
+                elif x == "4":
+                    area = formModelEntry.area_json_4
+                if selector == 'form':
                     intital_adding = {
                         x: {
                             'name': area['selection'],
-                            'startTime': area['start_time'],
-                            'stopTime': area['stop_time'],
+                            'startTime': datetime.datetime.strptime(area['start_time'], "%H:%M").strftime("%H:%M"),
+                            'stopTime': datetime.datetime.strptime(area['stop_time'], "%H:%M").strftime("%H:%M"),
                             'average': area['average'],
                         }
                     }
-                    print(intital_adding)
-                    initial_data_dict = {
-                        x: [
-                            area['readings']['1'], 
-                            area['readings']['2'], 
-                            area['readings']['3'], 
-                            area['readings']['3'], 
-                            area['readings']['4'], 
-                            area['readings']['5'], 
-                            area['readings']['6'],
-                            area['readings']['7'],
-                            area['readings']['8'],
-                            area['readings']['9'],
-                            area['readings']['10'],
-                            area['readings']['11']
-                        ]
-                    }
-                    initial_areas.update(intital_adding)
-                    readsData.update(initial_data_dict)
-                print(initial_areas)
-                print(readsData)
-            else:
-                print('check 2')
-                initial_data = {
-                    'date': now,
-                    'observer': full_name,
-                    'cert_date': cert_date,
+                initial_data_dict = {
+                    x: [
+                        area['readings']['1'], 
+                        area['readings']['2'], 
+                        area['readings']['3'], 
+                        area['readings']['3'], 
+                        area['readings']['4'], 
+                        area['readings']['5'], 
+                        area['readings']['6'],
+                        area['readings']['7'],
+                        area['readings']['8'],
+                        area['readings']['9'],
+                        area['readings']['10'],
+                        area['readings']['11']
+                    ]
                 }
-                readsData = {}
-                intital_adding = {}
-            form = SubFormC1(initial=initial_data)
+                initial_areas.update(intital_adding)
+                readsData.update(initial_data_dict)
+            allData = {"main": initial_data, "primary": initial_areas, "readings": readsData}
+        else:
+            print('check 2')
+            initial_data = {
+                'date': now.strftime("%Y-%m-%d"),
+                'observer': full_name,
+                'cert_date': cert_date.strftime("%Y-%m-%d"),
+            }
+            areaFilled1 = 4
+            allData = {"main": initial_data, "primary": {}, "readings": {}}
+        
+        print(existing)
         if request.method == "POST":
             copyRequest = request.POST.copy()
+            print(copyRequest)
             areaFilled = 0
             for formKeys in request.POST.keys():
                 if formKeys[:8] == 'areaName':
                     areaFilled += 1
+            print(areaFilled)
             for x in range(1,areaFilled+1):
                 x = str(x)
                 areaSetup= {
@@ -207,7 +206,7 @@ def formC(request, facility, fsID, selector):
         "client": client, 
         'unlock': unlock, 
         'supervisor': supervisor, 
-        'form': form,
+        #'form': form,
         "back": back, 
         'profile': profile, 
         'selector': selector, 
@@ -216,7 +215,6 @@ def formC(request, facility, fsID, selector):
         'notifs': notifs,
         'freq': freq,
         'existing': existing,
-        'initial_data': initial_data,
-        'readsData': readsData,
-        'initial_areas': initial_areas
+        'allData': allData,
+        "areaFilled1": areaFilled1,
     })

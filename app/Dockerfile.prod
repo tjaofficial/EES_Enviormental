@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     tcl8.6-dev \
     tk8.6-dev \
     python3-tk \
+    libxcb1 \
     pkg-config \
     --no-install-recommends && \
     apt-get clean && \
@@ -69,6 +70,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo \
     zlib1g \
     libpq5 \
+    libxcb1 \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

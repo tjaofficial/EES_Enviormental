@@ -3,9 +3,9 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import issues_model, form1_readings_model, form2_model, form3_model, Event, form4_model, form5_readings_model, daily_battery_profile_model, form1_readings_model, User, user_profile_model, bat_info_model
 import datetime
 import json
-import requests
+import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases,updateAllFormSubmissions, ninetyDayPushTravels
+from ..utils import colorModeSwitch, setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases,updateAllFormSubmissions, ninetyDayPushTravels
 
 lock = login_required(login_url='Login')
 
@@ -15,14 +15,13 @@ def client_dashboard_view(request, facility):
     userGroupRedirect(request.user, permissions)
     updateAllFormSubmissions(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
-    options = bat_info_model.objects.all()
     supervisor = False
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    formA1 = form1_readings_model.objects.all().order_by('-form')
-    formA2 = form2_model.objects.all().order_by('-date')
-    formA3 = form3_model.objects.all().order_by('-date')
-    formA4 = form4_model.objects.all().order_by('-date')
-    formA5 = form5_readings_model.objects.all().order_by('-form')
+    formA1 = form1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+    formA2 = form2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    formA3 = form3_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    formA4 = form4_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    formA5 = form5_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
     fsID1 = tryExceptFormDatabases(1,formA1, facility)
     fsID2 = tryExceptFormDatabases(2,formA2, facility) 
     fsID3 = tryExceptFormDatabases(3,formA3, facility)
@@ -63,56 +62,79 @@ def client_dashboard_view(request, facility):
     todays_num = today.weekday()
     
     #---------- Graph Data ---------------------
-    dateList = []
-    dateListD = []
-    dateListL = []
-    top7xValues = []
-    top7yValues = []
-    top7Query = formA1[:7]
-    for x in range(0,6):
-        if today + datetime.timedelta(days=x) not in dateList:
-            dateList.append(today - datetime.timedelta(days=x))
-            dateListD.append(today - datetime.timedelta(days=x))
-            dateListL.append(today - datetime.timedelta(days=x))
-    for dates in dateList:
-        for chargeEntry in top7Query:
-            if chargeEntry.form.date == dates:
-                top7xValues.append(int(chargeEntry.total_seconds))
-                top7yValues.append(str(chargeEntry.form.date))
-                break
-        if str(dates) not in top7yValues:
-            top7xValues.append(int(0))
-            top7yValues.append(str(dates))
-    top7yValues = json.dumps(top7yValues)
-
-    top7xValuesD = []
-    top7yValuesD = []
-    top7QueryD = formA2[:7]
-    for dates in dateList:
-        for doorEntry in top7QueryD:
-            if doorEntry.date == dates:
-                top7xValuesD.append(int(doorEntry.leaking_doors))
-                top7yValuesD.append(str(doorEntry.date))
-                break
-        if str(dates) not in top7yValuesD:
-            top7xValuesD.append(int(0))
-            top7yValuesD.append(str(dates))
-    top7yValuesD = json.dumps(top7yValuesD)
+    print('litty')
+    graphData = ''
+    graphDataDump = ''
+    if facility != 'supervisor':
+        if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
+            baseIterations = userProfile.settings['dashboard'][str(options.id)]
+            graphSettings = baseIterations['batteryDash']['graphs']
+            setGraphRange = graphSettings['graphFrequencyData']
         
-    top7xValuesL = []
-    top7yValuesL = []
-    top7QueryL = formA3[:7]
-    for dates in dateList:
-        for lidEntry in top7QueryL:
-            if lidEntry.date == dates:
-                top7xValuesL.append(int(lidEntry.l_leaks))
-                top7yValuesL.append(str(lidEntry.date))
-                break
-        if str(dates) not in top7yValuesL:
-            top7xValuesL.append(int(0))
-            top7yValuesL.append(str(dates))
-    top7yValuesL = json.dumps(top7yValuesL)
-    
+            canvasData = {}
+            dateList = []
+            def rangeNumber(rangeID):
+                dateList = []
+                if rangeID == 'weekly':
+                    ranID = 6
+                    oneWeekAgo = today - datetime.timedelta(days=ranID)
+                    for x in range(0,ranID+1):
+                        dateList.append(oneWeekAgo + datetime.timedelta(days=x))
+                elif rangeID == 'monthly':
+                    ranID = calendar.monthrange(today.year,today.month)[1]
+                    for x in range(0,ranID):
+                        dateList.append(datetime.datetime.strptime(str(today.year) + "-" + str(today.month) + "-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                elif rangeID == 'annually':
+                    ranID = 365 + calendar.isleap(today.year)
+                    for x in range(0,ranID):
+                        dateList.append(datetime.datetime.strptime(str(today.year) + "-" + "01-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                else:
+                    ranID = abs((datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() - datetime.datetime.strptime(setGraphRange['dates']['graphStop'], "%Y-%m-%d").date()).days)
+                    for x in range(0,ranID):
+                        dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
+                return dateList
+            dateList = rangeNumber(setGraphRange['frequency'])
+            print('hello')
+            print(dateList)
+            for gStuff in graphSettings['dataChoice']:
+                if gStuff == 'graph90dayPT':
+                    continue
+                if graphSettings['dataChoice'][gStuff]['show']:
+                    canvasData[gStuff] = {
+                        'graphID': gStuff,
+                        'xValues': [],
+                        'yValues': [],
+                        'type': graphSettings['dataChoice'][gStuff]['type'],
+                    }
+                    xValues = []
+                    yValues = []
+                    for dates in dateList:
+                        if gStuff == 'charges':
+                            useModel = formA1.filter(form__date=dates)
+                            if useModel.exists():
+                                xValues.append(int(useModel[0].total_seconds))
+                                yValues.append(str(useModel[0].form.date))
+                        elif gStuff == 'doors':
+                            useModel = formA2.filter(date=dates)
+                            if useModel.exists():
+                                xValues.append(int(useModel[0].leaking_doors))
+                                yValues.append(str(useModel[0].date))
+                        elif gStuff == 'lids':
+                            useModel = formA3.filter(date=dates)
+                            if useModel.exists():
+                                xValues.append(int(useModel[0].l_leaks))
+                                yValues.append(str(useModel[0].date))
+                        if str(dates) not in yValues:
+                            xValues.append(int(0))
+                            yValues.append(str(dates))
+                    canvasData[gStuff]['xValues'] = xValues
+                    canvasData[gStuff]['yValues'] = yValues
+            graphData = {
+                'canvasData': canvasData,
+                'today': str(today),
+                'frequency': setGraphRange, 
+            }
+            graphDataDump = json.dumps(graphData)
     # -------PROGRESS PERCENTAGES -----------------
     if facility != 'supervisor':
         daily_percent = calculateProgessBar(facility, 'Daily')
@@ -229,40 +251,50 @@ def client_dashboard_view(request, facility):
         if emypty_dp_today:
             if request.method == 'POST':
                 answer = request.POST
-                if answer['facilitySelect'] != '':
-                    return redirect('sup_dashboard', answer['facilitySelect'])
+                if 'facilitySelect' in answer.keys():
+                    if answer['facilitySelect'] != '':
+                        return redirect('sup_dashboard', answer['facilitySelect'])
+                elif 'colorMode' in answer.keys():
+                    print("CHECK 1")
+                    colorModeSwitch(request)
+                    return redirect(request.META['HTTP_REFERER'])
             return render(request, "supervisor/sup_dashboard.html", {
                 'notifs': notifs,
                 'facility': facility, 
                 'ca_forms': ca_forms, 
                 'recent_logs': recent_logs, 
-                'todays_obser': todays_obser, 
+                'todays_obser': todays_obser,
                 'profile': allContacts, 
                 'weather': weather, 
-                'od_recent': od_recent, 
+                'od_recent': od_recent,
                 'weekly_percent': weekly_percent, 
                 'monthly_percent': monthly_percent, 
                 'annually_percent': annually_percent, 
                 'daily_percent': daily_percent, 
-                'supervisor': supervisor,  
+                'supervisor': supervisor, 
                 "client": client, 
                 'unlock': unlock,
                 'sortedFacilityData': sortedFacilityData,
                 'fsIDs': fsIDs,
                 'quarterly_percent': quarterly_percent,
-                'top7xValues': top7xValues,
-                'top7yValues': top7yValues,
-                'top7xValuesD': top7xValuesD,
-                'top7yValuesD': top7yValuesD,
-                'top7xValuesL': top7xValuesL,
-                'top7yValuesL': top7yValuesL,
+                'graphData': graphData,
                 'last7days': str(last7days),
-                'today': str(now)
+                'today': str(now),
+                'options': options,
+                'graphDataDump': graphDataDump,
+                "od_30": od_30, 
+                "od_10": od_10, 
+                "od_5": od_5, 
+                'userProfile': userProfile
             })
     if request.method == 'POST':
-        answer = request.POST
-        if answer['facilitySelect'] != '':
-            return redirect('sup_dashboard', answer['facilitySelect'])
+        nswer = request.POST
+        if 'facilitySelect' in answer.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
+        elif 'colorMode' in answer.keys():
+            print(answer['colorMode'])
+            colorModeSwitch(request)
         
     return render(request, "supervisor/sup_dashboard.html", {
         'notifs': notifs,
@@ -291,25 +323,23 @@ def client_dashboard_view(request, facility):
         'A4data': A4data, 
         'A5data': A5data, 
         'push': push, 
-        'coke': coke, 
+        'coke': coke,
         'weekly_percent': weekly_percent, 
         'monthly_percent': monthly_percent, 
         'annually_percent': annually_percent, 
-        'daily_percent': daily_percent,
+        'daily_percent': daily_percent, 
         'quarterly_percent': quarterly_percent,
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
-        'sortedFacilityData': sortedFacilityData,
+        'sortedFacilityData': sortedFacilityData, 
         'fsIDs': fsIDs,
-        'top7xValues': top7xValues,
-        'top7yValues': top7yValues,
-        'top7xValuesD': top7xValuesD,
-        'top7yValuesD': top7yValuesD,
-        'top7xValuesL': top7xValuesL,
-        'top7yValuesL': top7yValuesL,
+        'graphData': graphData,
         'last7days': str(last7days),
         'today': str(now),
         'pLeaks': pLeaks,
-        'cLeaks': cLeaks
+        'cLeaks': cLeaks,
+        'options': options,
+        'graphDataDump': graphDataDump,
+        'userProfile': userProfile
     })

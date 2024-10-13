@@ -13,3 +13,7 @@ def get_list_item(lst, index):
         return lst[index]
     except (IndexError, KeyError):
         return ''
+
+@register.filter
+def get_category(value, attr):
+    return value[str(attr)]

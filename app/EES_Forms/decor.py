@@ -1,6 +1,6 @@
-import braintree
-from django.shortcuts import redirect
-from .utils import braintreeGateway
+import braintree # type: ignore
+from django.shortcuts import redirect # type: ignore
+from .utils import braintreeGateway, get_braintree_query
 from .models import user_profile_model, braintree_model
 
 # def client_redirect(x):
@@ -11,13 +11,9 @@ from .models import user_profile_model, braintree_model
 
 def isSubActive(func):
     def wrapper(request, facility, *args, **kwargs):
-        braintreeData = braintree_model.objects.filter(user__id=request.user.id)
-        profileData = user_profile_model.objects.get(user__id=request.user.id)
-        if braintreeData.exists():
-            braintreeData = braintreeData.get(user__id=request.user.id)
-        else:
-            print('handle if there is no braintree entry')
-        status = braintreeData.status
+        status = get_braintree_query(request.user)
+        if status:
+            status = status.status
         if status == "active":
             status = True
         else:
