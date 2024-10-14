@@ -105,14 +105,15 @@ defaultNotifications = {
         '10_day_pt': False,
         '5_day_pt': False
 }
-defaultSettings = {
+defaultFacilitySettings = {
     'dashboard': {
         'formsDash': True,
         'batteryDash': False,
     },
-    'notifications': defaultNotifications
+    'notifications': defaultNotifications,
+    'first_login': False
 }
-defaultSettingsParsed = json.loads(json.dumps(defaultSettings))
+defaultFacilitySettingsParsed = json.loads(json.dumps(defaultFacilitySettings))
 defaultUserSettings = {
     'colorMode': 'light',
     'landingDash': 'default'
@@ -941,7 +942,7 @@ def createNotification(facility, request, fsID, date, notifSelector, issueID):
             print('mail check 2')
     
 def checkIfFacilitySelected(user, facility):
-    if facility != 'supervisor':
+    if facility not in ['supervisor', 'observer']:
         notifs = displayNotifications(user, facility)
     else:
         notifs = ''
@@ -1646,16 +1647,21 @@ def change_dashboard_setting(dashboard_pick, observer):
     return profileSetDash
 
 def setDefaultSettings(profile, superUsername):
+    today = datetime.datetime.now()
     createSettings = {'dashboard':{}}
-    companyFacilities = getCompanyFacilities(superUsername)
-    for facility in companyFacilities:
-        createSettings['dashboard'][str(facility.id)] = dashDict
-        if facility.is_battery == 'Yes':
-            if profile.position != OBSER_VAR:
-                createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', False)
-            else:
-                createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', True)
+    try:
+        companyFacilities = getCompanyFacilities(superUsername)
+        for facility in companyFacilities:
+            createSettings['dashboard'][str(facility.id)] = dashDict
+            if facility.is_battery == 'Yes':
+                if profile.position != OBSER_VAR:
+                    createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', False)
+                else:
+                    createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', True)
+    except:
+        createSettings['dashboard'] = False
     createSettings['notifications'] = defaultNotifications
+    createSettings['first_login'] = False
     return createSettings
 
 def get_braintree_query(user):
@@ -1669,3 +1675,18 @@ def get_braintree_query(user):
     else:
         print('handle if there is zero braintree entries')
         return False
+
+def parsePhone(phoneNumber):
+    if phoneNumber[0] == "+":
+        numWoAreaCode = phoneNumber[2:]
+        first = numWoAreaCode[:3]
+        second = numWoAreaCode[3:6]
+        third = numWoAreaCode[6:]
+        finalPhone = "(" + first + ") " + second + "-" + third
+        print('parenthatses')
+    else:
+        finalPhone = '+1' + ''.join(filter(str.isdigit, phoneNumber))
+    return finalPhone
+
+
+

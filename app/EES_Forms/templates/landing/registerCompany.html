@@ -1,7 +1,8 @@
 {% extends 'landing/landingPage_layout.html' %}{% load static %}
 {% block body %}
 <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
-<div class='topCont' style='height:100%;'>
+<script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
+<div class='topCont' style='height:100%; margin-bottom: 6rem;'>
     <div class='regCont' style="width: 500px;">
         <form id="signup" method="POST" action="">
             {% csrf_token %}

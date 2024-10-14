@@ -39,8 +39,7 @@
                     Safety Information
                 </div>
             </a>
-            {% if supervisor %}
-            <a href="{% url 'Account' 'supervisor' %}">
+            <a href="{% if supervisor %}{% url 'Account' 'supervisor' %}{% elif client %}{% url 'Account' facility %}{% elif unlock %}{% url 'Account' 'observer' %}{% endif %}">
                 <div class="sidebar_item modeTextColor">
                     <div class="sidebar_svg">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
@@ -50,7 +49,6 @@
                     Account Settings
                 </div>
             </a>
-            {% endif %}
             <a href=#>
                 <div class="sidebar_item modeTextColor">
                     <div class="sidebar_svg">

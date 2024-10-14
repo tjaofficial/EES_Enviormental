@@ -6,7 +6,7 @@
 
 <div class="mainCont" style="width:700px; max-width:none;margin: auto;">
     <div class="card" style='margin-bottom: 50px;'>
-        <div class="cardHeader">Payment Method</div>
+        <div class="cardHeader">Payment gMethod</div>
         <div class="contentCont">
             <form id="dataGather" method="post" autocomplete="off" action="../subscription/receipt">
                 {% csrf_token %}
@@ -34,6 +34,74 @@
                 <div class="dataBoxes">
                     <div class="infoHeaders">Payment</div>
                     <div id='optionsCont' class="tabInfoCont infoBoxes" style="height:fit-content">
+                        chicken
+
+                        <div class="container">
+                            <div class="title">
+                                <h4>Select a <span style="color: #6064b6">Payment</span> method</h4>
+                            </div>
+                    
+                            <form action="#">
+                                <input type="radio" name="payment" id="visa">
+                                <input type="radio" name="payment" id="mastercard">
+                                <input type="radio" name="payment" id="paypal">
+                                <input type="radio" name="payment" id="AMEX">
+                    
+                    
+                                <div class="category">
+                                    <label for="visa" class="visaMethod">
+                                        <div class="imgName">
+                                            <div class="imgContainer visa">
+                                                <img src="https://i.ibb.co/vjQCN4y/Visa-Card.png" alt="">
+                                            </div>
+                                            <span class="name">VISA</span>
+                                        </div>
+                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                    </label>
+                    
+                                    <label for="mastercard" class="mastercardMethod">
+                                        <div class="imgName">
+                                            <div class="imgContainer mastercard">
+                                                <img src="https://i.ibb.co/vdbBkgT/mastercard.jpg" alt="">
+                                            </div>
+                                            <span class="name">Mastercard</span>
+                                        </div>
+                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                    </label>
+                    
+                                    <label for="paypal" class="paypalMethod">
+                                        <div class="imgName">
+                                            <div class="imgContainer paypal">
+                                                <img src="https://i.ibb.co/KVF3mr1/paypal.png" alt="">
+                                            </div>
+                                            <span class="name">Paypal</span>
+                                        </div>
+                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                    </label>
+                    
+                                    <label for="AMEX" class="amexMethod">
+                                        <div class="imgName">
+                                            <div class="imgContainer AMEX">
+                                                <img src="https://i.ibb.co/wQnrX86/American-Express.jpg" alt="">
+                                            </div>
+                                            <span class="name">AMEX</span>
+                                        </div>
+                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
                         {% if cardData %}
                             <div id="cardCont" style="display:block;">
                                 <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card" checked>

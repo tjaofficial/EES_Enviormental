@@ -1,4 +1,4 @@
-from django.shortcuts import render # type: ignore
+from django.shortcuts import render, redirect # type: ignore
 from ..models import user_profile_model, Forms, daily_battery_profile_model, signature_model, bat_info_model, the_packets_model, form_settings_model
 from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
 from django.contrib.auth.decorators import login_required # type: ignore
@@ -12,6 +12,8 @@ def IncompleteForms(request, facility):
     formName = "obs_dash"
     permissions = [OBSER_VAR]
     userGroupRedirect(request.user, permissions)
+    if facility == OBSER_VAR:
+        return redirect('facilitySelect')
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     today = datetime.date.today()

@@ -13,16 +13,17 @@
                 <div id="account" class="settingsTab" onclick='openInformation(this)'>
                     Account Information
                 </div>
-                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                <div class="tabInfoCont" style="padding: 20px 0px; height: fit-content;">
                     {% include "supervisor/settings/settings_account.html" %}
                 </div>
             </div>
+            {% if supervisor %}
             <hr>
             <div class="tabCont">
                 <div id="company" class="settingsTab" onclick='openInformation(this)'>
                     Company Settings
                 </div>
-                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                <div class="tabInfoCont" style="padding: 20px 0px; height: fit-content;">
                     {% include "supervisor/settings/settings_company.html" %}
                 </div>
             </div>
@@ -31,15 +32,16 @@
                 <div id="subscription" class="settingsTab" onclick='openInformation(this)'>
                     Subscription Settings
                 </div>   
-                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                <div class="tabInfoCont" style="padding: 20px 0px; height: fit-content;">
                     {% include "supervisor/settings/settings_subscription.html" %}
                 </div>
             </div>
+            {% endif %}
             <div class="tabCont">
                 <div id="facility" class="settingsTab" onclick='openInformation(this)'>
                     Facility Settings
                 </div>   
-                <div class="tabInfoCont" style="padding: unset; height: 0px;">
+                <div class="tabInfoCont" style="padding: 20px 0px; height: fit-content;">
                     {% include "supervisor/settings/settings_facility.html" %}
                 </div>
             </div>

@@ -1,33 +1,37 @@
 {% load static %}
-<style>
-    .left{
-        text-align: left;
-    }
-    .description{
-        font-weight: normal;
-        font-size: 13px;
-    }
-</style>
-{% if selector == "packets" %}
-    <h5 class="left">HELP: Packets</h5><br>
-    <p class="left description">
-        Packets are an easy way to put forms into 
-        organized groups. These packets can be 
-        used to print off groups of "submitted"
-        inspection forms. To add a new packet, 
-        enter in a new "Packet Name" and click "save". 
-        Once saved, you will see a blue bar appear
-        with the new packet name. You can drag-and-drop forms from the top into the packets or you can click "add" to
-        to advance to the add page. You can click the blue bar to expand the packet
-        and see the existing forms within. To the right of the packet you will see
-        the settings or delete icons.
-    </p>
-{% elif selector == "accountSettings" %}
-    <h5 class="left">HELP: Packets</h5><br>
-    <p class="left description">
-        Packets are an easy way to put forms 
-        into organized groups. These packets 
-        can be used to print off groups of 
-        filled out inspection forms.
-    </p>
-{% endif %}
+<link href="{% static 'ees_forms/style/helpBoxes.css' %}" rel="stylesheet" />
+<div id="help-popup{{popupCounter}}" class="popupCont">
+    {% if selector == "packets" %}
+        <h5 class="left">HELP: Packets</h5><br>
+        <p class="left description">
+            Packets are an easy way to put forms into 
+            organized groups. These packets can be 
+            used to print off groups of "submitted"
+            inspection forms. To add a new packet, 
+            enter in a new "Packet Name" and click "save". 
+            Once saved, you will see a blue bar appear
+            with the new packet name. You can drag-and-drop forms from the top into the packets or you can click "add" to
+            to advance to the add page. You can click the blue bar to expand the packet
+            and see the existing forms within. To the right of the packet you will see
+            the settings or delete icons.
+        </p>
+    {% elif selector == "accountSettings" %}
+        <h5 class="left">HELP: Packets</h5><br>
+        <p class="left description">
+            Packets are an easy way to put forms 
+            into organized groups. These packets 
+            can be used to print off groups of 
+            filled out inspection forms.
+        </p>
+    {% elif selector == "password" %}
+        <h5 class="left">HELP: Password</h5><br>
+        <p class="left description">
+            <ul>
+                <li>Your password can’t be too similar to your other personal information.</li>
+                <li>Your password must contain at least 8 characters.</li>
+                <li>Your password can’t be a commonly used password.</li>
+                <li>Your password can’t be entirely numeric.</li>
+            </ul>
+        </p>
+    {% endif %}
+</div>

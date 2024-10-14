@@ -209,7 +209,7 @@ class user_profile_form(forms.ModelForm):
         widgets = {
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'profile_picture': forms.FileInput(attrs={'class':'input', 'style': 'width: fit-content;'}),
-            'phone': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 150px;', 'placeholder': '(123)456-7890'}),
+            'phone': forms.TextInput(attrs={'class':'input', 'oninput':"processPhone(event)", 'type': 'text', 'style': 'width: 150px;', 'placeholder': '(123)456-7890'}),
             'position': forms.Select(attrs={'class':'input', 'oninput': 'cert_date1()', 'style': 'width: 160px;'}),
             'company': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 150px;'}),
             'certs': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 300px;'}),
@@ -2071,8 +2071,22 @@ class company_form(ModelForm):
             'city': forms.TextInput(attrs={'placeholder':'City', 'style':'width: 250px;'}),
             'state': forms.TextInput(attrs={'placeholder':'State', 'style':'width: 250px;'}),
             'zipcode': forms.TextInput(attrs={'placeholder':'Zipcode', 'style':'width: 250px;'}),
-            'phone': forms.TextInput(attrs={'placeholder':'Phone', 'style':'width: 250px;'}),
+            'phone': forms.TextInput(attrs={'placeholder':'Phone', 'oninput':"processPhone(event)", 'style':'width: 250px;'}),
             'customerID': forms.TextInput(attrs={'style':'width: 250px;'}),
+        }   
+
+class company_Update_form(ModelForm):
+    class Meta:
+        model = company_model
+        fields = ('__all__')
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class':'input', 'style':'width:100%;'}),
+            'address': forms.TextInput(attrs={'class':'input', 'style':'width:100%;'}),
+            'city': forms.TextInput(attrs={'class':'input', 'style':'width:9rem;'}),
+            'state': forms.TextInput(attrs={'class':'input', 'placeholder':'State', 'style':'width:3rem;'}),
+            'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
+            'phone': forms.TextInput(attrs={'class':'input', 'oninput':"processPhone(event)", 'placeholder':'(123)456-7890', 'style':'width: 100%;'}),
+            'customerID': forms.TextInput(attrs={'class':'input', 'style':'width: 250px;'}),
         }   
         
 class facility_forms_form(ModelForm):

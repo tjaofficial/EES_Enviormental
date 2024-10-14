@@ -51,7 +51,7 @@
                                 <input class="input" id="postalCode" type="text" name="postalCode" placeholder="11111"/>
                             </div>
                         </div>
-                        <input id="submit" type="submit" value="Review Subscription" name="{% if action == 'change' %}newCard{% else %}updateAddress{% endif %}" disabled="{% if action == 'change' or action == 'add'%}True{% else %}False{% endif %}"/>
+                        <input id="submit" type="submit" value="Review card information " name="{% if action == 'change' %}newCard{% else %}updateAddress{% endif %}" disabled="{% if action == 'change' or action == 'add'%}True{% else %}False{% endif %}"/>
                     </form>
                 </div>
                 <!-- Review Form -->

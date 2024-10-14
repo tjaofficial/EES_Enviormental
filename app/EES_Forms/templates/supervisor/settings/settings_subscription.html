@@ -54,14 +54,14 @@
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Active Accounts:</td>
-                <td class="labelClass2">( {{active_registrations}} / {{braintreeData.registrations}} ) <a id="seeAll" href=# onclick="seeEmployees()">see all</a></td>
+                <td class="labelClass2">( {{active_registrations}} / {{braintreeData.registrations}} ) <a id="seeAll" href=# onclick="seeEmployees()" style="text-decoration: underline;">see all</a></td>
             </tr>
             <tr id="employeesCont" class='tableSpacer' style="display:none;">
                 <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
                     {% for employee in listOfEmployees %}
                         <p style="{%if employee.company.braintree.status != 'active' %}color:gray;{% endif %}">
                             {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee.company.braintree.status == 'active' %}Active {% if employee.user.id != accountData.user.id %}
-                            <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}">
+                            <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;">
                                 (cancel)
                             </a>
                             {% endif %}{% else %}Inactive{% endif %}
@@ -79,9 +79,9 @@
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass" colspan=2 style="text-align: center;">
-                {% if braintreeData.status == "active" %}<a href="{% url 'subscriptionChange' facility %}">Change Subscription</a><br>{% endif %}
-                <a href="{% url 'billingHistory' facility %}">See Billing History</a><br>
-                {% if braintreeData.status == "active" %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}">Cancel Subscription</a>{% endif %}
+                {% if braintreeData.status == "active" %}<a href="{% url 'subscriptionChange' facility %}" style="text-decoration: underline;">Change Subscription</a><br>{% endif %}
+                <a href="{% url 'billingHistory' facility %}" style="text-decoration: underline;">See Billing History</a><br>
+                {% if braintreeData.status == "active" %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}" style="text-decoration: underline;">Cancel Subscription</a>{% endif %}
             </td>
         </tr>
         <tr class='tableSpacer'>
@@ -92,8 +92,8 @@
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass2" style="text-align: center;" colspan=2>
-                <a href="{% url 'cardUpdate' facility 'update' 'false' 'false' %}">Update Billing Address</a><br>
-                <a href="{% url 'cardUpdate' facility 'add' 'false' 'false'%}">Add/Change Payment Method</a><br>
+                <a href="{% url 'cardUpdate' facility 'update' 'false' 'false' %}" style="text-decoration: underline;">Update Billing Address</a><br>
+                <a href="{% url 'cardUpdate' facility 'add' 'false' 'false'%}" style="text-decoration: underline;">Add/Change Payment Method</a><br>
                 {% comment %} <a href="{% url 'cardUpdate' facility 'change' %}">Change Payment Details</a> {% endcomment %}
             </td>
         </tr>

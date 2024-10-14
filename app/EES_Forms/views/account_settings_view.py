@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.db.models import Q # type: ignore
-from ..utils import get_braintree_query, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
+from ..utils import parsePhone, get_braintree_query, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
-from ..forms import CreateUserForm, user_profile_form, company_form,bat_info_form
+from ..forms import CreateUserForm, user_profile_form, company_Update_form, bat_info_form
 import datetime
 import braintree # type: ignore
 import json
@@ -216,11 +216,13 @@ def sup_select_subscription(request, facility, selector):
 def sup_account_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    if unlock:
-        return redirect('IncompleteForms', facility)
+    # if unlock:
+    #     return redirect('IncompleteForms', facility)
     braintreeData = get_braintree_query(request.user)
-        
-    facility = 'supervisor'
+    if supervisor:
+        facility = 'supervisor'
+    elif unlock:
+        facility = 'observer'
     sortedFacilityData = getCompanyFacilities(request.user.username)
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
@@ -431,9 +433,10 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
 def sup_update_account(request, facility, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    if unlock:
-        return redirect('IncompleteForms', facility)
-    facility = 'supervisor'
+    if supervisor:
+        facility = 'supervisor'
+    elif unlock:
+        facility = 'observer'
     user = user_profile_model.objects.get(user__id=request.user.id)
     variables = {
         'supervisor': supervisor, 
@@ -451,7 +454,7 @@ def sup_update_account(request, facility, selector):
             'last_name': user.user.last_name,
             'email': user.user.email,
             'cert_date': user.cert_date,
-            'phone': user.phone,
+            'phone': parsePhone(user.phone),
             'certs': user.certs,
             'profile_picture': user.profile_picture,
         }
@@ -466,11 +469,12 @@ def sup_update_account(request, facility, selector):
             'city': primaryModel.city,
             'state': primaryModel.state,
             'zipcode': primaryModel.zipcode,
-            'phone': primaryModel.phone,
+            'phone': parsePhone(primaryModel.phone),
         }
-        primaryForm = company_form(initial=initial_data)
+        primaryForm = company_Update_form(initial=initial_data)
     
     variables['primaryForm'] = primaryForm
+    variables['initial_data'] = initial_data
     if request.method == 'POST':
         print(request.POST)
         dataFromForm = request.POST
@@ -479,8 +483,9 @@ def sup_update_account(request, facility, selector):
             primaryModel.last_name = dataFromForm['last_name']
             primaryModel.username = dataFromForm['username']
             primaryModel.email = dataFromForm['email']
-            user.cert_date = dataFromForm['cert_date']
-            user.phone = dataFromForm['phone']
+            if unlock:
+                user.cert_date = dataFromForm['cert_date']
+            user.phone = parsePhone(dataFromForm['phone'])
             user.save()
         elif selector == "company":
             primaryModel.company_name = dataFromForm['company_name']
@@ -488,7 +493,7 @@ def sup_update_account(request, facility, selector):
             primaryModel.city = dataFromForm['city']
             primaryModel.state = dataFromForm['state']
             primaryModel.zipcode = dataFromForm['zipcode']
-            primaryModel.phone = dataFromForm['phone']
+            primaryModel.phone = parsePhone(dataFromForm['phone'])
             
         primaryModel.save()
         return redirect("Account", facility)
@@ -560,8 +565,6 @@ def sup_billing_history(request, facility):
 def sup_facility_settings(request, facility, facilityID, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    if unlock:
-        return redirect('IncompleteForms', facility)
     braintreeData = braintree_model.objects.filter(user__id=request.user.id)
     if braintreeData.exists():
         braintreeData = braintreeData.get(user__id=request.user.id)
@@ -596,7 +599,10 @@ def sup_facility_settings(request, facility, facilityID, selector):
 
 
 
-    facility = 'supervisor'
+    if supervisor:
+        facility = 'supervisor'
+    elif unlock:
+        facility = 'observer'
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
@@ -727,7 +733,6 @@ def sup_facility_settings(request, facility, facilityID, selector):
         'listOfEmployees': listOfEmployees,
         'accountData': accountData,
         'active_registrations': active_registrations,
-        'braintreeData': braintreeData,
         'userProfileQuery': userProfileQuery,
         'dashDict': json.loads(json.dumps(dashDictOptions))
     })

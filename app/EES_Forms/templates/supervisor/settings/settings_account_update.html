@@ -1,7 +1,9 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
         <div class="cardHeader">
@@ -9,22 +11,121 @@
             {% if selector == "account" %}Account{% elif selector == "company" %}Company{% endif %} Settings
         </div>
         <div class="contentCont" style="padding: 15px 32px;">
-            <form method="post" action='' style='text-align:left;'>
+            <form method="post" action=''>
                 {% csrf_token %}
                 {% if selector == "account" %}
-                    {{primaryForm.username.label}}: {{primaryForm.username}}<br><br>
-                    {{primaryForm.first_name.label}}: {{primaryForm.first_name}}<br><br>
-                    {{primaryForm.last_name.label}}: {{primaryForm.last_name}}<br><br>
-                    {{primaryForm.email.label}}: {{primaryForm.email}}<br><br>
-                    Certification Date: {{secondaryForm.cert_date}}<br><br>
-                    {{secondaryForm.phone.label}}: {{secondaryForm.phone}}<br><br>
+                <div style="text-align:left;width: 33rem;margin: auto;">
+                    <li class="form-line">
+                        <div class="label">Profile Information</div>
+                        <div class="inputCont">
+                            <div style="display:block;">
+                                <div style="width: 294px;">
+                                    <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                        <span>
+                                            <input disabled type="text" name="first_name" value="{{initial_data.first_name}}" class="input" style="width:9rem;" maxlength="150">
+                                            <input type="hidden" name="first_name" value="{{initial_data.first_name}}" class="input" style="width:9rem;" maxlength="150" id="id_first_name">
+                                        </span>
+                                        <label class="sub_label">First Name</label>
+                                    </span>
+                                    <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                        <span>
+                                            <input disabled type="text" name="last_name" value="{{initial_data.last_name}}" class="input" style="width:9rem;" maxlength="150">
+                                            <input type="hidden" name="last_name" value="{{initial_data.last_name}}" class="input" style="width:9rem;" maxlength="150" id="id_last_name">
+                                        </span>
+                                        <label class="sub_label">Last Name</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="display:block;">
+                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                    <span>
+                                        <input disabled type="text" name="username" value="{{initial_data.username}}" style="width:100%;" class="input" maxlength="150" required>
+                                        <input type="hidden" name="username" value="{{initial_data.username}}" style="width:100%;" class="input" maxlength="150" required id="id_username">
+                                    </span>
+                                    <label class="sub_label">Username</label>
+                                </span>
+                            </div>
+                            <div style="display:block;">
+                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                    <span>
+                                        <input type="email" name="email" value="{{initial_data.email}}" class="input" placeholder="johndoe@mail.com" style="width:100%;" maxlength="254" id="id_email">
+                                    </span>
+                                    <label class="sub_label">Email</label>
+                                </span>
+                            </div>
+                            <div style="display:block;">
+                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                    <span>
+                                        <input oninput="processPhone(event)" type="text" name="phone" value="{{initial_data.phone}}" class="input" style="width:100%;" placeholder="(123) 456-7890" maxlength="14" required id="id_phone">
+                                    </span>
+                                    <label class="sub_label">Phone</label>              
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </div>
                 {% elif selector == "company" %}
-                    {{primaryForm.company_name.label}}: {{primaryForm.company_name}}<br><br>
-                    {{primaryForm.address.label}}: {{primaryForm.address}}<br><br>
-                    {{primaryForm.city.label}}: {{primaryForm.city}}<br><br>
-                    {{primaryForm.state.label}}: {{primaryForm.state}}<br><br>
-                    {{primaryForm.zipcode.label}}: {{primaryForm.zipcode}}<br><br>
-                    {{primaryForm.phone.label}}: {{primaryForm.phone}}<br><br>
+                <div style="text-align:left;width: 33rem;margin: auto;">
+                    <li class="form-line">
+                        <div class="label">Company Name</div>
+                        <div class="inputCont">
+                            <div style="display:block;">
+                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                    <span>{{primaryForm.company_name}}</span>
+                                    <label class="sub_label">Name</label>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="form-line">
+                        <div class="label">Address</div>
+                        <div class="inputCont" style="width: 294px;">
+                            <div style="display:block;">
+                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                    <span>
+                                        {{primaryForm.address}}
+                                    </span>
+                                    <label class="sub_label">Street Address</label>
+                                </span>
+                            </div>
+                            <div style="display:block;">
+                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                    <span>
+                                        <input type="text" name="address2" class="input" style="width:100%;" id="id_address2">
+                                    </span>
+                                    <label class="sub_label">Street Address Line 2</label>
+                                </span>
+                            </div>
+                            <div style="display:block;">
+                                <div style="width: 290px;">
+                                    <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                        <span>{{primaryForm.city}}</span>
+                                        <label class="sub_label">City</label>
+                                    </span>
+                                    <span style="display: inline-block;padding-bottom: 10px;width: 3rem;">
+                                        <span>{{primaryForm.state}}</span>
+                                        <label class="sub_label">State</label>
+                                    </span>
+                                    <span style="display: inline-block;padding-bottom: 10px;width: 4rem;">
+                                        <span>{{primaryForm.zipcode}}</span>
+                                        <label class="sub_label">Zipcode</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="form-line">
+                        <div class="label">Company Information</div>
+                        <div class="inputCont">
+                            <div style="display:block;">
+                                <span style="width: 290px; display: inline-block; padding-bottom: 10px;">
+                                    <span>{{primaryForm.phone}}</span>
+                                    <label class="sub_label">Phone</label>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </div>
                 {% endif %}
                 <p style="text-align:center"><input type="submit" value="Save"/></p>
             </form>

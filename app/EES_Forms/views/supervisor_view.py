@@ -9,7 +9,7 @@ import calendar
 from django.contrib import messages # type: ignore
 from django.contrib.auth.models import Group # type: ignore
 import json
-from ..utils import setDefaultSettings, defaultBatteryDashSettings, defaultSettings, setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultSettingsParsed, defaultBatteryDashSettings, generate_random_string
+from ..utils import dashDict, parsePhone, setDefaultSettings, defaultBatteryDashSettings, defaultFacilitySettingsParsed, setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultBatteryDashSettings, generate_random_string
 from ..decor import isSubActive
 from django.core.mail import send_mail # type: ignore
 from django.contrib.sites.shortcuts import get_current_site # type: ignore
@@ -442,7 +442,7 @@ def register_view(request, facility, access_page):
         check_4 = request.POST.get('create_client', False)
         if check_1:
             print('CHECK 1')
-            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            finalPhone = parsePhone(request.POST['phone'])
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['username'] = request.POST['username'].lower()
@@ -503,14 +503,18 @@ def register_view(request, facility, access_page):
                 if not facilityModel.exists():    
                     A = form.save(commit=False)
                     A.company = userProf.company
-                    A.settings = defaultSettingsParsed
+                    A.settings = defaultFacilitySettingsParsed
                     if request.POST['cokeBattery'] == 'Yes':
                         A.dashboard = 'battery'
-                        A.settings['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
                     else:
                         A.dashboard = 'default'
-                    
                     A.save()
+                    for ups in user_profiles.filter(company=A.company):
+                        ups.settings['dashboard'] = {str(A.id): dashDict}
+                        if request.POST['cokeBattery'] == 'Yes':
+                            ups.settings['dashboard'][str(A.id)]['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
+                            ups.settings['dashboard'][str(A.id)]['formsDash'] = False
+                        ups.save()
                     newfacilityForm = facility_forms_model(
                         facilityChoice = A,
                         formData = ''
@@ -526,7 +530,7 @@ def register_view(request, facility, access_page):
                     return redirect('Register', facility, 'facility')
         elif check_3:
             print('CHECK 3')
-            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            finalPhone = parsePhone(request.POST['phone'])
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['company'] = userProfileInfo.company
@@ -537,7 +541,7 @@ def register_view(request, facility, access_page):
         elif check_4:
             print('CHECK 4')
             facility = bat_info_model.objects.filter(id=request.POST['facilityChoice'])[0]
-            finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+            finalPhone = parsePhone(request.POST['phone'])
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone
             new_data['position'] = 'client'

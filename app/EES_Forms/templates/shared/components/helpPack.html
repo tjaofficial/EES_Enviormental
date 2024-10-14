@@ -1,0 +1,4 @@
+{% load static %}
+<script defer src="{% static 'ees_forms/script/helpBox.js' %}"></script>
+{% include 'shared/components/helpQuestionMarks.html' with popupCounter=popupCounter %}
+{% include 'shared/components/helpBoxes.html' with selector=data popupCounter=popupCounter %}

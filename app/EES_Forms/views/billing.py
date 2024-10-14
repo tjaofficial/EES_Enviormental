@@ -1,15 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import user_profile_model, company_model, braintreePlans
 from ..utils import braintreeGateway
 import datetime
-from django.contrib.sites.shortcuts import get_current_site  
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode  
-from django.template.loader import render_to_string  
-from django.utils.html import strip_tags
-from django.core.mail import send_mail
-from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site # type: ignore
+from django.utils.encoding import force_bytes # type: ignore
+from django.utils.http import urlsafe_base64_encode # type: ignore
+from django.template.loader import render_to_string # type: ignore
+from django.utils.html import strip_tags # type: ignore
+from django.core.mail import send_mail # type: ignore
+from django.conf import settings # type: ignore
 
 lock = login_required(login_url='Login')
 

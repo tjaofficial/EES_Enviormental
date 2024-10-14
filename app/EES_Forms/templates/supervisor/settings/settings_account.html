@@ -19,7 +19,7 @@
         <tr class='tableSpacer'>
             <td class="labelClass">Password Change:</td>
             <td class="labelClass2">
-                <a href="{% url 'PasswordChange' facility %}">
+                <a href="{% url 'PasswordChange' facility %}" style="text-decoration: underline;">
                     Change password
                 </a>
             </td>
@@ -28,11 +28,12 @@
             <td colspan="2" class="labelClass"><hr></td>
         </tr>
         <tr class='tableSpacer'>
-            <th colspan=2 class='' style="width: 30%;">Account Options</th>
+            <th colspan=2 style="width: 30%;">Account Options</th>
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass2" style="text-align: center;" colspan=2>
-                <a href="{% url 'accountUpdate' facility 'account' %}">Update Account Details</a><br>
+                <a href="{% url 'accountUpdate' facility 'account' %}" style="text-decoration: underline;">Update Profile Details</a><br>
+                <a href="{% url 'accountUpdate' facility 'account' %}" style="text-decoration: underline;">Update Profile Picture</a><br>
             </td>
         </tr>
     </table>

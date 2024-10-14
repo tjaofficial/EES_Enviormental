@@ -1,25 +1,26 @@
 from django.shortcuts import render, redirect # type: ignore
-from django.http import HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponse # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login # type: ignore
 import datetime
 from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model, braintree_model, User
 from ..forms import CreateUserForm, user_profile_form, company_form, braintree_form
-from django.contrib.auth import logout
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash, get_user_model
-from django.contrib import messages
-from django.contrib.auth.models import Group
+from ..utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
+from django.contrib.auth import logout # type: ignore
+from django.contrib.auth.forms import PasswordChangeForm # type: ignore
+from django.contrib.auth import update_session_auth_hash, get_user_model # type: ignore
+from django.contrib import messages # type: ignore
+from django.contrib.auth.models import Group # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, EMAIL_HOST_USER
-from django.core.mail import send_mail
-from django.contrib.sites.shortcuts import get_current_site  
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
-from django.template.loader import render_to_string  
+from django.core.mail import send_mail # type: ignore
+from django.contrib.sites.shortcuts import get_current_site # type: ignore
+from django.utils.encoding import force_bytes, force_str # type: ignore
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode # type: ignore
+from django.template.loader import render_to_string # type: ignore
 from ..tokens import create_token, check_token, delete_token
-from django.conf import settings
-from django.utils.html import strip_tags
-from django.core.exceptions import ValidationError
+from django.conf import settings # type: ignore
+from django.utils.html import strip_tags # type: ignore
+from django.core.exceptions import ValidationError # type: ignore
 
 
 profile = user_profile_model.objects.all()
@@ -51,6 +52,7 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
+            print('check 1')
             userProf = user_profile_model.objects.filter(user__id=request.user.id)
             if request.user.is_superuser:
                 return redirect('adminDash')
@@ -58,18 +60,30 @@ def login_view(request):
                 userProf = userProf[0]
                 if not userProf.company and userProf.is_active:
                     return redirect('companyReg')
-            if request.user.groups.filter(name=SUPER_VAR):
-                if len(bat_info_model.objects.all()) > 0:
-                    return redirect('sup_dashboard', SUPER_VAR)
+                if request.user.groups.filter(name=SUPER_VAR):
+                    if userProf.settings['first_login']:
+                        if len(bat_info_model.objects.all()) > 0:
+                            return redirect('sup_dashboard', SUPER_VAR)
+                        else:
+                            return redirect('Register', SUPER_VAR, 'facility')
+                    else:
+                        return redirect('PasswordChange', SUPER_VAR)
+                elif request.user.groups.filter(name=CLIENT_VAR):
+                    facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
+                    if userProf.settings['first_login']:
+                        return redirect('c_dashboard', facility)
+                    else:
+                        return redirect('PasswordChange', facility)
+                elif request.user.groups.filter(name=OBSER_VAR):
+                    if userProf.settings['first_login']:
+                        return redirect('facilitySelect')
+                    else:
+                        return redirect('PasswordChange', OBSER_VAR)
                 else:
-                    return redirect('Register', SUPER_VAR, 'facility')
-            elif request.user.groups.filter(name=CLIENT_VAR):
-                facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
-                return redirect('c_dashboard', facility)
-            elif request.user.groups.filter(name=OBSER_VAR):
-                return redirect('facilitySelect')
+                    messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
+                    return redirect('Login')
             else:
-                messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
+                messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
                 return redirect('Login')
         else:
             messages.error(request,"Incorrect username or password")
@@ -184,19 +198,28 @@ def main_change_password(request):
     })
     
 def change_password(request, facility):
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
+            userProf = user_profile_model.objects.get(user=request.user)
+            if not userProf.settings['first_login']:
+                userProf.settings['first_login'] = True
+                userProf.save()
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('profile', facility, 'main')
+            return redirect('Account', facility)
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'ees_forms/ees_password.html', {
-        'form': form, 'facility': facility
+        'form': form, 
+        'facility': facility,
+        'unlock': unlock,
+        'supervisor': supervisor, 
+        "client": client, 
     })
 
 def landingRegister(request):
@@ -229,6 +252,8 @@ def landingRegister(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.is_active = False
+            profile.settings = setDefaultSettings(profile, user.username)
+            profile.settings['first_login'] = True
             
             profile.save()
             
@@ -268,7 +293,7 @@ def registerCompany(request):
     companyForm = company_form()
     print(userProf.company)
     if request.method == 'POST':
-        finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
+        finalPhone = parsePhone(request.POST['phone'])
         new_data = request.POST.copy()
         new_data['phone'] = finalPhone
         form = company_form(new_data)
