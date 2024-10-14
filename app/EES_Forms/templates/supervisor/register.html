@@ -4,7 +4,7 @@
 <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
-
+<script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
 <body>
     <input id='access_page' type='hidden' value={{access_page}} />
     <div id='addMoreRegistrations' style='display:none;' data-registrations={{addMoreRegistrations}}></div>
@@ -53,7 +53,7 @@
                                     </div>
                                     <div style="display:block;">
                                         <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span><input type="text" name="phone" class="input" style="width: 100%;" placeholder="(123)456-7890" maxlength="75" required id="id_phone"></span>
+                                            <span><input type="text" oninput="processPhone(event)" name="phone" class="input" style="width: 100%;" placeholder="(123)456-7890" maxlength="75" required id="id_phone"></span>
                                             <label class="sub_label">Phone</label>
                                         </span>
                                     </div>

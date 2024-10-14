@@ -126,7 +126,8 @@ def formC(request, facility, fsID, selector):
             areaFilled = 0
             for formKeys in request.POST.keys():
                 if formKeys[:8] == 'areaName':
-                    areaFilled += 1
+                    if request.POST["areaStartTime" + formKeys[8:]] != '':
+                        areaFilled += 1
             print(areaFilled)
             for x in range(1,areaFilled+1):
                 x = str(x)
