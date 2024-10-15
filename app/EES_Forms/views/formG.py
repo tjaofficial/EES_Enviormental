@@ -248,7 +248,8 @@ def formG1(request, facility, fsID, selector):
         'profile_form': profile_form, 
         'selector': selector, 
         'todays_log': todays_log, 
-        'formName': formName
+        'formName': formName,
+        'options': options
     })
 
 @lock
@@ -261,9 +262,9 @@ def formG2(request, facility, fsID, selector):
     existing = False
     search = False
     now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    userProf = request.user.user_profile_model
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = form18_model.objects.all().order_by('-date')
     org2 = form18_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
@@ -271,10 +272,7 @@ def formG2(request, facility, fsID, selector):
     picker = issueForm_picker(facility, selector, fsID)
     
     if unlock:
-        if profile.exists():
-            cert_date = request.user.user_profile_model.cert_date
-        else:
-            return redirect('IncompleteForms', facility)
+        cert_date = request.user.user_profile_model.cert_date
     
     # Weather API Pull
     weather = weatherDict(options.city)
@@ -485,5 +483,6 @@ def formG2(request, facility, fsID, selector):
         'formName': formName, 
         'facility': facility,
         'notifs': notifs,
-        'freq': freq
+        'freq': freq,
+        'options': options
     })

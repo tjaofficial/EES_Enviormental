@@ -284,4 +284,5 @@ def formH(request, facility, fsID, selector):
         'client': client, 
         'unlock': unlock, 
         'readings_form': readings_form,
+        'options': options
     })

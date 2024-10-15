@@ -1,155 +1,38 @@
 function freeboard_check(truck) {
     const freeboard = document.getElementById('id_freeboard' + truck).value;
     if (freeboard == 'Yes') {
-        document.getElementById('id_wetted' + truck).value = 'N/A';
+        let newID = 'id_wetted' + truck
+        document.getElementById(newID).value = 'N/A';
     } else if (freeboard == '') {
         document.getElementById('id_wetted' + truck).value = '';
     }
 }
-function freeboard_1() {
-    freeboard_check(1);
+function freeboard(elem) {
+    freeboard_check(elem.name.slice(9));
     if_one_then_all();
 }
-function freeboard_2() {
-    freeboard_check(2);
-    if_one_then_all();
-}
-function freeboard_3() {
-    freeboard_check(3);
-    if_one_then_all();
-}
-function freeboard_4() {
-    freeboard_check(4);
-    if_one_then_all();
-}
-function freeboard_5() {
-    freeboard_check(5);
-    if_one_then_all();
-}
-
 window.onload = function initialDisplay() {
     for (number=1;number<6;number+=1){
         const formTruck = document.getElementById('id_observer'+number).value;
         if(!formTruck){
-            if (number == 1) {
-                changeTab1()
-            } else if (number == 2) {
-                changeTab2()
-            } else if (number == 3) {
-                changeTab3()
-            } else if (number == 4) {
-                changeTab4()
-            } else if (number == 5) {
-                changeTab5()
-            }
+            changeTab(number);
             break;
         }
     }
 }
-
-document.getElementById("tab1Cont").addEventListener("click", changeTab1);
-document.getElementById("tab2Cont").addEventListener("click", changeTab2);
-document.getElementById("tab3Cont").addEventListener("click", changeTab3);
-document.getElementById("tab4Cont").addEventListener("click", changeTab4);
-document.getElementById("tab5Cont").addEventListener("click", changeTab5);
-
-function changeTab1() {
-    document.getElementById('truck1Card').style.display = 'block';
-    document.getElementById('truck2Card').style.display = 'none';
-    document.getElementById('truck3Card').style.display = 'none';
-    document.getElementById('truck4Card').style.display = 'none';
-    document.getElementById('truck5Card').style.display = 'none';
-
-    document.getElementById('tab1Cont').style.backgroundColor = '#dfe5e9';
-    document.getElementById('tab1Cont').style.color = 'black';
-
-    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab2Cont').style.color = 'white';
-    document.getElementById('tab3Cont').style.color = 'white';
-    document.getElementById('tab4Cont').style.color = 'white';
-    document.getElementById('tab5Cont').style.color = 'white';
+function changeTab(item){
+    for (let i=1; i<=5; i++){
+        if (item == i){
+            document.getElementById('truck'+ String(i) +'Card').style.display = 'block';
+            document.getElementById('tab'+ String(i) +'Cont').style.backgroundColor = '#dfe5e9';
+            document.getElementById('tab'+ String(i) +'Cont').style.color = 'black';
+        } else {
+            document.getElementById('truck'+ String(i) +'Card').style.display = 'none';
+            document.getElementById('tab'+ String(i) +'Cont').style.backgroundColor = '#6c7d88';
+            document.getElementById('tab'+ String(i) +'Cont').style.color = 'white';
+        }
+    }
 }
-function changeTab2() {
-    document.getElementById('truck2Card').style.display = 'block';
-    document.getElementById('truck1Card').style.display = 'none';
-    document.getElementById('truck3Card').style.display = 'none';
-    document.getElementById('truck4Card').style.display = 'none';
-    document.getElementById('truck5Card').style.display = 'none';
-
-    document.getElementById('tab2Cont').style.backgroundColor = '#dfe5e9';
-    document.getElementById('tab2Cont').style.color = 'black';
-    
-    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab1Cont').style.color = 'white';
-    document.getElementById('tab3Cont').style.color = 'white';
-    document.getElementById('tab4Cont').style.color = 'white';
-    document.getElementById('tab5Cont').style.color = 'white';
-}
-function changeTab3() {
-    document.getElementById('truck3Card').style.display = 'block';
-    document.getElementById('truck1Card').style.display = 'none';
-    document.getElementById('truck2Card').style.display = 'none';
-    document.getElementById('truck4Card').style.display = 'none';
-    document.getElementById('truck5Card').style.display = 'none';
-
-    document.getElementById('tab3Cont').style.backgroundColor = '#dfe5e9';
-    document.getElementById('tab3Cont').style.color = 'black';
-    
-    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab1Cont').style.color = 'white';
-    document.getElementById('tab2Cont').style.color = 'white';
-    document.getElementById('tab4Cont').style.color = 'white';
-    document.getElementById('tab5Cont').style.color = 'white';
-}
-function changeTab4() {
-    document.getElementById('truck4Card').style.display = 'block';
-    document.getElementById('truck1Card').style.display = 'none';
-    document.getElementById('truck2Card').style.display = 'none';
-    document.getElementById('truck3Card').style.display = 'none';
-    document.getElementById('truck5Card').style.display = 'none';
-
-    document.getElementById('tab4Cont').style.backgroundColor = '#dfe5e9';
-    document.getElementById('tab4Cont').style.color = 'black';
-    
-    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab5Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab1Cont').style.color = 'white';
-    document.getElementById('tab2Cont').style.color = 'white';
-    document.getElementById('tab3Cont').style.color = 'white';
-    document.getElementById('tab5Cont').style.color = 'white';
-}
-function changeTab5() {
-    document.getElementById('truck5Card').style.display = 'block';
-    document.getElementById('truck1Card').style.display = 'none';
-    document.getElementById('truck2Card').style.display = 'none';
-    document.getElementById('truck3Card').style.display = 'none';
-    document.getElementById('truck4Card').style.display = 'none';
-
-    document.getElementById('tab5Cont').style.backgroundColor = '#dfe5e9';
-    document.getElementById('tab5Cont').style.color = 'black';
-    
-    document.getElementById('tab1Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab2Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab3Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab4Cont').style.backgroundColor = '#6c7d88';
-    document.getElementById('tab1Cont').style.color = 'white';
-    document.getElementById('tab2Cont').style.color = 'white';
-    document.getElementById('tab3Cont').style.color = 'white';
-    document.getElementById('tab4Cont').style.color = 'white';
-}
-
-
 function truckFinished(){
     list = [1,2,3,4,5];
     for (let item=0; item < list.length; item++){
@@ -167,9 +50,7 @@ function truckFinished(){
         }
     }
 }
-
 truckFinished();
-
 function if_one_then_all(){
     const input_group = ['observer', 'truck_id', 'date', 'time', 'contents', 'freeboard', 'wetted', 'comments'];
     for (let i=1; i < 6; i++) {
@@ -179,7 +60,6 @@ function if_one_then_all(){
             const input_check = document.getElementById('id_' + input + String(i)).value;
             if (input_check) {
                 pass = true;
-                
             }
         }
         if (pass) {
@@ -202,7 +82,5 @@ function if_one_then_all(){
             document.getElementById('id_comments' + String(i)).required = false;
         }
     } 
-    console.log(document.getElementById('id_time3').required)
 }
-
 if_one_then_all()

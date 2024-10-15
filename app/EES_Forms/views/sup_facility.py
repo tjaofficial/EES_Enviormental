@@ -6,7 +6,7 @@ from .form_settings_builds import form7settings
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 import json
-from .form_settings_builds import form7settings
+from .form_settings_builds import form7settings, form8settings, form9settings, form20settings, form21settings
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
@@ -334,6 +334,14 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
                 keysList.append(inputs)
             if formData.id == 7:
                 settingsDict = form7settings(keysList, request.POST)
+            elif formData.id == 8:
+                settingsDict = form8settings(keysList, request.POST)
+            elif formData.id == 9:
+                settingsDict = form9settings(keysList, request.POST)
+            elif formData.id == 20:
+                settingsDict = form20settings(keysList, request.POST)
+            elif formData.id == 21:
+                settingsDict = form21settings(keysList, request.POST)
             settingsChange = selectedSettings.settings
             settingsChange['settings'] = settingsDict
             copyPOST['settings'] = settingsChange

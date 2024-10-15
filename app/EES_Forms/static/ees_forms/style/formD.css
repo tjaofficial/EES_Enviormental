@@ -139,3 +139,20 @@
     background-color: #6c7d88;
     color: white;
 }
+.baseInput{
+    width: 215px; 
+    border-radius: 15px; 
+    font-size: 1.5rem; 
+    text-align: center;
+}
+.selectInput{
+    border-width: 2px; 
+    border-style: inset; 
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+}
+.textBox{
+    width: 463px; 
+    font-size: 1.5rem; 
+    border-radius: 15px; 
+    height: 8rem;
+}

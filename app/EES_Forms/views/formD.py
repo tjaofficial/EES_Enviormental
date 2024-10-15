@@ -20,7 +20,7 @@ def formD(request, facility, fsID, selector):
     now = datetime.datetime.now()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     today = datetime.date.today()
     last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
@@ -59,36 +59,36 @@ def formD(request, facility, fsID, selector):
                     'week_start': database_form.week_start,
                     'week_end': database_form.week_end,
                     'truck_id1': database_form.truck_id1,
-                    'date1': database_form.date1,
-                    'time1': database_form.time1,
+                    'date1': database_form.date1.strftime("%Y-%m-%d") if database_form.date1 else database_form.date1,
+                    'time1': database_form.time1.strftime("%H:%M") if database_form.time1 else database_form.time1,
                     'contents1': database_form.contents1,
                     'freeboard1': database_form.freeboard1,
                     'wetted1': database_form.wetted1,
                     'comments1': database_form.comments1,
                     'truck_id2': database_form.truck_id2,
-                    'date2': database_form.date2,
-                    'time2': database_form.time2,
+                    'date2': database_form.date2.strftime("%Y-%m-%d") if database_form.date2 else database_form.date2,
+                    'time2': database_form.time2.strftime("%H:%M") if database_form.time2 else database_form.time2,
                     'contents2': database_form.contents2,
                     'freeboard2': database_form.freeboard2,
                     'wetted2': database_form.wetted2,
                     'comments2': database_form.comments2,
                     'truck_id3': database_form.truck_id3,
-                    'date3': database_form.date3,
-                    'time3': database_form.time3,
+                    'date3': database_form.date3.strftime("%Y-%m-%d") if database_form.date3 else database_form.date3,
+                    'time3': database_form.time3.strftime("%H:%M") if database_form.time3 else database_form.time3,
                     'contents3': database_form.contents3,
                     'freeboard3': database_form.freeboard3,
                     'wetted3': database_form.wetted3,
                     'comments3': database_form.comments3,
                     'truck_id4': database_form.truck_id4,
-                    'date4': database_form.date4,
-                    'time4': database_form.time4,
+                    'date4': database_form.date4.strftime("%Y-%m-%d") if database_form.date4 else database_form.date4,
+                    'time4': database_form.time4.strftime("%H:%M") if database_form.time4 else database_form.time4,
                     'contents4': database_form.contents4,
                     'freeboard4': database_form.freeboard4,
                     'wetted4': database_form.wetted4,
                     'comments4': database_form.comments4,
                     'truck_id5': database_form.truck_id5,
-                    'date5': database_form.date5,
-                    'time5': database_form.time5,
+                    'date5': database_form.date5.strftime("%Y-%m-%d") if database_form.date5 else database_form.date5,
+                    'time5': database_form.time5.strftime("%H:%M") if database_form.time5 else database_form.time5,
                     'contents5': database_form.contents5,
                     'freeboard5': database_form.freeboard5,
                     'wetted5': database_form.wetted5,
@@ -164,5 +164,7 @@ def formD(request, facility, fsID, selector):
         'formName': formName, 
         'facility': facility,
         'notifs': notifs,
-        'freq': freq
+        'freq': freq,
+        'amountOfTrucks': [1,2,3,4,5],
+        'initial_data': initial_data
     })

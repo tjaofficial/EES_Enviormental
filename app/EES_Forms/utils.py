@@ -151,7 +151,8 @@ g2Settings = {
     'operating_mode2': "-",
 }
 
-hSettings = {
+hDefaultSettings = {
+    "custom_name": False, 
     'height_above_ground_level': 350,
     'describe_emissions_point_start': 'Above Stack',
     'describe_emissions_point_stop': 'Same',
@@ -160,7 +161,7 @@ hSettings = {
     'process_equip2': "-",
     'operating_mode2': "-",
 }
-cSettings = {
+cDefaultSettings = {
     "custom_name": "Coal Field Inspections", 
     "number_of_areas": "4", 
     "area1": {
@@ -198,6 +199,17 @@ cSettings = {
         "options": {}
     }
 }
+iDefaultSettings = {
+    "custom_name": False,
+    "days_weekly": 5,
+    
+}
+
+
+
+
+
+
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
     emptyDB = False

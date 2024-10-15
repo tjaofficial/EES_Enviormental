@@ -1,4 +1,52 @@
 import json
+def form21settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form20settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+            elif mainLabel == 'days_weekly':
+                settings[mainLabel] = int(requestPost[key])
+    return json.loads(json.dumps(settings))
+
+def form9settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form8settings(keysList, requestPost):
+    settings = {'options':{}}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            # pairLen = len(key.split("-"))
+            # pairFormID = key.split("-")[0]
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+            elif mainLabel == 'number_of_options':
+                settings[mainLabel] = int(requestPost[key])
+            elif mainLabel[:6] == 'option':
+                if mainLabel not in settings['options'].keys():
+                    settings['options'][str(mainLabel[6:])] = requestPost[key]
+    return json.loads(json.dumps(settings))
 
 def form7settings(keysList, requestPost):
     settings = {}
@@ -9,14 +57,11 @@ def form7settings(keysList, requestPost):
             pairFormID = key.split("-")[0]
             mainLabel = key.split("-")[1]
             secondaryLabel = False
-            print(pairFormID)
-            print(mainLabel)
             if pairLen == 3:
                 secondaryLabel = key.split("-")[2]
-                print(secondaryLabel)
             
             if mainLabel == 'custom_name':
-                settings[mainLabel] = requestPost[key]
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
             elif mainLabel == 'number_of_areas':
                 settings[mainLabel] = int(requestPost[key])
             elif mainLabel[:-1] == 'area':

@@ -1,5 +1,5 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%}{% load static %}
+{% block list%}{% load static %}{% load formD_tags %}
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/formD.js' %}"></script>
 <link href="{% static 'ees_forms/style/formD.css' %}" rel="stylesheet" />
@@ -37,9 +37,8 @@
                         </tr>
                         <tr>
                             <th colspan="3" style="text-align: center;">
-                            Week Of:    
-                                            {{ form.week_start }} - {{ form.week_end }}
-
+                                Week Of:    
+                                {{ form.week_start }} - {{ form.week_end }}
                             </th>
                             <th></th>
                             <th></th>
@@ -52,377 +51,103 @@
                     </table>
                     <div id="truckCard">
                         <div id="truckTabs">
-                            <div class="tabContainer topLeftCont" id='tab1Cont'>
+                            <div class="tabContainer topLeftCont" onclick="changeTab(1)" id='tab1Cont'>
                                 Truck 1
                             </div>
-                            <div class="tabContainer" id='tab2Cont'>
+                            <div class="tabContainer" onclick="changeTab(2)" id='tab2Cont'>
                                 Truck 2
                             </div>
-                            <div class="tabContainer" id='tab3Cont'>
+                            <div class="tabContainer" onclick="changeTab(3)" id='tab3Cont'>
                                 Truck 3
                             </div>
-                            <div class="tabContainer" id='tab4Cont'>
+                            <div class="tabContainer" onclick="changeTab(4)" id='tab4Cont'>
                                 Truck 4
                             </div>
-                            <div class="tabContainer topRightCont" id='tab5Cont'>
+                            <div class="tabContainer topRightCont" onclick="changeTab(5)" id='tab5Cont'>
                                 Truck 5
                             </div>
                         </div>
-                        <div class="truckForm" id='truck1Card'>
+                        {% for truck in amountOfTrucks %}
+                        <div class="truckForm" id='truck{{forloop.counter}}Card'>
                             <table style="border-collapse: collapse; margin: auto;">
                                 <tr>
-                                    <th class="inputHeader">
-                                        Observer:
-                                    </th>
+                                    <th class="inputHeader">Observer: </th>
                                     <td>
-                                        {{ form.observer1 }}
+                                        <input type="text" name="observer{{forloop.counter}}" value="{% with fill='observer'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" maxlength="30" id="id_observer{{forloop.counter}}" required>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="inputHeader">
-                                        Truck ID
-                                    </th>
+                                    <th class="inputHeader">Truck ID: </th>
                                     <td>
-                                        {{ form.truck_id1 }}
+                                        <select name="truck_id{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_truck_id{{forloop.counter}}" required>
+                                            <option value="">---------</option>
+                                            <option value="#5" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#5' %}selected{% endif %}{% endwith %}>#5</option>
+                                            <option value="#6" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#6' %}selected{% endif %}{% endwith %}>#6</option>
+                                            <option value="#7" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#7' %}selected{% endif %}{% endwith %}>#7</option>
+                                            <option value="#9" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#9' %}selected{% endif %}{% endwith %}>#9</option>
+                                            <option value="Dozer" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Dozer' %}selected{% endif %}{% endwith %}>Dozer</option>
+                                            <option value="Semi" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Semi' %}selected{% endif %}{% endwith %}>Semi</option>
+                                            <option value="Contractor" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Contractor' %}selected{% endif %}{% endwith %}>Contractor</option><option value="Security">Security</option>
+                                            <option value="Water Truck" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Water Truck' %}selected{% endif %}{% endwith %}>Water Truck</option>
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="inputHeader">
-                                        Date: 
-                                    </th>
+                                    <th class="inputHeader">Date: </th>
                                     <td>
-                                        {{ form.date1 }}
+                                        <input type="date" name="date{{forloop.counter}}" value="{% with fill='date'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_date{{forloop.counter}}" required>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="inputHeader">
-                                        Time:
-                                    </th>
+                                    <th class="inputHeader">Time: </th>
                                     <td>
-                                        {{ form.time1 }}
+                                        <input type="time" name="time{{forloop.counter}}" value="{% with fill='time'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_time{{forloop.counter}}" required>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="inputHeader">
-                                        Contents:
-                                    </th>
+                                    <th class="inputHeader">Contents: </th>
                                     <td>
-                                        {{ form.contents1 }}
+                                        <select name="contents{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_contents{{forloop.counter}}" required>
+                                            <option value="">---------</option>
+                                            <option value="Coal" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Coal' %}selected{% endif %}{% endwith %}>Coal</option>
+                                            <option value="Coke" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Coke' %}selected{% endif %}{% endwith %}>Coke</option>
+                                            <option value="Breeze" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Breeze' %}selected{% endif %}{% endwith %}>Breeze</option>
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="inputHeader">
-                                        6" or greater freeboard?
-                                    </th>
+                                    <th class="inputHeader">6" or greater freeboard? </th>
                                     <td>
-                                        {{ form.freeboard1 }}
+                                        <select name="freeboard{{forloop.counter}}" oninput="freeboard(this)" class="baseInput" class="selectInput" id="id_freeboard{{forloop.counter}}" required>
+                                            <option value="">---------</option>
+                                            <option value="Yes" {% with fill='freeboard'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Yes' %}selected{% endif %}{% endwith %}>Yes</option>
+                                            <option value="No" {% with fill='freeboard'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'No' %}selected{% endif %}{% endwith %}>No</option>
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="inputHeader">
-                                        If NO, is material adequately wetted and stable?
-                                    </th>
+                                    <th class="inputHeader">If NO, is material adequately wetted and stable? </th>
                                     <td>
-                                        {{ form.wetted1 }}
+                                        <select name="wetted{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_wetted{{forloop.counter}}" required>
+                                            <option value="">---------</option>
+                                            <option value="N/A" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'N/A' %}selected{% endif %}{% endwith %}>N/A</option>
+                                            <option value="Yes" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Yes' %}selected{% endif %}{% endwith %}>Yes</option>
+                                            <option value="No" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'No' %}selected{% endif %}{% endwith %}>No</option>
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th colspan="2" class="inputHeaderComment">
-                                        Comments:
-                                    </th>
+                                    <th colspan="2" class="inputHeaderComment">Comments: </th>
                                 </tr>
                                 <tr style="text-align: center;">
                                     <td colspan="2">
-                                        {{ form.comments1 }}
+                                        <textarea name="comments{{forloop.counter}}" cols="40" rows="3" onchange="if_one_then_all()" type="text" class="textBox" maxlength="30" id="id_comments{{forloop.counter}}" required>{% with fill='comments'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}</textarea>
                                         <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                        <div class="truckForm" id='truck2Card'>
-                            <table style="border-collapse: collapse; margin: auto;">
-                                <tr>
-                                    <th class="inputHeader">
-                                        Observer:
-                                    </th>
-                                    <td>
-                                        {{ form.observer2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Truck ID
-                                    </th>
-                                    <td>
-                                        {{ form.truck_id2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Date: 
-                                    </th>
-                                    <td>
-                                        {{ form.date2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Time:
-                                    </th>
-                                    <td>
-                                        {{ form.time2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Contents:
-                                    </th>
-                                    <td>
-                                        {{ form.contents2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        6" or greater freeboard?
-                                    </th>
-                                    <td>
-                                        {{ form.freeboard2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        If NO, is material adequately wetted and stable?
-                                    </th>
-                                    <td>
-                                        {{ form.wetted2 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="inputHeaderComment">
-                                        Comments:
-                                    </th>
-                                </tr>
-                                <tr style="text-align: center;">
-                                    <td colspan="2">
-                                        {{ form.comments2 }}
-                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="truckForm" id='truck3Card'>
-                            <table style="border-collapse: collapse; margin: auto;">
-                                <tr>
-                                    <th class="inputHeader">
-                                        Observer:
-                                    </th>
-                                    <td>
-                                        {{ form.observer3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Truck ID
-                                    </th>
-                                    <td>
-                                        {{ form.truck_id3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Date: 
-                                    </th>
-                                    <td>
-                                        {{ form.date3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Time:
-                                    </th>
-                                    <td>
-                                        {{ form.time3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Contents:
-                                    </th>
-                                    <td>
-                                        {{ form.contents3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        6" or greater freeboard?
-                                    </th>
-                                    <td>
-                                        {{ form.freeboard3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        If NO, is material adequately wetted and stable?
-                                    </th>
-                                    <td>
-                                        {{ form.wetted3 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="inputHeaderComment">
-                                        Comments:
-                                    </th>
-                                </tr>
-                                <tr style="text-align: center;">
-                                    <td colspan="2">
-                                        {{ form.comments3 }}
-                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="truckForm" id='truck4Card'>
-                            <table style="border-collapse: collapse; margin: auto;">
-                                <tr>
-                                    <th class="inputHeader">
-                                        Observer:
-                                    </th>
-                                    <td>
-                                        {{ form.observer4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Truck ID
-                                    </th>
-                                    <td>
-                                        {{ form.truck_id4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Date: 
-                                    </th>
-                                    <td>
-                                        {{ form.date4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Time:
-                                    </th>
-                                    <td>
-                                        {{ form.time4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Contents:
-                                    </th>
-                                    <td>
-                                        {{ form.contents4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        6" or greater freeboard?
-                                    </th>
-                                    <td>
-                                        {{ form.freeboard4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        If NO, is material adequately wetted and stable?
-                                    </th>
-                                    <td>
-                                        {{ form.wetted4 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="inputHeaderComment">
-                                        Comments:
-                                    </th>
-                                </tr>
-                                <tr style="text-align: center;">
-                                    <td colspan="2">
-                                        {{ form.comments4 }}
-                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="truckForm" id='truck5Card'>
-                            <table style="border-collapse: collapse; margin: auto;">
-                                <tr>
-                                    <th class="inputHeader">
-                                        Observer:
-                                    </th>
-                                    <td>
-                                        {{ form.observer5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Truck ID
-                                    </th>
-                                    <td>
-                                        {{ form.truck_id5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Date: 
-                                    </th>
-                                    <td>
-                                        {{ form.date5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Time:
-                                    </th>
-                                    <td>
-                                        {{ form.time5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        Contents:
-                                    </th>
-                                    <td>
-                                        {{ form.contents5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        6" or greater freeboard?
-                                    </th>
-                                    <td>
-                                        {{ form.freeboard5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="inputHeader">
-                                        If NO, is material adequately wetted and stable?
-                                    </th>
-                                    <td>
-                                        {{ form.wetted5 }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th colspan="2" class="inputHeaderComment">
-                                        Comments:
-                                    </th>
-                                </tr>
-                                <tr style="text-align: center;">
-                                    <td colspan="2">
-                                        {{ form.comments5 }}
-                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                        {% endfor %}
                     </div> 
                     {% if supervisor or client %} {% elif unlock and not search %}
                     {% include "shared/components/submitButton.html" with label="form" %}

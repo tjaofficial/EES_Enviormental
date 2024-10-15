@@ -19,7 +19,7 @@ def formA5(request, facility, fsID, selector):
     existing = False
     search = False
     now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    profile = request.user.user_profile_model
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     org = form5_model.objects.all().order_by('-date')
@@ -27,12 +27,8 @@ def formA5(request, facility, fsID, selector):
     full_name = request.user.get_full_name()
     exist_canvas = ''
     picker = issueForm_picker(facility, selector, fsID)
-    
     if unlock:
-        if profile.exists():
-            cert_date = request.user.user_profile_model.cert_date
-        else:
-            return redirect('IncompleteForms', facility)
+        cert_date = request.user.user_profile_model.cert_date
     
     #Weather API Pull
     weather = weatherDict(options.city)
@@ -333,5 +329,6 @@ def formA5(request, facility, fsID, selector):
         'facility': facility,
         'notifs': notifs,
         'freq': freq,
-        'fsID': fsID
+        'fsID': fsID,
+        "options": options
     })

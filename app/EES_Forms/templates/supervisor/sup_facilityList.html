@@ -35,7 +35,7 @@
                                     {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
                                     <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
                                         <td class="center">{{x.id}}</td>
-                                        <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
+                                        <td class="">{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
                                         <td class="center" style="display: inline-flex;"> 
                                             <a class="smallLink" href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}">
                                                edit
