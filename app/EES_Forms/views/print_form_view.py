@@ -70,8 +70,8 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                     formsBeingUsed.append((packs ,settingsForm))
     elif formGroup == 'Weekly' and type == 'group':
         formsBeingUsed = []
-        packetQuery = the_packets_model.objects.get(id=formIdentity)
-        packetFormList = packetQuery.formList["formsList"]
+        packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
+        packetFormList = packetBeingPrinted.formList["formsList"]
         for packs in packetFormList:
             for settingsForm in formSettingsQuery:
                 if packetFormList[packs]['settingsID'] == settingsForm.id:
@@ -141,7 +141,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             endDate = formDateParsed
             if type not in ['single', 'coke_battery']:
-                weekly_start_day = packetQuery.formList['settings']['weekly_start_day']
+                weekly_start_day = packetBeingPrinted.formList['settings']['weekly_start_day']
                 startingDayNumb = time.strptime(weekly_start_day, "%A").tm_wday
                 amountOfDaysToStartingDay = (startingDayNumb-formDateParsed.weekday())
                 if formDateParsed.weekday() < startingDayNumb:
