@@ -81,15 +81,14 @@ def formC(request, facility, fsID, selector):
                     area = formModelEntry.area_json_3
                 elif x == "4":
                     area = formModelEntry.area_json_4
-                if selector == 'form':
-                    intital_adding = {
-                        x: {
-                            'name': area['selection'],
-                            'startTime': datetime.datetime.strptime(area['start_time'], "%H:%M").strftime("%H:%M"),
-                            'stopTime': datetime.datetime.strptime(area['stop_time'], "%H:%M").strftime("%H:%M"),
-                            'average': area['average'],
-                        }
+                intital_adding = {
+                    x: {
+                        'name': area['selection'],
+                        'startTime': datetime.datetime.strptime(area['start_time'], "%H:%M").strftime("%H:%M"),
+                        'stopTime': datetime.datetime.strptime(area['stop_time'], "%H:%M").strftime("%H:%M"),
+                        'average': area['average'],
                     }
+                }
                 initial_data_dict = {
                     x: [
                         area['readings']['1'], 

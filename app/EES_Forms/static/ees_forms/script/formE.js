@@ -2,18 +2,20 @@
 
 window.addEventListener("load", ()=> {
     let gooseNeckArray = []
-    const gooseNeckInputValue = document.querySelector('#gooseNeckData').value;
-    const gooseNeckObj = JSON.parse(gooseNeckInputValue);
-    if(gooseNeckObj.hasOwnProperty('data')){
-        gooseNeckArray = gooseNeckObj.data;
+    if (document.querySelector('#gooseNeckData')){
+        const gooseNeckInputValue = document.querySelector('#gooseNeckData').value;
+        const gooseNeckObj = JSON.parse(gooseNeckInputValue);
+        if(gooseNeckObj.hasOwnProperty('data')){
+            gooseNeckArray = gooseNeckObj.data;
+        }
+        else{
+            gooseNeckArray = [];
+        }
+        
+        
+        insertHTMLString(gooseNeckArray);
+        updateEventListeners();
     }
-    else{
-        gooseNeckArray = [];
-    }
-    
-    
-    insertHTMLString(gooseNeckArray);
-    updateEventListeners();
 });
 
 function updateEventListeners(){
@@ -160,13 +162,17 @@ function update_Temp_Save(event){
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
-function no_leaks() {
-    const leaks = document.getElementById('id_leaks').value;
-
-    if (leaks == 'No') {
-        document.getElementById('gooseNeckInputContainer').style.display = 'none';
-    } else if (leaks == "Yes" || !leaks) {
-        document.getElementById('gooseNeckInputContainer').style.display = 'contents';
+function no_leaks(elem) {
+    if (elem){
+        const leaks = elem.value;
+        
+        if (leaks == 'No') {
+            document.getElementById('gooseNeckInputContainer').style.display = 'none';
+            document.getElementById('newEmpty').style.display = 'contents';
+        } else if (leaks == "Yes" || !leaks) {
+            document.getElementById('gooseNeckInputContainer').style.display = 'contents';
+            document.getElementById('newEmpty').style.display = 'none';
+        }
     }
 }
-no_leaks();
+no_leaks(document.getElementById('id_leaks'));

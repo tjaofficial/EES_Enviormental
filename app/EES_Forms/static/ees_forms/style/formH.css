@@ -97,3 +97,15 @@ span.sideWord{
 .formImageContainer > img{
     width:100%;
 }
+#formG1_box1{
+    border: 1px solid black;
+    text-align: center;
+    width: 88px;
+    padding: 5px;
+
+}
+#formG1_box2{
+    border: 1px solid black;
+    width: 43px;
+    text-align: center;
+}

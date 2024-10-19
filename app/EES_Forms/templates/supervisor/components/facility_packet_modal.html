@@ -1,33 +1,44 @@
 {% load static %}
 <script defer src="{% static 'ees_forms/script/deletePacket.js' %}"></script>
+<link href="{% static 'ees_forms/style/secondary_form.css' %}" rel="stylesheet" />
 <div id="edit{{packID}}" class="modalHolder" style="display:none;">
     <div id="cancelReg" class="modal-content">
         <span onclick="exit_modal({{packID}}, 'edit')" class="closeAdd">&times;</span>
         <div class='modalHeader'>
             <h1><span class="registerName">{{packet.name}} Settings</span></h1>
         </div>
-        <div class='modalContent'>
+        <div class='modalContent'> 
             <form action="" method="POST">
                 {% csrf_token %}
-                <div style="color:black;text-align:justify;">
-                    <p>Facility: {{info.0.facility_name}}</p><br>
-                    <p>Packet Name: <input value="{{packet.name}}" type="text" name="name" placeholder="Enter packet name..." maxlength="70" required id="id_name">
-                        <input type="hidden" name="packID" value="{{packet.id}}"></p><br>
-                    <p>Frequency: <select name="frequency" id="id_frequency">
-                        <option value="Daily" {% if packet.frequency == 'Daily' %}selected{% endif %}>Daily</option>
-                        <option value="Weekly" {% if packet.frequency == 'Weekly' %}selected{% endif %}="">Weekly</option>
-                        <option value="Monthly" {% if packet.frequency == 'Monthly' %}selected{% endif %}>Monthly</option>
-                        <option value="Quarterly" {% if packet.frequency == 'Quarterly' %}selected{% endif %}>Quarterly </option>
-                        <option value="Semi-Annual" {% if packet.frequency == 'Semi-Annual' %}selected{% endif %}>Semi-Annual</option>
-                        <option value="Annual" {% if packet.frequency == 'Annual' %}selected{% endif %}>Annual</option>
-                      
-                      </select></p><br>
-                    {% comment %} <select name="existingForms">
-                        <option value="">------</option>
-                        {% for forms in info.1 %}
-                        <option value="{{forms.3.id}}">EQUIPMENT_NAME - {{forms.2}}</option>
-                        {% endfor %}
-                    </select> {% endcomment %}
+                <div class="formCont" style="color:black;text-align:justify;">
+                    <div class="innerFormCont">
+                        <li class="form-line">
+                            Facility: {{info.0.facility_name}}
+                        </li><br>
+                        <li class="form-line">
+                            Packet Name: <input value="{{packet.name}}" type="text" name="name" placeholder="Enter packet name..." maxlength="70" required id="id_name">
+                            <input type="hidden" name="packID" value="{{packet.id}}">
+                        </li>
+                        <li class="form-line">
+                            Frequency: {% include 'shared/components/helpPack.html' with data="frequencyInput" popupCounter=facID|add:"-"|add:packID|add:"a" %}
+                            <select name="frequency" id="id_frequency">
+                                <option value="Daily" {% if packet.formList.settings.frequency|capfirst == 'Daily' %}selected{% endif %}>Daily</option>
+                                <option value="Weekly" {% if packet.formList.settings.frequency|capfirst == 'Weekly' %}selected{% endif %}="">Weekly</option>
+                                <option value="Monthly" {% if packet.formList.settings.frequency|capfirst == 'Monthly' %}selected{% endif %}>Monthly</option>
+                                <option value="Quarterly" {% if packet.formList.settings.frequency|capfirst == 'Quarterly' %}selected{% endif %}>Quarterly </option>
+                                <option value="Semi-Annual" {% if packet.formList.settings.frequency|capfirst == 'Semi-Annual' %}selected{% endif %}>Semi-Annual</option>
+                                <option value="Annual" {% if packet.formList.settings.frequency|capfirst == 'Annual' %}selected{% endif %}>Annual</option>
+                            </select>
+                        </li>
+                        <li class="form-line">
+                            Week Start Day: {% include 'shared/components/helpPack.html' with data="weeklyStartDayInput" popupCounter=facID|add:"-"|add:packID|add:"b" %}
+                            <select name="weekly_start_day" id="weekly_start_day">
+                                <option value="Sunday" {% if packet.formList.settings.weekly_start_day|capfirst == 'Sunday' %}selected{% endif %}>Sunday</option>
+                                <option value="Monday" {% if packet.formList.settings.weekly_start_day|capfirst == 'Monday' %}selected{% endif %}>Monday</option>
+                                <option value="Saturday" {% if packet.formList.settings.weekly_start_day|capfirst == 'Saturday' %}selected{% endif %}>Saturday</option>
+                            </select>
+                        </li>
+                    </div>
                     <br>
                     <div style="text-align: right;">
                         <input id="submit{{packID}}" name="pack_settings" type="submit" value="Update">

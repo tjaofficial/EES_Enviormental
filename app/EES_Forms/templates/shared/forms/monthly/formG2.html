@@ -113,7 +113,7 @@
                                     <td id="boxa4" colspan="2" >
                                         OPERATING MODE<br>{{ data.op_mode1 }}</td>
                                     <td id="boxa4" colspan="2" >
-                                        BACKGROUND COLOR<br>Start:{{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.background_color_stop }}
+                                        BACKGROUND COLOR<br>Start: {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.background_color_stop }}
                                     </td>
                                     <td id="boxa4" colspan="1" >
                                         SKY CONDITION<br>{{ data.sky_conditions }}
@@ -127,7 +127,7 @@
                                         OPERATING MODE<br>{{ data.op_mode2 }}
                                     </td>
                                     <td id="boxa4" colspan="2" >
-                                        WIND SPEED<br>Start:{{ data.wind_speed_start }}mph &nbsp; Stop:{{ data.wind_speed_stop }}mph
+                                        WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }}{% if data.wind_speed_stop != 'same' %}mph{% endif %}
                                     </td>
                                     <td id="boxa4" colspan="1">
                                         WIND DIRECTION<br>{{ data.wind_direction }}
@@ -135,10 +135,10 @@
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSION POINT<br>Start:{{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_point_stop }}
+                                        DESCRIBE EMISSION POINT<br>Start: {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_point_stop }}
                                     </td>
                                     <td id="boxa4" colspan="2" >
-                                        AMBIENT TEMP<br>Start:{{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop:{{ data.ambient_temp_stop }}<sup>o</sup>
+                                        AMBIENT TEMP<br>Start: {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop: {{ data.ambient_temp_stop }}{% if data.ambient_temp_stop != 'same' %}<sup>o</sup>{% endif %}
                                     </td>
                                     <td id="boxa4" colspan="1" >
                                         HUMIDITY<br>{{ data.humidity }}%
@@ -170,15 +170,15 @@
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSIONS<br>Start:{{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_emissions_stop }}
+                                        DESCRIBE EMISSIONS<br>Start: {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_emissions_stop }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="3" >
-                                        EMISSIONS COLOR<br>Start:{{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_color_stop }}
+                                        EMISSIONS COLOR<br>Start: {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_color_stop }}
                                     </td>
                                     <td id="boxa4" colspan="3" >
-                                        PLUME TYPE:
+                                        PLUME TYPE:<br>
                                         {{ data.plume_type }}
                                     </td>
                                 </tr>
@@ -194,12 +194,12 @@
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start:{{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.plume_opacity_determined_stop }}
+                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start: {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.plume_opacity_determined_stop }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE BACKGROUND<br>Start:{{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_background_stop }}
+                                        DESCRIBE BACKGROUND<br>Start: {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_background_stop }}
                                     </td>
                                 </tr>
                             </table>
@@ -210,21 +210,21 @@
                     <center>
                         Method 9B Observations shall be performed during pushing.
                         <br><br><br>
-                        Highest average opacity for Method 9B reading: {{ readings_form.PEC_average_main }}
+                        <span class="bold">Highest average opacity for Method 9B reading: </span>{{ readings_form.PEC_average_main }}
                     </center>    
                     <br><br>
                     <div id='pushTravels'>
                         <div id="bothTables">
                             <div>
-                            <table name="oven1" style="border-collapse: collapse;">
+                                <table name="oven1" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.PEC_oven_a }}
+                                            <span class="bold">Oven No: </span>{{ readings_form.PEC_oven_a }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.PEC_start_a }}
+                                            <span class="bold">Start Time: </span>{{ readings_form.PEC_start_a }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -232,7 +232,7 @@
                                     </tr> 
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                        <td rowspan="3" style="border: 1px solid black;width: 33px;"><span class="sideWord">Push</span></td>
                                         <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
                                         <td id="boxa4">0</td>
                                         <td id="boxa4">15</td>
@@ -260,7 +260,7 @@
                                     </tr> 
                                     <tr>
                                         <td colspan="6">
-                                            Highest 6-reading Average Opacity for Push: {{ readings_form.PEC_average_a }}
+                                            <span class="bold">Highest 6-reading Average Opacity for Push: </span>{{ readings_form.PEC_average_a }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -273,13 +273,13 @@
                                 <table name="oven2" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.PEC_oven_b }}
+                                            <span class="bold">Oven No: </span>{{ readings_form.PEC_oven_b }}
                                             <span class="oven2_pop_class" id="popUp2" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.PEC_start_b }}
+                                            <span class="bold">Start Time: </span>{{ readings_form.PEC_start_b }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -287,7 +287,7 @@
                                     </tr> 
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                        <td rowspan="3" style="border: 1px solid black; width: 33px;"><span class="sideWord">Push</span></td>
                                         <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
                                         <td id="boxa4">0</td>
                                         <td id="boxa4">15</td>
@@ -315,7 +315,7 @@
                                     </tr> 
                                     <tr>
                                         <td colspan="6">
-                                            Highest 6-reading Average Opacity for Push: {{ readings_form.PEC_average_b }}
+                                            <span class="bold">Highest 6-reading Average Opacity for Push: </span>{{ readings_form.PEC_average_b }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -330,13 +330,13 @@
                                 <table name="oven3" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.PEC_oven_c }}
+                                            <span class="bold">Oven No: </span>{{ readings_form.PEC_oven_c }}
                                             <span class="oven2_pop_class" id="popUp3" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.PEC_start_c }}
+                                            <span class="bold">Start Time: </span>{{ readings_form.PEC_start_c }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -344,7 +344,7 @@
                                     </tr> 
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
+                                        <td rowspan="3" style="border: 1px solid black; width: 33px;"><span class="sideWord">Push</span></td>
                                         <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
                                         <td id="boxa4">0</td>
                                         <td id="boxa4">15</td>
@@ -372,7 +372,7 @@
                                     </tr> 
                                     <tr>
                                         <td colspan="6">
-                                            Highest 6-reading Average Opacity for Push: {{ readings_form.PEC_average_c }}
+                                            <span class="bold">Highest 6-reading Average Opacity for Push: </span>{{ readings_form.PEC_average_c }}
                                         </td>
                                     </tr>
                                     <tr>

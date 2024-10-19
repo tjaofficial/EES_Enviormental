@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from .models import *
-from datetime import datetime as dtime, date, time
 from django.db.models import Q # type: ignore
 from django.apps import apps # type: ignore
 import ast
@@ -12,6 +11,7 @@ import os
 import calendar
 import random
 import string
+import time
 from django.shortcuts import redirect # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from channels.layers import get_channel_layer # type: ignore
@@ -202,7 +202,7 @@ cDefaultSettings = {
 iDefaultSettings = {
     "custom_name": False,
     "days_weekly": 5,
-    
+
 }
 
 
@@ -346,6 +346,10 @@ class Calendar2(HTMLCalendar):
         if isinstance(selectedForm, str):
             packetsEntry = the_packets_model.objects.get(id=int(selectedForm))
             packFreq = packetsEntry.formList['settings']['frequency'].capitalize()
+            def day_name_to_number(day_name):
+                # Convert the day name to a date object
+                date_obj = time.strptime(day_name, "%A").tm_wday
+                return date_obj
             if packFreq == 'Daily':
                 print("Starting to find Forms that exist on this day for daily...")
                 print(forms)
@@ -368,31 +372,38 @@ class Calendar2(HTMLCalendar):
                         eventCell = True
                         break
             elif packFreq == 'Weekly':
+                packStartDayNumber = day_name_to_number(packetsEntry.formList['settings']['weekly_start_day'].capitalize())
                 print("Starting to find Forms that exist on this day for weekly...")
-                print(forms)
                 wPacketFormList = []
                 for iForms in forms:
                     try:
-                        if iForms.date.day == day:
-                            wPacketFormList.append(iForms)
+                        theDate = iForms.date
                     except:
-                        if iForms.week_start.day == day:
-                            wPacketFormList.append(iForms)
+                        theDate = iForms.week_start
+                    if packStartDayNumber == 5:
+                        if theDate.weekday() in [5,6]:
+                            weekEnd = theDate + datetime.timedelta(days=11 - theDate.weekday())
+                        else:
+                            weekEnd = theDate + datetime.timedelta(days=4 - theDate.weekday())
+                    elif packStartDayNumber == 0:
+                        weekEnd = theDate + datetime.timedelta(days=6 - theDate.weekday())
+                    elif packStartDayNumber == 6:
+                        if theDate.weekday() in [5,6]:
+                            if theDate.weekday() == 5: 
+                                weekEnd = theDate
+                            else:
+                                weekEnd = theDate + datetime.timedelta(days=12 - theDate.weekday())
+                        else:
+                            weekEnd = theDate + datetime.timedelta(days=5 - theDate.weekday())
+                    if weekEnd not in wPacketFormList:
+                        wPacketFormList.append(weekEnd)
                 for h in wPacketFormList:
-                    try:
-                        if h.date.year == year:
-                            print('check 1')
-                            selectedFormDate = h
-                            print('check 2')
-                            forms_html += "<a href='../../../../printIndex/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-"+ formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
-                            eventCell = True
-                            break
-                    except:
-                        if h.week_start.year == year:
-                            selectedFormDate = h
-                            forms_html += "<a href='../../../../printIndex/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.week_start.year) + "-"+ formatTheDayNumber(selectedFormDate.week_start.month) +"-"+ formatTheDayNumber(selectedFormDate.week_start.day) +"' target='_blank'>Submitted Packet</a><br>"
-                            eventCell = True
-                            break
+                    if h.year == year and h.day == day:
+                        print('check 1')
+                        selectedFormDate = h
+                        forms_html += "<a href='../../../../printIndex/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.year) + "-"+ formatTheDayNumber(selectedFormDate.month) +"-"+ formatTheDayNumber(selectedFormDate.day) +"' target='_blank'>Submitted Packet</a><br>"
+                        eventCell = True
+                        break
             elif packFreq == 'Monthly':
                 print('Monthly')
         else:
@@ -440,14 +451,9 @@ class Calendar2(HTMLCalendar):
         formList = get_facility_forms('facilityName', facility)
         #ogFormID = forms
         if type == 'single':
-            try:
-                forms = int(forms)
-                formPacket = False
-            except:
-                formsList = forms.split('-')
-                forms = int(formsList[0])
-                formPacket = formsList[1]
-        
+            formsList = forms.split('-')
+            forms = int(formsList[0])
+            formPacket = formsList[1]
         print("start")
         print(forms)
         if isinstance(forms, str) and type == 'group':
@@ -509,10 +515,7 @@ class Calendar2(HTMLCalendar):
             for x in formSettingsQuery:
                 if x.id == forms:
                     fsEntry = x
-                    if formPacket:
-                        label = x.settings['packets'][formPacket]
-                    else:
-                        label = x.id
+                    label = formPacket
             name_of_model = fsEntry.formChoice.link + "_model"
             if fsEntry.formChoice.id == 23:
                 chk_database = apps.get_model('EES_Forms', "form22_model").objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
@@ -753,33 +756,39 @@ def ninetyDayPushTravels(facility):
         def overdue_30(cool):
             C = []
             for x in cool:
-                if x[3] <= 30:
+                if x[3] <= 30 and x[1] != "N/A":
                     C.append(x)
             return C
 
         def overdue_10(cool):
             D = []
             for x in cool:
-                if x[3] <= 10:
+                if x[3] <= 10 and x[1] != "N/A":
                     D.append(x)
             return D
 
         def overdue_5(cool):
             E = []
             for x in cool:
-                if x[3] <= 5:
+                if x[3] <= 5 and x[1] != "N/A":
                     E.append(x)
             return E
 
         def overdue_closest(cool):
             F = []
+            sort3 = []
         
             func2 = lambda R: (R[3])
             sort2 = sorted(cool, key=func2)
-            most_recent = sort2[0][3]
-        
+
             for x in sort2:
-                if x[3] == most_recent:
+                if x[1] != "N/A":
+                    sort3.append(x)
+
+            most_recent = sort3[0][3]
+
+            for y in sort3:
+                if y[3] == most_recent:
                     F.append(x)
             return F
 

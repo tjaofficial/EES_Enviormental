@@ -406,6 +406,11 @@ class bat_info_model(models.Model):
     city = models.CharField(
         max_length=30
     )
+    zipcode = models.CharField(
+        max_length=5,
+        null=True,
+        blank=True
+    )
     district = models.CharField(
         max_length=30,
         null=True,

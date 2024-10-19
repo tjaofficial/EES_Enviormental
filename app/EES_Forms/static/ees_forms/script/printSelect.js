@@ -45,7 +45,8 @@ function showLabels(elem){
     console.log(elem.value)
     console.log(fsQuery.length)
     let html = ''
-    html += `<option value="` + elem.value + `">`+ elem.value + `</option>`
+    html += `<option value="none">None</option>`
+    html += `<option value="fsID">`+ elem.value + `</option>`
     for (let x=0; x<fsQuery.length; x++){
         let fsForm = fsQuery[x];
         console.log(fsForm)

@@ -5,219 +5,286 @@
 {% comment %} {% with isBreak=1 %}{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{ isBreak|add:'1' }}{% endif %}{% endfor %}{% if isBreak == 2 %}display:block;{% else %}display:none;{% endif %}{% endwith %} {% endcomment %}
 <div id="settings{{count}}" class="formCont" style="{% if count != '' %}margin-left: 32px;display:none;{% endif %}">
     <div class="innerFormCont">
-{% if formID == 1 %}
-        Custom Title:<input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        Larry Car quantity: <input name="{{formID}}-larry_car_quantity" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.larry_car_quantity}}{% endif %}{% endfor %}{% endif %}{% endfor %}" type="number"><br>
-        Larry Car organized by: 
-        <select name="{{formID}}-organize_larry_car">
-            <option value="">------</option>
-            <option value="numbered" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_larry_car == 'numbered' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Numbered</option>
-            <option value="lettered" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_larry_car == 'lettered' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Lettered</option>
-        </select><br>
-        Order of ovens: <select name="{{formID}}-organize_ovens">
-            <option value="">------</option>
-            <option value="sequential" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_ovens == 'sequential' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Sequential</option>
-            <option value="every_other" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_ovens == 'every_other' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Every-Other</option>
-            <option value="alternating" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.organize_ovens == 'alternating' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Alternating</option>
-        </select>
-{% elif formID == 3 %}
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        One pass option: <select name="{{formID}}-one_pass">
-            <option value="">------</option>
-            <option value="yes" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'yes' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Yes</option>
-            <option value="no" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'no' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>No</option>
-        </select><br>
-{% elif formID == 5 %}
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-        Larry Car Quantity: <input name="{{formID}}-larry_car_quantity" type="number"><br>
-{% elif formID == 7 %}
-    <li class="form-line">
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
-    </li>
-    <li class="form-line" id="areaNumberCont" data-count={{formID}}>
-        How many areas?(1-4) <input type="number" name="{{formID}}-number_of_areas" max="4" min="1" value="{% if formSettings.settings.number_of_areas != 0 %}{{formSettings.settings.number_of_areas}}{% endif %}"><button type="button" onclick="displayAreaFields(this, {{formID}})">Change</button><br>
-    </li>
-    <li class="form-line">
-        <div id="7-areaNames" style="display: block;"></div>
-    </li>
-    <script>
-        const settingsDict = JSON.parse("{{formSettings.settings|escapejs}}".replaceAll("'", '"'))
-        const formIDjs = String("{{formData.id}}")
-        function displayAreaFields(elem, count){
-            let areas = elem.previousSibling.value;
-            console.log(areas)
-            if (areas > 4){
-                areas = 4;
-                elem.value = areas;
-            }
-            console.log(areas)
-            console.log(count)
-            const htmlDIV = document.getElementById(String(count)+"-areaNames");
-            console.log(htmlDIV)
-            let buildHTML = "";
-            for(i=0; i<areas; i++){
-                buildHTML += `<div style="padding-bottom:25px;">`
-                buildHTML += `Name of area ${i+1}: <input class='input_text' name='${String(count)}-area${i+1}' type='text' required value=""><br>`
-                buildHTML += `How many options: <input class='input_number' name='${String(count)}-area${i+1}-optionsQty' type='number' required><button id="${String(count)}-area${i+1}-button" type="button" onclick='createAreaChoices(this, ${count}, "area${i+1}")'>Change</button>`
-                buildHTML += `<div class="choiceCont" id="${String(count)}-area${i+1}-choicesDiv" style="display:none;"></div></div>`
-            } 
-            htmlDIV.innerHTML = buildHTML;
-            htmlDIV.style.display = 'block';
-        }
-        function createAreaChoices(elem, count, area){
-            let choices = elem.previousSibling.value
-            let destinationDiv = document.getElementById(String(count)+ "-" + area + "-choicesDiv");
-            let oldOptions = destinationDiv.querySelectorAll('input').length;
-            console.log(oldOptions)
-            if (oldOptions == 0){
-                let buildHTML = "";
-                for(let i=0; i<choices; i++){
-                    buildHTML += `<div id='${String(count)}-${area}-choiceCont${i+1}'>Option ${i+1}: <input name='${String(count)}-${area}-choice${i+1}' type='text' required></div>`
-                } 
-                destinationDiv.innerHTML = buildHTML;
-                destinationDiv.style.display = 'block';
-                oldOptions = destinationDiv.querySelectorAll('input').length;
-                console.log('fuck')
-            }
-            console.log('-------')
-            console.log(choices)
-            console.log(oldOptions)
-            console.log('-------')
-            if (choices > oldOptions){
-                let buildHTML = "";
-                for(let z=oldOptions+1; z<=choices; z++){
-                    buildHTML += `<div id='${String(count)}-${area}-choiceCont${z}'>Option ${z}: <input name='${String(count)}-${area}-choice${z}' type='text' required></div>`
-                } 
-                destinationDiv.insertAdjacentHTML('beforeend', buildHTML);
-                destinationDiv.style.display = 'block';
-            } else if (oldOptions > choices) {
-                for(let e=parseInt(choices); e<=oldOptions; e++){
-                    choiceNumber = parseInt(e)+1;
-                    let lastInput = document.getElementById(`${String(count)}-${area}-choiceCont${choiceNumber}`)
-                    console.log(`${String(count)}-${area}-choiceCont${choiceNumber}`)
-                    destinationDiv.removeChild(lastInput);
-                } 
-                console.log('la;sdklafjkl')
-                if (choices == 0){
-                    destinationDiv.style.display = 'none';
+        {% if formID == 1 %}
+            <li class="form-line">    
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Larry Car quantity: <input name="{{formID}}-larry_car_quantity" value="{% if formSettings.settings.larry_car_quantity %}{{formSettings.settings.larry_car_quantity}}{% endif %}" type="number"><br>
+            </li>
+            <li class="form-line">
+                Larry Car organized by: 
+                <select name="{{formID}}-organize_larry_car">
+                    <option value="">------</option>
+                    <option value="numbered" {% if formSettings.settings.organize_larry_car == "numbered"  %}selected{% endif %}>Numbered</option>
+                    <option value="lettered" {% if formSettings.settings.organize_larry_car == "lettered" %}selected{% endif %}>Lettered</option>
+                </select><br>
+            </li>
+            <li class="form-line">
+                Order of ovens: <select name="{{formID}}-organize_ovens">
+                    <option value="">------</option>
+                    <option value="sequential" {% if formSettings.settings.organize_ovens == "sequential"  %}selected{% endif %}>Sequential</option>
+                    <option value="every_other" {% if formSettings.settings.organize_ovens == "every_other"  %}selected{% endif %}>Every-Other</option>
+                    <option value="alternating" {% if formSettings.settings.organize_ovens == "alternating"  %}selected{% endif %}>Alternating</option>
+                </select>
+            </li>
+        {% elif formID == 2 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+        {% elif formID == 3 %}
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+                One pass option: <select name="{{formID}}-one_pass">
+                    <option value="">------</option>
+                    <option value="yes" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'yes' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Yes</option>
+                    <option value="no" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'no' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>No</option>
+                </select><br>
+        {% elif formID == 4 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+        {% elif formID == 5 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
+            </li>
+            <li class="form-line">
+                Larry Car Quantity: <input name="{{formID}}-larry_car_quantity" type="number"><br>
+            </li>
+        {% elif formID == 6 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+        {% elif formID == 7 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line" id="areaNumberCont" data-count={{formID}}>
+                How many areas?(1-4) <input type="number" name="{{formID}}-number_of_areas" max="4" min="1" value="{% if formSettings.settings.number_of_areas != 0 %}{{formSettings.settings.number_of_areas}}{% endif %}"><button type="button" onclick="displayAreaFields(this, {{formID}})">Change</button><br>
+            </li>
+            <li class="form-line">
+                <div id="7-areaNames" style="display: block;"></div>
+            </li>
+            <script>
+                const settingsDict = JSON.parse("{{formSettings.settings|escapejs}}".replaceAll("'", '"'))
+                const formIDjs = String("{{formData.id}}")
+                function displayAreaFields(elem, count){
+                    let areas = elem.previousSibling.value;
+                    console.log(areas)
+                    if (areas > 4){
+                        areas = 4;
+                        elem.value = areas;
+                    }
+                    console.log(areas)
+                    console.log(count)
+                    const htmlDIV = document.getElementById(String(count)+"-areaNames");
+                    console.log(htmlDIV)
+                    let buildHTML = "";
+                    for(i=0; i<areas; i++){
+                        buildHTML += `<div style="padding-bottom:25px;">`
+                        buildHTML += `Name of area ${i+1}: <input class='input_text' name='${String(count)}-area${i+1}' type='text' required value=""><br>`
+                        buildHTML += `How many options: <input class='input_number' name='${String(count)}-area${i+1}-optionsQty' type='number' required><button id="${String(count)}-area${i+1}-button" type="button" onclick='createAreaChoices(this, ${count}, "area${i+1}")'>Change</button>`
+                        buildHTML += `<div class="choiceCont" id="${String(count)}-area${i+1}-choicesDiv" style="display:none;"></div></div>`
+                    } 
+                    htmlDIV.innerHTML = buildHTML;
+                    htmlDIV.style.display = 'block';
                 }
-            }
-        }
-        window.onload = function initial_form7() {
-            console.log('play')
-            if (document.getElementById('areaNumberCont').childNodes[1].value > 0 && document.getElementById('areaNumberCont').childNodes[1].value) {
-                let areaElem = document.getElementById('areaNumberCont');
-                displayAreaFields(areaElem.childNodes[2], areaElem.dataset.count)
-                for (let x in settingsDict){
-                    if (x.slice(0,4) == 'area'){
-                        let areaNameInput = document.getElementsByName(formIDjs + "-" + x)[0];
-                        let areaOptionsInput = document.getElementsByName(formIDjs + "-" + x + "-optionsQty")[0];
-                        let optionsButton = document.getElementById(formIDjs + "-" + x + "-button");
-                        areaNameInput.value = settingsDict[x]['name'];
-                        areaOptionsInput.value = settingsDict[x]['number_of_options'];
-                        createAreaChoices(optionsButton, areaElem.dataset.count, x)
-                        let optionsCont = document.getElementById(formIDjs + "-" + x + "-choicesDiv");
-                        for (let y in settingsDict[x]["options"]){
-                            let singOps = settingsDict[x]["options"][y]
-                            document.getElementsByName(formIDjs + "-" + x + "-choice" + y)[0].value = singOps;
+                function createAreaChoices(elem, count, area){
+                    let choices = elem.previousSibling.value
+                    let destinationDiv = document.getElementById(String(count)+ "-" + area + "-choicesDiv");
+                    let oldOptions = destinationDiv.querySelectorAll('input').length;
+                    console.log(oldOptions)
+                    if (oldOptions == 0){
+                        let buildHTML = "";
+                        for(let i=0; i<choices; i++){
+                            buildHTML += `<div id='${String(count)}-${area}-choiceCont${i+1}'>Option ${i+1}: <input name='${String(count)}-${area}-choice${i+1}' type='text' required></div>`
+                        } 
+                        destinationDiv.innerHTML = buildHTML;
+                        destinationDiv.style.display = 'block';
+                        oldOptions = destinationDiv.querySelectorAll('input').length;
+                        console.log('fuck')
+                    }
+                    console.log('-------')
+                    console.log(choices)
+                    console.log(oldOptions)
+                    console.log('-------')
+                    if (choices > oldOptions){
+                        let buildHTML = "";
+                        for(let z=oldOptions+1; z<=choices; z++){
+                            buildHTML += `<div id='${String(count)}-${area}-choiceCont${z}'>Option ${z}: <input name='${String(count)}-${area}-choice${z}' type='text' required></div>`
+                        } 
+                        destinationDiv.insertAdjacentHTML('beforeend', buildHTML);
+                        destinationDiv.style.display = 'block';
+                    } else if (oldOptions > choices) {
+                        for(let e=parseInt(choices); e<=oldOptions; e++){
+                            choiceNumber = parseInt(e)+1;
+                            let lastInput = document.getElementById(`${String(count)}-${area}-choiceCont${choiceNumber}`)
+                            console.log(`${String(count)}-${area}-choiceCont${choiceNumber}`)
+                            destinationDiv.removeChild(lastInput);
+                        } 
+                        console.log('la;sdklafjkl')
+                        if (choices == 0){
+                            destinationDiv.style.display = 'none';
                         }
                     }
                 }
-            }
-        }
-        
-    </script>
-{% elif formID == 8 %}
-    <li class="form-line">
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
-    </li>
-    <li class="form-line" id="optionNumberCont" data-count={{formID}}>
-        How many different material options? <input type="number" name="{{formID}}-number_of_options" min="1" style="width:48px;" value="{% if formSettings.settings.number_of_options != 0 %}{{formSettings.settings.number_of_options}}{% endif %}"><button type="button" onclick="displayOptionsFields(this, {{formID}})">Change</button><br>
-    </li>
-    <li class="form-line">
-        <div id="8-optionNames" style="display: block;"></div>
-    </li>
-    <script>
-        const settingsDict = JSON.parse("{{formSettings.settings|escapejs}}".replaceAll("'", '"'))
-        const formIDjs = String("{{formData.id}}")
-        function displayOptionsFields(elem, count){
-            let options = elem.previousSibling.value;
-            console.log(options)
-            console.log(count)
-            const htmlDIV = document.getElementById(String(count)+"-optionNames");
-            console.log(htmlDIV)
-            let buildHTML = "";
-            for(i=0; i<options; i++){
-                buildHTML += `<div style="padding-bottom:25px;">`
-                buildHTML += `Option ${i+1}: <input class='input_text' name='${String(count)}-option${i+1}' type='text' required value=""><br>`
-                buildHTML += `</div>`
-            } 
-            htmlDIV.innerHTML = buildHTML;
-            htmlDIV.style.display = 'block';
-        }
-        window.onload = function initial_form8() {
-            console.log('play')
-            if (document.getElementById('optionNumberCont').childNodes[1].value > 0 && document.getElementById('optionNumberCont').childNodes[1].value) {
-                let optionElem = document.getElementById('optionNumberCont');
-                displayOptionsFields(optionElem.childNodes[2], optionElem.dataset.count)
-                for (let x in settingsDict['options']){
-                    let optionNameInput = document.getElementsByName(formIDjs + "-option" + x)[0];
-                    optionNameInput.value = settingsDict['options'][x];
+                window.onload = function initial_form7() {
+                    console.log('play')
+                    if (document.getElementById('areaNumberCont').childNodes[1].value > 0 && document.getElementById('areaNumberCont').childNodes[1].value) {
+                        let areaElem = document.getElementById('areaNumberCont');
+                        displayAreaFields(areaElem.childNodes[2], areaElem.dataset.count)
+                        for (let x in settingsDict){
+                            if (x.slice(0,4) == 'area'){
+                                let areaNameInput = document.getElementsByName(formIDjs + "-" + x)[0];
+                                let areaOptionsInput = document.getElementsByName(formIDjs + "-" + x + "-optionsQty")[0];
+                                let optionsButton = document.getElementById(formIDjs + "-" + x + "-button");
+                                areaNameInput.value = settingsDict[x]['name'];
+                                areaOptionsInput.value = settingsDict[x]['number_of_options'];
+                                createAreaChoices(optionsButton, areaElem.dataset.count, x)
+                                let optionsCont = document.getElementById(formIDjs + "-" + x + "-choicesDiv");
+                                for (let y in settingsDict[x]["options"]){
+                                    let singOps = settingsDict[x]["options"][y]
+                                    document.getElementsByName(formIDjs + "-" + x + "-choice" + y)[0].value = singOps;
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-        }
-    </script>
-{% elif formID == 9 %}
-    <li class="form-line">
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
-    </li>
-{% elif formID == 20 %}
-    <li class="form-line">
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
-    </li>
-    <li class="form-line">
-        How many days per week: 
-        <select name="{{formID}}-days_weekly" class="customName" class="selectInput" id="id_freeboard{{forloop.counter}}" required>
-            <option value="5" {% if formSettings.settings.days_weekly == 5 %}selected{% endif %}>5</option>
-            <option value="6" {% if formSettings.settings.days_weekly == 7 %}selected{% endif %}>7</option>
-        </select><br>
-    </li>
-{% elif formID == 21 %}
-    <li class="form-line">
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
-    </li>
-{% elif formID == 17 %}
-    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.height_above_ground_level}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_start}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_stop}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-{% elif formID == 18 %}
-    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.height_above_ground_level}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_start}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_stop}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-{% elif formID == 19 %}
-    Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.height_above_ground_level}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_start}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.describe_emissions_point_stop}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode1}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.process_equip2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-    Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.operating_mode2}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-{% endif %}
+                
+            </script>
+        {% elif formID == 8 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line" id="optionNumberCont" data-count={{formID}}>
+                How many different material options? <input type="number" name="{{formID}}-number_of_options" min="1" style="width:48px;" value="{% if formSettings.settings.number_of_options != 0 %}{{formSettings.settings.number_of_options}}{% endif %}"><button type="button" onclick="displayOptionsFields(this, {{formID}})">Change</button><br>
+            </li>
+            <li class="form-line">
+                <div id="8-optionNames" style="display: block;"></div>
+            </li>
+            <script>
+                const settingsDict = JSON.parse("{{formSettings.settings|escapejs}}".replaceAll("'", '"'))
+                const formIDjs = String("{{formData.id}}")
+                function displayOptionsFields(elem, count){
+                    let options = elem.previousSibling.value;
+                    console.log(options)
+                    console.log(count)
+                    const htmlDIV = document.getElementById(String(count)+"-optionNames");
+                    console.log(htmlDIV)
+                    let buildHTML = "";
+                    for(i=0; i<options; i++){
+                        buildHTML += `<div style="padding-bottom:25px;">`
+                        buildHTML += `Option ${i+1}: <input class='input_text' name='${String(count)}-option${i+1}' type='text' required value=""><br>`
+                        buildHTML += `</div>`
+                    } 
+                    htmlDIV.innerHTML = buildHTML;
+                    htmlDIV.style.display = 'block';
+                }
+                window.onload = function initial_form8() {
+                    console.log('play')
+                    if (document.getElementById('optionNumberCont').childNodes[1].value > 0 && document.getElementById('optionNumberCont').childNodes[1].value) {
+                        let optionElem = document.getElementById('optionNumberCont');
+                        displayOptionsFields(optionElem.childNodes[2], optionElem.dataset.count)
+                        for (let x in settingsDict['options']){
+                            let optionNameInput = document.getElementsByName(formIDjs + "-option" + x)[0];
+                            optionNameInput.value = settingsDict['options'][x];
+                        }
+                    }
+                }
+            </script>
+        {% elif formID == 9 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+        {% elif formID == 17 %}
+            <li class="form-line">    
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% if formSettings.settings.height_above_ground_level %}{{formSettings.settings.height_above_ground_level}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% if formSettings.settings.describe_emissions_point_start %}{{formSettings.settings.describe_emissions_point_start}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% if formSettings.settings.describe_emissions_point_stop %}{{formSettings.settings.describe_emissions_point_stop}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% if formSettings.settings.process_equip1 %}{{formSettings.settings.process_equip1}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% if formSettings.settings.operating_mode1 %}{{formSettings.settings.operating_mode1}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% if formSettings.settings.process_equip2 %}{{formSettings.settings.process_equip2}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
+            </li>
+        {% elif formID == 18 %}
+            <li class="form-line">    
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% if formSettings.settings.height_above_ground_level %}{{formSettings.settings.height_above_ground_level}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% if formSettings.settings.describe_emissions_point_start %}{{formSettings.settings.describe_emissions_point_start}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% if formSettings.settings.describe_emissions_point_stop %}{{formSettings.settings.describe_emissions_point_stop}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% if formSettings.settings.process_equip1 %}{{formSettings.settings.process_equip1}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% if formSettings.settings.operating_mode1 %}{{formSettings.settings.operating_mode1}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% if formSettings.settings.process_equip2 %}{{formSettings.settings.process_equip2}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
+            </li>
+        {% elif formID == 19 %}
+            <li class="form-line">    
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Height of of equipment/stack: <input name="{{formID}}-height_above_ground_level" type="number" value="{% if formSettings.settings.height_above_ground_level %}{{formSettings.settings.height_above_ground_level}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point start: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% if formSettings.settings.describe_emissions_point_start %}{{formSettings.settings.describe_emissions_point_start}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point stop:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% if formSettings.settings.describe_emissions_point_stop %}{{formSettings.settings.describe_emissions_point_stop}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip1" type="text" value="{% if formSettings.settings.process_equip1 %}{{formSettings.settings.process_equip1}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Operating Mode: <input name="{{formID}}-operating_mode1" type="text" value="{% if formSettings.settings.operating_mode1 %}{{formSettings.settings.operating_mode1}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% if formSettings.settings.process_equip2 %}{{formSettings.settings.process_equip2}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
+            </li>
+        {% elif formID == 20 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                How many days per week: 
+                <select name="{{formID}}-days_weekly" class="customName" class="selectInput" id="id_freeboard{{forloop.counter}}" required>
+                    <option value="5" {% if formSettings.settings.days_weekly == 5 %}selected{% endif %}>5</option>
+                    <option value="6" {% if formSettings.settings.days_weekly == 7 %}selected{% endif %}>7</option>
+                </select><br>
+            </li>
+        {% elif formID == 21 %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+        {% endif %}
+    </div>
 </div>
-</div>
-
-{% comment %} {% elif formID == 9 %}
-    <li class="form-line">
-        Custom Title: <input type='text' class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
-    </li> {% endcomment %}

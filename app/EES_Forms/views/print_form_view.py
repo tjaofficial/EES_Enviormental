@@ -53,12 +53,13 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
     userProfile = user_profile_model.objects.get(user=request.user)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     packetBeingPrinted = ''
-    if formGroup == 'Daily' and type == 'single':
-        formID_Label = formIdentity.split('-')
-        formID = int(formID_Label[0])
-        label = formID_Label[1]
-        formSettingsEntry = formSettingsQuery.get(id=int(formID))
-        formsBeingUsed = [(label,formSettingsEntry)]
+    if type == 'single':
+        if formGroup in ['Daily', 'Weekly', 'Monthly']:
+            formID_Label = formIdentity.split('-')
+            formID = int(formID_Label[0])
+            label = formID_Label[1]
+            formSettingsEntry = formSettingsQuery.get(id=int(formID))
+            formsBeingUsed = [(label,formSettingsEntry)]
     elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
@@ -90,13 +91,21 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
     for fsIDPackage in formsBeingUsed:
         print("Now running process for form: " + str(fsIDPackage[1].id))
         fsEntry = fsIDPackage[1]
+        packetID = fsIDPackage[0]
         formID = fsEntry.formChoice.id
         formInformation = fsEntry.formChoice
+        formSettings = fsEntry.settings['settings']
         formModelName = formInformation.link + '_model'
-        if fsIDPackage[0] == 'none':
-            formLabel = fsIDPackage[1].id
+        if type == 'single':
+            if packetID == 'none':
+                formLabel = ''
+            elif packetID == 'fsID':
+                formLabel = fsEntry.id
+            else:
+                formLabel = fsEntry.settings['packets'][packetID]
         else:
-            formLabel = fsIDPackage[0]
+            formLabel = packetID
+        print(formLabel)
         try:
             formModel = apps.get_model('EES_Forms', formModelName)
             formModel = formModel.objects.filter(facilityChoice__facility_name=facility)
@@ -162,7 +171,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                 submittedFormDate = submittedForm.date
             except:
                 submittedFormDate = submittedForm.week_start
-            if int(formID) in (1,5,7,17,18,19,22):
+            if int(formID) in (1,5,17,18,19,22):
                 formSecondaryModelName = formInformation.link + '_readings_model'
                 try:
                     formSecondaryModel = apps.get_model('EES_Forms', formSecondaryModelName)
@@ -198,17 +207,23 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             elif formGroup == 'coke_battery':
                 fileName = "form_1_packet.pdf"
                 documentTitle = "form_1_packet"
-            elif formGroup == 'Daily':
-                if type == 'single':
+            elif type == 'single':
+                if formGroup in ['Daily', "Weekly", "Monthly"]:
                     fileName = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)+".pdf"
                     documentTitle = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)
-                else:
+            elif type == "group":
+                if formGroup in ['Daily', "Weekly", "Monthly"]:
                     fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
                     documentTitle = str(packetBeingPrinted.name)
-            elif formGroup == 'Weekly':
-                fileName = "facility_weekly_packet.pdf"
-                documentTitle = str(formLabel) + "facility_weekly_packet"
-            title = formInformation.header + ' ' + formInformation.title + ' - Form (' + str(formLabel) + ')'
+            title = formInformation.header
+            if formSettings['custom_name']:
+                title += ' - ' + formSettings['custom_name']
+            else:
+                title += ' - ' + formInformation.title
+            
+            if packetID != 'none':
+                title += ' - Form (' + str(formLabel) + ')'
+            
             subTitle = 'Facility Name: ' + facility
             #always the same on all A-forms
             marginSet = 0.4
@@ -226,7 +241,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             if formID == 4:
                 tableData, tableColWidths, style = pdf_template_A4(formData, title, subTitle)
             if formID == 5:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_A5(formData, formSecondaryData, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_A5(formData, formSecondaryData, title, subTitle, formInformation)
             if formID == 6:
                 tableData, tableColWidths, style = pdf_template_6(formData, title, subTitle, formInformation)
             if formID == 7:
@@ -324,6 +339,8 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
         response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
         print('Starting to Compile...')
     except UnboundLocalError as e:
+        print(type)
+        print(formGroup)
         return HttpResponseNotFound("No Forms Found")
     
     return response

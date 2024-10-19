@@ -2,12 +2,14 @@ const type2 = document.getElementById('tableChoice').value;
 console.log(type2);
 if (type2 == 'meth9'){
     document.getElementById('formG1method9').style.display = 'inline-block';
+    document.getElementById('formG1method9_2').style.display = 'block';
     document.getElementById('formG1Non').style.display = 'none';
     document.getElementById('method9').style.backgroundColor = 'gray';
     document.getElementById('nonCert').style.backgroundColor = 'white';
 } else if (type2 == 'non') {
     document.getElementById('formG1Non').style.display = 'inline-block';
     document.getElementById('formG1method9').style.display = 'none';
+    //document.getElementById('formG1method9-2').style.display = 'none';
     document.getElementById('method9').style.backgroundColor = 'white';
     document.getElementById('nonCert').style.backgroundColor = 'gray';
 } else {
@@ -22,6 +24,7 @@ if (type2 == 'meth9'){
     document.getElementById("method9").onclick = function() {method9(), meth9_input()};
     function method9() {
         document.getElementById('formG1method9').style.display = 'inline-block';
+        document.getElementById('formG1method9_2').style.display = 'block';
         document.getElementById('formG1Non').style.display = 'none';
         document.getElementById('method9').style.backgroundColor = 'gray';
         document.getElementById('nonCert').style.backgroundColor = 'white';
@@ -46,6 +49,7 @@ if (type2 == 'meth9'){
     function nonCert() {
         document.getElementById('formG1Non').style.display = 'inline-block';
         document.getElementById('formG1method9').style.display = 'none';
+        document.getElementById('formG1method9_2').style.display = 'none';
         document.getElementById('method9').style.backgroundColor = 'white';
         document.getElementById('nonCert').style.backgroundColor = 'gray';
 

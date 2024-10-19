@@ -90,7 +90,7 @@
                         <p>{{message}}</p>
                     {% endfor%}
                 {% else %}
-                    You have used all of your registrations available within your plan. If you would like to upgrade to a larger plan or add more registrations <a href="{% url 'Account' 'supervisor' %}">click here</a>
+                    You have used all of your registrations available within your plan. If you would like to upgrade to a larger plan or add more registrations <a href="{% url 'Account' 'supervisor' %}" style="text-decoration: underline;">click here</a>
                 {% endif %}
             </div>
             <div id="newFacility" class='contentCont' style='display: none;'>
@@ -138,9 +138,13 @@
                                             <span>{{data.city}}</span>
                                             <label class="sub_label">City</label>
                                         </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 5rem;">
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 3rem;">
                                             <span>{{data.state}}</span>
                                             <label class="sub_label">State</label>
+                                        </span>
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 4rem;">
+                                            <span>{{data.zipcode}}</span>
+                                            <label class="sub_label">Zipcode</label>
                                         </span>
                                     </div>
                                 </div>

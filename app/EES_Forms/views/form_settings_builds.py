@@ -21,6 +21,36 @@ def form20settings(keysList, requestPost):
                 settings[mainLabel] = int(requestPost[key])
     return json.loads(json.dumps(settings))
 
+def form19settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2']:
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form18settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2']:
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form17settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2']:
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
 def form9settings(keysList, requestPost):
     settings = {}
     print(keysList)
@@ -144,76 +174,63 @@ def form7settings(keysList, requestPost):
     #     }, 
     #     'area2': {
     #         'options': {'': 'fudge'}, 'name': 'Poptarts', 'number_of_options': '3'}}
-    
-# class form7_model(models.Model):
-#     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
-#     date = models.DateField(auto_now_add=False, auto_now=False)
-#     area_json_1 = models.JSONField(
-#         default=dict,
-#         null=True,
-#         blank=True
-#     )
-#     area_json_1 = {
-#         "selection": "Truck #5",
-#         "start_time": "time",
-#         "stop_time": "time",
-#         "readings": {
-#             "1": 0,
-#             "2": 0,
-#             "3": 0,
-#             "4": 0,
-#             "5": 0,
-#             "6": 0,
-#             "7": 0,
-#             "8": 0,
-#             "9": 0,
-#             "10": 0,
-#             "11": 0,
-#             "12": 0,
-#         },
-#         "average": 0
-#     }
 
-#     area_json_2 =models.JSONField(
-#         default=dict,
-#         null=True,
-#         blank=True
-#     )
-#     area_json_3 =models.JSONField(
-#         default=dict,
-#         null=True,
-#         blank=True
-#     )
-#     area_json_4 =models.JSONField(
-#         default=dict,
-#         null=True,
-#         blank=True
-#     )
-#     observer = models.CharField(
-#         max_length=30
-#     )
-#     cert_date = models.DateField(
-#         auto_now_add=False,
-#         auto_now=False
-#     )
-#     comments = models.CharField(
-#         max_length=600
-#     )
+def form6settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
 
+def form5settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel in ['custom_name', 'larry_car_quantity']:
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
 
-#     truck_sel = models.CharField(max_length=30, choices=truck_choices)
-#     area_sel = models.CharField(max_length=30, choices=area_choices)
-#     truck_start_time = models.TimeField()
-#     truck_stop_time = models.TimeField()
-#     area_start_time = models.TimeField()
-#     area_stop_time = models.TimeField()
-#     sto_start_time = models.TimeField(
-#         blank = True, null=True
-#     )
-#     sto_stop_time = models.TimeField(blank = True, null=True)
-#     salt_start_time = models.TimeField(blank = True, null=True)
-#     salt_stop_time = models.TimeField(blank = True, null=True)
-#     average_t = models.FloatField(blank=True)
-#     average_p = models.FloatField(blank=True)
-#     average_storage = models.FloatField(blank=True, null=True)
-#     average_salt = models.FloatField(blank=True, null=True)
+def form4settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form3settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel in ['custom_name','one_pass']:
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form2settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel == 'custom_name':
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))
+
+def form1settings(keysList, requestPost):
+    settings = {}
+    print(keysList)
+    for key in keysList:
+        if key not in ['csrfmiddlewaretoken', 'update']:
+            mainLabel = key.split("-")[1]
+            if mainLabel in ['custom_name','larry_car_quantity', 'organize_larry_car', 'organize_ovens']:
+                settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+    return json.loads(json.dumps(settings))

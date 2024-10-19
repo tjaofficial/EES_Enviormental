@@ -187,86 +187,90 @@
                                         </div>
                                     </div>
                                     {% else %}
-                                    <div class="areaCont">
-                                        <div style="padding: 15px 22px; display:none;" id="areaLabel{{sliced_key}}" onclick="add_areas(this, {{sliced_key}})">{{cats.name}} (Click to add)</div>
-                                        <div id="areaCont{{sliced_key}}">    
-                                            <div style="padding: 15px 22px;">
-                                                {{cats.name}}: 
-                                                {% if selector == 'form' %}
-                                                    {% if cats.number_of_options != 0 %}
-                                                    <select id="areaName{{sliced_key}}" name="areaName{{sliced_key}}" style="width: 100px;" required="" id="areaName{{sliced_key}}">
-                                                        <option value="">---------</option>
-                                                        {% for num, ops in cats.options.items %}
-                                                            <option value="{{ops}}">{{ops}}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                    {% else %}
-                                                        <input type="hidden" value="{{cats.name}}" name="none{{sliced_key}}" id="areaName{{sliced_key}}" required> 
-                                                    {% endif %}
-                                                {% else %}
-                                                    {{ allData.primary|get_item:sliced_key|get_category:'name'}}
-                                                {% endif %}
-                                                <span style="margin-left: 30px;">
-                                                    Start Time: <input type="time" name="areaStartTime{{sliced_key}}" id="areaStartTime{{sliced_key}}" oninput='formC_timeCheck_area{{sliced_key}}(); zero_option_name(this,{{sliced_key}})' class="input" required>
-                                                </span>
-                                                <span style="margin-left: 30px;">
-                                                    End Time: <input type="time" name="areaStopTime{{sliced_key}}" id="areaStopTime{{sliced_key}}" oninput="formC_timeCheck_area{{sliced_key}}()" class="input" required>
-                                                </span>
-                                                <span class="truck_popup_class" id="area{{sliced_key}}_timePopup">Please Change Time</span>
-                                                <span style="float: right;" onclick="remove_area(this, {{sliced_key}})" class='remove_link'>remove</span>
-                                            </div>
-                                            <div class="areaTableCont">
-                                                <table class="areaTable">
-                                                    <tr>
-                                                        <td id="boxc2" style="font-size:13px;">MIN/SEC</td>
-                                                        <td id="boxc1">0</td>
-                                                        <td id="boxc1">15</td>
-                                                        <td id="boxc1">30</td>
-                                                        <td id="boxc1">45</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td id="boxc2">0</td>
-                                                        <td id="boxc1">
-                                                            <input type="text" name="area{{sliced_key}}Read0" id="area{{sliced_key}}Read0" oninput="area{{sliced_key}}_average(); autoFillZeros(area{{sliced_key}}Read0.id);" class="input" maxlength="3" required>
-                                                        </td>
-                                                        {% with range="eleven" %}
-                                                            {% for i in range|rangeFrom1 %}
+                                        {% if selector == 'form' %}
+                                            <div class="areaCont">
+                                                <div style="padding: 15px 22px; display:none;" id="areaLabel{{sliced_key}}" onclick="add_areas(this, {{sliced_key}})">{{cats.name}} (Click to add)</div>
+                                                <div id="areaCont{{sliced_key}}">    
+                                                    <div style="padding: 15px 22px;">
+                                                        {{cats.name}}: 
+                                                        {% if selector == 'form' %}
+                                                            {% if cats.number_of_options != 0 %}
+                                                            <select id="areaName{{sliced_key}}" name="areaName{{sliced_key}}" style="width: 100px;" required="" id="areaName{{sliced_key}}">
+                                                                <option value="">---------</option>
+                                                                {% for num, ops in cats.options.items %}
+                                                                    <option value="{{ops}}">{{ops}}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            {% else %}
+                                                                <input type="hidden" value="{{cats.name}}" name="none{{sliced_key}}" id="areaName{{sliced_key}}" required> 
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if cats.number_of_options != 0 %}
+                                                                {{ allData.primary|get_item:sliced_key|get_category:'name'}}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        <span style="margin-left: 30px;">
+                                                            Start Time: <input type="time" name="areaStartTime{{sliced_key}}" id="areaStartTime{{sliced_key}}" oninput='formC_timeCheck_area{{sliced_key}}(); zero_option_name(this,{{sliced_key}})' class="input" required>
+                                                        </span>
+                                                        <span style="margin-left: 30px;">
+                                                            End Time: <input type="time" name="areaStopTime{{sliced_key}}" id="areaStopTime{{sliced_key}}" oninput="formC_timeCheck_area{{sliced_key}}()" class="input" required>
+                                                        </span>
+                                                        <span class="truck_popup_class" id="area{{sliced_key}}_timePopup">Please Change Time</span>
+                                                        <span style="float: right;" onclick="remove_area(this, {{sliced_key}})" class='remove_link'>remove</span>
+                                                    </div>
+                                                    <div class="areaTableCont">
+                                                        <table class="areaTable">
+                                                            <tr>
+                                                                <td id="boxc2" style="font-size:13px;">MIN/SEC</td>
+                                                                <td id="boxc1">0</td>
+                                                                <td id="boxc1">15</td>
+                                                                <td id="boxc1">30</td>
+                                                                <td id="boxc1">45</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="boxc2">0</td>
                                                                 <td id="boxc1">
-                                                                    <input 
-                                                                        type="text" 
-                                                                        name="area{{sliced_key}}Read{{i}}" 
-                                                                        id="area{{sliced_key}}Read{{i}}" 
-                                                                        oninput="area{{sliced_key}}_average()" 
-                                                                        class="input" 
-                                                                        maxlength="3" 
-                                                                        required=""
-                                                                    >
+                                                                    <input type="text" name="area{{sliced_key}}Read0" id="area{{sliced_key}}Read0" oninput="area{{sliced_key}}_average(); autoFillZeros(area{{sliced_key}}Read0.id);" class="input" maxlength="3" required>
                                                                 </td>
-                                                                {% if i == 3 %}
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td id="boxc2">1</td>
-                                                                {% elif i == 7 %}
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td id="boxc2">2</td>
-                                                                {% elif i == 11 %}
-                                                                    </tr>
-                                                                {% endif %} 
-                                                            {% endfor %}
-                                                        {% endwith %}
-                                                    <tr>
-                                                        <td colspan="4" class="boxc3">
-                                                            3-minute Average Opacity (sum of the 12 readings above/12):
-                                                        </td>
-                                                        <td id="boxc1">
-                                                            <input type="number" name="areaAverage{{sliced_key}}" oninput="area{{sliced_key}}_average()" id="areaAverage{{sliced_key}}" class="input" style="background-color: rgb(255, 250, 139); width: 95px;" required step="any" placeholder="NaN">
-                                                        </td>
-                                                    </tr>
-                                                </table>
+                                                                {% with range="eleven" %}
+                                                                    {% for i in range|rangeFrom1 %}
+                                                                        <td id="boxc1">
+                                                                            <input 
+                                                                                type="text" 
+                                                                                name="area{{sliced_key}}Read{{i}}" 
+                                                                                id="area{{sliced_key}}Read{{i}}" 
+                                                                                oninput="area{{sliced_key}}_average()" 
+                                                                                class="input" 
+                                                                                maxlength="3" 
+                                                                                required=""
+                                                                            >
+                                                                        </td>
+                                                                        {% if i == 3 %}
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="boxc2">1</td>
+                                                                        {% elif i == 7 %}
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="boxc2">2</td>
+                                                                        {% elif i == 11 %}
+                                                                            </tr>
+                                                                        {% endif %} 
+                                                                    {% endfor %}
+                                                                {% endwith %}
+                                                            <tr>
+                                                                <td colspan="4" class="boxc3">
+                                                                    3-minute Average Opacity (sum of the 12 readings above/12):
+                                                                </td>
+                                                                <td id="boxc1">
+                                                                    <input type="number" name="areaAverage{{sliced_key}}" oninput="area{{sliced_key}}_average()" id="areaAverage{{sliced_key}}" class="input" style="background-color: rgb(255, 250, 139); width: 95px;" required step="any" placeholder="NaN">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             {% endwith %}

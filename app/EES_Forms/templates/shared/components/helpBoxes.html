@@ -33,5 +33,35 @@
                 <li>Your password can’t be entirely numeric.</li>
             </ul>
         </p>
+    {% elif selector == "customTitleInput" %}
+        <h5 class="left">HELP: Custom Title</h5><br>
+        <p class="left description">
+            Leave this input empty if you would like to use the default title shown.
+        </p>
+    {% elif selector == "frequencyInput" %}
+        <h5 class="left">HELP: Frequency Input</h5><br>
+        <p class="left description">
+            This input allows you to specify the time interval at which forms 
+            should be selected for printing. Based on the selected frequency:
+        </p>
+        <p>
+            <ul>
+                <li>Daily: All forms due within each day will be included for that day's selection.</li>
+                <li>Weekly: Forms due within the week (Monday to Sunday) will be included for that week's selection.</li>
+                <li>Monthly: Forms that are due within the specified month will be included for that month's selection.</li>
+                <li>Custom Range: Select a specific date range to include all forms due within that period.</li>
+            </ul>
+        </p>
+        <p>
+            The frequency setting ensures that forms are grouped by the chosen 
+            interval, making it easier to manage and print the relevant forms 
+            for the specified time frame.
+        </p>
+    {% elif selector == "weeklyStartDayInput" %}
+        <h5 class="left">HELP: Weekly Start Day Inpur</h5><br>
+        <p class="left description">
+            This input allows you to select the starting day of the calendar week for the
+            selected packet.
+        </p>
     {% endif %}
 </div>

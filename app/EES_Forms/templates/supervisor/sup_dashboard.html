@@ -82,6 +82,7 @@
         </a>
     </div>
 {% else %}
+{% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash' %}
 <div class="grid-dashboard">
     {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
     <div id="progress" class="card skinny cardPadd">
@@ -640,5 +641,8 @@
     </div>
     {% endif %}
 </div>
+{% else %}
+Heloo
+{% endif %}
 {% endif %}
 {% endblock %}

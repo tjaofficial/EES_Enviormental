@@ -39,6 +39,7 @@ def formD(request, facility, fsID, selector):
             existing = True
             search = True
             unlock = True
+            initial_data = database_model
         elif submitted_forms.exists():
             database_form = submitted_forms[0]
             #print(database_form.whatever().values())

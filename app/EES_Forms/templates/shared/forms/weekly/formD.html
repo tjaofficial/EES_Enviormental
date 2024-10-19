@@ -19,7 +19,7 @@
                     <table style="border-collapse: collapse; margin: auto;">
                         <tr>
                             <th id="boxTitle" colspan="5" style="text-align: center;">
-                                Fugiative Dust Inspections<br>Weekly Random Truck Inspection - Form (D)
+                                {% include "shared/components/formHeader.html" with main="Fugitive Dust Vehicle Inspection Form"%}
                             </th>
                             <th></th>
                         </tr>
@@ -73,67 +73,95 @@
                                 <tr>
                                     <th class="inputHeader">Observer: </th>
                                     <td>
-                                        <input type="text" name="observer{{forloop.counter}}" value="{% with fill='observer'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" maxlength="30" id="id_observer{{forloop.counter}}" required>
+                                        {% if selector == 'form' %}
+                                            <input type="text" name="observer{{forloop.counter}}" value="{% with fill='observer'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" maxlength="30" id="id_observer{{forloop.counter}}" required>
+                                        {% else %}
+                                            {% with fixed='observer-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="inputHeader">Truck ID: </th>
                                     <td>
-                                        <select name="truck_id{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_truck_id{{forloop.counter}}" required>
-                                            <option value="">---------</option>
-                                            <option value="#5" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#5' %}selected{% endif %}{% endwith %}>#5</option>
-                                            <option value="#6" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#6' %}selected{% endif %}{% endwith %}>#6</option>
-                                            <option value="#7" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#7' %}selected{% endif %}{% endwith %}>#7</option>
-                                            <option value="#9" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#9' %}selected{% endif %}{% endwith %}>#9</option>
-                                            <option value="Dozer" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Dozer' %}selected{% endif %}{% endwith %}>Dozer</option>
-                                            <option value="Semi" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Semi' %}selected{% endif %}{% endwith %}>Semi</option>
-                                            <option value="Contractor" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Contractor' %}selected{% endif %}{% endwith %}>Contractor</option><option value="Security">Security</option>
-                                            <option value="Water Truck" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Water Truck' %}selected{% endif %}{% endwith %}>Water Truck</option>
-                                        </select>
+                                        {% if selector == 'form' %}
+                                            <select name="truck_id{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_truck_id{{forloop.counter}}" required>
+                                                <option value="">---------</option>
+                                                <option value="#5" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#5' %}selected{% endif %}{% endwith %}>#5</option>
+                                                <option value="#6" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#6' %}selected{% endif %}{% endwith %}>#6</option>
+                                                <option value="#7" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#7' %}selected{% endif %}{% endwith %}>#7</option>
+                                                <option value="#9" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == '#9' %}selected{% endif %}{% endwith %}>#9</option>
+                                                <option value="Dozer" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Dozer' %}selected{% endif %}{% endwith %}>Dozer</option>
+                                                <option value="Semi" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Semi' %}selected{% endif %}{% endwith %}>Semi</option>
+                                                <option value="Contractor" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Contractor' %}selected{% endif %}{% endwith %}>Contractor</option><option value="Security">Security</option>
+                                                <option value="Water Truck" {% with fill='truck_id'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Water Truck' %}selected{% endif %}{% endwith %}>Water Truck</option>
+                                            </select>
+                                        {% else %}
+                                            {% with fixed='truck_id-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="inputHeader">Date: </th>
                                     <td>
-                                        <input type="date" name="date{{forloop.counter}}" value="{% with fill='date'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_date{{forloop.counter}}" required>
+                                        {% if selector == 'form' %}
+                                            <input type="date" name="date{{forloop.counter}}" value="{% with fill='date'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_date{{forloop.counter}}" required>
+                                        {% else %}
+                                            {% with fixed='date-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="inputHeader">Time: </th>
                                     <td>
+                                        {% if selector == 'form' %}
                                         <input type="time" name="time{{forloop.counter}}" value="{% with fill='time'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_time{{forloop.counter}}" required>
+                                    {% else %}
+                                        {% with fixed='time-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                    {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="inputHeader">Contents: </th>
                                     <td>
-                                        <select name="contents{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_contents{{forloop.counter}}" required>
-                                            <option value="">---------</option>
-                                            <option value="Coal" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Coal' %}selected{% endif %}{% endwith %}>Coal</option>
-                                            <option value="Coke" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Coke' %}selected{% endif %}{% endwith %}>Coke</option>
-                                            <option value="Breeze" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Breeze' %}selected{% endif %}{% endwith %}>Breeze</option>
-                                        </select>
+                                        {% if selector == 'form' %}
+                                            <select name="contents{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_contents{{forloop.counter}}" required>
+                                                <option value="">---------</option>
+                                                <option value="Coal" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Coal' %}selected{% endif %}{% endwith %}>Coal</option>
+                                                <option value="Coke" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Coke' %}selected{% endif %}{% endwith %}>Coke</option>
+                                                <option value="Breeze" {% with fill='contents'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Breeze' %}selected{% endif %}{% endwith %}>Breeze</option>
+                                            </select>
+                                        {% else %}
+                                            {% with fixed='contents-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="inputHeader">6" or greater freeboard? </th>
                                     <td>
-                                        <select name="freeboard{{forloop.counter}}" oninput="freeboard(this)" class="baseInput" class="selectInput" id="id_freeboard{{forloop.counter}}" required>
-                                            <option value="">---------</option>
-                                            <option value="Yes" {% with fill='freeboard'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Yes' %}selected{% endif %}{% endwith %}>Yes</option>
-                                            <option value="No" {% with fill='freeboard'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'No' %}selected{% endif %}{% endwith %}>No</option>
-                                        </select>
+                                        {% if selector == 'form' %}
+                                            <select name="freeboard{{forloop.counter}}" oninput="freeboard(this)" class="baseInput" class="selectInput" id="id_freeboard{{forloop.counter}}" required>
+                                                <option value="">---------</option>
+                                                <option value="Yes" {% with fill='freeboard'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Yes' %}selected{% endif %}{% endwith %}>Yes</option>
+                                                <option value="No" {% with fill='freeboard'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'No' %}selected{% endif %}{% endwith %}>No</option>
+                                            </select>
+                                        {% else %}
+                                            {% with fixed='freeboard-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="inputHeader">If NO, is material adequately wetted and stable? </th>
                                     <td>
-                                        <select name="wetted{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_wetted{{forloop.counter}}" required>
-                                            <option value="">---------</option>
-                                            <option value="N/A" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'N/A' %}selected{% endif %}{% endwith %}>N/A</option>
-                                            <option value="Yes" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Yes' %}selected{% endif %}{% endwith %}>Yes</option>
-                                            <option value="No" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'No' %}selected{% endif %}{% endwith %}>No</option>
-                                        </select>
+                                        {% if selector == 'form' %}
+                                            <select name="wetted{{forloop.counter}}" onchange="if_one_then_all()" class="baseInput" class="selectInput" id="id_wetted{{forloop.counter}}" required>
+                                                <option value="">---------</option>
+                                                <option value="N/A" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'N/A' %}selected{% endif %}{% endwith %}>N/A</option>
+                                                <option value="Yes" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'Yes' %}selected{% endif %}{% endwith %}>Yes</option>
+                                                <option value="No" {% with fill='wetted'|addNum:forloop.counter %}{% if initial_data|get_category:fill == 'No' %}selected{% endif %}{% endwith %}>No</option>
+                                            </select>
+                                        {% else %}
+                                            {% with fixed='wetted-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 <tr>
@@ -141,7 +169,7 @@
                                 </tr>
                                 <tr style="text-align: center;">
                                     <td colspan="2">
-                                        <textarea name="comments{{forloop.counter}}" cols="40" rows="3" onchange="if_one_then_all()" type="text" class="textBox" maxlength="30" id="id_comments{{forloop.counter}}" required>{% with fill='comments'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}</textarea>
+                                        <textarea name="comments{{forloop.counter}}" cols="40" rows="3" onchange="if_one_then_all()" type="text" class="textBox" maxlength="30" id="id_comments{{forloop.counter}}" required>{% if selector == 'form' %}{% with fill='comments'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}{% else %}{% with fixed='comments-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}{% endif %}</textarea>
                                         <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
                                     </td>
                                 </tr>

@@ -44,9 +44,7 @@
                         <table style="border-collapse: collapse;">
                             <tr>
                                 <th id="boxTitle" colspan="15" style="text-align: center;">
-                                    {{freq.formChoice.header}}<br>
-                                    Visible Emission Observation Form - ({% if freq.settings.packets %}{{freq.settings.packets}}{% else %}{{freq.id}}{% endif %})<br>
-                                    {{freq.settings.settings.custom_name}}
+                                    {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
                                 </th>
                                 <th></th>
                             </tr>
@@ -117,7 +115,7 @@
                                 <td id="boxa4" colspan="2" >
                                     OPERATING MODE<br>{{ data.op_mode1 }}</td>
                                 <td id="boxa4" colspan="2" >
-                                    BACKGROUND COLOR<br>Start:{{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.background_color_stop }}
+                                    BACKGROUND COLOR<br>Start: {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.background_color_stop }}
                                     </td>
                                 <td id="boxa4" colspan="1" >
                                     SKY CONDITION<br>{{ data.sky_conditions }}
@@ -131,7 +129,7 @@
                                     OPERATING MODE<br>{{ data.op_mode2 }}
                                     </td>
                                 <td id="boxa4" colspan="2" >
-                                    WIND SPEED<br>Start:{{ data.wind_speed_start }}mph &nbsp; Stop:{{ data.wind_speed_stop }}mph
+                                    WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }}{% if data.wind_speed_stop != 'same' %}mph{% endif %}
                                 </td>
                                 <td id="boxa4" colspan="1">
                                     WIND DIRECTION<br>{{ data.wind_direction }}
@@ -139,10 +137,10 @@
                             </tr>
                                 <tr>
                                 <td id="boxa4" colspan="6" >
-                                    DESCRIBE EMISSION POINT<br>Start:{{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_point_stop }}
+                                    DESCRIBE EMISSION POINT<br>Start: {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_point_stop }}
                                     </td>
                                 <td id="boxa4" colspan="2" >
-                                    AMBIENT TEMP<br>Start:{{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop:{{ data.ambient_temp_stop }}<sup>o</sup>
+                                    AMBIENT TEMP<br>Start: {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop: {{ data.ambient_temp_stop }}{% if data.ambient_temp_stop != 'same' %}<sup>o</sup>{% endif %}
                                     </td>
                                 <td id="boxa4" colspan="1" >
                                     HUMIDITY<br>{{ data.humidity }}%
@@ -174,15 +172,15 @@
                             </tr>
                                 <tr>
                                 <td id="boxa4" colspan="6" >
-                                    DESCRIBE EMISSIONS<br>Start:{{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_emissions_stop }}
+                                    DESCRIBE EMISSIONS<br>Start: {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_emissions_stop }}
                                 </td>
                             </tr>
                                 <tr>
                                 <td id="boxa4" colspan="3" >
-                                    EMISSIONS COLOR<br>Start:{{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_color_stop }}
+                                    EMISSIONS COLOR<br>Start: {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_color_stop }}
                                 </td>
                                 <td id="boxa4" colspan="3" >
-                                    PLUME TYPE:
+                                    PLUME TYPE:<br>
                                     {{ data.plume_type }}
                                 </td>
                             </tr>
@@ -198,12 +196,12 @@
                             </tr>
                                 <tr>
                                 <td id="boxa4" colspan="6" >
-                                    POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start:{{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.plume_opacity_determined_stop }}
+                                    POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start: {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.plume_opacity_determined_stop }}
                                 </td>
                             </tr>
                                 <tr>
                                 <td id="boxa4" colspan="6" >
-                                    DESCRIBE BACKGROUND<br>Start:{{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_background_stop }}
+                                    DESCRIBE BACKGROUND<br>Start: {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_background_stop }}
                                 </td>
                             </tr>
                         </table>
@@ -214,7 +212,7 @@
                 <div id='pushTravels'>
                     <div id="bothTables">
                         <div>
-                            <table style="border-collapse: collapse;">
+                            <table style="border-collapse: collapse; width: 479px;">
                                 <tr>
                                     <th colspan="7" style="text-align: center;">
                                         Method 9 Observation
@@ -225,13 +223,21 @@
                                 </tr> 
                                 <tr>
                                     {% if selector == 'form' %}
-                                    <td colspan="7" style="text-align: left;">
-                                        Read for 6 minutes at 15 second intervals DURING PUSHING
-                                    </td>
+                                        <td colspan="7" style="text-align: center;">
+                                            <div style="">
+                                                Read for 6 minutes at 15 second intervals DURING PUSHING
+                                            </div>
+                                        </td>
+                                    {% elif selector != 'formL' %}
+                                        <td colspan="7" style="text-align: center;">
+                                            <div style="">
+                                                Read for 6 minutes at 15 second intervals DURING PUSHING
+                                            </div>
+                                        </td>
                                     {% else %}
-                                    <td colspan="7" style="text-align: left;">
-                                        Read for 15 minutes MINIMUM at 15 second intervals
-                                    </td>
+                                        <td colspan="7" style="text-align: center;">
+                                            Read for 15 minutes MINIMUM at 15 second intervals
+                                        </td>
                                     {% endif %}
                                 </tr>
                                 <tr>
@@ -263,19 +269,15 @@
                                 <tr>
                                     <td style="height: 25px;" > </td>
                                 </tr> 
+                            </table>
+                            <table style="border-collapse: collapse; width: 30rem;">
                                 <tr>
-                                    <td colspan="1" style="text-align: left;">
-                                        Start Time: 
-                                    </td>
-                                    <td colspan="2" style="text-align: left;">
-                                        {{ readings_form.comb_start }}
+                                    <td colspan="3" style="text-align: left;">
+                                        Start Time: {{ readings_form.comb_start }}
                                         <span class="popuptext1" id="combPopup1">Please Change Time</span>
                                     </td>
-                                    <td colspan="1" style="text-align: left;">
-                                        Stop Time: 
-                                    </td>
-                                    <td colspan="2" style="text-align: left;">
-                                        {{ readings_form.comb_stop }}
+                                    <td colspan="3" style="text-align: left;">
+                                        Stop Time: {{ readings_form.comb_stop }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -655,12 +657,6 @@
                                     </td>
                                 </tr>
                                 {% endif %}
-
-                            </table>
-                        </div>    
-                        <br>
-                        <div id="ptTable"> 
-                            <table style="border-collapse: collapse;">
                                 <tr>
                                     <td colspan="1" id="formG1_box2">
                                         Average:
@@ -670,7 +666,8 @@
                                     </td>
                                 </tr>
                             </table>
-                        </div> 
+                        </div>    
+                        <br>
                     </div>
                     <br><br><br><br>
                     <div style="text-align: left;">

@@ -10,6 +10,7 @@
 #boxa4{
     border: 1px solid black;
     padding: 5px;
+    width: 83px;
 }
 span.sideWord{
     writing-mode: vertical-rl;
@@ -82,4 +83,7 @@ span.sideWord{
 }
 .formImageContainer > img{
     width:100%;
+}
+.bold{
+    font-weight: bold;
 }

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # type: ignore
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import form3_model, form2_model, form1_readings_model, user_profile_model, daily_battery_profile_model, form5_readings_model, form5_model, Forms
-from django.apps import apps
+from django.apps import apps # type: ignore
 from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -19,17 +19,24 @@ def pt_admin1_view(request, facility):
     todays_log = daily_prof[0]
     data = form5_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
-
+    def checkIfAllNone(theGroup):
+        dayCount = 0
+        for ovenData in theGroup:
+            if ovenData[1] == 'N/A':
+                dayCount += 1
+        if dayCount > 0:
+            newList = []
+        return newList
     # -------90 DAY PUSH ----------------
     all_db_reads = form5_readings_model.objects.all()
     pushTravelsData = ninetyDayPushTravels(facility)
     od_30 = pushTravelsData['30days']
+    
     od_10 = pushTravelsData['10days']
     od_5 = pushTravelsData['5days']
     od_recent = pushTravelsData['closest']
     all_ovens = pushTravelsData['all']
     
-    print(od_recent)
     if request.method == 'POST':
         answer = request.POST
         if 'facilitySelect' in answer.keys():

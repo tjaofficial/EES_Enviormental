@@ -240,7 +240,8 @@ class bat_info_form(ModelForm):
             'bat_main', 
             'bat_lids', 
             'city',
-            'is_battery')
+            'is_battery',
+            'zipcode')
 
         widgets = {
             'bat_num': forms.NumberInput(attrs={'class':'input', 'type': 'number','style': 'width: 7rem;'}),
@@ -257,7 +258,8 @@ class bat_info_form(ModelForm):
             'bat_height_label': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
             'bat_main': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
             'bat_lids': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;'}),
-            'is_battery': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
+            'is_battery': forms.Select(attrs={'class':'input', 'style':'height: 24px; width: 81px;'}),
+            'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
         }
 
 
@@ -1018,7 +1020,7 @@ class formE_form(ModelForm):
             'foreman' : forms.TextInput(attrs={'style':'width: 80px;'}),
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'leaks' : forms.Select(attrs={'onchange': 'no_leaks()', 'style': 'width: 50px;'}),
+            'leaks' : forms.Select(attrs={'onchange': 'no_leaks(this)', 'style': 'width: 50px;'}),
             'goose_neck_data' : forms.NumberInput(attrs={'id': "gooseNeckData", 'type': "hidden", 'value': "{}", 'data-resulttable': ""})
             
         }
@@ -1376,8 +1378,8 @@ class formG1_readings_form(ModelForm):
         fields = ('__all__')
         exclude = ('form',)
         widgets = {
-            'PEC_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'PEC_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'PEC_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
+            'PEC_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
             'PEC_read_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'PEC_read_2' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'PEC_read_3' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
@@ -1402,15 +1404,15 @@ class formG1_readings_form(ModelForm):
             'PEC_read_22' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'PEC_read_23' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'PEC_read_24' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_oven1' : forms.NumberInput(attrs={'type': 'number',}),
-            'PEC_oven2' : forms.NumberInput(attrs={'type': 'number',}),
-            'PEC_time1' : forms.TimeInput(attrs={'type': 'time'}),
-            'PEC_time2' : forms.TimeInput(attrs={'type': 'time'}),
+            'PEC_oven1' : forms.NumberInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_oven2' : forms.NumberInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+            'PEC_time1' : forms.TimeInput(attrs={'type': 'time', 'style':'width: 95px;'}),
+            'PEC_time2' : forms.TimeInput(attrs={'type': 'time', 'style':'width: 95px;'}),
             'PEC_type' : forms.TextInput(attrs={'type': 'hidden'}),
             'PEC_average' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
             'PEC_push_oven' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 30px; text-align: center;'}),
-            'PEC_push_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
-            'PEC_observe_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;'}),
+            'PEC_push_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
+            'PEC_observe_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
             'PEC_emissions_present' : forms.CheckboxInput(attrs={'style': 'width: 50px;', 'initial': 'false' }),
         }
 

@@ -18,13 +18,13 @@
                     {% include "shared/components/backArrow.html" with destination="form" %}
                     <table style="border-collapse: collapse; margin: auto;">
                         <tr>
-                            <th id="boxTitle" colspan="5" style="text-align: left;">
-                                Gooseneck Inspection - Form (E)
+                            <th id="boxTitle" colspan="5" style="text-align: center;">
+                                {% include "shared/components/formHeader.html" with main="Gooseneck Inspection Form"%}
                             </th>
                             <th></th>
                         </tr>
                         <tr>
-                            <th colspan="3" style="text-align: left;">
+                            <th colspan="3" style="text-align: center;">
                                 Facility Name: {{facility}}
                             </th>
                             <th></th>
@@ -126,6 +126,13 @@
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
+                            <tr id="newEmpty" style="display: none;">
+                                <td colspan="4" id="formE_box1">
+                                    <center style='padding-top: 20px; padding-bottom: 20px;'>
+                                        No Leaks Found During Observation
+                                    </center>
+                                </td>
+                            </tr>
                         <tbody id="gooseNeckInputContainer">
                             
                         </tbody>

@@ -2,11 +2,10 @@ from django.shortcuts import render, redirect # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
 from ..forms import the_packets_form, form_settings_form
-from .form_settings_builds import form7settings
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 import json
-from .form_settings_builds import form7settings, form8settings, form9settings, form20settings, form21settings
+from .form_settings_builds import form1settings, form2settings, form3settings, form4settings, form5settings, form6settings, form7settings, form8settings, form9settings, form17settings, form18settings, form19settings, form20settings, form21settings
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
@@ -332,12 +331,30 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             keysList = []
             for inputs in request.POST.keys():
                 keysList.append(inputs)
-            if formData.id == 7:
+            if formData.id == 1:
+                settingsDict = form1settings(keysList, request.POST)
+            elif formData.id == 2:
+                settingsDict = form2settings(keysList, request.POST)
+            elif formData.id == 3:
+                settingsDict = form3settings(keysList, request.POST)
+            elif formData.id == 4:
+                settingsDict = form4settings(keysList, request.POST)
+            elif formData.id == 5:
+                settingsDict = form5settings(keysList, request.POST)
+            elif formData.id == 6:
+                settingsDict = form6settings(keysList, request.POST)
+            elif formData.id == 7:
                 settingsDict = form7settings(keysList, request.POST)
             elif formData.id == 8:
                 settingsDict = form8settings(keysList, request.POST)
             elif formData.id == 9:
                 settingsDict = form9settings(keysList, request.POST)
+            elif formData.id == 17:
+                settingsDict = form17settings(keysList, request.POST)
+            elif formData.id == 18:
+                settingsDict = form18settings(keysList, request.POST)
+            elif formData.id == 19:
+                settingsDict = form19settings(keysList, request.POST)
             elif formData.id == 20:
                 settingsDict = form20settings(keysList, request.POST)
             elif formData.id == 21:

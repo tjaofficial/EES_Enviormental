@@ -113,7 +113,7 @@
                                     <td id="boxa4" colspan="2" >
                                         OPERATING MODE<br>{{ data.op_mode1 }}</td>
                                     <td id="boxa4" colspan="2" >
-                                        BACKGROUND COLOR<br>Start:{{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.background_color_stop }}
+                                        BACKGROUND COLOR<br>Start: {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.background_color_stop }}
                                     </td>
                                     <td id="boxa4" colspan="1" >
                                         SKY CONDITION<br>{{ data.sky_conditions }}
@@ -127,7 +127,7 @@
                                         OPERATING MODE<br>{{ data.op_mode2 }}
                                     </td>
                                     <td id="boxa4" colspan="2" >
-                                        WIND SPEED<br>Start:{{ data.wind_speed_start }}mph &nbsp; Stop:{{ data.wind_speed_stop }}mph
+                                        WIND SPEED<br>Start: {{ data.wind_speed_start }} mph &nbsp; Stop: {{ data.wind_speed_stop }}{% if data.wind_speed_stop != 'same' %}mph{% endif %}
                                     </td>
                                     <td id="boxa4" colspan="1">
                                         WIND DIRECTION<br>{{ data.wind_direction }}
@@ -135,10 +135,10 @@
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSION POINT<br>Start:{{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_point_stop }}
+                                        DESCRIBE EMISSION POINT<br>Start: {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_point_stop }}
                                     </td>
                                     <td id="boxa4" colspan="2" >
-                                        AMBIENT TEMP<br>Start:{{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop:{{ data.ambient_temp_stop }}<sup>o</sup>
+                                        AMBIENT TEMP<br>Start: {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; Stop: {{ data.ambient_temp_stop }}{% if data.ambient_temp_stop != 'same' %}<sup>o</sup>{% endif %}
                                     </td>
                                     <td id="boxa4" colspan="1" >
                                         HUMIDITY<br>{{ data.humidity }}%
@@ -170,15 +170,15 @@
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE EMISSIONS<br>Start:{{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_emissions_stop }}
+                                        DESCRIBE EMISSIONS<br>Start: {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_emissions_stop }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="3" >
-                                        EMISSIONS COLOR<br>Start:{{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.emission_color_stop }}
+                                        EMISSIONS COLOR<br>Start: {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.emission_color_stop }}
                                     </td>
                                     <td id="boxa4" colspan="3" >
-                                        PLUME TYPE:
+                                        PLUME TYPE:<br>
                                         {{ data.plume_type }}
                                     </td>
                                 </tr>
@@ -194,12 +194,12 @@
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start:{{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.plume_opacity_determined_stop }}
+                                        POINT IN PLUME WERE OPACITY WAS DETERMINED<br>Start: {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.plume_opacity_determined_stop }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td id="boxa4" colspan="6" >
-                                        DESCRIBE BACKGROUND<br>Start:{{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop:{{ data.describe_background_stop }}
+                                        DESCRIBE BACKGROUND<br>Start: {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; Stop: {{ data.describe_background_stop }}
                                     </td>
                                 </tr>
                             </table>
@@ -226,41 +226,39 @@
                                     </tr> 
                                     <tr>
                                         <td colspan="7" style="text-align: left;">
-                                        Read for 6 minutes at 15 second intervals DURING PUSHING
+                                            Read for 6 minutes at 15 second intervals DURING PUSHING
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="height: 25px;" > </td>
                                     </tr> 
                                     <tr>
-                                        <th colspan="6" style="text-align: left;">
-                                        <center>Pushing - Oven #'s / Times</center>
+                                        <th colspan="6" style="text-align: left; padding-bottom:5px;">
+                                            <center>Pushing - Oven #'s / Times</center>
                                         </th>
                                     </tr>
                                     <tr>
                                         <th colspan="6" style="text-align: left;">
                                             <center>#{{readings_form.PEC_oven1}} {{readings_form.PEC_time1}}</center>
                                         </th>
+                                    {% if readings_form.PEC_oven2 %}
                                     </tr><tr>
                                         <th colspan="6" style="text-align: left;">
                                             <center>#{{readings_form.PEC_oven2}} {{readings_form.PEC_time2}}</center>
                                         </th>
                                     </tr>
+                                    {% endif %}
                                     <tr>
                                         <td style="height: 25px;" > </td>
                                     </tr> 
+                                </table>
+                                <table id='formG1method9_2' style="border-collapse: collapse; width: 30rem; display:none;">
                                     <tr>
-                                        <td colspan="1" style="text-align: left;">
-                                        Start Time:
+                                        <td colspan="3" style="text-align: left;">
+                                        Start Time: {{ readings_form.PEC_start }}
                                         </td>
-                                        <td colspan="2" style="text-align: left;">
-                                            {{ readings_form.PEC_start }}
-                                        </td>
-                                        <td colspan="1" style="text-align: left;">
-                                        Stop Time:
-                                        </td>
-                                        <td colspan="2" style="text-align: left;">
-                                            {{ readings_form.PEC_stop }}
+                                        <td colspan="3" style="text-align: left;">
+                                        Stop Time: {{ readings_form.PEC_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -413,8 +411,8 @@
                                         <th colspan="3" style="text-align: left;">
                                         Pushing - Oven # and Time:
                                         </th>
-                                        <th colspan="4" style="text-align: left;">
-                                            {{ readings_form.PEC_push_oven }} - {{ readings_form.PEC_push_time }}
+                                        <th colspan="4" style="text-align: left; font-weight: unset;">
+                                            #{{ readings_form.PEC_push_oven }} - {{ readings_form.PEC_push_time }}
                                         </th>
                                     </tr>
                                     <tr>
@@ -424,7 +422,7 @@
                                         <th colspan="3" style="text-align: left;">
                                         Time of observation:
                                         </th>
-                                        <th colspan="3" style="text-align: left;">
+                                        <th colspan="3" style="text-align: left; font-weight: unset;">
                                             {{ readings_form.PEC_observe_time }}
                                         </th>
                                     </tr>
@@ -435,8 +433,8 @@
                                         <th colspan="3" style="text-align: left;">
                                         Visible Emissions Present?
                                         </th>
-                                        <th colspan="3" style="text-align: left;">
-                                            {{ readings_form.PEC_emissions_present }}
+                                        <th colspan="3" style="text-align: left; font-weight: unset;">
+                                           {% if readings_form.PEC_emissions_present %}Yes{% else %}No{% endif %}
                                         </th>
                                     </tr>
                                     <tr>

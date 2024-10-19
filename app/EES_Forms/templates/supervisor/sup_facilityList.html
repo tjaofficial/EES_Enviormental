@@ -66,10 +66,11 @@
                                 </th>
                                 <th style="width: 15%;"></th>
                             </tr>
+                            {% with facID=forloop.counter %}
                             {% for packet in packetData %}
                             {% if packet.facilityChoice.facility_name == info.0.facility_name %}
                                 {% include 'supervisor/components/facility_delete_modal.html' with packID=forloop.counter %}
-                                {% include 'supervisor/components/facility_packet_modal.html' with packID=forloop.counter %}
+                                {% include 'supervisor/components/facility_packet_modal.html' with packID=forloop.counter|stringformat:'s' facID=facID|stringformat:'s' %}
                                 <tr>
                                     <td class="center"></td>
                                     <td>
@@ -132,6 +133,7 @@
                                 </tr>
                                 {% endif %}
                             {% endfor %}
+                            {% endwith %}
                             <tr>
                                 <form method='POST' action="">
                                     {% csrf_token %}

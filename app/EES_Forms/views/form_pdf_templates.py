@@ -318,8 +318,15 @@ def pdf_template_A3(primaryData, title, subTitle):
         lLen = len(l_leaks)
         for x in range(omLen):
             text = ''
+            om_leak_len = len(om_leaks[x]['location'])
+            omCount = 0
             for letters in om_leaks[x]['location']:
-                text += letters + ','
+                omCount += 1
+                if letters == 'dampered_off':
+                    omNewLetter = 'D'
+                text += omNewLetter + ','
+                if omCount == om_leak_len:
+                    text = text[:-1]
             tableData.insert(9,['', '', om_leaks[x]['oven'], text, '', '', '', '', '', '', '', ''],)
         if omLen < lLen:
             for rest in range(lLen - omLen):
@@ -333,8 +340,15 @@ def pdf_template_A3(primaryData, title, subTitle):
             spacedL = lLen
         for y in range(lLen):
             textl = ''
+            l_leak_len = len(om_leaks[x]['location'])
+            lCount = 0
             for letterL in l_leaks[y]['location']:
-                textl += letterL + ','
+                lCount += 1
+                if letters == 'dampered_off':
+                    lNewLetter = 'D'
+                textl += lNewLetter + ','
+                if lCount == l_leak_len:
+                    textl = textl[:-1]
             tableData[9 + y][7] = l_leaks[y]['oven']
             tableData[9 + y][8] = textl
     elif om_leaks != '' and l_leaks == '':
@@ -555,13 +569,13 @@ def pdf_template_A4(primaryData, title, subTitle):
         style.append(lines)         
     return tableData, tableColWidths, style
 
-def pdf_template_A5(primaryData, secondaryData, formInformation):
+def pdf_template_A5(primaryData, secondaryData, title, subTitle, formInformation):
     marginSet = 0.3
     o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + secondaryData.o1 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.o1_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(secondaryData.o1_stop) + '</para>', styles['Normal'])
     o2NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + secondaryData.o2 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.o2_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(secondaryData.o2_stop) + '</para>', styles['Normal'])
     o3NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + secondaryData.o3 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.o3_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(secondaryData.o3_stop) + '</para>', styles['Normal'])
     o4NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + secondaryData.o4 + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.o4_start) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(secondaryData.o4_stop) + '</para>', styles['Normal'])
-    title = formInformation.header + ' Visible Emission Observation Form' + formInformation.title + ' - Form (' + formInformation.form + ')'
+    #title = formInformation.header + ' Visible Emission Observation Form' + formInformation.title + ' - Form (' + formInformation.form + ')'
     if primaryData.wind_speed_stop == 'same':
         suffix = ''
     else:
@@ -572,7 +586,7 @@ def pdf_template_A5(primaryData, secondaryData, formInformation):
         suffix2 = '<sup>o</sup>'
     tableData = [
         [title],
-        [''],
+        [subTitle],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         [Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT</sup></b>&#160;&#160;</para><para fontSize=7>' + primaryData.estab + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>COUNTY</sup></b>&#160;&#160;</para><para fontSize=7>' + primaryData.county + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>ESTABLISHMENT NO.</sup></b>&#160;&#160;</para><para fontSize=7>' + primaryData.estab_no + '</para>', styles['Normal']), '', ''],
         [Paragraph('<para fontSize=7><b><sup>EQUIPMENT LOCATION</sup></b>&#160;&#160;</para><para fontSize=7>' + primaryData.equip_loc + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', Paragraph('<para fontSize=7><b><sup>DISTRICT</sup></b>&#160;&#160;</para><para fontSize=7>' + primaryData.district + '</para>', styles['Normal']), '', '', Paragraph('<para fontSize=7><b><sup>DATE</sup></b>&#160;&#160;</para><para fontSize=7>' + date_change(primaryData.date) + '</para>', styles['Normal']), '', ''],
@@ -632,7 +646,7 @@ def pdf_template_A5(primaryData, secondaryData, formInformation):
         ('SPAN', (0,0), (-1,0)),
         ('SPAN', (0,1), (-1,1)),
         ('ALIGN', (0,0), (-1,0), 'CENTER'),
-        ('ALIGN', (0,1), (-1,1), 'LEFT'),
+        ('ALIGN', (0,1), (-1,1), 'CENTER'),
         
         #readings first 2 (0,17)
         ('VALIGN', (0,17), (-1,29), 'MIDDLE'),
@@ -823,78 +837,14 @@ def pdf_template_6(primaryData, title, subTitle, formInformation):
     return tableData, tableColWidths, style
 
 def pdf_template_7(primaryData, secondaryData, title, subTitle):
-    if primaryData.sto_start_time and not primaryData.salt_start_time or not primaryData.sto_start_time and primaryData.salt_start_time:
-        count = 7
-    elif primaryData.sto_start_time and primaryData.salt_start_time:
-        count = 14
-    else:
-        count = 0
+    # formSettings = primaryData.settings['settings']
     date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(primaryData.date) + '</para>', styles['Normal'])
-    startStopTruck = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(primaryData.truck_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(primaryData.truck_stop_time)+ '</para>', styles['Normal'])
-    startStopArea = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(primaryData.area_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(primaryData.area_stop_time)+ '</para>', styles['Normal'])
-    if primaryData.sto_start_time:
-        startStopSto = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(primaryData.sto_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(primaryData.sto_stop_time)+ '</para>', styles['Normal'])
-    if primaryData.salt_start_time:
-        startStopSalt = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(primaryData.salt_start_time) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(primaryData.salt_stop_time)+ '</para>', styles['Normal'])
-    observerCert = Paragraph('<para align=center><b>Observer:</b>&#160;' + primaryData.observer + '&#160;&#160;&#160;&#160;<b>Certified Date:</b>&#160;' + date_change(primaryData.cert_date) + '</para>', styles['Normal'])
-    comments = Paragraph('<para align=left><b>Comments:</b>    ' + primaryData.comments + '</para>', styles['Normal'])
-    
     tableData = [
         [title],
         [subTitle],
         [date],
         ['','','','','','','',''],
-        ['',Paragraph('<para align=left><b>Truck:</b> ' + truck_choices(primaryData.truck_sel) + '</para>', styles['Normal']),'',startStopTruck,'','','',''],
-        ['','MIN/SEC','0','15','30','45','',''],
-        ['','0',secondaryData.TRead1,secondaryData.TRead2,secondaryData.TRead3,secondaryData.TRead4,'',''],
-        ['','1',secondaryData.TRead5,secondaryData.TRead6,secondaryData.TRead7,secondaryData.TRead8,'',''],
-        ['','2',secondaryData.TRead9,secondaryData.TRead10,secondaryData.TRead11,secondaryData.TRead12,'',''],
-        ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',primaryData.average_t,''],
-        ['','','','','','','',''],
-        ['',Paragraph('<para align=left><b>Area:</b> ' + area_choices(primaryData.area_sel) + '</para>', styles['Normal']),'',startStopArea,'','','',''],
-        ['','MIN/SEC','0','15','30','45','',''],
-        ['','0',secondaryData.ARead1,secondaryData.ARead2,secondaryData.ARead3,secondaryData.ARead4,'',''],
-        ['','1',secondaryData.ARead5,secondaryData.ARead6,secondaryData.ARead7,secondaryData.ARead8,'',''],
-        ['','2',secondaryData.ARead9,secondaryData.ARead10,secondaryData.ARead11,secondaryData.ARead12,'',''],
-        ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',primaryData.average_p,''],
-        ['','','','','','','',''],
     ]
-    tableColWidths = (60,75,75,75,75,75,40,60)
-    
-    if primaryData.sto_start_time:
-        tableInsertSto = [
-            ['',Paragraph('<para align=left><b>Area B Coke Storage Area:</b></para>', styles['Normal']),'',startStopSto,'','','',''],
-            ['','MIN/SEC','0','15','30','45','',''],
-            ['','0',secondaryData.storage_1,secondaryData.storage_2,secondaryData.storage_3,secondaryData.storage_4,'',''],
-            ['','1',secondaryData.storage_5,secondaryData.storage_6,secondaryData.storage_7,secondaryData.storage_8,'',''],
-            ['','2',secondaryData.storage_9,secondaryData.storage_10,secondaryData.storage_11,secondaryData.storage_12,'',''],
-            ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',primaryData.average_storage,''],
-            ['','','','','','','',''],
-        ]
-        for lineSto in tableInsertSto:
-            tableData.append(lineSto)
-    if primaryData.salt_start_time:
-        tableInsertSalt = [
-            ['',Paragraph('<para align=left><b>Monthly Salt Pile Inspections:</b></para>', styles['Normal']),'',startStopSalt,'','','',''],
-            ['','MIN/SEC','0','15','30','45','',''],
-            ['','0',secondaryData.salt_1,secondaryData.salt_2,secondaryData.salt_3,secondaryData.salt_4,'',''],
-            ['','1',secondaryData.salt_5,secondaryData.salt_6,secondaryData.salt_7,secondaryData.salt_8,'',''],
-            ['','2',secondaryData.salt_9,secondaryData.salt_10,secondaryData.salt_11,secondaryData.salt_12,'',''],
-            ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',primaryData.average_salt,''],
-            ['','','','','','','',''],
-        ]
-        for lineSalt in tableInsertSalt:
-            tableData.append(lineSalt)
-    
-    tableInsert =[
-        ['',observerCert,'','','','','',''],
-        ['','','','','','','',''],
-        ['',comments,'','','','','',''],
-    ]
-    
-    for finalLines in tableInsert:
-        tableData.append(finalLines)
-        
     style = [
         #Top header and info
         ('FONT', (0,0), (-1,0), 'Times-Bold', 18),
@@ -903,77 +853,60 @@ def pdf_template_7(primaryData, secondaryData, title, subTitle):
         ('SPAN', (0,0), (-1,0)),
         ('SPAN', (0,1), (-1,1)),
         ('SPAN', (0,2), (-1,2)),
-        ('ALIGN', (0,0), (-1,2), 'CENTER'),
-        
-        #truck table (1,4)
-        ('GRID',(1,5), (-3,9), 0.5,colors.black),
-        ('BOX',(1,4), (-3,9), 0.5,colors.black),
-        ('GRID',(6,9), (-2,9), 0.5,colors.black),
-        ('SPAN', (1,4), (2,4)),
-        ('SPAN', (1,9), (5,9)),
-        ('ALIGN', (1,5), (5,8), 'CENTER'),
-        ('ALIGN', (6,9), (6,9), 'CENTER'),
-        ('SPAN', (3,4), (5,4)),
-        ('ALIGN', (3,4), (5,4), 'RIGHT'),
-        ('BACKGROUND', (1,5), (5,5),'(.6,.7,.8)'),
-        
-        #truck table (1,11)
-        ('GRID',(1,12), (-3,16), 0.5,colors.black),
-        ('BOX',(1,11), (-3,16), 0.5,colors.black),
-        ('GRID',(6,16), (-2,16), 0.5,colors.black),
-        ('SPAN', (1,11), (2,11)),
-        ('SPAN', (1,16), (5,16)),
-        ('ALIGN', (1,12), (5,15), 'CENTER'),
-        ('ALIGN', (6,16), (6,16), 'CENTER'),
-        ('SPAN', (3,11), (5,11)),
-        ('ALIGN', (3,11), (5,11), 'RIGHT'),
-        ('BACKGROUND', (1,12), (5,12),'(.6,.7,.8)'),
-        
-        #ending data (1,18)
-        ('SPAN', (1,18 + count), (6,18 + count)),
-        ('SPAN', (1,20 + count), (6,20 + count)),
+        ('ALIGN', (0,0), (-1,2), 'CENTER')
     ]
-    if primaryData.sto_start_time and not primaryData.salt_start_time or not primaryData.sto_start_time and primaryData.salt_start_time:
-        styleInsertOne = [
-            ('GRID',(1,19), (-3,23), 0.5,colors.black),
-            ('BOX',(1,18), (-3,23), 0.5,colors.black),
-            ('GRID',(6,23), (-2,23), 0.5,colors.black),
-            ('SPAN', (1,18), (2,18)),
-            ('SPAN', (1,23), (5,23)),
-            ('ALIGN', (1,19), (5,22), 'CENTER'),
-            ('ALIGN', (6,23), (6,23), 'CENTER'),
-            ('SPAN', (3,18), (5,18)),
-            ('ALIGN', (3,18), (5,18), 'RIGHT'),
-            ('BACKGROUND', (1,19), (5,19),'(.6,.7,.8)'),
-        ]
-        for styleOne in styleInsertOne:
-            style.append(styleOne)
-    elif primaryData.sto_start_time and primaryData.salt_start_time:
-        styleInsertTwo = [
-            ('GRID',(1,19), (-3,23), 0.5,colors.black),
-            ('BOX',(1,18), (-3,23), 0.5,colors.black),
-            ('GRID',(6,23), (-2,23), 0.5,colors.black),
-            ('SPAN', (1,18), (2,18)),
-            ('SPAN', (1,23), (5,23)),
-            ('ALIGN', (1,19), (5,22), 'CENTER'),
-            ('ALIGN', (6,23), (6,23), 'CENTER'),
-            ('SPAN', (3,18), (5,18)),
-            ('ALIGN', (3,18), (5,18), 'RIGHT'),
-            ('BACKGROUND', (1,19), (5,19),'(.6,.7,.8)'),
-            
-            ('GRID',(1,26), (-3,30), 0.5,colors.black),
-            ('BOX',(1,25), (-3,30), 0.5,colors.black),
-            ('GRID',(6,30), (-2,30), 0.5,colors.black),
-            ('SPAN', (1,25), (2,25)),
-            ('SPAN', (1,30), (5,30)),
-            ('ALIGN', (1,26), (5,29), 'CENTER'),
-            ('ALIGN', (6,30), (6,30), 'CENTER'),
-            ('SPAN', (3,25), (5,25)),
-            ('ALIGN', (3,25), (5,25), 'RIGHT'),
-            ('BACKGROUND', (1,26), (5,26),'(.6,.7,.8)'),
-        ]
-        for styleTwo in styleInsertTwo:
-            style.append(styleTwo)
+    tableCount = -1
+    areaData = [primaryData.area_json_1, primaryData.area_json_2, primaryData.area_json_3, primaryData.area_json_4]
+    for areaDict in areaData:
+        if areaDict:
+            tableCount += 1
+            startStop = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(areaDict['start_time']) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(areaDict['stop_time'])+ '</para>', styles['Normal'])
+            readings = areaDict['readings']
+            areaBuild = [
+                ['',Paragraph('<para align=left><b>Truck:</b> ' + areaDict['selection'] + '</para>', styles['Normal']),'',startStop,'','','',''],
+                ['','MIN/SEC','0','15','30','45','',''],
+                ['','0',readings['1'],readings['2'],readings['3'],readings['4'],'',''],
+                ['','1',readings['5'],readings['6'],readings['7'],readings['8'],'',''],
+                ['','2',readings['9'],readings['10'],readings['11'],readings['12'],'',''],
+                ['','3-minute Average Opacity (sum of the 12 readings above/12)','','','','',areaDict['average'],''],
+                ['','','','','','','',''],
+            ]
+            for lines in areaBuild:
+                tableData.append(lines)
+            count = tableCount * 7
+            styleBuild = [
+                ('GRID',(1,5 + count), (-3,9 + count), 0.5,colors.black),
+                ('BOX',(1,4 + count), (-3,9 + count), 0.5,colors.black),
+                ('GRID',(6,9 + count), (-2,9 + count), 0.5,colors.black),
+                ('SPAN', (1,4 + count), (2,4 + count)),
+                ('SPAN', (1,9 + count), (5,9 + count)),
+                ('ALIGN', (1,5 + count), (5,8 + count), 'CENTER'),
+                ('ALIGN', (6,9 + count), (6,9 + count), 'CENTER'),
+                ('SPAN', (3,4 + count), (5,4 + count)),
+                ('ALIGN', (3,4 + count), (5,4 + count), 'RIGHT'),
+                ('BACKGROUND', (1,5 + count), (5,5 + count),'(.6,.7,.8)')
+            ]
+            for styleLine in styleBuild:
+                style.append(styleLine)
+    observerCert = Paragraph('<para align=center><b>Observer:</b>&#160;' + primaryData.observer + '&#160;&#160;&#160;&#160;<b>Certified Date:</b>&#160;' + date_change(primaryData.cert_date) + '</para>', styles['Normal'])
+    comments = Paragraph('<para align=left><b>Comments:</b>    ' + primaryData.comments + '</para>', styles['Normal'])
+    tableColWidths = (60,75,75,75,75,75,40,60)
+    tableInsert =[
+        ['',observerCert,'','','','','',''],
+        ['','','','','','','',''],
+        ['',comments,'','','','','',''],
+    ]
+    endingCount = count + 11
+    endingStyleInsert = [
+        #ending data (1,18)
+        ('SPAN', (1,endingCount), (6,endingCount)),
+        ('SPAN', (1,endingCount), (6,endingCount))
+    ]
+    for finalLines in tableInsert:
+        tableData.append(finalLines)
+    for finalStyleLines in endingStyleInsert:
+        style.append(finalStyleLines)
+    
     return tableData, tableColWidths, style
 
 def pdf_template_8(primaryData, title, subTitle):
@@ -984,35 +917,35 @@ def pdf_template_8(primaryData, title, subTitle):
         ['Truck 1', '', '', '', '', ''],
         [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(primaryData.observer1) + '</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(primaryData.truck_id1) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(primaryData.contents1) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(primaryData.date1)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(primaryData.time1)) + '</para>', styles['Normal']), '', ''],
-        [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted1) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard1) + '</para>', styles['Normal']), '', ''],
+        [Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard1) + '</para>', styles['Normal']), Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted1) + '</para>', styles['Normal']), '', '',  '', ''],
         [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(primaryData.comments1) + '</para>', styles['Normal']), '', '', '', '', ''],
         ['', '', '', '', '', ''],
         ['Truck 2', '', '', '', '', ''],
         [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(primaryData.observer2) + '</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(primaryData.truck_id2) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(primaryData.contents2) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(primaryData.date2)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(primaryData.time2)) + '</para>', styles['Normal']), '', ''],
-        [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted2) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard2) + '</para>', styles['Normal']), '', ''],
+        [Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard2) + '</para>', styles['Normal']), Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted2) + '</para>', styles['Normal']), '', '', '', ''],
         [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(primaryData.comments2) + '</para>', styles['Normal']), '', '', '', '', ''],
         ['', '', '', '', '', ''],
         ['Truck 3', '', '', '', '', ''],
         [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(primaryData.observer3) + '</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(primaryData.truck_id3) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(primaryData.contents3) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(primaryData.date3)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(primaryData.time3)) + '</para>', styles['Normal']), '', ''],
-        [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted3) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard3) + '</para>', styles['Normal']), '', ''],
+        [Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard3) + '</para>', styles['Normal']), Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted3) + '</para>', styles['Normal']), '', '', '', ''],
         [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(primaryData.comments3) + '</para>', styles['Normal']), '', '', '', '', ''],
         ['', '', '', '', '', ''],
         ['Truck 4', '', '', '', '', ''],
         [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(primaryData.observer4) + '</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(primaryData.truck_id4) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(primaryData.contents4) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(primaryData.date4)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(primaryData.time4)) + '</para>', styles['Normal']), '', ''],
-        [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted4) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard4) + '</para>', styles['Normal']), '', ''],
+        [Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard4) + '</para>', styles['Normal']), Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted4) + '</para>', styles['Normal']), '', '', '', ''],
         [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(primaryData.comments4) + '</para>', styles['Normal']), '', '', '', '', ''],
         ['', '', '', '', '', ''],
         ['Truck 5', '', '', '', '', ''],
         [Paragraph('<para><b>Observer:&#160;</b>' + emptyInputs(primaryData.observer5) + '</para>', styles['Normal']), '', '', '', '', ''],
         [Paragraph('<para><b>Truck ID:&#160;</b>' + emptyInputs(primaryData.truck_id5) + '</para>', styles['Normal']), Paragraph('<para><b>Contents:&#160;</b>' + emptyInputs(primaryData.contents5) + '</para>', styles['Normal']), Paragraph('<para><b>Date:&#160;</b>' + emptyInputs(str(primaryData.date5)) + '</para>', styles['Normal']), Paragraph('<para><b>Time:&#160;</b>' + emptyInputs(time_change(primaryData.time5)) + '</para>', styles['Normal']), '', ''],
-        [Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted5) + '</para>', styles['Normal']), '', '', Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard5) + '</para>', styles['Normal']), '', ''],
+        [Paragraph('<para><b>Freeboard:&#160;</b>' + emptyInputs(primaryData.freeboard5) + '</para>', styles['Normal']), Paragraph('<para><b>If NO, is material adequately wetted and stable?&#160;</b>' + emptyInputs(primaryData.wetted5) + '</para>', styles['Normal']), '', '', '', ''],
         [Paragraph('<para><b>Comments:&#160;</b>' + emptyInputs(primaryData.comments5) + '</para>', styles['Normal']), '', '', '', '', ''],
         ['', '', '', '', '', ''],
     ]
-    tableColWidths = (80,90,100,90,80,80)
+    tableColWidths = (90,90,100,90,80,80)
 
     style = [
         #Top header and info
@@ -1033,7 +966,7 @@ def pdf_template_8(primaryData, title, subTitle):
         ('SPAN', (2,4), (3,4)),
         ('SPAN', (4,4), (5,4)),
         ('SPAN', (4,5), (5,5)),
-        ('SPAN', (0,6), (2,6)),
+        ('SPAN', (1,6), (3,6)),
         ('SPAN', (0,7), (3,7)),
         
         #truck 2
@@ -1045,7 +978,7 @@ def pdf_template_8(primaryData, title, subTitle):
         ('SPAN', (2,10), (3,10)),
         ('SPAN', (4,10), (5,10)),
         ('SPAN', (4,11), (5,11)),
-        ('SPAN', (0,12), (2,12)),
+        ('SPAN', (1,12), (3,12)),
         ('SPAN', (0,13), (3,13)),
         
         #truck 3
@@ -1057,7 +990,7 @@ def pdf_template_8(primaryData, title, subTitle):
         ('SPAN', (2,16), (3,16)),
         ('SPAN', (4,16), (5,16)),
         ('SPAN', (4,17), (5,17)),
-        ('SPAN', (0,18), (2,18)),
+        ('SPAN', (1,18), (3,18)),
         ('SPAN', (0,19), (3,19)),
         
         #truck 4
@@ -1069,7 +1002,7 @@ def pdf_template_8(primaryData, title, subTitle):
         ('SPAN', (2,22), (3,22)),
         ('SPAN', (4,22), (5,22)),
         ('SPAN', (4,23), (5,23)),
-        ('SPAN', (0,24), (2,24)),
+        ('SPAN', (1,24), (3,24)),
         ('SPAN', (0,25), (3,25)),
         
         #truck 5
@@ -1081,7 +1014,7 @@ def pdf_template_8(primaryData, title, subTitle):
         ('SPAN', (2,28), (3,28)),
         ('SPAN', (4,28), (5,28)),
         ('SPAN', (4,29), (5,29)),
-        ('SPAN', (0,30), (2,30)),
+        ('SPAN', (1,30), (3,30)),
         ('SPAN', (0,31), (3,31)),
     ]
     return tableData, tableColWidths, style
@@ -1170,12 +1103,12 @@ def pdf_template_17(primaryData, secondaryData, title, subTitle, formInformation
     else:
         pecType = 'Method 9'
         methOvenTime1 = Paragraph('<para fontSize=10 align=center>#' + str(secondaryData.PEC_oven1) + '&#160;-&#160;' + time_change(secondaryData.PEC_time1) + '</para>', styles['Normal'])
-        methOvenTime2 = Paragraph('<para fontSize=10 align=center>#' + str(secondaryData.PEC_oven2) + '&#160;-&#160;' + time_change(secondaryData.PEC_time2) + '</para>', styles['Normal'])
+        methOvenTime2 = Paragraph('<para fontSize=10 align=center>#' + str(secondaryData.PEC_oven2) + '&#160;-&#160;' + time_change(secondaryData.PEC_time2) + '</para>', styles['Normal']) if secondaryData.PEC_oven2 else ""
         methStartStop = Paragraph('<para fontSize=10 align=center><b>Start:</b>&#160;' + time_change(secondaryData.PEC_start) + '&#160;&#160;&#160;<b>Stop:&#160;</b>' + time_change(secondaryData.PEC_stop) + '</para>', styles['Normal'])
     marginSet = 0.3
     bothDataHeader = Paragraph('<para fontSize=10 align=center>Type of Visible Emissions Observation (select once and complete form below):&#160;' + pecType + '</para>', styles['Normal'])
     
-    title = Paragraph('<para align=center><b>' + formInformation.header + ' Visible Emission Observation Form</b><br/><b>' + formInformation.title + ' - Form (' + formInformation.form + ')</b></para>', styles['Normal'])
+    #title = Paragraph('<para align=center><b>' + formInformation.header + '<br/> Visible Emission Observation Form</b><br/><b>' + formInformation.title + ' - Form (' + formInformation.form + ')</b></para>', styles['Normal'])
     if primaryData.wind_speed_stop == 'same':
         suffix = ''
     else:
@@ -1242,7 +1175,7 @@ def pdf_template_17(primaryData, secondaryData, title, subTitle, formInformation
             ['', '', '', '', '', '', '', '5', secondaryData.PEC_read_21, secondaryData.PEC_read_22, secondaryData.PEC_read_23, secondaryData.PEC_read_24, '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', '', 'Average: ' + str(secondaryData.PEC_average), '', '', '', '', '', ''],
         ]
-        tableColWidths = (45,10,40,20,20,20,20,20,40,40,40,40,30,30,42,35,40)
+        tableColWidths = (45,10,20,20,20,40,35,38,38,38,38,34,34,34,34,34,40)
         tableRowHeights = (20, 20, 5, 20, 20, 20, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 30, 15, 5, 15, 30, 25, 15, 15, 5, 15, 20, 20, 20, 20, 20, 20, 20, 20)
     for line in dataInsert:
         tableData.append(line)
@@ -1355,7 +1288,7 @@ def pdf_template_18(primaryData, secondaryData, title, subTitle, formInformation
     o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + str(secondaryData.PEC_oven_a) + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.PEC_start_a) + '</para>', styles['Normal'])
     o2NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + str(secondaryData.PEC_oven_b) + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.PEC_start_b) + '</para>', styles['Normal'])
     o3NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + str(secondaryData.PEC_oven_c) + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(secondaryData.PEC_start_c) + '</para>', styles['Normal'])
-    title = Paragraph('<para align=center><b>' + formInformation.header + ' Visible Emission Observation Form</b><br/><b>' + formInformation.title + ' - Form (' + formInformation.form + ')</b></para>', styles['Normal'])
+    #title = Paragraph('<para align=center><b>' + formInformation.header + ' Visible Emission Observation Form</b><br/><b>' + formInformation.title + ' - Form (' + formInformation.form + ')</b></para>', styles['Normal'])
     if primaryData.wind_speed_stop == 'same':
         suffix = ''
     else:
@@ -1495,7 +1428,7 @@ def pdf_template_19(primaryData, secondaryData, title, subTitle, formInformation
     marginSet = 0.3
     startStop = Paragraph('<para fontSize=10 align=center><b>Start:</b>&#160;' + time_change(secondaryData.comb_start) + '&#160;&#160;&#160; <b>Stop:</b>&#160;' + time_change(secondaryData.comb_stop) + '</para>', styles['Normal'])
     bottomHeader = Paragraph('<para fontSize=10 align=center><b>Method 9 Observation</b></para>', styles['Normal'])
-    title = Paragraph('<para align=center><b>' + formInformation.header + ' Visible Emission Observation Form</b><br/><b>' + formInformation.title + ' - Form (' + formInformation.form + ')</b></para>', styles['Normal'])
+    #title = Paragraph('<para align=center><b>' + formInformation.header + ' Visible Emission Observation Form</b><br/><b>' + formInformation.title + ' - Form (' + formInformation.form + ')</b></para>', styles['Normal'])
     if secondaryData.comb_formL:
         interval = 'Read for 15 minutes MINIMUM at 15 second intervals'
     else:
