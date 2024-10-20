@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from django.apps import apps
-from ..models import Forms, bat_info_model, facility_forms_model, the_packets_model
+from django.apps import apps # type: ignore
+from ..models import bat_info_model, the_packets_model
 from ..forms import *
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
-from ..utils import Calendar, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
+from ..utils import checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
 import datetime
 
 lock = login_required(login_url='Login')
@@ -49,11 +49,11 @@ def printSelect(request, facility):
 
     if request.method == "POST":
         answer = request.POST
-        forms  = request.POST['forms']
         if 'facilitySelect' in answer.keys():
             if answer['facilitySelect'] != '':
                 return redirect('PrintSelect', answer['facilitySelect'])
         inputDate = datetime.datetime.strptime(answer["monthSel"], "%Y-%m").date()
+        forms  = request.POST['forms']
         if answer['type'] == 'single':
             print('HFLSKDJFLSKJDFLKSJDF--------')
             print(forms)

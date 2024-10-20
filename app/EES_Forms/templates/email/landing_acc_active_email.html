@@ -1,0 +1,35 @@
+{% autoescape off %}
+<style>
+    .mainContEmail{
+        background-color: lightblue;
+        padding: 27px;
+        margin: auto;
+        width: 600px;
+        border-radius: 16px;
+    }
+    .cardHeader {
+        font-size: 17px;
+        font-weight: bolder;
+        padding: 1rem;
+        background-color: #253544;
+        color: white;
+        border-radius: 13px 13px 0px 0px;
+        text-align: center;
+        font-family: sans-serif;
+    }
+</style>
+<div style="background-color: #ebebeb; margin: auto; width: 524px; border-radius: 16px;">
+    <div style="font-size: 20px; font-weight: bolder; padding: 1rem; background-color: #253544; color: white; border-radius: 13px 13px 0px 0px; text-align: center; font-family: sans-serif;">
+        MethodPlus+ Account Activation
+    </div>
+    <div style="padding: 27px;font-size: 18px; color:black;">
+        Hi {{ user.first_name }} {{ user.last_name }},<br>
+        <p>Please click on the link below to confirm your registration and be taken to the login page.</p>
+        http://{{domain}}{% url 'activate' uidb64=uid token=token %}<br>
+        <p>Here is your username:</p>
+        <p style="padding-left: 20px;">
+            Username: {{ user.username }}<br>
+        </p>
+    </div>
+</div>
+{% endautoescape %}

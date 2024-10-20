@@ -1039,8 +1039,9 @@ def shared_contacts_view(request, facility):
     
     if request.method == 'POST':
         answer = request.POST
-        if answer['facilitySelect'] != '':
-            return redirect('sup_dashboard', answer['facilitySelect'])
+        if 'facilitySelect' in request.POST.keys():
+            if answer['facilitySelect'] != '':
+                return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "shared/contacts.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
@@ -1059,10 +1060,13 @@ def sop_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)
     options = bat_info_model.objects.all()
-    sops = sop_model.objects.all().order_by('name')
+    sops = sop_model.objects.filter(facilityChoice__facility_name=facility).order_by('name')
     sopForm = sop_form()
     
     if request.method == 'POST':
+        if 'facilitySelect' in request.POST.keys():
+            if request.POST['facilitySelect'] != '':
+                return redirect('sup_dashboard', request.POST['facilitySelect'])
         form = sop_form(request.POST, request.FILES)
         if form.is_valid():
             A = form.save(commit=False)

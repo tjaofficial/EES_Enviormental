@@ -16,19 +16,19 @@
                 <form method="GET" action="./archive" style="text-align: center;">
                     <div class="CR_dataCont">
                         <div class="inputCont">
-                            Search Form ID<br>
-                            <input type="search" name="archiveFormID" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                            Search Form ID {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
+                            <input type="number" name="archiveFormID" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
-                            Search Form Label<br>
+                            Search Form Label {% include 'shared/components/helpPack.html' with data="searchLabel" popupCounter=1 %}<br>
                             <input type="search" name="archiveFormLabel" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
-                            Search Month/Year<br>
+                            Search Month/Year {% include 'shared/components/helpPack.html' with data="searchMonthYear" popupCounter=2 %}<br>
                             <input type="month" name="archiveMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
-                            Search Date<br>
+                            Search Date {% include 'shared/components/helpPack.html' with data="searchDate" popupCounter=3 %}<br>
                             <input type="date" name="archiveDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
                         </div>
                     </div>

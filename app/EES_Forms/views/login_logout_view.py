@@ -115,7 +115,9 @@ def activate_view(request, uidb64, token):
         messages.success(request, 'Account has been activated. Please Login for further instruction.')
         return redirect('Login')
     else:  
-        return HttpResponse('Activation link is invalid!') 
+        messages.success(request, 'Your account has already been activated. Please Login for further instruction.')
+        return redirect('Login')
+        # return HttpResponse('Activation link is invalid!') 
     
 def reset_password_activate_view(request, uidb64, token):  
     User = get_user_model()  
@@ -262,7 +264,7 @@ def landingRegister(request):
 
             current_site = get_current_site(request)
             mail_subject = 'MethodPlus: Activate Your New Account'   
-            html_message = render_to_string('email/acc_active_email.html', {  
+            html_message = render_to_string('email/landing_acc_active_email.html', {  
                 'user': user,  
                 'domain': current_site.domain,  
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),  

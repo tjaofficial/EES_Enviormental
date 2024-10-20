@@ -74,7 +74,7 @@
                                     <th class="inputHeader">Observer: </th>
                                     <td>
                                         {% if selector == 'form' %}
-                                            <input type="text" name="observer{{forloop.counter}}" value="{% with fill='observer'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" maxlength="30" id="id_observer{{forloop.counter}}" required>
+                                            <input type="text" name="observer{{forloop.counter}}" value="{% with fill='observer'|addNum:forloop.counter %}{% if initial_data|exist:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" maxlength="30" id="id_observer{{forloop.counter}}" required>
                                         {% else %}
                                             {% with fixed='observer-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
                                         {% endif %}
@@ -104,7 +104,7 @@
                                     <th class="inputHeader">Date: </th>
                                     <td>
                                         {% if selector == 'form' %}
-                                            <input type="date" name="date{{forloop.counter}}" value="{% with fill='date'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_date{{forloop.counter}}" required>
+                                            <input type="date" name="date{{forloop.counter}}" value="{% with fill='date'|addNum:forloop.counter %}{% if initial_data|exist:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_date{{forloop.counter}}" required>
                                         {% else %}
                                             {% with fixed='date-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
                                         {% endif %}
@@ -114,7 +114,7 @@
                                     <th class="inputHeader">Time: </th>
                                     <td>
                                         {% if selector == 'form' %}
-                                        <input type="time" name="time{{forloop.counter}}" value="{% with fill='time'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_time{{forloop.counter}}" required>
+                                        <input type="time" name="time{{forloop.counter}}" value="{% with fill='time'|addNum:forloop.counter %}{% if initial_data|exist:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}" onchange="if_one_then_all()" class="baseInput" id="id_time{{forloop.counter}}" required>
                                     {% else %}
                                         {% with fixed='time-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}
                                     {% endif %}
@@ -169,7 +169,7 @@
                                 </tr>
                                 <tr style="text-align: center;">
                                     <td colspan="2">
-                                        <textarea name="comments{{forloop.counter}}" cols="40" rows="3" onchange="if_one_then_all()" type="text" class="textBox" maxlength="30" id="id_comments{{forloop.counter}}" required>{% if selector == 'form' %}{% with fill='comments'|addNum:forloop.counter %}{% if initial_data|get_category:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}{% else %}{% with fixed='comments-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}{% endif %}</textarea>
+                                        <textarea name="comments{{forloop.counter}}" cols="40" rows="3" onchange="if_one_then_all()" type="text" class="textBox" maxlength="30" id="id_comments{{forloop.counter}}" required>{% if selector == 'form' %}{% with fill='comments'|addNum:forloop.counter %}{% if initial_data|exist:fill %}{{initial_data|get_category:fill}}{% endif %}{% endwith %}{% else %}{% with fixed='comments-'|addNum:forloop.counter %}{{form|get_instance:fixed}}{% endwith %}{% endif %}</textarea>
                                         <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
                                     </td>
                                 </tr>

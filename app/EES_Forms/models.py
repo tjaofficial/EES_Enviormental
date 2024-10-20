@@ -6924,6 +6924,7 @@ class form27_model(models.Model):
         }
 
 class sop_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=50
     )

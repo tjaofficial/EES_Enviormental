@@ -7,6 +7,13 @@ def get_category(value, attr):
     return value[str(attr)]
 
 @register.filter
+def exist(value, key):
+    if key in value.keys():
+        return True
+    else:
+        return False
+
+@register.filter
 def addNum(value, number):
     return value + str(number)
 

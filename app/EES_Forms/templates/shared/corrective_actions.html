@@ -15,25 +15,25 @@
                 <form method="GET" action="./Corrective-Action" style="text-align: center;">
                     <div class="CR_dataCont">
                         <div class="inputCont">
-                            Search Form Name <br>
+                            Search Form ID: {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
                             <input type="search" name="issueForm" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
-                            Search Month/Year<br>
+                            Search Month/Year: {% include 'shared/components/helpPack.html' with data="searchMonthYear" popupCounter=1 %}<br>
                             <input type="month" name="issueMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
-                            Search Date<br>
+                            Search Date: {% include 'shared/components/helpPack.html' with data="searchDate" popupCounter=2 %}<br>
                             <input type="date" name="issueDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
                         </div>
                         <div class="inputCont">
-                            Search Issue Description<br>
+                            Search Issue Description: {% include 'shared/components/helpPack.html' with data="searchIssue" popupCounter=3 %}<br>
                             <input type="search" name="issue_contains" placeholder="Issue Contains..." value="{% if varPull.3 %}{{varPull.3}}{% endif %}"/>
                         </div>
                     </div>
                     <div class="CR_dataCont">
                         <div class="inputCont">
-                            Personnel Notified<br>
+                            Personnel Notified: {% include 'shared/components/helpPack.html' with data="searchPersonnel" popupCounter=4 %}<br>
                             <input type="search" name="notified" placeholder="Personnel Name" value="{% if varPull.4 %}{{varPull.4}}{% endif %}"/>
                         </div>
                     </div>

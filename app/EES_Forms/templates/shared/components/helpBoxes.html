@@ -58,10 +58,92 @@
             for the specified time frame.
         </p>
     {% elif selector == "weeklyStartDayInput" %}
-        <h5 class="left">HELP: Weekly Start Day Inpur</h5><br>
+        <h5 class="left">HELP: Weekly Start Day Input</h5><br>
         <p class="left description">
             This input allows you to select the starting day of the calendar week for the
             selected packet.
+        </p>
+    {% elif selector == "searchID" %}
+        <h5 class="left">HELP: Search By Form ID</h5><br>
+        <p class="left description">
+            This input allows users to search for specific forms within a facility 
+            by entering the unique Form ID.<br><br>
+            The form ID can ONLY be a number.
+        </p><br>
+        <p class="left description">
+            <span class="bold">Use Case Example: </span><br>
+            If a user needs to quickly locate a form associated with a specific 
+            process or inspection, they can input the Form ID into the search box to 
+            find and view the relevant form without manually browsing through all 
+            available forms.
+        </p>
+    {% elif selector == "searchLabel" %}
+        <h5 class="left">HELP: Search By Label</h5><br>
+        <p class="left description">
+            This input allows users to search for forms within a facility by 
+            entering the form label or name assigned by the supervisor.
+        </p><br>
+        <p class="left description">
+            <span class="bold">Use Case Example: </span><br>
+            If a user is looking for a form labeld "A1" or "3-4" they can type 
+            the full label into the search box. The search will then show all 
+            forms that match this label, making it easy to find and manage forms 
+            related to specific processes or activities.
+        </p>
+    {% elif selector == "searchMonthYear" %}
+        <h5 class="left">HELP: Search By Month/Year</h5><br>
+        <p class="left description">
+            This input allows users to search for forms within a facility based 
+            on a specific month and year combination.
+        </p><br>
+        <p class="left description">
+            <span class="bold">Use Case Example: </span><br>
+            If a user wants to find all forms submitted in March 2024, they can 
+            select or input "March" and "2024." The search will then filter and 
+            display all relevant forms from that period.
+        </p>
+    {% elif selector == "searchDate" %}
+        <h5 class="left">HELP: Search By Date</h5><br>
+        <p class="left description">
+            This input allows users to search for forms within a facility that were 
+            submitted on a specific date.
+        </p><br>
+        {% comment %} <p class="left description">
+            The user can search with one input to broaden their results or use multiple 
+            search inputs combined to narrow the search results.
+        </p><br> {% endcomment %}
+        <p class="left description">
+            <span class="bold">Use Case Example: </span><br>
+            If a user wants to find all forms from October 15, 2024, they would 
+            input that specific date, and the system would filter and display all 
+            forms submitted on that day.
+        </p>
+    {% elif selector == "searchIssue" %}
+        <h5 class="left">HELP: Search By Issue Description</h5><br>
+        <p class="left description">
+            This input allows users to search for forms within a facility based on 
+            keywords or phrases found within the "Issues Description" field of the 
+            forms.
+        </p><br>
+        <p class="left description">
+            <span class="bold">Use Case Example: </span><br>
+            If a user is looking for forms that mention issues related to "leak" or 
+            "maintenance," they can type those words into the input field. The 
+            system will then display all forms where the "Issues Description" 
+            contains either of those terms or closely related variations.
+        </p>
+    {% elif selector == "searchPersonnel" %}
+        <h5 class="left">HELP: Search By Personnel Notified</h5><br>
+        <p class="left description">
+            This input allows users to search for forms within a facility based on 
+            the name of the facility personnel who was notified about an issue, 
+            event, or task.
+        </p><br>
+        <p class="left description">
+            <span class="bold">Use Case Example: </span><br>
+            If a user wants to find all forms where "John Doe" was notified, they 
+            can enter "John Doe" into the search input. The system will then display 
+            all forms where "John Doe" is listed as the person who was notified.
         </p>
     {% endif %}
 </div>

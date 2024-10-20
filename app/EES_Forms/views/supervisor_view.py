@@ -509,7 +509,7 @@ def register_view(request, facility, access_page):
                     else:
                         A.dashboard = 'default'
                     A.save()
-                    for ups in user_profiles.filter(company=A.company):
+                    for ups in user_profiles.filter(company=A.company).exclude(position=CLIENT_VAR):
                         if 'dashboard' in ups.settings.keys():
                             ups.settings['dashboard'][str(A.id)] = dashDict
                         else:

@@ -9,10 +9,13 @@
     border: solid 1px black;
     border-radius: 6px;
     padding: 11px;
-    position: absolute;
+    position: fixed;
     background: #dfe5e9;
     width: 282px;
     right: 15px;
     top: 56px;
     visibility: hidden;
+}
+.bold{
+    font-weight: bold;
 }
