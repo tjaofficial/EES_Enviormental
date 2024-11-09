@@ -150,7 +150,7 @@ def facilityList(request, facility):
             messages.success(request,"The selected form has been added to the packet.")
         elif 'pack_settings' in answer.keys():
             packEntry = packetData.get(id=answer['packID'])
-            packEntry.frequency = answer['frequency']
+            packEntry.formList['settings']['frequency'] = answer['frequency']
             packEntry.name = answer['name']
             packEntry.save()
             return redirect(facilityList, facility)

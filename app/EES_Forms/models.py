@@ -308,6 +308,11 @@ class braintree_model(models.Model):
         User,
         on_delete=models.PROTECT
     )
+    settings = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
     def __str__(self):
         return str(self.user.last_name) + "-" + str(self.customerID)
     
@@ -497,11 +502,6 @@ class the_packets_model(models.Model):
         null=True,
         blank=True,
         default=dict
-    )
-    frequency = models.CharField(
-        max_length=30, 
-        choices=frequent_choices,
-        default='Weekly'
     )
     def __str__(self):
         return str(self.id) + ' - ' + str(self.name) + ' - ' + str(self.facilityChoice)

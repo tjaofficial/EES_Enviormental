@@ -9,12 +9,12 @@
     z-index: 2;
 }
 .sidebar_svg svg {
-    height: 73%;
+    height: 82%;
 }
 .sidebar_svg {
     height: 2em;
     width: 2em;
-    background-color: #40516a;
+    /* background-color: #40516a; */
     border-radius: 50%;
     display: flex;
     align-items: center;

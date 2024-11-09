@@ -1,4 +1,5 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% load static %}{% block list%}
 <script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">

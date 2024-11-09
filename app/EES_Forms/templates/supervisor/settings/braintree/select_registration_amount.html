@@ -7,7 +7,7 @@
         <div class="cardHeader">Select Amount of Registrations</div>
         <div class="contentCont">
             Please select the number of additioanl employees you would like to purchase a registration for:
-            <form method="post" autocomplete="off" action="../subscription/payment">
+            <form method="POST" autocomplete="off"> {% comment %} action="../subscription/payment" {% endcomment %}
                 {% csrf_token %}
                 <div class="itemsCont">
                     <table style="margin:auto;">
@@ -62,7 +62,7 @@
                     </table>
                 </div>
                 <input type="hidden" value={{selectedPlan.id}} name="planId">
-                <input id="submit" type="submit" value="Payment>">
+                <input id="submit" type="submit" name="confirmRegistration" value="Payment>">
             </form>
         </div>
     </div>

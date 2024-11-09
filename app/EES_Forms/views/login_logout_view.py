@@ -42,7 +42,7 @@ def login_view(request):
             if count_bp != 0:
                 todays_log = daily_prof[0]
                 if now == todays_log.date_save:
-                    return redirect('facilitySelect')
+                    return redirect('facilitySelect', 'observer')
                 batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
                 return redirect(batt_prof)
     if request.method == 'POST':
@@ -76,7 +76,7 @@ def login_view(request):
                         return redirect('PasswordChange', facility)
                 elif request.user.groups.filter(name=OBSER_VAR):
                     if userProf.settings['first_login']:
-                        return redirect('facilitySelect')
+                        return redirect('facilitySelect', 'observer')
                     else:
                         return redirect('PasswordChange', OBSER_VAR)
                 else:

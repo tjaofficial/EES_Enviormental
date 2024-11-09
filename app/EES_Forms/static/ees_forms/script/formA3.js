@@ -533,7 +533,9 @@ function inoperable_ovens() {
     const inop_numbs_input = document.getElementById('inop_numbs');
     var length_of_inop_numbers = inop_numbs_input.value.replace(' ', '').split(',').length
     const inop_message = document.getElementById('inop_message');
-    if (length_of_inop_numbers != inop){
+    if (inop_numbs_input.value == "-" && +inop == 0){
+        inop_message.style.display = "none";
+    } else if (length_of_inop_numbers != inop){
         console.log('Error message')
         inop_message.style.display = "block";
         submitButton.disabled = true;

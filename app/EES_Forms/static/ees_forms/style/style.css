@@ -36,3 +36,13 @@
 #landscape_page_button{
   margin-left: 4rem;
 }
+.mainContentContainer{
+  width: 100%;
+  overflow: scroll;
+  margin-top: 3rem;
+  display: flex;
+  /* margin-bottom: 3rem; */
+  /* justify-content: center; */
+  padding: 1.5rem;
+  flex-direction: column;
+}

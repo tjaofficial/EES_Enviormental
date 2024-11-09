@@ -96,104 +96,104 @@
     // client instance to create additional components here, such as
     // PayPal or Data Collector.
 
-braintree.client.create({
-    authorization: clientToken
-}, function (clientErr, clientInstance) {
-    if (clientErr) {
-        console.error(clientErr);
-        return;
-    }
-    braintree.hostedFields.create({
-        client: clientInstance,
-        styles: {
-            'input': {
-                'font-size': '14px',
-                'height': '30px'
-            },
-            'input.invalid': {
-                'color': 'red'
-            },
-            'input.valid': {
-                'color': 'green'
-            }
-        },
-        fields: {
-            cardholderName: {
-                selector: '#nameOnCard',
-                placeholder: 'Name as it appears on your card'
-            },
-            number: {
-                container: '#card-number',
-                placeholder: '4111 1111 1111 1111'
-            },
-            cvv: {
-                container: '#cvv',
-                placeholder: '123'
-            },
-            expirationDate: {
-                container: '#expiration-date',
-                placeholder: '10/2022'
-            },
-        }
-    }, function (hostedFieldsErr, hostedFieldsInstance) {
-        if (hostedFieldsErr) {
-            console.error(hostedFieldsErr);
+    braintree.client.create({
+        authorization: clientToken
+    }, function (clientErr, clientInstance) {
+        if (clientErr) {
+            console.error(clientErr);
             return;
         }
-
-        submit.removeAttribute('disabled');
-
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
-                if (tokenizeErr) {
-                    console.error(tokenizeErr);
-                    return;
+        braintree.hostedFields.create({
+            client: clientInstance,
+            styles: {
+                'input': {
+                    'font-size': '14px',
+                    'height': '30px'
+                },
+                'input.invalid': {
+                    'color': 'red'
+                },
+                'input.valid': {
+                    'color': 'green'
                 }
-                console.dir(payload)
-                //Get the form values
-                const planId = document.querySelector("#planId").value
-                const nameOnCard = payload.details.cardholderName;
-                console.log("JavaScript Console.log 'nameOnCard: '" + String(nameOnCard));
-                const address1 = document.querySelector("#address1").value
-                const address2 = document.querySelector("#address2").value
+            },
+            fields: {
+                cardholderName: {
+                    selector: '#nameOnCard',
+                    placeholder: 'Name as it appears on your card'
+                },
+                number: {
+                    container: '#card-number',
+                    placeholder: '4111 1111 1111 1111'
+                },
+                cvv: {
+                    container: '#cvv',
+                    placeholder: '123'
+                },
+                expirationDate: {
+                    container: '#expiration-date',
+                    placeholder: '10/2022'
+                },
+            }
+        }, function (hostedFieldsErr, hostedFieldsInstance) {
+            if (hostedFieldsErr) {
+                console.error(hostedFieldsErr);
+                return;
+            }
 
-                const city = document.querySelector("#city").value
-                const state = document.querySelector("#state").value
-                const postalCode = document.querySelector("#postalCode").value
-                const cardNumber = "************"+payload.details.lastFour
-                const expirationDate = payload.details.expirationMonth + "/"+ payload.details.expirationYear 
+            submit.removeAttribute('disabled');
 
-                //set the form values for review
-                document.querySelector("#rNameOnCard").innerHTML += nameOnCard
-                document.querySelector("#rAddress1").innerHTML += address1
-                document.querySelector("#rAddress2").innerHTML += address2
-                document.querySelector("#rCity").innerHTML += city
-                document.querySelector("#rState").innerHTML += state
-                document.querySelector("#rZip").innerHTML += postalCode
-                document.querySelector("#rCardNumber").innerHTML += cardNumber
-                document.querySelector("#rExpiration").innerHTML += expirationDate
-                //Set the form values for post
-                document.querySelector("#pPayNonce").value = payload.nonce
-                document.querySelector("#pPlanId").value = planId
-                document.querySelector("#pNameOnCard").value = nameOnCard
-                document.querySelector("#pAddress1").value = address1
-                document.querySelector("#pAddress2").value = address2
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
 
-                document.querySelector("#pCity").value = city
-                document.querySelector("#pState").value = state
-                document.querySelector("#pZipCode").value = postalCode
+                hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+                    if (tokenizeErr) {
+                        console.error(tokenizeErr);
+                        return;
+                    }
+                    console.dir(payload)
+                    //Get the form values
+                    const planId = document.querySelector("#planId").value
+                    const nameOnCard = payload.details.cardholderName;
+                    console.log("JavaScript Console.log 'nameOnCard: '" + String(nameOnCard));
+                    const address1 = document.querySelector("#address1").value
+                    const address2 = document.querySelector("#address2").value
 
-                //Show Review
-                showFrom("review")
-                
+                    const city = document.querySelector("#city").value
+                    const state = document.querySelector("#state").value
+                    const postalCode = document.querySelector("#postalCode").value
+                    const cardNumber = "************"+payload.details.lastFour
+                    const expirationDate = payload.details.expirationMonth + "/"+ payload.details.expirationYear 
 
-                console.log('Got a nonce: ' + payload.nonce);
-            });
-        }, false);
+                    //set the form values for review
+                    document.querySelector("#rNameOnCard").innerHTML += nameOnCard
+                    document.querySelector("#rAddress1").innerHTML += address1
+                    document.querySelector("#rAddress2").innerHTML += address2
+                    document.querySelector("#rCity").innerHTML += city
+                    document.querySelector("#rState").innerHTML += state
+                    document.querySelector("#rZip").innerHTML += postalCode
+                    document.querySelector("#rCardNumber").innerHTML += cardNumber
+                    document.querySelector("#rExpiration").innerHTML += expirationDate
+                    //Set the form values for post
+                    document.querySelector("#pPayNonce").value = payload.nonce
+                    document.querySelector("#pPlanId").value = planId
+                    document.querySelector("#pNameOnCard").value = nameOnCard
+                    document.querySelector("#pAddress1").value = address1
+                    document.querySelector("#pAddress2").value = address2
+
+                    document.querySelector("#pCity").value = city
+                    document.querySelector("#pState").value = state
+                    document.querySelector("#pZipCode").value = postalCode
+
+                    //Show Review
+                    showFrom("review")
+                    
+
+                    console.log('Got a nonce: ' + payload.nonce);
+                });
+            }, false);
+        });
     });
-});
 
     function showFrom(form){
         if(form == "review"){

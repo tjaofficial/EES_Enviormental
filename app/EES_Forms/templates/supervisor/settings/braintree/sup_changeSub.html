@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div style="padding: 0px 1rem 1rem;">
-                            <form method="post" autocomplete="off" action="../account/subscription/registration">
+                            <form method="post" autocomplete="off" action="../account/subscription/registration-change">
                                 {% csrf_token %}
                                 <input type="hidden" value={{plan.pid}} name="planId">
                                 <input type="hidden" value=True name="planChange">

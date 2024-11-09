@@ -2,13 +2,15 @@
 <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/selectPayment.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/primary/primaryButton.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
+<link href="{% static 'landing/style/select_payment_type.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/select_payment.js' %}"></script>
 
 <div class="mainCont" style="width:700px; max-width:none;margin: auto;">
     <div class="card" style='margin-bottom: 50px;'>
-        <div class="cardHeader">Payment gMethod</div>
+        <div class="cardHeader">Payment Method</div>
         <div class="contentCont">
-            <form id="dataGather" method="post" autocomplete="off" action="../subscription/receipt">
+            <form id="dataGather" method="post" autocomplete="off" > {% comment %} action="../subscription/receipt" {% endcomment %}
                 {% csrf_token %}
                 <div class="dataBoxes">
                     <div class="infoHeaders">Contact Information</div>
@@ -20,144 +22,213 @@
                 </div><br>
                 {% if cardsOnFile|length > 0 %}
                     {% for x in cardsOnFile %}
-                            <div class="dataBoxes">
-                                <div class="infoHeaders">Billing Address</div>
-                                <div class="tabInfoCont infoBoxes" style="height:fit-content">
-                                    <div>{{x.cardholder_name}}</div>
-                                    <div>{{x.billing_address.street_address}}</div>
-                                    {% if x.billing_address.extended_address %}<div>{{x.billing_address.extended_address}}</div>{% endif %}
-                                    <div>{{x.billing_address.locality}} / {{x.billing_address.region}} / {{x.billing_address.postal_code}}</div>
-                                </div>
-                            </div><br>
+                        <div id="{% if x.default %}default{% else %}{{x.token}}{% endif %}" class="dataBoxes cardInformationDiv" style="display:none;">
+                            <div class="infoHeaders">Billing Address</div>
+                            <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                                <div>{{x.cardholder_name}}</div>
+                                <div>{{x.billing_address.street_address}}</div>
+                                {% if x.billing_address.extended_address %}<div>{{x.billing_address.extended_address}}</div>{% endif %}
+                                <div>{{x.billing_address.locality}} / {{x.billing_address.region}} / {{x.billing_address.postal_code}}</div>
+                            </div>
+                        </div>
+                        <br id="break-{% if x.default %}default{% else %}{{x.token}}{% endif %}" style="display:none;">
                     {% endfor %}
                 {% endif %}
                 <div class="dataBoxes">
                     <div class="infoHeaders">Payment</div>
-                    <div id='optionsCont' class="tabInfoCont infoBoxes" style="height:fit-content">
-                        chicken
-
-                        <div class="container">
-                            <div class="title">
-                                <h4>Select a <span style="color: #6064b6">Payment</span> method</h4>
-                            </div>
-                    
-                            <form action="#">
-                                <input type="radio" name="payment" id="visa">
-                                <input type="radio" name="payment" id="mastercard">
-                                <input type="radio" name="payment" id="paypal">
-                                <input type="radio" name="payment" id="AMEX">
-                    
-                    
-                                <div class="category">
-                                    <label for="visa" class="visaMethod">
-                                        <div class="imgName">
-                                            <div class="imgContainer visa">
-                                                <img src="https://i.ibb.co/vjQCN4y/Visa-Card.png" alt="">
-                                            </div>
-                                            <span class="name">VISA</span>
-                                        </div>
-                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
-                                    </label>
-                    
-                                    <label for="mastercard" class="mastercardMethod">
-                                        <div class="imgName">
-                                            <div class="imgContainer mastercard">
-                                                <img src="https://i.ibb.co/vdbBkgT/mastercard.jpg" alt="">
-                                            </div>
-                                            <span class="name">Mastercard</span>
-                                        </div>
-                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
-                                    </label>
-                    
-                                    <label for="paypal" class="paypalMethod">
-                                        <div class="imgName">
-                                            <div class="imgContainer paypal">
-                                                <img src="https://i.ibb.co/KVF3mr1/paypal.png" alt="">
-                                            </div>
-                                            <span class="name">Paypal</span>
-                                        </div>
-                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
-                                    </label>
-                    
-                                    <label for="AMEX" class="amexMethod">
-                                        <div class="imgName">
-                                            <div class="imgContainer AMEX">
-                                                <img src="https://i.ibb.co/wQnrX86/American-Express.jpg" alt="">
-                                            </div>
-                                            <span class="name">AMEX</span>
-                                        </div>
-                                        <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
-
-
-
-
-
-
-
-
-
-
-
-                        {% if cardData %}
-                            <div id="cardCont" style="display:block;">
-                                <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card" checked>
-                                <div style="display: inline-flex;">
-                                    {{ dataTemplateUse.nameOnCard }}<br>
-                                    {{ cardData.details.card_type|upper }} ending in {{ cardData.details.last_four }}<br><br>
-                                </div>
-                            </div>
-                        {% elif cardsOnFile|length > 0 %}
+                    <div id='optionsCont' class="tabInfoCont infoBoxes" style="height:fit-content; display: flex; flex-direction: column;">
+                        {% if cardsOnFile|length > 0 %}
                             {% for card in cardsOnFile %}
                                 {% if card.default %}
-                                    <div id="cardCont" style="display:block;">
-                                        <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card-default" checked>
+                                    <div id="cardCont" style="display: inline-flex; align-items: flex-start;">
+                                        <input style="display:inline-flex; margin-right: 4px;" type="radio" id="html" name="paymentSelected" value="card-default" checked>
                                         <div style="display: inline-flex;">
                                             DEFAULT CARD<br>
-                                            {{card.card_type|upper}} ending in {{card.last_4 }}<br><br>
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <div id="cardCont" style="display:block;">
-                                        <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="card-new" checked>
-                                        <div style="display: inline-flex;">
-                                            {{card.card_type|upper}} ending in {{card.last_4 }}<br><br>
+                                            {{card.cardholder_name|capfirst}}<br>
+                                            {{card.card_type|capfirst}} ending in {{card.last_4}}<br>
+                                            EXP: {{card.expiration_month}}/{{card.expiration_year}}<br><br>  
                                         </div>
                                     </div>
                                 {% endif %}
                             {% endfor %}
-                        {% endif %}
-                        <div id="paypalCont" style="display:inline-flex;">
-                            <input style="display:inline-flex;" type="radio" id="html" name="paymentSelected" value="paypal">
-                            <div style="margin-left: 6px;">
-                                <div style="display: flex;height: 28px;justify-content: center;align-items: center;">
-                                    <img style="width: 84px;" src="{% static 'images/paypal_icon.png' %}"><br><br>
+                            {% for card in cardsOnFile %}
+                                {% if not card.default %}
+                                    <div id="cardCont" style="display: inline-flex; align-items: flex-start;">
+                                        <input style="display:inline-flex; margin-right: 4px;" type="radio" id="html" name="paymentSelected" value="card-{{card.token}}">
+                                        <div style="display: inline-flex;">
+                                            {{card.cardholder_name|capfirst}}<br>
+                                            {{card.card_type|capfirst}} ending in {{card.last_4 }}<br>
+                                            EXP: {{card.expiration_month}}/{{card.expiration_year}}<br><br>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% elif cardsOnFile|length == 0 %}
+                            <div class="container">
+                                <div class="title">
+                                    <h4>Select a <span style="color: #6064b6">Payment</span> method</h4>
+                                </div>
+                                <div id="formDiv">
+                                    <input type="radio" onclick="choosePaymentType('visa')" name="payment" id="visa">
+                                    <input type="radio" onclick="choosePaymentType('mastercard')" name="payment" id="mastercard">
+                                    <input type="radio" onclick="choosePaymentType('paypal')" name="payment" id="paypal">
+                                    <input type="radio" onclick="choosePaymentType('AMEX')" name="payment" id="AMEX">
+                                    <div class="category">
+                                        <label for="visa" class="visaMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer visa">
+                                                    <img src="https://i.ibb.co/vjQCN4y/Visa-Card.png" alt="">
+                                                </div>
+                                                <span class="name">VISA</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                        <label for="mastercard" class="mastercardMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer mastercard">
+                                                    <img src="https://i.ibb.co/vdbBkgT/mastercard.jpg" alt="">
+                                                </div>
+                                                <span class="name">Mastercard</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                        <label for="paypal" class="paypalMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer paypal">
+                                                    <img src="https://i.ibb.co/KVF3mr1/paypal.png" alt="">
+                                                </div>
+                                                <span class="name">Paypal</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                        <label for="AMEX" class="amexMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer AMEX">
+                                                    <img src="https://i.ibb.co/wQnrX86/American-Express.jpg" alt="">
+                                                </div>
+                                                <span class="name">AMEX</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                    </div>
+                                    <script>
+                                        function choosePaymentType(type){
+                                            console.log(type)
+                                            if (['visa', 'mastercard', 'AMEX'].includes(type)){
+                                                console.log('check 1')
+                                                window.location.href = "{% url 'cardAdd' selectedPlan seats %}";
+                                            }
+                                        }
+                                    </script>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+                        {% if cardsOnFile|length != 0 %} 
+                            <div id="cardCont" style="display:block;">
+                                <input style="display:inline-flex;" type="radio" id="newPaymentRadio" name="paymentSelected" value="new-payment">
+                                <div style="display: inline-flex;">Add New Payment Method</div>
+                                {% comment %} <a id="addNewCard" style="display:block;" href="{% url 'cardUpdate' facility 'add-subscription' selectedPlan seats %}"> Add New Payment Method<br><br></a> {% endcomment %}
+                            </div><br>
+                            <div class="container" id="newPaymentOptions" style="display:none;">
+                                <div class="title">
+                                    <h4>Select a <span style="color: #6064b6">Payment</span> method</h4>
+                                </div>
+                                <div id="formDiv">
+                                    <input type="radio" onclick="choosePaymentType('visa')" name="payment" id="visa">
+                                    <input type="radio" onclick="choosePaymentType('mastercard')" name="payment" id="mastercard">
+                                    <input type="radio" onclick="choosePaymentType('paypal')" name="payment" id="paypal">
+                                    <input type="radio" onclick="choosePaymentType('AMEX')" name="payment" id="AMEX">
+                                    <div class="category">
+                                        <label for="visa" class="visaMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer visa">
+                                                    <img src="https://i.ibb.co/vjQCN4y/Visa-Card.png" alt="">
+                                                </div>
+                                                <span class="name">VISA</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                        <label for="mastercard" class="mastercardMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer mastercard">
+                                                    <img src="https://i.ibb.co/vdbBkgT/mastercard.jpg" alt="">
+                                                </div>
+                                                <span class="name">Mastercard</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                        <label for="paypal" class="paypalMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer paypal">
+                                                    <img src="https://i.ibb.co/KVF3mr1/paypal.png" alt="">
+                                                </div>
+                                                <span class="name">Paypal</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                        <label for="AMEX" class="amexMethod">
+                                            <div class="imgName">
+                                                <div class="imgContainer AMEX">
+                                                    <img src="https://i.ibb.co/wQnrX86/American-Express.jpg" alt="">
+                                                </div>
+                                                <span class="name">AMEX</span>
+                                            </div>
+                                            <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+                                        </label>
+                                    </div>
+                                    <script>
+                                        function choosePaymentType(type){
+                                            console.log(type)
+                                            if (['visa', 'mastercard', 'AMEX'].includes(type)){
+                                                console.log('check 1')
+                                                window.location.href = "{% url 'cardUpdate' facility 'add-subscription' selectedPlan seats %}";
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
-                        
-                    <a id="addNewCard" style="display:block;" href="{% url 'cardUpdate' facility 'add-subscription' totalData.planId totalData.seats %}">+ Add New Payment Method<br><br></a>
-                    <div id="saveContinue" style="margin: auto; text-align: center;display:block;">
+                    <div id="saveContinue" style="cursor: pointer; margin: auto; text-align: center;display:block;text-decoration: underline;">
                         <div onclick="changePaymentArea()">Save & Continue</div>
+                    </div>
+                    <div id="changePayment" style="cursor: pointer; margin: auto; text-align: center;display:none;text-decoration: underline;">
+                        <div onclick="changePaymentArea(); setReviewInput()">Change Payment Information</div>
                     </div>
                 </div><br>
                 <div id="orderSummary" class="dataBoxes" style="display:none;">
                     <div class="infoHeaders">Subscription Details</div>
-                    <div class="tabInfoCont infoBoxes" style="height:fit-content">
-                        <div>{{planDetails.name}} Subscription</div>
-                        <div>- {{planDetails.description}}</div>
-                        <div class="priceRight">${{planDetails.price}}</div>
-                        <div>Additional Registrations</div>
-                        <div>- Add ({{seats}}) additional registrations</div>
-                        <div class="priceRight">${{addRegistrationCost}}</div><br>
-                        <hr><br>
-                        <div>Total Amount</div>
-                        <div class="priceRight">${{totalCost}}</div>
-                    </div>
+                    {% if not subChange %}
+                        <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                            <div>{{planDetails.name}} Subscription</div>
+                            <div>- {{planDetails.description}}</div>
+                            <div class="priceRight">${{planDetails.price}}</div>
+                            <div>Additional Registrations</div>
+                            <div>- Add ({{seats}}) additional registrations</div>
+                            <div class="priceRight">${{addRegistrationCost}}</div><br>
+                            <hr><br>
+                            <div>Total Amount</div>
+                            <div class="priceRight">${{totalCost}}</div>
+                        </div>
+                    {% else %}
+                        <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                            <div>{{planDetails.name}} Subscription</div>
+                            <div>- {{planDetails.description}}</div>
+                            <div class="priceRight">${{planDetails.price}}</div>
+                            <div>Additional Registrations</div>
+                            <div>- Add ({{seats}}) additional registrations</div>
+                            <div class="priceRight">${{addRegistrationCost}}</div><br>
+                            <hr><br>
+                            <div>New Subscription Total</div>
+                            <div class="priceRight">${{totalCost}}</div>
+                            <br>
+                            <div>Previous Subscription Total</div>
+                            <div class="priceRight">- ${{subChange.old_total}}</div><br>
+                            <hr><br>
+                            <div>Total Balance Due</div>
+                            <div class="priceRight">${{subChange.due}}</div>
+                        </div>
+                    {% endif %}
                 </div><br>
                 <div id="review" class="dataBoxes" style="display:none;">
                     <div class="infoHeaders">Review & Complete</div>
@@ -167,19 +238,13 @@
                     <div style="margin: auto; text-align: center;">
                         <input type="checkbox" id="reviewed" name="reviewed" value="reviewed" onchange="reviewCheck(this)">
                         <label for="reviewed"> I have reviewed my purchase details.</label><br><br>
-                        <input id="submit" type="submit" value="Review Order>" style="display:none;">
+                        <input id="submit" type="submit" name="confirmOrder" value="Confirm Order>" style="display:none;">
                     </div>
                 </div>
                 <br>
-                <input type="hidden" value="{{totalData.planId}}" name="planId">
-                <input type="hidden" value="{{totalData.seats}}" name="seats">
-                <input type="hidden" value="{{totalData.payNonce}}" name="payNonce"/>
-                <input type="hidden" value="{{totalData.nameOnCard}}" name="nameOnCard"/>
-                <input type="hidden" value="{{totalData.address1}}" name="address1"/>
-                <input type="hidden" value="{{totalData.address2}}" name="address2"/>
-                <input type="hidden" value="{{totalData.city}}" name="city"/>
-                <input type="hidden" value="{{totalData.state}}" name="state"/>
-                <input type="hidden" value="{{totalData.zipCode}}" name="zipCode"/>
+                <input type="hidden" value="{{selectedPlan}}" name="planId">
+                <input type="hidden" value="{{seats}}" name="seats">
+                <input id="selectedPaymentToken" type="hidden" value="" name="paymentToken"/>
             </form>
         </div>
     </div>

@@ -57,13 +57,14 @@ def formC(request, facility, fsID, selector):
                     formModelEntry = database_form
         
         if existing:
-            areaFilled1 = 0
+            areaFilled1 = []
             initial_areas = {}
             readsData = {}
-            dataBaseInputList = [formModelEntry.area_json_1, formModelEntry.area_json_2, formModelEntry.area_json_3, formModelEntry.area_json_4]
+            dataBaseInputList = database_form._meta.get_fields()
             for inputData in dataBaseInputList:
-                if inputData != {}:
-                    areaFilled1 += 1
+                if inputData.name[:-1] == 'area_json_':
+                    if getattr(database_form, inputData.name) != {}:
+                        areaFilled1.append(inputData.name[10:])
             print('check 1')
             initial_data = {
                 'date': formModelEntry.date.strftime("%Y-%m-%d"),
@@ -71,7 +72,7 @@ def formC(request, facility, fsID, selector):
                 'cert_date': formModelEntry.cert_date.strftime("%Y-%m-%d"),
                 'comments': formModelEntry.comments
             }
-            for x in range(1, areaFilled1+1):
+            for x in areaFilled1:
                 x = str(x)
                 if x == "1":
                     area = formModelEntry.area_json_1
@@ -108,8 +109,8 @@ def formC(request, facility, fsID, selector):
                 initial_areas.update(intital_adding)
                 readsData.update(initial_data_dict)
             allData = {"main": initial_data, "primary": initial_areas, "readings": readsData}
+            print(allData["readings"])
         else:
-            print('check 2')
             initial_data = {
                 'date': now.strftime("%Y-%m-%d"),
                 'observer': full_name,
@@ -121,19 +122,17 @@ def formC(request, facility, fsID, selector):
         print(existing)
         if request.method == "POST":
             copyRequest = request.POST.copy()
-            print(copyRequest)
-            areaFilled = 0
+            areaFilled = []
             for formKeys in request.POST.keys():
                 if formKeys[:8] == 'areaName':
                     if request.POST["areaStartTime" + formKeys[8:]] != '':
-                        areaFilled += 1
-            print(areaFilled)
-            for x in range(1,areaFilled+1):
+                        areaFilled.append(formKeys[8:])
+            for x in areaFilled:
                 x = str(x)
                 areaSetup= {
-                    "selection": request.POST['areaName' + x],
-                    "start_time": request.POST['areaStartTime' + x],
-                    "stop_time": request.POST['areaStopTime' + x],
+                    "selection": request.POST[f"areaName{x}"],
+                    "start_time": request.POST[f"areaStartTime{x}"],
+                    "stop_time": request.POST[f"areaStopTime{x}"],
                     "readings": {
                         "1": int(request.POST['area' + x + 'Read0']),
                         "2": int(request.POST['area' + x + 'Read1']),
@@ -152,7 +151,6 @@ def formC(request, facility, fsID, selector):
                 }
                 areaSetup = json.loads(json.dumps(areaSetup))
                 copyRequest['area_json_' + x] = areaSetup
-            print(copyRequest)
 
             if existing:
                 CData = SubFormC1(copyRequest, instance=database_form)
@@ -164,7 +162,7 @@ def formC(request, facility, fsID, selector):
             if A_valid:
                 A = CData.save(commit=False)
                 A.facilityChoice = options
-                for x in range(1,areaFilled+1):
+                for x in areaFilled:
                     x = str(x)
                     areaJson = copyRequest['area_json_' + x]
                     if x == "1":
@@ -181,7 +179,6 @@ def formC(request, facility, fsID, selector):
                 if not existing:
                     database_form = A
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
-                print(A.area_json_1)
                 if A.area_json_1['average'] > 5 or A.area_json_2['average'] > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     issueFound = True
                 if issueFound:

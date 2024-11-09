@@ -260,14 +260,16 @@ function inoperable_ovens() {
     const inop_numbs_input = document.getElementById('inop_numbs');
     var length_of_inop_numbers = inop_numbs_input.value.replace(' ', '').split(',').length
     const inop_message = document.getElementById('inop_message');
-    if (length_of_inop_numbers != inop ){
+    if (inop_numbs_input.value == "-" && +inop == 0){
+        inop_message.style.display = "none";
+    } else if (length_of_inop_numbers != inop ){
         console.log('Error message')
         inop_message.style.display = "block";
     } else {
         var blank = false;
         for(let x=0;x<length_of_inop_numbers;x++){
             const oven_number = inop_numbs_input.value.replace(' ', '').split(',')[x];
-            if (!oven_number || +oven_number == 0 || isNaN(+oven_number)) {
+            if (!oven_number || +oven_number == 0 || isNaN(+oven_number)){
                 var blank = true;
             }
         }

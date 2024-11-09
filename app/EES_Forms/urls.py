@@ -56,7 +56,7 @@ urlpatterns = [
     path('<str:facility>/form-select/add-forms', views.Add_Forms, name='addingForms'),
     
     ##---OBSERVER PAGES-------
-    path("facility/", views.facility_select_view, name="facilitySelect"),
+    path("<str:facility>/facility/", views.facility_select_view, name="facilitySelect"),
     path("<str:facility>/daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("<str:facility>/signature",views.signature,name="signature"),
 

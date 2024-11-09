@@ -13,7 +13,7 @@ def IncompleteForms(request, facility):
     permissions = [OBSER_VAR]
     userGroupRedirect(request.user, permissions)
     if facility == OBSER_VAR:
-        return redirect('facilitySelect')
+        return redirect('facilitySelect', 'observer')
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     today = datetime.date.today()
@@ -207,7 +207,10 @@ def IncompleteForms(request, facility):
         'facFormList1': facFormList1,
         'packetQuery': packetQuery,
         'listOfAllPacketIDs': listOfAllPacketIDs,
-        'formName': formName
+        'formName': formName,
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
     })
 
 @lock

@@ -6,8 +6,8 @@ function zero_option_name(elem, key, name){
     }
 }
 
-function add_areas(elem, areaNum) {
-    const areaCont = elem.nextElementSibling;
+function add_areas(areaNum) {
+    const areaCont = document.getElementById("areaCont" + areaNum)
     areaCont.style.display = 'block';
     for (let x=0;x<12;x+=1){
         document.getElementById('area' + areaNum + 'Read' + x).required = true;
@@ -19,8 +19,8 @@ function add_areas(elem, areaNum) {
     document.getElementById('areaName' + areaNum).required = true;
 }
 
-function remove_area(elem, areaNum) {
-    const areaCont = elem.parentNode.parentNode;
+function remove_area(areaNum) {
+    const areaCont = document.getElementById("areaCont" + areaNum)
     areaCont.style.display = 'none';
     for (let x=0;x<12;x+=1){
         document.getElementById('area' + areaNum + 'Read' + x).required = false;
@@ -30,6 +30,27 @@ function remove_area(elem, areaNum) {
     document.getElementById('areaAverage' + areaNum).required = false;
     document.getElementById('areaLabel' + areaNum).style.display = 'block';
     document.getElementById('areaName' + areaNum).required = false;
+}
+
+function startupDisplay() {
+    const areasFilled = document.getElementById('areasFilled').dataset.areas;
+    const areasList = JSON.parse(areasFilled.replaceAll("'",'"'))
+    let theList = []
+    for (let x=1; x<=4; x++){
+        if (!areasList.includes(String(x))){
+            theList.push(x)
+        }
+    }
+    if (theList.length != 0){
+        for (let theArea in theList){
+            remove_area(theList[theArea]);
+        }
+    }
+}
+const pullSelector = document.getElementById('selector').dataset.selector;
+const [selector, existing] = pullSelector.split('-');
+if (existing){
+    startupDisplay();
 }
 
 

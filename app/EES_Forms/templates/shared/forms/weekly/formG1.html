@@ -60,7 +60,7 @@
                             </table>
                                 </div>
                             <br><br>
-                            <div id="ptInfoInner2">
+                            <div id="ptInfoInner2" style="min-width: 1189px;">
                             <table style="border-collapse: collapse;">
                                 <tr>
                                     <th style="width: 240px;"></th>
@@ -434,7 +434,15 @@
                                         Visible Emissions Present?
                                         </th>
                                         <th colspan="3" style="text-align: left; font-weight: unset;">
-                                           {% if readings_form.PEC_emissions_present %}Yes{% else %}No{% endif %}
+                                            {% if selector == "form" %}
+                                                {{readings_form.PEC_emissions_present}}
+                                            {% else %}
+                                                {% if readings_form.PEC_emissions_present %}
+                                                    Yes
+                                                {% else %}
+                                                    No
+                                                {% endif %}
+                                            {% endif %}
                                         </th>
                                     </tr>
                                     <tr>

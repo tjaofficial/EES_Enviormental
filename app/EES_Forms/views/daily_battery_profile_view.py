@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import daily_battery_profile_model, user_profile_model, bat_info_model
 from ..forms import daily_battery_profile_form
-from django.conf import settings
+from django.conf import settings # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import setUnlockClientSupervisor, getCompanyFacilities
 import re
@@ -72,7 +72,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
     })
 
 @lock
-def facility_select_view(request):
+def facility_select_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profileFacs = getCompanyFacilities(request.user.username)
     profile = user_profile_model.objects.all()
@@ -93,12 +93,18 @@ def facility_select_view(request):
                     todays_log = daily_prof[0]
                     if now == todays_log.date_save:
                         return redirect('IncompleteForms', answer)
-                batt_prof = '../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+                batt_prof = '../../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
                 return redirect(batt_prof)
             elif batteryQuery.dashboard == "default":
                 print('CHECK 03')
                 return redirect('defaultDash', answer)
 
     return render(request, "observer/facility_select.html", {
-        'supervisor': supervisor, "client": client, 'unlock': unlock, 'options': profileFacs, 'loginPage': loginPage, 'profile': profile, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock, 
+        'options': profileFacs, 
+        'loginPage': loginPage, 
+        'profile': profile, 
+        'facility': facility
     })

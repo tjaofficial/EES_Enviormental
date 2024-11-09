@@ -87,6 +87,13 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
     print("The fsID's being used are listed below:")
     print(formsBeingUsed)
     print("_________________________________")
+    print("The same list is sorted by label below:")
+    formsBeingUsed = sorted(
+        formsBeingUsed,
+        key=lambda x: x[0]
+    )
+    print(formsBeingUsed)
+    print("_________________________________")
     elems = []
     for fsIDPackage in formsBeingUsed:
         print("Now running process for form: " + str(fsIDPackage[1].id))

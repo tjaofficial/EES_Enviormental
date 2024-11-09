@@ -205,10 +205,30 @@ iDefaultSettings = {
 
 }
 
-
-
-
-
+braintreeSettings = {
+    "account": {
+        "customer_ID": "item",
+        "status": "item",
+    },
+    "subscription": {
+        "subscription_ID": "item",
+        "plan_id": "item",
+        "plan_name": "item",
+        "price": "item",
+        "registrations": "item",
+        "next_billing_date": "item",
+    },
+    "payment_methods": {
+        "default": {
+            "type": "item",
+            "card_name": "item",
+            "payment_token": "item",
+            "last_4": "item",
+            "exp_month": "item",
+            'exp_year': "item"
+        }
+    }
+}
 
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
@@ -322,9 +342,9 @@ class Calendar(HTMLCalendar):
         a('\n')
         return ''.join(v)
 
-class Calendar2(HTMLCalendar):
+class PrintCalendar(HTMLCalendar):
     def __init__(self, events=None):
-        super(Calendar2, self).__init__()
+        super(PrintCalendar, self).__init__()
         self.events = events
  
     def formatday(self, day, weekday, events, year, type, label, forms, selectedForm):
@@ -442,7 +462,6 @@ class Calendar2(HTMLCalendar):
         s = ''.join(self.formatday(d, wd, events, year, type, label, forms, selectedForm) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
         
- 
     def formatmonth(self, theyear, themonth, year, type, forms, facility, withyear=True):
         """
         Return a formatted month as a table.
@@ -482,33 +501,6 @@ class Calendar2(HTMLCalendar):
                 
                 if chk_database.exists():
                     packetExists.extend(chk_database)
-            # if forms == "Coke Battery Daily Packet":
-            #     aPacket = ["1","2","3","4","5"]
-            #     packetExists = []
-            #     for aForm in aPacket:
-            #         modelSelect = "formA" + aForm + "_model"
-            #         print(modelSelect)
-            #         chk_database = apps.get_model('EES_Forms', modelSelect).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-            #         if chk_database.exists():
-            #             packetExists.extend(chk_database)
-            #     print(packetExists)
-            # elif forms == "Facility Weekly Packet":
-            #     wPacket = formList
-            #     packetExists = []
-            #     for indivForms in wPacket:
-            #         formID = indivForms[0]
-            #         formInformation = Forms.objects.get(id=formID)
-            #         name_of_model = formInformation.link + "_model"
-            #         if formID == 23:
-            #             chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-            #         else:
-            #             try:#### ----- Set up a code to switch over to a number based model instead of labels
-            #                 chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
-            #             except:
-            #                 chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
-                    
-            #         if chk_database.exists():
-            #             packetExists.extend(chk_database)
             selectedForm = forms
             chk_database = packetExists
         elif isinstance(forms, int) and type == "single":
@@ -579,19 +571,6 @@ def updateSubmissionForm(fsID, submitted, date):
     formSettingsSub.save()
     print("Updated Submission was saved...") 
 
-# def setUnlockClientSupervisor(requestUserData):
-#     unlock = False
-#     client = False
-#     supervisor = False
-#     if requestUserData.groups.filter(name=OBSER_VAR):
-#         unlock = True
-#     if requestUserData.groups.filter(name=CLIENT_VAR):
-#         client = True
-#     if requestUserData.groups.filter(name=SUPER_VAR) or requestUserData.is_superuser:
-#         supervisor = True
-        
-#     return (unlock, client, supervisor)
-
 def setUnlockClientSupervisor(requestUserData):
     unlock = False
     client = False
@@ -609,7 +588,7 @@ def userGroupRedirect(user, permissions):
     userGroup = str(user.groups.all()[0])
     if userGroup not in permissions:
         if userGroup == OBSER_VAR:
-            return redirect('facilitySelect')
+            return redirect('facilitySelect', 'observer')
         elif userGroup == CLIENT_VAR:
             userProfile = user_profile_model.objects.get(user=user)
             return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
@@ -619,7 +598,7 @@ def userGroupRedirect(user, permissions):
 def sendToDash(user):
     userGroup = str(user.groups.all()[0])
     if userGroup == OBSER_VAR:
-        return redirect('facilitySelect')
+        return redirect('facilitySelect', 'observer')
     elif userGroup == CLIENT_VAR:
         userProfile = user_profile_model.objects.get(user=user)
         print('doskdhjflksdjflksfj')
@@ -996,8 +975,8 @@ def checkIfMoreRegistrations(user):
     else:
         print('There is no braintree entry in database for this Company/User.')
         return False
-    if braintreeData.registrations:
-        total_registrations = braintreeData.registrations
+    if braintreeData.settings['subscription']['registrations']:
+        total_registrations = braintreeData.settings['subscription']['registrations']
     else:
         print('There is no data in the database entry for this Company/User.')
         return False

@@ -133,3 +133,9 @@
   text-align: center;
   padding: 30px;
 }
+
+@media only screen and (max-width: 1290px) {
+  .forms {
+    flex-direction: column;
+  }
+}

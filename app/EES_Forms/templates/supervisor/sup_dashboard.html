@@ -334,6 +334,7 @@
             </a>
         </div>
     </div>
+    <div style="grid-column: span 1; width: 10px;"></div>
     
     {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'graphs' %}
     <div id="latestActivity3" class="card halfs cardPadd">
@@ -640,7 +641,9 @@
         </div>
     </div>
     {% endif %}
+    <div style="grid-column: span 8; min-height: 6px;"></div>
 </div>
+
 {% else %}
 Heloo
 {% endif %}

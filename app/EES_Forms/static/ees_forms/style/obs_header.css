@@ -2,17 +2,20 @@
     color: white;
 }
 .header {
-  z-index: 10;
-  height: 3rem;
   width: 100%;
+  height: 3rem;
+  display: flex;
+  align-items: center;
   position: fixed;
-  display: grid;
-  grid-template-columns: 3rem 1fr 10rem;
+  z-index: 4;
+  min-width: 790px;
 }
 .header_hamburger {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  width: 20%;
+  padding-left: 20px;
 }
 .header_hamburger svg {
   height: 2rem;
@@ -23,6 +26,7 @@
   align-items: center;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
+  width: 60%;
 }
 .header_profile {
   font-family: Arial, Helvetica, sans-serif;
@@ -30,10 +34,23 @@
   display: flex;
   justify-content: right;
   align-items: center;
-  margin-right: 10px;
+  padding-right: 20px;
+  width: 20%;
 }
 .header_profile svg {
   height: 1.5rem;
   /*color: #001011;*/
   margin: 5px;
+}
+
+li {
+  display: block;
+  list-style-type: none;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 35px;
+  font-size: 0.9rem;
+  font-weight: 100;
 }

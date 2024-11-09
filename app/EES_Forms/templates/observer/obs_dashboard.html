@@ -6,151 +6,157 @@
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
 <div class="mainCont forms">
-    <div class="card2">
-        <div class="card2_header" >
-            <h2 class="card2_title">
-                Closest Oven Due
-            </h2>
+    <div style="display: flex;">
+        <div class="card2">
+            <div class="card2_header" >
+                <h2 class="card2_title">
+                    Closest Oven Due
+                </h2>
+            </div>
+            <div class="card2_Form">
+                {% for x in od_recent %}
+                    {% if forloop.counter < 5 %}
+                    Oven #{{ x.0 }} due:&nbsp;{{ x.2 }}<br>
+                    {% endif %}
+                {% endfor %}
+                <br>
+                <a href="{% url 'pt_admin1' facility%}">
+                    <h4>View All</h4>
+                </a>
+            </div>
         </div>
-        <div class="card2_Form">
-            {% for x in od_recent %}
-                {% if forloop.counter < 5 %}
-                Oven #{{ x.0 }} due:&nbsp;{{ x.2 }}<br>
-                {% endif %}
-            {% endfor %}
-            <br>
-            <a href="{% url 'pt_admin1' facility%}">
-                <h4>View All</h4>
-            </a>
-        </div>
-    </div>
-    <div class="card2">
-        <div class="card2_header" >
-            <h2 class="card2_title">
-                Battery Profile {{ todays_log.date }}
-            </h2>
-        </div>
-        {% if profile_entered %}
-        <div class="card3_Form">
-            Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
-            Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
-            Inoperable Oven(s):<br>
-            {{ inopNumbsParse }}<br>
-            <br>
-            
-            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
-                <h4>Edit</h4>
-            </a>
-        </div>
-        {% else %}
-        <div class="card3_Form">
-            None
-            <br>
-            
-            <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
-                <h4>Add</h4>
-            </a>
-        </div>
-        {% endif %}
-    </div>
-    <div class="card2">
-        <div class="card2_header" >
-            <h2 class="card2_title">
-                Todays Weather
-            </h2>
-        </div>
-        <div class="card2_Form">
-            <table class="c_client_card_background c_font_color">
-                {% if weather.city %}
-                <tr>
-                    <td id="table_left">
-                        City:
-                    </td>
-                    <td id="table_right">
-                        {{ weather.city }}
-                    </td>
-                </tr>
-                <tr>
-                    <td id="table_left">
-                        Temp:
-                    </td>
-                    <td id="table_right">
-                        {{ weather.temperature|floatformat:"0" }}° F
-                    </td>
-                </tr>
-                <tr>
-                    <td id="table_left">
-                        Description:
-                    </td>
-                    <td id="table_right">
-                        {{ weather.description }}
-                    </td>
-                </tr>
-                <tr>
-                    <td id="table_left">
-                        Wind:
-                    </td>
-                    <td id="table_right">
-                        {{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}
-                    </td>
-                </tr>
-                <tr>
-                    <td id="table_left">
-                        Humidity:
-                    </td>
-                    <td id="table_right">
-                        {{ weather.humidity|floatformat:"0" }}%
-                    </td>
-                </tr>
-                {% else %}
-                <p class="weather_battery_font">
-                    <span>
-                        Invalid City:
-                    </span>
-                    <br><br>
-                    {{weather.error}}
-                </p>
-                {% endif %}
-            </table>
-        </div>
-    </div>
-    <div class="card2">
-        <div class="card2_header" >
-            <h2 class="card2_title">
-                Supervisor Sign Off
-            </h2>
-        </div>
-        <div class="card2_Form">
-            {% if not sigExisting %}
-            <a href="{% url 'signature' facility %}">
-                <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
-                    <p style="font-size: 28px; margin-top: -8px;">
-                        Tap to Sign
-                    </p>
-                </div>
-            </a>
+        <div class="card2">
+            <div class="card2_header" >
+                <h2 class="card2_title">
+                    Battery Profile {{ todays_log.date }}
+                </h2>
+            </div>
+            {% if profile_entered %}
+            <div class="card3_Form">
+                Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
+                Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
+                Inoperable Oven(s):<br>
+                {{ inopNumbsParse }}<br>
+                <br>
+                
+                <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
+                    <h4>Edit</h4>
+                </a>
+            </div>
             {% else %}
-            <a>
-                <div style="height: 119px; margin: auto; padding: 28px 0px; justify-content: center; align-items: center;">
-                    <p style="font-size: 28px; margin-top: -8px;">
-                        Complete
-                    </p><br>
-                    <p>{{sigName}}</p>
-                </div>
-            </a>
+            <div class="card3_Form">
+                None
+                <br>
+                
+                <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
+                    <h4>Add</h4>
+                </a>
+            </div>
             {% endif %}
+        </div>
+    </div>
+    <div style="display: flex;">
+        <div class="card2">
+            <div class="card2_header" >
+                <h2 class="card2_title">
+                    Todays Weather
+                </h2>
+            </div>
+            <div class="card2_Form">
+                <table class="c_client_card_background c_font_color">
+                    {% if weather.city %}
+                    <tr>
+                        <td id="table_left">
+                            City:
+                        </td>
+                        <td id="table_right">
+                            {{ weather.city }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="table_left">
+                            Temp:
+                        </td>
+                        <td id="table_right">
+                            {{ weather.temperature|floatformat:"0" }}° F
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="table_left">
+                            Description:
+                        </td>
+                        <td id="table_right">
+                            {{ weather.description }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="table_left">
+                            Wind:
+                        </td>
+                        <td id="table_right">
+                            {{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="table_left">
+                            Humidity:
+                        </td>
+                        <td id="table_right">
+                            {{ weather.humidity|floatformat:"0" }}%
+                        </td>
+                    </tr>
+                    {% else %}
+                    <p class="weather_battery_font">
+                        <span>
+                            Invalid City:
+                        </span>
+                        <br><br>
+                        {{weather.error}}
+                    </p>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        <div class="card2">
+            <div class="card2_header" >
+                <h2 class="card2_title">
+                    Supervisor Sign Off
+                </h2>
+            </div>
+            <div class="card2_Form">
+                {% if not sigExisting %}
+                <a href="{% url 'signature' facility %}">
+                    <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
+                        <p style="font-size: 28px; margin-top: -8px;">
+                            Tap to Sign
+                        </p>
+                    </div>
+                </a>
+                {% else %}
+                <a>
+                    <div style="height: 119px; margin: auto; padding: 28px 0px; justify-content: center; align-items: center;">
+                        <p style="font-size: 28px; margin-top: -8px;">
+                            Complete
+                        </p><br>
+                        <p>{{sigName}}</p>
+                    </div>
+                </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
 <section class="mainCont forms">
     <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
-        <div class="cardHeader formList-headers">
+        <span style="float: left; position: relative; left: 22px; top: 16px;">
             <select id="packetSelect" name="formsDisplayed" onchange='packetChange(this)' style="position: absolute; margin-right: 25rem;" data-allpackets="{{listOfAllPacketIDs}}">
                 <option value="0">Facility Forms</option>
                 {% for pack in facPackets%}
                     <option value="{{pack.id}}">{{pack.name}}</option>
                 {% endfor %}
             </select>
+        </span>
+        <div class="cardHeader formList-headers">
             <h2 class="card_title">
                 Incomplete Forms
             </h2>

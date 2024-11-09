@@ -59,47 +59,26 @@ def formD(request, facility, fsID, selector):
                 initial_data = {
                     'week_start': database_form.week_start,
                     'week_end': database_form.week_end,
-                    'truck_id1': database_form.truck_id1,
-                    'date1': database_form.date1.strftime("%Y-%m-%d") if database_form.date1 else database_form.date1,
-                    'time1': database_form.time1.strftime("%H:%M") if database_form.time1 else database_form.time1,
-                    'contents1': database_form.contents1,
-                    'freeboard1': database_form.freeboard1,
-                    'wetted1': database_form.wetted1,
-                    'comments1': database_form.comments1,
-                    'truck_id2': database_form.truck_id2,
-                    'date2': database_form.date2.strftime("%Y-%m-%d") if database_form.date2 else database_form.date2,
-                    'time2': database_form.time2.strftime("%H:%M") if database_form.time2 else database_form.time2,
-                    'contents2': database_form.contents2,
-                    'freeboard2': database_form.freeboard2,
-                    'wetted2': database_form.wetted2,
-                    'comments2': database_form.comments2,
-                    'truck_id3': database_form.truck_id3,
-                    'date3': database_form.date3.strftime("%Y-%m-%d") if database_form.date3 else database_form.date3,
-                    'time3': database_form.time3.strftime("%H:%M") if database_form.time3 else database_form.time3,
-                    'contents3': database_form.contents3,
-                    'freeboard3': database_form.freeboard3,
-                    'wetted3': database_form.wetted3,
-                    'comments3': database_form.comments3,
-                    'truck_id4': database_form.truck_id4,
-                    'date4': database_form.date4.strftime("%Y-%m-%d") if database_form.date4 else database_form.date4,
-                    'time4': database_form.time4.strftime("%H:%M") if database_form.time4 else database_form.time4,
-                    'contents4': database_form.contents4,
-                    'freeboard4': database_form.freeboard4,
-                    'wetted4': database_form.wetted4,
-                    'comments4': database_form.comments4,
-                    'truck_id5': database_form.truck_id5,
-                    'date5': database_form.date5.strftime("%Y-%m-%d") if database_form.date5 else database_form.date5,
-                    'time5': database_form.time5.strftime("%H:%M") if database_form.time5 else database_form.time5,
-                    'contents5': database_form.contents5,
-                    'freeboard5': database_form.freeboard5,
-                    'wetted5': database_form.wetted5,
-                    'comments5': database_form.comments5,
-                    'observer1': database_form.observer1,
-                    'observer2': database_form.observer2,
-                    'observer3': database_form.observer3,
-                    'observer4': database_form.observer4,
-                    'observer5': database_form.observer5
                 }
+                attrList = [
+                    'observer',
+                    'truck_id',
+                    'time',
+                    'contents',
+                    'freeboard',
+                    'wetted',
+                    'comments'
+                ]
+                for i in range(1, 6):
+                    for attLabel in attrList:
+                        item_value = getattr(database_form, f"{attLabel}{i}")
+                        if item_value and item_value != None:
+                            if attLabel == 'date':
+                                initial_data[attLabel+str(i)] = item_value.strftime("%Y-%m-%d")
+                            elif attLabel == 'time':
+                                initial_data[attLabel+str(i)] = item_value.strftime("%H:%M")
+                            else:
+                                initial_data[attLabel+str(i)] = item_value
             else:
                 if today.weekday() == 5:
                     initial_data = {
@@ -118,12 +97,17 @@ def formD(request, facility, fsID, selector):
                     }
             form = formD_form(initial=initial_data)
         if request.method == "POST":
+            print("check 1")
+            print(request.POST)
             if existing:
+                print("check 2")
                 form = formD_form(request.POST, instance=database_form)
             else:
+                print("check 2.1")
                 form = formD_form(request.POST)
             A_valid = form.is_valid()
             if A_valid:
+                print("check 3")
                 A = form.save(commit=False)
                 A.facilityChoice = options
                 A.save()
@@ -132,6 +116,8 @@ def formD(request, facility, fsID, selector):
                 filled_out = True
                 for items in new_latest_form.whatever().values():
                     if items is None or items == '':
+                        print("check 4")
+                        print("not filled out all the way")
                         filled_out = False  # -change this back to false
                         break
                 print(filled_out)

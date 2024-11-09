@@ -53,7 +53,7 @@
 .grid-dashboard{
     display: grid;
     height: 1026;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     grid-template-rows: repeat(22, 1fr);
     grid-gap: 1rem;
     max-width: 1646px;

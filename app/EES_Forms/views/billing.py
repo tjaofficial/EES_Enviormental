@@ -59,8 +59,10 @@ def billing_view(request, step):
                 planDetails = plan
         totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
         if customerId and customerId != 'none':
+            print("check 1")
             customer = gateway.customer.find(customerId)
         else:
+            print("check 2")
             newCustomer = gateway.customer.create({
                 "first_name": user.first_name,
                 "last_name": user.last_name,
