@@ -625,13 +625,17 @@ def sup_update_account(request, facility, selector):
 def sup_change_subscription(request, facility):   
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+    gateway = braintreeGateway()
     if unlock:
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
     user = user_profile_model.objects.get(user__id=request.user.id)
-    subID = user.company.braintree.settings['subscription']['subscription_ID']
-    gateway = braintreeGateway()
-    activeSub = gateway.subscription.find(subID)
+    if user.company.braintree.settings['subscription']:
+        subID = user.company.braintree.settings['subscription']['subscription_ID']
+        activeSub = gateway.subscription.find(subID)
+    else:
+        subID = False
+        activeSub = False
     plans = braintreePlans.objects.all()
     cPlan = []
     for plan in plans:
