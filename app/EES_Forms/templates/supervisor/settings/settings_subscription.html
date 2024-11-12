@@ -31,7 +31,7 @@
         <tr class='tableSpacer'>
             <td class="labelClass">Subscription:</td>
             <td class="labelClass2">
-                {% if braintreeData.settings.account.status == "active" %}
+                {% if braintreeData.settings.account.status == "active" and braintreeData.settings.subscription %}
                     {{braintreeData.settings.subscription.plan_name}} <br>
                     {{braintreeData.settings.subscription.registrations|add:"-2"}} Extra Registration(s)
                 {% else %}
