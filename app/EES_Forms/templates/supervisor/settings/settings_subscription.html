@@ -59,8 +59,8 @@
             <tr id="employeesCont" class='tableSpacer' style="display:none;">
                 <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
                     {% for employee in listOfEmployees %}
-                        <p style="{%if employee.company.braintree.status != 'active' %}color:gray;{% endif %}">
-                            {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee.company.braintree.status == 'active' %}Active {% if employee.user.id != accountData.user.id %}
+                        <p style="{%if employee.company.braintree.settings.account.status != 'active' %}color:gray;{% endif %}">
+                            {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee.company.braintree.settings.account.status == 'active' %}Active {% if employee.user.id != accountData.user.id %}
                             <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;">
                                 (cancel)
                             </a>

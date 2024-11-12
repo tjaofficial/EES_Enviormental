@@ -260,50 +260,6 @@ weekly_range_choices = (
 
 # Create your models here.
 class braintree_model(models.Model):
-    status = models.CharField(
-        max_length=12,
-        default='inactive'
-    )
-    customerID = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True
-    )
-    payment_method_token = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True
-    )
-    subID = models.CharField(
-        max_length=500,
-        null=True,
-        blank=True
-    )
-    planID = models.CharField(
-        max_length=150,
-        null=True,
-        blank=True
-    )
-    planName = models.CharField(
-        max_length=70,
-        null=True,
-        blank=True
-    )
-    price = models.CharField(
-        max_length=70,
-        null=True,
-        blank=True
-    )
-    registrations = models.IntegerField(
-        null=True,
-        blank=True
-    )
-    next_billing_date = models.DateField(
-        auto_now=False, 
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
     user = models.OneToOneField(
         User,
         on_delete=models.PROTECT

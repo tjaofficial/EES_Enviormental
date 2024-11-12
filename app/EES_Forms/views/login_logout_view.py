@@ -3,6 +3,7 @@ from django.http import HttpResponseNotFound, HttpResponse # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib.auth import authenticate, login # type: ignore
 import datetime
+import json
 from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model, braintree_model, User
 from ..forms import CreateUserForm, user_profile_form, company_form, braintree_form
 from ..utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
@@ -313,7 +314,12 @@ def registerCompany(request):
                 if braintreeQuery.exists():
                     braintreeSave = braintreeQuery[0]
                 else:
-                    braintreeSave = braintree_model(user=request.user, status='inactive', registrations=0)
+                    braintreeSave = braintree_model(
+                        user=request.user, 
+                        status='inactive', 
+                        registrations=0,
+                        settings = json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False})
+                    )
                     braintreeSave.save()
                 companySave = form.save(commit=False)
                 companySave.braintree = braintreeSave

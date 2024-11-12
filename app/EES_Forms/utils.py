@@ -975,10 +975,14 @@ def checkIfMoreRegistrations(user):
     else:
         print('There is no braintree entry in database for this Company/User.')
         return False
-    if braintreeData.settings['subscription']['registrations']:
-        total_registrations = braintreeData.settings['subscription']['registrations']
+    if braintreeData.settings['subscription']:
+        if braintreeData.settings['subscription']['registrations']:
+            total_registrations = braintreeData.settings['subscription']['registrations']
+        else:
+            print('There is no data in the database entry for this Company/User.')
+            return False
     else:
-        print('There is no data in the database entry for this Company/User.')
+        print('The data listed for Braintree-Subscription is False')
         return False
     active_registrations = len(listOfEmployees.filter(is_active=True))
     if active_registrations >= total_registrations:

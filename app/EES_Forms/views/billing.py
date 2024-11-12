@@ -53,7 +53,7 @@ def billing_view(request, step):
         seats = request.POST['seats']
         addRegistrationCost = format(int(seats)*75, '.2f')
         accountData = user_profile_model.objects.get(user__id=user.id)
-        customerId = accountData.company.braintree.customerID
+        customerId = accountData.company.braintree.settings['account']['customer_ID']
         for plan in allPlans:
             if plan.id == int(request.POST['planId']):
                 planDetails = plan
@@ -72,10 +72,10 @@ def billing_view(request, step):
             })
             if newCustomer.is_success:
                 userCompany = company_model.objects.get(id=accountData.company.id)
-                userCompany.braintree.customerID = str(newCustomer.customer.id)
+                userCompany.braintree.settings['account']['customer_ID'] = str(newCustomer.customer.id)
                 userCompany.braintree.save()
                 userCompany.save()
-                customer = gateway.customer.find(userCompany.braintree.customerID)
+                customer = gateway.customer.find(userCompany.braintree.settings['account']['customer_ID'])
             else:
                 for i in newCustomer.errors.deep_errors:
                     print(i.code)
@@ -104,7 +104,7 @@ def billing_view(request, step):
         print(request.POST)
         seats = request.POST['seats']
         accountData = user_profile_model.objects.get(user__username=user.username)
-        customerId = accountData.company.braintree.customerID
+        customerId = accountData.company.braintree.settings['account']['customer_ID']
         for plan in allPlans:
             if plan.id == int(request.POST['planId']):
                 planDetails = plan
@@ -147,7 +147,7 @@ def billing_view(request, step):
                 "plan_id": planDetails.planID
             })
         else:
-            vaultPaymentToken = accountData.company.braintree.payment_method_token
+            vaultPaymentToken = accountData.company.braintree.settings['payment_methods']['default']['payment_token']
             addOnEdits = {
                 "payment_method_token": vaultPaymentToken,
                 "plan_id": planDetails.planID
@@ -176,14 +176,14 @@ def billing_view(request, step):
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
         else:
-            userComp.braintree.payment_method_token = vaultPaymentToken
-            userComp.braintree.subID = addSubsriptionResult.subscription.transactions[0].subscription_id
-            userComp.braintree.planID = planDetails.planID
-            userComp.braintree.planName = planDetails.name
-            userComp.braintree.price = totalCost
-            userComp.braintree.registrations = int(request.POST['seats']) + 2
-            userComp.braintree.next_billing_date = datetime.datetime.today()
-            userComp.braintree.status = 'active'
+            userComp.braintree.settings['payment_methods']['payment_token'] = vaultPaymentToken
+            userComp.braintree.settings['subscription']['subscription_ID'] = addSubsriptionResult.subscription.transactions[0].subscription_id
+            userComp.braintree.settings['subscription']['plan_id'] = planDetails.planID
+            userComp.braintree.settings['subscription']['plan_name'] = planDetails.name
+            userComp.braintree.settings['subscription']['price'] = totalCost
+            userComp.braintree.settings['subscription']['registrations'] = int(request.POST['seats']) + 2
+            userComp.braintree.settings['subscription']['next_billing_date'] = str(datetime.datetime.today().date())
+            userComp.braintree.settings['account']['status'] = 'active'
             userComp.braintree.save()
             userComp.save()
             
@@ -218,13 +218,13 @@ def landing_addCard_view(request, planId, seats):
     link = 'landing/braintree/landing_addCard.html'
     accountData = user_profile_model.objects.get(user__id=request.user.id)
     gateway = braintreeGateway()
-    customerId = accountData.company.braintree.customerID
+    customerId = accountData.company.braintree.settings['account']['customer_ID']
     variables = {}
     customer = gateway.customer.find(customerId)
     
     print("maide it through the second add")
     print(request.POST)
-    if customerId and customerId != 'none':
+    if customerId and customerId not in ['none', False]:
         client_token = gateway.client_token.generate({
             "customer_id": customerId
         })
