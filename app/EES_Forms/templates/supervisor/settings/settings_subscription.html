@@ -39,7 +39,7 @@
                 {% endif %}
             </td>
         </tr>
-        {% if braintreeData.status == "active" %}
+        {% if braintreeData.settings.account.status == "active" and braintreeData.settings.subscription %}
             <tr class='tableSpacer'>
                 <td class="labelClass">Monthly Amount:</td>
                 <td class="labelClass2">${{braintreeData.settings.subscription.price}}</td>
@@ -79,9 +79,9 @@
         </tr>
         <tr class='tableSpacer'>
             <td class="labelClass" colspan=2 style="text-align: center;">
-                {% if braintreeData.settings.account.status == "active" %}<a href="{% url 'subscriptionChange' facility %}" style="text-decoration: underline;">Change Subscription</a><br>{% endif %}
+                {% if braintreeData.settings.account.status == "active" and braintreeData.settings.subscription %}<a href="{% url 'subscriptionChange' facility %}" style="text-decoration: underline;">Change Subscription</a><br>{% endif %}
                 <a href="{% url 'billingHistory' facility %}" style="text-decoration: underline;">See Billing History</a><br>
-                {% if braintreeData.settings.account.status == "active" %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}" style="text-decoration: underline;">Cancel Subscription</a>{% endif %}
+                {% if braintreeData.settings.account.status == "active" and braintreeData.settings.subscription %}<a href="{% url 'cardUpdate' facility 'cancel' False False %}" style="text-decoration: underline;">Cancel Subscription</a>{% endif %}
             </td>
         </tr>
         <tr class='tableSpacer'>

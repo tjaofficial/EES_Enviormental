@@ -176,7 +176,18 @@ def billing_view(request, step):
             for i in addSubsriptionResult.errors.deep_errors:
                 print(i)
         else:
-            userComp.braintree.settings['payment_methods']['payment_token'] = vaultPaymentToken
+            userComp.braintree.settings['payment_methods'] = {
+                "payment_methods": {
+                    "default": {
+                        "type": addSubsriptionResult.payment_method.card_type.lower(),
+                        "card_name": addSubsriptionResult.payment_method.cardholder_name,
+                        "payment_token": vaultPaymentToken,
+                        "last_4": addSubsriptionResult.payment_method.last_4,
+                        "exp_month": addSubsriptionResult.payment_method.expiration_month,
+                        "exp_year": addSubsriptionResult.payment_method.expiration_year
+                    }
+                }
+            }
             userComp.braintree.settings['subscription']['subscription_ID'] = addSubsriptionResult.subscription.transactions[0].subscription_id
             userComp.braintree.settings['subscription']['plan_id'] = planDetails.planID
             userComp.braintree.settings['subscription']['plan_name'] = planDetails.name
