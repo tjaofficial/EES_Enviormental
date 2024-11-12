@@ -270,7 +270,7 @@ class braintree_model(models.Model):
         blank=True
     )
     def __str__(self):
-        return str(self.user.last_name) + "-" + str(self.customerID)
+        return str(self.id) + "-" + str(self.user.last_name)
     
 class settings_model(models.Model):
     measurement_choices = (

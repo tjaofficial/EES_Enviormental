@@ -11,16 +11,16 @@ from .models import user_profile_model, braintree_model
 
 def isSubActive(func):
     def wrapper(request, facility, *args, **kwargs):
-        status = get_braintree_query(request.user)
-        if status:
-            status = status.status
+        btEntry = get_braintree_query(request.user)
+        if btEntry:
+            status = btEntry.settings['account']['status']
         if status == "active":
             status = True
         else:
             status = False
             print("no customer ID")
         #V------get rid of the status=True for prod-----V
-        status = True    
+        # status = True    
         if status:
             return func(request, facility, *args, **kwargs)
         else:
