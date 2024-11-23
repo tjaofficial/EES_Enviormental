@@ -1,0 +1,24 @@
+<div id="activateModal" class="modalAdd">
+    <div id="activateReg" class="modal-content" style="width: 49%;">
+        <span id="closeActivate" class="closeAdd">&times;</span>
+        <div class='modalHeader'>
+            <h1>Activate Registration for <span class="registerName"></span>?</h1>
+        </div>
+        <div class='modalContent'>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div style="color:black;text-align:justify;">
+                    Are you sure you would like to activate <span class="registerName"></span>'s account?
+                    <br><br>
+                    <p>Please type "activate" below and confirm</p><br>
+                    <input id="activateText" oninput="checkActivateText(this)" type="text" name="theTextSubmitted" style="width: 250px;" required/>
+                    <input id="activateRegisterID" type="hidden" name="registerID" value=""/>
+                    <br>
+                    <div style="text-align: right;">
+                        <input id="submitActivate" name="activateReg" type="submit" value="Confirm Activation" disabled>
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </div>
+</div>

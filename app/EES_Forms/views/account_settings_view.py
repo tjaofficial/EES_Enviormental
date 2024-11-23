@@ -191,9 +191,12 @@ def sup_select_subscription(request, facility, selector):
                             "quantity": int(seats),
                         }]
                     }
-
-            result = gateway.subscription.update(btQuery.settings['subscription']['subscription_ID'], addOnEdits)
-
+            if btQuery.settings['account']['status'] == 'canceled':
+                addOnEdits["payment_method_token"] = request.POST['paymentToken']
+                result = gateway.subscription.create(addOnEdits)
+            elif btQuery.settings['account']['status'] == 'active':
+                result = gateway.subscription.update(btQuery.settings['subscription']['subscription_ID'], addOnEdits)
+            print(result)
             #else:
                 #cancelSub = gateway.subscription.cancel(userComp.braintree.settings.['subscription']['subscription_ID]')
             btCopy = btQuery
@@ -221,13 +224,14 @@ def sup_select_subscription(request, facility, selector):
                 old_sub = braintreeQuery.settings['subscription']
                 if old_sub:
                     old_price = float(old_sub['price'])
+                    braintreeSubID = old_sub['subscription_ID']
                 else:
                     old_price = 0
+                    braintreeSubID = False
                 #new sub
                 new_sub = plans.get(id=planIDPost)
                 seats_price = 75 * int(seatsPost)
                 new_price = new_sub.price + int(seats_price)
-                braintreeSubID = old_sub['subscription_ID']
                 if new_price <= old_price:
                     addOnEdits = {"plan_id": new_sub.planID}
                     if int(seatsPost) == 0:
@@ -305,9 +309,15 @@ def sup_account_view(request, facility):
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
-    listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
-    active_registrations = len(listOfEmployees.filter(company__braintree__settings__account__status='active'))
-
+    listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany)
+    companyStatus = braintreeData.settings['account']['status']
+    current_date = datetime.datetime.today().date()
+    end_of_billing_date = datetime.datetime.strptime(braintreeData.settings['subscription']['next_billing_date'], "%Y-%m-%d").date() if braintreeData.settings['subscription'] else False
+    if companyStatus == 'active' or companyStatus == 'canceled' and end_of_billing_date and current_date <= end_of_billing_date:
+        active_registrations = len(listOfEmployees.filter(user__is_active=True))
+    else:
+        active_registrations = 0
+    print(str(current_date))
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
         
@@ -316,11 +326,19 @@ def sup_account_view(request, facility):
         if 'facilitySelect' in data.keys():
             if data['facilitySelect'] != '':
                 return redirect('sup_dashboard', data['facilitySelect'])
-        else:
+        elif 'cancelReg' in data.keys():
             print(data)
-            selectedRegister = userProfileQuery.get(id=int(data['registerID']))
-            selectedRegister.company.braintree.settings['account']['status'] = "active"
+            selectedRegister = userProfileQuery.get(id=int(data['registerID'])).user
+            selectedRegister.is_active = False
             selectedRegister.save()
+            return redirect("Account", facility)
+        elif 'activateReg' in data.keys():
+            print(data)
+            userProf = userProfileQuery.get(id=int(data['registerID']))
+            leadSup = userProfileQuery.get(company=userProf.company, settings__position="supervisor-m")
+            braintree = braintree_model.objects.get(user=leadSup.user)
+            userProf.settings['reactivate_date'] = braintree.settings['subscription']['next_billing_date']
+            userProf.save()
             return redirect("Account", facility)
     return render(request, 'supervisor/settings/sup_account.html',{
         'notifs': notifs,
@@ -334,7 +352,8 @@ def sup_account_view(request, facility):
         'accountData': accountData,
         'active_registrations': active_registrations,
         'braintreeData': braintreeData,
-        'userProfileQuery': userProfileQuery
+        'userProfileQuery': userProfileQuery,
+        'today': (current_date, end_of_billing_date)
     })
     
 @lock
@@ -347,8 +366,8 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
     gateway = braintreeGateway()
     customerId = accountData.company.braintree.settings['account']['customer_ID']
     if action[0:3] != "add":
-        token = accountData.company.braintree.settings['payment_methods']['payment_token']
-        payment_method = gateway.payment_method.find(token)
+        token = accountData.company.braintree.settings['payment_methods']['default']['payment_token'] if accountData.company.braintree.settings['payment_methods'] else False
+        payment_method = gateway.payment_method.find(token) if token else False
     variables = {
             'supervisor': supervisor, 
             "client": client, 
@@ -539,13 +558,14 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
                 del request.session['form_data']
             request.session['form_data'] = {"planID": request.POST['planId'], "seats": request.POST['seats']}
             return redirect('subscriptionSelect', facility, 'payment')
-
         elif cancelSub:
             if request.POST['cancel'] == 'cancel':
-                subID = accountData.company.subID
                 cancelResult = gateway.subscription.cancel(subID)
                 print(cancelResult)
                 print('SUBSCRIPTION CANCELLED')
+                braintreeUpdate = accountData.company.braintree
+                braintreeUpdate.settings['account']['status'] = 'canceled'
+                braintreeUpdate.save()
                 return redirect("Account", facility)
     
     return render (request, template, variables)
@@ -672,7 +692,7 @@ def sup_billing_history(request, facility):
         return redirect('IncompleteForms', facility)
     facility = 'supervisor'
     user = user_profile_model.objects.get(user__id=request.user.id)
-    subID = user.company.braintree.settings['subscription']['subscription_ID']
+    # subID = user.company.braintree.settings['subscription']['subscription_ID']
     gateway = braintreeGateway()
     collection = gateway.transaction.search(
         braintree.TransactionSearch.customer_id == user.company.braintree.settings['account']['customer_ID']

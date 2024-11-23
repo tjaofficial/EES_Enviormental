@@ -217,6 +217,7 @@ braintreeSettings = {
         "price": "item",
         "registrations": "item",
         "next_billing_date": "item",
+        "status": "item",
     },
     "payment_methods": {
         "default": {
@@ -969,7 +970,7 @@ def checkIfMoreRegistrations(user):
     profileData = user_profile_model.objects.get(user__id=user.id)
     braintreeData = braintree_model.objects.filter(user__id=user.id)
     userCompany = profileData.company
-    listOfEmployees = user_profile_model.objects.filter(~Q(position="client"), company=userCompany, )
+    listOfEmployees = user_profile_model.objects.filter(~Q(position="client"), company=userCompany, user__is_active=True)
     if braintreeData.exists():
         braintreeData = braintreeData.get(user__id=user.id)
     else:
@@ -1692,5 +1693,7 @@ def parsePhone(phoneNumber):
         finalPhone = '+1' + ''.join(filter(str.isdigit, phoneNumber))
     return finalPhone
 
-
+def getActiveCompanyEmployees(company):
+    userProfileQuery = user_profile_model.objects.filter(~Q(position="client"), company=company, user__is_active=True)
+    return userProfileQuery
 

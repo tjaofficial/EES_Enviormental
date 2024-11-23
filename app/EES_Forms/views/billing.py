@@ -142,28 +142,24 @@ def billing_view(request, step):
                         print("Duplicate card exists.")
                      
             vaultPaymentToken = updateCustomer.customer.payment_methods[0].token
-            addSubsriptionResult = gateway.subscription.create({
-                "payment_method_token": vaultPaymentToken,
-                "plan_id": planDetails.planID
-            })
         else:
             vaultPaymentToken = accountData.company.braintree.settings['payment_methods']['default']['payment_token']
-            addOnEdits = {
-                "payment_method_token": vaultPaymentToken,
-                "plan_id": planDetails.planID
+        addOnEdits = {
+            "payment_method_token": vaultPaymentToken,
+            "plan_id": planDetails.planID
+        }
+        if int(seats) == 0:
+            addOnEdits["add_ons"] = {
+                "remove": ["86gr"]
             }
-            if int(seats) == 0:
-                addOnEdits["add_ons"] = {
-                    "remove": ["86gr"]
-                }
-            else:
-                addOnEdits["add_ons"] = {
-                    "update": [{
-                        "existing_id": "86gr",
-                        "quantity": int(seats)
-                    }]
-                }
-            addSubsriptionResult = gateway.subscription.create(addOnEdits)
+        else:
+            addOnEdits["add_ons"] = {
+                "update": [{
+                    "existing_id": "86gr",
+                    "quantity": int(seats)
+                }]
+            }
+        addSubsriptionResult = gateway.subscription.create(addOnEdits)
     
         userComp = company_model.objects.filter(company_name=accountData.company.company_name)
         if userComp.exists():
@@ -177,23 +173,25 @@ def billing_view(request, step):
                 print(i)
         else:
             userComp.braintree.settings['payment_methods'] = {
-                "payment_methods": {
-                    "default": {
-                        "type": addSubsriptionResult.payment_method.card_type.lower(),
-                        "card_name": addSubsriptionResult.payment_method.cardholder_name,
-                        "payment_token": vaultPaymentToken,
-                        "last_4": addSubsriptionResult.payment_method.last_4,
-                        "exp_month": addSubsriptionResult.payment_method.expiration_month,
-                        "exp_year": addSubsriptionResult.payment_method.expiration_year
-                    }
+                "default": {
+                    #subscription.id
+                    #.payment_method_token
+                    "type": updateCustomer.customer.payment_methods[0].card_type.lower(),
+                    "card_name": updateCustomer.customer.payment_methods[0].cardholder_name,
+                    "payment_token": vaultPaymentToken,
+                    "last_4": updateCustomer.customer.payment_methods[0].last_4,
+                    "exp_month": updateCustomer.customer.payment_methods[0].expiration_month,
+                    "exp_year": updateCustomer.customer.payment_methods[0].expiration_year
                 }
             }
-            userComp.braintree.settings['subscription']['subscription_ID'] = addSubsriptionResult.subscription.transactions[0].subscription_id
-            userComp.braintree.settings['subscription']['plan_id'] = planDetails.planID
-            userComp.braintree.settings['subscription']['plan_name'] = planDetails.name
-            userComp.braintree.settings['subscription']['price'] = totalCost
-            userComp.braintree.settings['subscription']['registrations'] = int(request.POST['seats']) + 2
-            userComp.braintree.settings['subscription']['next_billing_date'] = str(datetime.datetime.today().date())
+            userComp.braintree.settings['subscription'] = {
+                "subscription_ID": addSubsriptionResult.subscription.transactions[0].subscription_id,
+                "plan_id": planDetails.planID,
+                "plan_name": planDetails.name,
+                "price": totalCost,
+                "registrations": int(request.POST['seats']) + 2,
+                "next_billing_date": str(addSubsriptionResult.subscription.next_billing_date)
+            }
             userComp.braintree.settings['account']['status'] = 'active'
             userComp.braintree.save()
             userComp.save()

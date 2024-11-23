@@ -1,37 +1,51 @@
-# pull official base image
-FROM python:3
+# Pull official base image
+FROM python:3.11
 
-# set work directory
+# Set work directory
 WORKDIR /usr/src/app
 
-# set environment variables
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-#Temporarly install build Dependincies
-#RUN apk update \
-    #&& apk add --virtual build-deps postgresql-dev gcc python3-dev musl-dev \
-    #&& apk add jpeg-dev zlib-dev libjpeg
+# Install required system dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    libjpeg-dev \
+    zlib1g-dev \
+    libfreetype6-dev \
+    cron \
+    tzdata \
+    netcat-traditional \
+    && apt-get clean
 
-# install dependencies
+# Upgrade pip
 RUN pip install --upgrade pip
+
+# Install Pillow first to handle specific dependencies
+RUN pip install --no-cache-dir Pillow==10.4.0
+
+# Install remaining dependencies from requirements.txt
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-#remove temorary build depemdemcies
-#RUN apk del build-deps
-
-RUN apt-get update \
-    && apt-get install -yyq netcat-traditional
-
-# copy entrypoint.sh
+# Copy entrypoint.sh
 COPY ./entrypoint.sh .
 RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
 
-
-# copy project
+# Copy project files
 COPY . .
 
-# run entrypoint.sh
+# Run the Django crontab setup toremove previous jobs and then  register jobs
+RUN /usr/local/bin/python /usr/src/app/manage.py crontab remove
+RUN /usr/local/bin/python /usr/src/app/manage.py crontab add
+
+# Ensure rsyslog is installed and configured
+RUN apt-get update && apt-get install -y rsyslog
+
+# Run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
+# Start cron and your application
+#CMD service cron start && /usr/src/app/entrypoint.sh

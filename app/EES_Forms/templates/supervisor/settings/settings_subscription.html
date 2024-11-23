@@ -20,13 +20,14 @@
                         <input id="registerID" type="hidden" name="registerID" value=""/>
                         <br>
                         <div style="text-align: right;">
-                            <input id="submit" type="submit" value="Confirm Cancellation" disabled>
+                            <input id="submit" name="cancelReg" type="submit" value="Confirm Cancellation" disabled>
                         </div>
                     </div>  
                 </form>
             </div>
         </div>
     </div>
+    {% include "supervisor/components/settings_subscription_activate_modal.html" %}
     <table class="tableClass">
         <tr class='tableSpacer'>
             <td class="labelClass">Subscription:</td>
@@ -34,6 +35,13 @@
                 {% if braintreeData.settings.account.status == "active" and braintreeData.settings.subscription %}
                     {{braintreeData.settings.subscription.plan_name}} <br>
                     {{braintreeData.settings.subscription.registrations|add:"-2"}} Extra Registration(s)
+                {% elif braintreeData.settings.account.status == "canceled" and braintreeData.settings.subscription %}
+                    {% if today.0 <= today.1 %}
+                        {{braintreeData.settings.subscription.plan_name}} <br>
+                        {{braintreeData.settings.subscription.registrations|add:"-2"}} Extra Registration(s)
+                    {% else %}
+                        <a href="{% url 'subscriptionSelect' facility 'subscription' %}">Click here to pick a subscription!</a>
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'subscriptionSelect' facility 'subscription' %}">Click here to pick a subscription!</a>
                 {% endif %}
@@ -59,17 +67,61 @@
             <tr id="employeesCont" class='tableSpacer' style="display:none;">
                 <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
                     {% for employee in listOfEmployees %}
-                        <p style="{%if employee.company.braintree.settings.account.status != 'active' %}color:gray;{% endif %}">
-                            {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/{% if employee.company.braintree.settings.account.status == 'active' %}Active {% if employee.user.id != accountData.user.id %}
-                            <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;">
-                                (cancel)
-                            </a>
-                            {% endif %}{% else %}Inactive{% endif %}
+                        <p style="{% if not employee.user.is_active %}color:gray;{% endif %}">
+                            {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/
+                            {% if employee.user.is_active %}
+                                Active 
+                                {% if employee.user.id != accountData.user.id %}
+                                    <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;">
+                                        (cancel)
+                                    </a>
+                                {% endif %}
+                            {% else %}
+                                Inactive
+                                {% if employee.user.id != accountData.user.id %}
+                                    <span id="cancelButton" onclick="activateModal(this); registerActivate(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;cursor: pointer;" data-secondid="activateModal">
+                                        (activate)
+                                    </span>
+                                {% endif %}
+                            {% endif %}
                         </p>
                     {% endfor %}
                 </td>
             </tr>
-            
+        {% elif braintreeData.settings.account.status == "canceled" and braintreeData.settings.subscription %}
+            {% if today.0 <= today.1 %}
+                <tr class='tableSpacer'>
+                    <td class="labelClass">Monthly Amount:</td>
+                    <td class="labelClass2">${{braintreeData.settings.subscription.price}}</td>
+                </tr>
+                <tr class='tableSpacer'>
+                    <td class="labelClass">Status:</td>
+                    <td class="labelClass2">{{braintreeData.settings.account.status|title}}</td>
+                </tr>
+                <tr class='tableSpacer'>
+                    <td class="labelClass">Subscription Expires:</td>
+                    <td class="labelClass2">{{today.1}}</td>
+                </tr>
+                <tr class='tableSpacer'>
+                    <td class="labelClass">Active Accounts:</td>
+                    <td class="labelClass2">( {{active_registrations}} / {{braintreeData.settings.subscription.registrations}} ) <a id="seeAll" href=# onclick="seeEmployees()" style="text-decoration: underline;">see all</a></td>
+                </tr>
+                <tr id="employeesCont" class='tableSpacer' style="display:none;">
+                    <td colspan=2 class="labelClass2" style="text-align:left; padding-left:60px;">
+                        {% for employee in listOfEmployees %}
+                            <p style="{% if not employee.user.is_active %}color:gray;{% endif %}">
+                                {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/
+                                Active 
+                                {% if employee.user.id != accountData.user.id %}
+                                    <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;">
+                                        (cancel)
+                                    </a>
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
         {% endif %}
         <tr class='tableSpacer'>
             <td colspan="2" class="labelClass"><hr></td>

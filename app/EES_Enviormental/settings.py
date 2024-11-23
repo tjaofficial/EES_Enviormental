@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'django_crontab'
 ]
 
 if(USE_S3): INSTALLED_APPS.append('storages')
@@ -207,3 +207,8 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 PASSWORD_RESET_TIMEOUT = 14400
+
+CRONJOBS = [
+    ('0 0 * * *', 'EES_Forms.cron.check_subscription_expiry'),
+]
+
