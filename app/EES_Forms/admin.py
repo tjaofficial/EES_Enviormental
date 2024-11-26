@@ -64,6 +64,7 @@ admin.site.register(FAQ_model)
 admin.site.register(form_requests_model)
 admin.site.register(the_packets_model)
 admin.site.register(form_settings_model)
+admin.site.register(account_reactivation_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']

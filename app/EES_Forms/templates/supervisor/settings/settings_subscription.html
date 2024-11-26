@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load sup_tags %}
 <script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/settings_subscription.js' %}"></script>
 <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet" />
@@ -58,7 +58,7 @@
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Next Billing Date:</td>
-                <td class="labelClass2">{{braintreeData.settings.subscription.next_billing_date}}</td>
+                <td class="labelClass2">{{braintreeData.settings.subscription.next_billing_date|dateParse|date:"N j, Y"}}</td>
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Active Accounts:</td>
@@ -69,19 +69,43 @@
                     {% for employee in listOfEmployees %}
                         <p style="{% if not employee.user.is_active %}color:gray;{% endif %}">
                             {{ forloop.counter }}) {{ employee.user.first_name }} {{ employee.user.last_name }} - {{ employee.position|title }}/
-                            {% if employee.user.is_active %}
-                                Active 
-                                {% if employee.user.id != accountData.user.id %}
-                                    <a id="cancelButton" href=# onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;">
-                                        (cancel)
-                                    </a>
-                                {% endif %}
+                            {% if employee.settings.position == "supervisor-m" %}
+                                Active
                             {% else %}
-                                Inactive
-                                {% if employee.user.id != accountData.user.id %}
-                                    <span id="cancelButton" onclick="activateModal(this); registerActivate(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline;cursor: pointer;" data-secondid="activateModal">
-                                        (activate)
-                                    </span>
+                                {% if employee.user.is_active %}
+                                    Active 
+                                    {% if employee.user.id != accountData.user.id %}
+                                        <span id="cancelButton" onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline; cursor: pointer;">
+                                            (cancel)
+                                        </span>
+                                    {% endif %}
+                                {% elif not employee.user.is_active %}
+                                    {% if reactivationQuery|length > 0 %}
+                                        {% for activateUser in reactivationQuery %}
+                                            {% if activateUser.user == employee.user %}
+                                                Pending
+                                                {% if employee.user.id != accountData.user.id %}
+                                                    <span id="cancelButton" onclick="triggerButton(this); registerCancel(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline; cursor: pointer;">
+                                                        (cancel)
+                                                    </span>
+                                                {% endif %}
+                                            {% else %}
+                                                Inactive
+                                                {% if employee.user.id != accountData.user.id %}
+                                                    <span id="cancelButton" onclick="activateModal(this); registerActivate(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline; cursor: pointer;" data-secondid="activateModal">
+                                                        (activate)
+                                                    </span>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}    
+                                    {% else %}
+                                        Inactive
+                                        {% if employee.user.id != accountData.user.id %}
+                                            <span id="cancelButton" onclick="activateModal(this); registerActivate(this)" data-name="{{employee.user.first_name}} {{employee.user.last_name}}" data-ending="{{braintreeData.next_billing_date}}" data-regid="{{employee.id}}" style="text-decoration: underline; cursor: pointer;" data-secondid="activateModal">
+                                                (activate)
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </p>

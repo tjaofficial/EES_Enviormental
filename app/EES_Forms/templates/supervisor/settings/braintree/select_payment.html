@@ -202,31 +202,31 @@
                         <div class="tabInfoCont infoBoxes" style="height:fit-content">
                             <div>{{planDetails.name}} Subscription</div>
                             <div>- {{planDetails.description}}</div>
-                            <div class="priceRight">${{planDetails.price}}</div>
+                            <div class="priceRight">${{planDetails.price|floatformat:2}}</div>
                             <div>Additional Registrations</div>
                             <div>- Add ({{seats}}) additional registrations</div>
-                            <div class="priceRight">${{addRegistrationCost}}</div><br>
+                            <div class="priceRight">${{addRegistrationCost|floatformat:2}}</div><br>
                             <hr><br>
                             <div>Total Amount</div>
-                            <div class="priceRight">${{totalCost}}</div>
+                            <div class="priceRight">${{totalCost|floatformat:2}}</div>
                         </div>
                     {% else %}
                         <div class="tabInfoCont infoBoxes" style="height:fit-content">
                             <div>{{planDetails.name}} Subscription</div>
                             <div>- {{planDetails.description}}</div>
-                            <div class="priceRight">${{planDetails.price}}</div>
+                            <div class="priceRight">${{planDetails.price|floatformat:2}}</div>
                             <div>Additional Registrations</div>
                             <div>- Add ({{seats}}) additional registrations</div>
-                            <div class="priceRight">${{addRegistrationCost}}</div><br>
+                            <div class="priceRight">${{addRegistrationCost|floatformat:2}}</div><br>
                             <hr><br>
                             <div>New Subscription Total</div>
-                            <div class="priceRight">${{totalCost}}</div>
+                            <div class="priceRight">${{totalCost|floatformat:2}}</div>
                             <br>
                             <div>Previous Subscription Total</div>
-                            <div class="priceRight">- ${{subChange.old_total}}</div><br>
+                            <div class="priceRight">- ${{subChange.old_total|floatformat:2}}</div><br>
                             <hr><br>
                             <div>Total Balance Due</div>
-                            <div class="priceRight">${{subChange.due}}</div>
+                            <div class="priceRight">${{subChange.due|floatformat:2}}</div>
                         </div>
                     {% endif %}
                 </div><br>

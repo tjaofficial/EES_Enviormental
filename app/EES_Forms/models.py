@@ -7163,6 +7163,12 @@ class form_requests_model(models.Model):
     def __str__(self):
         return str(self.user) + ' - ' + str(self.name)
 
+class account_reactivation_model(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reactivation_date = models.DateField(auto_now=False, auto_now_add=False)
+
+    def __str__(self):
+        return str(self.id) + ' - ' + str(self.user)
 
 # class tank_library(models.Model):
 #     title = models.CharField(max_length=40)

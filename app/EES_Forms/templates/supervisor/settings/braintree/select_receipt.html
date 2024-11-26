@@ -10,13 +10,13 @@
                 <div class="tabInfoCont infoBoxes" style="height:fit-content">
                     <div>{{planDetails.name}} Subscription</div>
                     <div>- {{planDetails.description}}</div>
-                    <div class="priceRight">${{planDetails.price}}</div>
+                    <div class="priceRight">${{planDetails.price|floatformat:2}}</div>
                     <div>Additional Registrations</div>
                     <div>- Add ({{totalData.seats}}) additional registrations</div>
-                    <div class="priceRight">${{addRegistrationCost}}</div><br>
+                    <div class="priceRight">${{addRegistrationCost|floatformat:2}}</div><br>
                     <hr><br>
                     <div>Total Amount</div>
-                    <div class="priceRight">${{totalCost}}</div>
+                    <div class="priceRight">${{totalCost|floatformat:2}}</div>
                 </div>
             </div><br>
             <div style="text-align:justify;"> 

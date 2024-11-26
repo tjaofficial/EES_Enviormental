@@ -1,10 +1,7 @@
 import datetime
 import logging
-from django.db.models.functions import Cast
-from .models import braintree_model,user_profile_model
-from .utils import getActiveCompanyEmployees
-from django.db.models import DateField
-from django.db.models import Q # type: ignore
+from .models import braintree_model,user_profile_model, account_reactivation_model
+from .utils import getActiveCompanyEmployees, braintreeGateway
 
 # Configure logging
 logging.basicConfig(
@@ -14,14 +11,17 @@ logging.basicConfig(
 )
 
 def check_subscription_expiry():
-    print('HOLY SHIT CRON RAN')
-    logging.info("Cron job started")
+    logging.info("Subscripton Cancel job started")
     today = datetime.datetime.today().date()
     braintreeQuery = braintree_model.objects.all()
+    gateway = braintreeGateway()
     for subscription in braintreeQuery:
         subSettings = subscription.settings['subscription']
         if subSettings:
-            if datetime.datetime.strptime(subSettings['next_billing_date'],"%Y-%m-%d").date() <= today:
+            subID = subSettings['subscription_ID']
+            sub = gateway.subscription.find(subID)
+            subStatus = sub.status
+            if subStatus == "Canceled" and datetime.datetime.strptime(subSettings['next_billing_date'],"%Y-%m-%d").date() < today:
                 mainSupervisorProf = user_profile_model.objects.get(user=subscription.user)
                 listOfEmployees = getActiveCompanyEmployees(mainSupervisorProf.company)
                 print(listOfEmployees)
@@ -36,6 +36,30 @@ def check_subscription_expiry():
                         userProf.settings['position'] = userProf.settings['position'] + "-activate"
                         userProf.save()
                         logging.info(f"Deactivated user: {user.username}")
+            elif sub.status == "Past Due":
+                # maybe create an admin log for keeping track of this
+                print("Check admin logs for past due accounts")
 
 def check_subscription_activations():
-    
+    logging.info("Subscripton Activate job started")
+    today = datetime.datetime.today().date()
+    activationUsers = account_reactivation_model.objects.all()
+    for user in activationUsers:
+        if user.reactivation_date <= today:
+            userUser = user.user
+            userUser.is_active = True
+            userUser.save()
+
+            user.delete()
+
+def update_next_billing():
+    btQuery = braintree_model.objects.all()
+    for btEntry in btQuery:
+        if btEntry.settings['subscription']:
+            subId = btEntry.settings['subscription']['subscription_ID']
+            gateway = braintreeGateway()
+            sub = gateway.subscription.find(subId)
+            if sub.status == "Active":
+                if datetime.datetime.strptime(btEntry.settings['subscription']['next_billing_date'],"%Y-%m-%d").date() < sub.next_billing_date:
+                    btEntry.settings['subscription']['next_billing_date'] = str(sub.next_billing_date)
+                    btEntry.save()

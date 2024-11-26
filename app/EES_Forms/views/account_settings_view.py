@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.db.models import Q # type: ignore
 from ..utils import parsePhone, get_braintree_query, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
-from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model
+from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model, account_reactivation_model
 from ..forms import CreateUserForm, user_profile_form, company_Update_form, bat_info_form
 import datetime
 import braintree # type: ignore
@@ -53,11 +53,13 @@ def sup_select_subscription(request, facility, selector):
         link = "supervisor/settings/braintree/select_subscription.html"
     elif len(selector) >= 12 and selector[:12] == "registration":
         print('fuking madeit')
+        form_data = request.session.get('form_data')
+        print(form_data)
         change = False
         if selector[13:] == 'change':
             change = True
         for iPlans in plans:
-            if iPlans.id == int(request.POST['planId']):
+            if iPlans.id == int(form_data['planId']):
                 selectedPlan = iPlans
         variables['selectedPlan'] = selectedPlan
         link = "supervisor/settings/braintree/select_registration_amount.html"
@@ -150,14 +152,31 @@ def sup_select_subscription(request, facility, selector):
         link = "supervisor/settings/braintree/select_receipt.html"
     
     if request.method == "POST":
+        print(request.POST)
+        if "subSelect" in request.POST:
+            if "form_data" in request.session:
+                del request.session['form_data']
+            request.session['form_data'] = request.POST
+            currentPlanStatus = braintree_model.objects.get(user=request.user).settings['subscription']['status']
+            url_addition = "registration"
+            if currentPlanStatus == "active":
+                url_addition += "-change"
+            return redirect('subscriptionSelect', facility, url_addition)
         if "confirmOrder" in request.POST:
             if "form_data" in request.session:
                 del request.session['form_data']
             request.session['form_data'] = request.POST
+            if request.POST['paymentToken'] == "default":
+                btData = braintree_model.objects.get(user=request.user)
+                paymentToken = btData.settings['payment_methods']['default']['payment_token']
+                request.session['form_data']['paymentToken'] == btData.settings['payment_methods']['default']['payment_token']
+                print(paymentToken)
+            
+
             if subChange:
                 result = gateway.transaction.sale({
                     "amount": str(subChange['due']),
-                    "payment_method_token": request.POST['paymentToken'],
+                    "payment_method_token": paymentToken,
                     "options": {
                         "submit_for_settlement": True
                     }
@@ -166,6 +185,7 @@ def sup_select_subscription(request, facility, selector):
                     print("Prorated difference charged successfully.")
                 else:
                     print(f"Error charging prorated amount: {result.errors.deep_errors}")
+                    # send error message and reset the page dont allow to go any further
 
             addOnEdits = {"plan_id": planDetails.planID}
             if int(seats) == 0:
@@ -191,25 +211,52 @@ def sup_select_subscription(request, facility, selector):
                             "quantity": int(seats),
                         }]
                     }
-            if btQuery.settings['account']['status'] == 'canceled':
-                addOnEdits["payment_method_token"] = request.POST['paymentToken']
+            if btQuery.settings['subscription']['status'] == 'canceled':
+                addOnEdits["payment_method_token"] = paymentToken
                 result = gateway.subscription.create(addOnEdits)
-            elif btQuery.settings['account']['status'] == 'active':
+                btSubId = result.subscription.id
+                btBillingDate = result.subscription.next_billing_date
+            elif btQuery.settings['subscription']['status'] == 'active':
                 result = gateway.subscription.update(btQuery.settings['subscription']['subscription_ID'], addOnEdits)
-            print(result)
-            #else:
-                #cancelSub = gateway.subscription.cancel(userComp.braintree.settings.['subscription']['subscription_ID]')
-            btCopy = btQuery
-            btSettings = btCopy.settings
-            btSettings['subscription']['subscription_ID'] = btQuery.settings['subscription']['subscription_ID']
-            btSettings['subscription']['plan_id'] = planDetails.planID
-            btSettings['subscription']['plan_name'] = planDetails.name
-            btSettings['subscription']['price'] = totalCost
-            btSettings['subscription']['registrations'] = int(seats) + 2
-            btSettings['subscription']['next_billing_date'] = btQuery.settings['subscription']['next_billing_date']
-            btSettings['account']['status'] = 'active'
-            btCopy.save()
-            print('MADE IT TO FUCKING SAVE')
+                btSubId = btQuery.settings['subscription']['subscription_ID']
+                btBillingDate = btQuery.settings['subscription']['next_billing_date']
+            if result.is_success:
+                print("New Subscription created successfully.")
+                #else:
+                    #cancelSub = gateway.subscription.cancel(userComp.braintree.settings.['subscription']['subscription_ID]')
+                btCopy = btQuery
+                btSettings = btCopy.settings
+                btSettings['subscription']['subscription_ID'] = btSubId
+                btSettings['subscription']['plan_id'] = planDetails.planID
+                btSettings['subscription']['plan_name'] = planDetails.name
+                btSettings['subscription']['price'] = totalCost
+                btSettings['subscription']['registrations'] = int(seats) + 2
+                btSettings['subscription']['next_billing_date'] = str(btBillingDate)
+                btSettings['subscription']['status'] = "active"
+                btSettings['account']['status'] = 'active'
+                btCopy.save()
+
+                seatsCalc = btSettings['subscription']['registrations']
+                mainSupervisorProf = user_profile_model.objects.get(user=request.user)
+                userProfileQuery = user_profile_model.objects.filter(~Q(position="client"), company=mainSupervisorProf.company, settings__position__endswith="activate", user__is_active=False)
+                if userProfileQuery.exists():
+                    x = 2
+                    for emp in userProfileQuery:
+                        if x <= seatsCalc:
+                            empUser = emp.user
+                            empUser.is_active = True
+                            empUser.save()
+                            emp.settings['position'] = emp.settings['position'].replace("-activate", "")
+                            emp.save()
+                            x += 1
+                        else:
+                            emp.settings['position'] = emp.settings['position'].replace("-activate", "")
+                            emp.save()
+                            x += 1
+                print('MADE IT TO FUCKING SAVE')
+            else:
+                print(f"Error creating new subscription: {result.errors.deep_errors}")
+                # send error message and reset the page dont allow to go any further
 
             return redirect('subscriptionSelect', facility, 'receipt')
         if "confirmRegistration" in request.POST:
@@ -222,6 +269,7 @@ def sup_select_subscription(request, facility, selector):
                 braintreeQuery = braintree_model.objects.get(user=request.user)
                 #sub right now            
                 old_sub = braintreeQuery.settings['subscription']
+                # if old_sub['subscription']['status'] != 'canceled':
                 if old_sub:
                     old_price = float(old_sub['price'])
                     braintreeSubID = old_sub['subscription_ID']
@@ -320,6 +368,7 @@ def sup_account_view(request, facility):
     print(str(current_date))
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
+    reactivationQuery = account_reactivation_model.objects.all()
         
     if request.method == "POST":
         data = request.POST
@@ -331,14 +380,23 @@ def sup_account_view(request, facility):
             selectedRegister = userProfileQuery.get(id=int(data['registerID'])).user
             selectedRegister.is_active = False
             selectedRegister.save()
+            reactivation = account_reactivation_model.objects.filter(user=selectedRegister)
+            if reactivation.exists():
+                reactivation[0].delete()
+
             return redirect("Account", facility)
         elif 'activateReg' in data.keys():
             print(data)
             userProf = userProfileQuery.get(id=int(data['registerID']))
             leadSup = userProfileQuery.get(company=userProf.company, settings__position="supervisor-m")
             braintree = braintree_model.objects.get(user=leadSup.user)
-            userProf.settings['reactivate_date'] = braintree.settings['subscription']['next_billing_date']
-            userProf.save()
+
+            new_entry = account_reactivation_model(
+                user = userProf.user,
+                reactivation_date = braintree.settings['subscription']['next_billing_date']
+            )
+            new_entry.save()
+
             return redirect("Account", facility)
     return render(request, 'supervisor/settings/sup_account.html',{
         'notifs': notifs,
@@ -353,7 +411,8 @@ def sup_account_view(request, facility):
         'active_registrations': active_registrations,
         'braintreeData': braintreeData,
         'userProfileQuery': userProfileQuery,
-        'today': (current_date, end_of_billing_date)
+        'today': (current_date, end_of_billing_date),
+        'reactivationQuery': reactivationQuery
     })
     
 @lock
@@ -499,7 +558,7 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
         subID = accountData.company.braintree.settings['subscription']['subscription_ID']
         sub = gateway.subscription.find(subID)
         if sub.status == "Active":
-            activeSub = gateway.subscription.find(subID)
+            activeSub = sub
             billing_period_end_date = activeSub.billing_period_end_date
         template = "supervisor/settings/braintree/sup_cancelSub.html"
         variables['token'] = token
@@ -565,6 +624,14 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
                 print('SUBSCRIPTION CANCELLED')
                 braintreeUpdate = accountData.company.braintree
                 braintreeUpdate.settings['account']['status'] = 'canceled'
+                braintreeUpdate.settings['subscription']['status'] = 'canceled'
+                if braintreeUpdate.settings['past_subscriptions']:
+                    new_key = len(braintreeUpdate.settings['past_subscriptions']) + 1
+                    braintreeUpdate.settings['past_subscriptions'][new_key] = {
+                        "subscription_ID": subID,
+                        "start_date": activeSub.created_at,
+                        "end_date": billing_period_end_date
+                    }
                 braintreeUpdate.save()
                 return redirect("Account", facility)
     
@@ -752,7 +819,7 @@ def sup_facility_settings(request, facility, facilityID, selector):
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
     listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
-    active_registrations = len(listOfEmployees.filter(company__braintree__status='active'))
+    active_registrations = len(listOfEmployees.filter(company__braintree__settings__account__status='active'))
 
     dateStart = "1900-01-01"
     dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")

@@ -228,6 +228,18 @@ braintreeSettings = {
             "exp_month": "item",
             'exp_year': "item"
         }
+    },
+    "past_subscriptions": {
+        "1": {
+            "subscription_ID": "item",
+            "start_date": "item",
+            "end_date": "item"
+        },
+        "2": {
+            "subscription_ID": "item",
+            "start_date": "item",
+            "end_date": "item"
+        }
     }
 }
 
@@ -1667,6 +1679,7 @@ def setDefaultSettings(profile, superUsername):
         createSettings['dashboard'] = False
     createSettings['notifications'] = defaultNotifications
     createSettings['first_login'] = False
+    createSettings['position'] = profile.position
     return createSettings
 
 def get_braintree_query(user):
