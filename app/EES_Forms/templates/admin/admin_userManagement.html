@@ -1,0 +1,10 @@
+{% load static %}
+<link href="{% static 'admin/style/adminUserManagement.css' %}" rel="stylesheet">
+<script defer src="{% static 'admin/script/adminUserManagement.js' %}"></script>
+<section id="users" class="panel active">
+    <h1>User Management</h1>
+    <input type="text" id="user-search" placeholder="Search Users..." oninput="filterUsers()">
+    <ul id="user-list">
+        <!-- User List Populated by JS -->
+    </ul>
+</section>

@@ -1,0 +1,65 @@
+section {
+    margin: 20px auto;
+    max-width: 1200px;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #333;
+}
+
+.metric {
+    display: inline-block;
+    margin: 10px;
+    padding: 20px;
+    background: #0073e6;
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    height: 124px;
+}
+
+.metric p {
+    font-size: 24px;
+    margin: 10px 0 0 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #0073e6;
+    color: white;
+}
+
+button {
+    padding: 10px 20px;
+    background: #0073e6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #005bb5;
+}
+
+.canvasCont:hover{
+    background: white;
+}

@@ -1,0 +1,91 @@
+{% load static %}
+<link href="{% static 'admin/style/adminSubscriptions.css' %}" rel="stylesheet">
+<script defer src="{% static 'admin/script/adminSubscriptions.js' %}"></script>
+<div style="display:none;" id="active_users" data-activeusers="{{ active_users|length }}"></div>
+<div style="display:none;" id="past_due" data-pastdue="{{ past_due }}"></div>
+<section id="subscriptions" class="panel active">
+    <h1>Subscription Management</h1>
+    <p>Manage active and past-due subscriptions.</p>
+    <button onclick="retryPayments()">Retry Failed Payments</button>
+    <section id="metrics" style="display: inline-block;">
+        <div class="metric">
+            <h2>Total Active Subscriptions</h2>
+            <p id="active-subscriptions">Loading...</p>
+        </div>
+        <div class="metric">
+            <h2>Past Due Subscriptions</h2>
+            <p id="past-due-subscriptions">Loading...</p>
+        </div>
+        <div class="metric">
+            <h2>Total Revenue This Month</h2>
+            <p id="monthly-revenue">Loading...</p>
+        </div>
+    </section>
+
+    <section id="charts">
+        <h2>Subscription Trends</h2>
+        <div class="canvasCont">
+            <canvas id="subscriptionTrendsChart" width="400" height="200"></canvas>
+        </div>
+    </section>
+
+    <section id="filters">
+        <h2>Filter Subscriptions</h2>
+        <form id="filterForm" onsubmit="fetchFilteredSubscriptions(); return false;">
+            <!-- Status Filter -->
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="">All</option>
+                <option value="Active">Active</option>
+                <option value="Canceled">Canceled</option>
+                <option value="PastDue">Past Due</option>
+            </select>
+            <!-- Customer Name Filter -->
+            <label for="customer_name">Customer Name:</label>
+            <input
+                type="text"
+                id="customer_name"
+                name="customer_name"
+                placeholder="Enter customer name"
+            />
+            <!-- Plan ID Filter -->
+            <label for="plan">Plan:</label>
+            <select id="plan" name="plan">
+                <option value="">All</option>
+                <option value="basic">Basic</option>
+                <option value="premium">Premium</option>
+                <option value="pro">Pro</option>
+            </select>
+            <!-- Start Date Filter -->
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start-date" />
+        
+            <!-- End Date Filter -->
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end-date" />
+        
+            <!-- Submit Button -->
+            <button type="submit" class="filter-button">Filter Subscriptions</button>
+          </form>
+    </section>
+
+    <section id="subscription-list">
+        <h2>Subscriptions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subscription ID</th>
+                    <th>Customer Name</th>
+                    <th>Status</th>
+                    <th>Plan</th>
+                    <th>Start Date</th>
+                    <th>Next Billing Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="subscriptionContainer">
+                <!-- Dynamic Rows will be added here -->
+            </tbody>
+        </table>
+    </section>
+</section>

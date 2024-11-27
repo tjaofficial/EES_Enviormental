@@ -1,0 +1,26 @@
+{% load static %}
+<link href="{% static 'admin/style/adminOverview.css' %}" rel="stylesheet">
+<script defer src="{% static 'admin/script/adminOverview.js' %}"></script>
+<div style="display:none;" id="active_users" data-activeusers="{{ number_of_active_users }}"></div>
+<div style="display:none;" id="mmr" data-mmr="{{ mmr_total }}"></div>
+<div style="display:none;" id="past_due" data-pastdue="{{ past_due_subscriptions }}"></div>
+<section id="overview" class="panel active">
+    <h1>Dashboard Overview</h1>
+    <div class="cards">
+        <div class="card">
+            <h3>Active Users</h3>
+            <p id="active-users">Loading...</p>
+        </div>
+        <div class="card">
+            <h3>MRR</h3>
+            <p id="mrr">$0</p>
+        </div>
+        <div class="card">
+            <h3>Past Due Subscriptions</h3>
+            <p id="past-due">0</p>
+        </div>
+    </div>
+    <div class="canvasCont">
+        <canvas id="traffic-chart" width="400" height="200"></canvas>
+    </div>
+</section>

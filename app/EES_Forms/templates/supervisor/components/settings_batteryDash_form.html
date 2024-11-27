@@ -31,84 +31,84 @@
             <td colspan="2" style="width: 30%;">
                 <div>
                     <label class="container">Progress Bar (Pick 4)
-                        <input id="progressBar" onclick="openSubCategory(this)" name="progressBar" value="true" type="checkbox" data-subcat="progress" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar' %}checked{% endif %}>
+                        <input id="progressBar" onclick="openSubCategory(this)" name="progressBar" value="true" type="checkbox" data-subcat="progress" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar' %}checked{% endif %}{% endif %}>
                         <span class="checkmark"></span>
                     </label>
                     <div id="progress" style="padding-left: 40px; display:none;" data-count="0">
                         <label class="container">Daily Forms
-                            <input id="progressDaily" name="progressDaily" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressDaily' %}checked{% endif %}>
+                            <input id="progressDaily" name="progressDaily" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressDaily' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Weekly Forms
-                            <input id="progressWeekly" name="progressWeekly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressWeekly' %}checked{% endif %}>
+                            <input id="progressWeekly" name="progressWeekly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressWeekly' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Monthly Forms
-                            <input id="progressMonthly" name="progressMonthly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressMonthly' %}checked{% endif %}>
+                            <input id="progressMonthly" name="progressMonthly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressMonthly' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Quarterly Forms
-                            <input id="progressQuarterly" name="progressQuarterly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressQuarterly' %}checked{% endif %}>
+                            <input id="progressQuarterly" name="progressQuarterly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressQuarterly' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Annual Forms
-                            <input id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressAnnually' %}checked{% endif %}>
+                            <input id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressAnnually' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
                 <label class="container">Data Graphs
-                    <input id="graphsTile" onclick="openSubCategory(this)" name="graphs" value="true" type="checkbox" checked="checked" data-subcat="graphs" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs' %}checked{% endif %}>
+                    <input id="graphsTile" onclick="openSubCategory(this)" name="graphs" value="true" type="checkbox" checked="checked" data-subcat="graphs" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <div id="graphs" style="padding-left: 40px;">
                     <div style="padding-left: 25px; margin-left: 18px;">
                         Select Frequency:
                         <select id="graphFrequency" onchange="showGraphDates(this)" name="graphFrequency" data-subcat="graphDates">
-                            <option value="weekly" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'weekly' %}selected{% endif %}>Weekly</option>
-                            <option value="monthly" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'monthly' %}selected{% endif %}>Monthly</option>
-                            <option value="annually" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'annually' %}selected{% endif %}>Annually</option>
-                            <option value="dates" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}selected{% endif %}>Select Dates</option>
+                            <option value="weekly" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'weekly' %}selected{% endif %}{% endif %}>Weekly</option>
+                            <option value="monthly" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'monthly' %}selected{% endif %}{% endif %}>Monthly</option>
+                            <option value="annually" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'annually' %}selected{% endif %}{% endif %}>Annually</option>
+                            <option value="dates" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}selected{% endif %}{% endif %}>Select Dates</option>
                         </select>
-                        <div id="graphDates" style="padding-left: 40px; {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}display:block;{% else %}display:none;{% endif %}">
-                            Starting Date: <input id="graphStart" type="date" name="graphStart" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}value="{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStart' != '' %}{{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStart'|dateParse|date:'c'}}{% endif %}"{% endif %}><br>
-                            Ending Date: <input id="graphStop" type="date" name="graphStop" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}value="{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStop' != '' %}{{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStop'|dateParse|date:'c'}}{% endif %}"{% endif %}>
+                        <div id="graphDates" style="padding-left: 40px; {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}display:block;{% else %}display:none;{% endif %}{% endif %}">
+                            Starting Date: <input id="graphStart" type="date" name="graphStart" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}value="{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStart' != '' %}{{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStart'|dateParse|date:'c'}}{% endif %}{% endif %}"{% endif %}{% endif %}><br>
+                            Ending Date: <input id="graphStop" type="date" name="graphStop" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}value="{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStop' != '' %}{{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStop'|dateParse|date:'c'}}{% endif %}{% endif %}"{% endif %}{% endif %}>
                         </div>
                     </div>
                     <div style="padding-left: 25px; margin-left: 18px;">
                         Select Graphs:<br>
                         <label class="container">Charges
-                            <input name="charges" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'charges'|get_category:'show' %}checked{% endif %}>
+                            <input name="charges" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'charges'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Doors
-                            <input name="doors" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'doors'|get_category:'show' %}checked{% endif %}>
+                            <input name="doors" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'doors'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Lids
-                            <input name="lids" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'lids'|get_category:'show' %}checked{% endif %}>
+                            <input name="lids" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'lids'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">90 Day Push/Travels
-                            <input name="graph90dayPT" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'graph90dayPT'|get_category:'show' %}checked{% endif %}>
+                            <input name="graph90dayPT" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'graph90dayPT'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
                 <label class="container">Corrective Actions
-                    <input name="correctiveActions" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'correctiveActions' %}checked{% endif %}>
+                    <input name="correctiveActions" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'correctiveActions' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">Battery Weather Info.
-                    <input name="infoWeather" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'infoWeather' %}checked{% endif %}>
+                    <input name="infoWeather" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'infoWeather' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">90 Day Push Schedule
-                    <input name="90dayPT" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'90dayPT' %}checked{% endif %}>
+                    <input name="90dayPT" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'90dayPT' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">Contacts
-                    <input name="contacts" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'contacts' %}checked{% endif %}>
+                    <input name="contacts" value="true" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'contacts' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
             </td>
@@ -131,82 +131,84 @@
             <td colspan="2" style="width: 30%;">
                 <div>
                     <label class="container">Progress Bar (Pick 4)
-                        <input disabled id="progressBar" name="progressBar" onclick="openSubCategory(this)" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar' %}checked{% endif %} type="checkbox" data-subcat="progress">
+                        <input disabled id="progressBar" name="progressBar" onclick="openSubCategory(this)" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar' %}checked{% endif %}{% endif %} type="checkbox" data-subcat="progress">
                         <span class="checkmark"></span>
                     </label>
                     <div id="progress" style="padding-left: 40px; display:none;" data-count="0">
                         <label class="container">Daily Forms
-                            <input disabled id="progressDaily" name="progressDaily" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressDaily' %}checked{% endif %}>
+                            <input disabled id="progressDaily" name="progressDaily" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressDaily' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Weekly Forms
-                            <input disabled id="progressWeekly" name="progressWeekly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressWeekly' %}checked{% endif %}>
+                            <input disabled id="progressWeekly" name="progressWeekly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressWeekly' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Monthly Forms
-                            <input disabled id="progressMonthly" name="progressMonthly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressMonthly' %}checked{% endif %}>
+                            <input disabled id="progressMonthly" name="progressMonthly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressMonthly' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Quarterly Forms
-                            <input disabled id="progressQuarterly" name="progressQuarterly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressQuarterly' %}checked{% endif %}>
+                            <input disabled id="progressQuarterly" name="progressQuarterly" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressQuarterly' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Annual Forms
-                            <input disabled id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressAnnually' %}checked{% endif %}>
+                            <input disabled id="progressAnnually" name="progressAnnually" onchange="stopAtFour(this.checked)" type="checkbox" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'progressBar'|get_category:'progressAnnually' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
                 <label class="container">Data Graphs
-                    <input disabled id="graphsTile" name="graphs" onclick="openSubCategory(this)" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs' %}checked{% endif %} data-subcat="graphs">
+                    <input disabled id="graphsTile" name="graphs" onclick="openSubCategory(this)" type="checkbox" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs' %}checked{% endif %}{% endif %} data-subcat="graphs">
                     <span class="checkmark"></span>
                 </label>
                 <div id="graphs" style="padding-left: 40px;">
                     <div style="padding-left: 25px; margin-left: 18px;">
                         <input type="hidden" id="graphFrequency" name="graphFrequency" data-subcat="graphDates" value="main">
                         Select Frequency: 
-                        {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}
-                            {{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStart'}} - 
-                            {{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStop'}}
-                        {% else %}
-                            {{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency'|title}}
+                        {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}
+                            {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency' == 'dates' %}
+                                {{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStart'}} - 
+                                {{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'dates'|get_category:'graphStop'}}
+                            {% else %}
+                                {{accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'graphFrequencyData'|get_category:'frequency'|title}}
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div style="padding-left: 25px; margin-left: 18px;">
                         Select Graphs:<br>
                     
                         <label class="container">Charges
-                            <input disabled type="checkbox" name="Charges" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'charges'|get_category:'show' %}checked{% endif %}>
+                            <input disabled type="checkbox" name="Charges" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'charges'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Doors
-                            <input disabled type="checkbox" name="Doors" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'doors'|get_category:'show' %}checked{% endif %}>
+                            <input disabled type="checkbox" name="Doors" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'doors'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">Lids
-                            <input disabled type="checkbox" name="Lids" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'lids'|get_category:'show' %}checked{% endif %}>
+                            <input disabled type="checkbox" name="Lids" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'lids'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                         <label class="container">90 Day Push/Travels
-                            <input disabled type="checkbox" name="graph90dayPT" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'graph90dayPT'|get_category:'show' %}checked{% endif %}>
+                            <input disabled type="checkbox" name="graph90dayPT" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'graphs'|get_category:'dataChoice'|get_category:'graph90dayPT'|get_category:'show' %}checked{% endif %}{% endif %}>
                             <span class="checkmark"></span>
                         </label>
                     </div>
                 </div>
                 <label class="container">Corrective Actions
-                    <input disabled type="checkbox" name="correctiveActions" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'correctiveActions' %}checked{% endif %}>
+                    <input disabled type="checkbox" name="correctiveActions" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'correctiveActions' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">Battery Weather Info.
-                    <input disabled type="checkbox" name="infoWeather" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'infoWeather' %}checked{% endif %}>
+                    <input disabled type="checkbox" name="infoWeather" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'infoWeather' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">90 Day Push Schedule
-                    <input disabled type="checkbox" name="90dayPT" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'90dayPT' %}checked{% endif %}>
+                    <input disabled type="checkbox" name="90dayPT" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'90dayPT' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
                 <label class="container">Contacts
-                    <input disabled type="checkbox" name="contacts" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'contacts' %}checked{% endif %}>
+                    <input disabled type="checkbox" name="contacts" value="true" {% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash' %}{% if accountData.settings.dashboard|get_category:facilityIDString|get_category:'batteryDash'|get_category:'contacts' %}checked{% endif %}{% endif %}>
                     <span class="checkmark"></span>
                 </label>
             </td>

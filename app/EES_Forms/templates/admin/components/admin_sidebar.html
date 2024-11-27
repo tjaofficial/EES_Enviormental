@@ -1,7 +1,7 @@
 {% load static %}
-<div class='sideMainCont'>
+<aside class="sidebar">
     <div class="center">
-        <h1>Welcome, Anthony!</h1>
+        <h2>Welcome,</h2>
     </div>
     <hr style="width: 75%;">
     <div class='center'>
@@ -13,13 +13,15 @@
         </div>
     </div>
     <hr style="width: 75%;">
-    <div class='center'>
-        <br>
-        <div class='sectionClick'>
-            DASHBOARD
-        </div><br><br>
-        <div class='sectionClick'>
-            <a href="{% url 'adminFAQ' %}">ADD FAQ</a>
-        </div>
-    </div>
-</div>
+    <h2>Admin Panel</h2>
+    <nav>
+        <ul>
+            <li><a href="{% url 'adminDash' 'overview' %}">Overview</a></li>
+            <li><a href="{% url 'adminDash' 'users' %}">User Management</a></li>
+            <li><a href="{% url 'adminDash' 'subscriptions' %}">Subscriptions</a></li>
+            <li><a href="{% url 'adminDash' 'reports' %}">Reports</a></li>
+            <li><a href="{% url 'adminDash' 'settings' %}">Settings</a></li>
+            <li><a href="{% url 'adminFAQ' %}">Add FAQ</a></li>
+        </ul>
+    </nav>
+</aside>

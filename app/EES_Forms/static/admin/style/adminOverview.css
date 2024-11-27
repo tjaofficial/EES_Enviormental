@@ -1,0 +1,17 @@
+canvas {
+    margin: 20px auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+.canvasCont{
+    height: 262px;
+    width: 32rem;
+    border-radius: 11px;
+    background: #f9f9f9;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.canvasCont:hover{
+    background: white;
+}

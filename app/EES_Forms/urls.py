@@ -6,11 +6,13 @@ urlpatterns = [
     path("<str:facility>/dashboard", views.IncompleteForms, name="IncompleteForms"),
     path("<str:facility>/default-dashboard", views.default_dashboard, name="defaultDash"),
     path("<str:facility>/sup_dashboard", views.sup_dashboard_view, name='sup_dashboard'),
-    path("adminDash", views.adminDash, name="adminDash"),
+    path("adminDash/<str:selector>", views.adminDash, name="adminDash"),
     path("<str:facility>/c_dashboard", views.client_dashboard_view, name="c_dashboard"),
     
     ##---ADMIN PAGES -------
     path("admin-pages/addFAQ", views.admin_add_FAQ_view, name="adminFAQ"),
+    path('api/get_revenue', views.get_monthly_revenue, name='get_revenue'),
+    path('api/get_subscriptions/', views.get_subscriptions, name='get_subscriptions'),
     
     ##---LANDNG PAGES-----
     path("FAQ", views.FAQ_view, name="FAQ"),

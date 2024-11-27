@@ -1,0 +1,92 @@
+.reports-page {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+}
+
+.filters input, .filters select, .filters .btn {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.summary {
+  display: flex;
+  gap: 20px;
+}
+
+.metric-card {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.metric-card:hover {
+  background: white;
+}
+
+.metric-card h2 {
+  font-size: 16px;
+}
+
+.metric-card p {
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+.growth {
+  font-size: 14px;
+}
+  
+.growth.positive {
+  color: green;
+}
+
+.growth.negative {
+  color: red;
+}
+
+.charts {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+  
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+  
+.details-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+  
+.details-table th, .details-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+.canvasCont{
+  height: 262px;
+  width: 32rem;
+  border-radius: 11px;
+  background: #f9f9f9;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.canvasCont:hover{
+  background: white;
+}

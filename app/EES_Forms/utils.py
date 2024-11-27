@@ -1710,3 +1710,55 @@ def getActiveCompanyEmployees(company):
     userProfileQuery = user_profile_model.objects.filter(~Q(position="client"), company=company, user__is_active=True)
     return userProfileQuery
 
+def get_list_of_braintree_status(sub_search, addOnSet):
+    active_users = []
+    past_due_list = []
+    for sub in sub_search.items:
+        if sub.status == "Active":
+            if sub.transactions:
+                transaction = sub.transactions[0]  # Take the first transaction
+                customer = transaction.customer_details
+                
+                braintreeDict = {
+                    "customer_id": customer.id,
+                    "first_name": customer.first_name,
+                    "last_name": customer.last_name,
+                    "status": sub.status,
+                    "email": customer.email,
+                    "company": customer.company,
+                    "subscription_id": sub.id,
+                    "plan_id": sub.plan_id,
+                    "price": sub.price,
+                    "start_date": sub.created_at,
+                    "next_billing_date": sub.next_billing_date,
+                }
+                if addOnSet:
+                    # Extract add-on details
+                    add_ons = [
+                        {
+                            "id": add_on.id,
+                            "name": add_on.name,
+                            "amount": add_on.amount,
+                            "quantity": add_on.quantity,
+                        }
+                        for add_on in sub.add_ons
+                    ]
+                    braintreeDict['add_ons'] = add_ons
+
+                user = braintree_model.objects.filter(settings__account__customer_ID=customer.id)
+                if user.exists():
+                    braintreeDict['last_login'] = user[0].user.last_login.date()
+                else:
+                    braintreeDict['last_login'] = "User not in system"
+                
+                # Append user details
+                active_users.append(braintreeDict)
+        elif sub.status == "Past Due":
+            past_due_list.append(sub)
+    return active_users, past_due_list
+
+
+
+
+
+

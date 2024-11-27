@@ -1,12 +1,15 @@
 {% load static %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard</title>
         <link href="{% static 'admin/style/adminLayout.css' %}" rel="stylesheet">
     </head>
-    
     <body class='adminBody'>
         {% include "admin/components/admin_sidebar.html" %}
-        <div class='dataCont'>
+        <div class='dataCont' style="overflow: scroll;">
             {% include "admin/components/admin_header.html" %}
             {% block body %}
             {% endblock %}

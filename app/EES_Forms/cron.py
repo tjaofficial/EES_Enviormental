@@ -1,5 +1,7 @@
 import datetime
 import logging
+# from googleapiclient.discovery import build
+# from .models import TrafficData
 from .models import braintree_model,user_profile_model, account_reactivation_model
 from .utils import getActiveCompanyEmployees, braintreeGateway
 
@@ -63,3 +65,28 @@ def update_next_billing():
                 if datetime.datetime.strptime(btEntry.settings['subscription']['next_billing_date'],"%Y-%m-%d").date() < sub.next_billing_date:
                     btEntry.settings['subscription']['next_billing_date'] = str(sub.next_billing_date)
                     btEntry.save()
+
+# def fetch_google_analytics_data():
+#     analytics = build('analyticsreporting', 'v4', credentials=YOUR_CREDENTIALS)
+
+#     response = analytics.reports().batchGet(
+#         body={
+#             'reportRequests': [
+#                 {
+#                     'viewId': 'YOUR_VIEW_ID',
+#                     'dateRanges': [{'startDate': '7daysAgo', 'endDate': 'today'}],
+#                     'metrics': [{'expression': 'ga:pageviews'}, {'expression': 'ga:users'}]
+#                 }
+#             ]
+#         }
+#     ).execute()
+
+#     rows = response['reports'][0]['data']['rows']
+#     for row in rows:
+#         date_str = row['dimensions'][0]
+#         pageviews = row['metrics'][0]['values'][0]
+#         users = row['metrics'][0]['values'][1]
+#         TrafficData.objects.update_or_create(
+#             date=date_str,
+#             defaults={'views': pageviews, 'unique_visitors': users}
+#         )

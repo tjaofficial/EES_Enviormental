@@ -7170,6 +7170,17 @@ class account_reactivation_model(models.Model):
     def __str__(self):
         return str(self.id) + ' - ' + str(self.user)
 
+class TrafficData(models.Model):
+    date = models.DateField()
+    views = models.IntegerField()
+    unique_visitors = models.IntegerField()
+
+    def __str__(self):
+        return f"Traffic on {self.date}"
+
+
+
+
 # class tank_library(models.Model):
 #     title = models.CharField(max_length=40)
 #     description = models.TextField()

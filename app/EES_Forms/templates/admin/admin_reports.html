@@ -1,0 +1,164 @@
+{% load static %}
+<link href="{% static 'admin/style/adminReports.css' %}" rel="stylesheet">
+<script defer src="{% static 'admin/script/adminReports.js' %}"></script>
+<section id="reports" class="panel active">
+    <h1>Reports</h1>
+    <p>Generate and view detailed analytics reports.</p>
+    <div class="reports-page">
+        <header class="header">
+            <h1>Reports Dashboard</h1>
+            <div class="filters">
+                <input type="date" id="start-date" />
+                <input type="date" id="end-date" />
+                <select id="report-category">
+                    <option value="user-activity">User Activity</option>
+                    <option value="revenue">Revenue</option>
+                    <option value="traffic">Traffic</option>
+                </select>
+                <button class="btn export-btn">Export Report</button>
+            </div>
+        </header>
+        
+        <section class="summary">
+            <div class="metric-card">
+                <h2>Total Users</h2>
+                <p>1,234 <span class="growth positive">+5%</span></p>
+            </div>
+            <div class="metric-card">
+                <h2>Total Revenue</h2>
+                <p id="revenue-container" style="display: block;">
+                    $
+                    <span id="revenue-amount">0.00</span>
+                    <span class="growth positive">+15%</span>
+                </p>
+            </div>
+            <div class="metric-card">
+                <h2>Active Subscriptions</h2>
+                <p>{{active_users|length}} <span class="growth negative">-2%</span></p>
+            </div>
+            <div id="revenue-container1">
+                <h2>Total Revenue</h2>
+                <label for="month-select">Month:</label>
+                <select id="month-select">
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+              
+                <label for="year-select">Year:</label>
+                <input id="year-select" type="number" value="2024" min="2000" max="2100">
+                <div id="revenue-container" style="display: none;">
+                    <h3>Revenue for <span id="selected-month">November</span> <span id="selected-year">2024</span>: $<span id="revenue-amount">0.00</span></h3>
+                </div>
+                <div id="loading-message" style="display: none;">Calculating revenue...</div>    
+            </div>
+              
+            <script>
+                function updateRevenue(month = null, year = null) {
+                    const monthSelect = document.getElementById('month-select');
+                    const yearSelect = document.getElementById('year-select');
+            
+                    // Use passed values or current selections
+                    const selectedMonth = month || monthSelect.value;
+                    const selectedYear = year || yearSelect.value;
+            
+                    // Show loading message and hide revenue container
+                    document.getElementById("loading-message").style.display = "block";
+                    document.getElementById("revenue-container").style.display = "none";
+            
+                    // Fetch revenue data
+                    fetch(`/api/get_revenue?month=${selectedMonth}&year=${selectedYear}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.error) {
+                                console.error(data.error);
+                                document.getElementById("loading-message").innerText = "Error fetching revenue.";
+                            } else {
+                                // Update revenue display
+                                document.getElementById("revenue-amount").innerText = data.revenue.toFixed(2);
+                                document.getElementById("loading-message").style.display = "none";
+                                document.getElementById("revenue-container").style.display = "block";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error fetching revenue:", error);
+                            document.getElementById("loading-message").innerText = "An error occurred.";
+                        });
+                }
+            
+                // Function to set the dropdowns to the current month and year
+                function setCurrentMonthYear() {
+                    const today = new Date();
+                    const currentMonth = today.getMonth() + 1; // Months are zero-based
+                    const currentYear = today.getFullYear();
+            
+                    // Set the current month and year in the dropdowns
+                    document.getElementById('month-select').value = currentMonth;
+                    document.getElementById('year-select').value = currentYear;
+            
+                    // Fetch the initial revenue
+                    updateRevenue(currentMonth, currentYear);
+                }
+            
+                // Set event listeners for dropdown changes
+                document.getElementById('month-select').addEventListener('change', () => updateRevenue());
+                document.getElementById('year-select').addEventListener('change', () => updateRevenue());
+            
+                // Fetch revenue for the current month and year on page load
+                document.addEventListener('DOMContentLoaded', setCurrentMonthYear);
+            </script>
+        </section>
+      
+        <section class="charts">
+            <div class="canvasCont">
+                <canvas id="line-chart"></canvas>
+            </div>
+            <div class="canvasCont">
+                <canvas id="bar-chart"></canvas>
+            </div>
+        </section>
+      
+        <section class="details-table">
+            <h2>Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Subscription ID</th>
+                        <th>Last Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in active_users %}
+                        <tr>
+                            <td>{{user.company}}</td>
+                            <td>{{user.first_name}} {{user.last_name}}</td>
+                            <td>{{user.email}}</td>
+                            <td>{{user.status}}</td>
+                            <td>{{user.subscription_id}}</td>
+                            <td>{{user.last_login}}</td>
+                        </tr>
+                    {% endfor %}
+                <!-- More rows -->
+                </tbody>
+            </table>
+        </section>
+      </div>                      
+</section>
