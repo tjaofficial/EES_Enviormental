@@ -838,69 +838,71 @@ def sup_facility_settings(request, facility, facilityID, selector):
                     #print('saved it')
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
             elif 'batteryDashSave' in answer.keys():
-                accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = {}
-                batDashSettings = accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash']
-                progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
-                if 'progressBar' in answer.keys():
-                    if answer['progressBar'] == 'true':
-                        batDashSettings['progressBar'] = {}
-                        for progOpt in progressOptions:
-                            progInput = False
-                            if progOpt in answer.keys():
-                                if answer[progOpt] == 'true':
-                                    progInput = True
-                            batDashSettings['progressBar'][progOpt] = progInput
-                else:
-                    batDashSettings['progressBar'] = False
-                if 'graphs' in answer.keys():
-                    if answer['graphs'] == 'true':
-                        batDashSettings['graphs'] = {}
-                        graphOptions = ['charges', 'doors', 'lids', 'graph90dayPT']
-                        if answer['graphFrequency'] == 'dates':
-                            batDashSettings['graphs']['graphFrequencyData'] = {
-                                'frequency': answer['graphFrequency'],
-                                'dates': {
-                                    'graphStart': answer['graphStart'],
-                                    'graphStop': answer['graphStop']
+                if not unlock:
+                    accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = {}
+                    batDashSettings = accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash']
+                    progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
+                    if 'progressBar' in answer.keys():
+                        if answer['progressBar'] == 'true':
+                            batDashSettings['progressBar'] = {}
+                            for progOpt in progressOptions:
+                                progInput = False
+                                if progOpt in answer.keys():
+                                    if answer[progOpt] == 'true':
+                                        progInput = True
+                                batDashSettings['progressBar'][progOpt] = progInput
+                    else:
+                        batDashSettings['progressBar'] = False
+                    if 'graphs' in answer.keys():
+                        if answer['graphs'] == 'true':
+                            batDashSettings['graphs'] = {}
+                            graphOptions = ['charges', 'doors', 'lids', 'graph90dayPT']
+                            if answer['graphFrequency'] == 'dates':
+                                batDashSettings['graphs']['graphFrequencyData'] = {
+                                    'frequency': answer['graphFrequency'],
+                                    'dates': {
+                                        'graphStart': answer['graphStart'],
+                                        'graphStop': answer['graphStop']
+                                    }
                                 }
-                            }
-                        else:
-                            batDashSettings['graphs']['graphFrequencyData'] = {
-                                'frequency': answer['graphFrequency'],
-                                'dates': False
-                            }
-                        batDashSettings['graphs']['dataChoice'] = {}
-                        for graphOpt in graphOptions:
-                            graphInput = False
-                            if graphOpt in answer.keys():
-                                if answer[graphOpt] == 'true':
-                                    graphInput = True
-                            batDashSettings['graphs']['dataChoice'][graphOpt] = {'show': graphInput, 'type': 'bar'}
+                            else:
+                                batDashSettings['graphs']['graphFrequencyData'] = {
+                                    'frequency': answer['graphFrequency'],
+                                    'dates': False
+                                }
+                            batDashSettings['graphs']['dataChoice'] = {}
+                            for graphOpt in graphOptions:
+                                graphInput = False
+                                if graphOpt in answer.keys():
+                                    if answer[graphOpt] == 'true':
+                                        graphInput = True
+                                batDashSettings['graphs']['dataChoice'][graphOpt] = {'show': graphInput, 'type': 'bar'}
+                    else:
+                        batDashSettings['graphs'] = False
+                    if 'correctiveActions' in answer.keys():
+                        if answer['correctiveActions'] == 'true':
+                            batDashSettings['correctiveActions'] = True
+                    else:
+                        batDashSettings['correctiveActions'] = False
+                    if 'infoWeather' in answer.keys():
+                        if answer['infoWeather'] == 'true':
+                            batDashSettings['infoWeather'] = True
+                    else:
+                        batDashSettings['infoWeather'] = False
+                    if '90dayPT' in answer.keys():
+                        if answer['90dayPT'] == 'true':
+                            batDashSettings['90dayPT'] = True
+                    else:
+                        batDashSettings['90dayPT'] = False
+                    if 'contacts' in answer.keys():
+                        if answer['contacts'] == 'true':
+                            batDashSettings['contacts'] = True
+                    else:
+                        batDashSettings['contacts'] = False
+                    print(batDashSettings)
                 else:
-                    batDashSettings['graphs'] = False
-                if 'correctiveActions' in answer.keys():
-                    if answer['correctiveActions'] == 'true':
-                        batDashSettings['correctiveActions'] = True
-                else:
-                    batDashSettings['correctiveActions'] = False
-                if 'infoWeather' in answer.keys():
-                    if answer['infoWeather'] == 'true':
-                        batDashSettings['infoWeather'] = True
-                else:
-                    batDashSettings['infoWeather'] = False
-                if '90dayPT' in answer.keys():
-                    if answer['90dayPT'] == 'true':
-                        batDashSettings['90dayPT'] = True
-                else:
-                    batDashSettings['90dayPT'] = False
-                if 'contacts' in answer.keys():
-                    if answer['contacts'] == 'true':
-                        batDashSettings['contacts'] = True
-                else:
-                    batDashSettings['contacts'] = False
-                print(batDashSettings)
-                
-                A  = accountData
+                    accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = True
+                A = accountData
                 A.save()
                 return redirect('selectedFacilitySettings', facility, facilityID, 'main')
             elif 'notifSettingsForm' in answer.keys():

@@ -581,7 +581,7 @@ class formA5_form(ModelForm):
             'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
             'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
             'distance_from': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'direction_from': forms.TextInput(attrs={'oninput': 'this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
@@ -1719,13 +1719,13 @@ class formM_form(ModelForm):
         
         widgets = {
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'paved' : forms.Select(attrs={'style':'width: 150px;'}),
+            'paved' : forms.Select(attrs={'style':''}),
             'pav_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pav()', 'type':'time', 'style':'width: 120px;'}),
             'pav_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pav()', 'type':'time', 'style':'width: 120px;'}),
-            'unpaved' : forms.Select(attrs={'style':'width: 150px;'}),
+            'unpaved' : forms.Select(attrs={'style':''}),
             'unp_start' : forms.TimeInput(attrs={'oninput': 'timecheck_unpav()', 'type':'time', 'style':'width: 120px;'}),
             'unp_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_unpav()', 'type':'time', 'style':'width: 120px;'}),
-            'parking' : forms.Select(attrs={'style':'width: 150px;'}),
+            'parking' : forms.Select(attrs={'style':''}),
             'par_start' : forms.TimeInput(attrs={'oninput': 'timecheck_par()', 'type':'time', 'style':'width: 120px;'}),
             'par_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_par()', 'type':'time', 'style':'width: 120px;'}),
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),

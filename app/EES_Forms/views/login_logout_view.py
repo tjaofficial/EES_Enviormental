@@ -33,7 +33,7 @@ def login_view(request):
     count_bp = daily_battery_profile_model.objects.count()
     if request.user.is_authenticated:
         if request.user.is_superuser:
-            return redirect('adminDash')
+            return redirect('adminDash', "overview")
         elif request.user.groups.filter(name=SUPER_VAR):
             return redirect('sup_dashboard', SUPER_VAR)
         elif request.user.groups.filter(name=CLIENT_VAR):
@@ -56,7 +56,7 @@ def login_view(request):
             print('check 1')
             userProf = user_profile_model.objects.filter(user__id=request.user.id)
             if request.user.is_superuser:
-                return redirect('adminDash')
+                return redirect('adminDash', "overview")
             elif userProf.exists():
                 userProf = userProf[0]
                 if not userProf.company and userProf.is_active:

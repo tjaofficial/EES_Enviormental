@@ -10,7 +10,7 @@
                     <h4>{{section}}</h4>
                     <ol>
                         {% for qas in list %}
-                            <li><a href="#{{qas.id}}"><h5>{{qas.question}}</h5></a></li>
+                            <li><a href="#{{section}}-{{qas.id}}"><h5>{{qas.question}}</h5></a></li>
                         {% endfor %}
                     </ol>
                 </div>
@@ -21,7 +21,7 @@
                     <ol>
                         {% for qas in list %}
                             <li>
-                                <h5 id="{{qas.id}}">{{qas.question}}</h5>
+                                <h5 id="{{section}}-{{qas.id}}">{{qas.question}}</h5>
                                 <p>{{qas.answer}}:{{qas.link}}</p>
                             </li>
                         {% endfor %}
