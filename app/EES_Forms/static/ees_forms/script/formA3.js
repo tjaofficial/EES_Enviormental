@@ -410,7 +410,7 @@ function check_dampered_inoperable(elem, observed, action) {
                     for(var g=0;g<offtakeSelections.length;g++){
                         var offtakesSingleSelection = offtakeSelections[g].value;
                         if (offtakesSingleSelection == 'dampered_off'){
-                            console.log('check 2')
+                            console.log('check 2');
                             noOvensMatch1offtakes = false;
                         }
                     }
@@ -435,20 +435,20 @@ function check_dampered_inoperable(elem, observed, action) {
             }
         }
         if(noOvensMatch1offtakes){
-            document.getElementById('om_damperPopup').style.visibility = 'hidden';
+            document.getElementById('om_damperPopup').style.display = 'none';
             submitButton.disabled = false;
             console.log('No Ovens Match the Inoperable')
         } else {
-            document.getElementById('om_damperPopup').style.visibility = 'visible';
+            document.getElementById('om_damperPopup').style.display = 'block';
             submitButton.disabled = true;
             console.log('found one')
         }
         if(noOvensMatchlids){
-            document.getElementById('l_damperPopup').style.visibility = 'hidden';
+            document.getElementById('l_damperPopup').style.display = 'none';
             submitButton.disabled = false;
             console.log('No Ovens Match the Inoperable')
         } else {
-            document.getElementById('l_damperPopup').style.visibility = 'visible';
+            document.getElementById('l_damperPopup').style.display = 'block';
             submitButton.disabled = true;
             console.log('found one')
         }
@@ -480,11 +480,11 @@ function check_dampered_inoperable(elem, observed, action) {
                 }
             }
             if(noOvensMatch1){
-                document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+                document.getElementById(idAttachment + '_damperPopup').style.display = 'none';
                 submitButton.disabled = false;
                 console.log('No Ovens Match the Inoperable')
             } else {
-                document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+                document.getElementById(idAttachment + '_damperPopup').style.display = 'block';
                 submitButton.disabled = true;
                 console.log('found one')
             }
@@ -504,15 +504,15 @@ function check_dampered_inoperable(elem, observed, action) {
                     }
                 }
                 if(noOvensMatch2){
-                    document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+                    document.getElementById(idAttachment + '_damperPopup').style.display = 'none';
                     submitButton.disabled = false;
                     console.log('No Ovens Match')
                 } else {
                     submitButton.disabled = true;
-                    document.getElementById(idAttachment + '_damperPopup').style.visibility = 'visible';
+                    document.getElementById(idAttachment + '_damperPopup').style.display = 'block';
                 }
             } catch(err) {
-                document.getElementById(idAttachment + '_damperPopup').style.visibility = 'hidden';
+                document.getElementById(idAttachment + '_damperPopup').style.display = 'none';
                 submitButton.disabled = false;
                 console.log("No Data Inputed for " + observed)
             }

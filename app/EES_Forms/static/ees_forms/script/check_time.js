@@ -10,11 +10,13 @@ function check_time(startId, endId, timePopup) {
             document.getElementById(timePopup).style.visibility = 'visible';
             document.getElementById(startId).style.backgroundColor = "white";
             document.getElementById(endId).style.backgroundColor = "white";
+            document.getElementById(timePopup).style.display = 'block';
         }
         else{
             var popup = document.getElementById(timePopup).style.visibility = 'hidden';
             document.getElementById(startId).style.backgroundColor = "#3c983c85";
             document.getElementById(endId).style.backgroundColor = "#3c983c85";
+            document.getElementById(timePopup).style.display = 'none';
         }
         console.log("Times Inputed")
     } catch(err) {

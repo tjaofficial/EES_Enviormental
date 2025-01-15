@@ -146,6 +146,15 @@ function check_oven_numb() {
 }
 check_oven_numb();
 
+// function check_over_35sec() {
+//     if (selector != 'form') return;
+//     const c1_sec_value = document.getElementById('c1_sec').value,
+//     c2_sec_value = document.getElementById('c2_sec').value,
+//     c3_sec_value = document.getElementById('c3_sec').value;
+//     if (parseFloat(c1_sec_value) + parseFloat(c2_sec_value) + parseFloat(c3_sec_value) > 35) {
+//         // make popup
+//     }
+// }
 // function equal_start_stop() {
 //     const start = document.getElementById('main_start').value;
 //     const ovenStart = document.getElementById('c1_start').value;

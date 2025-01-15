@@ -91,18 +91,18 @@
                     </tr>
                     <tr>
                         <td id="table_left">
-                            Wind:
+                            Sunrise: 
                         </td>
                         <td id="table_right">
-                            {{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}
+                            {{ weather.sunrise }}
                         </td>
                     </tr>
                     <tr>
                         <td id="table_left">
-                            Humidity:
+                            Sunset: 
                         </td>
                         <td id="table_right">
-                            {{ weather.humidity|floatformat:"0" }}%
+                            {{ weather.sunset }}
                         </td>
                     </tr>
                     {% else %}

@@ -630,6 +630,8 @@ def weatherDict(city):
     url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=435ac45f81f3f8d42d164add25764f3c'
     try:
         city_weather = requests.get(url.format(city)).json()
+        sunrise = datetime.datetime.fromtimestamp(city_weather['sys']['sunrise'])
+        sunset = datetime.datetime.fromtimestamp(city_weather['sys']['sunset'])
         weather = {
             'city': city,
             'temperature': round(city_weather['main']['temp'], 0),
@@ -638,6 +640,8 @@ def weatherDict(city):
             'wind_speed': round(city_weather['wind']['speed'], 0),
             'wind_direction': city_weather['wind']['deg'],
             'humidity': city_weather['main']['humidity'],
+            'sunrise': str(sunrise.time().strftime("%I:%M %p")),
+            'sunset': str(sunset.time().strftime("%I:%M %p"))
         }
         degree = weather['wind_direction']
         

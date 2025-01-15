@@ -208,7 +208,9 @@
                             </div>
                         </div>
                     </div>
-                    <br><br><br><br><br>
+                    <br><br>
+                    {% include "shared/components/stopWatchToggle.html" %}
+                    <br><br><br>
                     <div id='pushTravels'>
                         <div id="bothTables">
                             <div>
@@ -704,6 +706,7 @@
                         {% endif %}
                     </div>
                 </div>
+                {% include "shared/components/stopWatch.html" %}
             </div>
             <br>
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}

@@ -136,6 +136,7 @@ function htmlTemplate(data, index) {
                     <option value="G" ${data.source === "G"? 'selected': ''}>G</option>
                     <option value="F" ${data.source === "F"? 'selected': ''}>F</option>
                     <option value="J" ${data.source === "J"? 'selected': ''}>J</option>
+                    <option value="B" ${data.source === "B"? 'selected': ''}>B</option>
                 </select>
             </th>
             <th colspan="1" id="formE_comments">

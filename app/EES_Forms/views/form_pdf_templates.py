@@ -1037,6 +1037,7 @@ def pdf_template_9(primaryData, title, subTitle):
         ['', '', 'G', 'GooseNeck', '', ''],
         ['', '', 'F', 'Flange', '', ''],
         ['', '', 'J', 'Expansion Joint', '', ''],
+        ['', '', 'B', 'Bitman Joint', '', ''],
     ]
     tableColWidths = (80,60,80,80,120,80)
 
@@ -1071,7 +1072,7 @@ def pdf_template_9(primaryData, title, subTitle):
         
         ('ALIGN', (1,6), (4,7), 'CENTER'),
         ('FONT', (1,6), (4,7), 'Helvetica-Bold', 10),
-        ('ALIGN', (2,8 + count), (2,11 + count), 'CENTER'),
+        ('ALIGN', (2,8 + count), (2,12 + count), 'CENTER'),
         
     ]
     
@@ -1081,7 +1082,7 @@ def pdf_template_9(primaryData, title, subTitle):
             style.append(('GRID', (1,8 + x), (4,8 + x), 0.5, colors.black),)
             style.append(('TOPPADDING',(0,8 + count), (-1,8 + count), 35),)
             style.append(('BOX', (1,6), (4,7 + count), 1.5, colors.black),)
-            style.append(('ALIGN', (2,8 + count), (2,11 + count), 'CENTER'),)
+            style.append(('ALIGN', (2,8 + count), (2,12 + count), 'CENTER'),)
     else:
         style.append(('ALIGN', (1,8), (4,8), 'CENTER'),)
         style.append(('SPAN', (1,8), (4,8)),)

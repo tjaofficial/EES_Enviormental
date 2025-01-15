@@ -35,6 +35,8 @@ def formA5(request, facility, fsID, selector):
     
     #Weather API Pull
     weather = weatherDict(options.city)
+    print(weather['sunrise'])
+    print(weather['sunset'])
     weather2 = json.dumps(weather)
     
     if daily_prof.exists():

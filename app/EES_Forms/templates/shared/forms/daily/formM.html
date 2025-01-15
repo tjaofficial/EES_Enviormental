@@ -106,6 +106,14 @@
                         <th></th>
                         <th></th>
                     </tr>
+                    <tr>
+                        <td style="height: 25px"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                          {% include "shared/components/stopWatchToggle.html" %}
+                        </td>
+                    </tr>
                 </table>
                 <table style="border-collapse: collapse; margin-left: 1rem; margin-right: 1rem; font-size: 15px;">
                     <tr>
@@ -407,6 +415,7 @@
                 {% include "shared/components/submitButton.html" with label="form" %}
                 {% endif %}
             </div>
+            {% include "shared/components/stopWatch.html" %}
         </div>
     </div>
     <br>

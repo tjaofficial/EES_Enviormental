@@ -56,6 +56,14 @@
                                     &nbsp; &nbsp;{{ data.foreman }}
                                 </th>
                             </tr>
+                            <tr>
+                                <td style="height: 25px"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    {% include "shared/components/stopWatchToggle.html" %}
+                                </td>
+                            </tr>
                         </table>
                         {% include 'observer/components/inop_message.html' %}
                     </section>
@@ -63,45 +71,49 @@
                         <div class="resultTables_container">
                             <div>Start Time:{{ data.om_start }}</div>
                             <div>End Time:{{ data.om_stop }}</div>
-                            <span class="popup_class" id="om_timePopup">
-                                Please Change End Time
-                            </span>
+                            <div style="position: relative;">
+                                <span class="popup_class" id="om_timePopup">
+                                    Please Change End Time
+                                </span>
+                            </div>
                             <div hidden="true">{{ data.om_leak_json }}</div>
-                            <span class="popup_damperClass" id="om_damperPopup">
-                                Dampered ovens and inoperable ovens overlap.
-                            </span>
-                            <table style="border-collapse: collapse;">
-                                <tr>
-                                    <th id="boxa5" colspan="3">
-                                        OFFTAKES AND MINI STANDPIPES
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th id="boxa6" colspan="1">
-                                        Oven
-                                    </th>
-                                    <th id="boxa6" colspan="2">
-                                        Location
-                                    </th>
-                                </tr>
-                                {% for item in omSide_json %}
+                            <div style="position: relative;">
+                                <span class="popup_damperClass" id="om_damperPopup" style="display:none;">
+                                    Dampered ovens and inoperable ovens overlap.
+                                </span>
+                                <table style="border-collapse: collapse;">
                                     <tr>
-                                        <th id="boxa6" colspan="1">
-                                            {{ item.oven }}
-                                        </th>
-                                        <th id="boxa6" colspan="2">
-                                            {% for loc in item.location %}
-                                                {% if forloop.last %}
-                                                    {{ loc }}
-                                                {% else %}
-                                                    {{ loc }},
-                                                {% endif %}
-                                            {% endfor %}
+                                        <th id="boxa5" colspan="3">
+                                            OFFTAKES AND MINI STANDPIPES
                                         </th>
                                     </tr>
-                                {% endfor %}
-                                <tbody id="offtakes_tableBody" data-numRows="1">
-                            </table>
+                                    <tr>
+                                        <th id="boxa6" colspan="1">
+                                            Oven
+                                        </th>
+                                        <th id="boxa6" colspan="2">
+                                            Location
+                                        </th>
+                                    </tr>
+                                    {% for item in omSide_json %}
+                                        <tr>
+                                            <th id="boxa6" colspan="1">
+                                                {{ item.oven }}
+                                            </th>
+                                            <th id="boxa6" colspan="2">
+                                                {% for loc in item.location %}
+                                                    {% if forloop.last %}
+                                                        {{ loc }}
+                                                    {% else %}
+                                                        {{ loc }},
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    <tbody id="offtakes_tableBody" data-numRows="1">
+                                </table>
+                            </div>
                             <div>Traverse Time: {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec = {{data.om_total_sec}}sec</div>
                             <div style='margin-top: 15px;'>
                                 One Pass ({{ data.one_pass }})
@@ -111,46 +123,50 @@
                         <div class="resultTables_container">
                             <div> Start Time:{{ data.l_start }} </div>
                             <div> End Time:{{ data.l_stop }} </div>
-                            <span class="popup_class" id="l_timePopup">
-                                Please Change End Time
-                            </span>
+                            <div style="position: relative;">
+                                <span class="popup_class" id="l_timePopup">
+                                    Please Change End Time
+                                </span>
+                            </div>
                             <div hidden="true">{{ data.l_leak_json }}</div>
-                            <span class="popup_class" id="l_damperPopup">
-                                Dampered ovens and inoperable ovens overlap.
-                            </span>
-                            <table style="border-collapse: collapse;">
-                                <tr>
-                                    <th id="boxa5" colspan="6">
-                                        LIDS
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th id="boxa6" colspan="1">
-                                        Oven
-                                    </th>
-                                    <th id="boxa6" colspan="8">
-                                        Location
-                                    </th>
-                                </tr>
-                                {% for item in lSide_json %}
+                            <div style="position: relative;">
+                                <span class="popup_damperClass" id="l_damperPopup" style="display:none;">
+                                    Dampered ovens and inoperable ovens overlap.
+                                </span>
+                                <table style="border-collapse: collapse;">
                                     <tr>
-                                        <th id="boxa6" colspan="1">
-                                            {{ item.oven }}
-                                        </th>
-                                        <th id="boxa6" colspan="2">
-                                            {% for loc in item.location %}
-                                                {% if forloop.last %}
-                                                    {{ loc }}
-                                                {% else %}
-                                                    {{ loc }},
-                                                {% endif %}
-                                            {% endfor %}
+                                        <th id="boxa5" colspan="6">
+                                            LIDS
                                         </th>
                                     </tr>
-                                {% endfor %}
-                                <tbody id="lids_tableBody" data-numRows="1">
-                                </tbody>
-                            </table>
+                                    <tr>
+                                        <th id="boxa6" colspan="1">
+                                            Oven
+                                        </th>
+                                        <th id="boxa6" colspan="8">
+                                            Location
+                                        </th>
+                                    </tr>
+                                    {% for item in lSide_json %}
+                                        <tr>
+                                            <th id="boxa6" colspan="1">
+                                                {{ item.oven }}
+                                            </th>
+                                            <th id="boxa6" colspan="2">
+                                                {% for loc in item.location %}
+                                                    {% if forloop.last %}
+                                                        {{ loc }}
+                                                    {% else %}
+                                                        {{ loc }},
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    <tbody id="lids_tableBody" data-numRows="1">
+                                    </tbody>
+                                </table>
+                            </div>
                             <div>Traverse Time: {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec = {{data.l_total_sec}}sec</div>
                         </div>
                     </section>
@@ -354,6 +370,7 @@
                         {% include "shared/components/submitButton.html" with label="form" %}
                     {% endif %}
                 </div>
+                {% include "shared/components/stopWatch.html" %}
             </div>
             <br>
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}

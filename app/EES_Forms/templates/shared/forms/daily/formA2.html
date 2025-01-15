@@ -52,6 +52,14 @@
                                     &nbsp; &nbsp;{{ data.foreman }}
                                 </th>
                             </tr>
+                            <tr>
+                                <td style="height: 25px"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                  {% include "shared/components/stopWatchToggle.html" %}
+                                </td>
+                            </tr>
                         </table>
                         {% include 'observer/components/inop_message.html' %}
                         <section class="readings_container">
@@ -247,6 +255,7 @@
                             {% include "shared/components/submitButton.html" with label="form" %}
                         {% endif %}
                     </div>
+                    {% include "shared/components/stopWatch.html" %}
                 </div>
                 <br>
                 {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}

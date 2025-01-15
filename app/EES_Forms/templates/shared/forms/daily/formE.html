@@ -62,6 +62,14 @@
                             </th>
                         </tr>
                         <tr>
+                            <td style="height: 25px"></td>
+                          </tr>
+                        <tr>
+                            <td colspan="6">
+                              {% include "shared/components/stopWatchToggle.html" %}
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="height: 25px" > </td>
                         </tr> 
                         <tr>
@@ -126,13 +134,13 @@
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
-                            <tr id="newEmpty" style="display: none;">
-                                <td colspan="4" id="formE_box1">
-                                    <center style='padding-top: 20px; padding-bottom: 20px;'>
-                                        No Leaks Found During Observation
-                                    </center>
-                                </td>
-                            </tr>
+                        <tr id="newEmpty" style="display: none;">
+                            <td colspan="4" id="formE_box1">
+                                <center style='padding-top: 20px; padding-bottom: 20px;'>
+                                    No Leaks Found During Observation
+                                </center>
+                            </td>
+                        </tr>
                         <tbody id="gooseNeckInputContainer">
                             
                         </tbody>
@@ -183,7 +191,17 @@
                                 Expansion Joint
                             </th>
                         </tr>
+                        <tr>
+                            <th colspan="1">
 
+                            </th>
+                            <th colspan="1">
+                                B
+                            </th>
+                            <th colspan="2">
+                                Bitman Joint
+                            </th>
+                        </tr>
                         <tr>
                             <td style="height: 25px" > </td>
                         </tr> 
@@ -192,6 +210,7 @@
                     {% include "shared/components/submitButton.html" with label="form" %}
                     {% endif %}
                 </div>
+                {% include "shared/components/stopWatch.html" %}
             </div>
             <br>
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}

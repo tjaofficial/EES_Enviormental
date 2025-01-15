@@ -1,0 +1,53 @@
+#method-303-form {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  #stopwatch-container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    position: sticky;
+    top: 50%;
+    right: 50%;
+    transform: translate(0, -50%);
+  }
+  
+  #stopwatch {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+  button {
+    margin-bottom: 25px;
+    padding: 8px 12px;
+    font-size: 34px;
+    border: none;
+    border-radius: 33px;
+    cursor: pointer;
+    width: 11rem;
+    height: 7rem;
+    background-color: #334b6273;
+  }
+  
+  button:hover {
+    background-color: #334b6299;
+  }
+
+#stopWatchDrawer{
+    padding: 26px 26px;
+    box-shadow: inset 20px 0px 20px -23px black;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: #bfbfbf;
+    position: relative;
+    width: 22rem;
+    display: none;
+}
+.swButtonCont{
+    text-align: center;
+}
+  

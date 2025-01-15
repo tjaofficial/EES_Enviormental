@@ -68,6 +68,14 @@
                             <th></th>
                         </tr>
                         <tr>
+                            <td style="height: 25px"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                              {% include "shared/components/stopWatchToggle.html" %}
+                            </td>
+                        </tr>
+                        <tr>
                             <td style="height: 40px"></td>
                         </tr> 
                     </table>
@@ -323,6 +331,7 @@
                     {% include "shared/components/submitButton.html" with label="form" %}
                     {% endif %}
                 </div>
+                {% include "shared/components/stopWatch.html" %}
             </div>
             <br>
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}

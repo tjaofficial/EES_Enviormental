@@ -206,7 +206,9 @@
                             </div>
                         </div>
                     </div>
-                    <br><br><br>
+                    <br><br>
+                    {% include "shared/components/stopWatchToggle.html" %}
+                    <br><br>
                     <center>
                         Type of Visible Emissions Observation (select once and complete form below): <span id='method9' class='type_buttons'>Method 9</span><span id='nonCert' class='type_buttons'>Non-Certified</span>
                         <div id='thisOne'>{{readings_form.PEC_type}}</div>
@@ -467,6 +469,7 @@
                         </div>    
                     </div>
                 </div>
+                {% include "shared/components/stopWatch.html" %}
             </div>
             <br>
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}

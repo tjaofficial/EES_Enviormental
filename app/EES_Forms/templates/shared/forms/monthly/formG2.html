@@ -207,6 +207,8 @@
                         </div>
                     </div>
                     <br><br>
+                    {% include "shared/components/stopWatchToggle.html" %}
+                    <br><br>
                     <center>
                         Method 9B Observations shall be performed during pushing.
                         <br><br><br>
@@ -395,6 +397,7 @@
                         </div>   
                     </div>
                 </div>
+                {% include "shared/components/stopWatch.html" %}
             </div>
             <br>
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
