@@ -2,26 +2,49 @@ let stopwatchContainer = document.getElementById("stopwatch-container");
 let isDragging = false;
 let offset = { x: 0, y: 0 };
 
-stopwatchContainer.addEventListener("mousedown", (e) => {
+function startDrag(e) {
     isDragging = true;
-    offset.x = e.clientX - stopwatchContainer.getBoundingClientRect().left;
-    offset.y = e.clientY - stopwatchContainer.getBoundingClientRect().top;
-    stopwatchContainer.style.cursor = "grabbing";
-});
 
-document.addEventListener("mousemove", (e) => {
+    // Determine the offset for touch or mouse
+    if (e.type === "touchstart") {
+        offset.x = e.touches[0].clientX - stopwatchContainer.getBoundingClientRect().left;
+        offset.y = e.touches[0].clientY - stopwatchContainer.getBoundingClientRect().top;
+    } else {
+        offset.x = e.clientX - stopwatchContainer.getBoundingClientRect().left;
+        offset.y = e.clientY - stopwatchContainer.getBoundingClientRect().top;
+    }
+
+    stopwatchContainer.style.cursor = "grabbing";
+}
+
+function duringDrag(e) {
     if (isDragging) {
-        stopwatchContainer.style.left = `${e.clientX - offset.x}px`;
-        stopwatchContainer.style.top = `${e.clientY - offset.y}px`;
+        e.preventDefault(); // Prevent scrolling while dragging
+
+        // Get the current position for touch or mouse
+        let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+        let clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+
+        stopwatchContainer.style.left = `${clientX - offset.x}px`;
+        stopwatchContainer.style.top = `${clientY - offset.y}px`;
         stopwatchContainer.style.right = "auto"; // Clear right position for proper dragging
         stopwatchContainer.style.bottom = "auto"; // Clear bottom position for proper dragging
     }
-});
+}
 
-document.addEventListener("mouseup", () => {
+function stopDrag() {
     isDragging = false;
     stopwatchContainer.style.cursor = "grab";
-});
+}
+
+// Add event listeners for mouse and touch
+stopwatchContainer.addEventListener("mousedown", startDrag);
+document.addEventListener("mousemove", duringDrag);
+document.addEventListener("mouseup", stopDrag);
+
+stopwatchContainer.addEventListener("touchstart", startDrag);
+document.addEventListener("touchmove", duringDrag);
+document.addEventListener("touchend", stopDrag);
 
 function closeStopwatch() {
     stopwatchContainer.style.display = "none";
