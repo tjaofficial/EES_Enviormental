@@ -1,14 +1,13 @@
 {% load static %}
 <script defer src="{% static 'ees_forms/script/stopWatch.js' %}"></script>
 <link href="{% static 'ees_forms/style/stopWatch.css' %}" rel="stylesheet" />
-<section id="stopWatchDrawer">
-    <!-- Stopwatch Container -->
-    <div id="stopwatch-container" style="display: none;">
-        <h3>Stopwatch</h3>
-        <p id="stopwatch">00:00:00.000</p>
-        <div class='swButtonCont'>
-            <button type="button" id="startButton" onclick="startStopwatch()">Start</button><br/>
-            <button type="button" onclick="resetStopwatch()">Reset</button><br/>
-        </div>
+<!-- Stopwatch Container -->
+<div id="stopwatch-container">
+    <button type="button" id="closeButton" onclick="closeStopwatch()">X</button>
+    <h3>Stopwatch</h3>
+    <p id="stopwatch">00:00:00.000</p>
+    <div class="swButtonCont">
+        <button type="button" id="startButton" onclick="startStopwatch()">Start</button><br/>
+        <button type="button" onclick="resetStopwatch()">Reset</button><br/>
     </div>
-</section>
+</div>

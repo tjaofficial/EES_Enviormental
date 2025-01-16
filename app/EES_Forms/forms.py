@@ -280,7 +280,7 @@ class formA1_form(ModelForm):
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'crew': forms.Select(attrs={'style': 'width:40px;'}),
             'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
-            'start': forms.TimeInput(attrs={'id': 'main_start', 'oninput': 'equal_start_stop()', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'start': forms.TimeInput(attrs={'id': 'main_start', 'type': 'time', 'style': 'width: 120px;', "required": True}),
             'stop': forms.TimeInput(attrs={'id': 'main_stop', 'type': 'time', 'style': 'width: 120px;', "required": True}),
         }
 

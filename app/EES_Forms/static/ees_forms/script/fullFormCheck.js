@@ -15,7 +15,6 @@ function checkFormFull(){
             console.log(x.elements[i].id)
         }
     }
-    console.log(allFilledInputs)
     if (allFilledInputs){
         console.log('this one true')
         document.getElementById('submit').disabled = false;

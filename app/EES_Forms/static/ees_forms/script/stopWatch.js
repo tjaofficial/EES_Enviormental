@@ -1,3 +1,56 @@
+let stopwatchContainer = document.getElementById("stopwatch-container");
+let isDragging = false;
+let offset = { x: 0, y: 0 };
+
+stopwatchContainer.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offset.x = e.clientX - stopwatchContainer.getBoundingClientRect().left;
+    offset.y = e.clientY - stopwatchContainer.getBoundingClientRect().top;
+    stopwatchContainer.style.cursor = "grabbing";
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+        stopwatchContainer.style.left = `${e.clientX - offset.x}px`;
+        stopwatchContainer.style.top = `${e.clientY - offset.y}px`;
+        stopwatchContainer.style.right = "auto"; // Clear right position for proper dragging
+        stopwatchContainer.style.bottom = "auto"; // Clear bottom position for proper dragging
+    }
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+    stopwatchContainer.style.cursor = "grab";
+});
+
+function closeStopwatch() {
+    stopwatchContainer.style.display = "none";
+    document.getElementById('toggle-stopwatch').checked = false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let stopwatchInterval;
 let elapsedTime = 0;
 let isRunning = false;
@@ -8,7 +61,7 @@ function toggleStopwatch() {
     const stopwatchContainer = document.getElementById('stopwatch-container');
     const isChecked = document.getElementById('toggle-stopwatch').checked;
     stopwatchContainer.style.display = isChecked ? 'block' : 'none';
-    stopwatchDrawer.style.display = isChecked ? 'block' : 'none';
+    //stopwatchDrawer.style.display = isChecked ? 'block' : 'none';
     card.style.display = isChecked ? 'flex' : 'block';
 }
 
