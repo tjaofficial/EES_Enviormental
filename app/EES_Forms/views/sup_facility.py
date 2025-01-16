@@ -5,7 +5,7 @@ from ..forms import the_packets_form, form_settings_form
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 import json
-from .form_settings_builds import form1settings, form2settings, form3settings, form4settings, form5settings, form6settings, form7settings, form8settings, form9settings, form17settings, form18settings, form19settings, form20settings, form21settings
+from .form_settings_builds import formSettingsFunc
 from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
@@ -331,41 +331,18 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             keysList = []
             for inputs in request.POST.keys():
                 keysList.append(inputs)
-            if formData.id == 1:
-                settingsDict = form1settings(keysList, request.POST)
-            elif formData.id == 2:
-                settingsDict = form2settings(keysList, request.POST)
-            elif formData.id == 3:
-                settingsDict = form3settings(keysList, request.POST)
-            elif formData.id == 4:
-                settingsDict = form4settings(keysList, request.POST)
-            elif formData.id == 5:
-                settingsDict = form5settings(keysList, request.POST)
-            elif formData.id == 6:
-                settingsDict = form6settings(keysList, request.POST)
-            elif formData.id == 7:
-                settingsDict = form7settings(keysList, request.POST)
-            elif formData.id == 8:
-                settingsDict = form8settings(keysList, request.POST)
-            elif formData.id == 9:
-                settingsDict = form9settings(keysList, request.POST)
-            elif formData.id == 17:
-                settingsDict = form17settings(keysList, request.POST)
-            elif formData.id == 18:
-                settingsDict = form18settings(keysList, request.POST)
-            elif formData.id == 19:
-                settingsDict = form19settings(keysList, request.POST)
-            elif formData.id == 20:
-                settingsDict = form20settings(keysList, request.POST)
-            elif formData.id == 21:
-                settingsDict = form21settings(keysList, request.POST)
+            newLabel, settingsDict = formSettingsFunc(keysList, request.POST, formData.id)
             settingsChange = selectedSettings.settings
             settingsChange['settings'] = settingsDict
+            settingsChange['packets'][str(packetID)] = newLabel
             copyPOST['settings'] = settingsChange
             formWData = form_settings_form(copyPOST, instance=selectedSettings)
             if formWData.is_valid():
                 print('it fucking saved')
                 formWData.save()
+                packetInstance = packetSettings
+                packetInstance.formList['formsList'][newLabel] = packetInstance.formList['formsList'].pop(formLabel)
+                packetInstance.save()
                 messages.success(request,"The form settings were updated.")
                 return redirect('facilityList', 'supervisor')
             #     if packetSettings:
@@ -494,7 +471,7 @@ def Add_Forms(request, facility):
                         if requestFormID == str(formID):
                             keysList.append(setts)
                 if formID == 7:
-                    settingsDict["settings"] = form7settings(keysList, request.POST)
+                    newLabel, settingsDict["settings"] = formSettingsFunc(keysList, request.POST, formID)
 
 
                 print(settingsDict)

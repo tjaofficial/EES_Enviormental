@@ -4,18 +4,28 @@
     overflow-clip-margin: unset;
 }
 .comment_skip_class {
-    width: 239px;
-    background-color: #ff6666;
-    color: black;
-    text-align: center;
-    border-radius: 6px;
-    padding: 16px 0;
+  width: 379px;
+  background-color: #ff6666;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 16px 0;
+  position: absolute;
+  z-index: 1;
+  font-size: 1rem;
+  padding-top: 18px;
+  top: -29px;
+  right: 269px;
+}
+.comment_skip_class::after {
+  content: "";
     position: absolute;
-    z-index: 1;
-    margin-left: 362px;
-    margin-top: -244px;
-    font-size: 1rem;
-    padding-top: 18px;
+    top: 70px;
+    left: 189px;
+    rotate: 0deg;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
 }
 .exit_pop_class{
     top: 3px;

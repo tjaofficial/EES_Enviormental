@@ -88,9 +88,9 @@
   padding: 8px 0;
   position: absolute;
   z-index: 1;
-  margin-left: -122px;
-  margin-top: -43px;
   opacity: 75%;
+  top: -39px;
+  left: -11px;
 }
 
 /* Popup arrow */

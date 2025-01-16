@@ -64,6 +64,7 @@ def formD(request, facility, fsID, selector):
                     'observer',
                     'truck_id',
                     'time',
+                    'date',
                     'contents',
                     'freeboard',
                     'wetted',

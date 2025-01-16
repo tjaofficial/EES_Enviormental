@@ -1,4 +1,4 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% load sup_tags %}{% block list%}
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% load sup_tags %}{% load formC_tags %}{% block list%}
 <link href="{% static 'ees_forms/style/formsProgress.css' %}" rel="stylesheet" />
 <div style="width: 100%;">    
     <div class="pageHeader">
@@ -8,77 +8,24 @@
         {% endif %}
     </div>
     <div id="mainBody">
-        <div class="sections snap" id="DailyProg">
-            <h1 class="secHeader">Daily Forms Progress</h1>
-            <div class="formsList">
-                {% if not finalList.Daily|is_string %}
-                    {% for form in finalList.Daily %}
-                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
-                        {{ form.0 }} - {{ form.1 }}
-                        <br>
-                    {% endfor %}
-                {% else %}
-                    {{finalList.Daily}}
-                {% endif %}
+        {% for freq in freqList%}
+            <div class="sections snap" id="{{freq}}Prog">
+                <h1 class="secHeader">{{freq}} Forms Progress</h1>
+                <div class="formsList">
+                    {% with freqData=finalList|get_category:freq %}
+                        {% if not freqData|is_string %}
+                            {% for form in freqData %}
+                                <input type="checkbox" id="{{form.0}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                                {{ form.0 }} - {{ form.1 }}
+                                <br>
+                            {% endfor %}
+                        {% else %}
+                            {{freqData}}
+                        {% endif %}
+                    {% endwith %}
+                </div>
             </div>
-        </div>
-        <div class="sections snap" id="WeeklyProg">
-            <h1 class="secHeader">Weekly Forms Progress</h1>
-            <div class="formsList">
-                {% if not finalList.Weekly|is_string %}
-                    {% for form in finalList.Weekly %}
-                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
-                        {{ form.0 }} - {{ form.1 }}
-                        <br>
-                    {% endfor %}
-                {% else %}
-                    {{finalList.Weekly}}
-                {% endif %}
-            </div>
-        </div>
-        <div class="sections snap" id="MonthlyProg">
-            <h1 class="secHeader">Monthly Forms Progress</h1>
-            <div class="formsList">
-                {% if not finalList.Monthly|is_string %}
-                    {% for form in finalList.Monthly %}
-                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
-                        {{ form.0 }} - {{ form.1 }}
-                        <br>
-                    {% endfor %}
-                {% else %}
-                    {{finalList.Monthly}}
-                {% endif %}
-            </div>
-        </div>
-        <div class="sections snap" id="QuarterlyProg">
-            <h1 class="secHeader">Quarterly Forms Progress</h1>
-            <div class="formsList">
-                {% if not finalList.Quarterly|is_string %}
-                    {% for form in finalList.Quarterly %}
-                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
-                        {{ form.0 }} - {{ form.1 }}
-                        <br>
-                    {% endfor %}
-                {% else %}
-                    {{finalList.Quarterly}}
-                {% endif %}
-            </div>
-        </div>
-        <div class="sections snap" id="AnnuallyProg">
-            <h1 class="secHeader">Annually Forms Progress</h1>
-            <div class="formsList">
-                {% if not finalList.Annually|is_string %}
-                    {% for form in finalList.Annually %}
-                        <input type="checkbox" id="{{form.1}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
-                        {{ form.0 }} - {{ form.1 }}
-                        <br>
-                    {% endfor %}
-                {% else %}
-                    {{finalList.Annually}}
-                {% endif %}
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
-
 {% endblock %}

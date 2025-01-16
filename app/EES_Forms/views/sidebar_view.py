@@ -1095,7 +1095,7 @@ def formsProgress(request, facility, section):
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     clientForms = get_facility_forms('facilityName', facility)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
-    
+    freqList = ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually']
     for formInfo in clientForms:
         print("Cross Reference " + str(formInfo) + "...")
         for x in formSettingsModel:
@@ -1132,5 +1132,6 @@ def formsProgress(request, facility, section):
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
-        'sortedFacilityData': sortedFacilityData
+        'sortedFacilityData': sortedFacilityData,
+        'freqList': freqList
     })

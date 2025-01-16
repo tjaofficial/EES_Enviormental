@@ -1,30 +1,50 @@
 let stopwatchContainer = document.getElementById("stopwatch-container");
 let isDragging = false;
+let dragThreshold = 10; // Minimum movement (in pixels) to trigger dragging
+let startPosition = { x: 0, y: 0 };
 let offset = { x: 0, y: 0 };
 
 function startDrag(e) {
-    isDragging = true;
+    isDragging = false; // Reset dragging state
+    stopwatchContainer.style.cursor = "grab";
 
-    // Determine the offset for touch or mouse
+    // Get the starting position for touch or mouse
     if (e.type === "touchstart") {
+        startPosition.x = e.touches[0].clientX;
+        startPosition.y = e.touches[0].clientY;
         offset.x = e.touches[0].clientX - stopwatchContainer.getBoundingClientRect().left;
         offset.y = e.touches[0].clientY - stopwatchContainer.getBoundingClientRect().top;
     } else {
+        startPosition.x = e.clientX;
+        startPosition.y = e.clientY;
         offset.x = e.clientX - stopwatchContainer.getBoundingClientRect().left;
         offset.y = e.clientY - stopwatchContainer.getBoundingClientRect().top;
     }
 
-    stopwatchContainer.style.cursor = "grabbing";
+    document.addEventListener("mousemove", duringDrag);
+    document.addEventListener("touchmove", duringDrag);
+    document.addEventListener("mouseup", stopDrag);
+    document.addEventListener("touchend", stopDrag);
 }
 
 function duringDrag(e) {
+    let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+    let clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+
+    // Check if movement exceeds threshold to enable dragging
+    if (!isDragging) {
+        if (
+            Math.abs(clientX - startPosition.x) > dragThreshold ||
+            Math.abs(clientY - startPosition.y) > dragThreshold
+        ) {
+            isDragging = true;
+            stopwatchContainer.style.cursor = "grabbing";
+        }
+    }
+
+    // If dragging, move the stopwatch
     if (isDragging) {
         e.preventDefault(); // Prevent scrolling while dragging
-
-        // Get the current position for touch or mouse
-        let clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
-        let clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
-
         stopwatchContainer.style.left = `${clientX - offset.x}px`;
         stopwatchContainer.style.top = `${clientY - offset.y}px`;
         stopwatchContainer.style.right = "auto"; // Clear right position for proper dragging
@@ -35,16 +55,16 @@ function duringDrag(e) {
 function stopDrag() {
     isDragging = false;
     stopwatchContainer.style.cursor = "grab";
+
+    document.removeEventListener("mousemove", duringDrag);
+    document.removeEventListener("touchmove", duringDrag);
+    document.removeEventListener("mouseup", stopDrag);
+    document.removeEventListener("touchend", stopDrag);
 }
 
 // Add event listeners for mouse and touch
 stopwatchContainer.addEventListener("mousedown", startDrag);
-document.addEventListener("mousemove", duringDrag);
-document.addEventListener("mouseup", stopDrag);
-
 stopwatchContainer.addEventListener("touchstart", startDrag);
-document.addEventListener("touchmove", duringDrag);
-document.addEventListener("touchend", stopDrag);
 
 function closeStopwatch() {
     stopwatchContainer.style.display = "none";

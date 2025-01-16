@@ -398,17 +398,17 @@
                 </p>
                 <p class="weather_battery_font">
                     <span>
-                        Wind:
+                        Sunrise:
                     </span>
                     <br>
-                    {% if weather %}{{ weather.wind_speed|floatformat:"0" }}mph - {{ wind_direction }}{% else %}N/A{% endif %}
+                    {% if weather %}{{ weather.sunrise }}{% else %}N/A{% endif %}
                 </p>
                 <p class="weather_battery_font">
                     <span>
-                        Humidity:
+                        Sunset:
                     </span>
                     <br>
-                    {% if weather %}{{ weather.humidity|floatformat:"0" }}%{% else %}N/A{% endif %}
+                    {% if weather %}{{ weather.sunset }}{% else %}N/A{% endif %}
                 </p>
             </div>
         </div>
