@@ -511,9 +511,12 @@ def register_view(request, facility, access_page):
                     A.save()
                     for ups in user_profiles.filter(company=A.company).exclude(position=CLIENT_VAR):
                         if 'dashboard' in ups.settings.keys():
-                            ups.settings['dashboard'][str(A.id)] = dashDict
+                            if ups.settings['dashboard']:
+                                ups.settings['dashboard'][str(A.id)] = dashDict
+                            else:
+                                ups.settings['dashboard'] = {str(A.id): dashDict}
                         else:
-                            ups.settings['dashboard'] = {str(A.id): dashDict}
+                            print("ERROR")
                         if request.POST['cokeBattery'] == 'Yes':
                             ups.settings['dashboard'][str(A.id)]['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
                             ups.settings['dashboard'][str(A.id)]['formsDash'] = False

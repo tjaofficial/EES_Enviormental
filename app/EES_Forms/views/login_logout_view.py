@@ -319,7 +319,7 @@ def registerCompany(request):
                         user=request.user, 
                         status='inactive', 
                         registrations=0,
-                        settings = json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False})
+                        settings = json.loads(json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False}))
                     )
                     braintreeSave.save()
                 companySave = form.save(commit=False)
