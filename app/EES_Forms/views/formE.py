@@ -5,7 +5,7 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 from ..forms import formE_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification, get_initial_data
 
 lock = login_required(login_url='Login')
 
@@ -67,16 +67,7 @@ def formE(request, facility, fsID, selector):
                 goose_neck_data_JSON = ''
         else:
             if existing:
-                initial_data = {
-                    'observer': database_form.observer,
-                    'date': database_form.date,
-                    'crew': database_form.crew,
-                    'foreman': database_form.foreman,
-                    'start_time': database_form.start_time,
-                    'end_time': database_form.end_time,
-                    'leaks': database_form.leaks,
-                    'goose_neck_data': database_form.goose_neck_data,
-                }
+                initial_data = get_initial_data(form9_model, database_form)
                 form = formE_form(initial=initial_data)
             else:
                 initial_data = {

@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, form22_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -66,62 +66,7 @@ def formM(request, facility, fsID, selector):
             THEmonth = form.date.month
         else:
             if existing:
-                initial_data = {
-                    'date': database_form.date,
-                    'paved': database_form.paved,
-                    'pav_start': database_form.pav_start,
-                    'pav_stop': database_form.pav_stop,
-                    'unpaved': database_form.unpaved,
-                    'unp_start': database_form.unp_start,
-                    'unp_stop': database_form.unp_stop,
-                    'parking': database_form.parking,
-                    'par_start': database_form.par_start,
-                    'par_stop': database_form.par_stop,
-                    'observer': database_form.observer,
-                    'cert_date': database_form.cert_date,
-                    'comments': database_form.comments,
-
-                    'pav_1': database_form2.pav_1,
-                    'pav_2': database_form2.pav_2,
-                    'pav_3': database_form2.pav_3,
-                    'pav_4': database_form2.pav_4,
-                    'pav_5': database_form2.pav_5,
-                    'pav_6': database_form2.pav_6,
-                    'pav_7': database_form2.pav_7,
-                    'pav_8': database_form2.pav_8,
-                    'pav_9': database_form2.pav_9,
-                    'pav_10': database_form2.pav_10,
-                    'pav_11': database_form2.pav_11,
-                    'pav_12': database_form2.pav_12,
-                    'unp_1': database_form2.unp_1,
-                    'unp_2': database_form2.unp_2,
-                    'unp_3': database_form2.unp_3,
-                    'unp_4': database_form2.unp_4,
-                    'unp_5': database_form2.unp_5,
-                    'unp_6': database_form2.unp_6,
-                    'unp_7': database_form2.unp_7,
-                    'unp_8': database_form2.unp_8,
-                    'unp_9': database_form2.unp_9,
-                    'unp_10': database_form2.unp_10,
-                    'unp_11': database_form2.unp_11,
-                    'unp_12': database_form2.unp_12,
-                    'par_1': database_form2.par_1,
-                    'par_2': database_form2.par_2,
-                    'par_3': database_form2.par_3,
-                    'par_4': database_form2.par_4,
-                    'par_5': database_form2.par_5,
-                    'par_6': database_form2.par_6,
-                    'par_7': database_form2.par_7,
-                    'par_8': database_form2.par_8,
-                    'par_9': database_form2.par_9,
-                    'par_10': database_form2.par_10,
-                    'par_11': database_form2.par_11,
-                    'par_12': database_form2.par_12,
-
-                    'pav_total': database_form2.pav_total,
-                    'unp_total': database_form2.unp_total,
-                    'par_total': database_form2.par_total,
-                }
+                initial_data = get_initial_data(form22_model, database_form)
                 form2 = formM_readings_form(initial=initial_data)
                 print(initial_data)
             else:

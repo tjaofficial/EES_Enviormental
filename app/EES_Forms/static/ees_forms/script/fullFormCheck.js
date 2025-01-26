@@ -1,18 +1,20 @@
-let x = document.getElementById('formID');
+let x = document.getElementById('formID').querySelectorAll(
+    'input, textarea, select');
 for (let i = 0; i < x.length ;i++) {
-    let theElem = x.elements[i];
+    let theElem = x[i];
     console.log(theElem)
     theElem.addEventListener('input', checkFormFull)
 
 }
 
 function checkFormFull(){
-    let x = document.getElementById('formID');
+    let x = document.getElementById('formID').querySelectorAll(
+  'input, textarea, select');
     let allFilledInputs = true;
     for (let i = 0; i < x.length ;i++) {
-        if (x.elements[i].value == false){
+        if (x[i].value == false){
             allFilledInputs=false;
-            console.log(x.elements[i].id)
+            console.log(x[i].id)
         }
     }
     if (allFilledInputs){

@@ -5,13 +5,15 @@ from ..models import user_profile_model, daily_battery_profile_model, Forms, for
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import formA5_Readings_Upadte, formA5_Model_Upadte, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification, get_initial_data
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA5(request, facility, fsID, selector):
+    formA5_Model_Upadte()
+    formA5_Readings_Upadte()
     formName = 5
     freq = getFacSettingsInfo(fsID)
     notifs = checkIfFacilitySelected(request.user, facility)
@@ -68,12 +70,7 @@ def formA5(request, facility, fsID, selector):
         else:
             if existing:
                 exist_canvas = database_form.canvas
-                initial_data = {}
-                for field1 in fields1:
-                    initial_data[field1] = getattr(database_form, field1)
-                for field2 in fields2:
-                    if field2 != 'pt_admin1_model':
-                        initial_data[field2] = getattr(database_form2, field2)
+                initial_data = get_initial_data(form5_model, database_form)
                 data = formA5_form(initial=initial_data)
                 readings_form = formA5_readings_form(initial=initial_data)
                 profile_form = user_profile_form()

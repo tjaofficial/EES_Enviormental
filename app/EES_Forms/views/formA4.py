@@ -5,7 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
-from ..utils import issueForm_picker, checkIfFacilitySelected, updateSubmissionForm, setUnlockClientSupervisor, createNotification, getFacSettingsInfo
+from ..utils import issueForm_picker, checkIfFacilitySelected, updateSubmissionForm, setUnlockClientSupervisor, createNotification, getFacSettingsInfo, get_initial_data
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -61,21 +61,7 @@ def formA4(request, facility, fsID, selector):
                 leaks = 'yes'
         else:
             if existing:
-                initial_data = {
-                    'date': database_form.date,
-                    'observer': database_form.observer,
-                    'crew': database_form.crew,
-                    'foreman': database_form.foreman,
-                    'main_start': database_form.main_start,
-                    'main_stop': database_form.main_stop,
-                    'main_1': database_form.main_1,
-                    'main_2': database_form.main_2,
-                    'main_3': database_form.main_3,
-                    'main_4': database_form.main_4,
-                    'suction_main': database_form.suction_main,
-                    'notes': database_form.notes,
-                    'leak_data': database_form.leak_data,
-                }
+                initial_data = get_initial_data(form4_model, database_form)
                 if initial_data['leak_data'] == '{}':
                     leaks = 'no'
                 else:

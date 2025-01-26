@@ -5,7 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA3_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker, checkIfFacilitySelected, updateSubmissionForm, setUnlockClientSupervisor, createNotification, sendToDash, getFacSettingsInfo
+from ..utils import issueForm_picker, checkIfFacilitySelected, updateSubmissionForm, setUnlockClientSupervisor, createNotification, sendToDash, getFacSettingsInfo, get_initial_data
 from django.contrib import messages # type: ignore
 
 lock = login_required(login_url='Login')
@@ -69,40 +69,7 @@ def formA3(request, facility, fsID, selector):
                 lSide_json = ''
         else:
             if existing:
-                initial_data = {
-                    'date': database_form.date,
-                    'observer': database_form.observer,
-                    'crew': database_form.crew,
-                    'foreman': database_form.foreman,
-                    'inop_ovens': database_form.inop_ovens,
-                    'inop_numbs': database_form.inop_numbs,
-                    'om_start': database_form.om_start,
-                    'om_stop': database_form.om_stop,
-                    'l_start': database_form.l_start,
-                    'l_stop': database_form.l_stop,
-                    'om_leak_json': database_form.om_leak_json,
-                    'om_leaks2': database_form.om_leaks2,
-                    'l_leak_json': database_form.l_leak_json,
-                    'l_leaks2': database_form.l_leaks2,
-                    'om_traverse_time_min': database_form.om_traverse_time_min,
-                    'om_traverse_time_sec': database_form.om_traverse_time_sec,
-                    'om_total_sec': database_form.om_total_sec,
-                    'l_traverse_time_min': database_form.l_traverse_time_min,
-                    'l_traverse_time_sec': database_form.l_traverse_time_sec,
-                    'l_total_sec': database_form.l_total_sec,
-                    'om_allowed_traverse_time': database_form.om_allowed_traverse_time,
-                    'l_allowed_traverse_time': database_form.l_allowed_traverse_time,
-                    'om_valid_run': database_form.om_valid_run,
-                    'l_valid_run': database_form.l_valid_run,
-                    'om_leaks': database_form.om_leaks,
-                    'l_leaks': database_form.l_leaks,
-                    'om_not_observed': database_form.om_not_observed,
-                    'l_not_observed': database_form.l_not_observed,
-                    'om_percent_leaking': database_form.om_percent_leaking,
-                    'l_percent_leaking': database_form.l_percent_leaking,
-                    'one_pass': database_form.one_pass,
-                    'notes': database_form.notes,
-                }
+                initial_data = get_initial_data(form3_model, database_form)
             else:
                 inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
                 initial_data = {

@@ -22,6 +22,8 @@ from django.utils.html import strip_tags # type: ignore
 from django.core.mail import send_mail # type: ignore
 from django.conf import settings # type: ignore
 from django.contrib import messages # type: ignore
+from django.db.models import Field, Min
+from django.contrib.contenttypes.models import ContentType
 
 #from .admin import EventAdmin
 parseFormList = [
@@ -242,6 +244,172 @@ braintreeSettings = {
         }
     }
 }
+
+def formA5_Model_Upadte():
+    allFormData = form5_model.objects.all()   
+    not_these_fields = [
+        'date',
+        'estab',
+        'county',
+        'estab_no',
+        'equip_loc',
+        'district',
+        'city',
+        'observer',
+        'cert_date',
+        'id',
+        'facilityChoice',
+        'notes',
+        'canvas',
+        'reading_data',
+        'ovens_data'
+    ]
+    for record in allFormData:
+        fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
+        finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
+        record.reading_data = finalJson
+        record.save()
+        
+
+    
+    print("hello")
+
+def formA5_Readings_Upadte():
+    allFormData = form5_readings_model.objects.all() 
+    #not_these_fields = ['form']
+    for record in allFormData:
+        #fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
+        #print(fieldsList)
+        formA5Ovens = {
+            "oven1": {
+                "oven_number": record.o1,
+                "start": str(record.o1_start),
+                "stop": str(record.o1_stop),
+                "highest_opacity": record.o1_highest_opacity,
+                "opacity_over_20": record.o1_instant_over_20,
+                "average_6_opacity": record.o1_average_6,
+                "average_6_over_35": record.o1_average_6_over_35,
+                "readings": {
+                    "push":{
+                        "1": record.o1_1_reads,
+                        "2": record.o1_2_reads,
+                        "3": record.o1_3_reads,
+                        "4": record.o1_4_reads,
+                        "5": record.o1_5_reads,
+                        "6": record.o1_6_reads,
+                        "7": record.o1_7_reads,
+                        "8": record.o1_8_reads,
+                    },
+                    "travel": {
+                        "1": record.o1_9_reads,
+                        "2": record.o1_10_reads,
+                        "3": record.o1_11_reads,
+                        "4": record.o1_12_reads,
+                        "5": record.o1_13_reads,
+                        "6": record.o1_14_reads,
+                        "7": record.o1_15_reads,
+                        "8": record.o1_16_reads,
+                    }
+                }
+            },
+            "oven2": {
+                "oven_number": record.o2,
+                "start": str(record.o2_start),
+                "stop": str(record.o2_stop),
+                "highest_opacity": record.o2_highest_opacity,
+                "opacity_over_20": record.o2_instant_over_20,
+                "average_6_opacity": record.o2_average_6,
+                "average_6_over_35": record.o2_average_6_over_35,
+                "readings": {
+                    "push":{
+                        "1": record.o2_1_reads,
+                        "2": record.o2_2_reads,
+                        "3": record.o2_3_reads,
+                        "4": record.o2_4_reads,
+                        "5": record.o2_5_reads,
+                        "6": record.o2_6_reads,
+                        "7": record.o2_7_reads,
+                        "8": record.o2_8_reads,
+                    },
+                    "travel": {
+                        "1": record.o2_9_reads,
+                        "2": record.o2_10_reads,
+                        "3": record.o2_11_reads,
+                        "4": record.o2_12_reads,
+                        "5": record.o2_13_reads,
+                        "6": record.o2_14_reads,
+                        "7": record.o2_15_reads,
+                        "8": record.o2_16_reads,
+                    }
+                }
+            },
+            "oven3": {
+                "oven_number": record.o3,
+                "start": str(record.o3_start),
+                "stop": str(record.o3_stop),
+                "highest_opacity": record.o3_highest_opacity,
+                "opacity_over_20": record.o3_instant_over_20,
+                "average_6_opacity": record.o3_average_6,
+                "average_6_over_35": record.o3_average_6_over_35,
+                "readings": {
+                    "push":{
+                        "1": record.o3_1_reads,
+                        "2": record.o3_2_reads,
+                        "3": record.o3_3_reads,
+                        "4": record.o3_4_reads,
+                        "5": record.o3_5_reads,
+                        "6": record.o3_6_reads,
+                        "7": record.o3_7_reads,
+                        "8": record.o3_8_reads,
+                    },
+                    "travel": {
+                        "1": record.o3_9_reads,
+                        "2": record.o3_10_reads,
+                        "3": record.o3_11_reads,
+                        "4": record.o3_12_reads,
+                        "5": record.o3_13_reads,
+                        "6": record.o3_14_reads,
+                        "7": record.o3_15_reads,
+                        "8": record.o3_16_reads,
+                    }
+                }
+            },
+            "oven4": {
+                "oven_number": record.o4,
+                "start": str(record.o4_start),
+                "stop": str(record.o4_stop),
+                "highest_opacity": record.o4_highest_opacity,
+                "opacity_over_20": record.o4_instant_over_20,
+                "average_6_opacity": record.o4_average_6,
+                "average_6_over_35": record.o4_average_6_over_35,
+                "readings": {
+                    "push":{
+                        "1": record.o4_1_reads,
+                        "2": record.o4_2_reads,
+                        "3": record.o4_3_reads,
+                        "4": record.o4_4_reads,
+                        "5": record.o4_5_reads,
+                        "6": record.o4_6_reads,
+                        "7": record.o4_7_reads,
+                        "8": record.o4_8_reads,
+                    },
+                    "travel": {
+                        "1": record.o4_9_reads,
+                        "2": record.o4_10_reads,
+                        "3": record.o4_11_reads,
+                        "4": record.o4_12_reads,
+                        "5": record.o4_13_reads,
+                        "6": record.o4_14_reads,
+                        "7": record.o4_15_reads,
+                        "8": record.o4_16_reads,
+                    }
+                }
+            }
+        }
+        #finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
+        record.form.ovens_data = json.loads(json.dumps(formA5Ovens))
+        record.form.save()
+        print("hello2")
 
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
@@ -688,112 +856,56 @@ def calculateProgessBar(facility, frequency):
     return percent_completed 
 
 def ninetyDayPushTravels(facility):
-    all_db_reads = form5_readings_model.objects.filter(form__facilityChoice__facility_name=facility)
-    if all_db_reads.exists():
-        def all_ovens(reads):
-            A = []
-            for p in reads:
-                date = p.form.date
-                list = [p.o1, p.o2, p.o3, p.o4]
-                year = date.year
-                month = date.month
-                day = date.day
+    today = datetime.datetime.now().date()
+    due_date_threshold = today + timedelta(days=30)
+    most_recent_dates = {}
+    all_records = form5_model.objects.filter(facilityChoice__facility_name=facility)
+    if all_records.exists():
+        for record in all_records:
+            record_date = record.date  # The date the record was created
+            ovens_data = record.ovens_data  # Parse the JSON data from ovens_data field
 
-                dateAdded = datetime.datetime(year, month, day)
-                EXPdate = dateAdded + datetime.timedelta(days=91)
-                daysLeft = EXPdate - datetime.datetime.now()
-                
-                for q in list:
-                    if len(str(q)) == 1:
-                        ovenNumber = "0" + str(q)
-                    else:
-                        ovenNumber = q
-
-                    A.append((ovenNumber, p.form.date, EXPdate.date, daysLeft.days))
-            return A
-        all_read_ovens = all_ovens(all_db_reads)
-        func = lambda x: (x[0], x[1])
-        sort_by_oven = sorted(all_read_ovens, key=func, reverse=True)
-
-        def final(organizedOvens):
-            B = []
-            i = 1
-            for oven_a in organizedOvens:
-                B.append(oven_a)
-            for oven_b in organizedOvens:
-                for y in range(i, len(organizedOvens)):
-                    check_instance = organizedOvens[y]
-                    if check_instance[0] == oven_b[0]:
-                        if check_instance in B:
-                            B.remove(check_instance)
-                i += 1
-
-            for n in range(1, 86):
-                for oven in B:
-                    if len(str(n)) == 1:
-                        zero_n = "0" + str(n)
-                    else:
-                        zero_n = str(n)
-                        
-                    if zero_n == oven[0]:
-                        exist = True
-                        break
-                    else:
-                        exist = False
-                if not exist:
-                    B.append((zero_n, 'N/A', 0, 0))              
-            return B
-        all_ovens_EXP = final(sort_by_oven)
+            # Iterate through each oven in the JSON data
+            for oven_key in ["oven1", "oven2", "oven3", "oven4"]:  # Explicitly handle 4 ovens
+                if oven_key in ovens_data:
+                    oven_data = ovens_data[oven_key]
+                    oven_number = oven_data.get("oven_number")
+                    if oven_number:
+                        # Update the most recent date for this oven
+                        if oven_number not in most_recent_dates or record_date > most_recent_dates[oven_number]:
+                            most_recent_dates[oven_number] = record_date
         
-        def sort_key(oven):
-            return oven[0]
-        all_ovens_EXP.sort(key=sort_key, reverse=True) 
-        
-        def overdue_30(cool):
-            C = []
-            for x in cool:
-                if x[3] <= 30 and x[1] != "N/A":
-                    C.append(x)
-            return C
+        # Calculate the 90-day deadlines and filter ovens due within 30 days
+        print(most_recent_dates)
+        od_90 = []
+        od_30 = []
+        od_10 = []
+        od_5 = []
+        for oven_number, most_recent_date in most_recent_dates.items():
+            # Calculate the 90-day deadline
+            deadline = most_recent_date + timedelta(days=90)
+            difference = deadline-today
+            ovenDict = {
+                "oven_number": int(oven_number),
+                "most_recent_date": most_recent_date,
+                "deadline": deadline,
+                "days_left": difference.days,
+            }
+            od_90.append(ovenDict)
+            if difference.days <= 30:
+                od_30.append(ovenDict)
+            if difference.days <= 10:
+                od_10.append(ovenDict)
+            if difference.days <= 5:
+                od_5.append(ovenDict)
 
-        def overdue_10(cool):
-            D = []
-            for x in cool:
-                if x[3] <= 10 and x[1] != "N/A":
-                    D.append(x)
-            return D
-
-        def overdue_5(cool):
-            E = []
-            for x in cool:
-                if x[3] <= 5 and x[1] != "N/A":
-                    E.append(x)
-            return E
-
-        def overdue_closest(cool):
-            F = []
-            sort3 = []
-        
-            func2 = lambda R: (R[3])
-            sort2 = sorted(cool, key=func2)
-
-            for x in sort2:
-                if x[1] != "N/A":
-                    sort3.append(x)
-
-            most_recent = sort3[0][3]
-
-            for y in sort3:
-                if y[3] == most_recent:
-                    F.append(x)
-            return F
-
-        od_30 = overdue_30(all_ovens_EXP)
-        od_10 = overdue_10(all_ovens_EXP)
-        od_5 = overdue_5(all_ovens_EXP)
-        od_recent = overdue_closest(all_ovens_EXP)
+        od_30 = sorted(od_30, key=lambda x: x["oven_number"])
+        od_10 = sorted(od_10, key=lambda x: x["oven_number"])
+        od_5 = sorted(od_5, key=lambda x: x["oven_number"])
+        min_days_left = min(item['days_left'] for item in od_5)
+        od_closest = [entry for entry in od_5 if entry["days_left"] == min_days_left]
     
-        return {'30days': od_30, '10days': od_10, '5days': od_5, 'closest': od_recent, 'all': all_ovens_EXP}
+        return {'30days': od_30, '10days': od_10, '5days': od_5, 'closest': od_closest, 'all': od_90}
     else:
         return {'30days': [], '10days': [], '5days': [], 'closest': [], 'all': []}
     
@@ -1761,7 +1873,32 @@ def get_list_of_braintree_status(sub_search, addOnSet):
             past_due_list.append(sub)
     return active_users, past_due_list
 
+def get_initial_data(modelName, modelInstance):
+    def get_field_value(fieldName, modelList):
+        for source in modelList:
+            if hasattr(source, fieldName):  # Check if the field exists
+                return getattr(source, fieldName)
+        return None  # Fallback value if neither has the attribute
 
+    allModelFields = [
+        field.name for field in modelName._meta.get_fields() 
+        if isinstance(field, Field) and field.name not in ["id","facilityChoice"]
+    ]
+    modelList = [modelInstance]
+    try:
+        model_name = modelName._meta.object_name.replace("_model", "_readings_model")
+        content_type = ContentType.objects.get(model=model_name.lower())
+        modelInstance2 = content_type.model_class().objects.get(form=modelInstance)
+        model2Fields = [
+            field.name for field in modelInstance2._meta.get_fields() 
+            if isinstance(field, Field) and field.name not in ["id","form"]
+        ]
+        allModelFields = allModelFields + model2Fields
+        modelList.append(modelInstance2)
+    except:
+        print('only one model')
+    initial_data = {fieldName: get_field_value(fieldName, modelList) for fieldName in allModelFields}
+    return initial_data
 
 
 

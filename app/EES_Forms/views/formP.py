@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form25_model, bat_info_model
 from ..forms import formP_form
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker, updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker, updateSubmissionForm, setUnlockClientSupervisor, createNotification
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -53,23 +53,7 @@ def formP(request, facility, fsID, selector, weekend_day):
             database_form = ''
         else:
             if existing:
-                initial_data = {
-                    'observer': database_form.observer,
-                    'month': database_form.month,
-                    'date': database_form.date,
-                    'weekend_day': database_form.weekend_day,
-                    'Q_1': database_form.Q_1,
-                    'Q_2': database_form.Q_2,
-                    'Q_3': database_form.Q_3,
-                    'Q_4': database_form.Q_4,
-                    'Q_5': database_form.Q_5,
-                    'Q_6': database_form.Q_6,
-                    'Q_7': database_form.Q_7,
-                    'Q_8': database_form.Q_8,
-                    'Q_9': database_form.Q_9,
-                    'comments': database_form.comments,
-                    'actions_taken': database_form.actions_taken,
-                }
+                initial_data = get_initial_data(form25_model, database_form)
             else:
                 initial_data = {
                     'date': today,

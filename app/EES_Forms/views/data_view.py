@@ -4,11 +4,13 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import form3_model, form2_model, form1_readings_model, user_profile_model, daily_battery_profile_model, form5_readings_model, form5_model, Forms
 from django.apps import apps # type: ignore
 from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
+from django.contrib.auth.decorators import login_required # type: ignore
 
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 profile = user_profile_model.objects.all()
+lock = login_required(login_url='Login')
 
-
+@lock
 def pt_admin1_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     allForms = Forms.objects.all()
@@ -64,7 +66,7 @@ def pt_admin1_view(request, facility):
         'sortedFacilityData': sortedFacilityData, 
     })
 
-
+@lock
 def pt_mth_input(request, facility):
     submitted_ordered = form5_readings_model.objects.all()
     now = datetime.datetime.now()
@@ -182,7 +184,7 @@ def pt_mth_input(request, facility):
         'facility': facility, "now": now, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort': sort, 'profile': profile,
     })
 
-
+@lock
 def method303_rolling_avg(request, facility):
     unlock = False
     client = False

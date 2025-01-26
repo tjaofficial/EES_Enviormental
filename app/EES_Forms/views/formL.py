@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form21_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -130,52 +130,7 @@ def formL(request, facility, fsID, selector):
                 new_sunday = True
             
         if existing:
-            initial_data = {
-                'week_start': database_model.week_start,
-                'week_end': database_model.week_end,
-                'time_0': database_model.time_0,
-                'obser_0': database_model.obser_0,
-                'vents_0': database_model.vents_0,
-                'mixer_0': database_model.mixer_0,
-                'v_comments_0': database_model.v_comments_0,
-                'm_comments_0': database_model.m_comments_0,
-                'time_1': database_model.time_1,
-                'obser_1': database_model.obser_1,
-                'vents_1': database_model.vents_1,
-                'mixer_1': database_model.mixer_1,
-                'v_comments_1': database_model.v_comments_1,
-                'm_comments_1': database_model.m_comments_1,
-                'time_2': database_model.time_2,
-                'obser_2': database_model.obser_2,
-                'vents_2': database_model.vents_2,
-                'mixer_2': database_model.mixer_2,
-                'v_comments_2': database_model.v_comments_2,
-                'm_comments_2': database_model.m_comments_2,
-                'time_3': database_model.time_3,
-                'obser_3': database_model.obser_3,
-                'vents_3': database_model.vents_3,
-                'mixer_3': database_model.mixer_3,
-                'v_comments_3': database_model.v_comments_3,
-                'm_comments_3': database_model.m_comments_3,
-                'time_4': database_model.time_4,
-                'obser_4': database_model.obser_4,
-                'vents_4': database_model.vents_4,
-                'mixer_4': database_model.mixer_4,
-                'v_comments_4': database_model.v_comments_4,
-                'm_comments_4': database_model.m_comments_4,
-                'time_5': database_model.time_5,
-                'obser_5': database_model.obser_5,
-                'vents_5': database_model.vents_5,
-                'mixer_5': database_model.mixer_5,
-                'v_comments_5': database_model.v_comments_5,
-                'm_comments_5': database_model.m_comments_5,
-                'time_6': database_model.time_6,
-                'obser_6': database_model.obser_6,
-                'vents_6': database_model.vents_6,
-                'mixer_6': database_model.mixer_6,
-                'v_comments_6': database_model.v_comments_6,
-                'm_comments_6': database_model.m_comments_6,
-            }
+            initial_data = get_initial_data(form21_model, database_model)
             this_week_saturday = ''
             if filled_in:
                 data = database_model

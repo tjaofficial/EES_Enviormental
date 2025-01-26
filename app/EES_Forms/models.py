@@ -1082,6 +1082,16 @@ class form5_model(models.Model):
     describe_background_stop = models.CharField(max_length=30)
     notes = models.CharField(max_length=600)
     canvas = models.CharField(max_length=100000)
+    reading_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    ovens_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return str(self.date)

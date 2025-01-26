@@ -5,7 +5,7 @@ from ..models import issues_model, user_profile_model, daily_battery_profile_mod
 from ..forms import formA2_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification, checkIfFacilitySelected, getFacSettingsInfo
+from ..utils import issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -57,36 +57,7 @@ def formA2(request, facility, fsID, selector):
                 cSide_json = ''
         else:
             if existing:
-                initial_data = {
-                    'date': database_form.date,
-                    'observer': database_form.observer,
-                    'crew': database_form.crew,
-                    'foreman': database_form.foreman,
-                    'inop_ovens': database_form.inop_ovens,
-                    'inop_numbs': database_form.inop_numbs,
-                    'p_start': database_form.p_start,
-                    'p_stop': database_form.p_stop,
-                    'c_start': database_form.c_start,
-                    'c_stop': database_form.c_stop,
-                    'p_leak_data': database_form.p_leak_data,
-                    'c_leak_data': database_form.c_leak_data,
-                    'notes': database_form.notes,
-                    'p_temp_block_from': database_form.p_temp_block_from,
-                    'p_temp_block_to': database_form.p_temp_block_to,
-                    'c_temp_block_from': database_form.c_temp_block_from,
-                    'c_temp_block_to': database_form.c_temp_block_to,
-                    'p_traverse_time_min': database_form.p_traverse_time_min,
-                    'p_traverse_time_sec': database_form.p_traverse_time_sec,
-                    'c_traverse_time_min': database_form.c_traverse_time_min,
-                    'c_traverse_time_sec': database_form.c_traverse_time_sec,
-                    'total_traverse_time': database_form.total_traverse_time,
-                    'allowed_traverse_time': database_form.allowed_traverse_time,
-                    'valid_run': database_form.valid_run,
-                    'leaking_doors': database_form.leaking_doors,
-                    'doors_not_observed': database_form.doors_not_observed,
-                    'inop_doors_eq': database_form.inop_doors_eq,
-                    'percent_leaking': database_form.percent_leaking,
-                }
+                initial_data = get_initial_data(form2_model, database_form)
             else:
                 inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
                 initial_data = {

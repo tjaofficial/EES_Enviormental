@@ -6,6 +6,7 @@
     <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/formA2.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+    {% comment %} <script defer src="{% static 'ees_forms/script/fullFormCheck.js' %}"></script> {% endcomment %}
     {% if not unlock %}
         <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
     {% endif %}
@@ -14,7 +15,7 @@
 
     <div id="paperSize">
         <div class="mainCont">
-            <form action="" method="POST" style="margin: auto; margin-bottom: 100px;">
+            <form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px;">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">
                     {% include "shared/components/print_button.html" with formGroup=freq %}

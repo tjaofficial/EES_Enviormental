@@ -1500,11 +1500,11 @@ class formH_form(ModelForm):
             'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
             'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
-            'wind_speed_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'wind_speed_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'wind_speed_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px; text-align: center;'}),
             'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;'}),
-            'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;'}),
+            'ambient_temp_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
+            'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px; text-align: center;'}),
             'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
             'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
             'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
@@ -1825,11 +1825,11 @@ class issues_form(ModelForm):
         model = issues_model
         fields = ('__all__')
         widgets = {
-            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center;'}),
+            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center; border: 1px solid black;'}),
             'issues' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
             'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px; border-radius: 5px; background-color: white; border: 1px solid black; padding-left: .5rem;'}),
-            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px; border-radius: 5px; background-color: white;'}),
+            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
             'cor_action' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
         }
 

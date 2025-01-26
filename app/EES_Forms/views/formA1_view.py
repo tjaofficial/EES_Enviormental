@@ -4,8 +4,9 @@ import datetime
 from ..models import issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
 from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 import ast
+from django.db.models import Field
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -54,42 +55,7 @@ def formA1(request, facility, fsID, selector):
             database_form = ''
         else:
             if existing:
-                initial_data = {
-                    'date': database_form.date,
-                    'observer': database_form.observer,
-                    'crew': database_form.crew,
-                    'foreman': database_form.foreman,
-                    'start': database_form.start,
-                    'stop': database_form.stop,
-                    'c1_no': database_form2.c1_no,
-                    'c2_no': database_form2.c2_no,
-                    'c3_no': database_form2.c3_no,
-                    'c4_no': database_form2.c4_no,
-                    'c5_no': database_form2.c5_no,
-                    'c1_start': database_form2.c1_start,
-                    'c2_start': database_form2.c2_start,
-                    'c3_start': database_form2.c3_start,
-                    'c4_start': database_form2.c4_start,
-                    'c5_start': database_form2.c5_start,
-                    'c1_stop': database_form2.c1_stop,
-                    'c2_stop': database_form2.c2_stop,
-                    'c3_stop': database_form2.c3_stop,
-                    'c4_stop': database_form2.c4_stop,
-                    'c5_stop': database_form2.c5_stop,
-                    'c1_sec': database_form2.c1_sec,
-                    'c2_sec': database_form2.c2_sec,
-                    'c3_sec': database_form2.c3_sec,
-                    'c4_sec': database_form2.c4_sec,
-                    'c5_sec': database_form2.c5_sec,
-                    'c1_comments': database_form2.c1_comments,
-                    'c2_comments': database_form2.c2_comments,
-                    'c3_comments': database_form2.c3_comments,
-                    'c4_comments': database_form2.c4_comments,
-                    'c5_comments': database_form2.c5_comments,
-                    'larry_car': database_form2.larry_car,
-                    'comments': database_form2.comments,
-                    'total_seconds': database_form2.total_seconds,
-                }
+                initial_data = get_initial_data(form1_model, database_form)
                 readings = formA1_readings_form(initial=initial_data)
             else:
                 initial_data = {
