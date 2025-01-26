@@ -14,11 +14,15 @@
                 </h2>
             </div>
             <div class="card2_Form">
-                {% for x in od_recent %}
-                    {% if forloop.counter < 5 %}
-                    Oven #{{ x.oven_number }} - {{ x.deadline }}<br>
-                    {% endif %}
-                {% endfor %}
+                {% if od_recent|length == 0 %}
+                    NONE
+                {% else %}
+                    {% for x in od_recent %}
+                        {% if forloop.counter < 5 %}
+                            Oven #{{ x.oven_number }} - {{ x.deadline }}<br>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 <br>
                 <a href="{% url 'pt_admin1' facility%}">
                     <h4>View All</h4>
