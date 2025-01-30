@@ -1031,6 +1031,7 @@ class form4_model(models.Model):
 
 class form5_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey('form_settings_model', on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
-from ..models import user_profile_model, daily_battery_profile_model, Forms, form5_model, form5_readings_model, issues_model, bat_info_model
+from datetime import datetime
+from ..models import daily_battery_profile_model, Forms, form5_model, form5_readings_model, issues_model, bat_info_model
 from ..forms import formA5_form, formA5_readings_form, user_profile_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -12,6 +12,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA5(request, facility, fsID, selector):
+    variables = {}
     formA5_Model_Upadte()
     formA5_Readings_Upadte()
     formName = 5
@@ -20,7 +21,7 @@ def formA5(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
+    now = datetime.now().date()
     profile = request.user.user_profile_model
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
@@ -35,7 +36,7 @@ def formA5(request, facility, fsID, selector):
     if unlock:
         cert_date = request.user.user_profile_model.cert_date
     
-    #Weather API Pull
+    # Weather API Pull
     weather = weatherDict(options.city)
     print(weather['sunrise'])
     print(weather['sunset'])
@@ -46,17 +47,17 @@ def formA5(request, facility, fsID, selector):
         if selector == 'new':
             existing = False
         elif selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form1_query = org.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form1_query[0] if form1_query.exists() else print('no data found with this date')
             data = database_model
+            existing = True
+            search = True
+            
             for x in org2:
                 if str(x.form.date) == str(selector):
                     database_model2 = x
             readings_form = database_model2
-            profile_form = ''
-            existing = True
-            search = True
+  
         elif org.exists() or org2.exists():
             database_form = org[0]
             database_form2 = org2[0]
@@ -73,7 +74,6 @@ def formA5(request, facility, fsID, selector):
                 initial_data = get_initial_data(form5_model, database_form)
                 data = formA5_form(initial=initial_data)
                 readings_form = formA5_readings_form(initial=initial_data)
-                profile_form = user_profile_form()
             else:
                 initial_data = {
                     'date': now,
@@ -110,9 +110,8 @@ def formA5(request, facility, fsID, selector):
                     initial_data['date'] = ''
                     initial_data['observer'] = ''
                 data = formA5_form(initial=initial_data)
-                profile_form = user_profile_form()
                 readings_form = formA5_readings_form()
-
+            variables['profile_form'] = user_profile_form()
         if request.method == "POST":
             if existing:
                 if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
@@ -183,7 +182,7 @@ def formA5(request, facility, fsID, selector):
 
         return redirect(batt_prof)
 
-    return render(request, "shared/forms/daily/formA5.html", {
+    variables.update({
         'picker': picker, 
         'weather': weather2, 
         "supervisor": supervisor, 
@@ -193,7 +192,6 @@ def formA5(request, facility, fsID, selector):
         "back": back, 
         'todays_log': todays_log, 
         'data': data, 
-        'profile_form': profile_form, 
         'readings_form': readings_form, 
         'formName': formName, 
         'selector': selector, 
@@ -205,3 +203,4 @@ def formA5(request, facility, fsID, selector):
         'fsID': fsID,
         "options": options
     })
+    return render(request, "shared/forms/daily/formA5.html", variables)

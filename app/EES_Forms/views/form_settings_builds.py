@@ -20,7 +20,9 @@ def formSettingsFunc(keysList, requestPost, formID):
             newLabel = requestPost[key]
             #set newLabel variable equal to the new label name: newLabel = requestPost[key] 
         elif key not in ['csrfmiddlewaretoken', 'update']:
+            newLabel = False
             mainLabel = key.split("-")[1]
+            print(mainLabel)
             if formID in withoutSettings:
                 if mainLabel == 'custom_name':
                     defaultDictUpdate = True
@@ -80,6 +82,7 @@ def formSettingsFunc(keysList, requestPost, formID):
             
             if defaultDictUpdate:
                 settings[mainLabel] = False if not requestPost[key] else requestPost[key]
+                print(settings[mainLabel])
     settingsDict = json.loads(json.dumps(settings))
     return newLabel, settingsDict
 

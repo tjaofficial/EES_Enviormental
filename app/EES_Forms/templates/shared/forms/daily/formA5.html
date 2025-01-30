@@ -1,5 +1,5 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%}{% load static %}
+{% block list %}{% load static %}{% load form_tags %}
 {% include "ees_forms/drawing_modal.html" %}
 <style>
     .loader {
@@ -217,12 +217,12 @@
                                 <table name="oven1" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            Oven No: {{ readings_form.o1 }}
+                                            <strong>Oven No:</strong> <input type="number" name="o1" id="o1" class="input" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven1.oven_number }}">
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.o1_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o1_stop }}
+                                            <strong>Start Time:</strong> <input type="time" name="o1_start" id="o1_start" oninput="timecheck_pt1()" style="width: 120px;" required value="{{ data.ovens_data.oven1.start|str_to_time|time:'h:i A' }}">&nbsp; &nbsp; <strong>Stop Time:</strong> <input type="time" name="o1_stop" id="o1_stop" oninput="timecheck_pt1()" style="width: 120px;" required value="{{ data.ovens_data.oven1.stop|str_to_time|time:'h:i A' }}">
                                             <span class="popuptext1" id="myPopup1">Please Change Time</span>
                                         </td>
                                     </tr>
@@ -233,26 +233,26 @@
                                         <td></td>
                                         <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
                                         <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
+                                        <td id="boxa4"><strong>0</strong></td>
+                                        <td id="boxa4"><strong>15</strong></td>
+                                        <td id="boxa4"><strong>30</strong></td>
+                                        <td id="boxa4"><strong>45</strong></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o1_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_4_reads }}</td>
+                                        <td id="boxa4"><strong>0</strong></td>
+                                        <td id="boxa4"><input type="text" name="o1_1_reads" id="o1_1_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_2_reads" id="o1_2_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_3_reads" id="o1_3_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_4_reads" id="o1_4_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o1_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_8_reads }}</td>
+                                        <td id="boxa4"><strong>1</strong></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_5_reads" id="o1_5_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_6_reads" id="o1_6_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_7_reads" id="o1_7_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_8_reads" id="o1_8_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -261,26 +261,26 @@
                                         <td></td>
                                         <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Travel</span></td>
                                         <td id="boxa4" style="font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">15</td>
-                                        <td id="boxa4">30</td>
-                                        <td id="boxa4">45</td>
+                                        <td id="boxa4"><strong>0</strong></td>
+                                        <td id="boxa4"><strong>15</strong></td>
+                                        <td id="boxa4"><strong>30</strong></td>
+                                        <td id="boxa4"><strong>45</strong></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o1_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_12_reads }}</td>
+                                        <td id="boxa4"><strong>0</strong></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_9_reads" id="o1_9_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_10_reads" id="o1_10_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_11_reads" id="o1_11_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_12_reads" id="o1_12_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o1_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o1_16_reads }}</td>
+                                        <td id="boxa4"><strong>1</strong></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_13_reads" id="o1_13_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_14_reads" id="o1_14_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_15_reads" id="o1_15_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o1_16_reads" id="o1_16_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -289,7 +289,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_highest_opacity }}%
+                                            <strong>Highest Instantaneous Opacity:</strong>&nbsp; &nbsp;<input type="number" name="o1_highest_opacity" oninput="averages_pt1()" id="o1_highest_opacity" class="input" style="width: 40px; text-align: center;" required value="{{ data.ovens_data.oven1.highest_opacity }}">%
                                         </td>
                                     </tr>
                                     <tr>
@@ -299,8 +299,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Instantaneous Over 20%?&nbsp; &nbsp;&nbsp; &nbsp;
-                                            {{ readings_form.o1_instant_over_20 }}
+                                            <strong>Instantaneous Over 20%?</strong>&nbsp; &nbsp;
+                                            <select name="o1_instant_over_20" id="o1_instant_over_20" style="width: 60px;" required>
+                                                <option value="" {% if not data.ovens_data.oven1.opacity_over_20 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven1.opacity_over_20 == 'Yes' %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven1.opacity_over_20 == 'No' %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>  
                                     <tr>
@@ -310,7 +314,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6 }}%
+                                            <strong>Average Opacity of 6 Highest Readings:</strong>&nbsp; &nbsp;<input type="number" name="o1_average_6" oninput="averages_pt1()" id="o1_average_6" class="input" style="width: 60px; text-align: center;" step="any" required value="{{ data.ovens_data.oven1.average_6_opacity }}">%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -320,8 +324,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
-                                            &nbsp; &nbsp;&nbsp; &nbsp;{{ readings_form.o1_average_6_over_35 }}
+                                            <strong>Average Opacity of 6 Highest Readings Over 35%:</strong>&nbsp; &nbsp;
+                                            <select name="o1_average_6_over_35" id="o1_average_6_over_35" style="width: 60px;" required="">
+                                                <option value="" {% if not data.ovens_data.oven1.average_6_over_35 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven1.average_6_over_35 %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven1.average_6_over_35 %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </table>
@@ -331,13 +339,13 @@
                                 <table name="oven2" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6" style="position: relative;">
-                                            Oven No: {{ readings_form.o2 }}
+                                            <strong>Oven No:</strong> <input type="number" name="o2" id="o2" class="input" oninput="pushTravelCheck(2)" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven2.oven_number }}">
                                             <span class="oven4_pop_class" id="oven2_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.o2_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o2_stop }}
+                                            <strong>Start Time:</strong> <input type="time" name="o2_start" id="o2_start" oninput="timecheck_pt2()" style="width: 120px;" required value="{{ data.ovens_data.oven2.start|str_to_time|time:'h:i A' }}">&nbsp; &nbsp; <strong>Stop Time:</strong> <input type="time" name="o2_stop" id="o2_stop" oninput="timecheck_pt2()" style="width: 120px;" required value="{{ data.ovens_data.oven2.stop }}">
                                             <span class="popuptext2" id="myPopup2">Please Change Time</span>
                                         </td>
                                     </tr>
@@ -356,18 +364,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o2_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_4_reads }}</td>
+                                        <td id="boxa4"><input type="text" name="o2_1_reads" id="o2_1_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_2_reads" id="o2_2_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_3_reads" id="o2_3_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_4_reads" id="o2_4_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o2_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_8_reads }}</td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_5_reads" id="o2_5_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_6_reads" id="o2_6_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_7_reads" id="o2_7_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_8_reads" id="o2_8_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.push.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -384,18 +392,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o2_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_12_reads }}</td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_9_reads" id="o2_9_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_10_reads" id="o2_10_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_11_reads" id="o2_11_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_12_reads" id="o2_12_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o2_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o2_16_reads }}</td>
+                                        <td id="boxa4"><strong>1</strong></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_13_reads" id="o2_13_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_14_reads" id="o2_14_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_15_reads" id="o2_15_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o2_16_reads" id="o2_16_reads" oninput="averages_pt2()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven2.readings.travel.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -404,7 +412,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o2_highest_opacity }}%
+                                            <strong>Highest Instantaneous Opacity:</strong>&nbsp; &nbsp;<input type="number" name="o2_highest_opacity" oninput="averages_pt2()" id="o2_highest_opacity" class="input" style="width: 40px; text-align: center;" required value="{{ data.ovens_data.oven2.highest_opacity }}">%
                                         </td>
                                     </tr>
                                     <tr>
@@ -414,8 +422,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Instantaneous Over 20%?&nbsp; &nbsp;
-                                            {{ readings_form.o2_instant_over_20 }}
+                                            <strong>Instantaneous Over 20%?</strong>&nbsp; &nbsp;
+                                            <select name="o2_instant_over_20" id="o2_instant_over_20" style="width: 60px;" required>
+                                                <option value="" {% if not data.ovens_data.oven2.opacity_over_20 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven2.opacity_over_20 == 'Yes' %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven2.opacity_over_20 == 'No' %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>  
                                     <tr>
@@ -425,7 +437,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o2_average_6 }}%
+                                            <strong>Average Opacity of 6 Highest Readings:</strong>&nbsp; &nbsp;<input type="number" name="o2_average_6" oninput="averages_pt2()" id="o2_average_6" class="input" style="width: 60px; text-align: center;" step="any" required value="{{ data.ovens_data.oven2.average_6_opacity }}">%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -435,8 +447,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%&nbsp; &nbsp;
-                                            {{ readings_form.o2_average_6_over_35 }}
+                                            <strong>Average Opacity of 6 Highest Readings Over 35%:</strong>&nbsp; &nbsp;
+                                            <select name="o2_average_6_over_35" id="o2_average_6_over_35" style="width: 60px;" required="">
+                                                <option value="" {% if not data.ovens_data.oven2.average_6_over_35 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven2.average_6_over_35 %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven2.average_6_over_35 %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </table>
@@ -448,13 +464,13 @@
                                 <table name="oven3" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6" style="position: relative;">
-                                            Oven No: {{ readings_form.o3 }}
+                                            <strong>Oven No:</strong> <input type="number" name="o3" id="o3" class="input" oninput="pushTravelCheck(3)" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven3.oven_number }}">
                                             <span class="oven4_pop_class" id="oven3_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.o3_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o3_stop }}
+                                            <strong>Start Time:</strong> <input type="time" name="o3_start" id="o3_start" oninput="timecheck_pt3()" style="width: 120px;" required value="{{ data.ovens_data.oven3.start}}">&nbsp; &nbsp; <strong>Stop Time:</strong> <input type="time" name="o3_stop" id="o3_stop" oninput="timecheck_pt3()" style="width: 120px;" required value="{{ data.ovens_data.oven3.stop }}">
                                             <span class="popuptext1" id="myPopup3">Please Change Time</span>
                                         </td>
                                     </tr>
@@ -473,18 +489,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o3_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_4_reads }}</td>
+                                        <td id="boxa4"><input type="text" name="o3_1_reads" id="o3_1_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_2_reads" id="o3_2_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_3_reads" id="o3_3_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_4_reads" id="o3_4_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o3_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_8_reads }}</td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_5_reads" id="o3_5_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_6_reads" id="o3_6_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_7_reads" id="o3_7_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_8_reads" id="o3_8_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.push.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -501,18 +517,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o3_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_12_reads }}</td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_9_reads" id="o3_9_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_10_reads" id="o3_10_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_11_reads" id="o3_11_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_12_reads" id="o3_12_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o3_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o3_16_reads }}</td>
+                                        <td id="boxa4"><strong>1</strong></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_13_reads" id="o3_13_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_14_reads" id="o3_14_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_15_reads" id="o3_15_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o3_16_reads" id="o3_16_reads" oninput="averages_pt3()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven3.readings.travel.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -521,7 +537,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o3_highest_opacity }}%
+                                            <strong>Highest Instantaneous Opacity:</strong>&nbsp; &nbsp;<input type="number" name="o3_highest_opacity" oninput="averages_pt3()" id="o3_highest_opacity" class="input" style="width: 40px; text-align: center;" required value="{{ data.ovens_data.oven3.highest_opacity }}">%
                                         </td>
                                     </tr>
                                     <tr>
@@ -531,8 +547,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Instantaneous Over 20%?
-                                            &nbsp; &nbsp;{{ readings_form.o3_instant_over_20 }}
+                                            <strong>Instantaneous Over 20%?</strong>&nbsp; &nbsp;
+                                            <select name="o3_instant_over_20" id="o3_instant_over_20" style="width: 60px;" required>
+                                                <option value="" {% if not data.ovens_data.oven3.opacity_over_20 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven3.opacity_over_20 == 'Yes' %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven3.opacity_over_20 == 'No' %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>  
                                     <tr>
@@ -542,7 +562,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o3_average_6 }}%
+                                            <strong>Average Opacity of 6 Highest Readings:</strong>&nbsp; &nbsp;<input type="number" name="o3_average_6" oninput="averages_pt3()" id="o3_average_6" class="input" style="width: 60px; text-align: center;" step="any" required value="{{ data.ovens_data.oven3.average_6_opacity }}">%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -552,8 +572,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
-                                            &nbsp; &nbsp;{{ readings_form.o3_average_6_over_35 }}
+                                            <strong>Average Opacity of 6 Highest Readings Over 35%:</strong>&nbsp; &nbsp;
+                                            <select name="o3_average_6_over_35" id="o3_average_6_over_35" style="width: 60px;" required="">
+                                                <option value="" {% if not data.ovens_data.oven3.average_6_over_35 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven3.average_6_over_35 %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven3.average_6_over_35 %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </table>
@@ -563,13 +587,13 @@
                                 <table name="oven4" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6" style="position: relative;">
-                                            Oven No: {{ readings_form.o4 }}
+                                            <strong>Oven No:</strong> <input type="number" name="o4" id="o4" class="input" oninput="pushTravelCheck(4)" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven4.oven_number}}">
                                             <span class="oven4_pop_class" id="oven4_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            Start Time: {{ readings_form.o4_start }}&nbsp; &nbsp; Stop Time: {{ readings_form.o4_stop }}
+                                            <strong>Start Time:</strong> <input type="time" name="o4_start" id="o4_start" oninput="timecheck_pt4()" style="width: 120px;" required value="{{ data.ovens_data.oven4.start}}">&nbsp; &nbsp; <strong>Stop Time:</strong> <input type="time" name="o4_stop" id="o4_stop" oninput="timecheck_pt4()" style="width: 120px;" required value="{{ data.ovens_data.oven4.stop }}">
                                             <span class="popuptext2" id="myPopup4">Please Change Time</span>
                                         </td>
                                     </tr>
@@ -588,18 +612,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o4_1_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_2_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_3_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_4_reads }}</td>
+                                        <td id="boxa4"><input type="text" name="o4_1_reads" id="o4_1_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_2_reads" id="o4_2_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_3_reads" id="o4_3_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_4_reads" id="o4_4_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o4_5_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_6_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_7_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_8_reads }}</td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_5_reads" id="o4_5_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_6_reads" id="o4_6_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_7_reads" id="o4_7_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_8_reads" id="o4_8_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.push.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -616,18 +640,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4">0</td>
-                                        <td id="boxa4">{{ readings_form.o4_9_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_10_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_11_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_12_reads }}</td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_9_reads" id="o4_9_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.1 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_10_reads" id="o4_10_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.2 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_11_reads" id="o4_11_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.3 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_12_reads" id="o4_12_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.4 }}"></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
-                                        <td id="boxa4">1</td>
-                                        <td id="boxa4">{{ readings_form.o4_13_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_14_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_15_reads }}</td>
-                                        <td id="boxa4">{{ readings_form.o4_16_reads }}</td>
+                                        <td id="boxa4"><strong>1</strong></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_13_reads" id="o4_13_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.5 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_14_reads" id="o4_14_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.6 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_15_reads" id="o4_15_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.7 }}"></td>
+                                        <td id="boxa4"><input type="text"  class="input" name="o4_16_reads" id="o4_16_reads" oninput="averages_pt4()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven4.readings.travel.8 }}"></td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -636,7 +660,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Highest Instantaneous Opacity&nbsp; &nbsp;{{ readings_form.o4_highest_opacity }}%
+                                            <strong>Highest Instantaneous Opacity:</strong>&nbsp; &nbsp;<input type="number" name="o4_highest_opacity" oninput="averages_pt4()" id="o4_highest_opacity" class="input" style="width: 40px; text-align: center;" required value="{{ data.ovens_data.oven4.highest_opacity }}">%
                                         </td>
                                     </tr>
                                     <tr>
@@ -646,8 +670,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Instantaneous Over 20%?
-                                            &nbsp; &nbsp;{{ readings_form.o4_instant_over_20 }}
+                                            <strong>Instantaneous Over 20%?</strong>&nbsp; &nbsp;
+                                            <select name="o4_instant_over_20" id="o4_instant_over_20" style="width: 60px;" required>
+                                                <option value="" {% if not data.ovens_data.oven4.opacity_over_20 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven4.opacity_over_20 == 'Yes' %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven4.opacity_over_20 == 'No' %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>  
                                     <tr>
@@ -657,7 +685,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings&nbsp; &nbsp;{{ readings_form.o4_average_6 }}%
+                                            <strong>Average Opacity of 6 Highest Readings:</strong>&nbsp; &nbsp;<input type="number" name="o4_average_6" oninput="averages_pt4()" id="o4_average_6" class="input" style="width: 60px; text-align: center;" step="any" required value="{{ data.ovens_data.oven4.average_6_opacity }}">%
                                         </td>
                                     </tr> 
                                     <tr>
@@ -667,8 +695,12 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            Average Opacity of 6 Highest Readings Over 35%
-                                            &nbsp; &nbsp;{{ readings_form.o4_average_6_over_35 }}
+                                            <strong>Average Opacity of 6 Highest Readings Over 35%:</strong>&nbsp; &nbsp;
+                                            <select name="o4_average_6_over_35" id="o4_average_6_over_35" style="width: 60px;" required="">
+                                                <option value="" {% if not data.ovens_data.oven4.average_6_over_35 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.ovens_data.oven4.average_6_over_35 %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.ovens_data.oven4.average_6_over_35 %}selected{% endif %}>No</option>
+                                            </select>
                                         </td>
                                     </tr>
                                 </table>

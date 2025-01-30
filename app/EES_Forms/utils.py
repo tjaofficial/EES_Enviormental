@@ -121,12 +121,8 @@ defaultUserSettings = {
     'landingDash': 'default'
 }
 
-packetSettings = {
-    'formsList': {
-        "B": {"settingsID": 6}, 
-        "C": {"settingsID": 7}, 
-        "D": {"settingsID": 8}
-    },
+defaultPacketSettings = {
+    'formsList': False,
     'settings': {
         'weekly_start_day': 'saturday',
         'frequency': 'weekly'
@@ -262,7 +258,8 @@ def formA5_Model_Upadte():
         'notes',
         'canvas',
         'reading_data',
-        'ovens_data'
+        'ovens_data',
+        'formSettings'
     ]
     for record in allFormData:
         fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
