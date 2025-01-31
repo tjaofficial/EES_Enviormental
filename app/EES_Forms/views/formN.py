@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime, date
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form22_model
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -17,12 +17,12 @@ def formN(request, facility, fsID, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     search = False
-    profile = user_profile_model.objects.all()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    now = datetime.datetime.now().date()
-    today = datetime.date.today()
-    month_name = calendar.month_name[today.month]
+    profile = user_profile_model.objects.all()
     form_pull = form22_model.objects.filter(date__month=today.month, facilityChoice__facility_name=facility)
+    today = date.today()
+    month_name = calendar.month_name[today.month]
 
     if selector != 'form':
         form_pull = form22_model.objects.filter(date__month=selector[0], facilityChoice__facility_name=facility)

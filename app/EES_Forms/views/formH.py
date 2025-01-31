@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime, date, timedelta
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form19_model, form19_readings_model, bat_info_model
 from ..forms import formH_form, user_profile_form, formH_readings_form
 import json
@@ -15,19 +15,19 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 def formH(request, facility, fsID, selector):
     formName = 19
     freq = getFacSettingsInfo(fsID)
-    personalizedSettings = freq.settings["settings"]
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
-    today = datetime.date.today()
-    start_saturday = today - datetime.timedelta(days=today.weekday() + 2)
-    end_friday = start_saturday + datetime.timedelta(days=6)
-    org = form19_model.objects.all().order_by('-date')
+    submitted_forms = form19_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    today = date.today()
+    personalizedSettings = freq.settings["settings"]
+    start_saturday = today - timedelta(days=today.weekday() + 2)
+    end_friday = start_saturday + timedelta(days=6)
     org2 = form19_readings_model.objects.all().order_by('-form')
     orgFormL = org2.filter(comb_formL__exact=True)
     full_name = request.user.get_full_name()
@@ -47,35 +47,37 @@ def formH(request, facility, fsID, selector):
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form' and selector != 'formL':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
+
             for x in org2:
                 if str(x.form.date) == str(selector):
                     database_model2 = x
             readings_form = database_model2
+
             profile_form = ''
             existing = True
             search = True
-        # ------check if database is empty----------
-        elif org.exists() or org2.exists():
-            if selector != 'formL':
-                database_form = org[0]
-                database_form2 = org2[0]
-                # -------check if there is a daily battery profile
-                if now == todays_log.date_save:
+        elif now == todays_log.date_save:
+            if submitted_forms.exists() or org2.exists():
+                if selector != 'formL':
+                    database_form = submitted_forms[0]
+                    database_form2 = org2[0]
+                    # -------check if there is a daily battery profile
                     if start_saturday < database_form.date < end_friday:
                         existing = True
-            elif orgFormL.exists():
-                formName = 'H-L'
-                database_form2 = orgFormL[0]
-                for line in org:
-                    if line.date == database_form2.form.date:
-                        database_form = line
-                if now == todays_log.date_save:
+                elif orgFormL.exists():
+                    formName = 'H-L'
+                    database_form2 = orgFormL[0]
+                    for line in submitted_forms:
+                        if line.date == database_form2.form.date:
+                            database_form = line
                     if todays_log.date_save == database_form.date:
                         existing = True
+        else:
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
         
         if search:
             database_form = ''

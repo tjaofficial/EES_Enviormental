@@ -178,7 +178,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                 submittedFormDate = submittedForm.date
             except:
                 submittedFormDate = submittedForm.week_start
-            if int(formID) in (1,5,17,18,19,22):
+            if int(formID) in (1,17,18,19,22):
                 formSecondaryModelName = formInformation.link + '_readings_model'
                 try:
                     formSecondaryModel = apps.get_model('EES_Forms', formSecondaryModelName)
@@ -223,8 +223,11 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                     fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
                     documentTitle = str(packetBeingPrinted.name)
             title = formInformation.header
-            if formSettings['custom_name']:
-                title += ' - ' + formSettings['custom_name']
+            if 'custom_name' in formSettings:
+                if formSettings['custom_name']:
+                    title += ' - ' + formSettings['custom_name']
+                else:
+                    title += ' - ' + formInformation.title
             else:
                 title += ' - ' + formInformation.title
             
@@ -248,7 +251,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             if formID == 4:
                 tableData, tableColWidths, style = pdf_template_A4(formData, title, subTitle)
             if formID == 5:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_A5(formData, formSecondaryData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_A5(formData, title, subTitle, formInformation)
             if formID == 6:
                 tableData, tableColWidths, style = pdf_template_6(formData, title, subTitle, formInformation)
             if formID == 7:

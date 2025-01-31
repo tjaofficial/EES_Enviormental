@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime,date,timedelta
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form8_model, bat_info_model, formSubmissionRecords_model
 from ..forms import formD_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -17,25 +17,24 @@ def formD(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now()
-    profile = user_profile_model.objects.all()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
-    today = datetime.date.today()
-    last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
-    one_week = datetime.timedelta(days=6)
+    submitted_forms = form8_model.objects.filter(facilityChoice__facility_name=facility).order_by('-week_start')
+    profile = user_profile_model.objects.all()
+    today = date.today()
+    last_saturday = today - timedelta(days=today.weekday() + 2)
+    one_week = timedelta(days=6)
     end_week = last_saturday + one_week
-    sunday = today - datetime.timedelta(days=1)
-    submitted_forms = form8_model.objects.all().order_by('-week_start')
+    sunday = today - timedelta(days=1)
     picker = issueForm_picker(facility, selector, fsID)
     
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in submitted_forms:
-                if str(x.week_start) == str(selector):
-                    database_model = x
-            form = database_model
+            form_query = submitted_forms.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
+            data = database_model
             existing = True
             search = True
             unlock = True
@@ -52,6 +51,7 @@ def formD(request, facility, fsID, selector):
                     existing = True
             elif starting_saturday == sunday:
                 existing = True
+        
         if search:
             database_form = ''
         else:
@@ -84,19 +84,19 @@ def formD(request, facility, fsID, selector):
                 if today.weekday() == 5:
                     initial_data = {
                         'week_start': today,
-                        'week_end': today + datetime.timedelta(days=6)
+                        'week_end': today + timedelta(days=6)
                     }
                 elif today.weekday() == 6:
                     initial_data = {
-                        'week_start': today - datetime.timedelta(days=1),
-                        'week_end': today + datetime.timedelta(days=5)
+                        'week_start': today - timedelta(days=1),
+                        'week_end': today + timedelta(days=5)
                     }
                 else:
                     initial_data = {
                         'week_start': last_saturday,
                         'week_end': end_week
                     }
-            form = formD_form(initial=initial_data)
+            data = formD_form(initial=initial_data)
         if request.method == "POST":
             print("check 1")
             print(request.POST)
@@ -133,9 +133,8 @@ def formD(request, facility, fsID, selector):
 
             return redirect('IncompleteForms', facility)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
     return render(request, "shared/forms/weekly/formD.html", {
         'fsID': fsID, 
@@ -144,7 +143,7 @@ def formD(request, facility, fsID, selector):
         "client": client, 
         'unlock': unlock, 
         'supervisor': supervisor, 
-        'form': form, 
+        'form': data, 
         "back": back, 
         'todays_log': todays_log, 
         'profile': profile, 

@@ -130,6 +130,7 @@ function resetStopwatch() {
     clearInterval(stopwatchInterval);
     elapsedTime = 0;
     document.getElementById('stopwatch').textContent = '00:00:00.000';
+    document.getElementById('startButton').innerHTML = "Start";
 }
 
 function formatTime(timeInMilliseconds) {

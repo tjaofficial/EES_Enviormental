@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from ..forms import spill_kits_form, spill_kit_inventory_form
-from ..models import daily_battery_profile_model, Forms, spill_kits_model, bat_info_model, spill_kit_inventory_model
-import datetime
+from ..models import daily_battery_profile_model, Forms, form26_model, bat_info_model, spill_kit_inventory_model
+from datetime import datetime, date
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
 import ast
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, stringToDate, setUnlockClientSupervisor, updateSubmissionForm
+from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, stringToDate, setUnlockClientSupervisor, updateSubmissionForm
 
 lock = login_required(login_url='Login')
 
@@ -19,35 +19,34 @@ def spill_kits(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    now = datetime.datetime.now().date()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    submitted_forms = form26_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sk_form = spill_kits_form()
     full_name = request.user.get_full_name()
-    today = datetime.date.today()
-    org = spill_kits_model.objects.all().order_by('-date')
+    today = date.today()
     month_name = calendar.month_name[today.month]
     
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            print('CHECK 1')
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
-
             existing = True
             search = True
-        elif org.exists():
-            print('CHECK 2')
-            database_form = org[0]
-            datetime_object = datetime.datetime.strptime(database_form.month, "%B")
-            month_number = datetime_object.month
+        elif now == todays_log.date_save:
+            if submitted_forms.exists():
+                database_form = submitted_forms[0]
+                datetime_object = datetime.strptime(database_form.month, "%B")
+                month_number = datetime_object.month
+                if now.month == month_number:
+                    existing = True
+        else:
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
-            if now.month == month_number:
-                print('CHECK 3')
-                existing = True
         iFormList = {}
         if search:
             print('CHECK 1.2')
@@ -65,166 +64,7 @@ def spill_kits(request, facility, fsID, selector):
                 iFormList = json.dumps(iFormList)
             if existing:
                 month = database_form.month
-                initial_data = {
-                    'observer': database_form.observer,
-                    'date': database_form.date,
-                    'month': database_form.month,
-                    'sk1_tag_on': database_form.sk1_tag_on,
-                    'sk1_serial': database_form.sk1_serial,
-                    'sk1_complete': database_form.sk1_complete,
-                    'sk1_report': database_form.sk1_report,
-                    'sk1_comment': database_form.sk1_comment,
-                    
-                    'sk2_tag_on': database_form.sk2_tag_on,
-                    'sk2_serial': database_form.sk2_serial,
-                    'sk2_complete': database_form.sk2_complete,
-                    'sk2_report': database_form.sk2_report,
-                    'sk2_comment': database_form.sk2_comment,
-                    
-                    'sk3_tag_on': database_form.sk3_tag_on,
-                    'sk3_serial': database_form.sk3_serial,
-                    'sk3_complete': database_form.sk3_complete,
-                    'sk3_report': database_form.sk3_report,
-                    'sk3_comment': database_form.sk3_comment,
-                    
-                    'sk4_tag_on': database_form.sk4_tag_on,
-                    'sk4_serial': database_form.sk4_serial,
-                    'sk4_complete': database_form.sk4_complete,
-                    'sk4_report': database_form.sk4_report,
-                    'sk4_comment': database_form.sk4_comment,
-                    
-                    'sk5_tag_on': database_form.sk5_tag_on,
-                    'sk5_serial': database_form.sk5_serial,
-                    'sk5_complete': database_form.sk5_complete,
-                    'sk5_report': database_form.sk5_report,
-                    'sk5_comment': database_form.sk5_comment,
-                    
-                    'sk6_tag_on': database_form.sk6_tag_on,
-                    'sk6_serial': database_form.sk6_serial,
-                    'sk6_complete': database_form.sk6_complete,
-                    'sk6_report': database_form.sk6_report,
-                    'sk6_comment': database_form.sk6_comment,
-                    
-                    'sk7_tag_on': database_form.sk7_tag_on,
-                    'sk7_serial': database_form.sk7_serial,
-                    'sk7_complete': database_form.sk7_complete,
-                    'sk7_report': database_form.sk7_report,
-                    'sk7_comment': database_form.sk7_comment,
-                    
-                    'sk8_tag_on': database_form.sk8_tag_on,
-                    'sk8_serial': database_form.sk8_serial,
-                    'sk8_complete': database_form.sk8_complete,
-                    'sk8_report': database_form.sk8_report,
-                    'sk8_comment': database_form.sk8_comment,
-                    
-                    'sk9_tag_on': database_form.sk9_tag_on,
-                    'sk9_serial': database_form.sk9_serial,
-                    'sk9_complete': database_form.sk9_complete,
-                    'sk9_report': database_form.sk9_report,
-                    'sk9_comment': database_form.sk9_comment,
-                    
-                    'sk10_tag_on': database_form.sk10_tag_on,
-                    'sk10_serial': database_form.sk10_serial,
-                    'sk10_complete': database_form.sk10_complete,
-                    'sk10_report': database_form.sk10_report,
-                    'sk10_comment': database_form.sk10_comment,
-                    
-                    'sk11_tag_on': database_form.sk11_tag_on,
-                    'sk11_serial': database_form.sk11_serial,
-                    'sk11_complete': database_form.sk11_complete,
-                    'sk11_report': database_form.sk11_report,
-                    'sk11_comment': database_form.sk11_comment,
-                    
-                    'sk12_tag_on': database_form.sk12_tag_on,
-                    'sk12_serial': database_form.sk12_serial,
-                    'sk12_complete': database_form.sk12_complete,
-                    'sk12_report': database_form.sk12_report,
-                    'sk12_comment': database_form.sk12_comment,
-                    
-                    'sk13_tag_on': database_form.sk13_tag_on,
-                    'sk13_serial': database_form.sk13_serial,
-                    'sk13_complete': database_form.sk13_complete,
-                    'sk13_report': database_form.sk13_report,
-                    'sk13_comment': database_form.sk13_comment,
-                    
-                    'sk14_tag_on': database_form.sk14_tag_on,
-                    'sk14_serial': database_form.sk14_serial,
-                    'sk14_complete': database_form.sk14_complete,
-                    'sk14_report': database_form.sk14_report,
-                    'sk14_comment': database_form.sk14_comment,
-                    
-                    'sk15_tag_on': database_form.sk15_tag_on,
-                    'sk15_serial': database_form.sk15_serial,
-                    'sk15_complete': database_form.sk15_complete,
-                    'sk15_report': database_form.sk15_report,
-                    'sk15_comment': database_form.sk15_comment,
-                    
-                    'sk16_tag_on': database_form.sk16_tag_on,
-                    'sk16_serial': database_form.sk16_serial,
-                    'sk16_complete': database_form.sk16_complete,
-                    'sk16_report': database_form.sk16_report,
-                    'sk16_comment': database_form.sk16_comment,
-                    
-                    'sk17_tag_on': database_form.sk17_tag_on,
-                    'sk17_serial': database_form.sk17_serial,
-                    'sk17_complete': database_form.sk17_complete,
-                    'sk17_report': database_form.sk17_report,
-                    'sk17_comment': database_form.sk17_comment,
-                    
-                    'sk18_tag_on': database_form.sk18_tag_on,
-                    'sk18_serial': database_form.sk18_serial,
-                    'sk18_complete': database_form.sk18_complete,
-                    'sk18_report': database_form.sk18_report,
-                    'sk18_comment': database_form.sk18_comment,
-                    
-                    'sk19_tag_on': database_form.sk19_tag_on,
-                    'sk19_serial': database_form.sk19_serial,
-                    'sk19_complete': database_form.sk19_complete,
-                    'sk19_report': database_form.sk19_report,
-                    'sk19_comment': database_form.sk19_comment,
-                    
-                    'sk20_tag_on': database_form.sk20_tag_on,
-                    'sk20_serial': database_form.sk20_serial,
-                    'sk20_complete': database_form.sk20_complete,
-                    'sk20_report': database_form.sk20_report,
-                    'sk20_comment': database_form.sk20_comment,
-                    
-                    'sk21_tag_on': database_form.sk21_tag_on,
-                    'sk21_serial': database_form.sk21_serial,
-                    'sk21_complete': database_form.sk21_complete,
-                    'sk21_report': database_form.sk21_report,
-                    'sk21_comment': database_form.sk21_comment,
-                    
-                    'skut22_tag_on': database_form.skut22_tag_on,
-                    'skut22_serial': database_form.skut22_serial,
-                    'skut22_complete': database_form.skut22_complete,
-                    'skut22_report': database_form.skut22_report,
-                    'skut22_comment': database_form.skut22_comment,
-                    
-                    'skut23_tag_on': database_form.skut23_tag_on,
-                    'skut23_serial': database_form.skut23_serial,
-                    'skut23_complete': database_form.skut23_complete,
-                    'skut23_report': database_form.skut23_report,
-                    'skut23_comment': database_form.skut23_comment,
-                    
-                    'skut24_tag_on': database_form.skut24_tag_on,
-                    'skut24_serial': database_form.skut24_serial,
-                    'skut24_complete': database_form.skut24_complete,
-                    'skut24_report': database_form.skut24_report,
-                    'skut24_comment': database_form.skut24_comment,
-                    
-                    'skut25_tag_on': database_form.skut25_tag_on,
-                    'skut25_serial': database_form.skut25_serial,
-                    'skut25_complete': database_form.skut25_complete,
-                    'skut25_report': database_form.skut25_report,
-                    'skut25_comment': database_form.skut25_comment,
-                    
-                    'skut26_tag_on': database_form.skut26_tag_on,
-                    'skut26_serial': database_form.skut26_serial,
-                    'skut26_complete': database_form.skut26_complete,
-                    'skut26_report': database_form.skut26_report,
-                    'skut26_comment': database_form.skut26_comment,
-                }
+                initial_data = get_initial_data(form26_model, database_form)
             else:
                 month = month_name
                 initial_data = {
@@ -245,7 +85,7 @@ def spill_kits(request, facility, fsID, selector):
             if form.is_valid():
                 form.save()
                 
-                new_latest_form = spill_kits_model.objects.filter(month=month_name)[0]
+                new_latest_form = form26_model.objects.filter(month=month_name)[0]
                 filled_out = True
                 for items in new_latest_form.whatever().values():
                     print(items)
@@ -258,9 +98,8 @@ def spill_kits(request, facility, fsID, selector):
                     
                 return redirect('IncompleteForms', facility)
     else:
-        batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-
-        return redirect(batt_prof)
+        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
     return render(request, "shared/forms/monthly/spillkits_form.html", {
         'iFormList': iFormList, 
@@ -287,12 +126,12 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
     
     count_bp = daily_battery_profile_model.objects.count()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    org = spill_kit_inventory_model.objects.all().order_by('-date')
-    today = datetime.date.today()
-    now = datetime.datetime.now().date()
+    submitted_forms = spill_kit_inventory_model.objects.all().order_by('-date')
+    today = date.today()
+    now = datetime.now().date()
     full_name = request.user.get_full_name()
     skForm = spill_kit_inventory_form()
-    attachedTo = spill_kits_model.objects.filter(month=month)
+    attachedTo = form26_model.objects.filter(month=month)
     
     if len(attachedTo) > 0:
         formAttached = attachedTo[0]
@@ -303,14 +142,14 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
         todays_log = daily_prof[0]
         if selector not in ['form','edit']:
             print('CHECK 1')
-            for x in org:
+            for x in submitted_forms:
                 if str(x.date) == str(selector) and x.skID == skNumber:
                     database_model = x
             data = database_model
             existing = True
             search = True
             print(data)
-        elif len(org) > 0:
+        elif len(submitted_forms) > 0:
             print('CHECK 2')
             if now == todays_log.date_save:
                 filterByskID = spill_kit_inventory_model.objects.filter(skID=skNumber).order_by('-date')

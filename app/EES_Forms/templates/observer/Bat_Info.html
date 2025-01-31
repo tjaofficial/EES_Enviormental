@@ -2,7 +2,141 @@
 <link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+<style>
+    .form-container {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 100%;
+    }
 
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+
+    /* Form Fields */
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .form-group label {
+        position: absolute;
+        top: 18px;
+        left: 15px;
+        font-size: 16px;
+        color: #777;
+        transition: 0.3s;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        border-color: #007bff;
+    }
+
+    .form-group input:focus + label, 
+    .form-group select:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+        top: 5px;
+        font-size: 12px;
+        color: #007bff;
+    }
+
+    /* Select Dropdown Styling */
+    select {
+        appearance: none;
+        background: white;
+        cursor: pointer;
+    }
+
+    /* Oven Input Section */
+    .oven-container {
+        background: #f0f0f0;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    #oven-tags {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tag {
+        background: #253544;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+    }
+
+    .tag button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        margin-left: 8px;
+    }
+
+    /* No Ovens Button */
+    #no-ovens-btn {
+        padding: 0 16px;
+        width: 100%;
+        border: none;
+        font-size: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration-line: underline;
+        text-align: right;
+    }
+
+    #no-ovens-btn:disabled {
+        /* background: gray; */
+        cursor: not-allowed;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background:#253544;
+        color: white;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    .submit-btn:hover {
+        background: #0056b3;
+    }
+    #oven-input { 
+        width: 100%; 
+        font-size: 18px; 
+        padding: 15px; 
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        transition: 0.3s;
+        outline: none;
+    }
+</style>
 <div class="mainCont mainContCenter" style="width:34rem;">
     <div class="card">
         <div class='cardHeader'>
@@ -14,13 +148,26 @@
         <form class="contentCont" method="POST" action="">
             {% csrf_token %}
             {{ form.facility }}
-            Foreman: {{ form.foreman }}<br>
-            Crew: {{ form.crew }}<br><br>
-            Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br>
-            <p style='font-size: .7rem;'>* separate each oven with a comma *</p>
-            <p style='font-size: .7rem;'>* if there are NO inoperable ovens please type '-' *</p><br>
-
-            {% include "shared/components/submitButton.html" with label="submit" %}
+            <div class="form-group">
+                {{ form.foreman }}
+                <label for="foreman">Foreman Name</label>
+                {{ form.foreman.errors }}
+            </div>
+            <div class="form-group">
+                {{ form.crew }}
+                {{ form.crew.errors }}
+            </div>
+            {% comment %} Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br> {% endcomment %}
+            <!-- Inoperable Ovens Input -->
+            <div class="oven-container">
+                <h3>Inoperable Ovens</h3>
+                <input type="number" id="oven-input" placeholder="Enter oven number..." />
+                <div id="oven-tags"></div>
+                {{ form.inop_numbs }} 
+                <button type="button" id="no-ovens-btn">No Inoperable Ovens</button>
+            </div>
+            <!-- Submit Button -->
+            <button class="submit-btn">Submit</button>
             <br><br>
             {% if access_page == 'login' or access_page == 'edit' %}
             <p>
@@ -30,5 +177,53 @@
         </form>
     </div>
 </div>
+<script>
+    let ovenNumbers = [];
 
+    function updateTags() {
+        document.getElementById("oven-tags").innerHTML = ovenNumbers.map(num => 
+            `<span class="tag">${num} <button onclick="removeOven('${num}')">&times;</button></span>`
+        ).join("");
+        document.getElementById("oven-hidden-input").value = ovenNumbers.join(",");
+    }
+
+    document.getElementById("oven-input").addEventListener("keydown", function(event) {
+        if (event.key === "Enter" || event.key === " " || event.key === "Tab") {
+            event.preventDefault();
+            let value = this.value.trim();
+
+            if (value && !ovenNumbers.includes(value)) {
+                ovenNumbers.push(value);
+                updateTags();
+                this.value = "";
+                document.getElementById("no-ovens-btn").disabled = true;
+            }
+        }
+    });
+
+    function removeOven(value) {
+        ovenNumbers = ovenNumbers.filter(num => num !== value);
+        updateTags();
+
+        if (ovenNumbers.length === 0) {
+            document.getElementById("no-ovens-btn").disabled = false;
+        }
+    }
+
+    document.getElementById("no-ovens-btn").addEventListener("click", function() {
+        ovenNumbers = ["None"];
+        updateTags();
+        this.disabled = true;
+        document.getElementById("oven-input").disabled = true;
+    });
+
+    // Preload Data When Editing a Form
+    window.onload = function() {
+        let existingOvens = document.getElementById("oven-hidden-input").value;
+        if (existingOvens) {
+            ovenNumbers = existingOvens.split(",").map(item => item.trim());
+            updateTags();
+        }
+    };
+</script>
 {% endblock %}

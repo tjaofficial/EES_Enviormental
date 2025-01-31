@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime, date,timedelta
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form21_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -18,19 +18,19 @@ def formL(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.all()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    today = datetime.date.today()
-    last_saturday = today - datetime.timedelta(days=today.weekday() + 2)
-    one_week = datetime.timedelta(days=6)
+    week_start_dates = form21_model.objects.filter(facilityChoice__facility_name=facility).order_by('-week_start')
+    profile = user_profile_model.objects.all()
+    today = date.today()
+    last_saturday = today - timedelta(days=today.weekday() + 2)
+    one_week = timedelta(days=6)
     end_week = last_saturday + one_week
     today_number = today.weekday()
     opened = True
-    week_start_dates = form21_model.objects.all().order_by('-week_start')
     picker = issueForm_picker(facility, selector, fsID)
-    sunday_last_sat = today - datetime.timedelta(days=1)
+    sunday_last_sat = today - timedelta(days=1)
     print('titty')
     print(isinstance(today_number, int))
     # -----check if Daily Battery Profile
@@ -38,10 +38,8 @@ def formL(request, facility, fsID, selector):
         todays_log = daily_prof[0]
         # -------check if access is for Form or Edit
         if selector not in ('form', 'edit'):
-            for x in week_start_dates:
-                if str(x.week_start) == str(selector):
-                    database_model = x
-                    filled_in = True
+            form_query = week_start_dates.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
             existing = True
             filled_in = True

@@ -180,16 +180,59 @@ class CreateUserForm(UserCreationForm):
         self.fields['username'].widget.attrs.update({'autofocus': False})
 
 
+# class daily_battery_profile_form(ModelForm):
+#     class Meta:
+#         model = daily_battery_profile_model
+#         fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs')
+        
+#         widgets = {
+#             'foreman': forms.TextInput(attrs={'type': 'text', 'placeholder': 'Last Name', 'class': 'input', 'style': 'width:120px; text-align:center;'}),
+#             'inop_ovens': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px;'}),
+#             'inop_numbs': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Ex. 1,2,3,45', 'style': 'width:150px; text-align:center;'})
+#         }
+
 class daily_battery_profile_form(ModelForm):
     class Meta:
         model = daily_battery_profile_model
         fields = ('foreman', 'crew', 'inop_ovens', 'inop_numbs')
         
         widgets = {
-            'foreman': forms.TextInput(attrs={'type': 'text', 'placeholder': 'Last Name', 'class': 'input', 'style': 'width:120px; text-align:center;'}),
-            'inop_ovens': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width:50px;'}),
-            'inop_numbs': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Ex. 1,2,3,45', 'style': 'width:150px; text-align:center;'})
+            'foreman': forms.TextInput(attrs={
+                'id': 'foreman', 
+                'type': 'text', 
+                'placeholder': " ", 
+                'class': 'form-control', 
+                'required': True
+            }),
+            "crew": forms.Select(attrs={
+                "class": "form-control",
+                "required": True
+            }),
+            'inop_ovens': forms.NumberInput(attrs={
+                'class': 'input', 
+                'type': 'number', 
+                'style': 'width:50px;'
+            }),
+            'inop_numbs': forms.HiddenInput(attrs={
+                "id": "oven-hidden-input"
+            })
         }
+    
+    def clean_inoperable_ovens(self):
+        """Ensure the user enters at least one oven or selects 'No Inoperable Ovens'."""
+        data = self.cleaned_data.get("inoperable_ovens")
+        if not data or data.strip() == "":
+            raise forms.ValidationError("You must enter at least one oven or select 'No Inoperable Ovens'.")
+        return data
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["crew"].choices = [("", "Select Crew")] + list(self.fields["crew"].choices[1:])
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.inop_numbs:
+            self.fields["inop_numbs"].initial = self.instance.inop_numbs
 
 
 class user_profile_form(forms.ModelForm):
@@ -1854,7 +1897,7 @@ class spill_kits_form(ModelForm):
         elif today.month == 2 and today.day == 28:
             all_spks = True
         
-        model = spill_kits_model
+        model = form26_model
         fields = ('__all__')
         widgets = {
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
@@ -2004,7 +2047,7 @@ class spill_kits_form(ModelForm):
         }
 class quarterly_trucks_form(ModelForm):
     class Meta:
-        model = quarterly_trucks_model
+        model = form27_model
         fields = ('__all__')
         widgets = {
             'quarter': forms.Select(attrs={'style':'width: 50px; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime,date,timedelta
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form20_model, bat_info_model
 from ..forms import formI_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -17,16 +17,16 @@ def formI(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.all()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    today = datetime.date.today()
-    last_monday = today - datetime.timedelta(days=today.weekday())
-    one_week = datetime.timedelta(days=4)
+    week_start_dates = form20_model.objects.filter(facilityChoice__facility_name=facility).order_by('-week_start')
+    profile = user_profile_model.objects.all()
+    today = date.today()
+    last_monday = today - timedelta(days=today.weekday())
+    one_week = timedelta(days=4)
     end_week = last_monday + one_week
     today_number = today.weekday()
-    week_start_dates = form20_model.objects.all().order_by('-week_start')
     opened = True
     submit = True
     filled_in = False
@@ -38,9 +38,8 @@ def formI(request, facility, fsID, selector):
         todays_log = daily_prof[0]
         if selector not in ('form', 'edit'):
             submit = False
-            for x in week_start_dates:
-                if str(x.week_start) == str(selector):
-                    database_model = x
+            form_query = week_start_dates.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
             existing = True
             search = True

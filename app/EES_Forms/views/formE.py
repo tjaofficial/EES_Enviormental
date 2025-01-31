@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form9_model, bat_info_model, issues_model
 from ..forms import formE_form
 import json
@@ -20,43 +20,30 @@ def formE(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.all()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = form9_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    submitted_forms = form9_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    profile = user_profile_model.objects.all()
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
-    
-    # THIS IS TO TRANSITION THE MIGRATIONS NEED THIS TEMPORARILY ASK TOBE
-    # for x in daily_prof:
-    #     for y in bat_info_model.objects.all():
-    #         if x.facility == y.facility_name:
-    #             x.facilityChoice = y
-    #             x.save()
-    #             print('done')
-    # for z in daily_prof:
-    #     if "EES" in z.facility:
-    #         z.facilityChoice = options
-    #         z.save()
 
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             form = database_model
             existing = True
             search = True
         elif now == todays_log.date_save:
-            if org.exists():
-                database_form = org[0]
+            if submitted_forms.exists():
+                database_form = submitted_forms[0]
                 if todays_log.date_save == database_form.date:
                     existing = True
         else:
-            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-            return redirect(batt_prof)
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
         
         if search:
             database_form = ''

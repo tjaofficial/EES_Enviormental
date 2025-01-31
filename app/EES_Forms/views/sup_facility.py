@@ -148,19 +148,25 @@ def facilityList(request, facility):
             thePacket = packetData.get(id=packetID)
             theSettings = formSettingsModelOG.get(id=fsID)
             highestLabelNumb = 0
-            for label in thePacket.formList["formsList"]:
-                settingsID = thePacket.formList["formsList"][label]['settingsID']
-                if int(settingsID) == int(fsID):
-                    messages.error(request,"The selected form is already been added to the packet.")
-                    return redirect(facilityList, facility)
-            for label in thePacket.formList["formsList"].keys():
-                noLabelTag = label[:9]
-                noLabelNumber = label[9:]
-                if noLabelTag == "no-label-":
-                    if int(noLabelNumber) > int(highestLabelNumb):
-                        highestLabelNumb = noLabelNumber
+
+            if thePacket.formList["formsList"]:
+                for label in thePacket.formList["formsList"]:
+                    settingsID = thePacket.formList["formsList"][label]['settingsID']
+                    if int(settingsID) == int(fsID):
+                        messages.error(request,"The selected form is already been added to the packet.")
+                        return redirect(facilityList, facility)
+                for label in thePacket.formList["formsList"].keys():
+                    noLabelTag = label[:9]
+                    noLabelNumber = label[9:]
+                    if noLabelTag == "no-label-":
+                        if int(noLabelNumber) > int(highestLabelNumb):
+                            highestLabelNumb = noLabelNumber
             formNoLabelParse = "no-label-"+str(int(highestLabelNumb)+1)
-            thePacket.formList["formsList"][formNoLabelParse] = {"settingsID":int(fsID)}
+            if thePacket.formList["formsList"]:
+                thePacket.formList["formsList"][formNoLabelParse] = {"settingsID":int(fsID)}
+            else:
+                thePacket.formList["formsList"] = {formNoLabelParse: {"settingsID":int(fsID)}}
+
             settingsEntry = form_settings_model.objects.get(id=int(fsID))
             if settingsEntry.settings['packets']:
                 print('check 1')
@@ -370,11 +376,16 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             formWData = form_settings_form(copyPOST, instance=selectedSettings)
             if formWData.is_valid():
                 print('it fucking saved')
-                formWData.save()
-                if not packetID:
+                A = formWData.save()
+                if packetID:
+                    print('check 7')
                     packetInstance = packetSettings
                     packetInstance.formList['formsList'][newLabel] = packetInstance.formList['formsList'].pop(formLabel)
                     packetInstance.save()
+                # else:
+                #     packetInstance = packetSettings
+                #     packetInstance.formList['formsList'][newLabel] = {"settingsID": A.id}
+                #     packetInstance.save()
                 messages.success(request,"The form settings were updated.")
                 return redirect('facilityList', 'supervisor')
             #     if packetSettings:
@@ -552,7 +563,7 @@ def Add_Forms(request, facility):
         print(selectedList)
         B = facilityFormsData[0]
         B.formData = selectedList
-        #B.save()
+        B.save()
         
         if sameEntryNotif:
             messages.error(request,"Some of the forms selected already exist for " + str(facility) + ".")

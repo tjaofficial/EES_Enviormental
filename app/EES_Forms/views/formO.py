@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime, date
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form24_model, bat_info_model
 from ..forms import formO_form
 from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor,createNotification
@@ -19,15 +19,15 @@ def formO(request, facility, fsID, selector, weekend_day):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.all()
-    today = datetime.date.today()
-    full_name = request.user.get_full_name()
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    submitted_forms = form24_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    profile = user_profile_model.objects.all()
+    today = date.today()
+    full_name = request.user.get_full_name()
     month_name = calendar.month_name[today.month]
     picker = issueForm_picker(facility, selector, fsID)
-    org = form24_model.objects.all().order_by('-date')
 
     if weekend_day == 'saturday':
         ss_filler = 5
@@ -39,16 +39,20 @@ def formO(request, facility, fsID, selector, weekend_day):
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
             existing = True
             search = True
-        elif org.exists():
-            database_form = org[0]
-            if database_form.date == today:
-                existing = True
+        elif now == todays_log.date_save:
+            if submitted_forms.exists():
+                database_form = submitted_forms[0]
+                if database_form.date == today:
+                    existing = True
+        else:
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+        
         if search:
             database_form = ''
         else:

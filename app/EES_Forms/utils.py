@@ -408,6 +408,135 @@ def formA5_Readings_Upadte():
         record.form.save()
         print("hello2")
 
+def formA5_ovens_data_build(requestPOST):
+    ovens_data = {
+        "oven1": {
+            "oven_number": requestPOST['o1'],
+            "start": str(requestPOST['o1_start']),
+            "stop": str(requestPOST['o1_stop']),
+            "highest_opacity": requestPOST['o1_highest_opacity'],
+            "opacity_over_20": requestPOST['o1_instant_over_20'],
+            "average_6_opacity": requestPOST['o1_average_6'],
+            "average_6_over_35": requestPOST['o1_average_6_over_35'],
+            "readings": {
+                "push":{
+                    "1": requestPOST['o1_1_reads'],
+                    "2": requestPOST['o1_2_reads'],
+                    "3": requestPOST['o1_3_reads'],
+                    "4": requestPOST['o1_4_reads'],
+                    "5": requestPOST['o1_5_reads'],
+                    "6": requestPOST['o1_6_reads'],
+                    "7": requestPOST['o1_7_reads'],
+                    "8": requestPOST['o1_8_reads'],
+                },
+                "travel": {
+                    "1": requestPOST['o1_9_reads'],
+                    "2": requestPOST['o1_10_reads'],
+                    "3": requestPOST['o1_11_reads'],
+                    "4": requestPOST['o1_12_reads'],
+                    "5": requestPOST['o1_13_reads'],
+                    "6": requestPOST['o1_14_reads'],
+                    "7": requestPOST['o1_15_reads'],
+                    "8": requestPOST['o1_16_reads'],
+                }
+            }
+        },
+        "oven2": {
+            "oven_number": requestPOST['o2'],
+            "start": str(requestPOST['o2_start']),
+            "stop": str(requestPOST['o2_stop']),
+            "highest_opacity": requestPOST['o2_highest_opacity'],
+            "opacity_over_20": requestPOST['o2_instant_over_20'],
+            "average_6_opacity": requestPOST['o2_average_6'],
+            "average_6_over_35": requestPOST['o2_average_6_over_35'],
+            "readings": {
+                "push":{
+                    "1": requestPOST['o2_1_reads'],
+                    "2": requestPOST['o2_2_reads'],
+                    "3": requestPOST['o2_3_reads'],
+                    "4": requestPOST['o2_4_reads'],
+                    "5": requestPOST['o2_5_reads'],
+                    "6": requestPOST['o2_6_reads'],
+                    "7": requestPOST['o2_7_reads'],
+                    "8": requestPOST['o2_8_reads'],
+                },
+                "travel": {
+                    "1": requestPOST['o2_9_reads'],
+                    "2": requestPOST['o2_10_reads'],
+                    "3": requestPOST['o2_11_reads'],
+                    "4": requestPOST['o2_12_reads'],
+                    "5": requestPOST['o2_13_reads'],
+                    "6": requestPOST['o2_14_reads'],
+                    "7": requestPOST['o2_15_reads'],
+                    "8": requestPOST['o2_16_reads'],
+                }
+            }
+        },
+        "oven3": {
+            "oven_number": requestPOST['o3'],
+            "start": str(requestPOST['o3_start']),
+            "stop": str(requestPOST['o3_stop']),
+            "highest_opacity": requestPOST['o3_highest_opacity'],
+            "opacity_over_20": requestPOST['o3_instant_over_20'],
+            "average_6_opacity": requestPOST['o3_average_6'],
+            "average_6_over_35": requestPOST['o3_average_6_over_35'],
+            "readings": {
+                "push":{
+                    "1": requestPOST['o3_1_reads'],
+                    "2": requestPOST['o3_2_reads'],
+                    "3": requestPOST['o3_3_reads'],
+                    "4": requestPOST['o3_4_reads'],
+                    "5": requestPOST['o3_5_reads'],
+                    "6": requestPOST['o3_6_reads'],
+                    "7": requestPOST['o3_7_reads'],
+                    "8": requestPOST['o3_8_reads'],
+                },
+                "travel": {
+                    "1": requestPOST['o3_9_reads'],
+                    "2": requestPOST['o3_10_reads'],
+                    "3": requestPOST['o3_11_reads'],
+                    "4": requestPOST['o3_12_reads'],
+                    "5": requestPOST['o3_13_reads'],
+                    "6": requestPOST['o3_14_reads'],
+                    "7": requestPOST['o3_15_reads'],
+                    "8": requestPOST['o3_16_reads'],
+                }
+            }
+        },
+        "oven4": {
+            "oven_number": requestPOST['o4'],
+            "start": str(requestPOST['o4_start']),
+            "stop": str(requestPOST['o4_stop']),
+            "highest_opacity": requestPOST['o4_highest_opacity'],
+            "opacity_over_20": requestPOST['o4_instant_over_20'],
+            "average_6_opacity": requestPOST['o4_average_6'],
+            "average_6_over_35": requestPOST['o4_average_6_over_35'],
+            "readings": {
+                "push":{
+                    "1": requestPOST['o4_1_reads'],
+                    "2": requestPOST['o4_2_reads'],
+                    "3": requestPOST['o4_3_reads'],
+                    "4": requestPOST['o4_4_reads'],
+                    "5": requestPOST['o4_5_reads'],
+                    "6": requestPOST['o4_6_reads'],
+                    "7": requestPOST['o4_7_reads'],
+                    "8": requestPOST['o4_8_reads'],
+                },
+                "travel": {
+                    "1": requestPOST['o4_9_reads'],
+                    "2": requestPOST['o4_10_reads'],
+                    "3": requestPOST['o4_11_reads'],
+                    "4": requestPOST['o4_12_reads'],
+                    "5": requestPOST['o4_13_reads'],
+                    "6": requestPOST['o4_14_reads'],
+                    "7": requestPOST['o4_15_reads'],
+                    "8": requestPOST['o4_16_reads'],
+                }
+            }
+        }
+    }
+    return json.loads(json.dumps(ovens_data))
+
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
     emptyDB = False

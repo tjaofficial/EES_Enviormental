@@ -61,8 +61,8 @@
           </tr>
           <tr>
             <th colspan="6">
-              Start Time:{{ data.start }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; End Time:{{ data.stop }}
+              Start Time:{{ data.start|time:"h:i A" }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; End Time:{{ data.stop|time:"h:i A" }}
             </th>
           </tr>
           <tr>
@@ -88,12 +88,12 @@
             <td id="boxa2" style="text-align: center">1</td>
             <td id="boxa2">{{ readings.c1_no }}</td>
             <td id="boxa1">
-              {{ readings.c1_start }}
+              {{ readings.c1_start|time:"h:i A" }}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c1_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{{ readings.c1_stop }}</td>
+            <td id="boxa1">{{ readings.c1_stop|time:"h:i A" }}</td>
             <td id="boxa1">{{ readings.c1_sec }}</td>
             <td id="boxa3">{{ readings.c1_comments }}</td>
           </tr>
@@ -106,12 +106,12 @@
               </div>
             </td>
             <td id="boxa1">
-              {{ readings.c2_start }}
+              {{ readings.c2_start|time:"h:i A" }}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c2_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{{ readings.c2_stop }}</td>
+            <td id="boxa1">{{ readings.c2_stop|time:"h:i A" }}</td>
             <td id="boxa1">{{ readings.c2_sec }}</td>
             <td id="boxa3">{{ readings.c2_comments }}</td>
           </tr>
@@ -124,12 +124,12 @@
               </div>
             </td>
             <td id="boxa1">
-              {{ readings.c3_start }}
+              {{ readings.c3_start|time:"h:i A" }}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c3_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{{ readings.c3_stop }}</td>
+            <td id="boxa1">{{ readings.c3_stop|time:"h:i A" }}</td>
             <td id="boxa1">{{ readings.c3_sec }}</td>
             <td id="boxa3">{{ readings.c3_comments }}</td>
           </tr>
@@ -142,12 +142,12 @@
               </div>
             </td>
             <td id="boxa1">
-              {{ readings.c4_start }}
+              {{ readings.c4_start|time:"h:i A" }}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c4_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{{ readings.c4_stop }}</td>
+            <td id="boxa1">{{ readings.c4_stop|time:"h:i A" }}</td>
             <td id="boxa1">{{ readings.c4_sec }}</td>
             <td id="boxa3">{{ readings.c4_comments }}</td>
           </tr>
@@ -160,12 +160,12 @@
               </div>
             </td>
             <td id="boxa1">
-              {{ readings.c5_start }}
+              {{ readings.c5_start|time:"h:i A" }}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c5_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{{ readings.c5_stop }}</td>
+            <td id="boxa1">{{ readings.c5_stop|time:"h:i A" }}</td>
             <td id="boxa1">{{ readings.c5_sec }}</td>
             <td id="boxa3">{{ readings.c5_comments }}</td>
           </tr>

@@ -4,6 +4,7 @@ from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+import re
 
 lock = login_required(login_url='Login')
 
@@ -57,6 +58,26 @@ def IncompleteForms(request, facility):
     # --------Weather API Pull---------------
     weather = weatherDict(facilityData.city)
     # ---------Form Data--------------------
+    def natural_sort_key(value):
+        """Extracts numbers from alphanumeric keys for correct sorting."""
+        return [int(text) if text.isdigit() else text for text in re.split(r'(\d+)', value)]
+
+    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
+
+    for packet in packetQuery:
+        # Ensure formList and formsList exist
+        if hasattr(packet, "formList") and "formsList" in packet.formList:
+            # Sort the dictionary keys naturally (A1, A2, ..., B, C, G1, G2, ...)
+            packet.formList["sortedFormsList"] = sorted(
+                packet.formList["formsList"].items(), key=lambda x: natural_sort_key(x[0])
+            )
+
+
+
+
+
+
+
     facFormsIDList = get_facility_forms('facilityName', facility)
     facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     facFormList2 = []
@@ -75,97 +96,16 @@ def IncompleteForms(request, facility):
         elif todays_num in [0,1,2,3,4] and formInfo.day_freq in ['0','1','2','3','4','Weekdays','Everyday']:
             if formInfo.weekdays_only and not formInfo.weekend_only or not formInfo.weekdays_only and not formInfo.weekend_only:
                 facFormList1.append(fsID)
-
-    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
+    facFormList1.sort(key=lambda record: record.id)
+    print(facFormList1)
+    print("______________________")
+    packetQuery2 = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
     listOfAllPacketIDs = []
-    for anID in packetQuery:
+    for anID in packetQuery2:
         listOfAllPacketIDs.append(anID.id)
 
 # ---------Update All Form Subs--------------------
-    updateAllFormSubmissions(facility)      
-#---------------Old sorting stuff-----------------------
-    # if facility_forms_model.objects.filter(facilityChoice__facility_name=facility).exists():
-    #     facilityFroms = ast.literal_eval(facility_forms_model.objects.filter(facilityChoice__facility_name=facility)[0].formData)
-    # # if formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility).exists():
-    # #     facilitySubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    # print(facilityFroms)
-    # all_incomplete_forms = []
-    # all_complete_forms = []
-    # daily_incomplete_forms = []
-    # daily_complete_forms = []
-    # weekly_incomplete_forms = []
-    # weekly_complete_forms = []
-    # monthly_incomplete_forms = []
-    # monthly_complete_forms = []
-    # quarterly_incomplete_forms = []
-    # quarterly_complete_forms = []
-    # annual_incomplete_forms = []
-    # annual_complete_forms = []
-    # sannual_incomplete_forms = []
-    # sannual_complete_forms = []
-        
-    # for forms in facilityFroms:
-    #     print(forms)
-    #     for sub in facilitySubs:
-    #         if forms == sub.formID.id:
-    #             sub.submitted = True
-    #             if sub.formID.day_freq in {'Everyday', todays_num} or (todays_num in {5, 6} and sub.formID.day_freq == 'Weekends') or (todays_num in {0, 1, 2, 3, 4} and sub.formID.day_freq == 'Weekdays'):
-    #                 if sub.submitted == False:
-    #                     if sub.formID.id in {17,18}:
-    #                         if len(facilitySubs.filter(formID__id=18)) > 0:
-    #                             g2_form = facilitySubs.filter(formID__id=18)[0]
-    #                             startOfWeek = weekday_fri - datetime.timedelta(days=6)
-    #                             if g2_form.submitted == True and startOfWeek <= g2_form.dateSubmitted <= weekday_fri:
-    #                                 continue
-    #                             else:
-    #                                 all_incomplete_forms.append((sub, forms[1]))
-    #                         else:
-    #                             all_incomplete_forms.append((sub, forms[1]))
-    #                     else:
-    #                         all_incomplete_forms.append((sub, forms[1]))
-    #                     if sub.formID.frequency == 'Daily':
-    #                         daily_incomplete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Weekly':
-    #                         weekly_incomplete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Monthly':
-    #                         monthly_incomplete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Quarterly':
-    #                         quarterly_incomplete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Annual':
-    #                         annual_incomplete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Semi-Annual':
-    #                         sannual_incomplete_forms.append((sub, forms[1]))
-    #                 elif sub.submitted == True: 
-    #                     all_complete_forms.append((sub, forms[1]))
-    #                     if sub.formID.frequency == 'Daily':
-    #                         daily_complete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Weekly':
-    #                         weekly_complete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Monthly':
-    #                         monthly_complete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Quarterly':
-    #                         quarterly_complete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Annual':
-    #                         annual_complete_forms.append((sub, forms[1]))
-    #                     elif sub.formID.frequency == 'Semi-Annual':
-    #                         sannual_complete_forms.append((sub, forms[1]))
-                
-    # sorting_array = [
-    #     all_incomplete_forms,
-    #     all_complete_forms,
-    #     daily_incomplete_forms,
-    #     daily_complete_forms,
-    #     weekly_incomplete_forms,
-    #     weekly_complete_forms,
-    #     monthly_incomplete_forms,
-    #     monthly_complete_forms,
-    #     quarterly_incomplete_forms,
-    #     quarterly_complete_forms,
-    #     annual_incomplete_forms,
-    #     annual_complete_forms,
-    #     sannual_incomplete_forms,
-    #     sannual_complete_forms,
-    # ]
+    updateAllFormSubmissions(facility)
 
     if todays_num == 6:
         saturday = False

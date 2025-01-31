@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, form7_model, form7_readings_model, Forms, bat_info_model
-from ..forms import SubFormC1, FormCReadForm
+from datetime import datetime
+from ..models import issues_model, user_profile_model, daily_battery_profile_model, form7_model, Forms, bat_info_model
+from ..forms import SubFormC1
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
 import json
@@ -19,15 +19,13 @@ def formC(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
+    now = datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = form7_model.objects.all().order_by('-date')
-    #org2 = form7_readings_model.objects.all().order_by('-form')
+    submitted_forms = form7_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
-    areaCount = int(freq.settings['settings']['number_of_areas'])
     print(selector)
     if profile.exists():
         same_user = user_profile_model.objects.filter(user__exact=request.user.id)
@@ -41,52 +39,51 @@ def formC(request, facility, fsID, selector):
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
-            formModelEntry = database_model
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
+            data = database_model
             existing = True
             search = True
-        # ------check if database is empty----------
-        elif org.exists():
-            database_form = org[0]
-            # -------check if there is a daily battery profile
-            if now == todays_log.date_save:
+        elif now == todays_log.date_save:
+            if submitted_forms.exists():
+                database_form = submitted_forms[0]
                 if todays_log.date_save == database_form.date:
                     existing = True
-                    formModelEntry = database_form
+                    data = database_form
+        else:
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
         
         if existing:
             areaFilled1 = []
             initial_areas = {}
             readsData = {}
-            dataBaseInputList = database_form._meta.get_fields()
+            dataBaseInputList = data._meta.get_fields()
             for inputData in dataBaseInputList:
                 if inputData.name[:-1] == 'area_json_':
-                    if getattr(database_form, inputData.name) != {}:
+                    if getattr(data, inputData.name) != {}:
                         areaFilled1.append(inputData.name[10:])
-            print('check 1')
             initial_data = {
-                'date': formModelEntry.date.strftime("%Y-%m-%d"),
-                'observer': formModelEntry.observer,
-                'cert_date': formModelEntry.cert_date.strftime("%Y-%m-%d"),
-                'comments': formModelEntry.comments
+                'date': data.date.strftime("%Y-%m-%d"),
+                'observer': data.observer,
+                'cert_date': data.cert_date.strftime("%Y-%m-%d"),
+                'comments': data.comments
             }
             for x in areaFilled1:
                 x = str(x)
                 if x == "1":
-                    area = formModelEntry.area_json_1
+                    area = data.area_json_1
                 elif x == "2":
-                    area = formModelEntry.area_json_2
+                    area = data.area_json_2
                 elif x == "3":
-                    area = formModelEntry.area_json_3
+                    area = data.area_json_3
                 elif x == "4":
-                    area = formModelEntry.area_json_4
+                    area = data.area_json_4
                 intital_adding = {
                     x: {
                         'name': area['selection'],
-                        'startTime': datetime.datetime.strptime(area['start_time'], "%H:%M").strftime("%H:%M"),
-                        'stopTime': datetime.datetime.strptime(area['stop_time'], "%H:%M").strftime("%H:%M"),
+                        'startTime': datetime.strptime(area['start_time'], "%H:%M").strftime("%H:%M"),
+                        'stopTime': datetime.strptime(area['stop_time'], "%H:%M").strftime("%H:%M"),
                         'average': area['average'],
                     }
                 }
@@ -153,7 +150,7 @@ def formC(request, facility, fsID, selector):
                 copyRequest['area_json_' + x] = areaSetup
 
             if existing:
-                CData = SubFormC1(copyRequest, instance=database_form)
+                CData = SubFormC1(copyRequest, instance=data)
             else:
                 CData = SubFormC1(copyRequest)
 
@@ -177,7 +174,7 @@ def formC(request, facility, fsID, selector):
 
                 issueFound = False
                 if not existing:
-                    database_form = A
+                    data = A
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 if A.area_json_1['average'] > 5 or A.area_json_2['average'] > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     issueFound = True
@@ -189,7 +186,7 @@ def formC(request, facility, fsID, selector):
                             issue_page = 'issue'
                     else:
                         issue_page = 'form'
-                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
+                    return redirect('issues_view', facility, fsID, str(data.date), issue_page)
                 createNotification(facility, request, fsID, now, 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
@@ -203,7 +200,6 @@ def formC(request, facility, fsID, selector):
         "client": client, 
         'unlock': unlock, 
         'supervisor': supervisor, 
-        #'form': form,
         "back": back, 
         'profile': profile, 
         'selector': selector, 

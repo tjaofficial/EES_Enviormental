@@ -1,68 +1,59 @@
 {% load static %}
 {% if complete == 'false' %}
 <div>
-    {% for key, form in packet.formList.formsList.items %}
-        {% for item in facFormList1 %}
-            {% if item.id == form.settingsID %}
-                {% if item.settings.active == 'true' and not item.subChoice.submitted %}
-                    {% comment %} {% if todays_num in [5,6] and item.formChoice.frequency %}
-                    {% if todays_num in [0,1,2,3,4] and item.formChoice.frequency %} {% endcomment %}
-                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{ item.id }}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
-                        <div class="card_Form" style="margin-left: 50px;">
-                            <h3 class="card_Form_letter">
-                                {{key}}
-                            </h3>
-                            <div class="card_Form_title">
-                                <h3>
-                                    {{ item.formChoice.title }}
-                                </h3>
-                                <h4>
-                                    {{ item.formChoice.frequency }}
-                                </h4>
-                            </div>
-                            <h4 class="card_Form_date">
-                                {{item.subChoice.dueDate}}
-                            </h4>       
-                        </div>      
-                    </a>
+    {% for key, form in packet.formList.sortedFormsList %}
+        {% with matching_item=None %}
+            {% for item in facFormList1 %}
+                {% if item.id == form.settingsID %}
+                    {% with item as matching_item %}
+                        {% if matching_item.settings.active == 'true' and not matching_item.subChoice.submitted %}
+                            <a href="{{ matching_item.formChoice.frequency }}/{{ matching_item.formChoice.form }}/{{ matching_item.id }}/form{% if matching_item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
+                                <div class="card_Form" style="margin-left: 50px;">
+                                    <h3 class="card_Form_letter">{{key}}</h3>
+                                    <div class="card_Form_title">
+                                        <h3>{{ matching_item.formChoice.title }}</h3>
+                                        <h4>{{ matching_item.formChoice.frequency }}</h4>
+                                    </div>
+                                    <h4 class="card_Form_date">{{matching_item.subChoice.dueDate}}</h4>       
+                                </div>      
+                            </a>
+                        {% endif %}
+                    {% endwith %}
                 {% endif %}
-            {% endif %}
-            {% empty %}
-            <h2 class="card_empty no_forms"> No Forms </h2>
-        {% endfor %}
+            {% endfor %}
+        {% endwith %}
         {% empty %}
         <h2 class="card_empty no_forms"> No Forms </h2>
     {% endfor %}
 </div>
 {% else %}
-    {% for key, form in packet.formList.formsList.items %}
-        {% for item in facFormList1 %}
-            {% if item.id == form.settingsID %}
-                {% if item.settings.active == 'true' and item.subChoice.submitted %}
-                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{ item.id }}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
-                        <div class="card_Form" style="margin-left: 50px;">
-                            <h3 class="card_Form_letter">
-                                {{key}}
-                            </h3>
-                            <div class="card_Form_title">
-                                <h3>
-                                    {{ item.formChoice.title }}
-                                </h3>
-                                <h4>
-                                    {{ item.formChoice.frequency }}
-                                </h4>
-                            </div>
-                            <h4 class="card_Form_date">
-                                {{item.subChoice.dateSubmitted}}
-                            </h4>       
-                        </div>      
-                    </a>
-                {% endif %}
-            {% endif %}
+    <div>
+        {% for key, form in packet.formList.sortedFormsList %}
+            {% with matching_item=None %}
+                {% for item in facFormList1 %}
+                    {% if item.id == form.settingsID %}
+                        {% with item as matching_item %}
+                            {% if matching_item.settings.active == 'true' and matching_item.subChoice.submitted %}
+                                <a href="{{ matching_item.formChoice.frequency }}/{{ matching_item.formChoice.form }}/{{ matching_item.id }}/form
+                                    {% if matching_item.formChoice.day_freq == 'Weekends' %}
+                                        {% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}
+                                    {% endif %}">
+                                    <div class="card_Form" style="margin-left: 50px;">
+                                        <h3 class="card_Form_letter">{{ key }}</h3>
+                                        <div class="card_Form_title">
+                                            <h3>{{ matching_item.formChoice.title }}</h3>
+                                            <h4>{{ matching_item.formChoice.frequency }}</h4>
+                                        </div>
+                                        <h4 class="card_Form_date">{{ matching_item.subChoice.dateSubmitted }}</h4>       
+                                    </div>      
+                                </a>
+                            {% endif %}
+                        {% endwith %}
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
             {% empty %}
-            <h2 class="card_empty no_forms"> No Forms </h2>
+                <h2 class="card_empty no_forms"> No Forms </h2>
         {% endfor %}
-        {% empty %}
-        <h2 class="card_empty no_forms"> No Forms </h2>
-    {% endfor %}
+    </div>
 {% endif %}

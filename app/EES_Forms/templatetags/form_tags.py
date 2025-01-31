@@ -6,6 +6,6 @@ register = template.Library()
 @register.filter
 def str_to_time(value):
     try:
-        return datetime.strptime(value, "%H:%M:%S").time()
+        return datetime.strptime(value, "%H:%M").time()
     except ValueError:
         return value  # Return original if parsing fails

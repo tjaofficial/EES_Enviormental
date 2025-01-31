@@ -176,7 +176,7 @@
         </div> 
         {% for packet in packetQuery %}
             <div id="i{{packet.id}}" style="display: none;">
-                {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' complete='false' %}
+                {% include 'observer/components/insert_packet_forms_card.html' with packet=packet complete='false' %}
             </div>
         {% endfor %}
         <div id="i0" style="display: block;">

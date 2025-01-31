@@ -104,9 +104,9 @@ urlpatterns = [
     path("<str:facility>/Monthly/23/<int:fsID>/<str:selector>", views.formN, name="form23"),
     path("<str:facility>/Daily/24/<int:fsID>/<str:selector>/<str:weekend_day>", views.formO, name="form24"),
     path("<str:facility>/Daily/25/<int:fsID>/<str:selector>/<str:weekend_day>", views.formP, name="form25"),
-    path("<str:facility>/Monthly/26/<int:fsID>/<str:selector>", views.spill_kits, name="form27"),
+    path("<str:facility>/Monthly/26/<int:fsID>/<str:selector>", views.spill_kits, name="form26"),
     path("<str:facility>/Monthly/26/inventory/<int:fsID>/<str:month>/<int:skNumber>/<str:selector>", views.spill_kits_inventory_form, name="skInventory"),
-    path("<str:facility>/Quarterly/28/<int:fsID>/<str:selector>", views.quarterly_trucks, name="form28"),
+    path("<str:facility>/Quarterly/27/<int:fsID>/<str:selector>", views.quarterly_trucks, name="form27"),
     
     ##---COKE_BATTERY_DATA
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),

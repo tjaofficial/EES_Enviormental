@@ -86,7 +86,7 @@
                                         <div class="areaCont">
                                             <div style="padding: 15px 22px; display:none;" id="areaLabel{{sliced_key}}" onclick="add_areas({{sliced_key}})">{{cats.name}} (Click to add)</div>
                                             <div id="areaCont{{sliced_key}}">    
-                                                <div style="padding: 15px 22px;">
+                                                <div style="padding: 15px 22px; position: relative;">
                                                     {{cats.name}}: 
                                                     {% if selector == 'form' %}
                                                         {% if cats.number_of_options != 0 %}
@@ -201,7 +201,7 @@
                                             <div class="areaCont">
                                                 <div style="padding: 15px 22px; display:none;" id="areaLabel{{sliced_key}}" onclick="add_areas({{sliced_key}})">{{cats.name}} (Click to add)</div>
                                                 <div id="areaCont{{sliced_key}}">    
-                                                    <div style="padding: 15px 22px;">
+                                                    <div style="padding: 15px 22px; position: relative;">
                                                         {{cats.name}}: 
                                                         {% if selector == 'form' %}
                                                             {% if cats.number_of_options != 0 %}

@@ -149,7 +149,9 @@
                         </table>
                     </div>
                 </div>
-                <hr style="width:80%;margin:auto;">
+                {% if not forloop.last %}
+                    <hr style="width:80%;margin:auto;">
+                {% endif %}
                 {% endfor %}
             </div>
         {% else %}

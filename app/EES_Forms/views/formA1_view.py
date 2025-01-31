@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime
 from ..models import issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
 from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -14,36 +14,36 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA1(request, facility, fsID, selector):
-    print(selector)
     formName = 1
     notifs = checkIfFacilitySelected(request.user, facility)
     freq = getFacSettingsInfo(fsID)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    now = datetime.datetime.now().date()
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    org = form1_model.objects.all().order_by('-date')
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
+    submitted_forms = form1_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     org2 = form1_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
+
             for x in org2:
                 if str(x.form.date) == str(selector):
                     database_model2 = x
             readings = database_model2
+            
             existing = True
             search = True
         elif now == todays_log.date_save:
-            if org.exists() and org2.exists():
-                database_form = org[0]
+            if submitted_forms.exists() and org2.exists():
+                database_form = submitted_forms[0]
                 database_form2 = org2[0]
                 if todays_log.date_save == database_form.date:
                     existing = True

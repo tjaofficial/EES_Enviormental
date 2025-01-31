@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime,date
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, form22_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -22,14 +22,14 @@ def formM(request, facility, fsID, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     existing = False
     search = False
-    THEmonth = False
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    today = datetime.date.today()
+    submitted_forms = form22_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    THEmonth = False
+    profile = user_profile_model.objects.filter(user__exact=request.user.id)
+    today = date.today()
     today_number = today.weekday()
-    org = form22_model.objects.all().order_by('-date')
     org2 = form22_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
@@ -42,25 +42,31 @@ def formM(request, facility, fsID, selector):
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             form = database_model
+
             for x in org2:
                 if str(x.form) == str(selector):
                     database_model2 = x
                 else:
                     print('Error - EES_00001')
             form2 = database_model2
+
             existing = True
             search = True
-        elif org.exists() or org2.exists():
-            database_form = org[0]
-            database_form2 = org2[0]
-            if selector == 'form':
-                if today_number in {0, 1, 2, 3, 4}:
-                    if todays_log.date_save == database_form.date:
-                        existing = True
+        elif now == todays_log.date_save:
+            if submitted_forms.exists() or org2.exists():
+                database_form = submitted_forms[0]
+                database_form2 = org2[0]
+                if selector == 'form':
+                    if today_number in {0, 1, 2, 3, 4}:
+                        if todays_log.date_save == database_form.date:
+                            existing = True
+        else:
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+        
         if search:
             database_form = ''
             THEmonth = form.date.month

@@ -83,6 +83,10 @@ function formC_timeCheck_area3(){
 function formC_timeCheck_area4(){
     check_time('areaStartTime4', 'areaStopTime4', 'area4_timePopup')
 }
+formC_timeCheck_area1()
+formC_timeCheck_area2()
+formC_timeCheck_area3()
+formC_timeCheck_area4()
 
 
 /*************

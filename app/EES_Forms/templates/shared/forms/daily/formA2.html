@@ -66,12 +66,12 @@
                         <section class="readings_container">
                             <div class="readings_col" style="margin-right: 6rem;">
                                 <div>
-                                    Start Time:{{ data.p_start }} 
+                                    <strong>Start Time:</strong> {{ data.p_start|time:"h:i A" }} 
                                     <span class="push_popup_class" id="p_timePopup">
                                         Please Change End Time
                                     </span>
                                 </div>
-                                <div>End Time:{{ data.p_stop }}</div>
+                                <div><strong>End Time:</strong> {{ data.p_stop|time:"h:i A" }}</div>
                                 <div hidden='true'>{{ data.p_leak_data }}</div>
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>
@@ -114,12 +114,12 @@
 
                             <div class="readings_col">
                                 <div>
-                                    Start Time:{{ data.c_start }}
+                                    <strong>Start Time:</strong> {{ data.c_start|time:"h:i A" }}
                                     <span class="push_popup_class" id="c_timePopup">
                                         Please Change End Time
                                     </span>
                                 </div>
-                                <div>End Time:{{ data.c_stop }}</div>
+                                <div><strong>End Time:</strong> {{ data.c_stop|time:"h:i A" }}</div>
                                 <div hidden='true'> {{ data.c_leak_data }}</div>
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> COKE SIDE</th>

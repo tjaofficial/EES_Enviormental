@@ -12,6 +12,7 @@ from .models import user_profile_model, braintree_model
 def isSubActive(func):
     def wrapper(request, facility, *args, **kwargs):
         btEntry = get_braintree_query(request.user)
+        print(btEntry.settings)
         if btEntry:
             status = btEntry.settings['account']['status']
         if status == "active":

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
+from datetime import datetime
 from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form2_model, bat_info_model
 from ..forms import formA2_form
 import json
@@ -17,32 +17,32 @@ def formA2(request, facility, fsID, selector):
     notifs = checkIfFacilitySelected(request.user, facility)
     freq = getFacSettingsInfo(fsID)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    search = False
     existing = False
-    now = datetime.datetime.now().date()
-    profile = user_profile_model.objects.all()
+    search = False
+    now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
+    submitted_forms = form2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    profile = user_profile_model.objects.all()
     full_name = request.user.get_full_name()
-    org = form2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
-            for x in org:
-                if str(x.date) == str(selector):
-                    database_model = x
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
             existing = True
             search = True
         elif now == todays_log.date_save:
-            if org.exists():
-                database_form = org[0]
+            if submitted_forms.exists():
+                database_form = submitted_forms[0]
                 if todays_log.date_save == database_form.date:
                     existing = True
         else:
-            batt_prof = '../../daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-            return redirect(batt_prof)    
+            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date) 
+        
         if search:
             database_form = ''
             pSide_Raw_JSON = json.loads(data.p_leak_data)
