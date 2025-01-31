@@ -1059,7 +1059,7 @@ def sop_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    options = bat_info_model.objects.all()
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     sops = sop_model.objects.filter(facilityChoice__facility_name=facility).order_by('name')
     sopForm = sop_form()
     
@@ -1067,9 +1067,15 @@ def sop_view(request, facility):
         if 'facilitySelect' in request.POST.keys():
             if request.POST['facilitySelect'] != '':
                 return redirect('sup_dashboard', request.POST['facilitySelect'])
-        form = sop_form(request.POST, request.FILES)
+        copyPost = request.POST.copy()
+        copyPost['facilityChoice'] = options
+        # print(request.FILES.url)
+        form = sop_form(copyPost, request.FILES)
+        print(form.errors)
         if form.is_valid():
             A = form.save(commit=False)
+            print("File Name:", A.pdf_file.name)  # Prints the file name
+            print("File URL:", A.pdf_file.url)
             A.pdf_url = A.pdf_file.url
             A.save()
     return render(request, 'shared/sops.html', {

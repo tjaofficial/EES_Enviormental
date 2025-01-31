@@ -21,7 +21,7 @@ def formA4(request, facility, fsID, selector):
     now = datetime.now().date()
     profile = user_profile_model.objects.all()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    options = bat_info_model.objects.filter(facility_name=facility)[0]
     submitted_forms = form4_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
