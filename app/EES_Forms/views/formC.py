@@ -54,8 +54,8 @@ def formC(request, facility, fsID, selector):
             batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect('daily_battery_profile', facility, "login", batt_prof_date)
         
+        areaFilled1 = []
         if existing:
-            areaFilled1 = []
             initial_areas = {}
             readsData = {}
             dataBaseInputList = data._meta.get_fields()
@@ -113,7 +113,7 @@ def formC(request, facility, fsID, selector):
                 'observer': full_name,
                 'cert_date': cert_date.strftime("%Y-%m-%d"),
             }
-            areaFilled1 = 4
+            areaFilled1 += ["1","2","3","4"]
             allData = {"main": initial_data, "primary": {}, "readings": {}}
         
         print(existing)

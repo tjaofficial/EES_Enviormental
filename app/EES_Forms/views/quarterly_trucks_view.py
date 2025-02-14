@@ -100,5 +100,6 @@ def quarterly_trucks(request, facility, fsID, selector):
         'supervisor': supervisor, 
         'formName': formName, 
         'selector': selector, 
-        'data': data
+        'data': data,
+        'fsID': fsID,
     })

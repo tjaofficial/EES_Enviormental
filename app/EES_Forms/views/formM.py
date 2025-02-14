@@ -33,6 +33,7 @@ def formM(request, facility, fsID, selector):
     org2 = form22_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
+    print(freq)
 
     if profile.exists():
         cert_date = request.user.user_profile_model.cert_date

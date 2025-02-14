@@ -55,8 +55,11 @@ function area4_average(){
     get_average('area4Read', 'areaAverage4', 11);
 }
 if (formName == 7) {
+    console.log("Test 2")
+    console.log(document.getElementById('areaCont1').style.display)
     if (document.getElementById('areaCont1').style.display == 'block'){
         area1_average();
+        console.log("Test 1")
     }
     if (document.getElementById('areaCont1').style.display == 'block'){
         area2_average();

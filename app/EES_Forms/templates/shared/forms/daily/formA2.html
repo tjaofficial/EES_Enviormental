@@ -66,12 +66,12 @@
                         <section class="readings_container">
                             <div class="readings_col" style="margin-right: 6rem;">
                                 <div>
-                                    <strong>Start Time:</strong> {% if selector != "form" %}{{ data.p_start|time:"h:i A" }}{% else %}{{ data.c_start }}{% endif %} 
+                                    <strong>Start Time:</strong> {% if selector != "form" %}{{ data.p_start|time:"h:i A" }}{% else %}{{ data.p_start }}{% endif %} 
                                     <span class="push_popup_class" id="p_timePopup">
                                         Please Change End Time
                                     </span>
                                 </div>
-                                <div><strong>End Time:</strong> {% if selector != "form" %}{{ data.p_stop|time:"h:i A" }}{% else %}{{ data.c_stop }}{% endif %}</div>
+                                <div><strong>End Time:</strong> {% if selector != "form" %}{{ data.p_stop|time:"h:i A" }}{% else %}{{ data.p_stop }}{% endif %}</div>
                                 <div hidden='true'>{{ data.p_leak_data }}</div>
                                 <table>
                                     <th class="boxa5" style="max-width: 100px;"colspan="3"> PUSH SIDE</th>

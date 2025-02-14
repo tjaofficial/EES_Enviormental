@@ -22,8 +22,8 @@ from django.utils.html import strip_tags # type: ignore
 from django.core.mail import send_mail # type: ignore
 from django.conf import settings # type: ignore
 from django.contrib import messages # type: ignore
-from django.db.models import Field, Min
-from django.contrib.contenttypes.models import ContentType
+from django.db.models import Field, Min # type: ignore
+from django.contrib.contenttypes.models import ContentType # type: ignore
 
 #from .admin import EventAdmin
 parseFormList = [
@@ -1706,14 +1706,14 @@ def create_starting_forms():
             due_date=today,
             date_submitted=today - datetime.timedelta(days=1),
             submitted=False,)
-        spill_kits = Forms(
+        spill_kits_inventory = Forms(
             form=26,
             frequency="Monthly",
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="spill_kits",
-            header="Spill Kits Form",
+            link="form26",
+            header="Spill Kit Inventory Form",
             title="Inspection Check List",
             due_date=today,
             date_submitted=today - datetime.timedelta(days=1),
@@ -1724,7 +1724,7 @@ def create_starting_forms():
             day_freq='Everyday',
             weekdays_only=False,
             weekend_only=False,
-            link="quarterly_trucks",
+            link="form27",
             header="Quarterly Trucks Form",
             title="Inspection Check List",
             due_date=today,
@@ -1743,6 +1743,18 @@ def create_starting_forms():
             date_submitted=today - datetime.timedelta(days=1),
             submitted=False
         )
+        spill_kits = Forms(
+            form=29,
+            frequency="Monthly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="form29",
+            header="Spill Kits Form",
+            title="Inspection Check List",
+            due_date=today,
+            date_submitted=today - datetime.timedelta(days=1),
+            submitted=False,)
 
         A1.save()
         A2.save()
@@ -1769,9 +1781,10 @@ def create_starting_forms():
         N.save()
         O.save()
         P.save()
-        spill_kits.save()
+        spill_kits_inventory.save()
         quarterly_trucks.save()
         STI_SP001_monthly_inspection.save()
+        spill_kits.save()
         
 def updateAllFormSubmissions(facility):
     facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)

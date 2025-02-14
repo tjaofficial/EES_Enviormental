@@ -99,7 +99,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
         print("Now running process for form: " + str(fsIDPackage[1].id))
         fsEntry = fsIDPackage[1]
         packetID = fsIDPackage[0]
-        formID = fsEntry.formChoice.id
+        formID = int(fsEntry.formChoice.form)
         formInformation = fsEntry.formChoice
         formSettings = fsEntry.settings['settings']
         formModelName = formInformation.link + '_model'
@@ -282,7 +282,9 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                 tableData, tableColWidths, style = pdf_template_26(formData, title, subTitle, formInformation)
             if formID == 27:
                 tableData, tableColWidths, style = pdf_template_27(formData, title, subTitle, formInformation)
-                
+            if formID == 29:
+                tableData, tableColWidths, style = pdf_template_29(formData, title, subTitle, formInformation)
+
             heightGroup = (5,17,18,19)
             
             try:

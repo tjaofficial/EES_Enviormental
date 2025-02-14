@@ -1,9 +1,9 @@
 import datetime
 from ..models import Forms, braintreePlans
-from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import Group # type: ignore
+from django.contrib.auth.models import User # type: ignore
+from django.contrib.auth.models import Permission # type: ignore
+from django.contrib.contenttypes.models import ContentType # type: ignore
 from ..utils import braintreeGateway, create_starting_forms
 
 def add_forms_to_database():

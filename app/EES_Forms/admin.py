@@ -1,9 +1,9 @@
-from django.contrib import admin
+from django.contrib import admin # type: ignore
 from .models import *
 import calendar
-from django.urls import reverse
+from django.urls import reverse # type: ignore
 from calendar import HTMLCalendar
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe # type: ignore
 from .utils import EventCalendar
 
 # Register your models here.
@@ -45,7 +45,7 @@ admin.site.register(formF4_model)
 admin.site.register(formF5_model)
 admin.site.register(formF6_model)
 admin.site.register(formF7_model)
-admin.site.register(spill_kits_model)
+admin.site.register(form29_model)
 admin.site.register(quarterly_trucks_model)
 admin.site.register(sop_model)
 admin.site.register(issues_model)

@@ -309,22 +309,22 @@
                             <tr>
                                 <td style="width: 100px;"></td>
                                 <td></td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                                <td style="padding-left: 40px;">
+                                    T<sub>ve</sub> x 100
                                 </td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.om_leaks2 }} x 100
+                                <td style="padding-left: 40px;">
+                                    {{ data.om_leaks2 }} x 100
                                 </td>
                                 <td></td>
                                 <td style="width: 75px"></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td style="text-align: center; margin: auto; width: 133px;">
+                                <td style="text-align: center; margin: auto; width: 168px;">
                                     % Leaking Offtakes = 
                                 </td>
                                 <td>
-                                    ---------------------- = 
+                                    ---------------------------- = 
                                 </td>
                                 <td>
                                     --------------------------------- = 
@@ -338,7 +338,7 @@
                                     <td></td>
                                     <td></td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp; P<sub>ovn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                                    &nbsp;T<sub>ovn</sub>(N - N<sub>i</sub>) + J - T<sub>no</sub>
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 (85 - 
@@ -347,7 +347,7 @@
                                     {% else %}
                                     {{data.inop_ovens}}
                                     {% endif %}
-                                    ) - {{ data.om_not_observed }}
+                                    ) + 0 - {{ data.om_not_observed }}
                                 </td>
                                     <td></td>
                                     <td></td>

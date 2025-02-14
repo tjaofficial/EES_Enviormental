@@ -34,7 +34,9 @@ function remove_area(areaNum) {
 
 function startupDisplay() {
     const areasFilled = document.getElementById('areasFilled').dataset.areas;
+    console.log(areasFilled)
     const areasList = JSON.parse(areasFilled.replaceAll("'",'"'))
+    console.log(areasList)
     let theList = []
     for (let x=1; x<=4; x++){
         if (!areasList.includes(String(x))){

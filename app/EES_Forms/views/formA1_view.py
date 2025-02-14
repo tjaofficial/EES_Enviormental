@@ -6,7 +6,7 @@ from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 import ast
-from django.db.models import Field
+from django.db.models import Field # type: ignore
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')

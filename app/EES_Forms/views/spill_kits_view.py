@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from ..forms import spill_kits_form, spill_kit_inventory_form
-from ..models import daily_battery_profile_model, Forms, form26_model, bat_info_model, spill_kit_inventory_model
+from ..models import daily_battery_profile_model, form29_model, bat_info_model, form26_model
 from datetime import datetime, date
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -13,7 +13,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def spill_kits(request, facility, fsID, selector):
-    formName = "26"
+    formName = "29"
     freq = getFacSettingsInfo(fsID)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
@@ -22,7 +22,7 @@ def spill_kits(request, facility, fsID, selector):
     now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    submitted_forms = form26_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    submitted_forms = form29_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sk_form = spill_kits_form()
     full_name = request.user.get_full_name()
     today = date.today()
@@ -52,19 +52,19 @@ def spill_kits(request, facility, fsID, selector):
             print('CHECK 1.2')
             database_form = ''
             month = database_model.month
-            inventoryModel = spill_kit_inventory_model.objects.filter(date__month=database_model.date.month)
+            inventoryModel = form26_model.objects.filter(date__month=database_model.date.month)
             for subForm in inventoryModel:
                 iFormList[subForm.skID] = [subForm.skID,stringToDate(subForm.date)]
             iFormList = json.dumps(iFormList)
         else:
-            inventoryModel = spill_kit_inventory_model.objects.filter(date__month=now.month)
+            inventoryModel = form26_model.objects.filter(date__month=now.month)
             if inventoryModel.exists():
                 for subForm in inventoryModel:
                     iFormList[subForm.skID] = [subForm.skID,stringToDate(subForm.date)]
                 iFormList = json.dumps(iFormList)
             if existing:
                 month = database_form.month
-                initial_data = get_initial_data(form26_model, database_form)
+                initial_data = get_initial_data(form29_model, database_form)
             else:
                 month = month_name
                 initial_data = {
@@ -85,7 +85,7 @@ def spill_kits(request, facility, fsID, selector):
             if form.is_valid():
                 form.save()
                 
-                new_latest_form = form26_model.objects.filter(month=month_name)[0]
+                new_latest_form = form29_model.objects.filter(month=month_name)[0]
                 filled_out = True
                 for items in new_latest_form.whatever().values():
                     print(items)
@@ -100,7 +100,6 @@ def spill_kits(request, facility, fsID, selector):
     else:
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-
     return render(request, "shared/forms/monthly/spillkits_form.html", {
         'iFormList': iFormList, 
         'month': month, 
@@ -120,18 +119,21 @@ def spill_kits(request, facility, fsID, selector):
 
 @lock
 def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector):
-    formName = "spill_kits_inventory"
+    formName = "26"
+    freq = getFacSettingsInfo(fsID)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    
+    search = False
+    existing = False
+    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
     count_bp = daily_battery_profile_model.objects.count()
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
-    submitted_forms = spill_kit_inventory_model.objects.all().order_by('-date')
+    submitted_forms = form26_model.objects.all().order_by('-date')
     today = date.today()
     now = datetime.now().date()
     full_name = request.user.get_full_name()
     skForm = spill_kit_inventory_form()
-    attachedTo = form26_model.objects.filter(month=month)
+    attachedTo = form29_model.objects.filter(month=month)
     
     if len(attachedTo) > 0:
         formAttached = attachedTo[0]
@@ -152,7 +154,7 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
         elif len(submitted_forms) > 0:
             print('CHECK 2')
             if now == todays_log.date_save:
-                filterByskID = spill_kit_inventory_model.objects.filter(skID=skNumber).order_by('-date')
+                filterByskID = form26_model.objects.filter(skID=skNumber).order_by('-date')
                 if len(filterByskID) > 0:
                     database_form = filterByskID[0]
                     if todays_log.date_save.month == database_form.date.month:
@@ -254,6 +256,7 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
             ]
         #copyData['spill_kit_submitted'] = skSubmitted
         print(copyData)
+        copyData['facilityChoice'] = options
         if existing:
             form = spill_kit_inventory_form(copyData, instance=database_form)
         else:
@@ -261,7 +264,7 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
         if form.is_valid():
             form.save()
             
-            return redirect('spill_kits', facility, fsID, "form")
+            return redirect('form29', facility, fsID, "form")
                 
     return render(request, "shared/forms/monthly/spillKits_inventoryForm.html",{
         'full_name': full_name,
@@ -279,5 +282,6 @@ def spill_kits_inventory_form(request, facility, fsID, month, skNumber, selector
         "formAttached": formAttached, 
         "selector": selector,
         'fsID': fsID,
-        'notifs': notifs
+        'notifs': notifs,
+        'freq': freq,
     })

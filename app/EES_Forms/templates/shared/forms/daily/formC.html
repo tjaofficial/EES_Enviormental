@@ -85,7 +85,7 @@
                                     {% if sliced_key in areaFilled1 %}
                                         <div class="areaCont">
                                             <div style="padding: 15px 22px; display:none;" id="areaLabel{{sliced_key}}" onclick="add_areas({{sliced_key}})">{{cats.name}} (Click to add)</div>
-                                            <div id="areaCont{{sliced_key}}">    
+                                            <div id="areaCont{{sliced_key}}" style="display: block;">    
                                                 <div style="padding: 15px 22px; position: relative;">
                                                     {{cats.name}}: 
                                                     {% if selector == 'form' %}
@@ -154,7 +154,7 @@
                                                                                 {% if existing %}
                                                                                     value="{% for key, readingsData in allData.readings.items %}{% if key == sliced_key %}{{allData.readings|get_item:sliced_key|get_list_item:i }}{% endif %}{% endfor %}"
                                                                                 {% endif %} 
-                                                                                type="text" 
+                                                                                type="number" 
                                                                                 name="area{{sliced_key}}Read{{i}}" 
                                                                                 id="area{{sliced_key}}Read{{i}}" 
                                                                                 oninput="area{{sliced_key}}_average()" 

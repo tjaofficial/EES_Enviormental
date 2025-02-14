@@ -10,6 +10,7 @@ from ..utils import defaultPacketSettings, setUnlockClientSupervisor, checkIfFac
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
 from django.contrib import messages # type: ignore
+
 lock = login_required(login_url='Login')
 
 @lock
@@ -261,6 +262,7 @@ def facilityForm(request, facility, packet):
                     B = form_settings_model.objects.get(id=int(packetQuery.formList["formsList"][pacs]['settingsID']))
                     del B.settings['packets'][str(packetQuery.id)]
                     B.save()
+
         for item in range(1, totalAmountofForms+1):
             formIDlabel = 'forms' + str(item)
             formOrgLabel = 'formID' + str(item)
@@ -270,7 +272,31 @@ def facilityForm(request, facility, packet):
                 formID = int(answer[formIDlabel.replace(" ", "")])
                 formLabel = answer[formOrgLabel.replace(" ", "")].upper()
                 settingsID = int(answer[inputSettingsID])
-                
+                # if formLabel:
+                #     highestLabelNumb = 0
+
+                #     if packetQuery.formList["formsList"]:
+                #         for label in packetQuery.formList["formsList"]:
+                #             settingsID2 = packetQuery.formList["formsList"][label]['settingsID']
+                #             if int(settingsID2) == int(settingsID):
+                #                 messages.error(request,"The selected form is already been added to the packet.")
+                #                 return redirect(facilityList, facility)
+                #         for label in packetQuery.formList["formsList"].keys():
+                #             noLabelTag = label[:9]
+                #             noLabelNumber = label[9:]
+                #             if noLabelTag == "no-label-":
+                #                 if int(noLabelNumber) > int(highestLabelNumb):
+                #                     highestLabelNumb = noLabelNumber
+                #     formNoLabelParse = "no-label-"+str(int(highestLabelNumb)+1)
+                #     if packetQuery.formList["formsList"]:
+                #         selectedList[formNoLabelParse] = {"settingsID":int(settingsID)}
+                #     else:
+                #         packetQuery.formList["formsList"] = {formNoLabelParse: {"settingsID":int(settingsID)}}
+
+
+
+
+
                 selectedList[formLabel] = {"settingsID": settingsID}
                 settingsEntry = form_settings_model.objects.get(id=settingsID)
                 settingsEntryPacks = settingsEntry.settings["packets"]
