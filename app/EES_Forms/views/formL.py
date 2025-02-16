@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime, date,timedelta
+from datetime import datetime, date, timedelta
 from ..models import Forms, user_profile_model, daily_battery_profile_model, form21_model, bat_info_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -140,10 +140,10 @@ def formL(request, facility, fsID, selector):
             filled_in = False
             if new_saturday:
                 set_start_date = today
-                set_end_date = today + datetime.timedelta(days=6)
+                set_end_date = today + timedelta(days=6)
             elif new_sunday:
                 set_start_date = sunday_last_sat
-                set_end_date = today + datetime.timedelta(days=5)
+                set_end_date = today + timedelta(days=5)
             else:
                 set_start_date = last_saturday
                 set_end_date = end_week
@@ -182,7 +182,7 @@ def formL(request, facility, fsID, selector):
                             B.append((6, x.time_6, x.obser_6, x.vents_6, x.mixer_6, x.v_comments_6, x.m_comments_6))
                             B.append((5, x.time_5, x.obser_5, x.vents_5, x.mixer_5, x.v_comments_5, x.m_comments_5))
                     else:
-                        if x.week_start == todays_log.date_save - datetime.timedelta(days = (today_number - 5)):
+                        if x.week_start == todays_log.date_save - timedelta(days = (today_number - 5)):
                             B.append((4, x.time_4, x.obser_4, x.vents_4, x.mixer_4, x.v_comments_4, x.m_comments_4))
                             B.append((3, x.time_3, x.obser_3, x.vents_3, x.mixer_3, x.v_comments_3, x.m_comments_3))
                             B.append((2, x.time_2, x.obser_2, x.vents_2, x.mixer_2, x.v_comments_2, x.m_comments_2))
@@ -202,7 +202,7 @@ def formL(request, facility, fsID, selector):
 
                     return redirect('IncompleteForms', facility)
                 else:
-                    parseNewDate = todays_log.date_save - datetime.timedelta(days=1)
+                    parseNewDate = todays_log.date_save - timedelta(days=1)
                     createNotification(facility, request, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, parseNewDate)
 
