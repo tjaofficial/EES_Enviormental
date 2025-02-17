@@ -40,12 +40,7 @@ def login_view(request):
             facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
             return redirect('c_dashboard', facility)
         elif request.user.groups.filter(name=OBSER_VAR):
-            if count_bp != 0:
-                todays_log = daily_prof[0]
-                if now == todays_log.date_save:
-                    return redirect('facilitySelect', 'observer')
-                batt_prof = 'daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                return redirect(batt_prof)
+            return redirect('facilitySelect', OBSER_VAR)
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')

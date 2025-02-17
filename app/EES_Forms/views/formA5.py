@@ -5,13 +5,14 @@ from ..models import daily_battery_profile_model, Forms, form5_model, form_setti
 from ..forms import formA5_form, user_profile_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import formA5_ovens_data_build, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification, get_initial_data
+from ..utils import formA5_readings_data_Model_Upadte, formA5_ovens_data_build, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification, get_initial_data
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA5(request, facility, fsID, selector):
+    formA5_readings_data_Model_Upadte() #remove after first usage, update the model 5 records
     variables = {}
     formName = 5
     freq = getFacSettingsInfo(fsID)

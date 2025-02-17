@@ -537,6 +537,33 @@ def formA5_ovens_data_build(requestPOST):
     }
     return json.loads(json.dumps(ovens_data))
 
+def formA5_readings_data_Model_Upadte():
+    allFormData = form5_model.objects.all()   
+    not_these_fields = [
+        'date',
+        'estab',
+        'county',
+        'estab_no',
+        'equip_loc',
+        'district',
+        'city',
+        'observer',
+        'cert_date',
+        'id',
+        'facilityChoice',
+        'notes',
+        'canvas',
+        'reading_data',
+        'ovens_data',
+        'formSettings'
+    ]
+    for record in allFormData:
+        fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
+        print(fieldsList)
+        finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
+        record.reading_data = finalJson
+        record.save()
+
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
     emptyDB = False
