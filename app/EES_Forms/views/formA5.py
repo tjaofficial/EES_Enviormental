@@ -12,7 +12,6 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA5(request, facility, fsID, selector):
-    formA5_readings_data_Model_Upadte() #remove after first usage, update the model 5 records
     variables = {}
     formName = 5
     freq = getFacSettingsInfo(fsID)
