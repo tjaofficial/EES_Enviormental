@@ -408,6 +408,34 @@ def formA5_Readings_Upadte():
         record.form.save()
         print("hello2")
 
+def parse_form5_oven_dict(reading_data, ovens_data):
+    ovens = {}
+    for key1, oven in ovens_data.items():
+        id_sec_1 =  "o" + key1[4:]
+        ovens.update({
+            id_sec_1: oven['oven_number'], 
+            id_sec_1 + "_start": oven['start'], 
+            id_sec_1 + "_stop": oven['stop'],
+            id_sec_1 + "_highest_opacity": oven['highest_opacity'],
+            id_sec_1 + "_instant_over_20": oven['opacity_over_20'],
+            id_sec_1 + "_average_6": oven['average_6_opacity'],
+            id_sec_1 + "_average_6_over_35": oven['average_6_over_35'],
+        })
+        y=1
+        z=9
+        for x in range(1,9):
+            ovens.update({id_sec_1 + "_" + str(y) + "_reads": oven['readings']['push'][str(x)]})
+            ovens.update({id_sec_1 + "_" + str(z) + "_reads": oven['readings']['travel'][str(x)]})
+            y += 1
+            z += 1
+
+    print(ovens)
+    readings = {}
+    for key2, reading in reading_data.items():
+        readings.update({key2: reading})
+    print(readings)
+    return json.loads(json.dumps(readings)), json.loads(json.dumps(ovens))
+
 def formA5_ovens_data_build(requestPOST):
     ovens_data = {
         "oven1": {
@@ -563,6 +591,41 @@ def formA5_readings_data_Model_Upadte():
         finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
         record.reading_data = finalJson
         record.save()
+
+def form5_reading_data_build(requestPOST):
+    reading_data = {
+        'process_equip1': requestPOST['process_equip1'], 
+        'process_equip2': requestPOST['process_equip2'], 
+        'op_mode1': requestPOST['op_mode1'], 
+        'op_mode2': requestPOST['op_mode2'], 
+        'background_color_start': requestPOST['background_color_start'], 
+        'background_color_stop': requestPOST['background_color_stop'], 
+        'sky_conditions': requestPOST['sky_conditions'], 
+        'wind_speed_start': requestPOST['wind_speed_start'], 
+        'wind_speed_stop': requestPOST['wind_speed_stop'], 
+        'wind_direction': requestPOST['wind_direction'], 
+        'emission_point_start': requestPOST['emission_point_start'], 
+        'emission_point_stop': requestPOST['emission_point_stop'], 
+        'ambient_temp_start': requestPOST['ambient_temp_start'], 
+        'ambient_temp_stop': requestPOST['ambient_temp_stop'], 
+        'humidity': requestPOST['humidity'], 
+        'height_above_ground': requestPOST['height_above_ground'], 
+        'height_rel_observer': requestPOST['height_rel_observer'], 
+        'distance_from': requestPOST['distance_from'], 
+        'direction_from': requestPOST['direction_from'], 
+        'describe_emissions_start': requestPOST['describe_emissions_start'], 
+        'describe_emissions_stop': requestPOST['describe_emissions_stop'], 
+        'emission_color_start': requestPOST['emission_color_start'], 
+        'emission_color_stop': requestPOST['emission_color_stop'], 
+        'plume_type': requestPOST['plume_type'], 
+        'water_drolet_present': requestPOST['water_drolet_present'], 
+        'water_droplet_plume': requestPOST['water_droplet_plume'], 
+        'plume_opacity_determined_start': requestPOST['plume_opacity_determined_start'], 
+        'plume_opacity_determined_stop': requestPOST['plume_opacity_determined_stop'], 
+        'describe_background_start': requestPOST['describe_background_start'], 
+        'describe_background_stop': requestPOST['describe_background_stop'],
+    }
+    return json.loads(json.dumps(reading_data))
 
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
@@ -2039,17 +2102,52 @@ def get_list_of_braintree_status(sub_search, addOnSet):
             past_due_list.append(sub)
     return active_users, past_due_list
 
+# def get_initial_data(modelName, modelInstance):
+#     def get_field_value(fieldName, modelList):
+#         for source in modelList:
+#             if hasattr(source, fieldName):  # Check if the field exists
+#                 return getattr(source, fieldName)
+#         return None  # Fallback value if neither has the attribute
+
+#     allModelFields = [
+#         field.name for field in modelName._meta.get_fields() 
+#         if isinstance(field, Field) and field.name not in ["id","facilityChoice"]
+#     ]
+#     modelList = [modelInstance]
+#     try:
+#         model_name = modelName._meta.object_name.replace("_model", "_readings_model")
+#         content_type = ContentType.objects.get(model=model_name.lower())
+#         modelInstance2 = content_type.model_class().objects.get(form=modelInstance)
+#         model2Fields = [
+#             field.name for field in modelInstance2._meta.get_fields() 
+#             if isinstance(field, Field) and field.name not in ["id","form"]
+#         ]
+#         allModelFields = allModelFields + model2Fields
+#         modelList.append(modelInstance2)
+#     except:
+#         print('only one model')
+#     initial_data = {fieldName: get_field_value(fieldName, modelList) for fieldName in allModelFields}
+#     return initial_data
+
+
 def get_initial_data(modelName, modelInstance):
     def get_field_value(fieldName, modelList):
         for source in modelList:
             if hasattr(source, fieldName):  # Check if the field exists
-                return getattr(source, fieldName)
+                attrData = getattr(source, fieldName)
+                if isinstance(attrData, dict):
+                    inner_dict = { iFieldKey: iFieldValue for iFieldKey, iFieldValue in attrData.items() }
+                    print("fuck")
+                    return inner_dict
+                else:
+                    return attrData
         return None  # Fallback value if neither has the attribute
 
     allModelFields = [
         field.name for field in modelName._meta.get_fields() 
         if isinstance(field, Field) and field.name not in ["id","facilityChoice"]
     ]
+    print(allModelFields)
     modelList = [modelInstance]
     try:
         model_name = modelName._meta.object_name.replace("_model", "_readings_model")
@@ -2063,9 +2161,16 @@ def get_initial_data(modelName, modelInstance):
         modelList.append(modelInstance2)
     except:
         print('only one model')
+
     initial_data = {fieldName: get_field_value(fieldName, modelList) for fieldName in allModelFields}
+    # for fieldName in allModelFields:
+    #     if not isinstance(get_field_value(fieldName, modelList), dict):
+    #         initial_data[fieldName] = get_field_value(fieldName, modelList)
+    #     else:
+    #         for key, items in get_field_value(fieldName, modelList).items():
+    #             initial_data[key] = items
+
+
+    print(initial_data)
     return initial_data
-
-
-
 

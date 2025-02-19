@@ -118,53 +118,150 @@ function isEven(n) {
 }
 
 
-function pushTravelCheck(pushB) {
-    const pushA = pushB - 1,
-    pushC = pushB + 1;
+// function pushTravelCheck(pushB) {
+//     const pushA = pushB - 1,
+//     pushC = pushB + 1;
     
-    const ovenA = parseInt(document.getElementById('o' + pushA).value),
-          ovenB = parseInt(document.getElementById('o' + pushB).value);
-    if (pushB > 4){
-        var ovenC = parseInt(document.getElementById('o' + pushC).value);
+//     const ovenA = parseInt(document.getElementById('o' + pushA).value),
+//           ovenB = parseInt(document.getElementById('o' + pushB).value);
+//     if (pushB > 4){
+//         var ovenC = parseInt(document.getElementById('o' + pushC).value);
+//     }
+//     const endingNumbers = [85, 84]
+//     console.log(ovenB)
+//     console.log(pushB)
+//     if (ovenB && 0 < ovenB < 86) {
+//         if (isEven(ovenB) && isEven(ovenA) && ovenA < ovenB || !isEven(ovenB) && !isEven(ovenA) && ovenA < ovenB || ovenA == 85 && isEven(ovenB) || ovenA == 84 && !isEven(ovenB)) {
+//             if (ovenB >= parseInt(ovenA) + 4 || ovenA == 85 && ovenB >= 4 || ovenA == 84 && ovenB >= 3){
+//                 console.log('SKIPPED AN OVEN1')
+//                 document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
+//                 document.getElementById("comment_skip_id_" + String(parseInt(pushB))).style.display = 'block';
+//             } else {
+//                 console.log('EVERYTHING IS FINE1')
+//                 document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
+//                 document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
+//             }
+//         } else if (pushB < 4 && (isEven(ovenB) && isEven(ovenC) && ovenC > ovenB || !isEven(ovenB) && !isEven(ovenC) && ovenC > ovenB || ovenB == 85 && isEven(ovenC) || ovenB == 84 && !isEven(ovenC))) {
+//             if (ovenB <= parseInt(ovenC) - 4 || ovenB == 85 && ovenC >= 4 || ovenB == 84 && ovenC >= 3){
+//                 console.log('SKIPPED AN OVEN3')
+//                 document.getElementById("oven" + String(parseInt(pushC)) + "_pop_id").style.display = 'none';
+//                 document.getElementById("comment_skip_id_" + String(parseInt(pushC))).style.display = 'block';
+//             } else {
+//                 console.log('EVERYTHING IS FINE3')
+//                 document.getElementById("oven" + String(parseInt(pushC)) + "_pop_id").style.display = 'none';
+//                 document.getElementById("comment_skip_id_"+ String(parseInt(pushC))).style.display = 'none';
+//             }
+//         } else if (ovenB) {//if (!(parseInt(ovenA) in endingNumbers) && ovenA >= ovenB || ovenB == parseInt(ovenA) + 1 || ovenA == 85 && ovenB == 1 || ovenA == 84 && ovenB == 2) {
+//             console.log('NEED TO CHANGE INPUT')
+//             document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.display = 'block';
+//             document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
+//         }
+//     } else {
+//         console.log('no input')
+//         document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
+//         document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
+//     }
+// }
+
+function isEven(num) {
+    return num % 2 === 0;
+}
+
+function validateOvens() {
+    let ovenValues = {};
+
+    // Get values for all 4 ovens
+    for (let i = 1; i <= 4; i++) {
+        let input = document.getElementById('o' + i);
+        ovenValues[i] = input && input.value ? parseInt(input.value) : null;
     }
-    const endingNumbers = [85, 84]
-    console.log(ovenB)
-    console.log(pushB)
-    if (ovenB && 0 < ovenB < 86) {
-        if (isEven(ovenB) && isEven(ovenA) && ovenA < ovenB || !isEven(ovenB) && !isEven(ovenA) && ovenA < ovenB || ovenA == 85 && isEven(ovenB) || ovenA == 84 && !isEven(ovenB)) {
-            if (ovenB >= parseInt(ovenA) + 4 || ovenA == 85 && ovenB >= 4 || ovenA == 84 && ovenB >= 3){
-                console.log('SKIPPED AN OVEN1')
-                document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
-                document.getElementById("comment_skip_id_" + String(parseInt(pushB))).style.display = 'block';
-            } else {
-                console.log('EVERYTHING IS FINE1')
-                document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
-                document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
-            }
-        } else if (pushB < 4 && (isEven(ovenB) && isEven(ovenC) && ovenC > ovenB || !isEven(ovenB) && !isEven(ovenC) && ovenC > ovenB || ovenB == 85 && isEven(ovenC) || ovenB == 84 && !isEven(ovenC))) {
-            if (ovenB <= parseInt(ovenC) - 4 || ovenB == 85 && ovenC >= 4 || ovenB == 84 && ovenC >= 3){
-                console.log('SKIPPED AN OVEN3')
-                document.getElementById("oven" + String(parseInt(pushC)) + "_pop_id").style.display = 'none';
-                document.getElementById("comment_skip_id_" + String(parseInt(pushC))).style.display = 'block';
-            } else {
-                console.log('EVERYTHING IS FINE3')
-                document.getElementById("oven" + String(parseInt(pushC)) + "_pop_id").style.display = 'none';
-                document.getElementById("comment_skip_id_"+ String(parseInt(pushC))).style.display = 'none';
-            }
-        } else if (ovenB) {//if (!(parseInt(ovenA) in endingNumbers) && ovenA >= ovenB || ovenB == parseInt(ovenA) + 1 || ovenA == 85 && ovenB == 1 || ovenA == 84 && ovenB == 2) {
-            console.log('NEED TO CHANGE INPUT')
-            document.getElementById("oven" + parseInt(pushB) + "_pop_id").style.display = 'block';
-            document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
+
+    // Iterate over the ovens
+    for (let i = 1; i <= 4; i++) {
+        if (!ovenValues[i] && ovenValues[i] !== 0) continue; // Skip empty ovens
+        let prev = ovenValues[i - 1] || null; // Previous oven
+        let current = ovenValues[i];
+        let next = ovenValues[i + 1] || null; // Next oven
+
+        let invalidPrev = false, invalidNext = false;
+        // **Check for 0 Input**
+        if (current === 0) {
+            console.log(`❌ Invalid input: 0 is not allowed for oven ${i}`);
+            invalidPrev = true;
         }
-    } else {
-        console.log('no input')
-        document.getElementById("comment_skip_id_"+ String(parseInt(pushB))).style.display = 'none';
-        document.getElementById("oven" + String(parseInt(pushB)) + "_pop_id").style.display = 'none';
+
+        // **Check Previous Oven**
+        if (prev) {
+            let validPrev =
+                (isEven(prev) === isEven(current) && current === prev + 2) || // Normal sequence
+                (prev === 85 && current === 2) || // Wrap-around (odd)
+                (prev === 84 && current === 1);  // Wrap-around (even)
+
+            if (!validPrev) {
+                console.log(`❌ Invalid sequence from ${prev} to ${current}`);
+                invalidPrev = true;
+            }
+        }
+
+        // **Check Next Oven**
+        if (next) {
+            let validNext =
+                (isEven(next) === isEven(current) && next === current + 2) || // Normal sequence
+                (current === 85 && next === 2) || // Wrap-around (odd)
+                (current === 84 && next === 1);  // Wrap-around (even)
+
+            if (!validNext) {
+                console.log(`❌ Invalid sequence from ${current} to ${next}`);
+                invalidNext = true;
+            }
+        }
+
+        // **Check for Skipped Ovens (Only when the previous oven exists)**
+        if (prev) {
+            let skippedOven =
+                (current >= prev + 4) || // Normal skipping detection
+                (prev === 85 && current >= 4) || // Wrap-around case
+                (prev === 84 && current >= 3);
+
+            let skipElem = document.getElementById("comment_skip_id_" + i);
+            if (skipElem) skipElem.style.display = skippedOven ? 'block' : 'none';
+        }
+
+        if (next) {
+            let skippedOvenNext =
+                (next >= current + 4) || 
+                (current === 85 && next >= 4) || 
+                (current === 84 && next >= 3);
+
+            let skipElemNext = document.getElementById("comment_skip_id_" + (i + 1));
+            if (skipElemNext) skipElemNext.style.display = skippedOvenNext ? 'block' : 'none';
+        }
+
+        // **Show or Hide Popups**
+        let popElem = document.getElementById("oven" + i + "_pop_id");
+        if (invalidPrev || invalidNext) {
+            if (popElem) popElem.style.display = 'block';
+        } else {
+            if (popElem) popElem.style.display = 'none';
+        }
     }
 }
-pushTravelCheck(2);
-pushTravelCheck(3);
-pushTravelCheck(4);
+
+// **Attach event listener to all oven inputs**
+document.addEventListener("DOMContentLoaded", function () {
+    for (let i = 1; i <= 4; i++) {
+        let input = document.getElementById("o" + i);
+        if (input) {
+            input.addEventListener("input", validateOvens);
+        }
+    }
+});
+
+
+
+
+
+
 function exit_pop(pushB) {
     document.getElementById("comment_skip_id_"+String(parseInt(pushB))).style.display = 'none';
 }

@@ -36,7 +36,7 @@
             {% csrf_token %}
             <div class="card" id="card_fitter">
                 {% include "shared/components/print_button.html" with formGroup=freq %}
-                <div class="paper_fitter" style="padding: 3rem;">
+                <div class="paper_fitter" style="padding: 3rem 3rem 0 3rem;">
                     {% include "shared/components/backArrow.html" with destination="form" %}
                     <div id="ptInfo">
                         <div id="ptInfoInner">
@@ -77,81 +77,90 @@
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="5" >
-                                            <strong>ESTABLISHMENT</strong><br>{{ data.estab }}
+                                            <strong>ESTABLISHMENT</strong><br>
+                                            {{ data.estab }}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>COUNTY</strong> <br>{{ data.county }}
+                                            <strong>COUNTY</strong><br>
+                                            {{ data.county }}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>ESTABLISHMENT NO.</strong> <br>{{ data.estab_no }}
+                                            <strong>ESTABLISHMENT NO.</strong><br>
+                                            {{ data.estab_no }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="5" >
-                                            <strong>EQUIPMENT LOCATION</strong><br>{{ data.equip_loc }}
+                                            <strong>EQUIPMENT LOCATION</strong><br>
+                                            {{ data.equip_loc }}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>DISTRICT</strong> <br>{{ data.district }}
+                                            <strong>DISTRICT</strong><br>
+                                            {{ data.district }}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>DATE</strong> <br>{{ data.date }}
+                                            <strong>DATE</strong><br>
+                                            {{ data.date }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="1" >
-                                            <strong>CITY</strong><br>{{ data.city }}
+                                            <strong>CITY</strong><br>
+                                            {{ data.city }}
                                         </td>
                                         <td id="boxa4" colspan="6" >
-                                            <strong>OBSERVER</strong><br>{{ data.observer }}
+                                            <strong>OBSERVER</strong><br>
+                                            {{ data.observer }}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>CERTIFIED DATE<br>{{ data.cert_date }}
+                                            <strong>CERTIFIED DATE</strong><br>
+                                            {{ data.cert_date }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="4" >
-                                            <strong>PROCESS EQUIPMENT</strong><br>{{ data.process_equip1 }}
+                                            <strong>PROCESS EQUIPMENT</strong><br>{% if search %}{{ data.reading_data.process_equip1 }}{% else %}{{ data.process_equip1 }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>OPERATING MODE</strong><br>{{ data.op_mode1 }}</td>
+                                            <strong>OPERATING MODE</strong><br>{% if search %}{{ data.reading_data.op_mode1 }}{% else %}{{ data.op_mode1 }}{% endif %}</td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>BACKGROUND COLOR</strong><br><strong>Start:</strong> {{ data.background_color_start }} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.background_color_stop }}
+                                            <strong>BACKGROUND COLOR</strong><br><strong>Start:</strong> {% if search %}{{ data.reading_data.background_color_start }}{% else %}{{ data.background_color_start }}{% endif %} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.background_color_stop }}{% else %}{{ data.background_color_stop }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="1" >
-                                            <strong>SKY CONDITION</strong><br>{{ data.sky_conditions }}
+                                            <strong>SKY CONDITION</strong><br>{% if search %}{{ data.reading_data.sky_conditions }}{% else %}{{ data.sky_conditions }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="4" >
-                                            <strong>PROCESS EQUIPMENT</strong><br>{{ data.process_equip2 }}
+                                            <strong>PROCESS EQUIPMENT</strong><br>{% if search %}{{ data.reading_data.process_equip2 }}{% else %}{{ data.process_equip2 }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="2">
-                                            <strong>OPERATING MODE</strong><br>{{ data.op_mode2 }}
+                                            <strong>OPERATING MODE</strong><br>{% if search %}{{ data.reading_data.op_mode2 }}{% else %}{{ data.op_mode2 }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>WIND SPEED</strong><br><strong>Start:</strong> {{ data.wind_speed_start }} mph &nbsp; <strong>Stop:</strong> {{ data.wind_speed_stop }}{% if data.wind_speed_stop|lower != 'same' %}mph{% endif %}
+                                            <strong>WIND SPEED</strong><br><strong>Start:</strong> {% if search %}{{ data.reading_data.wind_speed_start }}{% else %}{{ data.wind_speed_start }}{% endif %} mph &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.wind_speed_stop }}{% else %}{{ data.wind_speed_stop }}{% endif %}{% if data.wind_speed_stop|lower != 'same' %} mph{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="1">
-                                            <strong>WIND DIRECTION</strong><br>{{ data.wind_direction }}
+                                            <strong>WIND DIRECTION</strong><br>{% if search %}{{ data.reading_data.wind_direction }}{% else %}{{ data.wind_direction }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="6" >
-                                            <strong>DESCRIBE EMISSION POINT</strong><br><strong>Start:</strong> {{ data.emission_point_start }} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.emission_point_stop }}
+                                            <strong>DESCRIBE EMISSION POINT</strong><br><strong>Start:</strong> {% if search %}{{ data.reading_data.emission_point_start }}{% else %}{{ data.emission_point_start }}{% endif %} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.emission_point_stop }}{% else %}{{ data.emission_point_stop }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>AMBIENT TEMP</strong><br><strong>Start:</strong> {{ data.ambient_temp_start }}<sup>o</sup> &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.ambient_temp_stop }}{% if data.ambient_temp_stop|lower != 'same' %}<sup>o</sup>{% endif %}
+                                            <strong>AMBIENT TEMP</strong><br><strong>Start:</strong> {% if search %}{{ data.reading_data.ambient_temp_start }}{% else %}{{ data.ambient_temp_start }}{% endif %}<sup>o</sup> &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.ambient_temp_stop }}{% else %}{{ data.ambient_temp_stop }}{% endif %}{% if data.ambient_temp_stop|lower != 'same' %}<sup>o</sup>{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="1" >
-                                            <strong>HUMIDITY</strong><br>{{ data.humidity }}%
+                                            <strong>HUMIDITY</strong><br>{% if search %}{{ data.reading_data.humidity }}{% else %}{{ data.humidity }}{% endif %}%
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>HEIGHT ABOVE GROUND LEVEL</strong><br>{{ data.height_above_ground }}{{options.bat_height_label}}
+                                            <strong>HEIGHT ABOVE GROUND LEVEL</strong><br>{% if search %}{{ data.reading_data.height_above_ground }} {{ data.reading_data.units }}{% else %}{{ data.height_above_ground }}{{options.bat_height_label}}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="4" >
-                                            <strong>HEIGHT RELATIVE TO OBSERVER</strong><br>{{ data.height_rel_observer }}{{options.bat_height_label}}
+                                            <strong>HEIGHT RELATIVE TO OBSERVER</strong><br>{% if search %}{{ data.reading_data.height_rel_observer }} {{ data.reading_data.units }}{% else %}{{ data.height_rel_observer }}{{options.bat_height_label}}{% endif %}
                                         </td>
                                         <td id="sketchBox" colspan="3" rowspan="7" data-filledSketch = "{{exist_canvas}}" data-base_img = "{% static 'ees_forms/images/A-5sketchBlank.png' %}" data-controls="modalContainer" data-selector={{selector}}>
                                             <div class="formImageContainer">
@@ -164,44 +173,48 @@
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="2" >
-                                            <strong>DISTANCE FROM OBSERVER</strong><br>{{ data.distance_from }}{{options.bat_height_label}}
+                                            <strong>DISTANCE FROM OBSERVER</strong><br>{% if search %}{{ data.reading_data.distance_from }} {{ data.reading_data.units }}{% else %}{{ data.distance_from }}{{options.bat_height_label}}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="4" >
-                                            <strong>DIRECTION FROM OBSERVER</strong><br>{{ data.direction_from }}
+                                            <strong>DIRECTION FROM OBSERVER</strong><br>{% if search %}{{ data.reading_data.direction_from }}{% else %}{{ data.direction_from }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="6" >
-                                            <strong>DESCRIBE EMISSIONS</strong><br><strong>Start:</strong> {{ data.describe_emissions_start }} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.describe_emissions_stop }}
+                                            <strong>DESCRIBE EMISSIONS</strong>
+                                            <br><strong>Start:</strong> {% if search %}{{ data.reading_data.describe_emissions_start }}{% else %}{{ data.describe_emissions_start }}{% endif %} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.describe_emissions_stop }}{% else %}{{ data.describe_emissions_stop }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="3" >
-                                            <strong>EMISSIONS COLOR</strong><br><strong>Start:</strong> {{ data.emission_color_start }} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.emission_color_stop }}
+                                            <strong>EMISSIONS COLOR</strong><br/>
+                                            <strong>Start:</strong> {% if search %}{{ data.reading_data.emission_color_start }}{% else %}{{ data.emission_color_start }}{% endif %} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.emission_color_stop }}{% else %}{{ data.emission_color_stop }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="3" >
-                                            <strong>PLUME TYPE:</strong>
-                                            {{ data.plume_type }}
+                                            <strong>PLUME TYPE:</strong><br/>
+                                            {% if search %}{{ data.reading_data.plume_type }}{% else %}{{ data.plume_type }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="3" >
-                                            <strong>WATER DROPLET PRESENT:</strong><br>
-                                            {{ data.water_drolet_present }}
+                                            <strong>WATER DROPLET PRESENT:</strong><br/>
+                                            {% if search %}{{ data.reading_data.water_drolet_present }}{% else %}{{ data.water_drolet_present }}{% endif %}
                                         </td>
                                         <td id="boxa4" colspan="3" >
-                                            <strong>IF WATER DROPLET PLUME:</strong><br>
-                                            {{ data.water_droplet_plume }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td id="boxa4" colspan="6" >
-                                            <strong>POINT IN PLUME WERE OPACITY WAS DETERMINED</strong><br><strong>Start:</strong> {{ data.plume_opacity_determined_start }} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.plume_opacity_determined_stop }}
+                                            <strong>IF WATER DROPLET PLUME:</strong><br/>
+                                            {% if search %}{{ data.reading_data.water_droplet_plume }}{% else %}{{ data.water_droplet_plume }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td id="boxa4" colspan="6" >
-                                            <strong>DESCRIBE BACKGROUND</strong><br><strong>Start:</strong> {{ data.describe_background_start }} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {{ data.describe_background_stop }}
+                                            <strong>POINT IN PLUME WERE OPACITY WAS DETERMINED</strong><br/>
+                                            <strong>Start:</strong> {% if search %}{{ data.reading_data.plume_opacity_determined_start }}{% else %}{{ data.plume_opacity_determined_start }}{% endif %} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.plume_opacity_determined_stop }}{% else %}{{ data.plume_opacity_determined_stop }}{% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td id="boxa4" colspan="6" >
+                                            <strong>DESCRIBE BACKGROUND</strong><br/>
+                                            <strong>Start:</strong> {% if search %}{{ data.reading_data.describe_background_start }}{% else %}{{ data.describe_background_start }}{% endif %} &nbsp; &nbsp; &nbsp; <strong>Stop:</strong> {% if search %}{{ data.reading_data.describe_background_stop }}{% else %}{{ data.describe_background_stop }}{% endif %}
                                         </td>
                                     </tr>
                                 </table>
@@ -217,12 +230,12 @@
                                 <table name="oven1" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6">
-                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven1.oven_number }}{% else %}<input type="number" name="o1" id="o1" class="input" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven1.oven_number }}">{% endif %}
+                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven1.oven_number }}{% else %}{{data.o1}}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="7">
-                                            <strong>Start Time:</strong> {% if search %}{{ data.ovens_data.oven1.start|str_to_time|time:'h:i A' }}{% else %}<input type="time" name="o1_start" id="o1_start" oninput="timecheck_pt1()" style="width: 120px;" required value="{{ data.ovens_data.oven1.start }}">{% endif %}&nbsp; &nbsp; <strong>Stop Time:</strong> {% if search %}{{ data.ovens_data.oven1.stop|str_to_time|time:'h:i A' }}{% else %}<input type="time" name="o1_stop" id="o1_stop" oninput="timecheck_pt1()" style="width: 120px;" required value="{{ data.ovens_data.oven1.stop }}">{% endif %}
+                                            <strong>Start Time:</strong> {% if search %}{{ data.ovens_data.oven1.start|str_to_time|time:'h:i A' }}{% else %}{{data.o1_start}}{% endif %}&nbsp; &nbsp; <strong>Stop Time:</strong> {% if search %}{{ data.ovens_data.oven1.stop|str_to_time|time:'h:i A' }}{% else %}{{data.o1_stop}}{% endif %}
                                             <span class="popuptext1" id="myPopup1">Please Change Time</span>
                                         </td>
                                     </tr>
@@ -232,27 +245,75 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
-                                        <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4"><strong>0</strong></td>
-                                        <td id="boxa4"><strong>15</strong></td>
-                                        <td id="boxa4"><strong>30</strong></td>
-                                        <td id="boxa4"><strong>45</strong></td>
+                                        <td id="boxa4" class="minSecSpace"><sub>Min</sub>\<sup>Sec</sup></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>0</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>15</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>30</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>45</strong></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4"><strong>0</strong></td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.1}}{% else %}<input type="text" name="o1_1_reads" id="o1_1_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.1 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.2}}{% else %}<input type="text"  class="input" name="o1_2_reads" id="o1_2_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.2 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.3}}{% else %}<input type="text"  class="input" name="o1_3_reads" id="o1_3_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.3 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.4}}{% else %}<input type="text"  class="input" name="o1_4_reads" id="o1_4_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.4 }}">{% endif %}</td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.1}}
+                                            {% else %}
+                                                {{ data.o1_1_reads }}
+                                            {% endif %}
+                                        </td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.2}}
+                                            {% else %}
+                                                {{ data.o1_2_reads }}
+                                            {% endif %}
+                                        </td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.3}}
+                                            {% else %}
+                                                {{ data.o1_3_reads }}
+                                            {% endif %}
+                                        </td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.4}}
+                                            {% else %}
+                                                {{ data.o1_4_reads }}
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4"><strong>1</strong></td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.5}}{% else %}<input type="text"  class="input" name="o1_5_reads" id="o1_5_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.5 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.6}}{% else %}<input type="text"  class="input" name="o1_6_reads" id="o1_6_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.6 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.7}}{% else %}<input type="text"  class="input" name="o1_7_reads" id="o1_7_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.7 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.push.8}}{% else %}<input type="text"  class="input" name="o1_8_reads" id="o1_8_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.push.8 }}">{% endif %}</td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.5}}
+                                            {% else %}
+                                                {{data.o1_5_reads}}
+                                            {% endif %}
+                                        </td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.6}}
+                                            {% else %}
+                                                {{data.o1_6_reads}}
+                                            {% endif %}
+                                        </td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.7}}
+                                            {% else %}
+                                                {{data.o1_7_reads}}
+                                            {% endif %}
+                                        </td>
+                                        <td id="boxa4">
+                                            {% if search %}
+                                                {{ data.ovens_data.oven1.readings.push.8}}
+                                            {% else %}
+                                                {{data.o1_8_reads}}
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -269,18 +330,18 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4"><strong>0</strong></td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.1}}{% else %}<input type="text"  class="input" name="o1_9_reads" id="o1_9_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.1 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.2}}{% else %}<input type="text"  class="input" name="o1_10_reads" id="o1_10_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.2 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.3}}{% else %}<input type="text"  class="input" name="o1_11_reads" id="o1_11_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.3 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.4}}{% else %}<input type="text"  class="input" name="o1_12_reads" id="o1_12_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.4 }}">{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.1}}{% else %}{{data.o1_9_reads}}{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.2}}{% else %}{{data.o1_10_reads}}{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.3}}{% else %}{{data.o1_11_reads}}{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.4}}{% else %}{{data.o1_12_reads}}{% endif %}</td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td id="boxa4"><strong>1</strong></td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.5}}{% else %}<input type="text"  class="input" name="o1_13_reads" id="o1_13_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.5 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.6}}{% else %}<input type="text"  class="input" name="o1_14_reads" id="o1_14_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.6 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.7}}{% else %}<input type="text"  class="input" name="o1_15_reads" id="o1_15_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.7 }}">{% endif %}</td>
-                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.8}}{% else %}<input type="text"  class="input" name="o1_16_reads" id="o1_16_reads" oninput="averages_pt1()" style="width: 50px; text-align: center;" maxlength="3" required value="{{ data.ovens_data.oven1.readings.travel.8 }}">{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.5}}{% else %}{{data.o1_13_reads}}{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.6}}{% else %}{{data.o1_14_reads}}{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.7}}{% else %}{{data.o1_15_reads}}{% endif %}</td>
+                                        <td id="boxa4">{% if search %}{{ data.ovens_data.oven1.readings.travel.8}}{% else %}{{data.o1_16_reads}}{% endif %}</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 15px" > </td>
@@ -289,7 +350,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            <strong>Highest Instantaneous Opacity:</strong>&nbsp; &nbsp;{% if search %}{{ data.ovens_data.oven1.highest_opacity}}%{% else %}<input type="number" name="o1_highest_opacity" oninput="averages_pt1()" id="o1_highest_opacity" class="input" style="width: 40px; text-align: center;" required value="{{ data.ovens_data.oven1.highest_opacity }}">%{% endif %}
+                                            <strong>Highest Instantaneous Opacity:</strong>&nbsp; &nbsp;{% if search %}{{ data.ovens_data.oven1.highest_opacity}}%{% else %}{{data.o1_highest_opacity}}%{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
@@ -302,9 +363,9 @@
                                             <strong>Instantaneous Over 20%?</strong>&nbsp; &nbsp;
                                             {% if search %}{{ data.ovens_data.oven1.opacity_over_20}}{% else %}
                                             <select name="o1_instant_over_20" id="o1_instant_over_20" style="width: 60px;" required>
-                                                <option value="" {% if not data.ovens_data.oven1.opacity_over_20 %}selected{% endif %}>---------</option>
-                                                <option value="Yes" {% if data.ovens_data.oven1.opacity_over_20 == 'Yes' %}selected{% endif %}>Yes</option>
-                                                <option value="No" {% if data.ovens_data.oven1.opacity_over_20 == 'No' %}selected{% endif %}>No</option>
+                                                <option value="" {% if not data.o1_instant_over_20 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.o1_instant_over_20 == 'Yes' %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.o1_instant_over_20 == 'No' %}selected{% endif %}>No</option>
                                             </select>
                                             {% endif %}
                                         </td>
@@ -316,7 +377,7 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="5">
-                                            <strong>Average Opacity of 6 Highest Readings:</strong>&nbsp; &nbsp;{% if search %}{{ data.ovens_data.oven1.average_6_opacity}}%{% else %}<input type="number" name="o1_average_6" oninput="averages_pt1()" id="o1_average_6" class="input" style="width: 60px; text-align: center;" step="any" required value="{{ data.ovens_data.oven1.average_6_opacity }}">%{% endif %}
+                                            <strong>Average Opacity of 6 Highest Readings:</strong>&nbsp; &nbsp;{% if search %}{{ data.ovens_data.oven1.average_6_opacity}}%{% else %}{{data.o1_average_6}}%{% endif %}
                                         </td>
                                     </tr> 
                                     <tr>
@@ -329,9 +390,9 @@
                                             <strong>Average Opacity of 6 Highest Readings Over 35%:</strong>&nbsp; &nbsp;
                                             {% if search %}{{ data.ovens_data.oven1.average_6_over_35}}{% else %}
                                             <select name="o1_average_6_over_35" id="o1_average_6_over_35" style="width: 60px;" required="">
-                                                <option value="" {% if not data.ovens_data.oven1.average_6_over_35 %}selected{% endif %}>---------</option>
-                                                <option value="Yes" {% if data.ovens_data.oven1.average_6_over_35 %}selected{% endif %}>Yes</option>
-                                                <option value="No" {% if data.ovens_data.oven1.average_6_over_35 %}selected{% endif %}>No</option>
+                                                <option value="" {% if not data.o1_average_6_over_35 %}selected{% endif %}>---------</option>
+                                                <option value="Yes" {% if data.o1_average_6_over_35 %}selected{% endif %}>Yes</option>
+                                                <option value="No" {% if data.o1_average_6_over_35 %}selected{% endif %}>No</option>
                                             </select>
                                             {% endif %}
                                         </td>
@@ -343,7 +404,7 @@
                                 <table name="oven2" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6" style="position: relative;">
-                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven2.oven_number }}{% else %}<input type="number" name="o2" id="o2" class="input" oninput="pushTravelCheck(2)" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven2.oven_number }}">{% endif %}
+                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven2.oven_number }}{% else %}<input type="number" name="o2" id="o2" class="input" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven2.oven_number }}">{% endif %}
                                             <span class="oven4_pop_class" id="oven2_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
@@ -359,11 +420,11 @@
                                     <tr style="text-align: center;">
                                         <td></td>
                                         <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
-                                        <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4"><strong>0</strong></td>
-                                        <td id="boxa4"><strong>15</strong></td>
-                                        <td id="boxa4"><strong>30</strong></td>
-                                        <td id="boxa4"><strong>45</strong></td>
+                                        <td id="boxa4" class="minSecSpace"><sub>Min</sub>\<sup>Sec</sup></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>0</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>15</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>30</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>45</strong></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
@@ -472,7 +533,7 @@
                                 <table name="oven3" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6" style="position: relative;">
-                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven3.oven_number }}{% else %}<input type="number" name="o3" id="o3" class="input" oninput="pushTravelCheck(3)" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven3.oven_number }}">{% endif %}
+                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven3.oven_number }}{% else %}<input type="number" name="o3" id="o3" class="input" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven3.oven_number }}">{% endif %}
                                             <span class="oven4_pop_class" id="oven3_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
@@ -489,10 +550,10 @@
                                         <td></td>
                                         <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
                                         <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4"><strong>0</strong></td>
-                                        <td id="boxa4"><strong>15</strong></td>
-                                        <td id="boxa4"><strong>30</strong></td>
-                                        <td id="boxa4"><strong>45</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>0</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>15</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>30</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>45</strong></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
@@ -599,7 +660,7 @@
                                 <table name="oven4" style="border-collapse: collapse;">
                                     <tr>
                                         <td colspan="6" style="position: relative;">
-                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven4.oven_number}}{% else %}<input type="number" name="o4" id="o4" class="input" oninput="pushTravelCheck(4)" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven4.oven_number}}">{% endif %}
+                                            <strong>Oven No:</strong> {% if search %}{{ data.ovens_data.oven4.oven_number}}{% else %}<input type="number" name="o4" id="o4" class="input" style="width: 40px; text-align: center;" maxlength="2" required value="{{ data.ovens_data.oven4.oven_number}}">{% endif %}
                                             <span class="oven4_pop_class" id="oven4_pop_id" style="display:none;">Please Change Oven No.</span>
                                         </td>
                                     </tr>
@@ -616,10 +677,10 @@
                                         <td></td>
                                         <td rowspan="3" style="border: 1px solid black;"><span class="sideWord">Push</span></td>
                                         <td id="boxa4" style="width: 50px; font-size: 10px;"><sub>Min</sub>\<sup>Sec</sup></td>
-                                        <td id="boxa4"><strong>0</strong></td>
-                                        <td id="boxa4"><strong>15</strong></td>
-                                        <td id="boxa4"><strong>30</strong></td>
-                                        <td id="boxa4"><strong>45</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>0</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>15</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>30</strong></td>
+                                        <td id="boxa4" class="tableReadingWidth"><strong>45</strong></td>
                                     </tr>
                                     <tr style="text-align: center;">
                                         <td></td>
@@ -720,16 +781,15 @@
                                         </td>
                                     </tr>
                                 </table>
-                            </div>
-                        </div>    
+                                
+                        </div>
                     </div>
                     <br><br>
-                    <div style="font-size: 20px; width: fit-content; margin: auto;position: relative;">
+                    <div class="notesCont">
                         <div style="text-align: left;">
                             Notes:
                         </div>
-                        <br>
-                        {{ data.notes }}
+                        {% if search %}<div class="noteSpace">{{ data.notes }}</div>{% else %}{{ data.notes }}{% endif %}
                         <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
                         <span class="comment_skip_class" id="comment_skip_id_2" style="display:none;">
                             <a id="exit_pop_id" class='exit_pop_class' onclick="exit_pop(2)">

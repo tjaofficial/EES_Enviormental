@@ -5,7 +5,7 @@ from ..models import daily_battery_profile_model, Forms, form5_model, form_setti
 from ..forms import formA5_form, user_profile_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import formA5_readings_data_Model_Upadte, formA5_ovens_data_build, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification, get_initial_data
+from ..utils import parse_form5_oven_dict, form5_reading_data_build, formA5_ovens_data_build, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification, get_initial_data
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -57,7 +57,11 @@ def formA5(request, facility, fsID, selector):
         else:
             if existing:
                 exist_canvas = database_form.canvas
-                initial_data = get_initial_data(form5_model, database_form)
+                unparsedData = get_initial_data(form5_model, database_form)
+                reading_data, ovens_data = parse_form5_oven_dict(unparsedData['reading_data'], unparsedData['ovens_data'])
+                newData = reading_data | ovens_data
+                initial_data = newData | unparsedData
+                print(initial_data)
             else:
                 initial_data = {
                     'date': now,
@@ -99,6 +103,8 @@ def formA5(request, facility, fsID, selector):
         if request.method == "POST":
             dataCopy = request.POST.copy()
             dataCopy['ovens_data'] = formA5_ovens_data_build(request.POST)
+            dataCopy['reading_data'] = form5_reading_data_build(request.POST)
+            dataCopy['reading_data']['units'] = options.bat_height_label
             if existing:
                 if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
                     dataCopy['canvas'] = exist_canvas
@@ -111,17 +117,17 @@ def formA5(request, facility, fsID, selector):
             if A_valid:
                 A = form.save(commit=False)
                 if not existing:
-                    print(A.wind_speed_stop)
-                    if A.wind_speed_stop == 'TBD':
-                        if int(A.wind_speed_start) == int(weather["wind_speed"]):
-                            A.wind_speed_stop = 'same'
+                    print(A.reading_data['wind_speed_stop'])
+                    if A.reading_data['wind_speed_stop'] == 'TBD':
+                        if int(A.reading_data['wind_speed_start']) == int(weather["wind_speed"]):
+                            A.reading_data['wind_speed_stop'] = 'same'
                         else:
-                            A.wind_speed_stop = weather['wind_speed']
-                    if A.ambient_temp_stop == 'TBD':
-                        if int(A.ambient_temp_start) == int(weather['temperature']):
-                            A.ambient_temp_stop = 'same'
+                            A.reading_data['wind_speed_stop'] = weather['wind_speed']
+                    if A.reading_data['ambient_temp_stop'] == 'TBD':
+                        if int(A.reading_data['ambient_temp_start']) == int(weather['temperature']):
+                            A.reading_data['ambient_temp_stop'] = 'same'
                         else:
-                            A.ambient_temp_stop = weather['temperature']
+                            A.reading_data['ambient_temp_stop'] = weather['temperature']
                 A.facilityChoice = finalFacility
                 
                 
@@ -130,14 +136,16 @@ def formA5(request, facility, fsID, selector):
                 fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 issueFound = False
-                if len(A.ovens_data['oven1']['highest_opacity']) >= 10 or len(A.ovens_data['oven1']['average_6_opacity']) >= 35 or len(A.ovens_data['oven1']['opacity_over_20']) == 'Yes' or len(A.ovens_data['oven1']['average_6_over_35']) == 'Yes':
+                if int(A.ovens_data['oven1']['highest_opacity']) >= 10 or int(A.ovens_data['oven1']['average_6_opacity']) >= 35 or A.ovens_data['oven1']['opacity_over_20'] == 'Yes' or A.ovens_data['oven1']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                elif len(A.ovens_data['oven2']['highest_opacity']) >= 10 or len(A.ovens_data['oven2']['average_6_opacity']) >= 35 or len(A.ovens_data['oven2']['opacity_over_20']) == 'Yes' or len(A.ovens_data['oven2']['average_6_over_35']) == 'Yes':
+                elif int(A.ovens_data['oven2']['highest_opacity']) >= 10 or int(A.ovens_data['oven2']['average_6_opacity']) >= 35 or A.ovens_data['oven2']['opacity_over_20'] == 'Yes' or A.ovens_data['oven2']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                elif len(A.ovens_data['oven3']['highest_opacity']) >= 10 or len(A.ovens_data['oven3']['average_6_opacity']) >= 35 or len(A.ovens_data['oven3']['opacity_over_20']) == 'Yes' or len(A.ovens_data['oven3']['average_6_over_35']) == 'Yes':
+                elif int(A.ovens_data['oven3']['highest_opacity']) >= 10 or int(A.ovens_data['oven3']['average_6_opacity']) >= 35 or A.ovens_data['oven3']['opacity_over_20'] == 'Yes' or A.ovens_data['oven3']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                elif len(A.ovens_data['oven4']['highest_opacity']) >= 10 or len(A.ovens_data['oven4']['average_6_opacity']) >= 35 or len(A.ovens_data['oven4']['opacity_over_20']) == 'Yes' or len(A.ovens_data['oven4']['average_6_over_35']) == 'Yes':
+                elif int(A.ovens_data['oven4']['highest_opacity']) >= 10 or int(A.ovens_data['oven4']['average_6_opacity']) >= 35 or A.ovens_data['oven4']['opacity_over_20'] == 'Yes' or A.ovens_data['oven4']['average_6_over_35'] == 'Yes':
                     issueFound = True
+                print("Highest Opacity: " + str(A.ovens_data['oven2']['highest_opacity']))
+                print("IssueFound: " + str(issueFound))
                 if issueFound:
                     if finder:
                         if selector == 'form':

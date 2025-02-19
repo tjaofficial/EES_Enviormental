@@ -97,5 +97,26 @@
 width:100%;
 }
 .formImageContainer > img{
-width:100%;
+    width:100%;
+}
+
+.tableReadingWidth{
+  width: 100px;
+}
+.notesCont{
+  font-size: 20px; 
+  width: 80%; 
+  margin: auto;
+  position: relative;
+}
+.noteSpace{
+  background-color: #0000002e;
+  border-radius: 6px;
+  min-height: 100px;
+  text-align: left;
+  padding: 10px;
+}
+.minSecSpace{
+  width: 42px;
+  font-size: 10px;
 }
