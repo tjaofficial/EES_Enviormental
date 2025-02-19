@@ -789,13 +789,13 @@ class formA5_form(ModelForm):
         'o3_average_6_over_35' : forms.Select(attrs={'id': 'o3_average_6_over_35', 'style': 'width: 60px;'}),
         'o4_average_6_over_35' : forms.Select(attrs={'id': 'o4_average_6_over_35', 'style': 'width: 60px;'}),
         'o1_highest_opacity' : forms.NumberInput(attrs={'oninput': 'averages_pt1()', 'id': 'o1_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-        'o1_average_6' : forms.NumberInput(attrs={'oninput': 'averages_pt1()', 'id': 'o1_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
         'o2_highest_opacity' : forms.NumberInput(attrs={'oninput': 'averages_pt2()', 'id': 'o2_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-        'o2_average_6' : forms.NumberInput(attrs={'oninput': 'averages_pt2()', 'id': 'o2_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
         'o3_highest_opacity' : forms.NumberInput(attrs={'oninput': 'averages_pt3()', 'id': 'o3_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-        'o3_average_6' : forms.NumberInput(attrs={'oninput': 'averages_pt3()', 'id': 'o3_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
         'o4_highest_opacity' : forms.NumberInput(attrs={'oninput': 'averages_pt4()', 'id': 'o4_highest_opacity','class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-        'o4_average_6' : forms.NumberInput(attrs={'oninput': 'averages_pt4()', 'id': 'o4_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+        'o1_average_6' : forms.NumberInput(attrs={"step": "0.01", 'oninput': 'averages_pt1()', 'id': 'o1_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+        'o2_average_6' : forms.NumberInput(attrs={"step": "0.01", 'oninput': 'averages_pt2()', 'id': 'o2_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+        'o3_average_6' : forms.NumberInput(attrs={"step": "0.01", 'oninput': 'averages_pt3()', 'id': 'o3_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
+        'o4_average_6' : forms.NumberInput(attrs={"step": "0.01", 'oninput': 'averages_pt4()', 'id': 'o4_average_6', 'class': 'input', 'type': 'number', 'style':'width: 60px; text-align: center;'}),
         'o1' : forms.NumberInput(attrs={'id' : 'o1', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
         'o2' : forms.NumberInput(attrs={'id' : 'o2', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
         'o3' : forms.NumberInput(attrs={'id' : 'o3', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
@@ -881,6 +881,7 @@ class formA5_form(ModelForm):
         # Get the instance's existing reading_data (if any)
         instance = kwargs.get("instance")
         existing_data = instance.reading_data if instance and instance.reading_data else {}
+        existing_ovens_data = instance.ovens_data if instance and instance.ovens_data else {}
 
         # Merge default fields with existing data and apply styles
         for key, default_value in self.DEFAULT_READING_FIELDS.items():
@@ -890,6 +891,39 @@ class formA5_form(ModelForm):
                 required=False,
                 widget=widget
             )
+        # **Merge `ovens_data` into the form fields (preserving structure)**
+        for oven_key, oven_values in existing_ovens_data.items():
+            oven_number = oven_key.replace("oven", "")  # Extract oven number (1, 2, 3, 4)
+
+            oven_fields = {
+                f"o{oven_number}_start": oven_values.get("start", ""),
+                f"o{oven_number}_stop": oven_values.get("stop", ""),
+                f"o{oven_number}": oven_values.get(f"o{oven_number}_oven_number", ""),
+                f"o{oven_number}_highest_opacity": oven_values.get(f"o{oven_number}_highest_opacity", ""),
+                f"o{oven_number}_opacity_over_20": oven_values.get(f"o{oven_number}_opacity_over_20", ""),
+                f"o{oven_number}_average_6_opacity": oven_values.get(f"o{oven_number}_average_6_opacity", ""),
+                f"o{oven_number}_average_6_over_35": oven_values.get(f"o{oven_number}_average_6_over_35", "")
+            }
+
+            # **Assign fields dynamically to form**
+            for field_name, value in oven_fields.items():
+                widget = self.JSON_WIDGET_STYLES.get(field_name, forms.TextInput(attrs={"class": "input"}))  # Default widget
+                self.fields[field_name] = forms.CharField(
+                    initial=value,
+                    required=False,
+                    widget=widget
+                )
+
+            # **Loop through `readings.push` and `readings.travel`**
+            for reading_type, reading_values in oven_values.get("readings", {}).items():
+                for index, reading in reading_values.items():
+                    field_name = f"o{oven_number}_{reading_type}_{index}_reads"
+                    widget = self.JSON_WIDGET_STYLES.get(field_name, forms.TextInput(attrs={"class": "input"}))  # Default widget
+                    self.fields[field_name] = forms.CharField(
+                        initial=reading,
+                        required=False,
+                        widget=widget
+                    )
 
 class formA5_readings_form(ModelForm):
     class Meta:

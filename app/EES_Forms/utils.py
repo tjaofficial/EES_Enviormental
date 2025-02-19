@@ -428,12 +428,9 @@ def parse_form5_oven_dict(reading_data, ovens_data):
             ovens.update({id_sec_1 + "_" + str(z) + "_reads": oven['readings']['travel'][str(x)]})
             y += 1
             z += 1
-
-    print(ovens)
     readings = {}
     for key2, reading in reading_data.items():
         readings.update({key2: reading})
-    print(readings)
     return json.loads(json.dumps(readings)), json.loads(json.dumps(ovens))
 
 def formA5_ovens_data_build(requestPOST):
@@ -2137,7 +2134,6 @@ def get_initial_data(modelName, modelInstance):
                 attrData = getattr(source, fieldName)
                 if isinstance(attrData, dict):
                     inner_dict = { iFieldKey: iFieldValue for iFieldKey, iFieldValue in attrData.items() }
-                    print("fuck")
                     return inner_dict
                 else:
                     return attrData
@@ -2147,7 +2143,6 @@ def get_initial_data(modelName, modelInstance):
         field.name for field in modelName._meta.get_fields() 
         if isinstance(field, Field) and field.name not in ["id","facilityChoice"]
     ]
-    print(allModelFields)
     modelList = [modelInstance]
     try:
         model_name = modelName._meta.object_name.replace("_model", "_readings_model")
@@ -2163,14 +2158,5 @@ def get_initial_data(modelName, modelInstance):
         print('only one model')
 
     initial_data = {fieldName: get_field_value(fieldName, modelList) for fieldName in allModelFields}
-    # for fieldName in allModelFields:
-    #     if not isinstance(get_field_value(fieldName, modelList), dict):
-    #         initial_data[fieldName] = get_field_value(fieldName, modelList)
-    #     else:
-    #         for key, items in get_field_value(fieldName, modelList).items():
-    #             initial_data[key] = items
-
-
-    print(initial_data)
     return initial_data
 

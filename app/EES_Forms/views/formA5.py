@@ -61,7 +61,6 @@ def formA5(request, facility, fsID, selector):
                 reading_data, ovens_data = parse_form5_oven_dict(unparsedData['reading_data'], unparsedData['ovens_data'])
                 newData = reading_data | ovens_data
                 initial_data = newData | unparsedData
-                print(initial_data)
             else:
                 initial_data = {
                     'date': now,
@@ -116,8 +115,8 @@ def formA5(request, facility, fsID, selector):
             finalFacility = options
             if A_valid:
                 A = form.save(commit=False)
+                A.formSettings = form_settings_model.objects.get(id=int(fsID))
                 if not existing:
-                    print(A.reading_data['wind_speed_stop'])
                     if A.reading_data['wind_speed_stop'] == 'TBD':
                         if int(A.reading_data['wind_speed_start']) == int(weather["wind_speed"]):
                             A.reading_data['wind_speed_stop'] = 'same'
@@ -129,23 +128,21 @@ def formA5(request, facility, fsID, selector):
                         else:
                             A.reading_data['ambient_temp_stop'] = weather['temperature']
                 A.facilityChoice = finalFacility
-                
-                
                 if not existing:
                     database_form = A
                 fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
                 issueFound = False
-                if int(A.ovens_data['oven1']['highest_opacity']) >= 10 or int(A.ovens_data['oven1']['average_6_opacity']) >= 35 or A.ovens_data['oven1']['opacity_over_20'] == 'Yes' or A.ovens_data['oven1']['average_6_over_35'] == 'Yes':
+                if float(A.ovens_data['oven1']['highest_opacity']) >= 10 or float(A.ovens_data['oven1']['average_6_opacity']) >= 35 or A.ovens_data['oven1']['opacity_over_20'] == 'Yes' or A.ovens_data['oven1']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                elif int(A.ovens_data['oven2']['highest_opacity']) >= 10 or int(A.ovens_data['oven2']['average_6_opacity']) >= 35 or A.ovens_data['oven2']['opacity_over_20'] == 'Yes' or A.ovens_data['oven2']['average_6_over_35'] == 'Yes':
+                elif float(A.ovens_data['oven2']['highest_opacity']) >= 10 or float(A.ovens_data['oven2']['average_6_opacity']) >= 35 or A.ovens_data['oven2']['opacity_over_20'] == 'Yes' or A.ovens_data['oven2']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                elif int(A.ovens_data['oven3']['highest_opacity']) >= 10 or int(A.ovens_data['oven3']['average_6_opacity']) >= 35 or A.ovens_data['oven3']['opacity_over_20'] == 'Yes' or A.ovens_data['oven3']['average_6_over_35'] == 'Yes':
+                elif float(A.ovens_data['oven3']['highest_opacity']) >= 10 or float(A.ovens_data['oven3']['average_6_opacity']) >= 35 or A.ovens_data['oven3']['opacity_over_20'] == 'Yes' or A.ovens_data['oven3']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                elif int(A.ovens_data['oven4']['highest_opacity']) >= 10 or int(A.ovens_data['oven4']['average_6_opacity']) >= 35 or A.ovens_data['oven4']['opacity_over_20'] == 'Yes' or A.ovens_data['oven4']['average_6_over_35'] == 'Yes':
+                elif float(A.ovens_data['oven4']['highest_opacity']) >= 10 or float(A.ovens_data['oven4']['average_6_opacity']) >= 35 or A.ovens_data['oven4']['opacity_over_20'] == 'Yes' or A.ovens_data['oven4']['average_6_over_35'] == 'Yes':
                     issueFound = True
-                print("Highest Opacity: " + str(A.ovens_data['oven2']['highest_opacity']))
-                print("IssueFound: " + str(issueFound))
+                A.save()
+                
                 if issueFound:
                     if finder:
                         if selector == 'form':
@@ -158,8 +155,6 @@ def formA5(request, facility, fsID, selector):
                 if selector != 'new':
                     createNotification(facility, request, fsID, now, 'submitted', False)
                     updateSubmissionForm(fsID, True, todays_log.date_save)
-                    A.formSettings = form_settings_model.objects.get(id=int(fsID))
-                A.save()
                 return redirect('IncompleteForms', facility)
     else:
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
