@@ -12,6 +12,12 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA5(request, facility, fsID, selector):
+    this = form5_model.objects.all()
+    for item in this:
+        facilityThing = bat_info_model.objects.filter(facility_name=item.facilityChoice.facility_name)[0]
+        item.reading_data['units'] = facilityThing.bat_height_label
+        item.save()
+
     variables = {}
     formName = 5
     freq = getFacSettingsInfo(fsID)
