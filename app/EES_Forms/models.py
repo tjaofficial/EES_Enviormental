@@ -696,6 +696,11 @@ class form1_model(models.Model):
         auto_now=False,
         blank=True
     )
+    ovens_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return str(self.date)

@@ -118,6 +118,7 @@
 }
 span.sideWord{
   writing-mode: vertical-rl;
+  padding: 5px;
 }
 #ptTable{
   padding-left: 50px;

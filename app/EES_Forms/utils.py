@@ -624,6 +624,93 @@ def form5_reading_data_build(requestPOST):
     }
     return json.loads(json.dumps(reading_data))
 
+def form1_json_build():
+    form1_query = form1_readings_model.objects.all()
+    for x in form1_query:
+        mainForm = x.form
+        ovens_data_unparsed = {
+            "charge_1": {
+                'c1_no': x.c1_no,
+                'c1_start': str(x.c1_start),
+                'c1_stop': str(x.c1_stop),
+                'c1_sec': x.c1_sec,
+                'c1_comments': x.c1_comments,
+            },
+            "charge_2": {
+                'c2_no': x.c2_no,
+                'c2_start': str(x.c2_start),
+                'c2_stop': str(x.c2_stop),
+                'c2_sec': x.c2_sec,
+                'c2_comments': x.c2_comments,
+            },
+            "charge_3": {
+                'c3_no': x.c3_no,
+                'c3_start': str(x.c3_start),
+                'c3_stop': str(x.c3_stop),
+                'c3_sec': x.c3_sec,
+                'c3_comments': x.c3_comments,
+            },
+            "charge_4": {
+                'c4_no': x.c4_no,
+                'c4_start': str(x.c4_start),
+                'c4_stop': str(x.c4_stop),
+                'c4_sec': x.c4_sec,
+                'c4_comments': x.c4_comments,
+            },
+            "charge_5": {
+                'c5_no': x.c5_no,
+                'c5_start': str(x.c5_start),
+                'c5_stop': str(x.c5_stop),
+                'c5_sec': x.c5_sec,
+                'c5_comments': x.c5_comments,
+            },
+            'comments': x.comments,
+            'larry_car': x.larry_car,
+            'total_seconds': x.total_seconds
+        }
+        mainForm.ovens_data = json.loads(json.dumps(ovens_data_unparsed))
+        mainForm.save()
+
+# ovens_data = {
+#             "charge_1": {
+#                 'c1_no': requestPOST['c1_no'],
+#                 'c1_start': requestPOST['c1_start'],
+#                 'c1_stop': requestPOST['c1_stop'],
+#                 'c1_sec': requestPOST['c1_sec'],
+#                 'c1_comments': requestPOST['c1_comments'],
+#             },
+#             "charge_2": {
+#                 'c2_no': requestPOST['c2_no'],
+#                 'c2_start': requestPOST['c2_start'],
+#                 'c2_stop': requestPOST['c2_stop'],
+#                 'c2_sec': requestPOST['c2_sec'],
+#                 'c2_comments': requestPOST['c2_comments'],
+#             },
+#             "charge_3": {
+#                 'c3_no': requestPOST['c3_no'],
+#                 'c3_start': requestPOST['c3_start'],
+#                 'c3_stop': requestPOST['c3_stop'],
+#                 'c3_sec': requestPOST['c3_sec'],
+#                 'c3_comments': requestPOST['c3_comments'],
+#             },
+#             "charge_4": {
+#                 'c4_no': requestPOST['c4_no'],
+#                 'c4_start': requestPOST['c4_start'],
+#                 'c4_stop': requestPOST['c4_stop'],
+#                 'c4_sec': requestPOST['c4_sec'],
+#                 'c4_comments': requestPOST['c4_comments'],
+#             },
+#             "charge_5": {
+#                 'c5_no': requestPOST['c5_no'],
+#                 'c5_start': requestPOST['c5_start'],
+#                 'c5_stop': requestPOST['c5_stop'],
+#                 'c5_sec': requestPOST['c5_sec'],
+#                 'c5_comments': requestPOST['c5_comments'],
+#             },
+#             'comments': requestPOST['comments'],
+#             'larry_car': requestPOST['larry_car'],
+#             'total_seconds': requestPOST['total_seconds']
+#     }
 # takes in the database array and returns wether it is empty True/False
 def DBEmpty(DBArray):
     emptyDB = False
