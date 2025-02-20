@@ -4,7 +4,7 @@ from datetime import datetime
 from ..models import issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
 from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import form1_json_build, updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
+from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 import ast
 from django.db.models import Field # type: ignore
 from django.http import JsonResponse # type: ignore
@@ -17,7 +17,6 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formA1(request, facility, fsID, selector):
 
-    form1_json_build()
 
 
     formName = 1
