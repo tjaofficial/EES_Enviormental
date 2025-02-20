@@ -4,7 +4,7 @@ from datetime import datetime
 from ..models import issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
 from ..forms import formA1_form, formA1_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
+from ..utils import form1_json_build, parse_form1_oven_dict, updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 import ast
 from django.db.models import Field # type: ignore
 from django.http import JsonResponse # type: ignore
@@ -17,7 +17,7 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 @lock
 def formA1(request, facility, fsID, selector):
 
-
+    
 
     formName = 1
     notifs = checkIfFacilitySelected(request.user, facility)
@@ -74,37 +74,31 @@ def formA1(request, facility, fsID, selector):
 
             data = formA1_form(initial=initial_data)
         if request.method == "POST":
+            dataCopy = request.POST.copy()
+            dataCopy['ovens_data'] = form1_json_build(request.POST)
             if existing:
-                form = formA1_form(request.POST, instance=database_form)
-                reads = formA1_readings_form(request.POST, instance=database_form2)
+                form = formA1_form(dataCopy, instance=database_form)
             else:
-                form = formA1_form(request.POST)
-                reads = formA1_readings_form(request.POST)
-
+                form = formA1_form(dataCopy)
             A_valid = form.is_valid()
-            B_valid = reads.is_valid()
             finalFacility = options
-            
-            if A_valid and B_valid:
+            print(form.errors)
+            if A_valid:
                 A = form.save(commit=False)
-                B = reads.save(commit=False)
-                B.form = A
                 A.facilityChoice = finalFacility
                 A.save()
-                B.save()
                 
                 if not existing:
                     database_form = A
                 fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
-            #     if B.comments not in {'-', 'n/a', 'N/A'}:
-            #         issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
-
-            #         return redirect (issue_page)
-                sec = {B.c1_sec, B.c2_sec, B.c3_sec, B.c4_sec, B.c5_sec}
+                if A.ovens_data['comments'] not in {'-', 'n/a', 'N/A'}:
+                    issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                    return redirect (issue_page)
+                sec = {int(A.ovens_data['charge_1']['c1_sec']), int(A.ovens_data['charge_2']['c2_sec']), int(A.ovens_data['charge_3']['c3_sec']), int(A.ovens_data['charge_4']['c4_sec']), int(A.ovens_data['charge_5']['c5_sec'])}
                 issueFound = False
                 compliance = False
-                if B.total_seconds >= 55:
+                if int(A.ovens_data['total_seconds']) >= 55:
                     issueFound = True
                     compliance = True
                 else:

@@ -42,7 +42,7 @@ def pdf_template_invoice(primaryData, userProf, title):
     return tableData, tableColWidths, style 
 
 def pdf_template_A1(primaryData, secondaryData, title, subTitle):
-    print(primaryData)
+    print(secondaryData)
     inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + primaryData.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(primaryData.date) + '</para>', styles['Normal'])
     batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + primaryData.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + primaryData.foreman + '</para>', styles['Normal'])
     startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(primaryData.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(primaryData.stop) + '</para>', styles['Normal'])
