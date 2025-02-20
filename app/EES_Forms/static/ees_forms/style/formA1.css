@@ -8,8 +8,8 @@
     padding: 8px 0;
     position: absolute;
     z-index: 1;
-    left: 0;
-    top: -63px;
+    left: -25px;
+    top: -80px;
     opacity: 100%;
     font-size: 1rem;
 }
@@ -27,16 +27,16 @@
 
 .c_popup_oven_class{
     visibility: hidden;
-    width: 205px;
+    width: 80px;
     background-color: #ff6666;
     color: black;
     text-align: center;
     border-radius: 6px;
-    padding: 8px 0;
+    padding: 3px 0;
     position: absolute;
     z-index: 1;
-    left: -200px;
-    top: -27px;
+    left: -76px;
+    top: -52px;
     opacity: 90%;
     font-size: 1rem;
 }
@@ -45,8 +45,8 @@
     position: absolute;
     top: 100%;
     left: 50%;
-    margin-left: 102px;
-    margin-top: -22px;
+    margin-left: 40px;
+    margin-top: -32px;
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
@@ -86,6 +86,7 @@
 #boxTitle{
     font-size: 30px;
 }
+/*
 #boxa1{
     align-content: center;
     text-align: center;
@@ -99,7 +100,6 @@
     text-align: center;
     border: 1px solid black;
     min-width: 80px;
-    /* max-width: 80px; */
     height: 35px;
 }
 #boxa3{
@@ -118,6 +118,157 @@
     max-width: 150px;
     height: 35px;
 }
+*/
 #datetime {
     width: 203px;
+}
+.noteSpace {
+    background-color: #0000002e;
+    border-radius: 6px;
+    min-height: 100px;
+    text-align: left;
+    padding: 10px;
+}
+
+#readingsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #dfe5e9; /* Light gray-blue background */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+#readingsTable th {
+    background-color: #263544;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    padding: 12px;
+}
+
+#readingsTable tr {
+    border-bottom: 1px solid #b0bec5; 
+}
+
+#readingsTable tr:nth-child(even) {
+    background-color: white;
+}
+
+#readingsTable tr:nth-child(odd) {
+    background-color: #f0f4f8; 
+}
+
+/* Table Cells */
+#readingsTable td {
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    color: #263544;
+    border-bottom: 1px solid #b0bec5;
+}
+
+#boxa1, #boxa2, #boxa3, #boxa13 {
+    border: 1px solid #b0bec5;
+    height: 40px;
+    font-size: 16px;
+}
+
+#boxa1 { min-width: 150px; max-width: 150px; }
+#boxa2 { min-width: 100px; max-width: 100px; }
+#boxa3 { min-width: 300px; max-width: 300px; }
+#boxa13 { min-width: 150px; max-width: 150px; }
+
+input[type="text"], input[type="number"], input[type="time"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #b0bec5;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+    background-color: white;
+}
+
+/* Style for select inputs */
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #b0bec5;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    cursor: pointer;
+    text-align: center;
+    appearance: none; /* Removes default dropdown arrow in some browsers */
+}
+
+/* Add a custom dropdown arrow */
+select::after {
+    content: "▼";
+    font-size: 14px;
+    color: #263544;
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
+}
+
+/* Style for date inputs */
+input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #b0bec5;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+    background-color: white;
+    cursor: pointer;
+}
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #b0bec5;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    text-align: left;
+    line-height: 1.5;
+    resize: none; /* Prevents manual resizing */
+    height: 100px; /* Default height */
+}
+
+/* Highlight on focus */
+textarea:focus {
+    border-color: #263544;
+    outline: none;
+}
+
+.noteSpace {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    min-height: 100px;
+    padding: 12px;
+    font-size: 16px;
+    color: #263544;
+}
+
+/* Table Hover Effect */
+#readingsTable tr:hover {
+    background-color: #cfd8dc; /* Slightly darker for hover effect */
+    transition: 0.2s ease-in-out;
+}
+
+/* Align Comments to Left */
+#readingsTable td#boxa3 {
+    text-align: left;
+    padding-left: 12px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    #readingsTable table {
+        font-size: 14px;
+    }
+    #readingsTable th, td {
+        padding: 8px;
+    }
 }

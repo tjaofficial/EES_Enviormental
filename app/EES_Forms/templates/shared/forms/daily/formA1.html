@@ -28,9 +28,9 @@
             <th></th>
           </tr>
           <tr>
-            <th colspan="6" style="text-align: center">
-              Facility Name: {{facility}}
-            </th>
+            <td colspan="6" style="text-align: center">
+              <strong>Facility Name:</strong> {{facility}}
+            </td>
             <th></th>
             <th></th>
             <th></th>
@@ -40,30 +40,29 @@
             <td style="height: 25px"></td>
           </tr>
           <tr>
-            <th colspan="6">
-              Inspectors Name: &nbsp; &nbsp; {{ data.observer }} &nbsp;
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date: &nbsp; &nbsp; &nbsp;
-              &nbsp; {{ data.date }}
-            </th>
+            <td colspan="6" style="text-align: center;">
+              <strong>Inspectors Name:</strong> &nbsp; {{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; 
+              <strong>Date:</strong>&nbsp; {{ data.date }}
+            </td>
           </tr>
           <tr>
             <td style="height: 25px"></td>
           </tr>
           <tr>
-            <th colspan="6">
-              Battery No. {{data.facilityChoice.bat_num}} &nbsp; Crew: &nbsp; &nbsp; {{ data.crew }}
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Battery Foreman:
-              &nbsp; &nbsp;{{ data.foreman }}
-            </th>
+            <td colspan="6" style="text-align: center;">
+              <strong>Battery No.:</strong> &nbsp;{{data.facilityChoice.bat_num}} &nbsp; &nbsp; &nbsp;
+              <strong>Crew:</strong> &nbsp; {{ data.crew }} &nbsp; &nbsp; &nbsp; &nbsp;
+              <strong>Battery Foreman:</strong> &nbsp; {{ data.foreman }}
+            </td>
           </tr>
           <tr>
             <td style="height: 25px"></td>
           </tr>
           <tr>
-            <th colspan="6">
-              Start Time: {% if selector != "form" %}{{ data.start|time:"h:i A" }}{% else %}{{ data.start }}{% endif %} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              &nbsp; End Time:{% if selector != "form" %}{{ data.stop|time:"h:i A" }}{% else %}{{ data.stop }}{% endif %}
-            </th>
+            <td colspan="6" style="text-align: center;">
+              <strong>Start Time:</strong> &nbsp; {% if selector != "form" %}{{ data.start|time:"h:i A" }}{% else %}{{ data.start }}{% endif %} &nbsp; &nbsp; &nbsp; &nbsp;
+              <strong>End Time:</strong> &nbsp; {% if selector != "form" %}{{ data.stop|time:"h:i A" }}{% else %}{{ data.stop }}{% endif %}
+            </td>
           </tr>
           <tr>
             <td style="height: 25px"></td>
@@ -74,16 +73,26 @@
             </td>
           </tr>
           <tr>
-            <td style="height: 25px"></td>
+            <td style="height: 25px">
+              <div style="position: relative;">
+                <span class="c1_popup_class" id="inop_ovenPopup" style="top: -43px; left: -165px;">
+                  Remove the inoperable oven listed below
+                </span>
+              </div>
+            </td>
           </tr>
-          <tr>
-            <td id="boxa2" style="width: 130px;">Charge Number</td>
-            <td id="boxa2" style="width: 113px;">Oven Number</td>
-            <td id="boxa1">Start Time</td>
-            <td id="boxa1">Stop Time</td>
-            <td id="boxa1">Visible Emissions (sec)</td>
-            <td id="boxa3">Comments</td>
-          </tr>
+        </table>
+        <table id="readingsTable">
+          <thead>
+            <tr>
+              <th id="boxa2" style="width: 130px;">Charge Number</th>
+              <th id="boxa2" style="width: 113px;">Oven Number</th>
+              <th id="boxa1">Start Time</th>
+              <th id="boxa1">Stop Time</th>
+              <th id="boxa1">Visible Emissions (sec)</th>
+              <th id="boxa3">Comments</th>
+            </tr>
+          </thead>
           <tr>
             <td id="boxa2" style="text-align: center">1</td>
             <td id="boxa2">{{ readings.c1_no }}</td>
@@ -177,6 +186,8 @@
             <td id="boxa1">{{readings.total_seconds}}</td>
             <td></td>
           </tr>
+        </table>
+        <table>
           <tr>
             <td style="height: 40px">Larry Car Number: {{ readings.larry_car }}</td>
           </tr>
@@ -184,7 +195,7 @@
             <td>Comments:</td>
           </tr>
           <tr style="font-size: 20px; text-align: center">
-            <td colspan="6">
+            <td colspan="6" class="noteSpace">
               {{ readings.comments }}
               <div style="position: relative;">
                 <span class="comment_skip_class" id="comment_skip_id1" data-inputValue1='' data-inputValue2=''></span>

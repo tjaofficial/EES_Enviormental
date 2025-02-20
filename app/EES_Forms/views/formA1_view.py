@@ -7,6 +7,8 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 import ast
 from django.db.models import Field # type: ignore
+from django.http import JsonResponse # type: ignore
+from django.core.exceptions import ObjectDoesNotExist # type: ignore
 
 lock = login_required(login_url='Login')
 back = Forms.objects.filter(form__exact='Incomplete Forms')
@@ -145,17 +147,15 @@ def formA1(request, facility, fsID, selector):
         'fsID': fsID
     })
 
+def inop_check_form_1(request):  # Add request parameter
+    today = datetime.now().date()
+    try:
+        dailyBatProf = daily_battery_profile_model.objects.get(date_save=today)
 
-    # hourNum = int(str(time)[0:2])
-    # minNum = str(time)[3:5]
-    # timeLabel = 'AM'
-    # if hourNum > 12:
-    #     newHourNum = str(hourNum - 12)
-    #     timeLabel = 'PM'
-    #     newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-    # elif hourNum == 00:
-    #     newHourNum = '12'
-    #     newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-    # else:
-    #     newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
-    # return newTime
+        # If `inop_numbs` is stored as a string like '44,45,54,62', split it into a list
+        response_data = dailyBatProf.inop_numbs[1:-1].replace(" ", "").split(",") if dailyBatProf.inop_numbs != "[]" else []
+    except ObjectDoesNotExist:
+        response_data = []
+
+    return JsonResponse(response_data, safe=False)
+

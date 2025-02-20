@@ -46,6 +46,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
 
     form = daily_battery_profile_form(initial=initial_data)
     if request.method == 'POST':
+        print(request.POST)
         if existing:
             form = daily_battery_profile_form(request.POST, instance=todays_log)
         else:
@@ -54,14 +55,15 @@ def daily_battery_profile_view(request, facility, access_page, date):
         if form.is_valid():
             A = form.save(commit=False)
             A.facilityChoice = options
-            if A.inop_numbs == '-':
+            if A.inop_numbs in ['-', 'None']:
                 A.inop_ovens = 0
+                A.inop_numbs = []
             else:
                 A.inop_ovens = len(request.POST['inop_numbs'].replace(' ', ''). split(','))
                 
                 newList = []
                 for x in request.POST['inop_numbs'].split(','):
-                    x = re.sub("[^0-9]", "", x)
+                    x = int(re.sub("[^0-9]", "", x))
                     newList.append(x)
                 A.inop_numbs = newList
             A.save()

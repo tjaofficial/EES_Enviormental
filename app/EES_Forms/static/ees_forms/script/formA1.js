@@ -1,3 +1,49 @@
+for (let x = 1; x <= 5; x++) {
+    document.getElementById(`c${x}_no`).addEventListener("change", check_ovens_inop);
+}
+
+async function check_ovens_inop() {
+    let ovenNumbers = [];
+
+    // Collect all entered oven numbers
+    for (let x = 1; x <= 5; x++) {
+        let input = document.getElementById(`c${x}_no`);
+        if (input && input.value) {
+            ovenNumbers.push(input.value.trim());
+        }
+    }
+
+    if (ovenNumbers.length === 0) return; // Don't fetch if no ovens are entered
+
+    let queryParams = `/api/get-inop/`;
+
+    try {
+        let response = await fetch(queryParams);
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+        let inopData = await response.json();
+
+        // Check and highlight inop ovens
+        let flagged = false
+        for (let x = 1; x <= 5; x++) {
+            let input = document.getElementById(`c${x}_no`);
+            if (input) {
+                if (inopData.includes(input.value.trim())) {
+                    flagged = true
+                }
+            }
+        }
+        if (flagged){
+            document.getElementById("inop_ovenPopup").style.visibility = "visible";  // Flag as inop
+        } else {
+            document.getElementById("inop_ovenPopup").style.visibility = "hidden";  // Reset if not inop
+        }
+    } catch (error) {
+        console.error("Error fetching inop ovens:", error);
+    }
+}
+
 // Sums the times on input
 const selector = document.getElementById('selector').dataset.selector;
  
@@ -32,143 +78,203 @@ function sumTime(){
             document.getElementById('total_seconds').value = '';
             document.getElementById("total_seconds").style.backgroundColor = "gray";
         }
-        
-        
-        //document.getElementById('total_seconds').placeholder = summedTime;
-        // if (totalTime) {
-        //     if (parseFloat(summedTime) == parseFloat(totalTime)) {
-        //         document.getElementById("total_seconds").style.backgroundColor = "#3c983c85";
-        //     } else {
-        //         document.getElementById("total_seconds").style.backgroundColor = "#F49B9B";
-        //     }
-        // } else {
-        //     if (summedTime == NaN) {
-        //         document.getElementById('total_seconds').placeholder = '-';
-        //     } else {
-        //         document.getElementById('total_seconds').placeholder = summedTime;
-        //     }
-        //     document.getElementById("total_seconds").style.backgroundColor = "#FFFA8B";
-        // }
     }
 }
 sumTime();
 
 function check_oven_numb() {
-    if (selector == 'form'){
-        var commentIncluded = true;
-        var commentList = [];
-        for (let i=1; i<=4; i++) {
-            var oven1 = document.getElementById("c"+ String(i) + "_no").value;
-            var oven2 = document.getElementById("c"+ String(i+1) +"_no").value;
-            if(!oven2 || !oven1){
-                var oven2 = NaN;
-                commentIncluded = false;
-            }
-            if (parseInt(oven1) == 84 && parseInt(oven2) == 1 || parseInt(oven1) == 85 && parseInt(oven2) == 2) {
-                //console.log("Check 1")
-                //console.log(commentIncluded)
-                document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
-                document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
-            } else if (parseInt(oven2) == parseInt(oven1) + 2) {
-                //console.log("Check 2")
-                //console.log(commentIncluded)
-                document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
-                document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
-            } else if (parseInt(oven1) >= parseInt(oven2)) {
-                //console.log("Check 3")
-                //console.log(commentIncluded)
-                document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'visible';
-                commentIncluded = false;
-                document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
-            } else if (parseInt(oven2) == parseInt(oven1) + 1) {
-                //console.log("Check 4")
-                //console.log(commentIncluded)
-                document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'visible';
-                commentIncluded = false;
-                document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
-            } else if (parseInt(oven2) > parseInt(oven1) + 2) {
-                //console.log("Check 5")
-                document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
-                var commentSet = false;
-                document.getElementById("comment_skip_id" + String(i)).style.visibility = 'visible';
-                document.getElementById("comment_skip_id" + String(i)).innerHTML = 'Please change Oven No. for Charge Number ' + String(i+1) + ' or click here to comment below what oven(s) were skipped.';
-                document.getElementById("comment_skip_id" + String(i)).onclick = function() {comment_add()};
-                document.getElementById("comment_skip_id" + String(i)).dataset.inputValue1 = parseInt(oven1);
-                document.getElementById("comment_skip_id" + String(i)).dataset.inputValue2 = parseInt(oven2);
-                
-                function comment_add() {
-                    //console.log("Check 5.1")
-                    const inputValue1 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue1;
-                    const inputValue2 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue2;
-                    for (let x=parseInt(inputValue1)+2; x<parseInt(inputValue2); x+=2) {
-                        document.getElementById("comments").value += ' Oven #' + String(x) + ' was skipped.'
-                    }
-                    commentSet = true
-                    commentList.push(commentSet)
-                    document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
-                    check_oven_numb();
-                }
+    function isEven(number) {
+        return number % 2 === 0;
+    }
+    if (selector == 'form') {
+        let commentIncluded = true;
+        let commentList = [];
 
-                function check_comments() {
-                    //console.log("Check 5.2")
-                    const inputValue1 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue1;
-                    const inputValue2 = document.getElementById("comment_skip_id" + String(i)).dataset.inputValue2;
-                    var commentsInput = document.getElementById("comments").value;
-                    
-                    for (let x=parseInt(inputValue1)+2; x<parseInt(inputValue2); x+=2) {
-                        if (commentsInput.includes('Oven #' + String(x) + ' was skipped.')) {
-                            //console.log("Check 5.2.1")
-                            document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
-                            commentSet = true;
-                        } else {
-                            //console.log("Check 5.2.2")
-                            commentSet = false;
-                        }
-                    }
-                    commentList.push(commentSet)
+        for (let i = 1; i <= 4; i++) {
+            let input1 = document.getElementById(`c${i}_no`);
+            let input2 = document.getElementById(`c${i + 1}_no`);
+            let oven1 = input1.value.trim();
+            let oven2 = input2 ? input2.value.trim() : "";
+    
+            if (i == 1) {
+                if (oven1){
+                    input1.style.border = "2px solid rgba(60, 152, 60, 0.52)";
+                    input1.style.boxShadow = "inset 0 0 4px 0px rgba(60, 152, 60, 0.52)";
+                } else {
+                    input1.style.border = "1px solid #b0bec5";
+                    input1.style.boxShadow = "unset";
                 }
-                check_comments();
-                //console.log(commentIncluded)
+            }
+            if (!oven1 && !oven2) {
+                // Empty inputs should be neutral (gray)
+                input1.style.border = "1px solid #b0bec5";
+                input1.style.boxShadow = "unset";
+                // document.getElementById(`c${i}_popup_oven`).style.visibility = "hidden";
+                // document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
+                if (input2) {
+                    input2.style.border = "1px solid #b0bec5";
+                    input2.style.boxShadow = "unset";
+                }
+                continue;
+            }
+
+            let num1 = parseInt(oven1);
+            let num2 = parseInt(oven2);
+
+            if (isNaN(num1) || (!isNaN(num2) && isNaN(num1))) {
+                if (input2) {
+                    input2.style.border = "2px solid rgba(60, 152, 60, 0.52)";
+                    input2.style.boxShadow = "inset 0 0 4px 0px rgba(60, 152, 60, 0.52)";
+                    // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "hidden";
+                    // document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
+                    input1.style.border = "1px solid #b0bec5";
+                    input1.style.boxShadow = "unset";
+                    // document.getElementById(`c${i}_popup_oven`).style.visibility = "hidden";
+                }
+                continue; // Skip if oven number is not valid
+            }
+
+            let validSequence = false;
+            let skippedOvens = false;
+            if (num2) {
+                if ((num1 === 84 && num2 === 1) || (num1 === 85 && num2 === 2)) {
+                    validSequence = true;
+                } else if (num2 === num1 + 2) {
+                    validSequence = true;
+                } else if (num1 === 84){
+                    if (!isEven(num2) && num2 !== 1){
+                        validSequence = true;
+                        skippedOvens = true
+                    }
+                } else if (num1 === 85){
+                    if (isEven(num2) && num2 !== 2){
+                        validSequence = true;
+                        skippedOvens = true
+                    }
+                }
+            }
+            //console.log(`In this set number 1: ${num1} & number 2: ${num2}`)
+            if (validSequence) {
+                // console.log("valid 1")
+                input2.style.border = "2px solid rgba(60, 152, 60, 0.52)";
+                input2.style.boxShadow = "inset 0 0 4px 0px rgba(60, 152, 60, 0.52)";
+                // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "hidden";
+            } else if (num2 && num2 < num1) {
+                //console.log("invalid 1")
+                input2.style.border = "2px solid red";
+                input2.style.boxShadow = "inset 0 0 4px 0px red";
+                // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
+                commentIncluded = false;
+            } else if (num2 && num2 === num1 + 1) {
+                //console.log("invalid 2")
+                input2.style.border = "2px solid red";
+                // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
+                commentIncluded = false;
+            } else if (num2 && num2 > num1 + 2 && (isEven(num1) && isEven(num2) || !isEven(num1) && !isEven(num2))) {
+                //console.log("invalid 3")
+                input2.style.border = "2px solid red";
+                skippedOvens = true
+            } else if (num1 && num1 === num2 + 1) {
+                //console.log("invalid 4")
+                input2.style.border = "2px solid red";
+                // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
+                commentIncluded = false;
+            } else if (num1 && num2 && num1 === num2){
+                //console.log("invalid 6")
+                input2.style.border = "2px solid red";
+                // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
+                commentIncluded = false;
             } else {
-                document.getElementById("c" + String(i+1) + "_popup_oven").style.visibility = 'hidden';
-                document.getElementById("comment_skip_id" + String(i)).style.visibility = 'hidden';
+                if (i>1){
+                    let oven0 = document.getElementById(`c${i - 1}_no`) ? document.getElementById(`c${i - 1}_no`).value.trim() : "";
+                    if (num1 && oven0 && num1 == oven0 + 1) {
+                        //console.log("invalid 5")
+                        input2.style.border = "2px solid red";
+                        // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
+                        commentIncluded = false;
+                    }
+                }
+            }
+            if (skippedOvens){
+                document.getElementById(`comment_skip_id${i}`).style.visibility = "visible";
+                document.getElementById(`comment_skip_id${i}`).innerHTML =
+                    `Please change Oven No. for Charge Number ${i + 1} or click here to comment below what oven(s) were skipped.`;
+                document.getElementById(`comment_skip_id${i}`).onclick = function () {
+                    comment_add(i, num1, num2);
+                };
+                document.getElementById(`comment_skip_id${i}`).dataset.inputvalue1 = num1;
+                document.getElementById(`comment_skip_id${i}`).dataset.inputvalue2 = num2;
+                check_comments(i, num1, num2);
+            } else {
+                document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
             }
         }
-        // console.log(commentList)
-        // if (commentIncluded && !commentList.includes(false)) {
-        //     console.log("Check END.1")
-        //     document.getElementById("submit").disabled = false;
-        // } else {
-        //     console.log("Check END.2")
-        //     document.getElementById("submit").disabled = true;
-        // }
     }
 }
-check_oven_numb();
 
-// function check_over_35sec() {
-//     if (selector != 'form') return;
-//     const c1_sec_value = document.getElementById('c1_sec').value,
-//     c2_sec_value = document.getElementById('c2_sec').value,
-//     c3_sec_value = document.getElementById('c3_sec').value;
-//     if (parseFloat(c1_sec_value) + parseFloat(c2_sec_value) + parseFloat(c3_sec_value) > 35) {
-//         // make popup
-//     }
-// }
-// function equal_start_stop() {
-//     const start = document.getElementById('main_start').value;
-//     const ovenStart = document.getElementById('c1_start').value;
-//     const stop = document.getElementById('c5_stop').value;
-//     const ovenSop = document.getElementById('c5_stop').value;
-    
-//     if (start) {
-//         document.getElementById('c1_start').placeholder = start;
-//         document.getElementById('c1_start').style.backgroundColor = '#F49B9B';
-//     } else if (ovenStart) {
-//         document.getElementById('c1_start').placeholder = start;
-//     }
-    
-    
-//     document.getElementById('main_stop').value = stop;
-// }
-// document.getElementById("c1_no").addEventListener("load", check_oven_numb());
+function comment_add(i, num1, num2) {
+    //console.log("Test 1")
+    //console.log(`i: ${i}, num1: ${num1}, num2: ${num2}`)
+    if (num1 === 85){
+        for (let x = 2; x < num2; x += 2) {
+            //console.log(`Comments were: ${document.getElementById("comments").value}`)
+            document.getElementById("comments").value += ` Oven #${x} was skipped and left empty.`;
+        }
+    } else if (num1 === 84){
+        for (let x = 1; x < num2; x += 2) {
+            //console.log(`Comments were: ${document.getElementById("comments").value}`)
+            document.getElementById("comments").value += ` Oven #${x} was skipped and left empty.`;
+        }
+    } else {
+        for (let x = num1 + 2; x < num2; x += 2) {
+            //console.log(`Comments were: ${document.getElementById("comments").value}`)
+            document.getElementById("comments").value += ` Oven #${x} was skipped and left empty.`;
+        }
+    }
+    document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
+    let storedData = localStorage.getItem("1_tempFormData"); 
+
+    if (storedData) {
+        let parsedData = JSON.parse(storedData); // Convert to object
+        
+        // Modify the "comments" field
+        parsedData.data.comments = document.getElementById("comments").value; 
+
+        // Save it back to localStorage
+        localStorage.setItem("1_tempFormData", JSON.stringify(parsedData));
+    }
+}
+
+function check_comments(i, num1, num2) {
+    //console.log("Test 1")
+    //console.log(`i: ${i}, num1: ${num1}, num2: ${num2}`)
+    let commentsInput = document.getElementById("comments").value;
+    //console.log(commentsInput)
+    let commentSet = false;
+
+    if (num1 === 85){
+        for (let x = 2; x < num2; x += 2) {
+            if (commentsInput.toLowerCase().includes(`Oven #${x} was skipped and left empty.`.toLowerCase())) {
+                document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
+                commentSet = true;
+            }
+        }
+    } else if (num1 === 84){
+        for (let x = 1; x < num2; x += 2) {
+            if (commentsInput.toLowerCase().includes(`Oven #${x} was skipped and left empty.`.toLowerCase())) {
+                document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
+                commentSet = true;
+            }
+        }
+    } else {
+        for (let x = num1 + 2; x < num2; x += 2) {
+            if (commentsInput.toLowerCase().includes(`Oven #${x} was skipped and left empty.`.toLowerCase())) {
+                document.getElementById(`comment_skip_id${i}`).style.visibility = "hidden";
+                commentSet = true;
+            }
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", check_oven_numb);
+

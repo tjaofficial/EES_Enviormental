@@ -107,6 +107,7 @@ urlpatterns = [
     path("<str:facility>/Monthly/26/inventory/<int:fsID>/<str:month>/<int:skNumber>/<str:selector>", views.spill_kits_inventory_form, name="skInventory"),
     path("<str:facility>/Quarterly/27/<int:fsID>/<str:selector>", views.quarterly_trucks, name="form27"),
     path("<str:facility>/Monthly/29/<int:fsID>/<str:selector>", views.spill_kits, name="form29"),
+    path("api/get-inop/", views.inop_check_form_1, name="get-inop"),
     
     ##---COKE_BATTERY_DATA
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
