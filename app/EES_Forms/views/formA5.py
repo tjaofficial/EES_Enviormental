@@ -51,7 +51,7 @@ def formA5(request, facility, fsID, selector):
         else:
             batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-        
+
         if search:
             exist_canvas = data.canvas
         else:

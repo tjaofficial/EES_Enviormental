@@ -12,6 +12,9 @@ from django.contrib import messages # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, USE_S3
 import os
 from django.utils.text import slugify # type: ignore
+from django.http import JsonResponse # type: ignore
+import json
+from django.views.decorators.csrf import csrf_exempt # type: ignore
 
 lock = login_required(login_url='Login')
 
@@ -1063,6 +1066,24 @@ def format_sop_file_path(filename):
     formatted_filename = slugify(base).replace('-', '_') + ext
     return f'SOPs/{formatted_filename}'  # Set folder to "SOPs/"
 
+@csrf_exempt
+def delete_selected_sops(request, facility):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            sop_ids = data.get('selected_sops', [])
+            
+            if sop_ids:
+                sop_model.objects.filter(id__in=sop_ids).delete()
+                return JsonResponse({'success': True, 'message': 'Selected SOPs deleted successfully.'})
+            else:
+                return JsonResponse({'success': False, 'message': 'No SOPs selected.'})
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Invalid JSON data.'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
 @lock
 def sop_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
@@ -1076,24 +1097,50 @@ def sop_view(request, facility):
         if 'facilitySelect' in request.POST.keys():
             if request.POST['facilitySelect'] != '':
                 return redirect('sup_dashboard', request.POST['facilitySelect'])
-        copyPost = request.POST.copy()
-        copyPost['facilityChoice'] = options
-        # print(request.FILES.url)
-        form = sop_form(copyPost, request.FILES)
-        print(form.errors)
-        if form.is_valid():
-            A = form.save(commit=False)
+        # copyPost = request.POST.copy()
+        # copyPost['facilityChoice'] = options
+        # # print(request.FILES.url)
+        # form = sop_form(copyPost, request.FILES)
+        # print(form.errors)
+        # if form.is_valid():
+        #     A = form.save(commit=False)
 
-            uploaded_file = request.FILES.get('pdf_file')
-            if uploaded_file:
-                formatted_path = format_sop_file_path(uploaded_file.name)
-                A.pdf_file.name = f'{formatted_path}'  # Full S3 path under "media/SOPs/"
+        #     uploaded_file = request.FILES.get('pdf_file')
+        #     if uploaded_file:
+        #         formatted_path = format_sop_file_path(uploaded_file.name)
+        #         A.pdf_file.name = f'{formatted_path}'  # Full S3 path under "media/SOPs/"
 
-            A.pdf_url = A.pdf_file.url
-            A.save()
+        #     A.pdf_url = A.pdf_file.url
+        #     A.save()
 
-            print("File Name:", A.pdf_file.name)  # Prints the file name
-            print("File URL:", A.pdf_file.url)
+        #     print("File Name:", A.pdf_file.name)  # Prints the file name
+        #     print("File URL:", A.pdf_file.url)
+        sop_id = request.POST.get('sop_id')
+        name = request.POST.get('name')
+        revision_date = request.POST.get('revision_date')
+        pdf_file = request.FILES.get('pdf_file')
+
+        if sop_id:  # Update existing SOP
+            sop_instance = sop_model.objects.get(id=sop_id)
+            sop_instance.name = name
+            sop_instance.revision_date = revision_date
+            if pdf_file:
+                sop_instance.pdf_file = pdf_file  # Save the uploaded file
+                sop_instance.save()
+                sop_instance.pdf_url = sop_instance.pdf_file.url  # Now get the URL after saving
+            sop_instance.save()
+        else:  # Add new SOP
+            new_sop = sop_model(
+                name=name,
+                revision_date=revision_date,
+                pdf_file=pdf_file,
+            )
+            new_sop.facilityChoice = options
+            new_sop.save()
+            new_sop.pdf_url = new_sop.pdf_file.url  # Access URL after saving
+            new_sop.save()
+
+        return redirect('Sop', facility=facility)
 
     return render(request, 'shared/sops.html', {
         'sortedFacilityData':sortedFacilityData, 

@@ -74,6 +74,7 @@ urlpatterns = [
     path("<str:facility>/issues_view/<int:fsID>/<str:form_date>/<str:access_page>", views.issues_view, name="issues_view"),
     path("<str:facility>/Contacts", views.shared_contacts_view, name="Contacts"),
     path("<str:facility>/Sop", views.sop_view, name="Sop"),
+    path('delete_selected_sops/<str:facility>/', views.delete_selected_sops, name='delete_selected_sops'),
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
     path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
@@ -108,6 +109,7 @@ urlpatterns = [
     path("<str:facility>/Quarterly/27/<int:fsID>/<str:selector>", views.quarterly_trucks, name="form27"),
     path("<str:facility>/Monthly/29/<int:fsID>/<str:selector>", views.spill_kits, name="form29"),
     path("api/get-inop/", views.inop_check_form_1, name="get-inop"),
+
     
     ##---COKE_BATTERY_DATA
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),

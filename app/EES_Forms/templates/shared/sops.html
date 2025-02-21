@@ -1,64 +1,74 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%} {% load static %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+</script>
 <link href="{% static 'ees_forms/style/sop_modal.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/styles.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/sop.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/sop_modal.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/sop.js' %}"></script>
+
 <div class="mainCont mainContCenter" style="width: 45rem;">
-    <div id="addModal" class="modalAdd">
-        <div class="modal-content">
-            <span class="closeAdd">&times;</span>
-            <div class='modalHeader'>
-                <h1>ADD SOP PDF</h1>
-            </div>
-            <div class='modalContent'>
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <center style="color:black;">
-                        Name: {{ sopForm.name }}<br><br>
-                        Revision Date: {{ sopForm.revision_date }}<br><br>
-                        File Upload: {{ sopForm.pdf_file }}<br><br>
-                        {{ sopForm.pdf_url }}
-                        <br>
-                        <input type="submit" value="Save">
-                    </center>  
-                </form>
-            </div>
-        </div>
-    </div>
     <div class='card'>
         <div class="cardHeader">
             {% include "shared/components/backArrow.html" with destination="dashboard"%}
             SOP Directory - By Name
         </div>
         <div class="contentCont">
-            <div style='display:inline-flex;'>
-                <div>
-                    <button id="addBtn" onclick="triggerButton(this)">Add SOP</button>
-                </div>
+            <!-- Bulk Action Buttons -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <button id="deleteSelected" class="actionBtn" onclick="deleteSelected()">Delete Selected</button>
+                <button id="addSopBtn" class="actionBtn" onclick="triggerButton(this)">Add SOP</button>
             </div>
-            <br><br>
-            <div class="CR_main">
-                <ul style="text-align: center;">
+
+            {% if sops %}
+            <table id="sopTable" class="sopTable">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                        <th>Name</th>
+                        <th>Revision Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for x in sops %}
-                    <div class="sopCard" style="width: 94%;padding-top: 10px; padding-bottom: 10px; display: inline-flex; margin: 8px;">
-                        <a href='{% if AWS %}{{ x.pdf_url }}{% else %}../media/{{x.pdf_file}}{% endif %}' target="_blank">
-                            <div style="width: 100%; text-align: left;font-size: 20px;">
-                                {{ x.name }} - {{ x.revision_date }}
-                            </div>
-                        </a>
-                        <div style='text-align:right; margin:auto; margin-right:0;display: inline-flex;}'>
-                            <div>
-                                <a style='color:red; font-size:10px;' href="{% url 'DeleteSop' facility x.id %}">delete</a>
-                            </div>
-                        </div>
-                    </div>
+                    <tr>
+                        <td><input type="checkbox" class="sopCheckbox" data-sop-id="{{ x.id }}"></td>
+                        <td style="text-decoration: underline; color: #007bff;"><a href='{% if AWS %}{{ x.pdf_url }}{% else %}../media/{{x.pdf_file}}{% endif %}' target="_blank" class="viewLink">{{ x.name }}</a></td>
+                        <td>{{ x.revision_date }}</td>
+                        <td>
+                            <button class="updateBtn" data-sop='{"id": "{{ x.id }}", "name": "{{ x.name }}", "revision_date": "{{ x.revision_date }}"}'>
+                                Update
+                            </button>
+                            <a href="{% url 'DeleteSop' facility x.id %}" class="deleteLink">Delete</a>
+                        </td>
+                    </tr>
                     {% endfor %}
-                </ul>    
-            </div>
+                </tbody>
+            </table>
+            {% else %}
+            <p class="noSopsMessage">No SOPs uploaded yet. Click "Add SOP" to upload a new file.</p>
+            {% endif %}
         </div>
     </div>
+    {% include "shared/components/sop_modal.html" %}
 </div>
 {% endblock %}

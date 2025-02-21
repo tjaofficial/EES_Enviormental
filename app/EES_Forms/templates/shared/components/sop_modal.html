@@ -1,0 +1,20 @@
+<div id="addModal" class="modalAdd">
+    <div class="modal-content">
+        <span class="closeAdd">&times;</span>
+        <div class='modalHeader'>
+            <h1 id="modalTitle">ADD SOP PDF</h1>
+        </div>
+        <div class='modalContent'>
+            <form id="sopForm" action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="sop_id" id="sopId" value="">  <!-- Hidden ID field -->
+                <center style="color:black;">
+                    Name: <input type="text" name="name" id="sopName"><br><br>
+                    Revision Date: <input type="date" name="revision_date" id="sopRevisionDate"><br><br>
+                    File Upload: <input type="file" name="pdf_file" id="sopFile"><br><br>
+                    <input type="submit" value="Save">
+                </center>  
+            </form>
+        </div>
+    </div>
+</div>

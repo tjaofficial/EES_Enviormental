@@ -255,7 +255,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             if formID == 6:
                 tableData, tableColWidths, style = pdf_template_6(formData, title, subTitle, formInformation)
             if formID == 7:
-                tableData, tableColWidths, style = pdf_template_7(formData, formSecondaryData, title, subTitle)
+                tableData, tableColWidths, style = pdf_template_7(formData, title, subTitle)
             if formID == 8:
                 tableData, tableColWidths, style = pdf_template_8(formData, title, subTitle)
             if formID == 9:
