@@ -1087,7 +1087,7 @@ def sop_view(request, facility):
             uploaded_file = request.FILES.get('pdf_file')
             if uploaded_file:
                 formatted_path = format_sop_file_path(uploaded_file.name)
-                A.pdf_file.name = f'media/{formatted_path}'  # Full S3 path under "media/SOPs/"
+                A.pdf_file.name = f'{formatted_path}'  # Full S3 path under "media/SOPs/"
 
             A.pdf_url = A.pdf_file.url
             A.save()
