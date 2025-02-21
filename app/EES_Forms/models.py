@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError # type: ignore
 from django.urls import reverse # type: ignore
 import datetime
+import os
+from django.utils.text import slugify # type: ignore
 
 quarter_choices = (
     ('1', '1st'),
@@ -5956,6 +5958,12 @@ class form27_model(models.Model):
             'exhaust_9_4': self.exhaust_9_4,
         }
 
+def sop_file_upload_path(instance, filename):
+    # Format the filename: replace spaces with underscores and clean up the name
+    base, ext = os.path.splitext(filename)
+    formatted_filename = slugify(base).replace('-', '_') + ext  # e.g., SOP__-_Collection_Main_2020-12-11.pdf
+    return f'SOPs/{formatted_filename}'
+
 class sop_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
     name = models.CharField(
@@ -5966,9 +5974,9 @@ class sop_model(models.Model):
         auto_now=False,
         blank=True,
     )
-    pdf_file = models.FileField(upload_to='SOPs/')
-    pdf_url = models.CharField(
-        max_length=1000000,
+    pdf_file = models.FileField(upload_to=sop_file_upload_path)
+    pdf_url = models.URLField(
+        max_length=1024,
         blank=True
     )
     
