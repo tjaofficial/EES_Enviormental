@@ -10,6 +10,9 @@ from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, c
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib import messages # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, USE_S3
+import os
+from django.utils.text import slugify # type: ignore
+
 lock = login_required(login_url='Login')
 
 
@@ -1054,6 +1057,12 @@ def shared_contacts_view(request, facility):
         'unlock': unlock
     })
     
+def format_sop_file_path(filename):
+    # Replace spaces with underscores and fix the filename format
+    base, ext = os.path.splitext(filename)
+    formatted_filename = slugify(base).replace('-', '_') + ext
+    return f'SOPs/{formatted_filename}'  # Set folder to "SOPs/"
+
 @lock
 def sop_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
@@ -1074,10 +1083,18 @@ def sop_view(request, facility):
         print(form.errors)
         if form.is_valid():
             A = form.save(commit=False)
-            print("File Name:", A.pdf_file.name)  # Prints the file name
-            print("File URL:", A.pdf_file.url)
+
+            uploaded_file = request.FILES.get('pdf_file')
+            if uploaded_file:
+                formatted_path = format_sop_file_path(uploaded_file.name)
+                A.pdf_file.name = f'media/{formatted_path}'  # Full S3 path under "media/SOPs/"
+
             A.pdf_url = A.pdf_file.url
             A.save()
+
+            print("File Name:", A.pdf_file.name)  # Prints the file name
+            print("File URL:", A.pdf_file.url)
+
     return render(request, 'shared/sops.html', {
         'sortedFacilityData':sortedFacilityData, 
         'notifs': notifs, 

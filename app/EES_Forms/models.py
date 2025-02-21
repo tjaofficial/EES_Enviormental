@@ -5974,7 +5974,7 @@ class sop_model(models.Model):
         auto_now=False,
         blank=True,
     )
-    pdf_file = models.FileField(upload_to=sop_file_upload_path)
+    pdf_file = models.FileField(upload_to='SOPs/')
     pdf_url = models.URLField(
         max_length=1024,
         blank=True
