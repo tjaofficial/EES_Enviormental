@@ -436,7 +436,8 @@ def parse_form5_oven_dict(reading_data, ovens_data):
 def parse_form1_oven_dict(ovens_data):
     ovens = {}
     for key, oven in ovens_data.items():
-        if key[:7] == "charge":
+        print()
+        if "charge" in key:
             charges =  f"c{key[7:]}"
             ovens.update({
                 f"{charges}_no": oven[f"{charges}_no"], 

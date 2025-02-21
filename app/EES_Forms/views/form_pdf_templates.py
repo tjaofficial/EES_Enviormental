@@ -41,22 +41,21 @@ def pdf_template_invoice(primaryData, userProf, title):
     
     return tableData, tableColWidths, style 
 
-def pdf_template_A1(primaryData, secondaryData, title, subTitle):
-    print(secondaryData)
+def pdf_template_A1(primaryData, title, subTitle):
     inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + primaryData.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(primaryData.date) + '</para>', styles['Normal'])
     batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + primaryData.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + primaryData.foreman + '</para>', styles['Normal'])
     startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(primaryData.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(primaryData.stop) + '</para>', styles['Normal'])
-    text1 = Paragraph(secondaryData.c1_comments,
+    text1 = Paragraph(primaryData.ovens_data['charge_1']['c1_comments'],
             styles['Normal'])
-    text2 = Paragraph(secondaryData.c2_comments,
+    text2 = Paragraph(primaryData.ovens_data['charge_2']['c2_comments'],
             styles['Normal'])
-    text3 = Paragraph(secondaryData.c3_comments,
+    text3 = Paragraph(primaryData.ovens_data['charge_3']['c3_comments'],
             styles['Normal'])
-    text4 = Paragraph(secondaryData.c4_comments,
+    text4 = Paragraph(primaryData.ovens_data['charge_4']['c4_comments'],
             styles['Normal'])
-    text5 = Paragraph(secondaryData.c5_comments,
+    text5 = Paragraph(primaryData.ovens_data['charge_5']['c5_comments'],
             styles['Normal'])
-    comments = Paragraph('<b>Comments:</b>    ' + secondaryData.comments,
+    comments = Paragraph('<b>Comments:</b>    ' + primaryData.ovens_data['comments'],
             styles['Normal'])
     print(primaryData.start)
     tableData = [
@@ -67,13 +66,13 @@ def pdf_template_A1(primaryData, secondaryData, title, subTitle):
             [startEnd],
             ['', '', '', '', '', ''],
             ['', Paragraph('<para align=center><b>Oven Number</b></para>', styles['Normal']), 'Start Time', 'Stop Time', Paragraph('<para align=center><b>Visible Emissions (sec)</b></para>',styles['Normal']), 'Comments'],
-            [1, secondaryData.c1_no, time_change(secondaryData.c1_start), time_change(secondaryData.c1_stop), secondaryData.c1_sec, text1],
-            [2, secondaryData.c2_no, time_change(secondaryData.c2_start), time_change(secondaryData.c2_stop), secondaryData.c2_sec, text2],
-            [3, secondaryData.c3_no, time_change(secondaryData.c3_start), time_change(secondaryData.c3_stop), secondaryData.c3_sec, text3],
-            [4, secondaryData.c4_no, time_change(secondaryData.c4_start), time_change(secondaryData.c4_stop), secondaryData.c4_sec, text4],
-            [5, secondaryData.c5_no, time_change(secondaryData.c5_start), time_change(secondaryData.c5_stop), secondaryData.c5_sec, text5],
-            ['', '', '', 'Total Seconds:', secondaryData.total_seconds],
-            [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + secondaryData.larry_car, styles['Normal'])],
+            [1, primaryData.ovens_data['charge_1']['c1_no'], time_change(primaryData.ovens_data['charge_1']['c1_start']), time_change(primaryData.ovens_data['charge_1']['c1_stop']), primaryData.ovens_data['charge_1']['c1_sec'], text1],
+            [2, primaryData.ovens_data['charge_2']['c2_no'], time_change(primaryData.ovens_data['charge_2']['c2_start']), time_change(primaryData.ovens_data['charge_2']['c2_stop']), primaryData.ovens_data['charge_2']['c2_sec'], text2],
+            [3, primaryData.ovens_data['charge_3']['c3_no'], time_change(primaryData.ovens_data['charge_3']['c3_start']), time_change(primaryData.ovens_data['charge_3']['c3_stop']), primaryData.ovens_data['charge_3']['c3_sec'], text3],
+            [4, primaryData.ovens_data['charge_4']['c4_no'], time_change(primaryData.ovens_data['charge_4']['c4_start']), time_change(primaryData.ovens_data['charge_4']['c4_stop']), primaryData.ovens_data['charge_4']['c4_sec'], text4],
+            [5, primaryData.ovens_data['charge_5']['c5_no'], time_change(primaryData.ovens_data['charge_5']['c5_start']), time_change(primaryData.ovens_data['charge_5']['c5_stop']), primaryData.ovens_data['charge_5']['c5_sec'], text5],
+            ['', '', '', 'Total Seconds:', primaryData.ovens_data['total_seconds']],
+            [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + primaryData.ovens_data['larry_car'], styles['Normal'])],
             [comments],
         ]
     tableColWidths = (25,70,100,100,90,150)
@@ -830,7 +829,7 @@ def pdf_template_6(primaryData, title, subTitle, formInformation):
     ]
     return tableData, tableColWidths, style
 
-def pdf_template_7(primaryData, secondaryData, title, subTitle):
+def pdf_template_7(primaryData, title, subTitle):
     # formSettings = primaryData.settings['settings']
     date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(primaryData.date) + '</para>', styles['Normal'])
     tableData = [

@@ -95,108 +95,108 @@
           </thead>
           <tr>
             <td id="boxa2" style="text-align: center">1</td>
-            <td id="boxa2">{{ readings.c1_no }}</td>
+            <td id="boxa2">{% if search %}{{ data.ovens_data.charge_1.c1_no }}{% else %}{{ data.c1_no }}{% endif %}</td>
             <td id="boxa1">
-              {% if selector != "form" %}{{ readings.c1_start|time:"h:i A" }}{% else %}{{ readings.c1_start }}{% endif %}
+              {% if search %}{{ data.ovens_data.charge_1.c1_start }}{% else %}{% if selector != "form" %}{{ data.c1_start|time:"h:i A" }}{% else %}{{ data.c1_start }}{% endif %}{% endif %}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c1_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{% if selector != "form" %}{{ readings.c1_stop|time:"h:i A" }}{% else %}{{ readings.c1_stop }}{% endif %}</td>
-            <td id="boxa1">{{ readings.c1_sec }}</td>
-            <td id="boxa3">{{ readings.c1_comments }}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_1.c1_stop }}{% else %}{% if selector != "form" %}{{ data.c1_stop|time:"h:i A" }}{% else %}{{ data.c1_stop }}{% endif %}{% endif %}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_1.c1_sec }}{% else %}{{ data.c1_sec }}{% endif %}</td>
+            <td id="boxa3">{% if search %}{{ data.ovens_data.charge_1.c1_comments }}{% else %}{{ data.c1_comments }}{% endif %}</td>
           </tr>
           <tr>
             <td id="boxa2" style="text-align: center">2</td>
             <td id="boxa2">
-              {{ readings.c2_no }}
+              {% if search %}{{ data.ovens_data.charge_2.c2_no }}{% else %}{{ data.c2_no }}{% endif %}
               <div style="position: relative;">
                 <span class="c_popup_oven_class" id="c2_popup_oven">Please Change Oven No.</span>
               </div>
             </td>
             <td id="boxa1">
-              {% if selector != "form" %}{{ readings.c2_start|time:"h:i A" }}{% else %}{{ readings.c2_start }}{% endif %}
+              {% if search %}{{ data.ovens_data.charge_2.c2_start }}{% else %}{% if selector != "form" %}{{ data.c2_start|time:"h:i A" }}{% else %}{{ data.c2_start }}{% endif %}{% endif %}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c2_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{% if selector != "form" %}{{ readings.c2_stop|time:"h:i A" }}{% else %}{{ readings.c2_stop }}{% endif %}</td>
-            <td id="boxa1">{{ readings.c2_sec }}</td>
-            <td id="boxa3">{{ readings.c2_comments }}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_2.c2_stop }}{% else %}{% if selector != "form" %}{{ data.c2_stop|time:"h:i A" }}{% else %}{{ data.c2_stop }}{% endif %}{% endif %}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_2.c2_sec }}{% else %}{{ data.c2_sec }}{% endif %}</td>
+            <td id="boxa3">{% if search %}{{ data.ovens_data.charge_2.c2_comments }}{% else %}{{ data.c2_comments }}{% endif %}</td>
           </tr>
           <tr>
             <td id="boxa2" style="text-align: center">3</td>
             <td id="boxa2">
-              {{ readings.c3_no }}
+              {% if search %}{{ data.ovens_data.charge_3.c3_no }}{% else %}{{ data.c3_no }}{% endif %}
               <div style="position: relative;">
                 <span class="c_popup_oven_class" id="c3_popup_oven">Please Change Oven No.</span>
               </div>
             </td>
             <td id="boxa1">
-              {% if selector != "form" %}{{ readings.c3_start|time:"h:i A" }}{% else %}{{ readings.c3_start }}{% endif %}
+              {% if search %}{{ data.ovens_data.charge_3.c3_start }}{% else %}{% if selector != "form" %}{{ data.c3_start|time:"h:i A" }}{% else %}{{ data.c3_start }}{% endif %}{% endif %}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c3_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{% if selector != "form" %}{{ readings.c3_stop|time:"h:i A" }}{% else %}{{ readings.c3_stop }}{% endif %}</td>
-            <td id="boxa1">{{ readings.c3_sec }}</td>
-            <td id="boxa3">{{ readings.c3_comments }}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_3.c3_stop }}{% else %}{% if selector != "form" %}{{ data.c3_stop|time:"h:i A" }}{% else %}{{ data.c3_stop }}{% endif %}{% endif %}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_3.c3_sec }}{% else %}{{ data.c3_sec }}{% endif %}</td>
+            <td id="boxa3">{% if search %}{{ data.ovens_data.charge_3.c3_comments }}{% else %}{{ data.c3_comments }}{% endif %}</td>
           </tr>
           <tr>
             <td id="boxa2" style="text-align: center">4</td>
             <td id="boxa2">
-              {{ readings.c4_no }}
+              {% if search %}{{ data.ovens_data.charge_4.c4_no }}{% else %}{{ data.c4_no }}{% endif %}
               <div style="position: relative;">
                 <span class="c_popup_oven_class" id="c4_popup_oven">Please Change Oven No.</span>
               </div>
             </td>
             <td id="boxa1">
-              {% if selector != "form" %}{{ readings.c4_start|time:"h:i A" }}{% else %}{{ readings.c4_start }}{% endif %}
+              {% if search %}{{ data.ovens_data.charge_4.c4_start }}{% else %}{% if selector != "form" %}{{ data.c4_start|time:"h:i A" }}{% else %}{{ data.c4_start }}{% endif %}{% endif %}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c4_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{% if selector != "form" %}{{ readings.c4_stop|time:"h:i A" }}{% else %}{{ readings.c4_stop }}{% endif %}</td>
-            <td id="boxa1">{{ readings.c4_sec }}</td>
-            <td id="boxa3">{{ readings.c4_comments }}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_4.c4_stop }}{% else %}{% if selector != "form" %}{{ data.c4_stop|time:"h:i A" }}{% else %}{{ data.c4_stop }}{% endif %}{% endif %}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_4.c4_sec }}{% else %}{{ data.c4_sec }}{% endif %}</td>
+            <td id="boxa3">{% if search %}{{ data.ovens_data.charge_4.c4_comments }}{% else %}{{ data.c4_comments }}{% endif %}</td>
           </tr>
           <tr>
             <td id="boxa2" style="text-align: center">5</td>
             <td id="boxa2">
-              {{ readings.c5_no }}
+              {% if search %}{{ data.ovens_data.charge_5.c5_no }}{% else %}{{ data.c5_no }}{% endif %}
               <div style="position: relative;">
                 <span class="c_popup_oven_class" id="c5_popup_oven">Please Change Oven No.</span>
               </div>
             </td>
             <td id="boxa1">
-              {% if selector != "form" %}{{ readings.c5_start|time:"h:i A" }}{% else %}{{ readings.c5_start }}{% endif %}
+              {% if search %}{{ data.ovens_data.charge_5.c5_start }}{% else %}{% if selector != "form" %}{{ data.c5_start|time:"h:i A" }}{% else %}{{ data.c5_start }}{% endif %}{% endif %}
               <div style="position: relative;">
                 <span class="c1_popup_class" id="c5_timePopup">Please Change Time</span>
               </div>
             </td>
-            <td id="boxa1">{% if selector != "form" %}{{ readings.c5_stop|time:"h:i A" }}{% else %}{{ readings.c5_stop }}{% endif %}</td>
-            <td id="boxa1">{{ readings.c5_sec }}</td>
-            <td id="boxa3">{{ readings.c5_comments }}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_5.c5_stop }}{% else %}{% if selector != "form" %}{{ data.c5_stop|time:"h:i A" }}{% else %}{{ data.c5_stop }}{% endif %}{% endif %}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.charge_5.c5_sec }}{% else %}{{ data.c5_sec }}{% endif %}</td>
+            <td id="boxa3">{% if search %}{{ data.ovens_data.charge_5.c5_comments }}{% else %}{{ data.c5_comments }}{% endif %}</td>
           </tr>
           <tr>
             <td></td>
             <td></td>
             <td></td>
             <td id="boxa1">Total(Seconds):</td>
-            <td id="boxa1">{{readings.total_seconds}}</td>
+            <td id="boxa1">{% if search %}{{ data.ovens_data.total_seconds }}{% else %}{{data.total_seconds}}{% endif %}</td>
             <td></td>
           </tr>
         </table>
-        <table>
+        <table class="lowerTable">
           <tr>
-            <td style="height: 40px">Larry Car Number: {{ readings.larry_car }}</td>
+            <td style="height: 40px">Larry Car Number: {% if search %}{{ data.ovens_data.larry_car }}{% else %}{{ data.larry_car }}{% endif %}</td>
           </tr>
           <tr style="font-size: 20px">
             <td>Comments:</td>
           </tr>
           <tr style="font-size: 20px; text-align: center">
             <td colspan="6" class="noteSpace">
-              {{ readings.comments }}
+              {% if search %}{{ data.ovens_data.comments }}{% else %}{{ data.comments }}{% endif %}
               <div style="position: relative;">
                 <span class="comment_skip_class" id="comment_skip_id1" data-inputValue1='' data-inputValue2=''></span>
                 <span class="comment_skip_class" id="comment_skip_id2" data-inputValue1='' data-inputValue2=''></span>

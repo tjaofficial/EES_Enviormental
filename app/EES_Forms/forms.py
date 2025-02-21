@@ -383,7 +383,9 @@ class formA1_form(ModelForm):
             'type': 'time',
             'style': 'width: 130px;',
             "required": True}),
-        'larry_car': forms.Select(attrs={'style': 'width: 60px;'}),
+        'larry_car': forms.Select(
+            attrs={'style': 'width: 60px;'}
+        ),
         'total_seconds': forms.NumberInput(attrs={
             'id': 'total_seconds', 
             'oninput': 'sumTime()',
@@ -400,7 +402,16 @@ class formA1_form(ModelForm):
 
         # Get the instance's existing ovens_data (if any)
         instance = kwargs.get("instance")
+        initial = kwargs.get("initial")
         existing_data = instance.ovens_data if instance and instance.ovens_data else {}
+        related_facility = initial['formSettings'] if hasattr(initial['formSettings'], 'settings') else None
+
+        if related_facility:
+            larry_cars = related_facility.settings.get('settings', {}).get('larry_car_quantity', 0)
+            larry_car_choices = [(str(car), str(car)) for car in range(1, int(larry_cars)+1)]
+        else:
+            larry_car_choices = []
+
 
         # **Handling Oven Data**
         for i in range(1, 6):  # Assuming max 5 ovens
@@ -417,7 +428,7 @@ class formA1_form(ModelForm):
 
             # Assign fields dynamically to form
             for field_name, value in oven_fields.items():
-                widget = forms.TextInput(attrs={"class": "input", "style": "width: 100px;"})
+                widget = self.JSON_WIDGET_STYLES.get(field_name, forms.TextInput(attrs={"class": "input"}))
                 self.fields[field_name] = forms.CharField(
                     initial=value,
                     required=False,
@@ -428,19 +439,20 @@ class formA1_form(ModelForm):
         self.fields["comments"] = forms.CharField(
             initial=existing_data.get("comments", ""),
             required=False,
-            widget=forms.Textarea(attrs={'id': 'comments', 'rows': 3, 'cols': 50, 'style': 'width: 300px;'})
+            widget=self.JSON_WIDGET_STYLES.get("comments", forms.TextInput(attrs={"class": "input"}))
         )
 
-        self.fields["larry_car"] = forms.CharField(
+        self.fields["larry_car"] = forms.ChoiceField(
+            choices=[("", "Select a Larry Car")] + larry_car_choices,
             initial=existing_data.get("larry_car", ""),
             required=False,
-            widget=forms.TextInput(attrs={"class": "input", "style": "width: 60px; text-align: center;"})
+            widget=self.JSON_WIDGET_STYLES.get("larry_car", forms.TextInput(attrs={"class": "input"}))
         )
 
         self.fields["total_seconds"] = forms.FloatField(
             initial=existing_data.get("total_seconds", ""),
             required=False,
-            widget=forms.NumberInput(attrs={"class": "input", "readonly": True, "style": "width: 80px; text-align: center;"})
+            widget=self.JSON_WIDGET_STYLES.get("total_seconds", forms.TextInput(attrs={"class": "input"}))
         )
 
 class formA1_readings_form(ModelForm):

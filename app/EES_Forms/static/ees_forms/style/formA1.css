@@ -272,3 +272,6 @@ textarea:focus {
         padding: 8px;
     }
 }
+.lowerTable{
+    width: 100%;
+}

@@ -178,7 +178,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                 submittedFormDate = submittedForm.date
             except:
                 submittedFormDate = submittedForm.week_start
-            if int(formID) in (1,17,18,19,22):
+            if int(formID) in (17,18,19,22):
                 formSecondaryModelName = formInformation.link + '_readings_model'
                 try:
                     formSecondaryModel = apps.get_model('EES_Forms', formSecondaryModelName)
@@ -243,7 +243,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             #create a stream
             stream = io.BytesIO()
             if formID == 1:
-                tableData, tableColWidths, style = pdf_template_A1(formData, formSecondaryData, title, subTitle)
+                tableData, tableColWidths, style = pdf_template_A1(formData, title, subTitle)
             if formID == 2:
                 tableData, tableColWidths, style = pdf_template_A2(formData, title, subTitle)
             if formID == 3:

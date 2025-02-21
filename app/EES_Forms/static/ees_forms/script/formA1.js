@@ -90,7 +90,7 @@ function check_oven_numb() {
         let commentIncluded = true;
         let commentList = [];
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 5; i++) {
             let input1 = document.getElementById(`c${i}_no`);
             let input2 = document.getElementById(`c${i + 1}_no`);
             let oven1 = input1.value.trim();
@@ -120,7 +120,7 @@ function check_oven_numb() {
 
             let num1 = parseInt(oven1);
             let num2 = parseInt(oven2);
-
+            //console.log(`Number 1: ${num1}, Nunmer 2: ${num2}`)
             if (isNaN(num1) || (!isNaN(num2) && isNaN(num1))) {
                 if (input2) {
                     input2.style.border = "2px solid rgba(60, 152, 60, 0.52)";
@@ -130,8 +130,25 @@ function check_oven_numb() {
                     input1.style.border = "1px solid #b0bec5";
                     input1.style.boxShadow = "unset";
                     // document.getElementById(`c${i}_popup_oven`).style.visibility = "hidden";
+                } else {
+                    input1.style.border = "1px solid #b0bec5";
+                    input1.style.boxShadow = "unset";
                 }
                 continue; // Skip if oven number is not valid
+            } else if (num1 && isNaN(num2)) {
+                let num0 = parseInt(document.getElementById(`c${i-1}_no`).value.trim());
+                // console.log(`Number 0: ${num0}, Number 1: ${num1}`)
+                if (num0 && num1 > num0 + 2 && (isEven(num1) && isEven(num0) || !isEven(num1) && !isEven(num0))){
+                    input1.style.border = "2px solid rgba(60, 152, 60, 0.52)";
+                    input1.style.boxShadow = "inset 0 0 4px 0px rgba(60, 152, 60, 0.52)";
+                } else if (num0 && num1 === num0 + 2){
+                    input1.style.border = "2px solid rgba(60, 152, 60, 0.52)";
+                    input1.style.boxShadow = "inset 0 0 4px 0px rgba(60, 152, 60, 0.52)";
+                } else {
+                    input1.style.border = "2px solid red";
+                    input1.style.boxShadow = "inset 0 0 4px 0px red";
+                }
+                continue;
             }
 
             let validSequence = false;
@@ -155,7 +172,7 @@ function check_oven_numb() {
             }
             //console.log(`In this set number 1: ${num1} & number 2: ${num2}`)
             if (validSequence) {
-                // console.log("valid 1")
+                //console.log("valid 1")
                 input2.style.border = "2px solid rgba(60, 152, 60, 0.52)";
                 input2.style.boxShadow = "inset 0 0 4px 0px rgba(60, 152, 60, 0.52)";
                 // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "hidden";
@@ -168,20 +185,24 @@ function check_oven_numb() {
             } else if (num2 && num2 === num1 + 1) {
                 //console.log("invalid 2")
                 input2.style.border = "2px solid red";
+                input2.style.boxShadow = "inset 0 0 4px 0px red";
                 // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
                 commentIncluded = false;
             } else if (num2 && num2 > num1 + 2 && (isEven(num1) && isEven(num2) || !isEven(num1) && !isEven(num2))) {
                 //console.log("invalid 3")
                 input2.style.border = "2px solid red";
+                input2.style.boxShadow = "inset 0 0 4px 0px red";
                 skippedOvens = true
             } else if (num1 && num1 === num2 + 1) {
                 //console.log("invalid 4")
                 input2.style.border = "2px solid red";
+                input2.style.boxShadow = "inset 0 0 4px 0px red";
                 // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
                 commentIncluded = false;
             } else if (num1 && num2 && num1 === num2){
                 //console.log("invalid 6")
                 input2.style.border = "2px solid red";
+                input2.style.boxShadow = "inset 0 0 4px 0px red";
                 // document.getElementById(`c${i + 1}_popup_oven`).style.visibility = "visible";
                 commentIncluded = false;
             } else {

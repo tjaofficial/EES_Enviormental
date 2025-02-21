@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from datetime import datetime
-from ..models import issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
-from ..forms import formA1_form, formA1_readings_form
+from ..models import form_settings_model, issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
+from ..forms import formA1_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import form1_json_build, parse_form1_oven_dict, updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
 import ast
@@ -29,7 +29,6 @@ def formA1(request, facility, fsID, selector):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
     submitted_forms = form1_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    org2 = form1_readings_model.objects.all().order_by('-form')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
     if daily_prof.exists():
@@ -38,18 +37,11 @@ def formA1(request, facility, fsID, selector):
             form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
             database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
-
-            for x in org2:
-                if str(x.form.date) == str(selector):
-                    database_model2 = x
-            readings = database_model2
-            
             existing = True
             search = True
         elif now == todays_log.date_save:
-            if submitted_forms.exists() and org2.exists():
+            if submitted_forms.exists():
                 database_form = submitted_forms[0]
-                database_form2 = org2[0]
                 if todays_log.date_save == database_form.date:
                     existing = True
         else:
@@ -60,8 +52,10 @@ def formA1(request, facility, fsID, selector):
             database_form = ''
         else:
             if existing:
-                initial_data = get_initial_data(form1_model, database_form)
-                readings = formA1_readings_form(initial=initial_data)
+                unparsedData = get_initial_data(form1_model, database_form)
+                ovens_data = parse_form1_oven_dict(unparsedData['ovens_data'])
+                initial_data = unparsedData | ovens_data
+                print(ovens_data)
             else:
                 initial_data = {
                     'date': todays_log.date_save,
@@ -70,9 +64,8 @@ def formA1(request, facility, fsID, selector):
                     'foreman': todays_log.foreman,
                     'facility_name': facility,
                 }
-                readings = formA1_readings_form()
-
             data = formA1_form(initial=initial_data)
+
         if request.method == "POST":
             dataCopy = request.POST.copy()
             dataCopy['ovens_data'] = form1_json_build(request.POST)
@@ -85,6 +78,7 @@ def formA1(request, facility, fsID, selector):
             print(form.errors)
             if A_valid:
                 A = form.save(commit=False)
+                A.formSettings = form_settings_model.objects.get(id=int(fsID))
                 A.facilityChoice = finalFacility
                 A.save()
                 
@@ -137,7 +131,6 @@ def formA1(request, facility, fsID, selector):
         "back": back, 
         'todays_log': todays_log, 
         'data': data, 
-        'readings': readings, 
         'formName': formName, 
         'selector': selector,
         'picker': picker,
