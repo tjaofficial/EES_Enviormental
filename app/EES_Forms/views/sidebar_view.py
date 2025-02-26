@@ -629,7 +629,7 @@ def search_forms_view(request, facility, access_page):
 def issues_view(request, facility, fsID, form_date, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    profile = user_profile_model.objects.all()
+    profile = user_profile_model.objects.get(user=request.user)
     now = datetime.datetime.now().date()
     todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.all()
@@ -701,6 +701,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
             dataCopy = request.POST.copy()
             dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
             dataCopy["out_of_compliance"] = compliance
+            dataCopy["userChoice"] = profile
             if existing:
                 data = issues_form(dataCopy, instance=database_form)
             else:

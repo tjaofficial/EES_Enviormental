@@ -6,7 +6,7 @@ from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected
 import datetime
 import os
 
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 lock = login_required(login_url='Login')
 
 @lock
@@ -56,7 +56,7 @@ def profile(request, facility, access_page):
         'client': client, 
         'supervisor': supervisor, 
         'facility': facility, 
-        "back": back, 
+         
         'user_select': user_select, 
         "today": today, 
         'pic': pic, 

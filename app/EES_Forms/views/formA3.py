@@ -9,7 +9,7 @@ from ..utils import issueForm_picker, checkIfFacilitySelected, updateSubmissionF
 from django.contrib import messages # type: ignore
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 @lock
 def formA3(request, facility, fsID, selector):
@@ -125,7 +125,7 @@ def formA3(request, facility, fsID, selector):
         "unlock": unlock,
         "search": search, 
         "supervisor": supervisor, 
-        "back": back, 
+         
         'todays_log': todays_log, 
         'data': data, 
         'formName': formName, 

@@ -418,7 +418,6 @@ class bat_info_model(models.Model):
         return self.facility_name
 
 class Forms(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     form = models.CharField(max_length=30)
     frequency = models.CharField(max_length=30, choices=frequent_choices)
     day_freq = models.CharField(max_length=30, choices=days_choices, null=True)
@@ -427,9 +426,6 @@ class Forms(models.Model):
     link = models.CharField(max_length=30)
     header = models.CharField(max_length=80)
     title = models.CharField(max_length=80)
-    due_date = models.DateField(auto_now_add=False, auto_now=False, blank=True)
-    date_submitted = models.DateField(auto_now_add=False, auto_now=False, blank=True)
-    submitted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.form
@@ -4489,6 +4485,12 @@ class form25_model(models.Model):
 
 class issues_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    userChoice = models.ForeignKey(
+        'user_profile_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     form = models.CharField(max_length=30)
     issues = models.CharField(max_length=300)
     notified = models.CharField(max_length=30)

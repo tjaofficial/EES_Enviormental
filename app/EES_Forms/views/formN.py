@@ -7,7 +7,7 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import getFacSettingsInfo, checkIfFacilitySelected, setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 
 @lock

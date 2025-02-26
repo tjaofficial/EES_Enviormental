@@ -18,7 +18,7 @@ import time
 from .form_pdf_templates import *
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
     
 class PageNumCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):

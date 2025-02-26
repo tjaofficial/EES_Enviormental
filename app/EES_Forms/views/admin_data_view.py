@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render # type: ignore
 import datetime
 from ..models import Forms, user_profile_model
 from django.contrib.auth.decorators import login_required # type: ignore
 from ..utils import setUnlockClientSupervisor
 
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 lock = login_required(login_url='Login')
 
 
@@ -16,7 +16,7 @@ def admin_data_view(request, facility):
 
     return render(request, "shared/admin_data.html", {
         'facility': facility, 
-        "back": back, 
+         
         "today": today, 
         'profile': profile,
         'unlock': unlock,

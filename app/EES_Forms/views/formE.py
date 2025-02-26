@@ -9,7 +9,7 @@ from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picke
 
 lock = login_required(login_url='Login')
 
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 
 @lock
@@ -106,7 +106,7 @@ def formE(request, facility, fsID, selector):
         'unlock': unlock, 
         'supervisor': supervisor, 
         'existing': existing, 
-        "back": back, 
+         
         'todays_log': todays_log, 
         'form': form, 
         'selector': selector, 

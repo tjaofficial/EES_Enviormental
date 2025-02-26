@@ -3,7 +3,7 @@ from ..models import Forms, user_profile_model, daily_battery_profile_model, for
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 profile = user_profile_model.objects.all()
 
 
@@ -65,5 +65,5 @@ def method303_rolling_avg(request, facility):
     list_of_records = form_compile(daily_prof)
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        'options': options, 'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'options': options, 'facility': facility, "now": now, 'todays_log': todays_log,  "today": today, 'list_of_records': list_of_records, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
     })

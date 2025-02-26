@@ -8,7 +8,7 @@ import json
 from ..utils import issueForm_picker, checkIfFacilitySelected, updateSubmissionForm, setUnlockClientSupervisor, createNotification, getFacSettingsInfo, get_initial_data
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 @lock
 def formA4(request, facility, fsID, selector):
@@ -123,7 +123,7 @@ def formA4(request, facility, fsID, selector):
         'existing': existing, 
         "client": client, 
         "supervisor": supervisor, 
-        "back": back, 
+         
         'todays_log': todays_log, 
         'data': data, 
         'formName': formName, 

@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta # type: ignore
 from ..utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 
 @lock
@@ -222,7 +222,7 @@ def formF1(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF1.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
@@ -435,7 +435,7 @@ def formF2(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF2.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
@@ -647,7 +647,7 @@ def formF3(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF3.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
@@ -859,7 +859,7 @@ def formF4(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF4.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, "today": today, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, "today": today, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
@@ -1071,7 +1071,7 @@ def formF5(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF5.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
@@ -1274,7 +1274,7 @@ def formF6(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF6.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })
 
 
@@ -1480,5 +1480,5 @@ def formF7(request, selector):
         return redirect(batt_prof)
 
     return render(request, "shared/forms/weekly/formF7.html", {
-        "back": back, 'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
+         'todays_log': todays_log, 'data': data, 'selector': selector, 'profile': profile, 'formName': formName
     })

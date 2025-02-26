@@ -8,7 +8,7 @@ from ..utils import getFacSettingsInfo, checkIfFacilitySelected, issueForm_picke
 import json
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 
 @lock
@@ -200,7 +200,7 @@ def formC(request, facility, fsID, selector):
         "client": client, 
         'unlock': unlock, 
         'supervisor': supervisor, 
-        "back": back, 
+         
         'profile': profile, 
         'selector': selector, 
         'formName': formName, 

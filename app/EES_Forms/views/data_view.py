@@ -6,7 +6,7 @@ from django.apps import apps # type: ignore
 from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 from django.contrib.auth.decorators import login_required # type: ignore
 
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
 
@@ -49,7 +49,7 @@ def pt_admin1_view(request, facility):
         'facility': facility, 
         "now": now, 
         'todays_log': todays_log, 
-        "back": back, 
+         
         'reads': all_db_reads, 
         'data': data, 
         'cool': all_ovens, 
@@ -181,7 +181,7 @@ def pt_mth_input(request, facility):
     sort = sorted(new_A5_list, key=func, reverse=True)
 
     return render(request, "ees_forms/pt_mth_input.html", {
-        'facility': facility, "now": now, "back": back, "today": today, 'submitted_ordered': submitted_ordered, 'sort': sort, 'profile': profile,
+        'facility': facility, "now": now,  "today": today, 'submitted_ordered': submitted_ordered, 'sort': sort, 'profile': profile,
     })
 
 @lock
@@ -271,5 +271,5 @@ def method303_rolling_avg(request, facility):
         
 
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        'facility': facility, "now": now, 'todays_log': todays_log, "back": back, "today": today, 'list_of_records': list_of_records, 'profile': profile,
+        'facility': facility, "now": now, 'todays_log': todays_log,  "today": today, 'list_of_records': list_of_records, 'profile': profile,
     })

@@ -8,7 +8,7 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 
 @lock
@@ -173,7 +173,7 @@ def formH(request, facility, fsID, selector):
         "supervisor": supervisor, 
         "search": search, 
         "existing": existing, 
-        "back": back, 
+         
         'data': data, 
         'profile_form': profile_form, 
         'profile': profile, 

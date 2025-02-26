@@ -11,8 +11,6 @@ from django.http import JsonResponse # type: ignore
 from django.core.exceptions import ObjectDoesNotExist # type: ignore
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
-
 
 @lock
 def formA1(request, facility, fsID, selector):
@@ -126,7 +124,6 @@ def formA1(request, facility, fsID, selector):
         'unlock': unlock, 
         'options': options, 
         "search": search, 
-        "back": back, 
         'todays_log': todays_log, 
         'data': data, 
         'formName': formName, 

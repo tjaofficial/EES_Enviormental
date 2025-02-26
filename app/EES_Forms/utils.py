@@ -1567,9 +1567,7 @@ def create_starting_forms():
             link="form1",
             header="Method 303",
             title="Charging",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         A2 = Forms(
             form=2,
             frequency="Daily",
@@ -1579,9 +1577,7 @@ def create_starting_forms():
             link="form2",
             header="Method 303",
             title="Doors",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         A3 = Forms(
             form=3,
             frequency="Daily",
@@ -1591,9 +1587,7 @@ def create_starting_forms():
             link="form3",
             header="Method 303",
             title="Lids and Offtakes",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         A4 = Forms(
             form=4,
             frequency="Daily",
@@ -1603,9 +1597,7 @@ def create_starting_forms():
             link="form4",
             header="Method 303",
             title="Collection Main",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         A5 = Forms(
             form=5,
             frequency="Daily",
@@ -1615,9 +1607,7 @@ def create_starting_forms():
             link="form5",
             header="Method 9B",
             title="Push Travels",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         B = Forms(
             form=6,
             frequency="Daily",
@@ -1627,9 +1617,7 @@ def create_starting_forms():
             link="form6",
             header="Method 9",
             title="Fugitive Dust Inspection",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         C = Forms(
             form=7,
             frequency="Daily",
@@ -1639,9 +1627,7 @@ def create_starting_forms():
             link="form7",
             header="Method 9",
             title="Method 9D - Coal Field",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         D = Forms(
             form=8,
             frequency="Weekly",
@@ -1651,9 +1637,7 @@ def create_starting_forms():
             link="form8",
             header="Method 9",
             title="Random Truck Inspection",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         E = Forms(
             form=9,
             frequency="Daily",
@@ -1663,9 +1647,7 @@ def create_starting_forms():
             link="form9",
             header="Method 9",
             title="Gooseneck Inspection",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F1 = Forms(
             form=10,
             frequency="Weekly",
@@ -1675,9 +1657,7 @@ def create_starting_forms():
             link="form10",
             header="Waste Weekly Inspections",
             title="SIF / K087 Process Area (Satellite)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F2 = Forms(
             form=11,
             frequency="Weekly",
@@ -1687,9 +1667,7 @@ def create_starting_forms():
             link="form11",
             header="Waste Weekly Inspections",
             title="#1 Shop (Satellite Accumulation)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F3 = Forms(
             form=12,
             frequency="Weekly",
@@ -1699,9 +1677,7 @@ def create_starting_forms():
             link="form12",
             header="Waste Weekly Inspections",
             title="#2 Shop (Satellite Accumulation)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F4 = Forms(
             form=13,
             frequency="Weekly",
@@ -1711,9 +1687,7 @@ def create_starting_forms():
             link="form13",
             header="Waste Weekly Inspections",
             title="Battery (Satellite Accumulation)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F5 = Forms(
             form=14,
             frequency="Weekly",
@@ -1723,9 +1697,7 @@ def create_starting_forms():
             link="form14",
             header="Waste Weekly Inspections",
             title="Bio Plant (Satellite Accumulation)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F6 = Forms(
             form=15,
             frequency="Weekly",
@@ -1735,9 +1707,7 @@ def create_starting_forms():
             link="form15",
             header="Waste Weekly Inspections",
             title="No. 8 Tank Area (Satellite Accumulation)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         F7 = Forms(
             form=16,
             frequency="Weekly",
@@ -1747,9 +1717,7 @@ def create_starting_forms():
             link="form16",
             header="Waste Weekly Inspections",
             title="Booster Pad (90-Day Accumulation)",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         G1 = Forms(
             form=17,
             frequency="Weekly",
@@ -1759,9 +1727,7 @@ def create_starting_forms():
             link="form17",
             header="PECS Baghouse Stack",
             title="Method 9/Non-Certified Observations",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         G2 = Forms(
             form=18,
             frequency="Monthly",
@@ -1771,9 +1737,7 @@ def create_starting_forms():
             link="form18",
             header="PECS Baghouse Stack",
             title="Method 9B",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         H = Forms(
             form=19,
             frequency="Weekly",
@@ -1783,9 +1747,7 @@ def create_starting_forms():
             link="form19",
             header="Method 9",
             title="Method 9 - Combustion Stack",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         I = Forms(
             form=20,
             frequency="Daily",
@@ -1795,9 +1757,7 @@ def create_starting_forms():
             link="form20",
             header="Sampling",
             title="Quench Water Sampling Form",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         L = Forms(
             form=21,
             frequency="Daily",
@@ -1807,9 +1767,7 @@ def create_starting_forms():
             link="form21",
             header="Method 9",
             title="Visual Emissions Observations",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         M = Forms(
             form=22,
             frequency="Daily",
@@ -1819,9 +1777,7 @@ def create_starting_forms():
             link="form22",
             header="Method 9D",
             title="Method 9D Observation",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         N = Forms(
             form=23,
             frequency="Monthly",
@@ -1831,9 +1787,7 @@ def create_starting_forms():
             link="form23",
             header="Fugitive Dust Inspection",
             title="Method 9D Monthly Checklist",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         O = Forms(
             form=24,
             frequency="Weekly",
@@ -1843,9 +1797,7 @@ def create_starting_forms():
             link="form24",
             header="Stormwater Observation Form",
             title="MP 108A",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         P = Forms(
             form=25,
             frequency="Daily",
@@ -1855,9 +1807,7 @@ def create_starting_forms():
             link="form25",
             header="Outfall Observation Form",
             title="Outfall 008",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         spill_kits_inventory = Forms(
             form=26,
             frequency="Monthly",
@@ -1867,9 +1817,7 @@ def create_starting_forms():
             link="form26",
             header="Spill Kit Inventory Form",
             title="Inspection Check List",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         quarterly_trucks = Forms(
             form=27,
             frequency="Quarterly",
@@ -1879,9 +1827,7 @@ def create_starting_forms():
             link="form27",
             header="Quarterly Trucks Form",
             title="Inspection Check List",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
         STI_SP001_monthly_inspection = Forms(
             form=28,
             frequency="Monthly",
@@ -1891,9 +1837,6 @@ def create_starting_forms():
             link="form28",
             header="STI SP001",
             title="Monthly Tank Inspection Checklist",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False
         )
         spill_kits = Forms(
             form=29,
@@ -1904,9 +1847,7 @@ def create_starting_forms():
             link="form29",
             header="Spill Kits Form",
             title="Inspection Check List",
-            due_date=today,
-            date_submitted=today - datetime.timedelta(days=1),
-            submitted=False,)
+        )
 
         A1.save()
         A2.save()

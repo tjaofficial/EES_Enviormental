@@ -8,7 +8,7 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import parse_form5_oven_dict, form5_reading_data_build, formA5_ovens_data_build, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification, get_initial_data
 
 lock = login_required(login_url='Login')
-back = Forms.objects.filter(form__exact='Incomplete Forms')
+
 
 @lock
 def formA5(request, facility, fsID, selector):
@@ -167,7 +167,7 @@ def formA5(request, facility, fsID, selector):
         "search": search, 
         "existing": existing, 
         "exist_canvas": exist_canvas, 
-        "back": back, 
+         
         'todays_log': todays_log, 
         'data': data, 
         'formName': formName, 
