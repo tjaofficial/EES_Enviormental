@@ -81,7 +81,7 @@ def formA1(request, facility, fsID, selector):
                 if not existing:
                     database_form = A
                 fsID = str(fsID)
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 if A.ovens_data['comments'] not in {'-', 'n/a', 'N/A'}:
                     issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
                     return redirect (issue_page)

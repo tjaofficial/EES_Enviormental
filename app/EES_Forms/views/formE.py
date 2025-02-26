@@ -81,7 +81,7 @@ def formE(request, facility, fsID, selector):
                 issueFound = False
                 if not existing:
                     database_form = A
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 if A.leaks == "Yes":
                     issueFound = True
                 if issueFound:

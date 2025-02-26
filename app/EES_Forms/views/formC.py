@@ -175,7 +175,7 @@ def formC(request, facility, fsID, selector):
                 issueFound = False
                 if not existing:
                     data = A
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 if A.area_json_1['average'] > 5 or A.area_json_2['average'] > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     issueFound = True
                 if issueFound:

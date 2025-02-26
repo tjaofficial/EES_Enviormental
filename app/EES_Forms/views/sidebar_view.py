@@ -147,7 +147,16 @@ def corrective_action_view(request, facility):
         if answer['facilitySelect'] != '':
             return redirect('Corrective-Action', answer['facilitySelect'])
     return render(request, "shared/corrective_actions.html", {
-        'notifs': notifs, "varPull": varPull, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, 'ca_forms': ca_forms, 'profile': profile, 'client': client, "supervisor": supervisor, "unlock": unlock, 
+        'notifs': notifs, 
+        "varPull": varPull, 
+        'sortedFacilityData': sortedFacilityData, 
+        'options': options, 
+        'facility': facility, 
+        'ca_forms': ca_forms, 
+        'profile': profile, 
+        'client': client, 
+        "supervisor": supervisor, 
+        "unlock": unlock, 
     })
 
 @lock
@@ -682,7 +691,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                     existing = True
         if existing:
             initial_data = {
-                'form': database_form.form,
+                'form': database_form.formChoice.formChoice.id,
                 'issues': database_form.issues,
                 'notified': database_form.notified,
                 'time': database_form.time,
@@ -705,6 +714,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
             if existing:
                 data = issues_form(dataCopy, instance=database_form)
             else:
+                dataCopy['formChoice'] = formSetting
                 data = issues_form(dataCopy)
             if data.is_valid():
                 data.save()
@@ -722,7 +732,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
         database_form = org[0]
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                if int(fsID) == int(entry.form):
+                if int(fsID) == int(entry.formChoice.id):
                     existing = True
                     picker = entry
                     form = issues_form()
@@ -730,7 +740,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                         entry.viewed = True
                         entry.save()
     elif access_page == 'edit' or access_page == 'resubmit':
-        org = issues_model.objects.filter(form=fsID).order_by('-date')
+        org = issues_model.objects.filter(formChoice=formSetting).order_by('-date')
         database_form = org[0]
         for entry in org:
             if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
@@ -738,7 +748,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                 link = ''
                 existing=True
         initial_data = {
-            'form': picker.form,
+            'form': picker.formChoice.formChoice.id,
             'issues': picker.issues,
             'notified': picker.notified,
             'time': picker.time,
@@ -770,12 +780,12 @@ def issues_view(request, facility, fsID, form_date, access_page):
             org = issues_model.objects.all().order_by('-date')
             database_form = org[0]
             if todays_log.date_save == database_form.date:
-                if database_form.form == fsID:
+                if database_form.formChoice.formChoice.id == fsID:
                     existing = True
 
     if existing:
         initial_data = {
-            'form': database_form.form,
+            'form': database_form.formChoice.formChoice.id,
             'issues': database_form.issues,
             'notified': database_form.notified,
             'time': database_form.time,
@@ -804,6 +814,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
     #         createNotification(facility, request, fsID, now, 'corrective')
     #         updateSubmissionForm(fsID, True, todays_log.date_save)
     #         return redirect('IncompleteForms', facility)
+
     return render(request, "shared/issues_template.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 

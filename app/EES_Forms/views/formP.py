@@ -81,7 +81,7 @@ def formP(request, facility, fsID, selector, weekend_day):
                 issueFound = False
                 if not existing:
                     database_form = A
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
                     issueFound = True
                 if issueFound:

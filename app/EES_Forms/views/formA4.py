@@ -95,7 +95,7 @@ def formA4(request, facility, fsID, selector):
                 if not existing:
                     database_form = A
                 fsID = str(fsID)
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 if A.notes.lower() != 'no ve' or A.leak_data != "{}":
                     issueFound = True
                 if issueFound:

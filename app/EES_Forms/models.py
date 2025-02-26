@@ -485,6 +485,12 @@ class form_settings_model(models.Model):
     
 class form7_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     date = models.DateField(auto_now_add=False, auto_now=False)
     observer = models.CharField(
         max_length=30
@@ -672,7 +678,6 @@ class form1_model(models.Model):
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
-        related_name="forms",
         blank=True, 
         null=True
     )
@@ -827,6 +832,12 @@ class form1_readings_model(models.Model):
 
 class form2_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=30
     )
@@ -903,6 +914,12 @@ class form2_model(models.Model):
 
 class form3_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=30
     )
@@ -987,6 +1004,12 @@ class form3_model(models.Model):
 
 class form4_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=30
     )
@@ -1239,6 +1262,12 @@ class pt_admin1_model(models.Model):
 
 class form6_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     week_start = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -1988,6 +2017,12 @@ class form6_model(models.Model):
 
 class form8_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     today = datetime.date.today()
     last_friday = today - datetime.timedelta(days=today.weekday() + 2)
     one_week = datetime.timedelta(days=6)
@@ -2280,6 +2315,12 @@ class form8_model(models.Model):
 
 class form9_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=30
     )
@@ -3404,6 +3445,12 @@ class formF7_model(models.Model):
 
 class form17_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3624,6 +3671,12 @@ class form17_readings_model(models.Model):
 
 class form18_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3726,6 +3779,12 @@ class form18_readings_model(models.Model):
 
 class form19_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3854,6 +3913,12 @@ class form19_readings_model(models.Model):
  
 class form20_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     week_start = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -3927,6 +3992,12 @@ class form20_model(models.Model):
  
 class form21_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     today = datetime.date.today()
 
     week_start = models.DateField(
@@ -4176,6 +4247,12 @@ class form21_model(models.Model):
 
 class form22_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     date = models.DateField(
         auto_now_add=False,
         auto_now=False,
@@ -4361,6 +4438,12 @@ class form22_readings_model(models.Model):
 
 class form24_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=30
     )
@@ -4423,6 +4506,12 @@ class form24_model(models.Model):
  
 class form25_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=30
     )
@@ -4575,6 +4664,12 @@ class Event(models.Model):
 
 class form29_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     observer = models.CharField(
         max_length=150
     )
@@ -5729,6 +5824,12 @@ class quarterly_trucks_model(models.Model):
 
 class form27_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     quarter = models.CharField(
         choices=quarter_choices,
         max_length=4,
@@ -6034,6 +6135,12 @@ class spill_kit_inventory_model(models.Model):
     
 class form26_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     date = models.DateField(auto_now=False, auto_now_add=False)
     inspector = models.CharField(max_length=40)
     skID = models.IntegerField()
@@ -6163,6 +6270,12 @@ class facility_tags_register_model(models.Model):
     
 class form28_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     inspector = models.CharField(max_length=40)
     date = models.DateField(auto_now=False, auto_now_add=False)
     tankChoice = models.ForeignKey(facility_tags_register_model, on_delete=models.CASCADE)

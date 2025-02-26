@@ -131,7 +131,7 @@ def formA5(request, facility, fsID, selector):
                 if not existing:
                     database_form = A
                 fsID = str(fsID)
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 issueFound = False
                 if float(A.ovens_data['oven1']['highest_opacity']) >= 10 or float(A.ovens_data['oven1']['average_6_opacity']) >= 35 or A.ovens_data['oven1']['opacity_over_20'] == 'Yes' or A.ovens_data['oven1']['average_6_over_35'] == 'Yes':
                     issueFound = True

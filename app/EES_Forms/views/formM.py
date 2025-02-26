@@ -108,7 +108,7 @@ def formM(request, facility, fsID, selector):
                 issueFound = False
                 if not existing:
                     database_form = A
-                finder = issues_model.objects.filter(date=A.date, form=fsID).exists()
+                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
                 if int(B.pav_total) > 5 or int(B.unp_total) > 5 or int(B.par_total) > 5 or A.comments not in {'-', 'n/a', 'N/A'}:
                     issueFound = True
                 if issueFound:
