@@ -400,18 +400,38 @@ class formA1_form(ModelForm):
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
-        # Get the instance's existing ovens_data (if any)
+        initial = kwargs.get("initial", {}) or {}  # Prevent NoneType error
+        # Extract related facility settings
+        related_facility = initial.get("formSettings") if isinstance(initial, dict) and "formSettings" in initial else None
+
+        # Handle case where `instance` is available but `initial` is not
         instance = kwargs.get("instance")
-        initial = kwargs.get("initial")
         existing_data = instance.ovens_data if instance and instance.ovens_data else {}
-        related_facility = initial['formSettings'] if hasattr(initial['formSettings'], 'settings') else None
+        if not related_facility and instance:
+            related_facility = getattr(instance, "formSettings", None)
 
-        if related_facility:
-            larry_cars = related_facility.settings.get('settings', {}).get('larry_car_quantity', 0)
-            larry_car_choices = [(str(car), str(car)) for car in range(1, int(larry_cars)+1)]
-        else:
-            larry_car_choices = []
+        # Fetch `larry_car` quantity from the settings
+        larry_cars = []
+        if related_facility and hasattr(related_facility, "settings"):
+            larry_cars = [
+                (str(car), str(car))
+                for car in range(1, int(related_facility.settings.get("settings", {}).get("larry_car_quantity", 0)) + 1)
+            ]
 
+        # **🛠️ Fix: Always re-add choices on POST requests**  
+        if not larry_cars:  # If we didn't get settings, default to at least one option
+            larry_cars = [("1", "1"), ("2", "2")]
+
+        print("🚀 Larry Car Choices (final):", larry_cars)
+
+        # **Ensure `larry_car` exists in form fields for POST handling**
+        self.fields["larry_car"] = forms.ChoiceField(
+            choices=[("", "Select a Larry Car")] + larry_cars,
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("larry_car", forms.TextInput(attrs={"class": "input"}))
+        )
+
+        print("🚀 Existing fields AFTER adding `larry_car`:", list(self.fields.keys()))
 
         # **Handling Oven Data**
         for i in range(1, 6):  # Assuming max 5 ovens
@@ -442,12 +462,12 @@ class formA1_form(ModelForm):
             widget=self.JSON_WIDGET_STYLES.get("comments", forms.TextInput(attrs={"class": "input"}))
         )
 
-        self.fields["larry_car"] = forms.ChoiceField(
-            choices=[("", "Select a Larry Car")] + larry_car_choices,
-            initial=existing_data.get("larry_car", ""),
-            required=False,
-            widget=self.JSON_WIDGET_STYLES.get("larry_car", forms.TextInput(attrs={"class": "input"}))
-        )
+        # self.fields["larry_car"] = forms.ChoiceField(
+        #     choices=[("", "Select a Larry Car")] + larry_car_choices,
+        #     initial=str(existing_data.get("larry_car", "")),
+        #     required=False,
+        #     widget=self.JSON_WIDGET_STYLES.get("larry_car", forms.TextInput(attrs={"class": "input"}))
+        # )
 
         self.fields["total_seconds"] = forms.FloatField(
             initial=existing_data.get("total_seconds", ""),

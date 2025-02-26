@@ -16,9 +16,6 @@ back = Forms.objects.filter(form__exact='Incomplete Forms')
 
 @lock
 def formA1(request, facility, fsID, selector):
-
-    
-
     formName = 1
     notifs = checkIfFacilitySelected(request.user, facility)
     freq = getFacSettingsInfo(fsID)
@@ -63,6 +60,7 @@ def formA1(request, facility, fsID, selector):
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
                     'facility_name': facility,
+                    'formSettings': form_settings_model.objects.get(id=int(fsID))
                 }
             data = formA1_form(initial=initial_data)
 
