@@ -4491,7 +4491,12 @@ class issues_model(models.Model):
         blank=True, 
         null=True
     )
-    form = models.CharField(max_length=30)
+    formChoice = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     issues = models.CharField(max_length=300)
     notified = models.CharField(max_length=30)
     time = models.TimeField(
