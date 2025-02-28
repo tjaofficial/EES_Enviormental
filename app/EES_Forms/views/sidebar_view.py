@@ -687,25 +687,26 @@ def issues_view(request, facility, fsID, form_date, access_page):
         if issueModel.exists():
             database_form = issueModel[0]
             if todays_log.date_save == database_form.date:
-                if database_form.form == settingsID:
+                if database_form.formChoice.id == settingsID:
                     existing = True
         if existing:
             initial_data = {
-                'form': database_form.formChoice.formChoice.id,
+                'formChoice': database_form.formChoice,
                 'issues': database_form.issues,
                 'notified': database_form.notified,
                 'time': database_form.time,
                 'date': database_form.date,
                 'cor_action': database_form.cor_action
             }
-        else:             
+        else:
+            print("check 1")
             initial_data = {
                 'date': todays_log.date_save,
-                'form': settingsID
+                'formChoice': form_settings_model.objects.get(id=settingsID)
             }
+            print(initial_data)
             picker = ''
         form = issues_form(initial=initial_data)
-        
         if request.method == "POST":
             dataCopy = request.POST.copy()
             dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
@@ -795,7 +796,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
     else:
         initial_data = {
             'date': todays_log.date_save,
-            'form': fsID
+            'formChoice': form_settings_model.objects.get(id=settingsID)
         }
 
     form = issues_form(initial=initial_data)
@@ -828,7 +829,8 @@ def issues_view(request, facility, fsID, form_date, access_page):
         'profile': profile, 
         "unlock": unlock, 
         "client": client, 
-        "supervisor": supervisor
+        "supervisor": supervisor,
+        "initial_data": initial_data
     })
 
 @lock

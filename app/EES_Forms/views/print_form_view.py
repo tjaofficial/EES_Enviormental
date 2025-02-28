@@ -288,9 +288,9 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             heightGroup = (5,17,18,19)
             
             try:
-                issueForm = issues_model.objects.filter(date=formData.date, form=fsEntry.id)
+                issueForm = issues_model.objects.filter(date=formData.date, formChoice=fsEntry)
             except:
-                issueForm = issues_model.objects.filter(date=formData.week_start, form=fsEntry.id)
+                issueForm = issues_model.objects.filter(date=formData.week_start, formChoice=fsEntry)
                 
             if issueForm.exists():
                 issueSpace = len(tableData)

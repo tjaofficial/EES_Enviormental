@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from datetime import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form3_model, bat_info_model
+from ..models import form_settings_model, issues_model, user_profile_model, daily_battery_profile_model, Forms, form3_model, bat_info_model
 from ..forms import formA3_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -94,6 +94,7 @@ def formA3(request, facility, fsID, selector):
             if form.is_valid():
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
+                A.formSettings = form_settings_model.objects.get(id=int(fsID))
                 A.save()
                 
                 issueFound = False

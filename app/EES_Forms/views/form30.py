@@ -1,19 +1,16 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from datetime import datetime
-from ..models import form_settings_model, issues_model, daily_battery_profile_model, form1_model, form1_readings_model, Forms, bat_info_model, facility_forms_model, form1_model, form1_readings_model
-from ..forms import formA1_form
+from ..models import issues_model, form_settings_model, daily_battery_profile_model, bat_info_model, form30_model
+from ..forms import form30_form
+from ..utils import updateSubmissionForm, createNotification, get_initial_data, checkIfFacilitySelected, getFacSettingsInfo, setUnlockClientSupervisor, issueForm_picker
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import form1_json_build, parse_form1_oven_dict, updateSubmissionForm, setUnlockClientSupervisor, createNotification, issueForm_picker, checkIfFacilitySelected, getFacSettingsInfo, get_initial_data
-from django.db.models import Field # type: ignore
-from django.http import JsonResponse # type: ignore
-from django.core.exceptions import ObjectDoesNotExist # type: ignore
 
 lock = login_required(login_url='Login')
 
 @lock
-def formA1(request, facility, fsID, selector):
-    formName = 1
+def form30(request, facility, fsID, selector):
+    formName = 30
     notifs = checkIfFacilitySelected(request.user, facility)
     freq = getFacSettingsInfo(fsID)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
@@ -22,9 +19,10 @@ def formA1(request, facility, fsID, selector):
     now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = bat_info_model.objects.filter(facility_name=facility)[0]
-    submitted_forms = form1_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+    submitted_forms = form30_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     full_name = request.user.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
+
     if daily_prof.exists():
         todays_log = daily_prof[0]
         if selector != 'form':
@@ -41,59 +39,77 @@ def formA1(request, facility, fsID, selector):
         else:
             batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-        
+    
         if search:
             database_form = ''
         else:
             if existing:
-                unparsedData = get_initial_data(form1_model, database_form)
-                ovens_data = parse_form1_oven_dict(unparsedData['ovens_data'])
-                initial_data = unparsedData | ovens_data
-                print(ovens_data)
+                unparsedData = get_initial_data(form30_model, database_form)
+                inspection_initial = {}
+                for i in range(1, 7):  # Assuming 6 status checks
+                    inspection_initial[f'check{i}'] = unparsedData["inspection_json"][f'check{i}']['status']
+                    inspection_initial[f'comments{i}'] = unparsedData["inspection_json"][f'check{i}']['comment']
+                print(inspection_initial)
+                
+                containers_initial = {}
+                for index, (key, value) in enumerate(unparsedData['containers_json'].items()):
+                    containers_initial[f'waste_description_{index}'] = value.get('description', "")
+                    containers_initial[f'container_count_{index}'] = value.get('count', 0)
+                    containers_initial[f'waste_code_{index}'] = value.get('code', "")
+
+                    # Extract multiple dates
+                    waste_dates = value.get('dates', [])
+                    for date_idx, date_value in enumerate(waste_dates):
+                        containers_initial[f'waste_dates_{index}_{date_idx}'] = date_value
+
+                initial_data = unparsedData | inspection_initial
             else:
                 initial_data = {
                     'date': todays_log.date_save,
                     'observer': full_name,
-                    'crew': todays_log.crew,
-                    'foreman': todays_log.foreman,
-                    'facility_name': facility,
-                    'formSettings': form_settings_model.objects.get(id=int(fsID))
+                    'formSettings': form_settings_model.objects.get(id=int(fsID)),
                 }
-            data = formA1_form(initial=initial_data)
+            data = form30_form(initial=initial_data)
 
         if request.method == "POST":
-            dataCopy = request.POST.copy()
-            dataCopy['ovens_data'] = form1_json_build(request.POST)
-            if existing:
-                form = formA1_form(dataCopy, instance=database_form)
-            else:
-                form = formA1_form(dataCopy)
-            A_valid = form.is_valid()
-            finalFacility = options
+            print(request.POST)
+            copyPOST = request.POST.copy()
+            inspection_data = {
+                "check1": {"status": request.POST.get("check1", ""), "comment": request.POST.get("comments1", "")},
+                "check2": {"status": request.POST.get("check2", ""), "comment": request.POST.get("comments2", "")},
+                "check3": {"status": request.POST.get("check3", ""), "comment": request.POST.get("comments3", "")},
+                "check4": {"status": request.POST.get("check4", ""), "comment": request.POST.get("comments4", "")},
+                "check5": {"status": request.POST.get("check5", ""), "comment": request.POST.get("comments5", "")},
+                "check6": {"status": request.POST.get("check6", ""), "comment": request.POST.get("comments6", "")},
+            }
+
+            containers_data = {}
+            index = 0
+            while f"waste_description_{index}[]" in request.POST:
+                containers_data[f"waste{index+1}"] = {
+                    "description": request.POST.get(f"waste_description_{index}[]", ""),
+                    "count": request.POST.get(f"container_count_{index}[]", ""),
+                    "code": request.POST.get(f"waste_code_{index}[]", ""),
+                    "dates": request.POST.getlist(f"waste_dates_{index}[]"),
+                }
+                index += 1
+            copyPOST['inspection_json'] = inspection_data
+            copyPOST['containers_json'] = containers_data
+            # Create form instance and save
+            form = form30_form(copyPOST)
             print(form.errors)
-            if A_valid:
+            if form.is_valid():
+                print("saved")
                 A = form.save(commit=False)
                 A.formSettings = form_settings_model.objects.get(id=int(fsID))
-                A.facilityChoice = finalFacility
+                A.facilityChoice = options
                 A.save()
-                
-                if not existing:
-                    database_form = A
+
                 fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
-                if A.ovens_data['comments'] not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
-                    return redirect (issue_page)
-                sec = {int(A.ovens_data['charge_1']['c1_sec']), int(A.ovens_data['charge_2']['c2_sec']), int(A.ovens_data['charge_3']['c3_sec']), int(A.ovens_data['charge_4']['c4_sec']), int(A.ovens_data['charge_5']['c5_sec'])}
+                #INSERT ANY CHECKS HERE
                 issueFound = False
                 compliance = False
-                if int(A.ovens_data['total_seconds']) >= 55:
-                    issueFound = True
-                    compliance = True
-                else:
-                    for x in sec:
-                        if 10 <= x:
-                            issueFound = True
                 if issueFound:
                     if finder:
                         if selector == 'form':
@@ -107,14 +123,18 @@ def formA1(request, facility, fsID, selector):
                         issue_page = issue_page + "-c"
                         
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
+
+
                 createNotification(facility, request, fsID, now, 'submitted', False)        
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
+
+
     else:
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
-    return render(request, "shared/forms/daily/formA1.html", {
+    return render(request, "shared/forms/weekly/form30.html", {
         'facility': facility,
         'notifs': notifs,
         'freq': freq,
@@ -130,16 +150,3 @@ def formA1(request, facility, fsID, selector):
         'picker': picker,
         'fsID': fsID
     })
-
-def inop_check_form_1(request):  # Add request parameter
-    today = datetime.now().date()
-    try:
-        dailyBatProf = daily_battery_profile_model.objects.get(date_save=today)
-
-        # If `inop_numbs` is stored as a string like '44,45,54,62', split it into a list
-        response_data = dailyBatProf.inop_numbs[1:-1].replace(" ", "").split(",") if dailyBatProf.inop_numbs != "[]" else []
-    except ObjectDoesNotExist:
-        response_data = []
-
-    return JsonResponse(response_data, safe=False)
-

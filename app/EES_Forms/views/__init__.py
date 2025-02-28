@@ -45,5 +45,6 @@ from .formP import *
 from .spill_kits_view import spill_kits, spill_kits_inventory_form
 from .quarterly_trucks_view import *
 from .weekly_enviornmental_inspections import *
+from .form30 import *
 from .admin_ajax_call import *
 

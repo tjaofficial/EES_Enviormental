@@ -26,6 +26,16 @@ def formSettingsFunc(keysList, requestPost, formID):
             if formID in withoutSettings:
                 if mainLabel == 'custom_name':
                     defaultDictUpdate = True
+            elif formID == 30:
+                pairLen = len(key.split("-"))
+                pairFormID = key.split("-")[0]
+                if mainLabel == 'custom_name':
+                    defaultDictUpdate = True
+                elif mainLabel == 'num_of_areas':
+                    settings[mainLabel] = int(requestPost[key])
+                elif mainLabel[:4] == 'area':
+                    if mainLabel not in settings.keys():
+                        settings[mainLabel] = requestPost[key]
             elif formID == 20:
                 if mainLabel == 'custom_name':
                     defaultDictUpdate = True

@@ -2313,6 +2313,7 @@ class issues_form(ModelForm):
         model = issues_model
         fields = ('__all__')
         widgets = {
+            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center; border: 1px solid black;'}),
             'issues' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
             'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px; border-radius: 5px; background-color: white; border: 1px solid black; padding-left: .5rem;'}),
             'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
@@ -2661,6 +2662,80 @@ class form_settings_form(ModelForm):
             'settings': forms.TextInput(),
         }
         
-        
-        
-        
+class form30_form(forms.ModelForm):
+    class Meta:
+        model = form30_model
+        fields = "__all__"
+        widgets = {
+            "observer": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter Observer Name"}),
+            "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "time": forms.TimeInput(attrs={"type": "time", "class": "form-control"}),
+        }
+
+    def clean_inspection_json(self):
+        """Ensure the JSON data is valid for status checks"""
+        data = self.cleaned_data.get("inspection_json")
+        if not isinstance(data, dict):
+            raise forms.ValidationError("Invalid data format for inspection status.")
+        return data
+
+    def clean_containers_json(self):
+        """Ensure the JSON data is valid for waste containers"""
+        data = self.cleaned_data.get("containers_json")
+        if not isinstance(data, dict):
+            raise forms.ValidationError("Invalid data format for containers.")
+        return data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Get the instance and initial data
+        initial = kwargs.get("initial", {}) or {}
+        instance = kwargs.get("instance") or {}
+
+        # Handle formSettings
+        related_facility = initial.get("formSettings") if "formSettings" in initial else None
+        if not related_facility and instance:
+            related_facility = getattr(instance, "formSettings", None)
+
+        # 🔹 1️⃣ Load inspection_json (Status Checks)
+        inspection_data = instance.inspection_json if instance and instance.inspection_json else {}
+        containers_data = instance.containers_json if instance and instance.containers_json else {}
+        print(initial)
+        print(containers_data)
+        print('_______blah____')
+
+        for i in range(1, 7):  # Assuming 6 status checks
+            self.fields[f"check{i}"] = forms.ChoiceField(
+                choices=[("OK", "OK"), ("N/A", "N/A"), ("Not OK", "Not OK")],
+                required=False,
+                widget=forms.RadioSelect(attrs={"class": "status-radio"}),
+                initial=inspection_data.get(f"check{i}", ""),
+            )
+            self.fields[f"comments{i}"] = forms.CharField(
+                required=False,
+                widget=forms.TextInput(attrs={"class": "status-comment", "placeholder": "Add comment..."}),
+                initial=inspection_data.get(f"comments{i}", ""),
+            )
+
+
+
+
+
+
+        # 🔹 2️⃣ Load area_name options from settings JSON
+        area_choices = [("", "Select Area")]
+        if related_facility and hasattr(related_facility, "settings"):
+            settings = related_facility.settings.get("settings", {})
+            if isinstance(settings, dict) and "num_of_areas" in settings:
+                num_of_areas = settings["num_of_areas"]
+                for i in range(1, num_of_areas + 1):
+                    area_key = f"area{i}"
+                    if area_key in settings:
+                        area_choices.append((settings[area_key], settings[area_key]))
+
+        self.fields["area_name"] = forms.ChoiceField(
+            choices=area_choices,
+            required=True,
+            widget=forms.Select(attrs={"class": "form-control"}),
+        )

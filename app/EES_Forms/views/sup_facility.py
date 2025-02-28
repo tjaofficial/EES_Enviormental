@@ -392,6 +392,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             for inputs in request.POST.keys():
                 keysList.append(inputs)
             print("--------------------------")
+            print(keysList)
             # chek this utils
             newLabel, settingsDict = formSettingsFunc(keysList, request.POST, formData.id)
             settingsChange = selectedSettings.settings
@@ -403,12 +404,12 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             if formWData.is_valid():
                 print('it fucking saved')
                 A = formWData.save()
-                if packetID:
+                if packetSettings:
                     print('check 7')
                     packetInstance = packetSettings
                     packetInstance.formList['formsList'][newLabel] = packetInstance.formList['formsList'].pop(formLabel)
                     packetInstance.save()
-                # else:
+                #else:
                 #     packetInstance = packetSettings
                 #     packetInstance.formList['formsList'][newLabel] = {"settingsID": A.id}
                 #     packetInstance.save()
@@ -511,7 +512,7 @@ def Add_Forms(request, facility):
     #                         toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
     #                         toBeDeleted.delete()
     #                     break
-                    
+
     if request.method == 'POST':
         answer = request.POST
         print(answer)

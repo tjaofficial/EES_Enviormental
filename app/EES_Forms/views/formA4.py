@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from datetime import datetime
-from ..models import issues_model, user_profile_model, daily_battery_profile_model, Forms, form4_model, bat_info_model
+from ..models import form_settings_model, issues_model, user_profile_model, daily_battery_profile_model, Forms, form4_model, bat_info_model
 from ..forms import formA4_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
@@ -87,6 +87,7 @@ def formA4(request, facility, fsID, selector):
             if form.is_valid():
                 A = form.save(commit=False)
                 A.facilityChoice = finalFacility
+                A.formSettings = form_settings_model.objects.get(id=int(fsID))
                 if A.leak_data == '{"data":[]}':
                     A.leak_data = "{}"
                 A.save()

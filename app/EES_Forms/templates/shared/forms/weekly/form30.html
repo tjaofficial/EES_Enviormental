@@ -1,0 +1,157 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%} {% load static %}
+<script defer src="{% static 'ees_forms/script/form30.js' %}"></script>
+<link href="{% static 'ees_forms/style/form30.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+<div id="selector" data-selector="{{selector}}"></div>
+<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+
+<div class="container">
+    <h2>Inspection Form</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Main Form Section -->
+        <label for="id_observer">Inspector Name:</label>
+        {{data.observer}}
+        <label for="id_date">Date:</label>
+        {{data.date}}
+        <label for="id_time">Time:</label>
+        {{data.time}}
+
+        <br><br>
+        <label for="retain_until">Retain Until:</label>
+        <input type="date" id="retain_until" name="retain_until" required>
+        <br><br>
+        <label for="id_area_name">Area Name:</label>
+        {{data.area_name}}
+
+        <!-- Status Check Section -->
+        <div style="padding: 20px;">
+            <div class="status-section">
+                <h3>Status Checks</h3>
+                <div class="status-container">
+                    <div class="status-item">
+                        <p>Containers are properly closed and in good condition (no dents or corrosion).</p>
+                        {% for radio in data.check1 %}
+                            <label class="radio-container">
+                                {{ radio.tag }} {{ radio.choice_label }}
+                            </label>
+                        {% endfor %}
+                        {{ data.comments1 }}
+                    </div>
+
+                    <div class="status-item">
+                        <p>Containers are 55 gallons or smaller and compatible with waste stored.</p>
+                        {% for radio in data.check2 %}
+                            <label class="radio-container">
+                                {{ radio.tag }} {{ radio.choice_label }}
+                            </label>
+                        {% endfor %}
+                        {{ data.comments2 }}
+                    </div>
+
+                    <div class="status-item">
+                        <p>Labels on containers include accumulation dates, waste descriptions, and waste codes.</p>
+                        {% for radio in data.check3 %}
+                            <label class="radio-container">
+                                {{ radio.tag }} {{ radio.choice_label }}
+                            </label>
+                        {% endfor %}
+                        {{ data.comments3 }}
+                    </div>
+
+                    <div class="status-item">
+                        <p>No spills, leaks, or staining around the area.</p>
+                        {% for radio in data.check4 %}
+                            <label class="radio-container">
+                                {{ radio.tag }} {{ radio.choice_label }}
+                            </label>
+                        {% endfor %}
+                        {{ data.comments4 }}
+                    </div>
+
+                    <div class="status-item">
+                        <p>No water or liquids in the containment area.</p>
+                        {% for radio in data.check5 %}
+                            <label class="radio-container">
+                                {{ radio.tag }} {{ radio.choice_label }}
+                            </label>
+                        {% endfor %}
+                        {{ data.comments5 }}
+                    </div>
+
+                    <div class="status-item">
+                        <p>Full containers of hazardous waste are moved to the 90-day storage area within 3 days.</p>
+                        {% for radio in data.check6 %}
+                            <label class="radio-container">
+                                {{ radio.tag }} {{ radio.choice_label }}
+                            </label>
+                        {% endfor %}
+                        {{ data.comments6 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <table class="waste-table">
+            <thead>
+                <tr>
+                    <th style="width: 195px;">Description</th>
+                    <th style="width: 168px;">Count</th>
+                    <th style="width: 158px;">Waste Code</th>
+                    <th>Dates</th>
+                    <th style="width: 84px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="wasteTableBody">
+                <tr>
+                    <td><input type="text" name="waste_description_0[]" required></td>
+        
+                    <td>
+                        <div class="count-container">
+                            <button type="button" class="decrement">−</button>
+                            <input type="number" name="container_count_0[]" value="1" min="1" required>
+                            <button type="button" class="increment">+</button>
+                        </div>
+                    </td>
+        
+                    <td>
+                        <select name="waste_code_0[]" required>
+                            <option value="">-------</option>
+                            <option value="univ">UNIV</option>
+                            <option value="non-haz">NON-HAZ</option>
+                            <option value="haz">HAZ</option>
+                        </select>
+                    </td>
+        
+                    <td>
+                        <div class="date-container" name="date_container_0[]">
+                            <div class="date-group">
+                                <input type="date" name="waste_dates_0[]" required>
+                                <button type="button" class="remove-date" title="Remove Date">✖</button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-date">+ Add Date</button>
+                    </td>
+        
+                    <td><button type="button" class="removeRow">🗑️</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Add Row Button -->
+        <button type="button" id="addRow" class="add-row-btn">+ Add Row</button>
+        
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}

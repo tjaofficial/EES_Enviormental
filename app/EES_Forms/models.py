@@ -6383,7 +6383,40 @@ class TrafficData(models.Model):
     def __str__(self):
         return f"Traffic on {self.date}"
 
-
+class form30_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
+    observer = models.CharField(
+        max_length=30
+    )
+    date = models.DateField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True,
+    )
+    time = models.TimeField(
+        auto_now_add=False,
+        auto_now=False,
+        blank=True
+    )
+    area_name = models.CharField(max_length=100)
+    inspection_json = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    containers_json = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    def __str__(self):
+        return str(self.date)
 
 
 # class tank_library(models.Model):
