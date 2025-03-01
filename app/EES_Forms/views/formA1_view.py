@@ -81,13 +81,13 @@ def formA1(request, facility, fsID, selector):
                     database_form = A
                 fsID = str(fsID)
                 finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
-                if A.ovens_data['comments'] not in {'-', 'n/a', 'N/A'}:
-                    issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
-                    return redirect (issue_page)
-                sec = {int(A.ovens_data['charge_1']['c1_sec']), int(A.ovens_data['charge_2']['c2_sec']), int(A.ovens_data['charge_3']['c3_sec']), int(A.ovens_data['charge_4']['c4_sec']), int(A.ovens_data['charge_5']['c5_sec'])}
+                # if A.ovens_data['comments'] not in {'-', 'n/a', 'N/A'}:
+                #     issue_page = '../../issues_view/A-1/' + str(database_form.date) + '/form'
+                #     return redirect (issue_page)
+                sec = {float(A.ovens_data['charge_1']['c1_sec']), float(A.ovens_data['charge_2']['c2_sec']), float(A.ovens_data['charge_3']['c3_sec']), float(A.ovens_data['charge_4']['c4_sec']), float(A.ovens_data['charge_5']['c5_sec'])}
                 issueFound = False
                 compliance = False
-                if int(A.ovens_data['total_seconds']) >= 55:
+                if float(A.ovens_data['total_seconds']) >= 55:
                     issueFound = True
                     compliance = True
                 else:
