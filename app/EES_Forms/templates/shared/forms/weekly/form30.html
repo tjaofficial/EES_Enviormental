@@ -1,35 +1,36 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%} {% load static %}
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/form30.js' %}"></script>
 <link href="{% static 'ees_forms/style/form30.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
-
+{% if search %}{{ data.inspection_json|json_script:"inspection_json" }}{% endif %}
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
 <div id="selector" data-selector="{{selector}}"></div>
 <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+<input type="hidden" id="fsID" name="fsID" value="{{ fsID }}">
 
 <div class="container">
-    <h2>Inspection Form</h2>
-    
+    <h2 style="text-align: center;">Waste Area Inspection Form</h2>
+    <br>
     <form method="POST">
         {% csrf_token %}
-
+        
         <!-- Main Form Section -->
-        <label for="id_observer">Inspector Name:</label>
-        {{data.observer}}
-        <label for="id_date">Date:</label>
-        {{data.date}}
-        <label for="id_time">Time:</label>
-        {{data.time}}
-
-        <br><br>
-        <label for="retain_until">Retain Until:</label>
-        <input type="date" id="retain_until" name="retain_until" required>
-        <br><br>
-        <label for="id_area_name">Area Name:</label>
-        {{data.area_name}}
+        <div style="text-align: center;">
+            <label for="id_observer">Inspector Name:</label>
+            {{data.observer}}
+            <label for="id_date">Date:</label>
+            {{data.date}}
+            <label for="id_time">Time:</label>
+            {{data.time}}
+            
+            <br><br>
+            <label for="id_area_name">Area Name:</label>
+            {{data.area_name}}
+        </div>
 
         <!-- Status Check Section -->
         <div style="padding: 20px;">
@@ -37,62 +38,115 @@
                 <h3>Status Checks</h3>
                 <div class="status-container">
                     <div class="status-item">
-                        <p>Containers are properly closed and in good condition (no dents or corrosion).</p>
-                        {% for radio in data.check1 %}
-                            <label class="radio-container">
-                                {{ radio.tag }} {{ radio.choice_label }}
-                            </label>
-                        {% endfor %}
+                        <div class="status-header">
+                            <p class="status-text">Containers are properly closed and in good condition (no dents or corrosion).</p>
+                            <div class="status-options">
+                            {% comment %} {% if search %}
+                                <span class="status-indicator">
+                                    {{ data.inspection_json.check1.status }}
+                                </span>
+                            {% else %} {% endcomment %}
+                                {% for radio in data.check1 %}
+                                    <label class="radio-container">
+                                        {{ radio.tag }} {{ radio.choice_label }}
+                                    </label>
+                                {% endfor %}
+                                {% comment %} {% endif %} {% endcomment %}
+                            </div>
+                        </div>
                         {{ data.comments1 }}
+                        {% comment %} <div class="status-comment" style="display: none;">
+                            {{ data.inspection_json.check1.comment }}
+                        </div> {% endcomment %}
                     </div>
 
                     <div class="status-item">
-                        <p>Containers are 55 gallons or smaller and compatible with waste stored.</p>
-                        {% for radio in data.check2 %}
-                            <label class="radio-container">
-                                {{ radio.tag }} {{ radio.choice_label }}
-                            </label>
-                        {% endfor %}
+                        <div class="status-header">
+                            <p class="status-text">Containers are 55 gallons or smaller and compatible with waste stored.</p>
+                            <div class="status-options">
+                                {% if search %}
+                                    {{data.inspection_json.check2.status}}
+                                {% else %}
+                                    {% for radio in data.check2 %}
+                                        <label class="radio-container">
+                                            {{ radio.tag }} {{ radio.choice_label }}
+                                        </label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
                         {{ data.comments2 }}
                     </div>
 
                     <div class="status-item">
-                        <p>Labels on containers include accumulation dates, waste descriptions, and waste codes.</p>
-                        {% for radio in data.check3 %}
-                            <label class="radio-container">
-                                {{ radio.tag }} {{ radio.choice_label }}
-                            </label>
-                        {% endfor %}
+                        <div class="status-header">
+                            <p class="status-text">Labels on containers include accumulation dates, waste descriptions, and waste codes.</p>
+                            <div class="status-options">
+                                {% if search %}
+                                    {{data.inspection_json.check3.status}}
+                                {% else %}
+                                    {% for radio in data.check3 %}
+                                        <label class="radio-container">
+                                            {{ radio.tag }} {{ radio.choice_label }}
+                                        </label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
                         {{ data.comments3 }}
                     </div>
 
                     <div class="status-item">
-                        <p>No spills, leaks, or staining around the area.</p>
-                        {% for radio in data.check4 %}
-                            <label class="radio-container">
-                                {{ radio.tag }} {{ radio.choice_label }}
-                            </label>
-                        {% endfor %}
+                        <div class="status-header">
+                            <p class="status-text">No spills, leaks, or staining around the area.</p>
+                            <div class="status-options">
+                                {% if search %}
+                                    {{data.inspection_json.check4.status}}
+                                {% else %}
+                                    {% for radio in data.check4 %}
+                                        <label class="radio-container">
+                                            {{ radio.tag }} {{ radio.choice_label }}
+                                        </label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
                         {{ data.comments4 }}
                     </div>
 
                     <div class="status-item">
-                        <p>No water or liquids in the containment area.</p>
-                        {% for radio in data.check5 %}
-                            <label class="radio-container">
-                                {{ radio.tag }} {{ radio.choice_label }}
-                            </label>
-                        {% endfor %}
+                        <div class="status-header">
+                            <p class="status-text">No water or liquids in the containment area.</p>
+                            <div class="status-options">
+                                {% if search %}
+                                    {{data.inspection_json.check5.status}}
+                                {% else %}
+                                    {% for radio in data.check5 %}
+                                        <label class="radio-container">
+                                            {{ radio.tag }} {{ radio.choice_label }}
+                                        </label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
                         {{ data.comments5 }}
                     </div>
 
                     <div class="status-item">
-                        <p>Full containers of hazardous waste are moved to the 90-day storage area within 3 days.</p>
-                        {% for radio in data.check6 %}
-                            <label class="radio-container">
-                                {{ radio.tag }} {{ radio.choice_label }}
-                            </label>
-                        {% endfor %}
+                        <div class="status-header">
+                            <p class="status-text">Full containers of hazardous waste are moved to the 90-day storage area within 3 days.</p>
+                            <div class="status-options">
+                                {% if search %}
+                                    {{data.inspection_json.check6.status}}
+                                {% else %}
+                                    {% for radio in data.check6 %}
+                                        <label class="radio-container">
+                                            {{ radio.tag }} {{ radio.choice_label }}
+                                        </label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
                         {{ data.comments6 }}
                     </div>
                 </div>
@@ -112,6 +166,7 @@
                 </tr>
             </thead>
             <tbody id="wasteTableBody">
+                {% if not existing %}
                 <tr>
                     <td><input type="text" name="waste_description_0[]" required></td>
         
@@ -144,6 +199,46 @@
         
                     <td><button type="button" class="removeRow">🗑️</button></td>
                 </tr>
+                {% else %}
+                    {% for key, waste in database_form.containers_json.items %}
+                        {% with forCount=forloop.counter0 %}
+                        <tr>
+                            <td><input type="text" name="waste_description_{{ forloop.counter0 }}[]" value="{{waste.description}}" required></td>
+                
+                            <td>
+                                <div class="count-container">
+                                    <button type="button" class="decrement">−</button>
+                                    <input type="number" name="container_count_{{ forloop.counter0 }}[]" value="{{waste.count}}" min="1" required>
+                                    <button type="button" class="increment">+</button>
+                                </div>
+                            </td>
+                
+                            <td>
+                                <select name="waste_code_{{ forloop.counter0 }}[]" required>
+                                    <option value="">-------</option>
+                                    <option value="univ" {% if waste.code == "univ" %}selected{% endif %}>UNIV</option>
+                                    <option value="non-haz" {% if waste.code == "non-haz" %}selected{% endif %}>NON-HAZ</option>
+                                    <option value="haz" {% if waste.code == "haz" %}selected{% endif %}>HAZ</option>
+                                </select>
+                            </td>
+                
+                            <td>
+                                {% for dates in waste.dates %}
+                                <div class="date-container" name="date_container_{{ forCount }}[]">
+                                    <div class="date-group">
+                                        <input type="date" name="waste_dates_{{ forCount }}[]" value="{{dates}}" required>
+                                        <button type="button" class="remove-date" title="Remove Date">✖</button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <button type="button" class="add-date">+ Add Date</button>
+                            </td>
+                
+                            <td><button type="button" class="removeRow">🗑️</button></td>
+                        </tr>
+                        {% endwith %}
+                    {% endfor %}
+                {% endif %}
             </tbody>
         </table>
         

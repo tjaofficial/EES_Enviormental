@@ -124,6 +124,7 @@ input, select, textarea {
     border-radius: 5px;
     background: #f5f5f5;
     cursor: not-allowed;
+    width: 100%;
 }
 
 /* 🌟 WASTE CONTAINER TABLE */
@@ -288,3 +289,85 @@ input, select, textarea {
 .add-row-btn:hover {
     background-color: #1b2b3a;
 }
+
+
+
+
+
+.status-item {
+    display: flex;
+    flex-direction: column;  /* Ensures comments appear BELOW */
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.29);
+    border: 1px solid black;
+    cursor: pointer; /* Makes it clear it's clickable */
+    transition: all 0.3s ease-in-out;
+}
+
+/* Ensures the top section (p + radios/status) stays on ONE LINE */
+.status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 10px;
+}
+
+/* The main description text */
+.status-text {
+    font-size: 18px;
+    flex-grow: 1; /* Ensures it takes available space */
+    width: 514px;
+}
+
+/* Status indicator (for search mode) */
+.status-indicator {
+    font-weight: bold;
+    color: red; /* Change color as needed */
+}
+
+/* Radio options (if search mode is off) */
+.status-options {
+    display: flex;
+    gap: 10px; /* Adds spacing between radios */
+    flex-wrap: wrap; /* Prevents layout breaking */
+}
+
+/* Comment section (hidden by default, appears below) */
+.status-comment-search {
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0;
+    margin-top: 5px;
+    width: 100%;
+    background-color: #f8f9fa;
+    border-left: 4px solid #007bff;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+
+
+
+/* ✅ Custom Styling for the Select Dropdown */
+#id_area_name {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    background-color: white;
+}
+
+/* ✅ Dropdown Menu */
+#id_area_name option {
+    padding: 10px;
+}
+
+/* ✅ Highlight Submitted Options (in case browser supports it) */
+#id_area_name option[data-submitted="true"] {
+    background-color: #d4edda !important; /* ✅ Light green */
+    font-weight: bold;
+}
+

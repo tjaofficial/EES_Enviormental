@@ -6416,7 +6416,7 @@ class form30_model(models.Model):
         blank=True
     )
     def __str__(self):
-        return str(self.date)
+        return str(self.date) + " - " + str(self.area_name)
 
 
 # class tank_library(models.Model):

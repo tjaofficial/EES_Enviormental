@@ -110,6 +110,8 @@ urlpatterns = [
     path("<str:facility>/Monthly/29/<int:fsID>/<str:selector>", views.spill_kits, name="form29"),
     path("<str:facility>/Weekly/30/<int:fsID>/<str:selector>", views.form30, name="form30"),
     path("api/get-inop/", views.inop_check_form_1, name="get-inop"),
+    path("get-existing-form/", views.get_existing_form, name="get_existing_form"),
+    path("get-submitted-areas/", views.get_submitted_areas, name="get_submitted_areas"),
 
     
     ##---COKE_BATTERY_DATA
