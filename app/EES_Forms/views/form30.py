@@ -36,10 +36,9 @@ def form30(request, facility, fsID, selector):
             existing = True
             search = True
         elif now == todays_log.date_save:
-            if submitted_forms.exists():
-                database_form = submitted_forms[0]
-                if todays_log.date_save == database_form.date:
-                    existing = True
+            database_form = submitted_forms[0] if submitted_forms.exists() else False
+            if database_form and todays_log.date_save == database_form.date:
+                existing = True
         else:
             batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect('daily_battery_profile', facility, "login", batt_prof_date)
@@ -123,9 +122,7 @@ def form30(request, facility, fsID, selector):
                 area_name=request.POST['area_name'],
                 date__range=[start_of_week, end_of_week]
             ).first()
-            print(existing_form)
-            print(existing_form.area_name)
-            print(database_form.area_name)
+            
             # Create form instance and save
             if existing_form:
                 if existing_form.area_name == database_form.area_name:
