@@ -1,10 +1,11 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%} {% load static %}
-<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/tempSave_form30.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/form30.js' %}"></script>
 <link href="{% static 'ees_forms/style/form30.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 {% if search %}{{ data.inspection_json|json_script:"inspection_json" }}{% endif %}
+{{ fsIDSelect.settings.settings|json_script:"fsID_json" }}
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
@@ -13,9 +14,12 @@
 <input type="hidden" id="fsID" name="fsID" value="{{ fsID }}">
 
 <div class="container">
+    {% include "shared/components/print_button.html" with formGroup=freq %}
+    {% include "shared/components/backArrow.html" with destination="form" %}
     <h2 style="text-align: center;">Waste Area Inspection Form</h2>
     <br>
     <form method="POST">
+        
         {% csrf_token %}
         
         <!-- Main Form Section -->
@@ -168,7 +172,16 @@
             <tbody id="wasteTableBody">
                 {% if not existing %}
                 <tr>
-                    <td><input type="text" name="waste_description_0[]" required></td>
+                    <td>
+                        <select name="waste_description_0[]" required>
+                            <option value="">-------</option>
+                            {% for key, category in fsIDSelect.settings.settings.items %}
+                                {% if key|slice:":3" == "cat" %}
+                                    <option value="{{category}}">{{category}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
         
                     <td>
                         <div class="count-container">
@@ -181,6 +194,7 @@
                     <td>
                         <select name="waste_code_0[]" required>
                             <option value="">-------</option>
+                            <option value="empty">EMPTY</option>
                             <option value="univ">UNIV</option>
                             <option value="non-haz">NON-HAZ</option>
                             <option value="haz">HAZ</option>
@@ -200,10 +214,20 @@
                     <td><button type="button" class="removeRow">🗑️</button></td>
                 </tr>
                 {% else %}
-                    {% for key, waste in database_form.containers_json.items %}
+                    {% for key, waste in data.containers_json.items %}
                         {% with forCount=forloop.counter0 %}
                         <tr>
-                            <td><input type="text" name="waste_description_{{ forloop.counter0 }}[]" value="{{waste.description}}" required></td>
+                            <td>
+                                <select name="waste_description_{{ forloop.counter0 }}[]" required>
+                                    <option value="">-------</option>
+                                    {% for key, category in fsIDSelect.settings.settings.items %}
+                                        {% if key|slice:":3" == "cat" %}
+                                            <option value="{{category}}" {% if category == waste.description %}selected{% endif %}>{{category}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {% comment %} <input type="text" name="waste_description_{{ forloop.counter0 }}[]" value="{{waste.description}}" required> {% endcomment %}
+                            </td>
                 
                             <td>
                                 <div class="count-container">
@@ -216,6 +240,7 @@
                             <td>
                                 <select name="waste_code_{{ forloop.counter0 }}[]" required>
                                     <option value="">-------</option>
+                                    <option value="empty" {% if waste.code == "empty" %}selected{% endif %}>EMPTY</option>
                                     <option value="univ" {% if waste.code == "univ" %}selected{% endif %}>UNIV</option>
                                     <option value="non-haz" {% if waste.code == "non-haz" %}selected{% endif %}>NON-HAZ</option>
                                     <option value="haz" {% if waste.code == "haz" %}selected{% endif %}>HAZ</option>

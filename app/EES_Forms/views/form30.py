@@ -1,48 +1,28 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from datetime import datetime
-from ..models import issues_model, form_settings_model, daily_battery_profile_model, bat_info_model, form30_model
+from ..models import issues_model, form_settings_model, form30_model
 from ..forms import form30_form
-from ..utils import updateSubmissionForm, createNotification, get_initial_data, checkIfFacilitySelected, getFacSettingsInfo, setUnlockClientSupervisor, issueForm_picker
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
+from ..form_issue_functions import form30_issue_check
+from ..utils import get_initial_data
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-import json
-from django.http import JsonResponse # type: ignore
+from django.http import JsonResponse, HttpResponseRedirect# type: ignore
 from django.utils.timezone import now, timedelta # type: ignore
 
 lock = login_required(login_url='Login')
 
 @lock
 def form30(request, facility, fsID, selector):
-    formName = 30
-    notifs = checkIfFacilitySelected(request.user, facility)
-    freq = getFacSettingsInfo(fsID)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    existing = False
-    search = False
-    now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.filter(facility_name=facility)[0]
-    submitted_forms = form30_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    full_name = request.user.get_full_name()
-    picker = issueForm_picker(facility, selector, fsID)
-    fsIDSelect = form_settings_model.objects.get(id=int(fsID))
-
-    if daily_prof.exists():
-        todays_log = daily_prof[0]
-        if selector != 'form':
-            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
-            database_model = form_query[0] if form_query.exists() else print('no data found with this date')
-            data = database_model
-            existing = True
-            search = True
-        elif now == todays_log.date_save:
-            database_form = submitted_forms[0] if submitted_forms.exists() else False
-            if database_form and todays_log.date_save == database_form.date:
-                existing = True
+    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    if form_variables['daily_prof'].exists():
+        todays_log = form_variables['daily_prof'][0]
+        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
+        if isinstance(more_form_variables, HttpResponseRedirect):
+            return more_form_variables
         else:
-            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-    
+            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+        
         if search:
             database_form = ''
         else:
@@ -52,37 +32,40 @@ def form30(request, facility, fsID, selector):
                 for i in range(1, 7):  # Assuming 6 status checks
                     inspection_initial[f'check{i}'] = unparsedData["inspection_json"][f'check{i}']['status']
                     inspection_initial[f'comments{i}'] = unparsedData["inspection_json"][f'check{i}']['comment']
-                print(inspection_initial)
+                #print(inspection_initial)
                 
                 containers_initial = {}
-                for index, (key, value) in enumerate(unparsedData['containers_json'].items()):
-                    containers_initial[f'waste_description_{index}'] = value.get('description', "")
-                    containers_initial[f'container_count_{index}'] = value.get('count', 0)
-                    containers_initial[f'waste_code_{index}'] = value.get('code', "")
+                if "noContainers" not in unparsedData['containers_json'].keys():
+                    for index, (key, value) in enumerate(unparsedData['containers_json'].items()):
+                        containers_initial[f'waste_description_{index}'] = value.get('description', "")
+                        containers_initial[f'container_count_{index}'] = value.get('count', 0)
+                        containers_initial[f'waste_code_{index}'] = value.get('code', "")
 
-                    # Extract multiple dates
-                    waste_dates = value.get('dates', [])
-                    for date_idx, date_value in enumerate(waste_dates):
-                        containers_initial[f'waste_dates_{index}_{date_idx}'] = date_value
+                        # Extract multiple dates
+                        waste_dates = value.get('dates', [])
+                        for date_idx, date_value in enumerate(waste_dates):
+                            containers_initial[f'waste_dates_{index}_{date_idx}'] = date_value
+                else:
+                    containers_initial['noContainers'] = False
 
                 initial_data = unparsedData | inspection_initial
+                initial_data["area_name"] = ""
             else:
                 initial_data = {
                     'date': todays_log.date_save,
-                    'observer': full_name,
-                    'formSettings': form_settings_model.objects.get(id=int(fsID)),
+                    'observer': form_variables['full_name'],
+                    'formSettings': form_variables['freq'],
                 }
-            data = form30_form(initial=initial_data, form_settings=fsIDSelect)
+            data = form30_form(initial=initial_data, form_settings=form_variables['freq'])
 
         if request.method == "POST":
-            print(request.POST)
+            #print(request.POST)
             copyPOST = request.POST.copy()
 
             try:
-                form_settings = fsIDSelect
+                form_settings = form_variables['freq']
             except form_settings_model.DoesNotExist:
                 raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
-
 
             copyPOST['formSettings'] = str(fsID)
             inspection_data = {
@@ -95,27 +78,30 @@ def form30(request, facility, fsID, selector):
             }
 
             print(f"Here is Request.POST: {request.POST}")
-            keyNumberList = []
-            for key, formItem in request.POST.items():
-                if 'waste_description' in key:
-                    keyNumberList.append(key.replace("waste_description_", "").replace("[]", ""))
-            print(keyNumberList)
+            if "noContainers" in request.POST.keys():
+                copyPOST['containers_json'] = {"noContainers": False}
+            else:
+                keyNumberList = []
+                for key, formItem in request.POST.items():
+                    if 'waste_description' in key:
+                        keyNumberList.append(key.replace("waste_description_", "").replace("[]", ""))
+                print(keyNumberList)
 
-            containers_data = {}
-            index = 1
-            for keyNumb in keyNumberList:
-                containers_data[f"waste{index}"] = {
-                    "description": request.POST.get(f"waste_description_{keyNumb}[]", ""),
-                    "count": request.POST.get(f"container_count_{keyNumb}[]", ""),
-                    "code": request.POST.get(f"waste_code_{keyNumb}[]", ""),
-                    "dates": request.POST.getlist(f"waste_dates_{keyNumb}[]"),
-                }
-                index += 1
+                containers_data = {}
+                index = 1
+                for keyNumb in keyNumberList:
+                    containers_data[f"waste{index}"] = {
+                        "description": request.POST.get(f"waste_description_{keyNumb}[]", ""),
+                        "count": request.POST.get(f"container_count_{keyNumb}[]", ""),
+                        "code": request.POST.get(f"waste_code_{keyNumb}[]", ""),
+                        "dates": request.POST.getlist(f"waste_dates_{keyNumb}[]"),
+                    }
+                    index += 1
+                copyPOST['containers_json'] = containers_data
 
             copyPOST['inspection_json'] = inspection_data
-            copyPOST['containers_json'] = containers_data
             
-            start_of_week = now - timedelta(days=now.weekday())  # Monday
+            start_of_week = form_variables['now'] - timedelta(days=form_variables['now'].weekday())  # Monday
             end_of_week = start_of_week + timedelta(days=6)  # Sunday
             
             existing_form = form30_model.objects.filter(
@@ -132,61 +118,29 @@ def form30(request, facility, fsID, selector):
                     form = form30_form(copyPOST, instance=existing_form, form_settings=form_settings)
             else:
                 form = form30_form(copyPOST, form_settings=form_settings)
-
-            print(form.errors)
-            if form.is_valid():
-                print("saved")
-                A = form.save(commit=False)
-                A.formSettings = form_settings_model.objects.get(id=int(fsID))
-                A.facilityChoice = options
-                A.save()
-
-                fsID = str(fsID)
-                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
-                #INSERT ANY CHECKS HERE
-                issueFound = False
-                compliance = False
-                if issueFound:
-                    if finder:
-                        if selector == 'form':
-                            issue_page = 'resubmit'
-                        else:
-                            issue_page = 'issue'
-                    else:
-                        issue_page = 'form'
-                    
-                    if compliance:
-                        issue_page = issue_page + "-c"
-                        
-                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-
-
-                createNotification(facility, request, fsID, now, 'submitted', False)        
-                updateSubmissionForm(fsID, True, todays_log.date_save)
-                return redirect('IncompleteForms', facility)
-
-
+            
+            exportVariables = (request, selector, facility, database_form, fsID)
+            return redirect(*template_validate_save(form, form_variables, *exportVariables))
     else:
-        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
     return render(request, "shared/forms/weekly/form30.html", {
         'facility': facility,
-        'notifs': notifs,
-        'freq': freq,
-        'supervisor': supervisor, 
-        "client": client, 
-        'unlock': unlock, 
-        'options': options, 
+        'notifs': form_variables['notifs'],
+        'freq': form_variables['freq'],
+        'supervisor': form_variables['supervisor'], 
+        "client": form_variables['client'], 
+        'unlock': form_variables['unlock'], 
         "search": search, 
         'todays_log': todays_log, 
         'data': data, 
-        'formName': formName, 
+        'formName': form_variables['formName'], 
         'selector': selector,
-        'picker': picker,
+        'picker': form_variables['picker'],
         'fsID': fsID,
         'existing': existing,
-        "database_form": database_form
+        'fsIDSelect': form_variables['fsIDSelect']
     })
 
 def get_existing_form(request):

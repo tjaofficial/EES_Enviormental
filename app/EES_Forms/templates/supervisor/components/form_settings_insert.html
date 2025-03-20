@@ -294,6 +294,7 @@
                 Number of areas:{% include 'shared/components/helpPack.html' with data="form30_num_of_areas" popupCounter=1 %} 
                 <input type='number' placeholder="" class="num_of_areas" name="{{formID}}-num_of_areas" value="{% if formSettings.settings.num_of_areas %}{{formSettings.settings.num_of_areas}}{% endif %}"><br>
             </li>
+            
             {{ formSettings.settings|json_script:"formSettingsData" }}
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
@@ -372,6 +373,190 @@
             <li class="form-line">
                 <div id="30-areaNames" style="display: none; padding-left: 40px;"></div>
             </li>
+            <li class="form-line">
+                Number of Waste Categories:{% include 'shared/components/helpPack.html' with data="form30_num_of_waste_cat" popupCounter=2 %} 
+                <input type='number' placeholder="" class="num_of_waste_cat" name="{{formID}}-num_of_waste_cat" value="{% if formSettings.settings.num_of_waste_cat %}{{formSettings.settings.num_of_waste_cat}}{% endif %}"><br>
+            </li>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    let numOfWasteCatInput = document.querySelector(".num_of_waste_cat");
+            
+                    if (numOfWasteCatInput) {
+                        console.log('hello')
+                        showOldCatData(numOfWasteCatInput)
+                        updateWasteCats(numOfWasteCatInput, "{{formID}}")
+                        numOfWasteCatInput.addEventListener("input", function () {
+                            updateWasteCats(this, "{{formID}}");
+                        });
+                    }
+                });
+            
+                function updateWasteCats(elem, count) {
+                    let cats = parseInt(elem.value) || 0;  // Ensure valid number
+            
+                    const htmlDIV = document.getElementById(`${count}-wasteCatNames`);
+                    if (!htmlDIV) return;
+            
+                    let existingCats = htmlDIV.querySelectorAll(".cat-block").length;
+            
+                    // If increasing, add new fields
+                    if (cats > existingCats) {
+                        for (let i = existingCats; i < cats; i++) {
+                            let catBlock = document.createElement("div");
+                            catBlock.classList.add("cat-block");
+                            catBlock.setAttribute("id", `${count}-catBlock-${i + 1}`);
+                            catBlock.innerHTML = `
+                                <div style="padding-bottom:25px;">
+                                    Name of Category ${i + 1}: <input class='input_text' name='${count}-cat${i + 1}' type='text' required value=""><br>
+                                </div>
+                            `;
+                            htmlDIV.appendChild(catBlock);
+                        }
+                    }
+                    // If decreasing, remove the last added inputs
+                    else if (cats < existingCats) {
+                        for (let i = existingCats; i > cats; i--) {
+                            let lastBlock = document.getElementById(`${count}-catBlock-${i}`);
+                            if (lastBlock) {
+                                lastBlock.remove();
+                            }
+                        }
+                    }
+
+                    htmlDIV.style.display = cats > 0 ? "block" : "none"; // Hide if no cats
+                }
+                function showOldCatData(numOfWasteCatInput){
+                    let settingsElement = document.getElementById("formSettingsData");
+                    if (!settingsElement) {
+                        console.error("Error: formSettingsData element not found.");
+                        return;
+                    }
+
+                    try {
+                        let settingsDict = JSON.parse(settingsElement.textContent);
+                        console.log("Parsed JSON:", settingsDict);
+                
+                        updateWasteCats(numOfWasteCatInput, "{{formID}}"); // Update UI
+                
+                        for (let x in settingsDict) {
+                            if (x.startsWith("cat")) {
+                                let catNameInput = document.getElementsByName("{{formID}}" + "-" + x)[0];
+                                if (catNameInput) {
+                                    catNameInput.value = settingsDict[x]; // Assign value correctly
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error parsing JSON:", error, settingsElement);
+                    }
+                }
+            </script>
+            <li class="form-line">
+                <div id="30-wasteCatNames" style="display: none; padding-left: 40px;"></div>
+            </li>
+        {% elif formID == 31 %}
+            {{ formSettings.settings|json_script:"formSettingsData" }}
+            <li class="form-line">
+                Custom title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} 
+                <input type='text' placeholder="{{formData.header}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <div style="justify-self: center;">
+                <table class="tank-table" style="border: #0000006e 1px solid; border-radius: 5px;">
+                    <thead>
+                        <tr>
+                            <th>Tank ID</th>
+                            <th>Tank Name</th>
+                            <th>Tank Class</th>
+                            <th>Contents</th>30-tank1-id
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tankTableBody">
+                        <tr id="row1">
+                            <td><input style="width: 90px;" type="text" name="{{formID}}-tank1-id" class="tank-input" placeholder="Enter Tank ID"></td>
+                            <td><input style="width: 230px;" type="text" name="{{formID}}-tank1-name" class="tank-input" placeholder="Enter Tank Name"></td>
+                            <td><input style="width: 150px;" type="text" name="{{formID}}-tank1-class" class="tank-input" placeholder="Enter Tank Class"></td>
+                            <td><input style="width: 150px;" type="text" name="{{formID}}-tank1-contents" class="tank-input" placeholder="Enter Contents"></td>
+                            <td><button type="button" class="deleteRow">🗑️</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" id="addRow">+ Add Row</button>
+            <script>
+                showOldData();
+                let tableBody = document.getElementById("tankTableBody");
+                document.getElementById("addRow").addEventListener("click", function() {
+                    let tableLastRowNumber = tableBody.lastElementChild.id.slice(3)
+                    console.log(tableBody.lastElementChild.id.slice(3))
+                    let newRow = document.createElement("tr");
+                    newRow.id = "row" + String(Number(tableLastRowNumber) + 1)
+                    newRow.innerHTML = `
+                        <td><input style="width: 90px;" type="text" name="{{formID}}-tank${String(Number(tableLastRowNumber) + 1)}-id" class="tank-input" placeholder="Enter Tank ID"></td>
+                        <td><input style="width: 230px;" type="text" name="{{formID}}-tank${String(Number(tableLastRowNumber) + 1)}-name" class="tank-input" placeholder="Enter Tank Name"></td>
+                        <td><input style="width: 150px;" type="text" name="{{formID}}-tank${String(Number(tableLastRowNumber) + 1)}-class" class="tank-input" placeholder="Enter Tank Class"></td>
+                        <td><input style="width: 150px;" type="text" name="{{formID}}-tank${String(Number(tableLastRowNumber) + 1)}-contents" class="tank-input" placeholder="Enter Contents"></td>
+                        <td><button type="button" class="deleteRow">🗑️</button></td>
+                    `;
+            
+                    tableBody.appendChild(newRow);
+                    attachDeleteEvent(newRow);
+                });
+            
+                function attachDeleteEvent(row) {
+                    row.querySelector(".deleteRow").addEventListener("click", function() {
+                        row.remove();
+                    });
+                }
+            
+                // Attach event listener to existing row
+                document.querySelectorAll(".deleteRow").forEach(button => {
+                    button.addEventListener("click", function() {
+                        this.closest("tr").remove();
+                    });
+                });
+
+                function showOldData(){
+                    let tableBody = document.getElementById("tankTableBody");
+                    let settingsElement = document.getElementById("formSettingsData");
+                    if (!settingsElement) {
+                        console.error("Error: formSettingsData element not found.");
+                        return;
+                    }
+
+                    try {
+                        let settingsDict = JSON.parse(settingsElement.textContent);
+                        console.log("Parsed JSON:", settingsDict);
+                        dataLength = Object.keys(settingsDict).length-1;
+                        console.log(dataLength)
+                        if (dataLength > 0){
+                            let child = tableBody.firstElementChild
+                            tableBody.removeChild(child)
+                            let count = 1;
+                            for (theKey in settingsDict){
+                                //for (x=1; x<=dataLength; x++){
+                                if (theKey != "custom_name"){
+                                    let tank_data = settingsDict[theKey];
+                                    let newRow = document.createElement("tr");
+                                    newRow.id = "row" + String(count);
+                                    newRow.innerHTML = `
+                                        <td><input value="${tank_data['id']}" style="width: 90px;" type="text" name="{{formID}}-tank${String(count)}-id" class="tank-input" placeholder="Enter Tank ID"></td>
+                                        <td><input value="${tank_data['name']}" style="width: 230px;" type="text" name="{{formID}}-tank${String(count)}-name" class="tank-input" placeholder="Enter Tank Name"></td>
+                                        <td><input value="${tank_data['class']}" style="width: 150px;" type="text" name="{{formID}}-tank${String(count)}-class" class="tank-input" placeholder="Enter Tank Class"></td>
+                                        <td><input value="${tank_data['contents']}" style="width: 150px;" type="text" name="{{formID}}-tank${String(count)}-contents" class="tank-input" placeholder="Enter Contents"></td>
+                                        <td><button type="button" class="deleteRow">🗑️</button></td>
+                                    `;
+                            
+                                    tableBody.appendChild(newRow);
+                                    count++;
+                                }
+                            }
+                        }  
+                    } catch (error) {
+                        console.error("Error parsing JSON:", error, settingsElement);
+                    }
+                }
+            </script>
         {% endif %}
     </div>
 </div>

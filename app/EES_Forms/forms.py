@@ -9,14 +9,18 @@ now = datetime.datetime.now()
 
 #Create Your Forms here
 
-class SubFormC1(ModelForm):
+class form7_form(ModelForm):
     class Meta:
         model = form7_model
         fields = (
             'date', 
             'observer', 
             'cert_date', 
-            'comments', 
+            'comments',
+            'area_json_1',
+            'area_json_2',
+            'area_json_3',
+            'area_json_4'
         )
         
         widgets = {
@@ -25,6 +29,14 @@ class SubFormC1(ModelForm):
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
             'comments': Textarea(attrs={'rows': 7, 'cols': 125}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
 
 
 class FormCReadForm(ModelForm):
@@ -306,7 +318,8 @@ class bat_info_form(ModelForm):
         }
 
 
-class formA1_form(ModelForm):
+
+class form1_form(ModelForm):
     class Meta:
         model = form1_model
         fields = ('__all__')
@@ -397,6 +410,10 @@ class formA1_form(ModelForm):
     }
 
     def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
@@ -553,8 +570,7 @@ class formA1_readings_form(ModelForm):
                 'style': 'width: 60px; text-align: center;'}),
         }
     
-
-class formA2_form(ModelForm):
+class form2_form(ModelForm):
     class Meta:
         model = form2_model
         fields = ('__all__')
@@ -687,9 +703,16 @@ class formA2_form(ModelForm):
             'p_leak_data': forms.TextInput(attrs={'id': "pushSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
             'c_leak_data': forms.TextInput(attrs={'id': "cokeSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
 
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
 
-class formA3_form(ModelForm):
+class form3_form(ModelForm):
     class Meta:
         model = form3_model
         fields = ('__all__')
@@ -728,8 +751,15 @@ class formA3_form(ModelForm):
             'notes': Textarea(attrs={'rows': 7, 'cols': 125}),
         }
 
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
 
-class formA4_form(ModelForm):
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
+class form4_form(ModelForm):
     class Meta:
         model = form4_model
         fields = ('__all__')
@@ -748,9 +778,16 @@ class formA4_form(ModelForm):
             'notes': forms.Textarea(attrs={'rows': 7, 'cols': 125}),
             'leak_data': forms.TextInput(attrs={'id': "collection", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
 
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
 
-class formA5_form(ModelForm):
+class form5_form(ModelForm):
     class Meta:
         model = form5_model
         fields = ('__all__')
@@ -1024,6 +1061,10 @@ class formA5_form(ModelForm):
     }
 
     def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
@@ -1275,8 +1316,7 @@ class formA5_readings_form(ModelForm):
             'o4_16_reads' : forms.TextInput(attrs={'id':'o4_16_reads', 'class': 'input', 'oninput':'averages_pt4()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
         }
     
- 
-class formB_form(ModelForm):
+class form6_form(ModelForm):
     class Meta:
         model = form6_model
         fields = ('__all__')
@@ -1394,7 +1434,15 @@ class formB_form(ModelForm):
             'breeze_4' : forms.Select(attrs={'oninput':'clean_up_submitted_form()', 'style':'width: 80px;'}),
         }
     
-class formD_form(ModelForm):
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
+class form8_form(ModelForm):
     class Meta:
         model = form8_model
         fields = (
@@ -1486,8 +1534,16 @@ class formD_form(ModelForm):
             'observer4' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
             'observer5' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
         }
-  
-class formE_form(ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
+class form9_form(ModelForm):
     class Meta:
         model = form9_model
         fields = (
@@ -1512,7 +1568,15 @@ class formE_form(ModelForm):
             'goose_neck_data' : forms.NumberInput(attrs={'id': "gooseNeckData", 'type': "hidden", 'value': "{}", 'data-resulttable': ""})
             
         }
-             
+
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
 class formF1_form(ModelForm):
     class Meta:
         model = formF1_model
@@ -1832,7 +1896,10 @@ class formF7_form(ModelForm):
             'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
         }
 
-class formG1_form(ModelForm):
+
+
+
+class form17_form(ModelForm):
     class Meta:
         model = form17_model
         fields = ('__all__')
@@ -1860,6 +1927,15 @@ class formG1_form(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
         }      
+
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
 class formG1_readings_form(ModelForm):
     class Meta:
         model = form17_readings_model
@@ -2075,8 +2151,12 @@ class formH_readings_form(ModelForm):
             'comb_read_60' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'comb_average' : forms.NumberInput(attrs={'oninput': 'comb_averages()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
         }
-        
-class formI_form(ModelForm):
+
+
+
+
+
+class form20_form(ModelForm):
     class Meta:
         model = form20_model
         fields = ('__all__')
@@ -2096,6 +2176,13 @@ class formI_form(ModelForm):
             'obser_4' : forms.TextInput(attrs={'style':'width: 150px;'}),
         }
         
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
         
 class formL_form(ModelForm):
     class Meta:
@@ -2678,7 +2765,7 @@ class form30_form(forms.ModelForm):
         fields = "__all__"
         widgets = {
             "observer": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter Observer Name"}),
-            "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "date": forms.DateInput(attrs={"type": "date", "class": "form-control", 'required': True}),
             "time": forms.TimeInput(attrs={"type": "time", "class": "form-control"}),
         }
 
@@ -2747,3 +2834,53 @@ class form30_form(forms.ModelForm):
             raise forms.ValidationError("Invalid data format for containers.")
         return data
 
+class form31_form(forms.ModelForm):
+    class Meta:
+        model = form31_model
+        fields = ["observer", "date", "time", "tank_json"]
+        widgets = {
+            "observer": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter Observer Name"}),
+            "date": forms.DateInput(attrs={"type": "date", "class": "form-control", 'required': True}),
+            "time": forms.TimeInput(attrs={"type": "time", "class": "form-control"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)  # Extract form settings
+        super().__init__(*args, **kwargs)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` is required to initialize form31_form.")
+
+        # ✅ Extract tank settings from `form_settings.settings['settings']`
+        settings = form_settings.settings.get("settings", {}) if hasattr(form_settings, "settings") else {}
+        tanks = {key: value for key, value in settings.items() if key.startswith("tank")}  # Extract tanks dynamically
+
+        # ✅ Load existing form data
+        instance = kwargs.get("instance")
+        tank_data = instance.tank_json if instance and instance.tank_json else {}
+
+        # ✅ Generate dynamic fields for each tank
+        for tank_key, tank_info in tanks.items():
+            tank_id = tank_info.get("id", tank_key)  # Default to key if missing ID
+
+            # Status field (Radio Select: OK / Not OK)
+            self.fields[f"{tank_id}_status"] = forms.ChoiceField(
+                choices=[("OK", "OK"), ("Not OK", "Not OK")],
+                required=False,
+                widget=forms.RadioSelect(attrs={"class": "status-radio"}),
+                initial=tank_data.get(tank_id, {}).get("status", ""),
+            )
+
+            # Comments field (Textarea)
+            self.fields[f"{tank_id}_comments"] = forms.CharField(
+                required=False,
+                widget=forms.Textarea(attrs={"rows": "2", "class": "tank-comment", "placeholder": "Add comment..."}),
+                initial=tank_data.get(tank_id, {}).get("comments", ""),
+            )
+
+    def clean_tank_json(self):
+        """Ensure JSON data is valid for tank inspections."""
+        data = self.cleaned_data.get("tank_json")
+        if not isinstance(data, dict):
+            raise forms.ValidationError("Invalid data format for tank status.")
+        return data

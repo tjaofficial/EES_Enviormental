@@ -1212,6 +1212,7 @@ def colorModeSwitch(request):
 
 def createNotificationDatabase(facility, user, fsID, date, notifSelector):
     print('notif - check 1')
+    print(fsID)
     todayNumb = datetime.date.today().weekday()
     nFormSettings = form_settings_model.objects.get(id=fsID)
     nFacility = bat_info_model.objects.filter(facility_name=facility)

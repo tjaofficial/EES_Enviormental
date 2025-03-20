@@ -1,34 +1,29 @@
-
-
-
-
 const arrayOfInputs = Array.prototype.slice.call(document.getElementsByTagName('input'),0);
-
+const arrayOfRadios = Array.from(document.querySelectorAll("input[type=radio]"));
 const arrayOfSelects = Array.prototype.slice.call(document.getElementsByTagName('select'),0);
 const arrayOfTextareas = Array.prototype.slice.call(document.getElementsByTagName('textarea'),0);
-const input_select_textarea_combined_array = arrayOfInputs.concat(arrayOfSelects, arrayOfTextareas);
-
-
+const input_select_textarea_combined_array = arrayOfInputs.concat(arrayOfSelects, arrayOfTextareas, arrayOfRadios);
+//console.log(input_select_textarea_combined_array)
 
 const formName = document.getElementById('formName').dataset.form
 const tempSaveKey = formName+"_tempFormData";
 const currentDate = Date.now();
 
-
-
 clearStorage(currentDate, tempSaveKey);
 inputEventListener(input_select_textarea_combined_array);
 //fillForm(tempSaveKey);
 
-
-function inputEventListener(array){
-    for(let elem in array) {  
-        item = array[elem];
-        if(item.id){
-            //console.log("test")
-            document.getElementById(item.id).addEventListener("input", saveToLocal);
-        }
+function inputEventListener(array) {
+    if (!Array.isArray(array)) {
+        console.error("inputEventListener was passed a non-array value:", array);
+        return;
     }
+    array.forEach(item => {
+        if (item.id || item.type === "radio") { // Handle radios properly
+            item.addEventListener("input", saveToLocal);
+            console.log()
+        }
+    });
 }
 
 function saveToLocal(event){
@@ -37,7 +32,17 @@ function saveToLocal(event){
     const currentDate = Date.now();
     const formTempData = localStorage.getItem(tempSaveKey)?JSON.parse(localStorage.getItem(tempSaveKey)): {"Experation":currentDate, data:{}};
     const elem = event.target;
-    formTempData.data[elem.id] = elem.value;
+
+    if (elem.type === "radio") {
+        let baseName = elem.name;  // Use `name` instead of `id` to get the whole group
+        formTempData.data[baseName] = elem.value; // Store by name, not full ID
+    } else {
+        formTempData.data[elem.id] = elem.value;
+    }
+
+    //formTempData.data[elem.id] = elem.value;
+    console.log(formTempData.data[elem.id])
+    console.log(elem.id)
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
@@ -58,14 +63,48 @@ function fillForm(tempSaveKey){
     if(formTempData){
         const object = JSON.parse(formTempData);
         dataObject = object.data;
+        console.log(dataObject)
         for(let key in dataObject) {
             if(dataObject[key]){ 
-                let inputValue = document.getElementById(key).value 
-                if(!inputValue || inputValue != {}){
-                    document.getElementById(key).value = dataObject[key];
+                let element = document.getElementById(key);
+                console.log(element)
+                if (element) {
+                    if(element.type === "radio") {
+                        let baseName = key.replace(/_\d+$/, '').replace("id_",""); // 🔥 Remove trailing _0, _1, _2
+                        let radios = document.getElementsByName(baseName);
+
+                        console.log(baseName)
+                        radios.forEach(radio => {
+                            if (radio.value === dataObject[key]) {
+                                radio.checked = true;
+                            }
+                        });
+                    } else {
+                        let inputValue = document.getElementById(key).value 
+                        if(!inputValue || inputValue != {}){
+                            document.getElementById(key).value = dataObject[key];
+                        }
+                    }
+                } else {
+                    if(dataObject[key] == "OK"){
+                        var parseBaseName = "id_" + key + "_0"
+                    } else {
+                        var parseBaseName = "id_" + key + "_1"
+                    }
+                    let element = document.getElementById(parseBaseName)
+                    if(element.type === "radio") {
+                        let baseName = key.replace(/_\d+$/, '').replace("id_",""); // 🔥 Remove trailing _0, _1, _2
+                        let radios = document.getElementsByName(baseName);
+
+                        console.log(baseName)
+                        radios.forEach(radio => {
+                            if (radio.value === dataObject[key]) {
+                                radio.checked = true;
+                            }
+                        });
+                    }
                 }
             }
-            
         }
     }
 }
@@ -76,7 +115,7 @@ function intiate_TempSave(){
     const currentDate = Date.now();
 
     clearStorage(tempSaveKey, currentDate);
-    inputEventListener();
+    inputEventListener(input_select_textarea_combined_array);
     fillForm(tempSaveKey);
     
 }

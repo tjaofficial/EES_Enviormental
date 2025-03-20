@@ -352,7 +352,7 @@ input, select, textarea {
 
 /* ✅ Custom Styling for the Select Dropdown */
 #id_area_name {
-    width: 100%;
+    /* width: 100%; */
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;

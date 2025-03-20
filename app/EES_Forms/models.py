@@ -6418,6 +6418,22 @@ class form30_model(models.Model):
     def __str__(self):
         return str(self.date) + " - " + str(self.area_name)
 
+class form31_model(models.Model):
+    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
+    observer = models.CharField(max_length=255, verbose_name="Inspector Name")
+    date = models.DateField(verbose_name="Inspection Date")
+    time = models.TimeField(verbose_name="Inspection Time")
+    tank_json = models.JSONField(default=dict, verbose_name="Tank Data")  # Stores dynamic tank data
+
+    def __str__(self):
+        return f"Monthly Tanks: {self.date}"
+    
 
 # class tank_library(models.Model):
 #     title = models.CharField(max_length=40)

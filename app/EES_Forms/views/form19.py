@@ -1,68 +1,45 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime, date, timedelta
-from ..models import Forms, user_profile_model, daily_battery_profile_model, form19_model, form19_readings_model, bat_info_model
-from ..forms import formH_form, user_profile_form, formH_readings_form
+from datetime import datetime, timedelta
+from ..models import form19_model, form19_readings_model
+from ..forms import formH_form, formH_readings_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form
 
 lock = login_required(login_url='Login')
 
-
-
 @lock
-def formH(request, facility, fsID, selector):
-    formName = 19
-    freq = getFacSettingsInfo(fsID)
-    notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    existing = False
-    search = False
-    now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.filter(facility_name=facility)[0]
-    submitted_forms = form19_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    profile = user_profile_model.objects.filter(user__exact=request.user.id)
-    today = date.today()
-    personalizedSettings = freq.settings["settings"]
-    start_saturday = today - timedelta(days=today.weekday() + 2)
+def form19(request, facility, fsID, selector):
+    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
+    personalizedSettings = form_variables['freq'].settings["settings"]
+    start_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2)
     end_friday = start_saturday + timedelta(days=6)
     org2 = form19_readings_model.objects.all().order_by('-form')
     orgFormL = org2.filter(comb_formL__exact=True)
-    full_name = request.user.get_full_name()
     exist_canvas = ''
-    picker = issueForm_picker(facility, selector, fsID)
-    
-    if unlock:
-        if profile.exists():
-            cert_date = request.user.user_profile_model.cert_date
-        else:
-            return redirect('IncompleteForms', facility)
-    
     # Weather API Pull
-    weather = weatherDict(options.city)
-    weather2 = json.dumps(weather)
+    weather = weatherDict(form_variables['freq'].facilityChoice.city)
     
-    if daily_prof.exists():
-        todays_log = daily_prof[0]
+    if form_variables['daily_prof'].exists():
+        todays_log = form_variables['daily_prof'][0]
+        data, existing, search = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
         if selector != 'form' and selector != 'formL':
-            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            form_query = form_variables['submitted_forms'].filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
             database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             data = database_model
-
             for x in org2:
                 if str(x.form.date) == str(selector):
                     database_model2 = x
             readings_form = database_model2
-
-            profile_form = ''
             existing = True
             search = True
-        elif now == todays_log.date_save:
-            if submitted_forms.exists() or org2.exists():
+        elif form_variables['now'] == todays_log.date_save:
+            if form_variables['submitted_forms'].exists() or org2.exists():
                 if selector != 'formL':
-                    database_form = submitted_forms[0]
+                    database_form = form_variables['submitted_forms'][0]
                     database_form2 = org2[0]
                     # -------check if there is a daily battery profile
                     if start_saturday < database_form.date < end_friday:
@@ -70,13 +47,13 @@ def formH(request, facility, fsID, selector):
                 elif orgFormL.exists():
                     formName = 'H-L'
                     database_form2 = orgFormL[0]
-                    for line in submitted_forms:
+                    for line in form_variables['submitted_forms']:
                         if line.date == database_form2.form.date:
                             database_form = line
                     if todays_log.date_save == database_form.date:
                         existing = True
         else:
-            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
             return redirect('daily_battery_profile', facility, "login", batt_prof_date)
         
         if search:
@@ -88,17 +65,16 @@ def formH(request, facility, fsID, selector):
                 initial_data = get_initial_data(form19_model, database_form)
                 data = formH_form(initial=initial_data)
                 readings_form = formH_readings_form(initial=initial_data)
-                profile_form = user_profile_form()
             else:
                 initial_data = {
-                    'date': now,
-                    'estab': options.facility_name,
-                    'county': options.county,
-                    'estab_no': options.estab_num,
-                    'equip_loc': options.equip_location,
-                    'district': options.district,
-                    'city': options.city,
-                    'observer': full_name,
+                    'date': form_variables['now'],
+                    'estab': form_variables['freq'].facilityChoice.facility_name,
+                    'county': form_variables['freq'].facilityChoice.county,
+                    'estab_no': form_variables['freq'].facilityChoice.estab_num,
+                    'equip_loc': form_variables['freq'].facilityChoice.equip_location,
+                    'district': form_variables['freq'].facilityChoice.district,
+                    'city': form_variables['freq'].facilityChoice.city,
+                    'observer': form_variables['full_name'],
                     'cert_date': cert_date,
                     'process_equip1': personalizedSettings['process_equip1'],
                     'process_equip2': personalizedSettings['process_equip2'],
@@ -118,7 +94,6 @@ def formH(request, facility, fsID, selector):
                     #'humidity': weather['humidity'],
                 }
                 data = formH_form(initial=initial_data)
-                profile_form = user_profile_form()
                 readings_form = formH_readings_form()
 
         if request.method == "POST":
@@ -138,7 +113,7 @@ def formH(request, facility, fsID, selector):
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = readings.save(commit=False)
-                A.facilityChoice = options
+                A.formSettings = form_variables['freq']
                 if not existing:
                     if A.wind_speed_stop == 'TBD':
                         if int(A.wind_speed_start) == int(weather['wind_speed']):
@@ -154,33 +129,31 @@ def formH(request, facility, fsID, selector):
 
                 B.form = A
                 B.save()
-                createNotification(facility, request, fsID, now, 'submitted', False)
+                createNotification(facility, request, fsID, form_variables['now'], 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
 
                 return redirect('IncompleteForms', facility)
     else:
-        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/weekly/formH.html", {
         'fsID': fsID, 
-        'picker': picker, 
+        'picker': form_variables['picker'], 
         'facility': facility, 
-        'notifs': notifs,
-        'freq': freq,
+        'notifs': form_variables['notifs'],
+        'freq': form_variables['freq'],
         'selector': selector, 
-        'weather': weather2, 
+        'weather': json.dumps(weather), 
         "exist_canvas": exist_canvas, 
-        "supervisor": supervisor, 
+        "supervisor": form_variables['supervisor'], 
         "search": search, 
         "existing": existing, 
          
-        'data': data, 
-        'profile_form': profile_form, 
-        'profile': profile, 
+        'data': data,
         'todays_log': todays_log, 
-        'formName': formName, 
-        'client': client, 
-        'unlock': unlock, 
+        'formName': form_variables['formName'], 
+        'client': form_variables['client'], 
+        'unlock': form_variables['unlock'], 
         'readings_form': readings_form,
-        'options': options
+        'options': form_variables['options']
     })

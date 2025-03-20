@@ -1,0 +1,29 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%} {% load static %}
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+<script>const formNumber = "{{ freq.formChoice.form }}";</script>
+<script defer src="{% static 'ees_forms/script/dynamicLoader.js' %}"></script>
+<div id="dynamic-script-container"></div>
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+<div id="selector" data-selector="{{selector}}"></div>
+<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+<div class="mainCont gap" style="max-width:none;padding-top:2rem;">
+    <form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px">
+        {% csrf_token %}
+        <div class="card" id="card_fitter">
+            {% include "shared/components/print_button.html" with formGroup=freq %}
+            <div class="paper_fitter" style="padding: 3rem">
+                {% include "shared/components/backArrow.html" with destination="form" %}
+                <div>
+                    {% block formArea %}
+            
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

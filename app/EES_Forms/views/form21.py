@@ -1,41 +1,34 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime, date, timedelta
-from ..models import Forms, user_profile_model, daily_battery_profile_model, form21_model, bat_info_model
+from django.http import HttpResponseRedirect #type: ignore
+from datetime import datetime, timedelta
+from ..models import form21_model
 from ..forms import formL_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import get_initial_data, updateSubmissionForm, createNotification
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form
 
 lock = login_required(login_url='Login')
 
-
-
 @lock
-def formL(request, facility, fsID, selector):
-    formName = 21
-    freq = getFacSettingsInfo(fsID)
-    notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    existing = False
-    search = False
-    now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    week_start_dates = form21_model.objects.filter(facilityChoice__facility_name=facility).order_by('-week_start')
-    profile = user_profile_model.objects.all()
-    today = date.today()
-    last_saturday = today - timedelta(days=today.weekday() + 2)
+def form21(request, facility, fsID, selector):
+    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    week_start_dates = form_variables['submitted_forms']
+    last_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2)
     one_week = timedelta(days=6)
     end_week = last_saturday + one_week
-    today_number = today.weekday()
+    today_number = form_variables['now'].weekday()
     opened = True
-    picker = issueForm_picker(facility, selector, fsID)
-    sunday_last_sat = today - timedelta(days=1)
-    print('titty')
-    print(isinstance(today_number, int))
+    sunday_last_sat = form_variables['now'] - timedelta(days=1)
+
     # -----check if Daily Battery Profile
-    if daily_prof.exists():
-        todays_log = daily_prof[0]
+    if form_variables['daily_prof'].exists():
+        todays_log = form_variables['daily_prof'][0]
+        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
+        if isinstance(more_form_variables, HttpResponseRedirect):
+            return more_form_variables
+        else:
+            data, existing, search = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
         # -------check if access is for Form or Edit
         if selector not in ('form', 'edit'):
             form_query = week_start_dates.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date())
@@ -69,8 +62,7 @@ def formL(request, facility, fsID, selector):
                         filled_in = True
         
             # ------check if today is a Weekday
-            print('titty1')
-            print(today_number)
+            print(f"Todays Number: {today_number}")
             if today_number not in {5, 6}:
                 new_saturday = ''
                 new_sunday = ''
@@ -87,14 +79,14 @@ def formL(request, facility, fsID, selector):
             elif today_number == 5:
                 # ---------- FORM ----------- FORM -------------- FORM ----------
                 if selector == 'form':
-                    if this_week_saturday == today:
+                    if this_week_saturday == form_variables['now']:
                         existing = True
                     else:
                         new_saturday = True
                         new_sunday = ''
                 # ---------- EDIT ----------- EDIT -------------- EDIT ----------
                 elif selector == "edit":
-                    if this_week_saturday == today:
+                    if this_week_saturday == form_variables['now']:
                         existing = True
                         filled_in = False
                     else:
@@ -139,11 +131,11 @@ def formL(request, facility, fsID, selector):
             week_almost = ''
             filled_in = False
             if new_saturday:
-                set_start_date = today
-                set_end_date = today + timedelta(days=6)
+                set_start_date = form_variables['now']
+                set_end_date = form_variables['now'] + timedelta(days=6)
             elif new_sunday:
                 set_start_date = sunday_last_sat
-                set_end_date = today + timedelta(days=5)
+                set_end_date = form_variables['now'] + timedelta(days=5)
             else:
                 set_start_date = last_saturday
                 set_end_date = end_week
@@ -162,7 +154,7 @@ def formL(request, facility, fsID, selector):
             A_valid = form.is_valid()
             if A_valid:
                 A = form.save(commit=False)
-                A.facilityChoice = options
+                A.formSettings = form_variables['freq']
                 A.save()
 
                 if 'Yes' in {A.vents_0, A.mixer_0, A.vents_1, A.mixer_1, A.vents_2, A.mixer_2, A.vents_3, A.mixer_3, A.vents_4, A.mixer_4, A.vents_5, A.mixer_5, A.vents_6, A.mixer_6}:
@@ -203,19 +195,19 @@ def formL(request, facility, fsID, selector):
                     return redirect('IncompleteForms', facility)
                 else:
                     parseNewDate = todays_log.date_save - timedelta(days=1)
-                    createNotification(facility, request, fsID, now, 'submitted', False)
+                    createNotification(facility, request, fsID, form_variables['now'], 'submitted', False)
                     updateSubmissionForm(fsID, True, parseNewDate)
 
                     return redirect('IncompleteForms', facility)
     else:
-        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formL.html", {
         'fsID': fsID, 
-        'picker': picker, 
+        'picker': form_variables['picker'], 
         'facility': facility, 
-        'notifs': notifs,
-        'freq': freq,
+        'notifs': form_variables['notifs'],
+        'freq': form_variables['freq'],
         'search': search, 
          
         'todays_log': todays_log, 
@@ -224,11 +216,10 @@ def formL(request, facility, fsID, selector):
         'last_saturday': last_saturday, 
         'end_week': end_week, 
         'filled_in': filled_in, 
-        "selector": selector, 
-        'profile': profile, 
+        "selector": selector,
         'opened': opened, 
-        'formName': formName, 
-        'supervisor': supervisor, 
-        "client": client, 
-        'unlock': unlock
+        'formName': form_variables['formName'], 
+        'supervisor': form_variables['supervisor'], 
+        "client": form_variables['client'], 
+        'unlock': form_variables['unlock']
     })

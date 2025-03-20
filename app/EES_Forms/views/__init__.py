@@ -6,7 +6,6 @@ from .supervisor_view import sup_dashboard_view, register_view, form_request_vie
 from .data_view import pt_admin1_view, pt_mth_input
 from .crud_sop_view import delete_sop_view, update_sop_view
 from .client_view import client_dashboard_view
-from .formA1_view import formA1, inop_check_form_1
 from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 from .signature_view import signature
@@ -25,26 +24,30 @@ from .method303_rolling_avg_view import *
 from .profile_view import *
 from .admin_data_view import *
 
-from .formA2 import *
-from .formA3 import *
-from .formA4 import *
-from .formA5 import *
-from .formB import *
-from .formC import *
-from .formD import *
-from .formE import *
+from .form1 import *
+from .form2 import *
+from .form3 import *
+from .form4 import *
+from .form5 import *
+from .form6 import *
+from .form7 import *
+from .form8 import *
+from .form9 import *
 from .formF import formF1, formF2, formF3, formF4, formF5, formF6, formF7
-from .formG import formG1, formG2
-from .formH import *
-from .formI import *
-from .formL import *
-from .formM import *
-from .formN import *
-from .formO import *
-from .formP import *
-from .spill_kits_view import spill_kits, spill_kits_inventory_form
-from .quarterly_trucks_view import *
+from .form17 import *
+from .form18 import *
+from .form19 import *
+from .form20 import *
+from .form21 import *
+from .form22 import *
+from .form23 import *
+from .form24 import *
+from .form25 import *
+from .form26 import *
+from .form29 import *
+from .form27 import *
 from .weekly_enviornmental_inspections import *
 from .form30 import *
+from .form31 import *
 from .admin_ajax_call import *
 

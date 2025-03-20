@@ -26,6 +26,19 @@ def formSettingsFunc(keysList, requestPost, formID):
             if formID in withoutSettings:
                 if mainLabel == 'custom_name':
                     defaultDictUpdate = True
+            elif formID == 31:
+                pairLen = len(key.split("-"))
+                pairFormID = key.split("-")[0]
+                if mainLabel == 'custom_name':
+                    defaultDictUpdate = True
+                elif mainLabel[:4] == 'tank':
+                    if mainLabel not in settings.keys():
+                        settings[mainLabel] = {
+                            "id": requestPost[f"{pairFormID}-{mainLabel}-id"],
+                            "name": requestPost[f"{pairFormID}-{mainLabel}-name"],
+                            "class": requestPost[f"{pairFormID}-{mainLabel}-class"],
+                            "contents": requestPost[f"{pairFormID}-{mainLabel}-contents"],
+                        }
             elif formID == 30:
                 pairLen = len(key.split("-"))
                 pairFormID = key.split("-")[0]
@@ -33,7 +46,12 @@ def formSettingsFunc(keysList, requestPost, formID):
                     defaultDictUpdate = True
                 elif mainLabel == 'num_of_areas':
                     settings[mainLabel] = int(requestPost[key])
+                elif mainLabel == 'num_of_waste_cat':
+                    settings[mainLabel] = int(requestPost[key])
                 elif mainLabel[:4] == 'area':
+                    if mainLabel not in settings.keys():
+                        settings[mainLabel] = requestPost[key]
+                elif mainLabel[:3] == 'cat':
                     if mainLabel not in settings.keys():
                         settings[mainLabel] = requestPost[key]
             elif formID == 20:

@@ -1,0 +1,102 @@
+{% extends "shared/components/allFormTemplate.html" %}
+{% block formArea %}{% load static %}{% load util_tags %}
+    <div>
+        <h2 style="text-align: center;">Monthly Tank Inspection</h2>
+        <div style="text-align: center;">
+            <label for="id_observer">Inspector Name:</label>
+            {{data.observer}}
+            <label for="id_date">Date:</label>
+            {{data.date}}
+            <label for="id_time">Time:</label>
+            {{data.time}}
+        </div>
+        <div class="inspection-container">
+            <div class="inspection-tank-header" onclick="toggleTable()">
+                <h2>Bulk Storage Tanks and Process Equipment Inspection References</h2>
+                <span id="toggle-arrow">&#9660;</span> <!-- Down Arrow -->
+            </div>
+    
+            <table id="inspection-table" class="inspection-table hidden">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Inspection Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tank Containment</td>
+                        <td>Check containment structure for water, debris, cracks or fire hazard. Ensure clear access pathways.</td>
+                    </tr>
+                    <tr>
+                        <td>Double Walled Tanks</td>
+                        <td>If a double wall tank is in use, check the interstitial space for leaks.</td>
+                    </tr>
+                    <tr>
+                        <td>Tank Foundations</td>
+                        <td>Inspect foundation for cracks, discoloration, settling, gaps, or damage from roots or vegetation.</td>
+                    </tr>
+                    <tr>
+                        <td>Tank Equipment</td>
+                        <td>Check valves, drain valves, and overfill equipment for leaks and proper operation.</td>
+                    </tr>
+                    <tr>
+                        <td>Tanks and Vessels</td>
+                        <td>Look for visible leakage, cracks, or shell distortions. Check surrounding soil for signs of leakage.</td>
+                    </tr>
+                    <tr>
+                        <td>Piping</td>
+                        <td>Inspect for leaks, corrosion, bowing, or seepage from valves or seals.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tank-table-div">
+            <table class="tank-table">
+                <thead>
+                    <tr>
+                        <th>Tank ID</th>
+                        <th>Tank Name</th>
+                        <th>Tank Class</th>
+                        <th>Contents</th>
+                        <th>Status</th>
+                        <th>Comments / Issue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, tank in formSettings.items %}
+                        {% if key != "custom_name" %}
+                            <tr data-tank-id="{{ tank.id }}">
+                                <td>{{ tank.id }}</td>
+                                <td>{{ tank.name }}</td>
+                                <td>{{ tank.class }}</td>
+                                <td>{{ tank.contents }}</td>
+                                <td>
+                                    <div class="status-column">
+                                    {% for field in data %}
+                                        {% if field.name|endswith:"_status" and field.name|slice:":-7" == tank.id %}
+                                            {% for radio in field %}
+                                                <label class="radio-container {% if radio.choice_label == 'OK' %}ok-label{% else %}not-ok-label{% endif %}">
+                                                    {{ radio.tag }} {{ radio.choice_label }}
+                                                </label>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% for field in data %}
+                                        {% if field.name|endswith:"_comments" and field.name|slice:":-9" == tank.id %}
+                                            {{ field }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>  
+        </div>
+        <button type="submit">Submit</button>      
+    </div>
+{% endblock %}

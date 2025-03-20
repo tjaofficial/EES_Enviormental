@@ -4,10 +4,10 @@ from datetime import datetime,date
 from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, form22_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, createNotification
+from ..utils import get_initial_data, issueForm_picker,updateSubmissionForm, createNotification
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form
 
 lock = login_required(login_url='Login')
-
 
 def showName(code):
     for pair in paved_roads:
@@ -15,35 +15,18 @@ def showName(code):
             return pair[1]
 
 @lock
-def formM(request, facility, fsID, selector):
-    formName = 22
-    freq = getFacSettingsInfo(fsID)
-    notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    existing = False
-    search = False
-    now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
-    submitted_forms = form22_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
+def form22(request, facility, fsID, selector):
+    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
     THEmonth = False
-    profile = user_profile_model.objects.filter(user__exact=request.user.id)
-    today = date.today()
-    today_number = today.weekday()
+    today_number = form_variables['now'].weekday()
     org2 = form22_readings_model.objects.all().order_by('-form')
-    full_name = request.user.get_full_name()
-    picker = issueForm_picker(facility, selector, fsID)
-    print(freq)
-
-    if profile.exists():
-        cert_date = request.user.user_profile_model.cert_date
-    else:
-        return redirect('IncompleteForms', facility)
     
-    if daily_prof.exists():
-        todays_log = daily_prof[0]
+    if form_variables['daily_prof'].exists():
+        todays_log = form_variables['daily_prof'][0]
+        data, existing, search = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
         if selector != 'form':
-            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
+            form_query = form_variables['submitted_forms'].filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
             database_model = form_query[0] if form_query.exists() else print('no data found with this date')
             form = database_model
 
@@ -56,16 +39,16 @@ def formM(request, facility, fsID, selector):
 
             existing = True
             search = True
-        elif now == todays_log.date_save:
-            if submitted_forms.exists() or org2.exists():
-                database_form = submitted_forms[0]
+        elif form_variables['now'] == todays_log.date_save:
+            if form_variables['submitted_forms'].exists() or org2.exists():
+                database_form = form_variables['submitted_forms'][0]
                 database_form2 = org2[0]
                 if selector == 'form':
                     if today_number in {0, 1, 2, 3, 4}:
                         if todays_log.date_save == database_form.date:
                             existing = True
         else:
-            batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
             return redirect('daily_battery_profile', facility, "login", batt_prof_date)
         
         if search:
@@ -78,8 +61,8 @@ def formM(request, facility, fsID, selector):
                 print(initial_data)
             else:
                 initial_data = {
-                    'date': now,
-                    'observer': full_name,
+                    'date': form_variables['now'],
+                    'observer': form_variables['full_name'],
                     'cert_date': cert_date
                 }
                 form2 = formM_readings_form()
@@ -100,7 +83,7 @@ def formM(request, facility, fsID, selector):
             if A_valid and B_valid:
                 A = form.save(commit=False)
                 B = reads.save(commit=False)
-                A.facilityChoice = options
+                A.formSettings = form_variables['freq']
                 B.form = A
                 A.save()
                 B.save()
@@ -120,29 +103,28 @@ def formM(request, facility, fsID, selector):
                     else:
                         issue_page = 'form'
                     return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request, fsID, now, 'submitted', False)
+                createNotification(facility, request, fsID, form_variables['now'], 'submitted', False)
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 #updateSubmissionForm(facility, 23, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     else:
-        batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     return render(request, "shared/forms/daily/formM.html", {
         'fsID': fsID, 
-        'picker': picker, 
+        'picker': form_variables['picker'], 
         "existing": existing, 
         'facility': facility, 
-        'notifs': notifs,
-        'freq': freq,
-        "client": client, 
-        'unlock': unlock, 
-        'supervisor': supervisor, 
+        'notifs': form_variables['notifs'],
+        'freq': form_variables['freq'],
+        "client": form_variables['client'], 
+        'unlock': form_variables['unlock'], 
+        'supervisor': form_variables['supervisor'], 
         'now': todays_log, 
         'form': form, 
-        'selector': selector, 
-        'profile': profile, 
+        'selector': selector,
         'read': form2, 
-        'formName': formName, 
+        'formName': form_variables['formName'], 
         'search': search, 
         'THEmonth': THEmonth, 
         'paved_roads': paved_roads, 

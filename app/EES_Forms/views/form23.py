@@ -1,28 +1,19 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime, date
-from ..models import Forms, user_profile_model, daily_battery_profile_model, form22_model
+from ..models import user_profile_model, form22_model
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import getFacSettingsInfo, checkIfFacilitySelected, setUnlockClientSupervisor
+from ..initial_form_variables import initiate_form_variables
 
 lock = login_required(login_url='Login')
 
-
-
 @lock
-def formN(request, facility, fsID, selector):
-    formName = "23"
-    freq = getFacSettingsInfo(fsID)
-    notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+def form23(request, facility, fsID, selector):
+    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     search = False
-    now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     profile = user_profile_model.objects.all()
-    today = date.today()
-    form_pull = form22_model.objects.filter(date__month=today.month, facilityChoice__facility_name=facility)
-    month_name = calendar.month_name[today.month]
+    form_pull = form22_model.objects.filter(date__month=form_variables['now'].month, facilityChoice__facility_name=facility)
+    month_name = calendar.month_name[form_variables['now'].month]
 
     if selector != 'form':
         form_pull = form22_model.objects.filter(date__month=selector[0], facilityChoice__facility_name=facility)
@@ -43,21 +34,21 @@ def formN(request, facility, fsID, selector):
         if x.parking:
             parking_loc.append((x.parking, x.date))
 
-    if daily_prof.exists():
-        todays_log = daily_prof[0]
+    if form_variables['daily_prof'].exists():
+        todays_log = form_variables['daily_prof'][0]
     else:
         todays_log = ''
 
     return render(request, "shared/forms/monthly/formN.html", {
         'fsID': fsID, 
-        'formName': formName, 
-        "client": client, 
-        'unlock': unlock, 
-        'supervisor': supervisor, 
+        'formName': form_variables['formName'], 
+        "client": form_variables['client'], 
+        'unlock': form_variables['unlock'], 
+        'supervisor': form_variables['supervisor'], 
         'search': search, 
         'facility': facility, 
-        'notifs': notifs,
-        'freq': freq,
+        'notifs': form_variables['notifs'],
+        'freq': form_variables['freq'],
         'now': todays_log, 
         'selector': selector, 
         'profile': profile, 

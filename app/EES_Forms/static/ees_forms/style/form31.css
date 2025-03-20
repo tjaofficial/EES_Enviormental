@@ -1,0 +1,147 @@
+/* 🌟 General Table Styling */
+.tank-table-div {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #00000047;
+}
+.tank-table{
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tank-table th, .tank-table td {
+    padding: 5px 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.tank-table th {
+    background: #253544;
+    color: white;
+    font-weight: bold;
+}
+
+/* 🌟 Status Column Styling */
+.status-column {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    height: 70px;
+}
+
+.status-radio{
+    margin-right: 5px;
+}
+
+.radio-container {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* 🌟 Comments Styling */
+.tank-comment {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    background: white;
+}
+
+/* 🌟 Highlight Rows Based on Status */
+.tank-table tr.ok {
+    background-color: #d4edda !important; /* ✅ Green */
+}
+
+.tank-table tr.not-ok {
+    background-color: #f8d7da !important; /* ❌ Red */
+}
+
+/* 🌟 Mobile & Tablet Optimization */
+@media (max-width: 768px) {
+    .tank-table {
+        font-size: 14px;
+    }
+
+    .tank-table th, .tank-table td {
+        padding: 8px;
+    }
+
+    .status-column {
+        flex-direction: column;
+    }
+
+    .radio-container {
+        font-size: 14px;
+    }
+
+    .tank-comment {
+        font-size: 14px;
+    }
+}
+
+
+
+
+.inspection-container {
+    margin: auto;
+    background: #dddddd;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 20px 0px;
+    border: 1px solid #00000047;
+}
+
+.inspection-tank-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #253544;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+#toggle-arrow {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.inspection-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: white;
+    border-radius: 8px;
+}
+
+.inspection-table th, .inspection-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.inspection-table th {
+    background: #253544;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
