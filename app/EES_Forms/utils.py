@@ -241,68 +241,8 @@ braintreeSettings = {
     }
 }
 
-def formA17_Model_Upadte():
+def formA5_Model_Upadte():
     allFormData = form17_model.objects.all()   
-    not_these_fields = [
-        'date',
-        'estab',
-        'county',
-        'estab_no',
-        'equip_loc',
-        'district',
-        'city',
-        'observer',
-        'cert_date',
-        'id',
-        'facilityChoice',
-        'notes',
-        'canvas',
-        'reading_data',
-        'ovens_data',
-        'formSettings'
-    ]
-    for record in allFormData:
-        fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
-        finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
-        record.reading_data = finalJson
-        record.save()
-        
-
-    
-    print("hello")
-
-def formA18_Model_Upadte():
-    allFormData = form18_model.objects.all()   
-    not_these_fields = [
-        'date',
-        'estab',
-        'county',
-        'estab_no',
-        'equip_loc',
-        'district',
-        'city',
-        'observer',
-        'cert_date',
-        'id',
-        'facilityChoice',
-        'notes',
-        'canvas',
-        'reading_data',
-        'ovens_data',
-        'formSettings'
-    ]
-    for record in allFormData:
-        fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
-        finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
-        record.reading_data = finalJson
-        record.save()
-        
-
-    
-    print("hello")
-
-def formA19_Model_Upadte():
-    allFormData = form19_model.objects.all()   
     not_these_fields = [
         'date',
         'estab',
@@ -465,6 +405,196 @@ def formA5_Readings_Upadte():
         }
         #finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
         record.form.ovens_data = json.loads(json.dumps(formA5Ovens))
+        record.form.save()
+        print("hello2")
+
+def formA17_Readings_Upadte():
+    allFormData = form17_readings_model.objects.all() 
+    #not_these_fields = ['form']
+    for record in allFormData:
+        #fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
+        #print(fieldsList)
+        collectedData = {
+            "PEC_type": record.PEC_type,
+            "meth9": {
+                "PEC_oven1": record.PEC_oven1,
+                "PEC_oven2": record.PEC_oven2,
+                "PEC_time1": str(record.PEC_time1),
+                "PEC_time2": str(record.PEC_time2),
+                "PEC_start": str(record.PEC_start),
+                "PEC_stop": str(record.PEC_stop),
+                "PEC_average": record.PEC_average,
+                "readings": {
+                    "PEC_read_1": record.PEC_read_1,
+                    "PEC_read_2": record.PEC_read_2,
+                    "PEC_read_3": record.PEC_read_3,
+                    "PEC_read_4": record.PEC_read_4,
+                    "PEC_read_5": record.PEC_read_5,
+                    "PEC_read_6": record.PEC_read_6,
+                    "PEC_read_7": record.PEC_read_7,
+                    "PEC_read_8": record.PEC_read_8,
+                    "PEC_read_9": record.PEC_read_9,
+                    "PEC_read_10": record.PEC_read_10,
+                    "PEC_read_11": record.PEC_read_11,
+                    "PEC_read_12": record.PEC_read_12,
+                    "PEC_read_13": record.PEC_read_13,
+                    "PEC_read_14": record.PEC_read_14,
+                    "PEC_read_15": record.PEC_read_15,
+                    "PEC_read_16": record.PEC_read_16,
+                    "PEC_read_17": record.PEC_read_17,
+                    "PEC_read_18": record.PEC_read_18,
+                    "PEC_read_19": record.PEC_read_19,
+                    "PEC_read_20": record.PEC_read_20,
+                    "PEC_read_21": record.PEC_read_21,
+                    "PEC_read_22": record.PEC_read_22,
+                    "PEC_read_23": record.PEC_read_23,
+                    "PEC_read_24": record.PEC_read_24,
+                },
+            },
+            "non": {
+                "PEC_push_oven": record.PEC_push_oven,
+                "PEC_push_time": str(record.PEC_push_time),
+                "PEC_observe_time": str(record.PEC_observe_time),
+                "PEC_emissions_present": record.PEC_emissions_present,
+            },
+        }
+        #finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
+        record.form.ovens_data = json.loads(json.dumps(collectedData))
+        record.form.save()
+        print("hello2")
+
+def formA18_Readings_Upadte():
+    allFormData = form18_readings_model.objects.all()
+    for record in allFormData:
+        #fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
+        #print(fieldsList)
+        ovenDatas = {
+            "PEC_average_main": record.PEC_average_main,
+            "oven_a": {
+                "PEC_oven_a": record.PEC_oven_a,
+                "PEC_start_a": str(record.PEC_start_a),
+                "PEC_average_a": record.PEC_average_a,
+                "readings":{
+                    "PEC_read_a_1": record.PEC_read_a_1,
+                    "PEC_read_a_2": record.PEC_read_a_2,
+                    "PEC_read_a_3": record.PEC_read_a_3,
+                    "PEC_read_a_4": record.PEC_read_a_4,
+                    "PEC_read_a_5": record.PEC_read_a_5,
+                    "PEC_read_a_6": record.PEC_read_a_6,
+                    "PEC_read_a_7": record.PEC_read_a_7,
+                    "PEC_read_a_8": record.PEC_read_a_8
+                }
+            },
+            "oven_b": {
+                "PEC_oven_b": record.PEC_oven_b,
+                "PEC_start_b": str(record.PEC_start_b),
+                "PEC_average_b": record.PEC_average_b,
+                "readings":{
+                    "PEC_read_b_1": record.PEC_read_b_1,
+                    "PEC_read_b_2": record.PEC_read_b_2,
+                    "PEC_read_b_3": record.PEC_read_b_3,
+                    "PEC_read_b_4": record.PEC_read_b_4,
+                    "PEC_read_b_5": record.PEC_read_b_5,
+                    "PEC_read_b_6": record.PEC_read_b_6,
+                    "PEC_read_b_7": record.PEC_read_b_7,
+                    "PEC_read_b_8": record.PEC_read_b_8
+                }
+            },
+            "oven_c": {
+                "PEC_oven_c": record.PEC_oven_c,
+                "PEC_start_c": str(record.PEC_start_c),
+                "PEC_average_c": record.PEC_average_c,
+                "readings":{
+                    "PEC_read_c_1": record.PEC_read_c_1,
+                    "PEC_read_c_2": record.PEC_read_c_2,
+                    "PEC_read_c_3": record.PEC_read_c_3,
+                    "PEC_read_c_4": record.PEC_read_c_4,
+                    "PEC_read_c_5": record.PEC_read_c_5,
+                    "PEC_read_c_6": record.PEC_read_c_6,
+                    "PEC_read_c_7": record.PEC_read_c_7,
+                    "PEC_read_c_8": record.PEC_read_c_8
+                }
+            }
+        }
+        #finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
+        record.form.ovens_data = json.loads(json.dumps(ovenDatas))
+        record.form.save()
+        print("hello2")
+
+def formA19_Readings_Upadte():
+    allFormData = form19_readings_model.objects.all() 
+    #not_these_fields = ['form']
+    for record in allFormData:
+        #fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
+        #print(fieldsList)
+        collectedData = {
+            "comb_formL": record.comb_formL,
+            "comb_read_1": record.comb_read_1,
+            "comb_read_2": record.comb_read_2,
+            "comb_read_3": record.comb_read_3,
+            "comb_read_4": record.comb_read_4,
+            "comb_read_5": record.comb_read_5,
+            "comb_read_6": record.comb_read_6,
+            "comb_read_7": record.comb_read_7,
+            "comb_read_8": record.comb_read_8,
+            "comb_read_9": record.comb_read_9,
+            "comb_read_10": record.comb_read_10,
+            "comb_read_11": record.comb_read_11,
+            "comb_read_12": record.comb_read_12,
+            "comb_read_13": record.comb_read_13,
+            "comb_read_14": record.comb_read_14,
+            "comb_read_15": record.comb_read_15,
+            "comb_read_16": record.comb_read_16,
+            "comb_read_17": record.comb_read_17,
+            "comb_read_18": record.comb_read_18,
+            "comb_read_19": record.comb_read_19,
+            "comb_read_20": record.comb_read_20,
+            "comb_read_21": record.comb_read_21,
+            "comb_read_22": record.comb_read_22,
+            "comb_read_23": record.comb_read_23,
+            "comb_read_24": record.comb_read_24,
+            "comb_read_25": record.comb_read_25,
+            "comb_read_26": record.comb_read_26,
+            "comb_read_27": record.comb_read_27,
+            "comb_read_28": record.comb_read_28,
+            "comb_read_29": record.comb_read_29,
+            "comb_read_30": record.comb_read_30,
+            "comb_read_31": record.comb_read_31,
+            "comb_read_32": record.comb_read_32,
+            "comb_read_33": record.comb_read_33,
+            "comb_read_34": record.comb_read_34,
+            "comb_read_35": record.comb_read_35,
+            "comb_read_36": record.comb_read_36,
+            "comb_read_37": record.comb_read_37,
+            "comb_read_38": record.comb_read_38,
+            "comb_read_39": record.comb_read_39,
+            "comb_read_40": record.comb_read_40,
+            "comb_read_41": record.comb_read_41,
+            "comb_read_42": record.comb_read_42,
+            "comb_read_43": record.comb_read_43,
+            "comb_read_44": record.comb_read_44,
+            "comb_read_45": record.comb_read_45,
+            "comb_read_46": record.comb_read_46,
+            "comb_read_47": record.comb_read_47,
+            "comb_read_48": record.comb_read_48,
+            "comb_read_49": record.comb_read_49,
+            "comb_read_50": record.comb_read_50,
+            "comb_read_51": record.comb_read_51,
+            "comb_read_52": record.comb_read_52,
+            "comb_read_53": record.comb_read_53,
+            "comb_read_54": record.comb_read_54,
+            "comb_read_55": record.comb_read_55,
+            "comb_read_56": record.comb_read_56,
+            "comb_read_57": record.comb_read_57,
+            "comb_read_58": record.comb_read_58,
+            "comb_read_59": record.comb_read_59,
+            "comb_read_60": record.comb_read_60,
+            "comb_start": str(record.comb_start),
+            "comb_stop": str(record.comb_stop),
+            "comb_average": record.comb_average
+        }
+        #finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
+        record.form.ovens_data = json.loads(json.dumps(collectedData))
         record.form.save()
         print("hello2")
 

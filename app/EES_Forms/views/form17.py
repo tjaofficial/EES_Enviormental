@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form17_model, form17_readings_model
 from ..forms import form17_form, formG1_readings_form
-from ..utils import formA17_Model_Upadte, get_initial_data, updateSubmissionForm, weatherDict, createNotification
+from ..utils import formA17_Readings_Upadte, get_initial_data, updateSubmissionForm, weatherDict, createNotification
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import json
 from datetime import datetime
@@ -14,7 +14,7 @@ lock = login_required(login_url='Login')
 @lock
 def form17(request, facility, fsID, selector):
     # -----SET MAIN VARIABLES------------
-    formA17_Model_Upadte()
+    formA17_Readings_Upadte()
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
     org2 = form17_readings_model.objects.all().order_by('-form')
