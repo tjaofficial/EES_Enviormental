@@ -211,7 +211,7 @@
                     <br><br>
                     <center>
                         Type of Visible Emissions Observation (select once and complete form below): <span id='method9' class='type_buttons'>Method 9</span><span id='nonCert' class='type_buttons'>Non-Certified</span>
-                        <div id='thisOne'>{{readings_form.PEC_type}}</div>
+                        <div id='thisOne'>{{data.PEC_type}}</div>
                     </center>    
                     <br><br>
                     <div id='pushTravels'>
@@ -241,12 +241,12 @@
                                     </tr>
                                     <tr>
                                         <th colspan="6" style="text-align: left;">
-                                            <center>#{{readings_form.PEC_oven1}} {{readings_form.PEC_time1}}</center>
+                                            <center>#{{data.PEC_oven1}} {{data.PEC_time1}}</center>
                                         </th>
-                                    {% if readings_form.PEC_oven2 %}
+                                    {% if data.PEC_oven2 %}
                                     </tr><tr>
                                         <th colspan="6" style="text-align: left;">
-                                            <center>#{{readings_form.PEC_oven2}} {{readings_form.PEC_time2}}</center>
+                                            <center>#{{data.PEC_oven2}} {{data.PEC_time2}}</center>
                                         </th>
                                     </tr>
                                     {% endif %}
@@ -257,10 +257,10 @@
                                 <table id='formG1method9_2' style="border-collapse: collapse; width: 30rem; display:none;">
                                     <tr>
                                         <td colspan="3" style="text-align: left;">
-                                        Start Time: {{ readings_form.PEC_start }}
+                                        Start Time: {{ data.PEC_start }}
                                         </td>
                                         <td colspan="3" style="text-align: left;">
-                                        Stop Time: {{ readings_form.PEC_stop }}
+                                        Stop Time: {{ data.PEC_stop }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -285,16 +285,16 @@
                                         0
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_1 }}
+                                            {{ data.PEC_read_1 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_2 }}
+                                            {{ data.PEC_read_2 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_3 }}
+                                            {{ data.PEC_read_3 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_4 }}
+                                            {{ data.PEC_read_4 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -302,16 +302,16 @@
                                         1
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_5 }}
+                                            {{ data.PEC_read_5 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_6 }}
+                                            {{ data.PEC_read_6 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_7 }}
+                                            {{ data.PEC_read_7 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_8 }}
+                                            {{ data.PEC_read_8 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -319,16 +319,16 @@
                                         2
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_9 }}
+                                            {{ data.PEC_read_9 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_10 }}
+                                            {{ data.PEC_read_10 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_11 }}
+                                            {{ data.PEC_read_11 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_12 }}
+                                            {{ data.PEC_read_12 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -336,16 +336,16 @@
                                         3
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_13 }}
+                                            {{ data.PEC_read_13 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_14 }}
+                                            {{ data.PEC_read_14 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_15 }}
+                                            {{ data.PEC_read_15 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_16 }}
+                                            {{ data.PEC_read_16 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -353,16 +353,16 @@
                                         4
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_17 }}
+                                            {{ data.PEC_read_17 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_18 }}
+                                            {{ data.PEC_read_18 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_19 }}
+                                            {{ data.PEC_read_19 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_20 }}
+                                            {{ data.PEC_read_20 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -370,16 +370,16 @@
                                         5
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_21 }}
+                                            {{ data.PEC_read_21 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_22 }}
+                                            {{ data.PEC_read_22 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_23 }}
+                                            {{ data.PEC_read_23 }}
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_read_24 }}
+                                            {{ data.PEC_read_24 }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -387,7 +387,7 @@
                                         Average:
                                         </td>
                                         <td colspan="1" id="formG1_box1">
-                                            {{ readings_form.PEC_average }}
+                                            {{ data.PEC_average }}
                                         </td>
                                     </tr>
                                 </table>
@@ -414,7 +414,7 @@
                                         Pushing - Oven # and Time:
                                         </th>
                                         <th colspan="4" style="text-align: left; font-weight: unset;">
-                                            #{{ readings_form.PEC_push_oven }} - {{ readings_form.PEC_push_time }}
+                                            #{{ data.PEC_push_oven }} - {{ data.PEC_push_time }}
                                         </th>
                                     </tr>
                                     <tr>
@@ -425,7 +425,7 @@
                                         Time of observation:
                                         </th>
                                         <th colspan="3" style="text-align: left; font-weight: unset;">
-                                            {{ readings_form.PEC_observe_time }}
+                                            {{ data.PEC_observe_time }}
                                         </th>
                                     </tr>
                                     <tr>
@@ -437,9 +437,10 @@
                                         </th>
                                         <th colspan="3" style="text-align: left; font-weight: unset;">
                                             {% if selector == "form" %}
-                                                {{readings_form.PEC_emissions_present}}
+                                                {{data.PEC_emissions_present}}
+                                                <input type="hidden" name="PEC_emissions_present" value="No">
                                             {% else %}
-                                                {% if readings_form.PEC_emissions_present %}
+                                                {% if data.PEC_emissions_present %}
                                                     Yes
                                                 {% else %}
                                                     No
@@ -476,9 +477,9 @@
         </form>
     </div>
 </div>
-    {% if readings_form.PEC_type == 'meth9' %} 
+    {% if data.PEC_type == 'meth9' %} 
         <input type='hidden' id='tableChoice' value="meth9">
-    {% elif readings_form.PEC_type == 'non' %}
+    {% elif data.PEC_type == 'non' %}
         <input type='hidden' id='tableChoice' value="non">
     {% else %}
         <input type='hidden' id='tableChoice' value="">

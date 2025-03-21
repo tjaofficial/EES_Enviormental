@@ -5,14 +5,13 @@ from ..models import form19_model, form19_readings_model
 from ..forms import formH_form, formH_readings_form
 import json
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import formA19_Readings_Upadte, get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
+from ..utils import get_initial_data, getFacSettingsInfo, checkIfFacilitySelected, issueForm_picker,updateSubmissionForm, setUnlockClientSupervisor, weatherDict, createNotification
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form
 
 lock = login_required(login_url='Login')
 
 @lock
 def form19(request, facility, fsID, selector):
-    formA19_Readings_Upadte()
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
     personalizedSettings = form_variables['freq'].settings["settings"]

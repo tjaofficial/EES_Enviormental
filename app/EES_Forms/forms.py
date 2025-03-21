@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm # type: i
 from django.contrib.auth.models import User # type: ignore
 import datetime
 from .models import *
+from types import SimpleNamespace
 
 now = datetime.datetime.now()
 
@@ -1907,34 +1908,149 @@ class form17_form(ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'cert_date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;text-align: center;'}),
-            'wind_speed_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;text-align: center;'}),
-            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;text-align: center;'}),
-            'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;text-align: center;'}),
-            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
-            'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
-            'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'distance_from': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
-        }      
+        }
+
+    DEFAULT_READING_FIELDS = {
+        "process_equip1": "", "process_equip2": "", "op_mode1": "normal", "op_mode2": "normal",
+        "background_color_start": "", "background_color_stop": "", "sky_conditions": "",
+        "wind_speed_start": "", "wind_speed_stop": "", "wind_direction": "",
+        "emission_point_start": "", "emission_point_stop": "",
+        "ambient_temp_start": "", "ambient_temp_stop": "", "humidity": "",
+        "height_above_ground": "", "height_rel_observer": "",
+        "distance_from": "", "direction_from": "",
+        "describe_emissions_start": "", "describe_emissions_stop": "",
+        "emission_color_start": "", "emission_color_stop": "",
+        "plume_type": "", "water_drolet_present": "",
+        "water_droplet_plume": "", "plume_opacity_determined_start": "", "plume_opacity_determined_stop": "",
+        "describe_background_start": "", "describe_background_stop": "",
+        "PEC_start": "", "PEC_stop": "",
+        **{f"PEC_read_{i}": "" for i in range(1, 25)},  # Generates PEC_read_1 to PEC_read_24
+        "PEC_oven1": "", "PEC_oven2": "", "PEC_time1": "", "PEC_time2": "",
+        "PEC_type": "", "PEC_average": "", "PEC_push_oven": "",
+        "PEC_push_time": "", "PEC_observe_time": "", "PEC_emissions_present": ""
+    }
+
+    JSON_WIDGET_STYLES = {
+        "process_equip1": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "process_equip2": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "background_color_start": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 60px; text-align: center;"}),
+        "background_color_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 60px; text-align: center;"}),
+        "sky_conditions": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 80px; text-align: center;"}),
+        "wind_speed_start": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "wind_speed_stop": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 40px; text-align: center;"}),
+        "wind_direction": forms.TextInput(attrs={"oninput": "weatherStoplight(); this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 60px; text-align: center; text-transform: uppercase;"}),
+        "emission_point_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "ambient_temp_start": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "ambient_temp_stop": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 40px; text-align: center;"}),
+        "humidity": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "height_above_ground": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "height_rel_observer": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "distance_from": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
+        "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "plume_type": forms.Select(
+            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            attrs={"class": "input", "required": True}
+        ),
+        "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "op_mode2": forms.TextInput(attrs={"name": "op_mode2", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "emission_point_start": forms.TextInput(attrs={"name": "emission_point_start", "maxlength": "50", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_emissions_start": forms.TextInput(attrs={"name": "describe_emissions_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 100px;"}),
+        "describe_emissions_stop": forms.TextInput(attrs={"name": "describe_emissions_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "emission_color_start": forms.TextInput(attrs={"name": "emission_color_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 100px;"}),
+        "emission_color_stop": forms.TextInput(attrs={"name": "emission_color_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "water_drolet_present": forms.Select(
+            choices=[("", "---------"), ("Yes", "Yes"), ("No", "No")],
+            attrs={"name": "water_drolet_present", "required": True, "class": "input", "style": "width: 120px;"}
+        ),
+        "water_droplet_plume": forms.Select(
+            choices=[("", "---------"), ("N/A", "N/A"), ("Attached", "Attached"), ("Detached", "Detached")],
+            attrs={"name": "water_droplet_plume", "required": True, "class": "input", "style": "width: 120px;"}
+        ),
+        "plume_opacity_determined_start": forms.TextInput(attrs={"name": "plume_opacity_determined_start", "maxlength": "50", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_background_start": forms.TextInput(attrs={"name": "describe_background_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_background_stop": forms.TextInput(attrs={"name": "describe_background_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "PEC_start": forms.TimeInput(attrs={'type': 'time', 'style': 'width: 95px;'}),
+        "PEC_stop": forms.TimeInput(attrs={'type': 'time', 'style': 'width: 95px;'}),
+        "PEC_oven1": forms.NumberInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        "PEC_oven2": forms.NumberInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        "PEC_time1": forms.TimeInput(attrs={'type': 'time', 'style': 'width: 95px;'}),
+        "PEC_time2": forms.TimeInput(attrs={'type': 'time', 'style': 'width: 95px;'}),
+        **{f"PEC_read_{i}": forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}) for i in range(1, 25)},  # Restore number input
+        'PEC_type' : forms.TextInput(attrs={'type': 'hidden'}),
+        "PEC_average": forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        "PEC_push_oven": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 50px; text-align: center;"}),
+        "PEC_push_time": forms.TimeInput(attrs={"type": "time", "style": "width: 95px;"}),
+        "PEC_observe_time": forms.TimeInput(attrs={"type": "time", "style": "width: 95px;"}),
+        "PEC_emissions_present": forms.CheckboxInput(attrs={"style": "width: 50px;"})
+    }
 
     def __init__(self, *args, **kwargs):
         form_settings = kwargs.pop("form_settings", None)
-
         if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
-        """ Extract JSON values and create dynamic form fields with the correct styles. """
+            raise ValueError("Error: `form_settings` must be provided when initializing form17_form.")
+
+        initial = kwargs.get("initial", {})
+        instance = kwargs.get("instance")
+
+        # Determine the data source: use instance if it exists, otherwise use initial
+        data_source = instance if instance else SimpleNamespace(**initial)
+
         super().__init__(*args, **kwargs)
+
+        # Extract JSON-stored data
+        existing_data = getattr(data_source, "reading_data", {}) or {}
+        existing_ovens_data = getattr(data_source, "ovens_data", {}) or {}
+        type_of_form = existing_ovens_data.get("PEC_type", None)
+
+        general_fields = [
+            "date", "estab", "county", "estab_no", "equip_loc",
+            "district", "city", "observer", "cert_date"
+        ]
+    
+        for field in general_fields:
+            if field in self.fields:  # Ensure the field exists in the form before setting
+                self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
+
+        # Handle all fields dynamically, merging data from the source
+        for field_name, default_value in self.DEFAULT_READING_FIELDS.items():
+            widget = self.JSON_WIDGET_STYLES.get(field_name, forms.TextInput(attrs={"class": "input"}))
+            self.fields[field_name] = forms.CharField(
+                initial=existing_data.get(field_name, default_value),
+                required=False,
+                widget=widget
+            )
+
+        # Assign PEC type field
+        self.fields["PEC_type"] = forms.CharField(
+            initial=existing_ovens_data.get("PEC_type", None),
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("PEC_type", forms.TextInput(attrs={"class": "input"}))
+        )
+
+        # Assign PEC fields based on type
+        if type_of_form == "meth9":
+            for i in range(1, 25):
+                field_name = f"PEC_read_{i}"
+                widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
+                self.fields[field_name] = forms.IntegerField(
+                    initial=existing_ovens_data.get("meth9", {}).get("readings", {}).get(field_name, None),
+                    required=False,
+                    widget=widget
+                )
+        else:  # Handling "non" type
+            for key in ["PEC_push_oven", "PEC_push_time", "PEC_observe_time", "PEC_emissions_present"]:
+                widget = self.JSON_WIDGET_STYLES.get(key, forms.TextInput(attrs={"class": "input"}))
+                field_type = forms.IntegerField if "oven" in key else forms.TimeField if "time" in key else forms.BooleanField
+                self.fields[key] = field_type(
+                    initial=existing_ovens_data.get("non", {}).get(key, None),
+                    required=False,
+                    widget=widget
+                )
+
 
 class formG1_readings_form(ModelForm):
     class Meta:
@@ -2603,7 +2719,7 @@ class form29_form(ModelForm):
             raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
-        
+
 class form27_form(ModelForm):
     class Meta:
         model = form27_model
