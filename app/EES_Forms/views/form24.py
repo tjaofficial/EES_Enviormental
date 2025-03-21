@@ -1,17 +1,18 @@
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime
-from ..models import issues_model, form24_model
-from ..forms import formO_form
-from ..utils import get_initial_data, updateSubmissionForm, createNotification
+from django.http import HttpResponseRedirect # type: ignore
+from ..models import form_settings_model, form24_model
+from ..forms import form24_form
+from ..utils import get_initial_data
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..initial_form_variables import initiate_form_variables, existing_or_new_form
 
 lock = login_required(login_url='Login')
 
 @lock
 def form24(request, facility, fsID, selector, weekend_day):
+    # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     month_name = calendar.month_name[form_variables['now'].month]
     if weekend_day == 'saturday':
@@ -20,10 +21,16 @@ def form24(request, facility, fsID, selector, weekend_day):
         ss_filler = 6
     else:
         ss_filler = ''
-
+    # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
     if form_variables['daily_prof'].exists():
         todays_log = form_variables['daily_prof'][0]
-        data, existing, search = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+    # -----SET DECIDING VARIABLES------------
+        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
+        if isinstance(more_form_variables, HttpResponseRedirect):
+            return more_form_variables
+        else:
+            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+    # -----SET RESPONSES TO DECIDING VARIABLES------------
         if search:
             database_form = ''
         else:
@@ -36,37 +43,22 @@ def form24(request, facility, fsID, selector, weekend_day):
                     'month': month_name,
                     'weekend_day': ss_filler,
                 }
-            data = formO_form(initial=initial_data)
-
-        if request.method == 'POST':
+            data = form24_form(initial=initial_data, form_settings=form_variables['freq'])
+    # -----IF REQUEST.POST------------
+        if request.method == "POST":
+    # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
+            try:
+                form_settings = form_variables['freq']
+            except form_settings_model.DoesNotExist:
+                raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
+    # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
             if existing:
-                data = formO_form(request.POST, instance=database_form)
+                form = form24_form(request.POST, instance=database_form, form_settings=form_settings)
             else:
-                data = formO_form(request.POST)
-            A_valid = data.is_valid()
-            if A_valid:
-                A = data.save(commit=False)
-                A.formSettings = form_variables['freq']
-                A.save()
-                
-                issueFound = False
-                if not existing:
-                    database_form = A
-                finder = issues_model.objects.filter(date=A.date, formChoice=A.formSettings).exists()
-                if 'Yes' in {A.Q_2,A.Q_3,A.Q_4,A.Q_5,A.Q_6,A.Q_7,A.Q_8,A.Q_9}:
-                    issueFound = True
-                if issueFound:
-                    if finder:
-                        if selector == 'form':
-                            issue_page = 'resubmit'
-                        else:
-                            issue_page = 'issue'
-                    else:
-                        issue_page = 'form'
-                    return redirect('issues_view', facility, fsID, str(database_form.date), issue_page)
-                createNotification(facility, request, fsID, form_variables['now'], 'submitted', False)
-                updateSubmissionForm(fsID, True, todays_log.date_save)
-                return redirect('IncompleteForms', facility)
+                form = form24_form(request.POST, form_settings=form_settings)
+    # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
+            exportVariables = (request, selector, facility, database_form, fsID)
+            return redirect(*template_validate_save(form, form_variables, *exportVariables))
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', 'login', batt_prof_date)

@@ -1,25 +1,33 @@
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from ..forms import spill_kits_form
-from ..models import form29_model, form26_model
-from datetime import datetime
-import calendar
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-import json
+from django.http import HttpResponseRedirect # type: ignore
+from ..models import form_settings_model, form29_model, form26_model
+from ..forms import form29_form
 from ..utils import createNotification, get_initial_data, stringToDate, updateSubmissionForm
-from ..initial_form_variables import initiate_form_variables, existing_or_new_form
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
+import calendar
+import json
+from datetime import datetime
 
 lock = login_required(login_url='Login')
 
 @lock
 def form29(request, facility, fsID, selector):
+    # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    sk_form = spill_kits_form()
+    sk_form = form29_form()
     month_name = calendar.month_name[form_variables['now'].month]
-    
+    # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
     if form_variables['daily_prof'].exists():
         todays_log = form_variables['daily_prof'][0]
-        data, existing, search = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+    # -----SET DECIDING VARIABLES------------
+        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
+        if isinstance(more_form_variables, HttpResponseRedirect):
+            return more_form_variables
+        else:
+            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+    # -----SET RESPONSES TO DECIDING VARIABLES------------
         if selector != 'form':
             form_query = form_variables['submitted_forms'].filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
             database_model = form_query[0] if form_query.exists() else print('no data found with this date')
@@ -62,16 +70,25 @@ def form29(request, facility, fsID, selector):
                     'date': form_variables['now'],
                     'month': month_name,
                 }
-            data = spill_kits_form(initial=initial_data)
-        
+            data = form29_form(initial=initial_data, form_settings=form_variables['freq'])
+    # -----IF REQUEST.POST------------
         if request.method == "POST":
-            dataCopy = request.POST.copy()
-            dataCopy["facilityChoice"] = form_variables['freq'].facilityChoice
+    # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
+            copyPOST = request.POST.copy()
+            copyPOST["facilityChoice"] = form_variables['freq'].facilityChoice
+            
+            try:
+                form_settings = form_variables['freq']
+            except form_settings_model.DoesNotExist:
+                raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
+    # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
             if existing:
-                form = spill_kits_form(dataCopy, instance=database_form)
+                form = form29_form(copyPOST, instance=database_form, form_settings=form_settings)
             else:
-                form = spill_kits_form(dataCopy)
-                
+                form = form29_form(copyPOST, form_settings=form_settings)
+    # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
+            exportVariables = (request, selector, facility, database_form, fsID)
+            return redirect(*template_validate_save(form, form_variables, *exportVariables))
             if form.is_valid():
                 form.save()
                 

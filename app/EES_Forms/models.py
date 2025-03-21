@@ -3499,7 +3499,17 @@ class form17_model(models.Model):
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
     canvas = models.CharField(max_length=100000)
-    
+    reading_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    ovens_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return str(self.date)
 
@@ -3725,6 +3735,16 @@ class form18_model(models.Model):
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
     canvas = models.CharField(max_length=100000)
+    reading_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    ovens_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return str(self.date)
@@ -3833,6 +3853,16 @@ class form19_model(models.Model):
     describe_background_start = models.CharField(max_length=30)
     describe_background_stop = models.CharField(max_length=30)
     canvas = models.CharField(max_length=100000)
+    reading_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    ovens_data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
     
     def __str__(self):
         return str(self.date)
@@ -3987,6 +4017,13 @@ class form20_model(models.Model):
         null=True
     )
 
+    def is_fully_filled(self):
+        """Check if all days (0-4) have both time and observer fields filled."""
+        for i in range(5):  # Weekdays (Monday-Friday)
+            if not getattr(self, f"time_{i}") or not getattr(self, f"obser_{i}"):
+                return False  # Missing a field → Not fully filled
+        return True  # Everything is filled
+    
     def __str__(self):
         return str(self.week_start)
  
@@ -4242,8 +4279,23 @@ class form21_model(models.Model):
         null=True
     )
 
+    def is_fully_filled(self):
+        """Checks if all 7 days have both required fields (time, observer, vents, mixer) filled."""
+        for i in range(7):  # Monday to Sunday
+            if not all([
+                getattr(self, f"time_{i}"),
+                getattr(self, f"obser_{i}"),
+                getattr(self, f"vents_{i}"),
+                getattr(self, f"mixer_{i}")
+            ]):
+                return False  # Missing a required field → Not fully filled
+        return True  # Everything is filled
+    
     def __str__(self):
         return str(self.week_start)
+    
+
+
 
 class form22_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
@@ -6029,6 +6081,12 @@ class form27_model(models.Model):
     
     def __str__(self):
         return str(self.date)
+    
+    def is_fully_filled(self):
+        """Checks if all fields are filled (not None or empty)."""
+        fields = [field.name for field in self._meta.get_fields() if isinstance(field, models.Field) and field.name not in ['id', 'facilityChoice', 'formSettings', 'quarter', 'date']]
+        
+        return all(bool(getattr(self, field)) for field in fields)
 
     def whatever(self):
         return{

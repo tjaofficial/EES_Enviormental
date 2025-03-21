@@ -1,18 +1,28 @@
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
+from django.http import HttpResponseRedirect # type: ignore
 from ..models import user_profile_model, form22_model
-import calendar
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..initial_form_variables import initiate_form_variables
+from collections import defaultdict
+import calendar
 
 lock = login_required(login_url='Login')
 
 @lock
 def form23(request, facility, fsID, selector):
+    # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    grouped_data = {
+        "roads": defaultdict(list),
+        "paved_roads": defaultdict(list),
+        "parking_lots": defaultdict(list)
+    }
+    grouped_data["roads"]["Main Street"].append("2025-03-01")
+    print(grouped_data)
     search = False
     profile = user_profile_model.objects.all()
-    form_pull = form22_model.objects.filter(date__month=form_variables['now'].month, facilityChoice__facility_name=facility)
+    form_pull = form22_model.objects.filter(date__month=form_variables['now'].month, formSettings__facilityChoice__facility_name=facility)
     month_name = calendar.month_name[form_variables['now'].month]
 
     if selector != 'form':

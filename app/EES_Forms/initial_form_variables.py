@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from .models import form_settings_model, daily_battery_profile_model, bat_info_model
-from .utils import checkIfFacilitySelected, getFacSettingsInfo, setUnlockClientSupervisor, issueForm_picker, sendToDash
+from .utils import checkIfFacilitySelected, getFacSettingsInfo, setUnlockClientSupervisor, issueForm_picker, what_quarter
 from .form_issue_functions import call_dynamic_function
 from django.apps import apps # type: ignore
 from django.shortcuts import redirect # type: ignore
@@ -18,14 +18,17 @@ def initiate_form_variables(fsID, requestUser, facility, selector):
     full_name = requestUser.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
     fsIDSelect = form_settings_model.objects.get(id=int(fsID))
-    selectedModel = apps.get_model('EES_Forms', freq.formChoice.link + "_model")
-    #print(selectedModel.objects.all())
     try:
-        submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
-        #print("CHECK submitted forms")
-        print(submitted_forms)
+        selectedModel = apps.get_model('EES_Forms', freq.formChoice.link + "_model")
+        #print(selectedModel.objects.all())
+        try:
+            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+            #print("CHECK submitted forms")
+            print(submitted_forms)
+        except:
+            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-week_start')
     except:
-        submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-week_start')
+        submitted_forms = False
     
     return dict(locals()) 
 
@@ -34,6 +37,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
     search = False
     database_form = False
     data = False
+
     if selector not in ('form', 'edit'):
         try:
             form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date()).order_by('-date')
@@ -54,13 +58,18 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
         if submitted_forms.exists():
             print("check 3")
             database_form = submitted_forms[0]
-            try:
-                existing = True if todays_log.date_save == database_form.date else False
-                data = database_form if todays_log.date_save == database_form.date else "new_form"
-            except:
-                starting_monday = now - timedelta(days=now.weekday())
-                existing = True if todays_log.date_save == now and starting_monday == database_form.week_start else False
-                data = database_form if todays_log.date_save == database_form.week_start else "new_form"
+            if database_form.formSettings and database_form.formSettings.formChoice.frequency.lower() == "quarterly":
+                if what_quarter(todays_log.date_save) == what_quarter(database_form.date) and todays_log.date_save.year == database_form.date.year:
+                    existing = True
+                    data = database_form
+            else:
+                try:
+                    existing = True if todays_log.date_save == database_form.date else False
+                    data = database_form if todays_log.date_save == database_form.date else "new_form"
+                except:
+                    starting_monday = now - timedelta(days=now.weekday())
+                    existing = True if starting_monday == database_form.week_start else False
+                    data = database_form if todays_log.date_save == database_form.week_start else "new_form"
     else:
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)

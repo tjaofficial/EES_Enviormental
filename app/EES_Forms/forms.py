@@ -2152,10 +2152,6 @@ class formH_readings_form(ModelForm):
             'comb_average' : forms.NumberInput(attrs={'oninput': 'comb_averages()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
         }
 
-
-
-
-
 class form20_form(ModelForm):
     class Meta:
         model = form20_model
@@ -2183,8 +2179,12 @@ class form20_form(ModelForm):
             raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
-        
-class formL_form(ModelForm):
+
+
+
+
+
+class form21_form(ModelForm):
     class Meta:
         #today = datetime.date.today()
         #name_5 = False
@@ -2272,7 +2272,15 @@ class formL_form(ModelForm):
             'obser_5' : forms.TextInput(attrs={'style':'width: 150px;'}),
             'obser_6' : forms.TextInput(attrs={'style':'width: 150px;'}),
         }
-       
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+        
 class formM_form(ModelForm):
     class Meta:
         model = form22_model
@@ -2353,7 +2361,9 @@ class formM_readings_form(ModelForm):
             'unp_total' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
             'par_total' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
         }
-class formO_form(ModelForm):
+
+
+class form24_form(ModelForm):
     class Meta:
         model = form24_model
         fields = ('__all__')
@@ -2374,6 +2384,15 @@ class formO_form(ModelForm):
             'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
             'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
 class formP_form(ModelForm):
     class Meta:
         model = form25_model
@@ -2420,7 +2439,7 @@ class events_form(ModelForm):
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
         }
-class spill_kits_form(ModelForm):
+class form29_form(ModelForm):
     class Meta:
         all_spks = False
         today = datetime.date.today()
@@ -2575,9 +2594,17 @@ class spill_kits_form(ModelForm):
             'skut24_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut25_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
             'skut26_comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;', 'required': all_spks}),
-            
         }
-class quarterly_trucks_form(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+        
+class form27_form(ModelForm):
     class Meta:
         model = form27_model
         fields = ('__all__')
@@ -2618,6 +2645,14 @@ class quarterly_trucks_form(ModelForm):
             'exhaust_9_4': forms.Select(attrs={'style':'width: 50px;'}),
         }
         
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
 class sop_form(ModelForm):
     class Meta:
         model = sop_model
@@ -2671,7 +2706,7 @@ class facility_forms_form(ModelForm):
         model = facility_forms_model
         fields = ('__all__')
         
-class spill_kit_inventory_form(ModelForm):
+class form26_form(ModelForm):
     class Meta:
         model = form26_model
         fields = ('__all__')
