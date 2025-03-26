@@ -275,11 +275,11 @@
                             <table style="border-collapse: collapse; width: 30rem;">
                                 <tr>
                                     <td colspan="3" style="text-align: left;">
-                                        Start Time: {{ readings_form.comb_start }}
+                                        Start Time: {{ data.comb_start }}
                                         <span class="popuptext1" id="combPopup1">Please Change Time</span>
                                     </td>
                                     <td colspan="3" style="text-align: left;">
-                                        Stop Time: {{ readings_form.comb_stop }}
+                                        Stop Time: {{ data.comb_stop }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -299,22 +299,23 @@
                                         45
                                     </td>
                                 </tr>
+                                <input name="comb_formL" type="hidden" value="false">
                                 {% if selector != 'formL' %}
                                 <tr>
                                     <td colspan="1" id="formG1_box2">
                                         0
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_1 }}
+                                        {{ data.comb_read_1 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_2 }}
+                                        {{ data.comb_read_2 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_3 }}
+                                        {{ data.comb_read_3 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_4 }}
+                                        {{ data.comb_read_4 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -322,16 +323,16 @@
                                         1
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_5 }}
+                                        {{ data.comb_read_5 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_6 }}
+                                        {{ data.comb_read_6 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_7 }}
+                                        {{ data.comb_read_7 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_8 }}
+                                        {{ data.comb_read_8 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -339,16 +340,16 @@
                                         2
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_9 }}
+                                        {{ data.comb_read_9 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_10 }}
+                                        {{ data.comb_read_10 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_11 }}
+                                        {{ data.comb_read_11 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_12 }}
+                                        {{ data.comb_read_12 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -356,16 +357,16 @@
                                         3
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_13 }}
+                                        {{ data.comb_read_13 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_14 }}
+                                        {{ data.comb_read_14 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_15 }}
+                                        {{ data.comb_read_15 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_16 }}
+                                        {{ data.comb_read_16 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -373,16 +374,16 @@
                                         4
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_17 }}
+                                        {{ data.comb_read_17 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_18 }}
+                                        {{ data.comb_read_18 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_19 }}
+                                        {{ data.comb_read_19 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_20 }}
+                                        {{ data.comb_read_20 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -390,16 +391,16 @@
                                         5
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_21 }}
+                                        {{ data.comb_read_21 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_22 }}
+                                        {{ data.comb_read_22 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_23 }}
+                                        {{ data.comb_read_23 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_24 }}
+                                        {{ data.comb_read_24 }}
                                     </td>
                                 </tr>
                                 {% else %}
@@ -408,16 +409,16 @@
                                         0
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_1 }}
+                                        {{ data.comb_read_1 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_2 }}
+                                        {{ data.comb_read_2 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_3 }}
+                                        {{ data.comb_read_3 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_4 }}
+                                        {{ data.comb_read_4 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -425,16 +426,16 @@
                                         1
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_5 }}
+                                        {{ data.comb_read_5 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_6 }}
+                                        {{ data.comb_read_6 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_7 }}
+                                        {{ data.comb_read_7 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_8 }}
+                                        {{ data.comb_read_8 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -442,16 +443,16 @@
                                         2
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_9 }}
+                                        {{ data.comb_read_9 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_10 }}
+                                        {{ data.comb_read_10 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_11 }}
+                                        {{ data.comb_read_11 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_12 }}
+                                        {{ data.comb_read_12 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -459,16 +460,16 @@
                                         3
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_13 }}
+                                        {{ data.comb_read_13 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_14 }}
+                                        {{ data.comb_read_14 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_15 }}
+                                        {{ data.comb_read_15 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_16 }}
+                                        {{ data.comb_read_16 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -476,16 +477,16 @@
                                         4
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_17 }}
+                                        {{ data.comb_read_17 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_18 }}
+                                        {{ data.comb_read_18 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_19 }}
+                                        {{ data.comb_read_19 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_20 }}
+                                        {{ data.comb_read_20 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -493,16 +494,16 @@
                                         5
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_21 }}
+                                        {{ data.comb_read_21 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_22 }}
+                                        {{ data.comb_read_22 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_23 }}
+                                        {{ data.comb_read_23 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_24 }}
+                                        {{ data.comb_read_24 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -510,16 +511,16 @@
                                         6
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_25 }}
+                                        {{ data.comb_read_25 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_26 }}
+                                        {{ data.comb_read_26 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_27 }}
+                                        {{ data.comb_read_27 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_28 }}
+                                        {{ data.comb_read_28 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -527,16 +528,16 @@
                                         7
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_29 }}
+                                        {{ data.comb_read_29 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_30 }}
+                                        {{ data.comb_read_30 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_31 }}
+                                        {{ data.comb_read_31 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_32 }}
+                                        {{ data.comb_read_32 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -544,16 +545,16 @@
                                         8
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_33 }}
+                                        {{ data.comb_read_33 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_34 }}
+                                        {{ data.comb_read_34 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_35 }}
+                                        {{ data.comb_read_35 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_36 }}
+                                        {{ data.comb_read_36 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -561,16 +562,16 @@
                                         9
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_37 }}
+                                        {{ data.comb_read_37 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_38 }}
+                                        {{ data.comb_read_38 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_39 }}
+                                        {{ data.comb_read_39 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_40 }}
+                                        {{ data.comb_read_40 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -578,16 +579,16 @@
                                         10
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_41 }}
+                                        {{ data.comb_read_41 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_42 }}
+                                        {{ data.comb_read_42 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_43 }}
+                                        {{ data.comb_read_43 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_44 }}
+                                        {{ data.comb_read_44 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -595,16 +596,16 @@
                                         11
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_45 }}
+                                        {{ data.comb_read_45 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_46 }}
+                                        {{ data.comb_read_46 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_47 }}
+                                        {{ data.comb_read_47 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_48 }}
+                                        {{ data.comb_read_48 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -612,16 +613,16 @@
                                         12
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_49 }}
+                                        {{ data.comb_read_49 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_50 }}
+                                        {{ data.comb_read_50 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_51 }}
+                                        {{ data.comb_read_51 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_52 }}
+                                        {{ data.comb_read_52 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -629,16 +630,16 @@
                                         13
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_53 }}
+                                        {{ data.comb_read_53 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_54 }}
+                                        {{ data.comb_read_54 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_55 }}
+                                        {{ data.comb_read_55 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_56 }}
+                                        {{ data.comb_read_56 }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -646,16 +647,16 @@
                                         14
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_57 }}
+                                        {{ data.comb_read_57 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_58 }}
+                                        {{ data.comb_read_58 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_59 }}
+                                        {{ data.comb_read_59 }}
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_read_60 }}
+                                        {{ data.comb_read_60 }}
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -664,7 +665,7 @@
                                         Average:
                                     </td>
                                     <td colspan="1" id="formG1_box1">
-                                        {{ readings_form.comb_average }}
+                                        {{ data.comb_average }}
                                     </td>
                                 </tr>
                             </table>

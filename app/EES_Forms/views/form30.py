@@ -1,28 +1,29 @@
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime
-from ..models import issues_model, form_settings_model, form30_model
-from ..forms import form30_form
-from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
-from ..form_issue_functions import form30_issue_check
-from ..utils import get_initial_data
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.http import JsonResponse, HttpResponseRedirect# type: ignore
+from ..models import form_settings_model, form30_model
+from ..forms import form30_form
+from ..utils import get_initial_data
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 from django.utils.timezone import now, timedelta # type: ignore
 
 lock = login_required(login_url='Login')
 
 @lock
 def form30(request, facility, fsID, selector):
+    # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
     if form_variables['daily_prof'].exists():
         todays_log = form_variables['daily_prof'][0]
+    # -----SET DECIDING VARIABLES------------
         more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
         if isinstance(more_form_variables, HttpResponseRedirect):
             return more_form_variables
         else:
             data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
-        
+    # -----SET RESPONSES TO DECIDING VARIABLES------------
         if search:
             database_form = ''
         else:
@@ -57,9 +58,9 @@ def form30(request, facility, fsID, selector):
                     'formSettings': form_variables['freq'],
                 }
             data = form30_form(initial=initial_data, form_settings=form_variables['freq'])
-
+    # -----IF REQUEST.POST------------
         if request.method == "POST":
-            #print(request.POST)
+    # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS------------
             copyPOST = request.POST.copy()
 
             try:
@@ -109,7 +110,7 @@ def form30(request, facility, fsID, selector):
                 date__range=[start_of_week, end_of_week]
             ).first()
             
-            # Create form instance and save
+    # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
             if existing_form:
                 if existing_form.area_name == database_form.area_name:
                     print(f"Yes exisitng")
@@ -118,7 +119,7 @@ def form30(request, facility, fsID, selector):
                     form = form30_form(copyPOST, instance=existing_form, form_settings=form_settings)
             else:
                 form = form30_form(copyPOST, form_settings=form_settings)
-            
+    # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
             exportVariables = (request, selector, facility, database_form, fsID)
             return redirect(*template_validate_save(form, form_variables, *exportVariables))
     else:

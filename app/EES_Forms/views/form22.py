@@ -1,11 +1,12 @@
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from datetime import datetime,date
-from ..models import Forms, issues_model, user_profile_model, daily_battery_profile_model, form22_model, form22_readings_model, bat_info_model, paved_roads, unpaved_roads, parking_lots
+from django.http import HttpResponseRedirect # type: ignore
+from ..models import issues_model, form22_model, form22_readings_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import get_initial_data, issueForm_picker,updateSubmissionForm, createNotification
-from ..initial_form_variables import initiate_form_variables, existing_or_new_form
+from ..utils import get_initial_data,updateSubmissionForm, createNotification
+from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
+from datetime import datetime,date
 
 lock = login_required(login_url='Login')
 
@@ -16,6 +17,7 @@ def showName(code):
 
 @lock
 def form22(request, facility, fsID, selector):
+    # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
     THEmonth = False
@@ -24,7 +26,12 @@ def form22(request, facility, fsID, selector):
     
     if form_variables['daily_prof'].exists():
         todays_log = form_variables['daily_prof'][0]
-        data, existing, search = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+        # -----SET DECIDING VARIABLES------------
+        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
+        if isinstance(more_form_variables, HttpResponseRedirect):
+            return more_form_variables
+        else:
+            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
         if selector != 'form':
             form_query = form_variables['submitted_forms'].filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
             database_model = form_query[0] if form_query.exists() else print('no data found with this date')

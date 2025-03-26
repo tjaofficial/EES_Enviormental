@@ -2,12 +2,11 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
-from ..models import form_settings_model, form17_model, form17_readings_model
-from ..forms import form17_form, formG1_readings_form
-from ..utils import get_initial_data, method9_reading_data_build, weatherDict, form17_ovens_data_build, parse_form17_oven_dict
+from ..models import form_settings_model, form17_model
+from ..forms import form17_form
+from ..utils import get_initial_data, method9_reading_data_build, weatherDict, form17_ovens_data_build
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import json
-from datetime import datetime
 
 lock = login_required(login_url='Login')
 
@@ -85,7 +84,6 @@ def form17(request, facility, fsID, selector):
             if existing:
                 if request.POST['canvas'] == '' or 'canvas' not in request.POST.keys():
                     dataCopy['canvas'] = exist_canvas
-                    form = form17_form(dataCopy, instance=database_form, form_settings=form_settings)
                 form = form17_form(dataCopy, instance=database_form, form_settings=form_settings)
             else:
                 if dataCopy['reading_data']['wind_speed_stop'] == 'TBD':

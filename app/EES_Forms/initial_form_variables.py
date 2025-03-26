@@ -37,11 +37,11 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
     search = False
     database_form = False
     data = False
-
+    print(submitted_forms)
     if selector not in ('form', 'edit'):
         try:
             form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date()).order_by('-date')
-            print("check date")
+            print(f"The query filters by date", form_query)
         except:
             form_query = submitted_forms.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date()).order_by('-week_start')
             print("check week")

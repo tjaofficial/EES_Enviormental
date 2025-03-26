@@ -1897,9 +1897,6 @@ class formF7_form(ModelForm):
             'dates_4' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
         }
 
-
-
-
 class form17_form(ModelForm):
     class Meta:
         model = form17_model
@@ -1985,7 +1982,7 @@ class form17_form(ModelForm):
         "PEC_push_oven": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 50px; text-align: center;"}),
         "PEC_push_time": forms.TimeInput(attrs={"type": "time", "style": "width: 95px;"}),
         "PEC_observe_time": forms.TimeInput(attrs={"type": "time", "style": "width: 95px;"}),
-        "PEC_emissions_present": forms.CheckboxInput(attrs={"style": "width: 50px;"})
+        "PEC_emissions_present": forms.RadioSelect(attrs={"class": "status-radio"})
     }
 
     def __init__(self, *args, **kwargs):
@@ -2041,8 +2038,45 @@ class form17_form(ModelForm):
                     required=False,
                     widget=widget
                 )
+
+            self.fields["PEC_oven1"] = forms.IntegerField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_oven1", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_oven1")
+            )
+            self.fields["PEC_oven2"] = forms.IntegerField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_oven2", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_oven2")
+            )
+            self.fields["PEC_time1"] = forms.TimeField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_time1", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_time1")
+            )
+            self.fields["PEC_time2"] = forms.TimeField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_time2", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_time2")
+            )
+            self.fields["PEC_start"] = forms.TimeField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_start", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_start")
+            )
+            self.fields["PEC_stop"] = forms.TimeField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_stop", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_stop")
+            )
+            self.fields["PEC_average"] = forms.IntegerField(
+                initial=existing_ovens_data.get("meth9", {}).get("PEC_average", {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_average")
+            )
+
         else:  # Handling "non" type
-            for key in ["PEC_push_oven", "PEC_push_time", "PEC_observe_time", "PEC_emissions_present"]:
+            for key in ["PEC_push_oven", "PEC_push_time", "PEC_observe_time"]:
                 widget = self.JSON_WIDGET_STYLES.get(key, forms.TextInput(attrs={"class": "input"}))
                 field_type = forms.IntegerField if "oven" in key else forms.TimeField if "time" in key else forms.BooleanField
                 self.fields[key] = field_type(
@@ -2050,53 +2084,14 @@ class form17_form(ModelForm):
                     required=False,
                     widget=widget
                 )
+            self.fields["PEC_emissions_present"] = forms.ChoiceField(
+                choices=[("Yes", "Yes"), ("No", "No")],
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get("PEC_emissions_present"),
+                initial=existing_ovens_data.get("non", {}).get("PEC_emissions_present", None)
+            )
 
-
-class formG1_readings_form(ModelForm):
-    class Meta:
-        model = form17_readings_model
-        fields = ('__all__')
-        exclude = ('form',)
-        widgets = {
-            'PEC_start' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
-            'PEC_stop' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
-            'PEC_read_1' : forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_2' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_3' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_4' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_5' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_6' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_7' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_8' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_9' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_10' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_11' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_12' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_13' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_14' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_15' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_16' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_17' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_18' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_19' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_20' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_21' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_22' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_23' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_24' : forms.TextInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_oven1' : forms.NumberInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_oven2' : forms.NumberInput(attrs={'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_time1' : forms.TimeInput(attrs={'type': 'time', 'style':'width: 95px;'}),
-            'PEC_time2' : forms.TimeInput(attrs={'type': 'time', 'style':'width: 95px;'}),
-            'PEC_type' : forms.TextInput(attrs={'type': 'hidden'}),
-            'PEC_average' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_push_oven' : forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_push_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
-            'PEC_observe_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 95px;'}),
-            'PEC_emissions_present' : forms.CheckboxInput(attrs={'style': 'width: 50px;', 'initial': 'false' }),
-        }
-
-class formG2_form(ModelForm):
+class form18_form(ModelForm):
     class Meta:
         model = form18_model
         fields = ('__all__')
@@ -2104,72 +2099,157 @@ class formG2_form(ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'cert_date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;text-align: center;'}),
-            'wind_speed_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;text-align: center;'}),
-            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px;text-align: center;'}),
-            'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px;text-align: center;'}),
-            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
-            'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
-            'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'distance_from': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
         }
-class formG2_readings_form(ModelForm):
-    class Meta:
-        model = form18_readings_model
-        fields = ('__all__')
-        exclude = ('form',)
-        widgets = {
-            'PEC_read_a_1' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_2' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_3' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_4' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_5' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_6' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_7' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_a_8' : forms.TextInput(attrs={'oninput': 'avg_a()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            
-            'PEC_read_b_1' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_2' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_3' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_4' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_5' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_6' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_7' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_b_8' : forms.TextInput(attrs={'oninput': 'avg_b()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            
-            'PEC_read_c_1' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_2' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_3' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_4' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_5' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_6' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_7' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_read_c_8' : forms.TextInput(attrs={'oninput': 'avg_c()', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+    
+    DEFAULT_READING_FIELDS = {
+        "process_equip1": "", "process_equip2": "", "op_mode1": "normal", "op_mode2": "normal",
+        "background_color_start": "", "background_color_stop": "", "sky_conditions": "",
+        "wind_speed_start": "", "wind_speed_stop": "", "wind_direction": "",
+        "emission_point_start": "", "emission_point_stop": "",
+        "ambient_temp_start": "", "ambient_temp_stop": "", "humidity": "",
+        "height_above_ground": "", "height_rel_observer": "",
+        "distance_from": "", "direction_from": "",
+        "describe_emissions_start": "", "describe_emissions_stop": "",
+        "emission_color_start": "", "emission_color_stop": "",
+        "plume_type": "", "water_drolet_present": "",
+        "water_droplet_plume": "", "plume_opacity_determined_start": "", "plume_opacity_determined_stop": "",
+        "describe_background_start": "", "describe_background_stop": "",
+        **{f"PEC_read_a_{i}": "" for i in range(1, 9)},
+        **{f"PEC_read_b_{i}": "" for i in range(1, 9)},
+        **{f"PEC_read_c_{i}": "" for i in range(1, 9)},
+        "PEC_oven_a": "", "PEC_oven_b": "", "PEC_oven_c": "", "PEC_start_a": "", 
+        "PEC_start_b": "", "PEC_start_c": "", "PEC_average_a": "", "PEC_average_b": "", 
+        "PEC_average_c": "", "PEC_average_main": ""
+    }
+    
+    JSON_WIDGET_STYLES = {
+        "process_equip1": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "process_equip2": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "background_color_start": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 60px; text-align: center;"}),
+        "background_color_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 60px; text-align: center;"}),
+        "sky_conditions": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 80px; text-align: center;"}),
+        "wind_speed_start": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "wind_speed_stop": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 40px; text-align: center;"}),
+        "wind_direction": forms.TextInput(attrs={"oninput": "weatherStoplight(); this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 60px; text-align: center; text-transform: uppercase;"}),
+        "emission_point_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "ambient_temp_start": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "ambient_temp_stop": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 40px; text-align: center;"}),
+        "humidity": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "height_above_ground": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "height_rel_observer": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "distance_from": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
+        "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "plume_type": forms.Select(
+            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            attrs={"class": "input", "required": True}
+        ),
+        "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "op_mode2": forms.TextInput(attrs={"name": "op_mode2", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "emission_point_start": forms.TextInput(attrs={"name": "emission_point_start", "maxlength": "50", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_emissions_start": forms.TextInput(attrs={"name": "describe_emissions_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 100px;"}),
+        "describe_emissions_stop": forms.TextInput(attrs={"name": "describe_emissions_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "emission_color_start": forms.TextInput(attrs={"name": "emission_color_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 100px;"}),
+        "emission_color_stop": forms.TextInput(attrs={"name": "emission_color_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "water_drolet_present": forms.Select(
+            choices=[("", "---------"), ("Yes", "Yes"), ("No", "No")],
+            attrs={"name": "water_drolet_present", "required": True, "class": "input", "style": "width: 120px;"}
+        ),
+        "water_droplet_plume": forms.Select(
+            choices=[("", "---------"), ("N/A", "N/A"), ("Attached", "Attached"), ("Detached", "Detached")],
+            attrs={"name": "water_droplet_plume", "required": True, "class": "input", "style": "width: 120px;"}
+        ),
+        "plume_opacity_determined_start": forms.TextInput(attrs={"name": "plume_opacity_determined_start", "maxlength": "50", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_background_start": forms.TextInput(attrs={"name": "describe_background_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_background_stop": forms.TextInput(attrs={"name": "describe_background_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        **{f"PEC_read_a_{i}": forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}) for i in range(1, 9)},
+        **{f"PEC_read_b_{i}": forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}) for i in range(1, 9)},
+        **{f"PEC_read_c_{i}": forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}) for i in range(1, 9)},
+        'PEC_oven_a' : forms.NumberInput(attrs={'oninput':'firstOvenCheck()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        'PEC_oven_b' : forms.NumberInput(attrs={'oninput': 'ovenCheck(this)', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        'PEC_oven_c' : forms.NumberInput(attrs={'oninput': 'ovenCheck(this)', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        'PEC_start_a' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
+        'PEC_start_b' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
+        'PEC_start_c' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
+        'PEC_average_a' : forms.NumberInput(attrs={'oninput': 'avg_a()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+        'PEC_average_b' : forms.NumberInput(attrs={'oninput': 'avg_b()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+        'PEC_average_c' : forms.NumberInput(attrs={'oninput': 'avg_c()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+        'PEC_average_main' : forms.NumberInput(attrs={'oninput': 'main_avg()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
+    }
 
-            'PEC_oven_a' : forms.NumberInput(attrs={'oninput':'firstOvenCheck()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_oven_b' : forms.NumberInput(attrs={'oninput': 'ovenCheck(this)', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_oven_c' : forms.NumberInput(attrs={'oninput': 'ovenCheck(this)', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
-            'PEC_start_a' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
-            'PEC_start_b' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
-            'PEC_start_c' : forms.TimeInput(attrs={'type':'time', 'style':'width: 100px;', 'required': True}),
-            'PEC_average_a' : forms.NumberInput(attrs={'oninput': 'avg_a()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-            'PEC_average_b' : forms.NumberInput(attrs={'oninput': 'avg_b()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-            'PEC_average_c' : forms.NumberInput(attrs={'oninput': 'avg_c()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-            'PEC_average_main' : forms.NumberInput(attrs={'oninput': 'main_avg()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-        }
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form18_form.")
+
+        initial = kwargs.get("initial", {})
+        instance = kwargs.get("instance")
+
+        # Determine the data source: use instance if it exists, otherwise use initial
+        data_source = instance if instance else SimpleNamespace(**initial)
+
+        super().__init__(*args, **kwargs)
+
+        # Extract JSON-stored data
+        existing_data = getattr(data_source, "reading_data", {}) or {}
+        existing_ovens_data = getattr(data_source, "ovens_data", {}) or {}
+
+        general_fields = [
+            "date", "estab", "county", "estab_no", "equip_loc",
+            "district", "city", "observer", "cert_date"
+        ]
+
+        for field in general_fields:
+            if field in self.fields:
+                self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
+
+        # Handle all fields dynamically, merging data from the source
+        for field_name, default_value in self.DEFAULT_READING_FIELDS.items():
+            widget = self.JSON_WIDGET_STYLES.get(field_name, forms.TextInput(attrs={"class": "input"}))
+            self.fields[field_name] = forms.CharField(
+                initial=existing_data.get(field_name, default_value),
+                required=False,
+                widget=widget
+            )
+
+        self.fields["PEC_average_main"] = forms.FloatField(
+            initial=existing_ovens_data.get("PEC_average_main", {}),
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("PEC_average_main")
+        )
         
-class formH_form(ModelForm):
+        for alpha in ["a", "b", "c"]:
+            category = f"oven_{alpha}"
+            alphaOvenName = f"PEC_oven_{alpha}"
+            alphaStartName = f"PEC_start_{alpha}"
+            alphaAverageName = f"PEC_average_{alpha}"
+            self.fields[alphaOvenName] = forms.IntegerField(
+                initial=existing_ovens_data.get(category, {}).get(alphaOvenName, {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(alphaOvenName)
+            )
+            self.fields[alphaStartName] = forms.TimeField(
+                initial=existing_ovens_data.get(category, {}).get(alphaStartName, {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(alphaStartName)
+            )
+            self.fields[alphaAverageName] = forms.FloatField(
+                initial=existing_ovens_data.get(category, {}).get(alphaAverageName, {}),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(alphaAverageName)
+            )
+            for ov_numb in range(1,9):
+                alphaReadingInput = f"PEC_read_{alpha}_{ov_numb}"
+                self.fields[alphaReadingInput] = forms.IntegerField(
+                    initial=existing_ovens_data.get(category, {}).get("readings", {}).get(alphaReadingInput, {}),
+                    required=False,
+                    widget=self.JSON_WIDGET_STYLES.get(alphaReadingInput)
+                )
+  
+class form19_form(ModelForm):
     class Meta:
         model = form19_model
         fields = ('__all__')
@@ -2177,96 +2257,141 @@ class formH_form(ModelForm):
         widgets = {
             'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'cert_date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'process_equip1' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'background_color_start' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'background_color_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 60px;'}),
-            'wind_speed_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'wind_speed_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px; text-align: center;'}),
-            'emission_point_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'ambient_temp_start' : forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-            'ambient_temp_stop' : forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style':'width: 40px; text-align: center;'}),
-            'plume_opacity_determined_stop' : forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style':'width: 250px;'}),
-            'humidity': forms.NumberInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'wind_direction': forms.TextInput(attrs={'oninput': 'weatherStoplight(); this.value = this.value.toUpperCase()', 'class': 'input', 'type': 'text', 'style': 'width: 60px; text-align: center; text-transform: uppercase;'}),
-            'sky_conditions': forms.TextInput(attrs={'oninput': 'weatherStoplight()', 'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
             'estab_no': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 80px; text-align: center;'}),
-            'height_above_ground': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'height_rel_observer': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'distance_from': forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 40px; text-align: center;'}),
-            'direction_from': forms.TextInput(attrs={'class': 'input', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
             'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'canvas': forms.TextInput(attrs={'id': 'canvas', 'type': 'hidden', 'class': 'input', 'style': 'width:50px; text-align: center;', "required": "true"})
         }
-class formH_readings_form(ModelForm):
-    class Meta:
-        model = form19_readings_model
-        fields = ('__all__')
-        exclude = ('form',)
-        widgets = {
-            'comb_start' : forms.TimeInput(attrs={'id': 'comb_start', 'oninput': 'timecheck_combustion()', 'type':'time', 'style':'width: 120px;', 'required': True}),
-            'comb_stop' : forms.TimeInput(attrs={'id': 'comb_stop', 'oninput': 'timecheck_combustion()', 'type':'time', 'style':'width: 120px;', 'required': True}),
-            'comb_read_1' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_2' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_3' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_4' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_5' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_6' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_7' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_8' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_9' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_10' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_11' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_12' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_13' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_14' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_15' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_16' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_17' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_18' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_19' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_20' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_21' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_22' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_23' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_24' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_25' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_26' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_27' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_28' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_29' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_30' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_31' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_32' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_33' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_34' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_35' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_36' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_37' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_38' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_39' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_40' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_41' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_42' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_43' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_44' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_45' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_46' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_47' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_48' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_49' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_50' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_51' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_52' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_53' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_54' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_55' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_56' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_57' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_58' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_59' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_read_60' : forms.TextInput(attrs={'oninput': 'comb_averages()', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'comb_average' : forms.NumberInput(attrs={'oninput': 'comb_averages()', 'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;', 'required': True}),
-        }
+    
+    DEFAULT_READING_FIELDS = {
+        "process_equip1": "", "process_equip2": "", "op_mode1": "normal", "op_mode2": "normal",
+        "background_color_start": "", "background_color_stop": "", "sky_conditions": "",
+        "wind_speed_start": "", "wind_speed_stop": "", "wind_direction": "",
+        "emission_point_start": "", "emission_point_stop": "",
+        "ambient_temp_start": "", "ambient_temp_stop": "", "humidity": "",
+        "height_above_ground": "", "height_rel_observer": "",
+        "distance_from": "", "direction_from": "",
+        "describe_emissions_start": "", "describe_emissions_stop": "",
+        "emission_color_start": "", "emission_color_stop": "",
+        "plume_type": "", "water_drolet_present": "",
+        "water_droplet_plume": "", "plume_opacity_determined_start": "", "plume_opacity_determined_stop": "",
+        "describe_background_start": "", "describe_background_stop": "",
+        "comb_start": "", "comb_stop": "", "comb_average": "",
+        **{f"comb_read_{i}": "" for i in range(1, 61)}
+    }
+
+    JSON_WIDGET_STYLES = {
+        "process_equip1": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "process_equip2": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "background_color_start": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 60px; text-align: center;"}),
+        "background_color_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 60px; text-align: center;"}),
+        "sky_conditions": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 80px; text-align: center;"}),
+        "wind_speed_start": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "wind_speed_stop": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 40px; text-align: center;"}),
+        "wind_direction": forms.TextInput(attrs={"oninput": "weatherStoplight(); this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 60px; text-align: center; text-transform: uppercase;"}),
+        "emission_point_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "ambient_temp_start": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "ambient_temp_stop": forms.TextInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "text", "style": "width: 40px; text-align: center;"}),
+        "humidity": forms.NumberInput(attrs={"oninput": "weatherStoplight()", "class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "height_above_ground": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "height_rel_observer": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "distance_from": forms.NumberInput(attrs={"class": "input", "type": "number", "style": "width: 40px; text-align: center;"}),
+        "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
+        "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
+        "plume_type": forms.Select(
+            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            attrs={"class": "input", "required": True}
+        ),
+        "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "op_mode2": forms.TextInput(attrs={"name": "op_mode2", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "emission_point_start": forms.TextInput(attrs={"name": "emission_point_start", "maxlength": "50", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_emissions_start": forms.TextInput(attrs={"name": "describe_emissions_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 100px;"}),
+        "describe_emissions_stop": forms.TextInput(attrs={"name": "describe_emissions_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "emission_color_start": forms.TextInput(attrs={"name": "emission_color_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 100px;"}),
+        "emission_color_stop": forms.TextInput(attrs={"name": "emission_color_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
+        "water_drolet_present": forms.Select(
+            choices=[("", "---------"), ("Yes", "Yes"), ("No", "No")],
+            attrs={"name": "water_drolet_present", "required": True, "class": "input", "style": "width: 120px;"}
+        ),
+        "water_droplet_plume": forms.Select(
+            choices=[("", "---------"), ("N/A", "N/A"), ("Attached", "Attached"), ("Detached", "Detached")],
+            attrs={"name": "water_droplet_plume", "required": True, "class": "input", "style": "width: 120px;"}
+        ),
+        "plume_opacity_determined_start": forms.TextInput(attrs={"name": "plume_opacity_determined_start", "maxlength": "50", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_background_start": forms.TextInput(attrs={"name": "describe_background_start", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "describe_background_stop": forms.TextInput(attrs={"name": "describe_background_stop", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 200px;"}),
+        "comb_start": forms.TimeInput(attrs={'type': 'time', 'style': 'width: 95px;'}),
+        "comb_stop": forms.TimeInput(attrs={'type': 'time', 'style': 'width: 95px;'}),
+        "comb_average": forms.NumberInput(attrs={'class': 'input', 'type': 'number', 'style': 'width: 50px; text-align: center;'}),
+        **{f"comb_read_{i}": forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}) for i in range(1, 25)},
+    }
+
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form19_form.")
+
+        initial = kwargs.get("initial", {})
+        instance = kwargs.get("instance")
+
+        # Determine the data source: use instance if it exists, otherwise use initial
+        data_source = instance if instance else SimpleNamespace(**initial)
+
+        super().__init__(*args, **kwargs)
+
+        # Extract JSON-stored data
+        existing_data = getattr(data_source, "reading_data", {}) or {}
+        existing_ovens_data = getattr(data_source, "ovens_data", {}) or {}
+
+        general_fields = [
+            "date", "estab", "county", "estab_no", "equip_loc",
+            "district", "city", "observer", "cert_date"
+        ]
+    
+        for field in general_fields:
+            if field in self.fields:  # Ensure the field exists in the form before setting
+                self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
+
+        # Handle all fields dynamically, merging data from the source
+        for field_name, default_value in self.DEFAULT_READING_FIELDS.items():
+            widget = self.JSON_WIDGET_STYLES.get(field_name, forms.TextInput(attrs={"class": "input"}))
+            self.fields[field_name] = forms.CharField(
+                initial=existing_data.get(field_name, default_value),
+                required=False,
+                widget=widget
+            )
+        
+        for i in range(1, 61):
+            field_name = f"comb_read_{i}"
+            widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
+            self.fields[field_name] = forms.IntegerField(
+                initial=existing_ovens_data.get(field_name, None),
+                required=False,
+                widget=widget
+            )
+
+        self.fields["comb_average"] = forms.FloatField(
+            initial=existing_ovens_data.get("comb_average", {}),
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("comb_average")
+        )
+
+        self.fields["comb_start"] = forms.TimeField(
+            initial=existing_ovens_data.get("comb_start", {}),
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("comb_start")
+        )
+
+        self.fields["comb_stop"] = forms.TimeField(
+            initial=existing_ovens_data.get("comb_stop", {}),
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("comb_stop")
+        )
+
+        self.fields["comb_formL"] = forms.CharField(
+            initial=existing_ovens_data.get("comb_stop", {}),
+            required=False,
+            widget=self.JSON_WIDGET_STYLES.get("comb_stop")
+        )
 
 class form20_form(ModelForm):
     class Meta:

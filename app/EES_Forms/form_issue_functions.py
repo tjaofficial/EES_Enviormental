@@ -309,6 +309,56 @@ def form17_issue_check(savedForm, form_variables, request, selector, facility, d
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms', facility)
 
+def form18_issue_check(savedForm, form_variables, request, selector, facility, database_form, fsID, *args, **kwargs):
+    fsID = str(fsID)
+    finder = issues_model.objects.filter(date=savedForm.date, formChoice=savedForm.formSettings).exists()
+    issueFound = False
+    compliance = False
+    #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
+    
+    #--------^^^^^^^ INSERT ANY CHECKS HERE ^^^^^^^^----------------
+    if issueFound:
+        if finder:
+            if selector == 'form':
+                issue_page = 'resubmit'
+            else:
+                issue_page = 'issue'
+        else:
+            issue_page = 'form'
+        
+        if compliance:
+            issue_page = issue_page + "-c"
+            
+        return ('issues_view', facility, fsID, str(database_form.date), issue_page)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector='submitted', issueID=False)        
+    updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
+    return ('IncompleteForms', facility)
+
+def form19_issue_check(savedForm, form_variables, request, selector, facility, database_form, fsID, *args, **kwargs):
+    fsID = str(fsID)
+    finder = issues_model.objects.filter(date=savedForm.date, formChoice=savedForm.formSettings).exists()
+    issueFound = False
+    compliance = False
+    #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
+    
+    #--------^^^^^^^ INSERT ANY CHECKS HERE ^^^^^^^^----------------
+    if issueFound:
+        if finder:
+            if selector == 'form':
+                issue_page = 'resubmit'
+            else:
+                issue_page = 'issue'
+        else:
+            issue_page = 'form'
+        
+        if compliance:
+            issue_page = issue_page + "-c"
+            
+        return ('issues_view', facility, fsID, str(database_form.date), issue_page)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector='submitted', issueID=False)        
+    updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
+    return ('IncompleteForms', facility)
+
 def form20_issue_check(savedForm, form_variables, request, selector, facility, database_form, fsID, *args, **kwargs):
     fsID = str(fsID)
     finder = issues_model.objects.filter(date=savedForm.week_start, formChoice=savedForm.formSettings).exists()
@@ -502,6 +552,8 @@ FUNCTION_MAP = {
     "8": form8_issue_check,
     "9": form9_issue_check,
     "17": form17_issue_check,
+    "18": form18_issue_check,
+    "19": form19_issue_check,
     "20": form20_issue_check,
     "21": form21_issue_check,
     "24": form24_issue_check,

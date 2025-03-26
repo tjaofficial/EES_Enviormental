@@ -91,8 +91,8 @@ function fillForm(tempSaveKey){
                     } else {
                         var parseBaseName = "id_" + key + "_1"
                     }
-                    let element = document.getElementById(parseBaseName)
-                    if(element.type === "radio") {
+                    let element = document.getElementById(parseBaseName);
+                    if(element?.type && element.type === "radio") {
                         let baseName = key.replace(/_\d+$/, '').replace("id_",""); // 🔥 Remove trailing _0, _1, _2
                         let radios = document.getElementsByName(baseName);
 

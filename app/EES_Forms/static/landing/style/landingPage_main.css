@@ -184,9 +184,9 @@
     align-self: center;
 }
 @media screen and (max-width: 960px) {
-    .hero {
-        /* padding: 100px 0; */
-    }
+    /* .hero {
+        padding: 100px 0;
+    } */
     .aboutCont{
         display:block;
         padding: 0px 0px;

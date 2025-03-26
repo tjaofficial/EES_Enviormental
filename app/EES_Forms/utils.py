@@ -475,92 +475,147 @@ def parse_form1_oven_dict(ovens_data):
     print(ovens)
     return json.loads(json.dumps(ovens))
 
+def form19_ovens_data_build(requestPOST):
+    ovens_data = {
+        "comb_formL": requestPOST['comb_formL'], 
+        **{f"comb_read_{i}": requestPOST[f"comb_read_{i}"] if f"comb_read_{i}" in requestPOST else False for i in range(1,61)},
+        "comb_start": requestPOST['comb_start'], 
+        "comb_stop": requestPOST['comb_stop'], 
+        "comb_average": requestPOST['comb_average']
+    }
+    return json.loads(json.dumps(ovens_data))
+
+def form18_ovens_data_build(requestPOST):
+    ovens_data = {
+        "PEC_average_main": requestPOST['PEC_average_main'], 
+        "oven_a": {
+            "PEC_oven_a": requestPOST['PEC_oven_a'],
+            "PEC_start_a": requestPOST['PEC_start_a'],
+            "PEC_average_a": requestPOST['PEC_average_a'],
+            "readings": {
+                "PEC_read_a_1": requestPOST['PEC_read_a_1'], 
+                "PEC_read_a_2": requestPOST['PEC_read_a_2'], 
+                "PEC_read_a_3": requestPOST['PEC_read_a_3'], 
+                "PEC_read_a_4": requestPOST['PEC_read_a_4'], 
+                "PEC_read_a_5": requestPOST['PEC_read_a_5'], 
+                "PEC_read_a_6": requestPOST['PEC_read_a_6'], 
+                "PEC_read_a_7": requestPOST['PEC_read_a_7'], 
+                "PEC_read_a_8": requestPOST['PEC_read_a_8']
+            }
+        }, 
+        "oven_b": {
+            "PEC_oven_b": requestPOST['PEC_oven_b'], 
+            "PEC_start_b": requestPOST['PEC_start_b'], 
+            "PEC_average_b": requestPOST['PEC_average_b'], 
+            "readings": {
+                "PEC_read_b_1": requestPOST['PEC_read_b_1'], 
+                "PEC_read_b_2": requestPOST['PEC_read_b_2'], 
+                "PEC_read_b_3": requestPOST['PEC_read_b_3'], 
+                "PEC_read_b_4": requestPOST['PEC_read_b_4'], 
+                "PEC_read_b_5": requestPOST['PEC_read_b_5'], 
+                "PEC_read_b_6": requestPOST['PEC_read_b_6'], 
+                "PEC_read_b_7": requestPOST['PEC_read_b_7'], 
+                "PEC_read_b_8": requestPOST['PEC_read_b_8']
+            }
+        }, 
+        "oven_c": {
+            "PEC_oven_c": requestPOST['PEC_oven_c'], 
+            "PEC_start_c": requestPOST['PEC_start_c'], 
+            "PEC_average_c": requestPOST['PEC_average_c'], 
+            "readings": {
+                "PEC_read_c_1": requestPOST['PEC_read_c_1'], 
+                "PEC_read_c_2": requestPOST['PEC_read_c_2'], 
+                "PEC_read_c_3": requestPOST['PEC_read_c_3'], 
+                "PEC_read_c_4": requestPOST['PEC_read_c_4'], 
+                "PEC_read_c_5": requestPOST['PEC_read_c_5'], 
+                "PEC_read_c_6": requestPOST['PEC_read_c_6'], 
+                "PEC_read_c_7": requestPOST['PEC_read_c_7'], 
+                "PEC_read_c_8": requestPOST['PEC_read_c_8']
+            }
+        }
+    }
+    return json.loads(json.dumps(ovens_data))
+
 def form17_ovens_data_build(requestPOST):
     ovens_data = {}
     ovens_data['PEC_type'] = requestPOST['PEC_type']
     if requestPOST['PEC_type'] == "meth9":
         meth9_dict = {
-            "meth9": {
-                "PEC_oven1": requestPOST['PEC_oven1'],
-                "PEC_oven2": requestPOST['PEC_oven2'],
-                "PEC_time1": str(requestPOST['PEC_time1']),
-                "PEC_time2": str(requestPOST['PEC_time2']),
-                "PEC_start": str(requestPOST['PEC_start']),
-                "PEC_stop": str(requestPOST['PEC_stop']),
-                "PEC_average": requestPOST['PEC_average'], 
-                "readings": {
-                    "PEC_read_1": requestPOST['PEC_read_1'], 
-                    "PEC_read_2": requestPOST['PEC_read_2'], 
-                    "PEC_read_3": requestPOST['PEC_read_3'], 
-                    "PEC_read_4": requestPOST['PEC_read_4'], 
-                    "PEC_read_5": requestPOST['PEC_read_5'], 
-                    "PEC_read_6": requestPOST['PEC_read_6'], 
-                    "PEC_read_7": requestPOST['PEC_read_7'], 
-                    "PEC_read_8": requestPOST['PEC_read_8'], 
-                    "PEC_read_9": requestPOST['PEC_read_9'], 
-                    "PEC_read_10": requestPOST['PEC_read_10'], 
-                    "PEC_read_11": requestPOST['PEC_read_11'],
-                    "PEC_read_12": requestPOST['PEC_read_12'], 
-                    "PEC_read_13": requestPOST['PEC_read_13'], 
-                    "PEC_read_14": requestPOST['PEC_read_14'], 
-                    "PEC_read_15": requestPOST['PEC_read_15'], 
-                    "PEC_read_16": requestPOST['PEC_read_16'], 
-                    "PEC_read_17": requestPOST['PEC_read_17'], 
-                    "PEC_read_18": requestPOST['PEC_read_18'], 
-                    "PEC_read_19": requestPOST['PEC_read_19'], 
-                    "PEC_read_20": requestPOST['PEC_read_20'], 
-                    "PEC_read_21": requestPOST['PEC_read_21'], 
-                    "PEC_read_22": requestPOST['PEC_read_22'], 
-                    "PEC_read_23": requestPOST['PEC_read_23'], 
-                    "PEC_read_24": requestPOST['PEC_read_24']
-                }
+            "PEC_oven1": requestPOST['PEC_oven1'],
+            "PEC_oven2": requestPOST['PEC_oven2'],
+            "PEC_time1": str(requestPOST['PEC_time1']),
+            "PEC_time2": str(requestPOST['PEC_time2']),
+            "PEC_start": str(requestPOST['PEC_start']),
+            "PEC_stop": str(requestPOST['PEC_stop']),
+            "PEC_average": requestPOST['PEC_average'], 
+            "readings": {
+                "PEC_read_1": requestPOST['PEC_read_1'], 
+                "PEC_read_2": requestPOST['PEC_read_2'], 
+                "PEC_read_3": requestPOST['PEC_read_3'], 
+                "PEC_read_4": requestPOST['PEC_read_4'], 
+                "PEC_read_5": requestPOST['PEC_read_5'], 
+                "PEC_read_6": requestPOST['PEC_read_6'], 
+                "PEC_read_7": requestPOST['PEC_read_7'], 
+                "PEC_read_8": requestPOST['PEC_read_8'], 
+                "PEC_read_9": requestPOST['PEC_read_9'], 
+                "PEC_read_10": requestPOST['PEC_read_10'], 
+                "PEC_read_11": requestPOST['PEC_read_11'],
+                "PEC_read_12": requestPOST['PEC_read_12'], 
+                "PEC_read_13": requestPOST['PEC_read_13'], 
+                "PEC_read_14": requestPOST['PEC_read_14'], 
+                "PEC_read_15": requestPOST['PEC_read_15'], 
+                "PEC_read_16": requestPOST['PEC_read_16'], 
+                "PEC_read_17": requestPOST['PEC_read_17'], 
+                "PEC_read_18": requestPOST['PEC_read_18'], 
+                "PEC_read_19": requestPOST['PEC_read_19'], 
+                "PEC_read_20": requestPOST['PEC_read_20'], 
+                "PEC_read_21": requestPOST['PEC_read_21'], 
+                "PEC_read_22": requestPOST['PEC_read_22'], 
+                "PEC_read_23": requestPOST['PEC_read_23'], 
+                "PEC_read_24": requestPOST['PEC_read_24']
             }
         } 
 
         nonCert_dict = {
-            "non": {
-                "PEC_push_oven": None, 
-                "PEC_push_time": None, 
-                "PEC_observe_time": None, 
-                "PEC_emissions_present": None
-            }
+            "PEC_push_oven": None, 
+            "PEC_push_time": None, 
+            "PEC_observe_time": None, 
+            "PEC_emissions_present": None
         }
     else:
         meth9_dict = {
-            "meth9": {
-                "PEC_oven1": None,
-                "PEC_oven2": None,
-                "PEC_time1": None,
-                "PEC_time2": None,
-                "PEC_start": None,
-                "PEC_stop": None,
-                "PEC_average": None, 
-                "readings": {
-                    "PEC_read_1": None, 
-                    "PEC_read_2": None, 
-                    "PEC_read_3": None, 
-                    "PEC_read_4": None, 
-                    "PEC_read_5": None, 
-                    "PEC_read_6": None, 
-                    "PEC_read_7": None, 
-                    "PEC_read_8": None, 
-                    "PEC_read_9": None, 
-                    "PEC_read_10": None, 
-                    "PEC_read_11": None,
-                    "PEC_read_12": None, 
-                    "PEC_read_13": None, 
-                    "PEC_read_14": None, 
-                    "PEC_read_15": None, 
-                    "PEC_read_16": None, 
-                    "PEC_read_17": None, 
-                    "PEC_read_18": None, 
-                    "PEC_read_19": None, 
-                    "PEC_read_20": None, 
-                    "PEC_read_21": None, 
-                    "PEC_read_22": None, 
-                    "PEC_read_23": None, 
-                    "PEC_read_24": None
-                }
+            "PEC_oven1": None,
+            "PEC_oven2": None,
+            "PEC_time1": None,
+            "PEC_time2": None,
+            "PEC_start": None,
+            "PEC_stop": None,
+            "PEC_average": None, 
+            "readings": {
+                "PEC_read_1": None, 
+                "PEC_read_2": None, 
+                "PEC_read_3": None, 
+                "PEC_read_4": None, 
+                "PEC_read_5": None, 
+                "PEC_read_6": None, 
+                "PEC_read_7": None, 
+                "PEC_read_8": None, 
+                "PEC_read_9": None, 
+                "PEC_read_10": None, 
+                "PEC_read_11": None,
+                "PEC_read_12": None, 
+                "PEC_read_13": None, 
+                "PEC_read_14": None, 
+                "PEC_read_15": None, 
+                "PEC_read_16": None, 
+                "PEC_read_17": None, 
+                "PEC_read_18": None, 
+                "PEC_read_19": None, 
+                "PEC_read_20": None, 
+                "PEC_read_21": None, 
+                "PEC_read_22": None, 
+                "PEC_read_23": None, 
+                "PEC_read_24": None
             }
         } 
 
@@ -2287,3 +2342,13 @@ def get_initial_data(modelName, modelInstance):
     initial_data = {fieldName: get_field_value(fieldName, modelList) for fieldName in allModelFields}
     return initial_data
 
+
+
+
+def fix_data(fsID):
+    freq = getFacSettingsInfo(fsID)
+    selectedModel = apps.get_model('EES_Forms', freq.formChoice.link + "_model")
+    modelAllQuery = selectedModel.objects.all()
+    for x in modelAllQuery:
+        x.formSettings = freq
+        x.save()
