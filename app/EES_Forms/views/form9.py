@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form9_model
 from ..forms import form9_form
-from ..utils import fix_data, get_initial_data
+from ..utils import get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import json
 
@@ -12,7 +12,6 @@ lock = login_required(login_url='Login')
 
 @lock
 def form9(request, facility, fsID, selector):
-    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
