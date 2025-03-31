@@ -3,11 +3,10 @@ const formNameCheckTime = document.getElementById('formName').dataset.form;
 function check_time(startId, endId, timePopup) {
     console.log(`${startId} & ${endId}`)
     try {
-        let inputStart = document.getElementById(startId),
-            inputEnd = document.getElementById(endId);
+        let inputStart = document.getElementById("id_" + startId),
+            inputEnd = document.getElementById("id_" + endId);
         const start = inputStart.value,
             end = inputEnd.value;
-
         if (end == false) {
             var popup = document.getElementById(timePopup).style.visibility = 'hidden';
             return;
@@ -35,6 +34,7 @@ function check_time(startId, endId, timePopup) {
         console.log("Times Inputed")
     } catch(err) {
         console.log("Times Not Inputed")
+        console.log(err)
     }
 }
 
@@ -107,22 +107,26 @@ if (String(formNameCheckTime) == "1"){
     timecheck_c4();
     timecheck_c5();
 }
+
+
+
+
 /*************
- FORM 6 - COAL FIELD
+ FORM 7 - COAL FIELD
 *************/
 function formC_timeCheck_area1(){
-    check_time('areaStartTime1', 'areaStopTime1', 'area1_timePopup')
+    check_time('1_start', '1_stop', 'area1_timePopup')
 }
 function formC_timeCheck_area2(){
-    check_time('areaStartTime2', 'areaStopTime2', 'area2_timePopup')
+    check_time('2_start', '2_stop', 'area2_timePopup')
 }
 function formC_timeCheck_area3(){
-    check_time('areaStartTime3', 'areaStopTime3', 'area3_timePopup')
+    check_time('3_start', '3_stop', 'area3_timePopup')
 }
 function formC_timeCheck_area4(){
-    check_time('areaStartTime4', 'areaStopTime4', 'area4_timePopup')
+    check_time('4_start', '4_stop', 'area4_timePopup')
 }
-if (String(formNameCheckTime) == "6"){
+if (String(formNameCheckTime) == "7"){
     formC_timeCheck_area1();
     formC_timeCheck_area2();
     formC_timeCheck_area3();

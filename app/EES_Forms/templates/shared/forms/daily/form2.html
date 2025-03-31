@@ -28,30 +28,35 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th colspan="6" style="text-align: center;">Facility Name: {{facility}}</th>
+                                <td colspan="6" style="text-align: center;">
+                                    <strong>Facility Name:</strong> {{facility}}
+                                </td>
                             </tr>
                             <tr>
                                 <td style="height: 25px" > </td>
                             </tr> 
                             <tr>
-                                <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
+                                <td colspan="6" style="text-align: center;">
+                                    <strong>Inspectors Name:</strong>&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                    <strong>Date:</strong>&nbsp; &nbsp;{{ data.date }}
+                                </td>
                             </tr>
                             <tr>
-                                <th colspan="6">
-                                    Battery No. {{ options.bat_num }} &nbsp; &nbsp; &nbsp; 
-                                    Total No. Ovens: {{ options.total_ovens }} &nbsp; &nbsp; &nbsp;
-                                    Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }} <br>
-                                    Inoperable Oven Number(s)&nbsp; &nbsp;{{ data.inop_numbs }}
-                                </th>
+                                <td colspan="6" style="text-align: center;">
+                                    <strong>Battery No. {{ options.bat_num }}</strong> &nbsp; &nbsp; &nbsp; 
+                                    <strong>Total No. Ovens:</strong> {{ options.total_ovens }} &nbsp; &nbsp; &nbsp;
+                                    <strong>Total No. of Inoperable Ovens:</strong> &nbsp; &nbsp;{{ data.inop_ovens }} <br>
+                                    <strong>Inoperable Oven Number(s):</strong>&nbsp; &nbsp;{{ data.inop_numbs }}
+                                </td>
                             </tr>
                             <tr>
-                                <th colspan="6">
-                                    Crew:
+                                <td colspan="6" style="text-align: center;">
+                                    <strong>Crew:</strong>
                                     &nbsp; &nbsp;{{ data.crew }}
                                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                                    Battery Foreman:
+                                    <strong>Battery Foreman:</strong>
                                     &nbsp; &nbsp;{{ data.foreman }}
-                                </th>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="height: 25px"></td>

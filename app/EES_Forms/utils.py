@@ -429,6 +429,21 @@ def parse_form17_oven_dict(reading_data, ovens_data):
         readings.update({key2: reading})
     return json.loads(json.dumps(readings)), json.loads(json.dumps(ovens))
 
+def parse_form7_oven_dict(area_json_1, area_json_2, area_json_3, area_json_4):
+    ovens = {}
+    print(area_json_1)
+    ovens.update({key: value for key, value in area_json_1.items() if key != 'readings'})
+    ovens.update({f"1Read_{key}": value for key, value in area_json_1.get('readings', {}).items()})
+    ovens.update({key: value for key, value in area_json_2.items() if key != 'readings'})
+    ovens.update({f"2Read_{key}": value for key, value in area_json_2.get('readings', {}).items()})
+    ovens.update({key: value for key, value in area_json_3.items() if key != 'readings'})
+    ovens.update({f"3Read_{key}": value for key, value in area_json_3.get('readings', {}).items()})
+    ovens.update({key: value for key, value in area_json_4.items() if key != 'readings'})
+    ovens.update({f"4Read_{key}": value for key, value in area_json_4.get('readings', {}).items()})
+
+    return json.loads(json.dumps(ovens))
+
+
 def parse_form5_oven_dict(reading_data, ovens_data):
     ovens = {}
     for key1, oven in ovens_data.items():
@@ -1603,6 +1618,7 @@ def date_change(date):
 
 def time_change(time):
     if isinstance(time, str):
+        print(time)
         time = str(datetime.datetime.strptime(time, "%H:%M"))[11:]
     if time:
         hourNum = int(str(time)[0:2])
@@ -2352,3 +2368,20 @@ def fix_data(fsID):
     for x in modelAllQuery:
         x.formSettings = freq
         x.save()
+
+
+happy = {
+    "area1": {
+        "options": {
+            "1": "Contractor", 
+            "2": "Truck #5", 
+            "3": "Truck #6", 
+            "4": "Truck #7", 
+            "5": "Truck #9", 
+            "6": "Dozer", 
+            "7": "Water Truck"
+        }, 
+        "name": "Truck", 
+        "number_of_options": 7
+    }
+}

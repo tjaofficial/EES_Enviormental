@@ -536,6 +536,14 @@ class form7_model(models.Model):
     def __str__(self):
         return str(self.date)
 
+    def save(self, *args, **kwargs):
+        for i in range(1, 5):  # Covers area_json_1 to area_json_4
+            field_name = f"area_json_{i}"
+            if getattr(self, field_name) in [None, "null", False]:
+                setattr(self, field_name, {})  # Set it to an empty dictionary
+
+        super().save(*args, **kwargs)
+
 class form7_readings_model(models.Model):
     form = models.OneToOneField(
         form7_model,
@@ -616,7 +624,8 @@ class daily_battery_profile_model(models.Model):
 class user_profile_model(models.Model):
     user = models.OneToOneField(
         User,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name='user_profile'
     )
     cert_date = models.DateField(
         auto_now_add=False,

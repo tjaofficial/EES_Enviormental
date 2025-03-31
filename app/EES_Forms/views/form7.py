@@ -2,9 +2,9 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
-from datetime import datetime
-from ..models import form_settings_model
+from ..models import form7_model, form_settings_model
 from ..forms import form7_form
+from ..utils import parse_form7_oven_dict, get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import json
 
@@ -14,7 +14,7 @@ lock = login_required(login_url='Login')
 def form7(request, facility, fsID, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
+    cert_date = request.user.user_profile.cert_date if request.user.user_profile else False
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
     if form_variables['daily_prof'].exists():
         todays_log = form_variables['daily_prof'][0]
@@ -27,102 +27,47 @@ def form7(request, facility, fsID, selector):
     # -----SET RESPONSES TO DECIDING VARIABLES------------
         if search:
             database_form = ''
+            areaFilled1 = [str(x) for x in range(1,5) if getattr(data, f"area_json_{x}")]
         else:
-            areaFilled1 = []
             if existing:
-                initial_areas = {}
-                readsData = {}
-                dataBaseInputList = data._meta.get_fields()
-                for inputData in dataBaseInputList:
-                    if inputData.name[:-1] == 'area_json_':
-                        if getattr(data, inputData.name) != {}:
-                            areaFilled1.append(inputData.name[10:])
-                initial_data = {
-                    'date': data.date.strftime("%Y-%m-%d"),
-                    'observer': data.observer,
-                    'cert_date': data.cert_date.strftime("%Y-%m-%d"),
-                    'comments': data.comments
-                }
-                for x in areaFilled1:
-                    x = str(x)
-                    if x == "1":
-                        area = data.area_json_1
-                    elif x == "2":
-                        area = data.area_json_2
-                    elif x == "3":
-                        area = data.area_json_3
-                    elif x == "4":
-                        area = data.area_json_4
-                    intital_adding = {
-                        x: {
-                            'name': area['selection'],
-                            'startTime': datetime.strptime(area['start_time'], "%H:%M").strftime("%H:%M"),
-                            'stopTime': datetime.strptime(area['stop_time'], "%H:%M").strftime("%H:%M"),
-                            'average': area['average'],
-                        }
-                    }
-                    initial_data_dict = {
-                        x: [
-                            area['readings']['1'], 
-                            area['readings']['2'], 
-                            area['readings']['3'], 
-                            area['readings']['3'], 
-                            area['readings']['4'], 
-                            area['readings']['5'], 
-                            area['readings']['6'],
-                            area['readings']['7'],
-                            area['readings']['8'],
-                            area['readings']['9'],
-                            area['readings']['10'],
-                            area['readings']['11']
-                        ]
-                    }
-                    initial_areas.update(intital_adding)
-                    readsData.update(initial_data_dict)
-                allData = {"main": initial_data, "primary": initial_areas, "readings": readsData}
-                print(allData["readings"])
+                unparsedData = get_initial_data(form7_model, database_form)
+                ovens_data = parse_form7_oven_dict(unparsedData['area_json_1'], unparsedData['area_json_2'], unparsedData['area_json_3'], unparsedData['area_json_4'])
+                initial_data = unparsedData | ovens_data
+                areaFilled1 = [str(x) for x in range(1,5) if getattr(database_form, f"area_json_{x}")]
             else:
                 initial_data = {
                     'date': form_variables['now'].strftime("%Y-%m-%d"),
                     'observer': form_variables['full_name'],
                     'cert_date': cert_date.strftime("%Y-%m-%d"),
                 }
-                areaFilled1 += ["1","2","3","4"]
-                allData = {"main": initial_data, "primary": {}, "readings": {}}
+                areaFilled1 = ["1","2","3","4"]
+            data = form7_form(initial=initial_data, form_settings=form_variables['freq'])
     # -----IF REQUEST.POST------------
         if request.method == "POST":
+            print(request.POST)
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
             copyRequest = request.POST.copy()
             areaFilled = []
             for formKeys in request.POST.keys():
-                if formKeys[:8] == 'areaName':
-                    if request.POST["areaStartTime" + formKeys[8:]] != '':
-                        areaFilled.append(formKeys[8:])
-            for x in areaFilled:
-                x = str(x)
-                areaSetup= {
-                    "selection": request.POST[f"areaName{x}"],
-                    "start_time": request.POST[f"areaStartTime{x}"],
-                    "stop_time": request.POST[f"areaStopTime{x}"],
-                    "readings": {
-                        "1": int(request.POST['area' + x + 'Read0']),
-                        "2": int(request.POST['area' + x + 'Read1']),
-                        "3": int(request.POST['area' + x + 'Read2']),
-                        "4": int(request.POST['area' + x + 'Read3']),
-                        "5": int(request.POST['area' + x + 'Read4']),
-                        "6": int(request.POST['area' + x + 'Read5']),
-                        "7": int(request.POST['area' + x + 'Read6']),
-                        "8": int(request.POST['area' + x + 'Read7']),
-                        "9": int(request.POST['area' + x + 'Read8']),
-                        "10": int(request.POST['area' + x + 'Read9']),
-                        "11": int(request.POST['area' + x + 'Read10']),
-                        "12": int(request.POST['area' + x + 'Read11']),
-                    },
-                    "average": int(request.POST['areaAverage' + x])
-                }
-                areaSetup = json.loads(json.dumps(areaSetup))
-                copyRequest[f'area_json_{x}'] = areaSetup
+                areaNumb = formKeys[9:]
+                areaKey = formKeys[:8]
 
+                if areaKey == 'areaUsed':
+                    if request.POST[formKeys] == "true":
+                        areaFilled.append(areaNumb)
+                        areaSetup = {
+                            "selection": request.POST[f"{areaNumb}_selection"],
+                            "start": request.POST[f"{areaNumb}_start"],
+                            "stop": request.POST[f"{areaNumb}_stop"],
+                            "readings": {
+                                **{f"{i}": int(request.POST[f"{areaNumb}Read_{i}"]) for i in range(1,13)},
+                            },
+                            "average": float(request.POST[f'{areaNumb}_average'])
+                        }
+                        areaSetup = json.loads(json.dumps(areaSetup))
+                        copyRequest[f'area_json_{areaNumb}'] = areaSetup
+                    else:
+                        copyRequest[f'area_json_{areaNumb}'] = dict()
             try:
                 form_settings = form_variables['freq']
             except form_settings_model.DoesNotExist:
@@ -151,6 +96,6 @@ def form7(request, facility, fsID, selector):
         'notifs': form_variables['notifs'],
         'freq': form_variables['freq'],
         'existing': existing,
-        'allData': allData,
+        'data': data,
         "areaFilled1": areaFilled1,
     })

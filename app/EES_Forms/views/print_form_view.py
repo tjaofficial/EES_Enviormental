@@ -12,6 +12,7 @@ from reportlab.pdfgen import canvas # type: ignore
 from ..models import issues_model, user_profile_model,form_settings_model, the_packets_model
 from ..utils import date_change, time_change
 import io
+from django.contrib import messages # type: ignore
 import datetime
 import calendar
 import time
@@ -48,18 +49,21 @@ class PageNumCanvas(canvas.Canvas):
       
 @lock
 def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
-    print(type)
-    print(formGroup)
-    userProfile = user_profile_model.objects.get(user=request.user)
+    print(f"This a '{type}' form")
+    print(f"Frequency: {formGroup}")
+    startingDayNumb = int(request.user.user_profile.company.settings.weekly_start_day)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+
     packetBeingPrinted = ''
     if type == 'single':
         if formGroup in ['Daily', 'Weekly', 'Monthly']:
-            formID_Label = formIdentity.split('-')
-            formID = int(formID_Label[0])
-            label = formID_Label[1]
-            formSettingsEntry = formSettingsQuery.get(id=int(formID))
+            fsID, label = map(lambda x: int(x) if x.isdigit() else x, formIdentity.split('-'))
+            formSettingsEntry = formSettingsQuery.get(id=fsID)
             formsBeingUsed = [(label,formSettingsEntry)]
+
+
+
+
     elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
@@ -84,51 +88,50 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
         formsBeingUsed = []
     elif formGroup == 'waste':
         formsBeingUsed = []
-    print("The fsID's being used are listed below:")
-    print(formsBeingUsed)
+    print(f"The fsID's being used are listed: {formsBeingUsed}")
     print("_________________________________")
-    print("The same list is sorted by label below:")
-    formsBeingUsed = sorted(
-        formsBeingUsed,
-        key=lambda x: x[0]
-    )
-    print(formsBeingUsed)
+    formsBeingUsed = sorted(formsBeingUsed, key=lambda x: x[0])
+    print(f"The same list is sorted by PacketID: {formsBeingUsed}")
     print("_________________________________")
     elems = []
     for fsIDPackage in formsBeingUsed:
-        print("Now running process for form: " + str(fsIDPackage[1].id))
         fsEntry = fsIDPackage[1]
         packetID = fsIDPackage[0]
         formID = int(fsEntry.formChoice.form)
         formInformation = fsEntry.formChoice
         formSettings = fsEntry.settings['settings']
         formModelName = formInformation.link + '_model'
+        print(f"Now running process for form {formID} with fsID {fsIDPackage[1].id}")
         if type == 'single':
-            if packetID == 'none':
-                formLabel = ''
-            elif packetID == 'fsID':
-                formLabel = fsEntry.id
-            else:
-                formLabel = fsEntry.settings['packets'][packetID]
+            formLabel = fsEntry.settings['packets'].get(str(packetID), str(fsEntry.id))
+            if not formLabel:
+                formLabel = fsEntry.id if packetID == "fsID" else False
+            
+            # if packetID == 'none':
+            #     formLabel = ''
+            # elif packetID == 'fsID':
+            #     formLabel = fsEntry.id
+            # else:
         else:
             formLabel = packetID
-        print(formLabel)
+        print(f"The label for this instance of form {formID} is: {formLabel}")
         try:
             formModel = apps.get_model('EES_Forms', formModelName)
-            formModel = formModel.objects.filter(facilityChoice__facility_name=facility)
-            print("Pulling all submitted data for " + facility + " from "+ formModelName)
+            formModel = formModel.objects.filter(formSettings__facilityChoice__facility_name=facility)
+            print(f"Pulling all submitted data for {formModelName} from {facility}")
             print('')
             print(formModel)
             print('')
         except:
             if formID == 23:
                 formModel = apps.get_model('EES_Forms', 'form22_model')
-                formModel = formModel.objects.filter(facilityChoice__facility_name=facility)
+                formModel = formModel.objects.filter(formSettings__facilityChoice__facility_name=facility)
                 print('Using form 22 data to create form 23.')
                 print('')  
                 print("Pulling all submitted data for " + facility + " from "+ 'form22_model')
             else:
                 print("Could not find a model with the name " + formModelName + " for formID " + str(formID))
+                messages.error(request,"ERROR: ID-11850006. Contact Support Team.")
                 continue
         try:
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
@@ -161,7 +164,6 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             formDateParsed = datetime.datetime.strptime(formDate, "%Y-%m-%d").date()
             endDate = formDateParsed
             if type not in ['single', 'coke_battery']:
-                startingDayNumb = int(userProfile.company.settings.weekly_start_day)
                 amountOfDaysToStartingDay = (startingDayNumb-formDateParsed.weekday())
                 if formDateParsed.weekday() < startingDayNumb:
                     amountOfDaysToStartingDay = amountOfDaysToStartingDay-7
@@ -169,48 +171,24 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                 endDate = startDate + datetime.timedelta(days=6)
             else:   
                 startDate = formDateParsed
-        print("Filtering submissions starting on " + str(startDate) + " and ending on " + str(endDate))
-        formsAndData = {}
+        print(f"Filtering submissions starting on {startDate} and ending on {endDate}")
         ## ----- ADD NEW FORM DATE SELECTIONS BELOEW ----- ##
-        for submittedForm in formModel:
-            listOfPulledForms = [submittedForm]
-            try:
-                submittedFormDate = submittedForm.date
-            except:
-                submittedFormDate = submittedForm.week_start
-            if int(formID) in (17,18,19,22):
-                formSecondaryModelName = formInformation.link + '_readings_model'
-                try:
-                    formSecondaryModel = apps.get_model('EES_Forms', formSecondaryModelName)
-                    try:
-                        formSecondaryModel = formSecondaryModel.objects.get(form__facilityChoice__facility_name=facility, form__date=str(submittedFormDate))
-                    except:
-                        formSecondaryModel = formSecondaryModel.objects.get(form__facilityChoice__facility_name=facility, form__week_start=submittedFormDate)
-                    listOfPulledForms.append(formSecondaryModel)
-                except:
-                    print("Could not find a secondary model with the name " + formSecondaryModelName + " for formID " + str(formID))
-                    continue
-            if startDate <= submittedFormDate <= endDate:
-                formsAndData[str(submittedFormDate)] = listOfPulledForms
-                if formGroup == 'single':
-                    break
-        print("Found " + str(len(formsAndData)) + " form(s) within the specified time frame.")
+        try:
+            formsAndData = formModel.filter(date__range=(startDate, endDate))
+        except:
+            formsAndData = formModel.filter(week_start__range=(startDate, endDate))
+        
+        print(f"Found {len(formsAndData)} form(s) within the specified time frame.")
         print('')
         if len(formsAndData) == 0:
             print("...Moving to next form")
             print("_________________________________")
             continue
-        for listForm in formsAndData:
-            formData = formsAndData[listForm][0]
-            formSecondaryData = False
-            if len(formsAndData[listForm]) == 2:
-                doubleDB = True
-                print(str(formID) + ' is a double database...')
-                formSecondaryData = formsAndData[listForm][1]
+        for formData in formsAndData:
             styles = getSampleStyleSheet()
             if formGroup == 'single':
-                fileName = 'form' + str(formLabel) + '_' + formDate + ".pdf"
-                documentTitle = 'form' + str(formLabel) + '_' + formDate
+                fileName = f"form{formLabel}_{formDate}.pdf"
+                documentTitle = f"form{formLabel}_{formDate}"
             elif formGroup == 'coke_battery':
                 fileName = "form_1_packet.pdf"
                 documentTitle = "form_1_packet"
@@ -223,16 +201,8 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
                     fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
                     documentTitle = str(packetBeingPrinted.name)
             title = formInformation.header
-            if 'custom_name' in formSettings:
-                if formSettings['custom_name']:
-                    title += ' - ' + formSettings['custom_name']
-                else:
-                    title += ' - ' + formInformation.title
-            else:
-                title += ' - ' + formInformation.title
-            
-            if packetID != 'none':
-                title += ' - Form (' + str(formLabel) + ')'
+            title += f" - {formSettings['custom_name']}" if 'custom_name' in formSettings and formSettings['custom_name'] else f" - {formInformation.title}"
+            title += f" - Form ({formLabel if formLabel else 'none'})"
             
             subTitle = 'Facility Name: ' + facility
             #always the same on all A-forms
@@ -261,17 +231,17 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             if formID == 9:
                 tableData, tableColWidths, style = pdf_template_9(formData, title, subTitle)
             if formID == 17:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_17(formData, formSecondaryData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_17(formData, title, subTitle, formInformation)
             if formID == 18:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_18(formData, formSecondaryData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_18(formData, title, subTitle, formInformation)
             if formID == 19:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_19(formData, formSecondaryData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_19(formData, title, subTitle, formInformation)
             if formID == 20:
                 tableData, tableColWidths, style = pdf_template_20(formData, title, subTitle)
             if formID == 21:
                 tableData, tableColWidths, style = pdf_template_21(formData, title, subTitle)
             if formID == 22:
-                tableData, tableColWidths, style = pdf_template_22(formData, formSecondaryData, title, subTitle)
+                tableData, tableColWidths, style = pdf_template_22(formData, title, subTitle)
             if formID == 23:
                 tableData, tableColWidths, style = pdf_template_23(formDate, facility)
             if formID == 24:

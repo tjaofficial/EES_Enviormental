@@ -124,6 +124,6 @@
 .areaTableCont{
     display: flex; 
     justify-content: center; 
-    height: 17rem;
+    padding: 0px 10px 35px 10px;
     width: 100%;
 }

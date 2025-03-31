@@ -197,8 +197,12 @@ def form7_issue_check(savedForm, form_variables, request, selector, facility, da
     issueFound = False
     compliance = False
     #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
-    if savedForm.area_json_1['average'] > 5 or savedForm.area_json_2['average'] > 5 or savedForm.comments not in {'-', 'n/a', 'N/A'}:
-        issueFound = True
+    for areaNumb in range(1,5):
+        areaJson = getattr(savedForm, f"area_json_{areaNumb}", False)
+        if areaJson:
+            issueFound = True if areaJson['average'] > 5 else False
+              
+    issueFound = True if savedForm.comments not in {'-', 'n/a', 'N/A'} else False
     #--------^^^^^^^ INSERT ANY CHECKS HERE ^^^^^^^^----------------
     if issueFound:
         if finder:

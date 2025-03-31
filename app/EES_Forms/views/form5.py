@@ -15,7 +15,7 @@ def form5(request, facility, fsID, selector):
     variables = {}
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
+    cert_date = request.user.user_profile.cert_date if request.user.user_profile else False
     exist_canvas = ''
     # Weather API Pull
     weather = weatherDict(form_variables['freq'].facilityChoice.city)
@@ -129,4 +129,4 @@ def form5(request, facility, fsID, selector):
         'fsID': fsID,
         "options": form_variables['freq'].facilityChoice
     })
-    return render(request, "shared/forms/daily/formA5.html", variables)
+    return render(request, "shared/forms/daily/form5.html", variables)

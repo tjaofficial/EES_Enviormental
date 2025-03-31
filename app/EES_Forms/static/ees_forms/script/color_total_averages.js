@@ -10,13 +10,13 @@ function get_average(opac_id, total_id, amount) {
     var the_total = 0;
     for (let i=0; i < list.length; i++){
         const opacities = list[i];
-        const the_opac  = document.getElementById(opac_id + opacities).value;
+        const the_opac  = document.getElementById("id_" + opac_id + (opacities+1)).value;
         the_total += parseInt(the_opac);
     }
     if (parseInt(amount) == 12 || parseInt(amount) == 11) {
         const theAverage = (the_total / 12).toFixed(3);
-        document.getElementById(total_id).placeholder = theAverage;
-        const id_param = document.getElementById(total_id).id;
+        document.getElementById("id_" + total_id).placeholder = theAverage;
+        const id_param = document.getElementById("id_" + total_id).id;
         stop_light(theAverage, id_param);
     } else if (parseInt(amount) == 24) {
         const theAverage = (the_total / 24).toFixed(3);
@@ -43,16 +43,16 @@ function stop_light(average, id_param) {
  FORM C - COAL FIELD
 *************/
 function area1_average(){
-    get_average('area1Read', 'areaAverage1', 11);
+    get_average('1Read_', '1_average', 11);
 }
 function area2_average(){
-    get_average('area2Read', 'areaAverage2', 11);
+    get_average('2Read_', '2_average', 11);
 }
 function area3_average(){
-    get_average('area3Read', 'areaAverage3', 11);
+    get_average('3Read_', '3_average', 11);
 }
 function area4_average(){
-    get_average('area4Read', 'areaAverage4', 11);
+    get_average('4Read_', '4_average', 11);
 }
 if (formName == 7) {
     console.log("Test 2")

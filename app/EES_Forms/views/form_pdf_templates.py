@@ -830,7 +830,7 @@ def pdf_template_6(primaryData, title, subTitle, formInformation):
     return tableData, tableColWidths, style
 
 def pdf_template_7(primaryData, title, subTitle):
-    # formSettings = primaryData.settings['settings']
+    formSettings = primaryData.formSettings.settings['settings']
     date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(primaryData.date) + '</para>', styles['Normal'])
     tableData = [
         [title],
@@ -853,10 +853,11 @@ def pdf_template_7(primaryData, title, subTitle):
     for areaDict in areaData:
         if areaDict:
             tableCount += 1
-            startStop = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(areaDict['start_time']) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(areaDict['stop_time'])+ '</para>', styles['Normal'])
+            areaName = formSettings[f"area{tableCount+1}"]['name']
+            startStop = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(areaDict['start']) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(areaDict['stop'])+ '</para>', styles['Normal'])
             readings = areaDict['readings']
             areaBuild = [
-                ['',Paragraph('<para align=left><b>Truck:</b> ' + areaDict['selection'] + '</para>', styles['Normal']),'',startStop,'','','',''],
+                ['',Paragraph('<para align=left><b>' + areaName + ':</b> ' + areaDict['selection'] + '</para>', styles['Normal']),'',startStop,'','','',''],
                 ['','MIN/SEC','0','15','30','45','',''],
                 ['','0',readings['1'],readings['2'],readings['3'],readings['4'],'',''],
                 ['','1',readings['5'],readings['6'],readings['7'],readings['8'],'',''],

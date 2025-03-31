@@ -7,29 +7,45 @@ function zero_option_name(elem, key, name){
 }
 
 function add_areas(areaNum) {
-    const areaCont = document.getElementById("areaCont" + areaNum)
+    const areaCont = document.getElementById("areaCont" + areaNum);
+    const areaUsed = document.getElementById(`areaUsed_${areaNum}`);
+    areaUsed.value = "true"
     areaCont.style.display = 'block';
-    for (let x=0;x<12;x+=1){
-        document.getElementById('area' + areaNum + 'Read' + x).required = true;
+    for (let x=1;x<13;x++){
+        document.getElementById("id_" + areaNum + 'Read_' + x).required = true;
     }
-    document.getElementById('areaStartTime' + areaNum).required = true;
-    document.getElementById('areaStopTime' + areaNum).required = true;
-    document.getElementById('areaAverage' + areaNum).required = true;
+    document.getElementById("id_" + areaNum + '_start').required = true;
+    document.getElementById("id_" + areaNum + '_stop').required = true;
+    document.getElementById("id_" + areaNum + '_average').required = true;
     document.getElementById('areaLabel' + areaNum).style.display = 'none';
-    document.getElementById('areaName' + areaNum).required = true;
+    var selectElement = document.getElementById("id_" + areaNum + '_selection');
+    if (selectElement && selectElement.options.length === 0){
+        var hiddenInput = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.id = selectElement.id;
+        hiddenInput.name = selectElement.name;
+        hiddenInput.value = "";
+        hiddenInput.required = true;
+        
+        selectElement.parentNode.replaceChild(hiddenInput, selectElement)
+    }
 }
 
 function remove_area(areaNum) {
     const areaCont = document.getElementById("areaCont" + areaNum)
+    const areaUsed = document.getElementById(`areaUsed_${areaNum}`);
+    areaUsed.value = "false"
     areaCont.style.display = 'none';
-    for (let x=0;x<12;x+=1){
-        document.getElementById('area' + areaNum + 'Read' + x).required = false;
+    if (selector == "form"){
+        for (let x=1;x<13;x++){
+            document.getElementById("id_" + areaNum + 'Read_' + x).required = false;
+        }
+        document.getElementById("id_" + areaNum + '_start').required = false;
+        document.getElementById("id_" + areaNum + '_stop').required = false;
+        document.getElementById("id_" + areaNum + '_average').required = false;
+        document.getElementById('areaLabel' + areaNum).style.display = 'block';
+        document.getElementById("id_" + areaNum + '_selection').required = false;
     }
-    document.getElementById('areaStartTime' + areaNum).required = false;
-    document.getElementById('areaStopTime' + areaNum).required = false;
-    document.getElementById('areaAverage' + areaNum).required = false;
-    document.getElementById('areaLabel' + areaNum).style.display = 'block';
-    document.getElementById('areaName' + areaNum).required = false;
 }
 
 function startupDisplay() {
@@ -41,6 +57,18 @@ function startupDisplay() {
     for (let x=1; x<=4; x++){
         if (!areasList.includes(String(x))){
             theList.push(x)
+        } else {
+            var selectElement = document.getElementById("id_" + x + '_selection');
+            if (selectElement && selectElement.options.length === 0){
+                var hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.id = selectElement.id;
+                hiddenInput.name = selectElement.name;
+                hiddenInput.value = "";
+                hiddenInput.required = true;
+                
+                selectElement.parentNode.replaceChild(hiddenInput, selectElement)
+            }
         }
     }
     if (theList.length != 0){

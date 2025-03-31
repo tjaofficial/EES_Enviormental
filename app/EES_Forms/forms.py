@@ -13,32 +13,116 @@ now = datetime.datetime.now()
 class form7_form(ModelForm):
     class Meta:
         model = form7_model
-        fields = (
-            'date', 
-            'observer', 
-            'cert_date', 
-            'comments',
-            'area_json_1',
-            'area_json_2',
-            'area_json_3',
-            'area_json_4'
-        )
-        
+        fields = ('__all__')
         widgets = {
             'date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;', "maxlength": "30", "required": True}),
             'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'comments': Textarea(attrs={'rows': 7, 'cols': 125}),
+            'comments': Textarea(attrs={'rows': 7, 'cols': 125, "maxlength": "30", "required": True}),
         }
+
+    DEFAULT_READING_FIELDS = {
+        **{f"1Read_{i}": "" for i in range(1,13)},
+        **{f"2Read_{i}": "" for i in range(1,13)},
+        **{f"3Read_{i}": "" for i in range(1,13)},
+        **{f"4Read_{i}": "" for i in range(1,13)},
+        **{f"{i}_start": "" for i in range(1,5)},
+        **{f"{i}_stop": "" for i in range(1,5)},
+        **{f"{i}_selection": "" for i in range(1,5)},
+        **{f"{i}_average": "" for i in range(1,5)}
+    }
+    
+    JSON_WIDGET_STYLES = {
+        **{f"1Read_{i}": forms.NumberInput(attrs={'oninput': f"area1_average();", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"2Read_{i}": forms.NumberInput(attrs={'oninput': f"area2_average(); autoFillZeros(2Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"3Read_{i}": forms.NumberInput(attrs={'oninput': f"area3_average(); autoFillZeros(3Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"4Read_{i}": forms.NumberInput(attrs={'oninput': f"area4_average(); autoFillZeros(4Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"{i}_start": forms.TimeInput(attrs={'type': 'time', "oninput": f"formC_timeCheck_area{i}()", "class": "input", 'style': 'width: 95px;'}) for i in range(1,5)},
+        **{f"{i}_stop": forms.TimeInput(attrs={'type': 'time', "oninput": f"formC_timeCheck_area{i}()", "class": "input", 'style': 'width: 95px;'}) for i in range(1,5)},
+        **{f"{i}_selection": forms.Select(attrs={"class": "input"}) for i in range(1,5)},
+        **{f"{i}_average": forms.NumberInput(attrs={'type': 'number', "oninput": f"area{i}_average()", "class": "input", 'style': 'width: 95px;', "maxlength": "3", "required": True}) for i in range(1,5)},
+    }
     
     def __init__(self, *args, **kwargs):
         form_settings = kwargs.pop("form_settings", None)
-
         if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
-        """ Extract JSON values and create dynamic form fields with the correct styles. """
+            raise ValueError("Error: `form_settings` must be provided when initializing form7_form.")
+
+        initial = kwargs.get("initial", {})
+        instance = kwargs.get("instance")
+
+        # Determine the data source: use instance if it exists, otherwise use initial
+        data_source = instance if instance else SimpleNamespace(**initial)
+
+        # Extract facility settings from form_settings
+        settings = form_settings.settings.get("settings", {}) if hasattr(form_settings, "settings") else {}
+        # Load area_name options from settings JSON
+        num_of_areas = settings.get("number_of_areas", 0)
+        print(f"These are the settings {num_of_areas}")
+        area_choices_dict = {}
+        for i in range(1, num_of_areas + 1):
+            area_key = f"area{i}"
+            if area_key in settings:
+                areaData = settings[area_key]
+                if areaData['number_of_options'] > 0:
+                    emptyChoice = [("", "Select Choice")]
+                    selectionList = emptyChoice + [(areaName, areaName) for areaKey, areaName in areaData['options'].items()]
+                else:
+                    selectionList = False
+                area_choices_dict[f"area_choices_{i}"] = selectionList
+            else:
+                print("No Area Data")
+        print(f"These are the choices: {area_choices_dict}")
         super().__init__(*args, **kwargs)
 
+
+        json_data_1 = getattr(data_source, "area_json_1", {}) or {}
+        json_data_2 = getattr(data_source, "area_json_2", {}) or {}
+        json_data_3 = getattr(data_source, "area_json_3", {}) or {}
+        json_data_4 = getattr(data_source, "area_json_4", {}) or {}
+
+        general_fields = [
+            "date", "estab", "county", "estab_no", "equip_loc",
+            "district", "city", "observer", "cert_date"
+        ]
+
+        for field in general_fields:
+            if field in self.fields:  # Ensure the field exists in the form before setting
+                self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
+
+        for i in range(1, 13):
+            for x in range(1,5):
+                field_name = f"{x}Read_{i}"
+                widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
+                self.fields[field_name] = forms.IntegerField(
+                    initial=json_data_1.get("readings", {}).get(field_name, None),
+                    required=False,
+                    widget=widget
+                )
+        
+        for i in range(1,5):
+            areaSelectChoices = area_choices_dict[f"area_choices_{i}"] if area_choices_dict[f"area_choices_{i}"] else []
+            self.fields[f"{i}_selection"] = forms.ChoiceField(
+                choices=areaSelectChoices,
+                initial=json_data_1.get(f"{i}_selection", ""),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_selection")
+            )
+            self.fields[f"{i}_start"] = forms.TimeField(
+                initial=json_data_1.get(f"{i}_start"),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_start")
+            )
+            self.fields[f"{i}_stop"] = forms.TimeField(
+                initial=json_data_1.get(f"{i}_stop", None),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_stop")
+            )
+            self.fields[f"{i}_average"] = forms.FloatField(
+                initial=json_data_1.get(f"{i}_average", None),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_average")
+            )
 
 class FormCReadForm(ModelForm):
     class Meta:

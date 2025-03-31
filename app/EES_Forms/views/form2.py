@@ -74,7 +74,7 @@ def form2(request, facility, fsID, selector):
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
-    return render(request, "shared/forms/daily/formA2.html", {
+    return render(request, "shared/forms/daily/form2.html", {
         'picker': form_variables['picker'], 
         'options': form_variables['freq'].facilityChoice, 
         "search": search, 

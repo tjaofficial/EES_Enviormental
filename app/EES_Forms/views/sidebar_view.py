@@ -222,7 +222,6 @@ def archive_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = bat_info_model.objects.all()
-    profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     archiveForm_query = request.GET.get('archiveFormID')
     archiveFormLabel_query = request.GET.get('archiveFormLabel')
@@ -250,7 +249,7 @@ def archive_view(request, facility):
                     break
             if idSearchData:
                 link = str(idSearchData.formChoice.link) + '_model'
-                chk_database = apps.get_model('EES_Forms', link).objects.filter(facilityChoice__facility_name=facility)
+                chk_database = apps.get_model('EES_Forms', link).objects.filter(formSettings__facilityChoice__facility_name=facility)
                 for item in chk_database:
                     fsList.append((item, idSearchData))
             return fsList
@@ -277,7 +276,7 @@ def archive_view(request, facility):
                             modelsList.append((model, fsSort))
             fsList = []
             for item in modelsList:
-                chk_database = item[0].objects.filter(facilityChoice__facility_name=facility)
+                chk_database = item[0].objects.filter(formSettings__facilityChoice__facility_name=facility)
                 for iForm in chk_database:
                     duple = (iForm, item[1].formChoice)
                     if duple not in fsList:
@@ -391,8 +390,7 @@ def archive_view(request, facility):
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
         'options': options, 
-        'facility': facility, 
-        'profile': profile, 
+        'facility': facility,
         'client': client, 
         "supervisor": supervisor, 
         "unlock": unlock, 

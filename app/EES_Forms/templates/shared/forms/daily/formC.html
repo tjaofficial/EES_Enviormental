@@ -22,7 +22,6 @@
                 <div class="paper_fitter" style="padding: 3rem;">
                     {% include "shared/components/backArrow.html" with destination="form" %}
                     <table style="border-collapse: collapse; margin: auto;">
-                        <!-- Header Information -->
                         <tr>
                             <th id="boxTitle" colspan="6" style="text-align: center;">
                                 {% include "shared/components/formHeader.html" with main="Fugitive Dust Inspection Form"%}
@@ -38,21 +37,16 @@
                         </tr> 
                         <tr>
                             <th colspan="6" style="text-align: center;">
-                                Date: 
-                                {% if selector == 'form' %}
-                                    <input type="date" name="date" value="{{ allData.main.date }}" class="input" required id="id_date">
-                                {% else %}
-                                    {{ allData.main.date }}
-                                {% endif %}
+                                Date: {{data.date}}
                             </th>
                         </tr>
                         <tr>
                             <td style="height: 25px" > </td>
                         </tr> 
-                        <!--   ^^^^^^^^Header Information  ^^^^^^ -->
-                        <!--   Header Information -->
                         <tr>
-                            <th style="text-decoration: underline; text-align: left;" colspan="3">Observe one vehicle per day traveling on Coal Field Road or in the coal field</th>
+                            <th style="text-decoration: underline; text-align: left;" colspan="3">
+                                Observe one vehicle per day traveling on Coal Field Road or in the coal field
+                            </th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -60,7 +54,9 @@
                             <th></th>
                         </tr>
                         <tr>
-                            <th style="text-decoration: underline; text-align: left;" colspan="2">Observe one coal pile per day</th>
+                            <th style="text-decoration: underline; text-align: left;" colspan="2">
+                                Observe one coal pile per day
+                            </th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -79,7 +75,85 @@
                             <td style="height: 40px"></td>
                         </tr> 
                     </table>
-                        {% for keys, cats in freq.settings.settings.items %}
+                    {% for keys, cats in freq.settings.settings.items %}
+                        {% with sliced_key=keys|slice:'4:' %}
+                            {% if keys|slice:":4" == 'area' %}
+                                <section class="areaCont">
+                                    <div style="padding: 15px 22px; {% if search %}display:none;{% else %}{% if sliced_key in areaFilled1 %}display:none;{% else %}display:block{% endif %}{% endif %}" id="areaLabel{{sliced_key}}" onclick="add_areas({{sliced_key}})">
+                                        {{cats.name}} (Click to add)
+                                    </div>
+                                    <div id="areaCont{{sliced_key}}" style="display: block;">
+                                        <div style="padding: 15px 22px; position: relative;">
+                                            <input type="hidden" name="areaUsed_{{sliced_key}}" id="areaUsed_{{sliced_key}}" value="true">
+                                            {{cats.name}}: {% get_area_attr data sliced_key "selection" %}
+                                            <span style="margin-left: 30px;">
+                                                Start Time: {% get_area_attr data sliced_key "start" %}
+                                            </span>
+                                            <span style="margin-left: 30px;">
+                                                End Time: {% get_area_attr data sliced_key "stop" %}
+                                            </span>
+                                            <span class="truck_popup_class" id="area{{sliced_key}}_timePopup">Please Change Time</span>
+                                            {% if selector == 'form' %}
+                                                <span style="float: right;" onclick="remove_area({{sliced_key}})" class='remove_link'>remove</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="areaTableCont">
+                                            <table class="areaTable">
+                                                <tr>
+                                                    <td id="boxc2" style="font-size:13px;">MIN/SEC</td>
+                                                    <td id="boxc1">0</td>
+                                                    <td id="boxc1">15</td>
+                                                    <td id="boxc1">30</td>
+                                                    <td id="boxc1">45</td>
+                                                </tr>
+                                                <tr>
+                                                    <td id="boxc2">0</td>
+                                                    {% comment %} <td id="boxc1">
+                                                        {{data.1Read_1}}
+                                                        {% if selector == 'form' %}
+                                                            <input {% if existing %}value="{% for key, readingsData in allData.readings.items %}{% if key == sliced_key %}{{allData.readings|get_item:sliced_key|get_list_item:0}}{% endif %}{% endfor %}"{% endif %} type="text" name="area{{sliced_key}}Read0" id="area{{sliced_key}}Read0" oninput="area{{sliced_key}}_average(); autoFillZeros(area{{sliced_key}}Read0.id);" class="input" maxlength="3" required>
+                                                        {% else %}
+                                                            {{allData.readings|get_item:sliced_key|get_list_item:0}}
+                                                        {% endif %}  
+                                                    </td> {% endcomment %}
+                                                    {% with base="eleven" %}
+                                                        {% for i in base|custom_range:"13" %}
+                                                            <td id="boxc1">
+                                                                {% get_reading_input data sliced_key i %}
+                                                            </td>
+                                                            {% if i == 4 %}
+                                                                </tr>
+                                                                <tr>
+                                                                    <td id="boxc2">1</td>
+                                                            {% elif i == 8 %}
+                                                                </tr>
+                                                                <tr>
+                                                                    <td id="boxc2">2</td>
+                                                            {% elif i == 12 %}
+                                                                </tr>
+                                                            {% endif %} 
+                                                        {% endfor %}
+                                                    {% endwith %}
+                                                <tr>
+                                                    <td colspan="4" class="boxc3">
+                                                        3-minute Average Opacity (sum of the 12 readings above/12):
+                                                    </td>
+                                                    <td id="boxc1">
+                                                        {% get_area_attr data sliced_key "average" %}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+
+
+
+                    {% comment %} </table> {% endcomment %}
+                        {% comment %} {% for keys, cats in freq.settings.settings.items %}
                             {% with sliced_key=keys|slice:'4:' %}
                                 {% if keys|slice:":4" == 'area' %}
                                     {% if sliced_key in areaFilled1 %}
@@ -87,7 +161,7 @@
                                             <div style="padding: 15px 22px; display:none;" id="areaLabel{{sliced_key}}" onclick="add_areas({{sliced_key}})">{{cats.name}} (Click to add)</div>
                                             <div id="areaCont{{sliced_key}}" style="display: block;">    
                                                 <div style="padding: 15px 22px; position: relative;">
-                                                    {{cats.name}}: 
+                                                    {{cats.name}}:
                                                     {% if selector == 'form' %}
                                                         {% if cats.number_of_options != 0 %}
                                                         <select id="areaName{{sliced_key}}" name="areaName{{sliced_key}}" style="width: 100px;" required>
@@ -96,7 +170,7 @@
                                                                 <option 
                                                                     value="{{ops}}"
                                                                     {% if existing %}
-                                                                        selected="{% if allData.primary|get_item:sliced_key|get_category:'name' == ops %}true{% endif %}"
+                                                                        selected="{% if data|get_category:'name' == ops %}true{% endif %}"
                                                                     {% endif %}
                                                                 >{{ops}}</option>
                                                             {% endfor %}
@@ -116,7 +190,7 @@
                                                         {% endif %}
                                                     </span>
                                                     <span style="margin-left: 30px;">
-                                                        End Time: 
+                                                        End Time: {{data|get_attr:"1Read_1"}}
                                                         {% if selector == 'form' %}
                                                             <input {% if existing %}value="{% for key, primaryData in allData.primary.items %}{% if key == sliced_key %}{{allData.primary|get_item:sliced_key|get_category:'stopTime'}}{% endif %}{% endfor %}"{% endif %} type="time" name="areaStopTime{{sliced_key}}" id="areaStopTime{{sliced_key}}" oninput="formC_timeCheck_area{{sliced_key}}()" class="input" required>
                                                         {% else %}
@@ -140,14 +214,15 @@
                                                         <tr>
                                                             <td id="boxc2">0</td>
                                                             <td id="boxc1">
+                                                                {{data.1Read_1}}
                                                                 {% if selector == 'form' %}
                                                                     <input {% if existing %}value="{% for key, readingsData in allData.readings.items %}{% if key == sliced_key %}{{allData.readings|get_item:sliced_key|get_list_item:0}}{% endif %}{% endfor %}"{% endif %} type="text" name="area{{sliced_key}}Read0" id="area{{sliced_key}}Read0" oninput="area{{sliced_key}}_average(); autoFillZeros(area{{sliced_key}}Read0.id);" class="input" maxlength="3" required>
                                                                 {% else %}
                                                                     {{allData.readings|get_item:sliced_key|get_list_item:0}}
                                                                 {% endif %}  
                                                             </td>
-                                                            {% with range="eleven" %}
-                                                                {% for i in range|rangeFrom1 %}
+                                                            {% with base="eleven" %}
+                                                                {% for i in base|custom_range:"13" %}
                                                                     <td id="boxc1">
                                                                         {% if selector == 'form' %}
                                                                             <input 
@@ -220,7 +295,7 @@
                                                             {% endif %}
                                                         {% endif %}
                                                         <span style="margin-left: 30px;">
-                                                            Start Time: <input type="time" name="areaStartTime{{sliced_key}}" id="areaStartTime{{sliced_key}}" oninput='formC_timeCheck_area{{sliced_key}}(); zero_option_name(this,{{sliced_key}})' class="input" required>
+                                                            Start Time: hello{{data.2_start}}<input type="time" name="areaStartTime{{sliced_key}}" id="areaStartTime{{sliced_key}}" oninput='formC_timeCheck_area{{sliced_key}}(); zero_option_name(this,{{sliced_key}})' class="input" required>
                                                         </span>
                                                         <span style="margin-left: 30px;">
                                                             End Time: <input type="time" name="areaStopTime{{sliced_key}}" id="areaStopTime{{sliced_key}}" oninput="formC_timeCheck_area{{sliced_key}}()" class="input" required>
@@ -239,31 +314,21 @@
                                                             </tr>
                                                             <tr>
                                                                 <td id="boxc2">0</td>
-                                                                <td id="boxc1">
-                                                                    <input type="text" name="area{{sliced_key}}Read0" id="area{{sliced_key}}Read0" oninput="area{{sliced_key}}_average(); autoFillZeros(area{{sliced_key}}Read0.id);" class="input" maxlength="3" required>
-                                                                </td>
-                                                                {% with range="eleven" %}
-                                                                    {% for i in range|rangeFrom1 %}
+                                                                <td id="boxc1">{{data.1Read_1}}</td>
+                                                                {% with base="thirteen" %}
+                                                                    {% for i in base|custom_range:"13" %}
                                                                         <td id="boxc1">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                name="area{{sliced_key}}Read{{i}}" 
-                                                                                id="area{{sliced_key}}Read{{i}}" 
-                                                                                oninput="area{{sliced_key}}_average()" 
-                                                                                class="input" 
-                                                                                maxlength="3" 
-                                                                                required=""
-                                                                            >
+                                                                            {{ data|area1_json:i }}
                                                                         </td>
-                                                                        {% if i == 3 %}
+                                                                        {% if i == 4 %}
                                                                             </tr>
                                                                             <tr>
                                                                                 <td id="boxc2">1</td>
-                                                                        {% elif i == 7 %}
+                                                                        {% elif i == 8 %}
                                                                             </tr>
                                                                             <tr>
                                                                                 <td id="boxc2">2</td>
-                                                                        {% elif i == 11 %}
+                                                                        {% elif i == 12 %}
                                                                             </tr>
                                                                         {% endif %} 
                                                                     {% endfor %}
@@ -284,25 +349,15 @@
                                     {% endif %}
                                 {% endif %}
                             {% endwith %}
-                        {% endfor %}
-                    <table>
+                        {% endfor %} {% endcomment %}
+                    <table> 
                         <tr>
                             <td style="height: 40px" > </td>
                         </tr> 
                         <tr style="text-align: center;">
                             <td colspan="6" style="font-size: 25px;">
-                                Observer:
-                                {% if selector == 'form' %}
-                                    <input value="{{ allData.main.observer }}" type="text" name="observer" style="width: 150px;" maxlength="30" required id="id_observer">
-                                {% else %}
-                                    {{ allData.main.observer }} 
-                                {% endif %}
-                                Certified Date: 
-                                {% if selector == 'form' %}
-                                    <input value="{{ allData.main.cert_date }}" type="date" name="cert_date" class="input" required id="id_cert_date">
-                                {% else %}
-                                    {{ allData.main.cert_date }}
-                                {% endif %}
+                                <strong>Observer:</strong> {{ data.observer }}
+                                <strong>Certified Date:</strong> {{ data.cert_date }}
                             </td>
                         </tr>
                         <tr>
@@ -319,11 +374,7 @@
                         </tr>
                         <tr style="font-size: 20px;text-align: center;">
                             <td colspan="6">
-                                {% if selector == 'form' %}
-                                    <textarea {% if existing %}value="{% for key, primaryData in allData.primary.items %}{% if key == sliced_key %}{{ allData.main.comments }}{% endif %}{% endfor %}"{% endif %} name="comments" cols="125" rows="7" maxlength="600" required id="id_comments"></textarea>
-                                {% else %}
-                                    {{ allData.main.comments }}
-                                {% endif %}
+                                {{ data.comments }}
                             </td>
                         </tr>
                     </table>

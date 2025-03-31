@@ -51,7 +51,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
             existing = True
             search = True
         else:
-            messages.error(request,"ERROR: ID-11850002. Contact Support Team.")
+            messages.error(request,"ERROR: ID-11850005. Contact Support Team.")
             #return sendToDash(request.user)
     elif now == todays_log.date_save:
         print("check 2")
