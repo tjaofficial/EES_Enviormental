@@ -37,7 +37,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
     search = False
     database_form = False
     data = False
-    print(submitted_forms)
+    #print(submitted_forms)
     if selector not in ('form', 'edit'):
         try:
             form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date()).order_by('-date')
@@ -54,22 +54,26 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
             messages.error(request,"ERROR: ID-11850005. Contact Support Team.")
             #return sendToDash(request.user)
     elif now == todays_log.date_save:
-        print("check 2")
         if submitted_forms.exists():
-            print("check 3")
             database_form = submitted_forms[0]
             if database_form.formSettings and database_form.formSettings.formChoice.frequency.lower() == "quarterly":
                 if what_quarter(todays_log.date_save) == what_quarter(database_form.date) and todays_log.date_save.year == database_form.date.year:
                     existing = True
                     data = database_form
             else:
+                print("CHECK 1")
                 try:
+                    print("CHECK 3")
                     existing = True if todays_log.date_save == database_form.date else False
                     data = database_form if todays_log.date_save == database_form.date else "new_form"
                 except:
-                    starting_monday = now - timedelta(days=now.weekday())
-                    existing = True if starting_monday == database_form.week_start else False
+                    print("CHECK 2")
+                    starting_day = (now - timedelta(days=now.weekday())) if database_form.formSettings.formChoice.day_freq.lower() == "weekdays" else (now - timedelta(days=now.weekday() + 2 if now.weekday() <= 5 else 5))
+                    print(f"Last monday is: {starting_day}")
+                    print(f"the record start date is: {database_form.week_start}")
+                    existing = True if starting_day == database_form.week_start else False
                     data = database_form if todays_log.date_save == database_form.week_start else "new_form"
+                    print(existing)
     else:
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)

@@ -246,7 +246,7 @@ def form8_issue_check(savedForm, form_variables, request, selector, facility, da
     filled_out = True
     for items in new_latest_form.whatever().values():
         if items is None or items == '':
-            print("check 4")
+            #print("check 4")
             print("not filled out all the way")
             filled_out = False  # -change this back to false
             break

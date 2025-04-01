@@ -50,7 +50,7 @@ crew_choices = (
 
 plume_type_choices = (
     ('N/A', 'N/A'),
-    ('Fugative', 'Fugative'),
+    ('Fugitive', 'Fugitive'),
     ('Continuous', 'Continuous'),
     ('Intermittent', 'Intermittent')
 )

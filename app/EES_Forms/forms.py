@@ -10,119 +10,7 @@ now = datetime.datetime.now()
 
 #Create Your Forms here
 
-class form7_form(ModelForm):
-    class Meta:
-        model = form7_model
-        fields = ('__all__')
-        widgets = {
-            'date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'observer': forms.TextInput(attrs={'style': 'width: 150px;', "maxlength": "30", "required": True}),
-            'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
-            'comments': Textarea(attrs={'rows': 7, 'cols': 125, "maxlength": "30", "required": True}),
-        }
 
-    DEFAULT_READING_FIELDS = {
-        **{f"1Read_{i}": "" for i in range(1,13)},
-        **{f"2Read_{i}": "" for i in range(1,13)},
-        **{f"3Read_{i}": "" for i in range(1,13)},
-        **{f"4Read_{i}": "" for i in range(1,13)},
-        **{f"{i}_start": "" for i in range(1,5)},
-        **{f"{i}_stop": "" for i in range(1,5)},
-        **{f"{i}_selection": "" for i in range(1,5)},
-        **{f"{i}_average": "" for i in range(1,5)}
-    }
-    
-    JSON_WIDGET_STYLES = {
-        **{f"1Read_{i}": forms.NumberInput(attrs={'oninput': f"area1_average();", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
-        **{f"2Read_{i}": forms.NumberInput(attrs={'oninput': f"area2_average(); autoFillZeros(2Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
-        **{f"3Read_{i}": forms.NumberInput(attrs={'oninput': f"area3_average(); autoFillZeros(3Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
-        **{f"4Read_{i}": forms.NumberInput(attrs={'oninput': f"area4_average(); autoFillZeros(4Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
-        **{f"{i}_start": forms.TimeInput(attrs={'type': 'time', "oninput": f"formC_timeCheck_area{i}()", "class": "input", 'style': 'width: 95px;'}) for i in range(1,5)},
-        **{f"{i}_stop": forms.TimeInput(attrs={'type': 'time', "oninput": f"formC_timeCheck_area{i}()", "class": "input", 'style': 'width: 95px;'}) for i in range(1,5)},
-        **{f"{i}_selection": forms.Select(attrs={"class": "input"}) for i in range(1,5)},
-        **{f"{i}_average": forms.NumberInput(attrs={'type': 'number', "oninput": f"area{i}_average()", "class": "input", 'style': 'width: 95px;', "maxlength": "3", "required": True}) for i in range(1,5)},
-    }
-    
-    def __init__(self, *args, **kwargs):
-        form_settings = kwargs.pop("form_settings", None)
-        if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form7_form.")
-
-        initial = kwargs.get("initial", {})
-        instance = kwargs.get("instance")
-
-        # Determine the data source: use instance if it exists, otherwise use initial
-        data_source = instance if instance else SimpleNamespace(**initial)
-
-        # Extract facility settings from form_settings
-        settings = form_settings.settings.get("settings", {}) if hasattr(form_settings, "settings") else {}
-        # Load area_name options from settings JSON
-        num_of_areas = settings.get("number_of_areas", 0)
-        print(f"These are the settings {num_of_areas}")
-        area_choices_dict = {}
-        for i in range(1, num_of_areas + 1):
-            area_key = f"area{i}"
-            if area_key in settings:
-                areaData = settings[area_key]
-                if areaData['number_of_options'] > 0:
-                    emptyChoice = [("", "Select Choice")]
-                    selectionList = emptyChoice + [(areaName, areaName) for areaKey, areaName in areaData['options'].items()]
-                else:
-                    selectionList = False
-                area_choices_dict[f"area_choices_{i}"] = selectionList
-            else:
-                print("No Area Data")
-        print(f"These are the choices: {area_choices_dict}")
-        super().__init__(*args, **kwargs)
-
-
-        json_data_1 = getattr(data_source, "area_json_1", {}) or {}
-        json_data_2 = getattr(data_source, "area_json_2", {}) or {}
-        json_data_3 = getattr(data_source, "area_json_3", {}) or {}
-        json_data_4 = getattr(data_source, "area_json_4", {}) or {}
-
-        general_fields = [
-            "date", "estab", "county", "estab_no", "equip_loc",
-            "district", "city", "observer", "cert_date"
-        ]
-
-        for field in general_fields:
-            if field in self.fields:  # Ensure the field exists in the form before setting
-                self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
-
-        for i in range(1, 13):
-            for x in range(1,5):
-                field_name = f"{x}Read_{i}"
-                widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
-                self.fields[field_name] = forms.IntegerField(
-                    initial=json_data_1.get("readings", {}).get(field_name, None),
-                    required=False,
-                    widget=widget
-                )
-        
-        for i in range(1,5):
-            areaSelectChoices = area_choices_dict[f"area_choices_{i}"] if area_choices_dict[f"area_choices_{i}"] else []
-            self.fields[f"{i}_selection"] = forms.ChoiceField(
-                choices=areaSelectChoices,
-                initial=json_data_1.get(f"{i}_selection", ""),
-                required=False,
-                widget=self.JSON_WIDGET_STYLES.get(f"{i}_selection")
-            )
-            self.fields[f"{i}_start"] = forms.TimeField(
-                initial=json_data_1.get(f"{i}_start"),
-                required=False,
-                widget=self.JSON_WIDGET_STYLES.get(f"{i}_start")
-            )
-            self.fields[f"{i}_stop"] = forms.TimeField(
-                initial=json_data_1.get(f"{i}_stop", None),
-                required=False,
-                widget=self.JSON_WIDGET_STYLES.get(f"{i}_stop")
-            )
-            self.fields[f"{i}_average"] = forms.FloatField(
-                initial=json_data_1.get(f"{i}_average", None),
-                required=False,
-                widget=self.JSON_WIDGET_STYLES.get(f"{i}_average")
-            )
 
 class FormCReadForm(ModelForm):
     class Meta:
@@ -331,7 +219,6 @@ class daily_battery_profile_form(ModelForm):
         if self.instance and self.instance.inop_numbs:
             self.fields["inop_numbs"].initial = self.instance.inop_numbs
 
-
 class user_profile_form(forms.ModelForm):
     class Meta:
         model = user_profile_model
@@ -355,12 +242,10 @@ class user_profile_form(forms.ModelForm):
             'certs': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 300px;'}),
         }
 
-
 class pt_admin1_form(ModelForm):
     class Meta:
         model = pt_admin1_model
         fields = ('add_days', 'days_left')
-
 
 class bat_info_form(ModelForm):
     class Meta:
@@ -401,8 +286,6 @@ class bat_info_form(ModelForm):
             'is_battery': forms.Select(attrs={'class':'input', 'style':'height: 24px; width: 81px;'}),
             'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
         }
-
-
 
 class form1_form(ModelForm):
     class Meta:
@@ -1527,92 +1410,163 @@ class form6_form(ModelForm):
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
+class form7_form(ModelForm):
+    class Meta:
+        model = form7_model
+        fields = ('__all__')
+        widgets = {
+            'date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 150px;', "maxlength": "30", "required": True}),
+            'cert_date': forms.DateInput(attrs={'class': 'input', 'type': 'date'}),
+            'comments': Textarea(attrs={'rows': 7, 'cols': 125, "maxlength": "30", "required": True}),
+        }
+
+    DEFAULT_READING_FIELDS = {
+        **{f"1Read_{i}": "" for i in range(1,13)},
+        **{f"2Read_{i}": "" for i in range(1,13)},
+        **{f"3Read_{i}": "" for i in range(1,13)},
+        **{f"4Read_{i}": "" for i in range(1,13)},
+        **{f"{i}_start": "" for i in range(1,5)},
+        **{f"{i}_stop": "" for i in range(1,5)},
+        **{f"{i}_selection": "" for i in range(1,5)},
+        **{f"{i}_average": "" for i in range(1,5)}
+    }
+    
+    JSON_WIDGET_STYLES = {
+        **{f"1Read_{i}": forms.NumberInput(attrs={'oninput': f"area1_average();", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"2Read_{i}": forms.NumberInput(attrs={'oninput': f"area2_average(); autoFillZeros(2Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"3Read_{i}": forms.NumberInput(attrs={'oninput': f"area3_average(); autoFillZeros(3Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"4Read_{i}": forms.NumberInput(attrs={'oninput': f"area4_average(); autoFillZeros(4Read_{i}.id);", 'class': 'input', 'type': 'number', 'style': 'text-align: center;', 'maxlength': 3}) for i in range(1,13)},
+        **{f"{i}_start": forms.TimeInput(attrs={'type': 'time', "oninput": f"formC_timeCheck_area{i}()", "class": "input", 'style': 'width: 95px;'}) for i in range(1,5)},
+        **{f"{i}_stop": forms.TimeInput(attrs={'type': 'time', "oninput": f"formC_timeCheck_area{i}()", "class": "input", 'style': 'width: 95px;'}) for i in range(1,5)},
+        **{f"{i}_selection": forms.Select(attrs={"class": "input"}) for i in range(1,5)},
+        **{f"{i}_average": forms.NumberInput(attrs={'type': 'number', "oninput": f"area{i}_average()", "class": "input", 'style': 'width: 95px;', "maxlength": "3", "required": True}) for i in range(1,5)},
+    }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form7_form.")
+
+        initial = kwargs.get("initial", {})
+        instance = kwargs.get("instance")
+
+        # Determine the data source: use instance if it exists, otherwise use initial
+        data_source = instance if instance else SimpleNamespace(**initial)
+
+        # Extract facility settings from form_settings
+        settings = form_settings.settings.get("settings", {}) if hasattr(form_settings, "settings") else {}
+        # Load area_name options from settings JSON
+        num_of_areas = settings.get("number_of_areas", 0)
+        print(f"These are the settings {num_of_areas}")
+        area_choices_dict = {}
+        for i in range(1, num_of_areas + 1):
+            area_key = f"area{i}"
+            if area_key in settings:
+                areaData = settings[area_key]
+                if areaData['number_of_options'] > 0:
+                    emptyChoice = [("", "Select Choice")]
+                    selectionList = emptyChoice + [(areaName, areaName) for areaKey, areaName in areaData['options'].items()]
+                else:
+                    selectionList = False
+                area_choices_dict[f"area_choices_{i}"] = selectionList
+            else:
+                print("No Area Data")
+        print(f"These are the choices: {area_choices_dict}")
+        super().__init__(*args, **kwargs)
+
+
+        json_data_1 = getattr(data_source, "area_json_1", {}) or {}
+        json_data_2 = getattr(data_source, "area_json_2", {}) or {}
+        json_data_3 = getattr(data_source, "area_json_3", {}) or {}
+        json_data_4 = getattr(data_source, "area_json_4", {}) or {}
+
+        general_fields = [
+            "date", "estab", "county", "estab_no", "equip_loc",
+            "district", "city", "observer", "cert_date"
+        ]
+
+        for field in general_fields:
+            if field in self.fields:  # Ensure the field exists in the form before setting
+                self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
+
+        for i in range(1, 13):
+            for x in range(1,5):
+                field_name = f"{x}Read_{i}"
+                widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
+                self.fields[field_name] = forms.IntegerField(
+                    initial=json_data_1.get("readings", {}).get(field_name, None),
+                    required=False,
+                    widget=widget
+                )
+        
+        for i in range(1,5):
+            areaSelectChoices = area_choices_dict[f"area_choices_{i}"] if area_choices_dict[f"area_choices_{i}"] else []
+            self.fields[f"{i}_selection"] = forms.ChoiceField(
+                choices=areaSelectChoices,
+                initial=json_data_1.get(f"{i}_selection", ""),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_selection")
+            )
+            self.fields[f"{i}_start"] = forms.TimeField(
+                initial=json_data_1.get(f"{i}_start"),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_start")
+            )
+            self.fields[f"{i}_stop"] = forms.TimeField(
+                initial=json_data_1.get(f"{i}_stop", None),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_stop")
+            )
+            self.fields[f"{i}_average"] = forms.FloatField(
+                initial=json_data_1.get(f"{i}_average", None),
+                required=False,
+                widget=self.JSON_WIDGET_STYLES.get(f"{i}_average")
+            )
+
 class form8_form(ModelForm):
     class Meta:
         model = form8_model
-        fields = (
-            'week_start',
-            'week_end',
-            'observer1',
-            'observer2',
-            'observer3',
-            'observer4',
-            'observer5',
-            'truck_id1',
-            'date1',
-            'time1',
-            'contents1',
-            'freeboard1',
-            'wetted1',
-            'comments1',
-            'truck_id2',
-            'date2',
-            'time2',
-            'contents2',
-            'freeboard2',
-            'wetted2',
-            'comments2',
-            'truck_id3',
-            'date3',
-            'time3',
-            'contents3',
-            'freeboard3',
-            'wetted3',
-            'comments3',
-            'truck_id4',
-            'date4',
-            'time4',
-            'contents4',
-            'freeboard4',
-            'wetted4',
-            'comments4',
-            'truck_id5',
-            'date5',
-            'time5',
-            'contents5',
-            'freeboard5',
-            'wetted5',
-            'comments5'
-        )
+        fields = '__all__'
         
         widgets = {
             'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'truck_id1' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'date1' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'time1' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'contents1' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'freeboard1' : forms.Select(attrs={'oninput': 'freeboard_1()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'wetted1' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'comments1' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'truck_id2' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'date2' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'time2' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'contents2' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'freeboard2' : forms.Select(attrs={'oninput': 'freeboard_2()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'wetted2' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'comments2' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'truck_id3' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'date3' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'time3' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'contents3' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'freeboard3' : forms.Select(attrs={'oninput': 'freeboard_3()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'wetted3' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'comments3' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'truck_id4' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'date4' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'time4' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'contents4' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'freeboard4' : forms.Select(attrs={'oninput': 'freeboard_4()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'wetted4' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'comments4' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'truck_id5' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'date5' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'time5' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'contents5' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'freeboard5' : forms.Select(attrs={'oninput': 'freeboard_5()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'wetted5' : forms.Select(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'comments5' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'truck_id1' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'date1' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time1' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents1' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'freeboard1' : forms.Select(attrs={'oninput': 'freeboard_1()'}),
+            'wetted1' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'comments1' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'truck_id2' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'date2' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time2' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents2' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'freeboard2' : forms.Select(attrs={'oninput': 'freeboard_2()'}),
+            'wetted2' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'comments2' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'truck_id3' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'date3' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time3' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents3' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'freeboard3' : forms.Select(attrs={'oninput': 'freeboard_3()'}),
+            'wetted3' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'comments3' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'truck_id4' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'date4' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time4' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents4' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'freeboard4' : forms.Select(attrs={'oninput': 'freeboard_4()'}),
+            'wetted4' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'comments4' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'truck_id5' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'date5' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time5' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents5' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'freeboard5' : forms.Select(attrs={'oninput': 'freeboard_5()'}),
+            'wetted5' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
+            'comments5' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
             'observer1' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
             'observer2' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
             'observer3' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
@@ -1625,8 +1579,23 @@ class form8_form(ModelForm):
 
         if not form_settings:
             raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+
+        # Extract 'initial' and 'instance' data
+        initial = kwargs.get("initial", {})
+        instance = kwargs.get("instance")
+
+        print(initial)
+
+        # Ensure we are using an object that can retrieve attributes
+        data_source = instance if instance else initial
+
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
+
+        # Dynamically populate fields from instance or initial data
+        for field_name in self.Meta.fields.keys():
+            if hasattr(data_source, field_name):
+                self.fields[field_name].initial = getattr(data_source, field_name, None)
 
 class form9_form(ModelForm):
     class Meta:

@@ -12,6 +12,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def form9(request, facility, fsID, selector):
+    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------

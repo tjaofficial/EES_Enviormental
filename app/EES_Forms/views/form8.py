@@ -2,17 +2,16 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
-from ..models import form_settings_model
+from ..models import form8_model, form_settings_model
 from ..forms import form8_form
+from ..utils import get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 from datetime import timedelta
-from ..utils import fix_data
 
 lock = login_required(login_url='Login')
 
 @lock
 def form8(request, facility, fsID, selector):
-    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     unlock = form_variables['unlock']
@@ -54,30 +53,32 @@ def form8(request, facility, fsID, selector):
             database_form = ''
         else:
             if existing:
-                initial_data = {
-                    'week_start': database_form.week_start,
-                    'week_end': database_form.week_end,
-                }
-                attrList = [
-                    'observer',
-                    'truck_id',
-                    'time',
-                    'date',
-                    'contents',
-                    'freeboard',
-                    'wetted',
-                    'comments'
-                ]
-                for i in range(1, 6):
-                    for attLabel in attrList:
-                        item_value = getattr(database_form, f"{attLabel}{i}")
-                        if item_value and item_value != None:
-                            if attLabel == 'date':
-                                initial_data[attLabel+str(i)] = item_value.strftime("%Y-%m-%d")
-                            elif attLabel == 'time':
-                                initial_data[attLabel+str(i)] = item_value.strftime("%H:%M")
-                            else:
-                                initial_data[attLabel+str(i)] = item_value
+                # initial_data = {
+                #     'week_start': database_form.week_start,
+                #     'week_end': database_form.week_end,
+                # }
+                # attrList = [
+                #     'observer',
+                #     'truck_id',
+                #     'time',
+                #     'date',
+                #     'contents',
+                #     'freeboard',
+                #     'wetted',
+                #     'comments'
+                # ]
+                # for i in range(1, 6):
+                #     for attLabel in attrList:
+                #         item_value = getattr(database_form, f"{attLabel}{i}")
+                #         if item_value and item_value != None:
+                #             if attLabel == 'date':
+                #                 initial_data[attLabel+str(i)] = item_value.strftime("%Y-%m-%d")
+                #             elif attLabel == 'time':
+                #                 initial_data[attLabel+str(i)] = item_value.strftime("%H:%M")
+                #             else:
+                #                 initial_data[attLabel+str(i)] = item_value
+                initial_data = get_initial_data(form8_model, database_form)
+                print(f"hello: {existing}")
             else:
                 if form_variables['now'].weekday() == 5:
                     initial_data = {
