@@ -499,6 +499,32 @@ def form27_issue_check(savedForm, form_variables, request, selector, facility, d
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms', facility)
 
+def form29_issue_check(savedForm, form_variables, request, selector, facility, database_form, fsID, *args, **kwargs):
+    fsID = str(fsID)
+    finder = issues_model.objects.filter(date=savedForm.date, formChoice=savedForm.formSettings).exists()
+    issueFound = False
+    compliance = False
+    #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
+    
+    #--------^^^^^^^ INSERT ANY CHECKS HERE ^^^^^^^^----------------
+    if issueFound:
+        if finder:
+            if selector == 'form':
+                issue_page = 'resubmit'
+            else:
+                issue_page = 'issue'
+        else:
+            issue_page = 'form'
+        
+        if compliance:
+            issue_page = issue_page + "-c"
+            
+        return ('issues_view', facility, fsID, str(database_form.date), issue_page)
+    if savedForm.is_fully_filled():
+        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector='submitted', issueID=False)        
+    updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
+    return ('IncompleteForms', facility)
+
 def form30_issue_check(savedForm, form_variables, request, selector, facility, database_form, fsID, *args, **kwargs):
     fsID = str(fsID)
     finder = issues_model.objects.filter(date=savedForm.date, formChoice=savedForm.formSettings).exists()
@@ -563,6 +589,7 @@ FUNCTION_MAP = {
     "24": form24_issue_check,
     "26": form26_issue_check,
     "27": form27_issue_check,
+    "29": form29_issue_check,
     "30": form30_issue_check,
     "31": form31_issue_check,
 }

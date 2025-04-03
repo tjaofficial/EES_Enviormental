@@ -445,7 +445,7 @@ class formSubmissionRecords_model(models.Model):
     )
     submitted = models.BooleanField(default=False)
     def __str__(self):
-        return str(self.id) + " - " + str(self.formID.id) + " - " + str(self.facilityChoice.facility_name)
+        return str(self.id) + " - " + str(self.formID.form) + " - " + str(self.facilityChoice.facility_name)
 
 class the_packets_model(models.Model):
     facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)

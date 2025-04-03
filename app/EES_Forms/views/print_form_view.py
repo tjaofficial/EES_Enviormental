@@ -231,11 +231,11 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
             if formID == 9:
                 tableData, tableColWidths, style = pdf_template_9(formData, title, subTitle)
             if formID == 17:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_17(formData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_17(formData, title, subTitle)
             if formID == 18:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_18(formData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_18(formData, title, subTitle)
             if formID == 19:
-                tableData, tableColWidths, tableRowHeights, style = pdf_template_19(formData, title, subTitle, formInformation)
+                tableData, tableColWidths, tableRowHeights, style = pdf_template_19(formData, title, subTitle)
             if formID == 20:
                 tableData, tableColWidths, style = pdf_template_20(formData, title, subTitle)
             if formID == 21:

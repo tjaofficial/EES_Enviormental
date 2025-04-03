@@ -2477,10 +2477,6 @@ class form20_form(ModelForm):
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
-
-
-
-
 class form21_form(ModelForm):
     class Meta:
         #today = datetime.date.today()
@@ -2577,7 +2573,11 @@ class form21_form(ModelForm):
             raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
-        
+     
+
+
+
+
 class formM_form(ModelForm):
     class Meta:
         model = form22_model
@@ -2658,6 +2658,8 @@ class formM_readings_form(ModelForm):
             'unp_total' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
             'par_total' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
         }
+
+
 
 
 class form24_form(ModelForm):
@@ -3015,6 +3017,14 @@ class form26_form(ModelForm):
             "counted_items": forms.NumberInput(attrs={'type': 'number'}),
             "missing_items": forms.NumberInput(attrs={'type': 'number'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
         
 class formSubmissionRecords_form(ModelForm):
     class Meta:

@@ -20,7 +20,7 @@ def form22(request, facility, fsID, selector):
     fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
+    cert_date = request.user.user_profile.cert_date if request.user.user_profile else False
     THEmonth = False
     today_number = form_variables['now'].weekday()
     org2 = form22_readings_model.objects.all().order_by('-form')

@@ -6,15 +6,14 @@ from ..models import form_settings_model, form29_model
 from ..forms import form26_form
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import ast
-from ..utils import fix_data
 
 lock = login_required(login_url='Login')
 
 @lock
 def form26(request, facility, fsID, month, skNumber, selector):
-    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    print(form_variables['freq'])
     attachedTo = form29_model.objects.filter(month=month)
     formAttached = attachedTo[0] if len(attachedTo) > 0 else "form"
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------

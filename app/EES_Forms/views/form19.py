@@ -2,9 +2,10 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
+from django.forms.models import model_to_dict # type: ignore
 from ..models import form_settings_model, form19_model
 from ..forms import form19_form
-from ..utils import fix_data, get_initial_data, weatherDict, method9_reading_data_build, form19_ovens_data_build
+from ..utils import get_initial_data, weatherDict, method9_reading_data_build, form19_ovens_data_build
 from ..initial_form_variables import template_validate_save, initiate_form_variables, existing_or_new_form
 import json
 
@@ -12,10 +13,9 @@ lock = login_required(login_url='Login')
 
 @lock
 def form19(request, facility, fsID, selector):
-    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False
+    cert_date = request.user.user_profile.cert_date if request.user.user_profile else False
     exist_canvas = ''
     # Weather API Pull
     weather = weatherDict(form_variables['freq'].facilityChoice.city)
@@ -36,8 +36,14 @@ def form19(request, facility, fsID, selector):
         #     database_form2 = orgFormL[0]
         
         if search:
-            database_form = ''
             exist_canvas = data.canvas
+            paresedData = {}
+            for key, iData in data.ovens_data.items():
+                paresedData[key] = iData
+            data_dict = model_to_dict(data, exclude=['ovens_data', 'reading_data'])
+            for key_2, iData_2 in data.reading_data.items():
+                paresedData[key_2] = iData_2
+            data = paresedData | data_dict
         else:
             if existing:
                 exist_canvas = database_form.canvas

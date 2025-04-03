@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form29_model, form26_model
 from ..forms import form29_form
-from ..utils import createNotification, get_initial_data, stringToDate, updateSubmissionForm, fix_data
+from ..utils import createNotification, get_initial_data, stringToDate, updateSubmissionForm
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
 import json
@@ -14,10 +14,9 @@ lock = login_required(login_url='Login')
 
 @lock
 def form29(request, facility, fsID, selector):
-    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    sk_form = form29_form()
+    sk_form = form29_form(form_settings=form_variables['freq'])
     month_name = calendar.month_name[form_variables['now'].month]
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
     if form_variables['daily_prof'].exists():
