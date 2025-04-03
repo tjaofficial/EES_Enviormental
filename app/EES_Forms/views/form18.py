@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form18_model
 from ..forms import form18_form
-from ..utils import get_initial_data, weatherDict, method9_reading_data_build, form18_ovens_data_build
+from ..utils import fix_data, get_initial_data, weatherDict, method9_reading_data_build, form18_ovens_data_build
 from ..initial_form_variables import template_validate_save, initiate_form_variables, existing_or_new_form
 import json
 
@@ -12,6 +12,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def form18(request, facility, fsID, selector):
+    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     cert_date = request.user.user_profile_model.cert_date if request.user.user_profile_model else False

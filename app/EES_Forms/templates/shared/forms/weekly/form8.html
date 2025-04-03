@@ -1,0 +1,138 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% block list%}{% load static %}{% load form8_tags %}
+<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/formD.js' %}"></script>
+<link href="{% static 'ees_forms/style/formD.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+{% if not unlock %}
+    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+{% endif %}
+<div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+<div id="paperSize">
+    <div class="mainCont">
+        <form action="" method="POST" style="margin: auto;margin-bottom: 100px;">
+            {% csrf_token %}
+            <section class="card" id="card_fitter">
+                {% include "shared/components/print_button.html" with formGroup=freq %}
+                <div class="paper_fitter" style="padding: 3rem;">
+                    {% include "shared/components/backArrow.html" with destination="form" %}
+                    <table style="border-collapse: collapse; margin: auto;">
+                        <tr>
+                            <th id="boxTitle" colspan="5" style="text-align: center;">
+                                {% include "shared/components/formHeader.html" with main="Fugitive Dust Vehicle Inspection Form"%}
+                            </th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th colspan="3" style="text-align: center;">
+                                Facility Name: {{facility}}
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td style="height: 15px;" ></td>
+                        </tr>
+                        <tr>
+                            <th colspan="3" style="text-align: center;">
+                                Week Of:    
+                                {{ form.week_start }} - {{ form.week_end }}
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td style="height: 25px;" ></td>
+                        </tr>
+                    </table>
+                    <div id="truckCard">
+                        <div id="truckTabs">
+                            <div class="tabContainer topLeftCont" onclick="changeTab(1)" id='tab1Cont'>
+                                Truck 1
+                            </div>
+                            <div class="tabContainer" onclick="changeTab(2)" id='tab2Cont'>
+                                Truck 2
+                            </div>
+                            <div class="tabContainer" onclick="changeTab(3)" id='tab3Cont'>
+                                Truck 3
+                            </div>
+                            <div class="tabContainer" onclick="changeTab(4)" id='tab4Cont'>
+                                Truck 4
+                            </div>
+                            <div class="tabContainer topRightCont" onclick="changeTab(5)" id='tab5Cont'>
+                                Truck 5
+                            </div>
+                        </div>
+                        {% for truck in amountOfTrucks %}
+                        <div class="truckForm" id='truck{{forloop.counter}}Card'>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th class="inputHeader">Observer: </th>
+                                    <td>
+                                        {% get_instance form 'observer' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">Truck ID: </th>
+                                    <td>
+                                        {% get_instance form 'truck_id' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">Date: </th>
+                                    <td>
+                                        {% get_instance form 'date' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">Time: </th>
+                                    <td>
+                                        {% get_instance form 'time' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">Contents: </th>
+                                    <td>
+                                        {% get_instance form 'contents' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">6" or greater freeboard? </th>
+                                    <td>
+                                        {% get_instance form 'freeboard' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="inputHeader">If NO, is material adequately wetted and stable? </th>
+                                    <td>
+                                        {% get_instance form 'wetted' forloop.counter selector %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="inputHeaderComment">Comments: </th>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td colspan="2">
+                                        {% get_instance form 'comments' forloop.counter selector %}
+                                        <p style="font-size: 15px;">**If there are no notes/comments input '-'</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        {% endfor %}
+                    </div> 
+                    {% if supervisor or client %} {% elif unlock and not search %}
+                    {% include "shared/components/submitButton.html" with label="form" %}
+                    {% endif %}
+                </div>
+            </section>
+            <br>
+            {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

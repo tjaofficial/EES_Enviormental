@@ -4,7 +4,7 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form25_model
 from ..forms import formP_form
-from ..utils import get_initial_data
+from ..utils import fix_data, get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
 
@@ -12,6 +12,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def form25(request, facility, fsID, selector, weekend_day):
+    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     month_name = calendar.month_name[form_variables['now'].month]

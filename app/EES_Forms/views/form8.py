@@ -117,7 +117,7 @@ def form8(request, facility, fsID, selector):
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
 
-    return render(request, "shared/forms/weekly/formD.html", {
+    return render(request, "shared/forms/weekly/form8.html", {
         'fsID': fsID, 
         'picker': form_variables['picker'], 
         "search": search, 
@@ -133,5 +133,4 @@ def form8(request, facility, fsID, selector):
         'notifs': form_variables['notifs'],
         'freq': form_variables['freq'],
         'amountOfTrucks': [1,2,3,4,5],
-        'initial_data': initial_data
     })

@@ -12,7 +12,6 @@ lock = login_required(login_url='Login')
 
 @lock
 def form9(request, facility, fsID, selector):
-    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
@@ -27,7 +26,7 @@ def form9(request, facility, fsID, selector):
     # -----SET RESPONSES TO DECIDING VARIABLES------------
         if search:
             database_form = ''
-            goose_neck_data_raw_JSON = json.loads(form.goose_neck_data)
+            goose_neck_data_raw_JSON = json.loads(data.goose_neck_data)
             if len(goose_neck_data_raw_JSON) > 0:
                 goose_neck_data_JSON = goose_neck_data_raw_JSON['data']
             else:
@@ -62,7 +61,7 @@ def form9(request, facility, fsID, selector):
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-    return render(request, "shared/forms/daily/formE.html", {
+    return render(request, "shared/forms/daily/form9.html", {
         'fsID': fsID, 
         'picker': form_variables['picker'], 
         "client": form_variables['client'], 
@@ -71,7 +70,7 @@ def form9(request, facility, fsID, selector):
         'existing': existing, 
          
         'todays_log': todays_log, 
-        'form': form, 
+        'form': data, 
         'selector': selector,
         'formName': form_variables['formName'], 
         'leak_JSON': goose_neck_data_JSON, 

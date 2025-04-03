@@ -1527,51 +1527,51 @@ class form7_form(ModelForm):
 class form8_form(ModelForm):
     class Meta:
         model = form8_model
-        fields = '__all__'
+        fields = ('__all__')
         
         widgets = {
             'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'truck_id1' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'date1' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
-            'time1' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
-            'contents1' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'freeboard1' : forms.Select(attrs={'oninput': 'freeboard_1()'}),
-            'wetted1' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'comments1' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
-            'truck_id2' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'date2' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
-            'time2' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
-            'contents2' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'freeboard2' : forms.Select(attrs={'oninput': 'freeboard_2()'}),
-            'wetted2' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'comments2' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
-            'truck_id3' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'date3' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
-            'time3' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
-            'contents3' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'freeboard3' : forms.Select(attrs={'oninput': 'freeboard_3()'}),
-            'wetted3' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'comments3' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
-            'truck_id4' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'date4' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
-            'time4' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
-            'contents4' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'freeboard4' : forms.Select(attrs={'oninput': 'freeboard_4()'}),
-            'wetted4' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'comments4' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
-            'truck_id5' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'date5' : forms.DateInput(attrs={'onchange': 'if_one_then_all()', 'type':'date'}),
-            'time5' : forms.TimeInput(attrs={'onchange': 'if_one_then_all()', 'type':'time'}),
-            'contents5' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'freeboard5' : forms.Select(attrs={'oninput': 'freeboard_5()'}),
-            'wetted5' : forms.Select(attrs={'onchange': 'if_one_then_all()'}),
-            'comments5' : forms.Textarea(attrs={'rows': '3', 'onchange': 'if_one_then_all()', 'type':'text'}),
-            'observer1' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'observer2' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'observer3' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'observer4' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
-            'observer5' : forms.TextInput(attrs={'onchange': 'if_one_then_all()', 'style':'width: 215px; border-radius: 15px; font-size: 1.5rem; text-align: center;'}),
+            'truck_id1' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'date1' : forms.DateInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time1' : forms.TimeInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents1' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'truck_id2' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'date2' : forms.DateInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time2' : forms.TimeInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents2' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'truck_id3' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'date3' : forms.DateInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time3' : forms.TimeInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents3' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'truck_id4' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'date4' : forms.DateInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time4' : forms.TimeInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents4' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'truck_id5' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'date5' : forms.DateInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'date'}),
+            'time5' : forms.TimeInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()', 'type':'time'}),
+            'contents5' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'freeboard1' : forms.Select(attrs={'class': 'baseInput', 'oninput': 'freeboard(this)'}),
+            'freeboard2' : forms.Select(attrs={'class': 'baseInput', 'oninput': 'freeboard(this)'}),
+            'freeboard3' : forms.Select(attrs={'class': 'baseInput', 'oninput': 'freeboard(this)'}),
+            'freeboard4' : forms.Select(attrs={'class': 'baseInput', 'oninput': 'freeboard(this)'}),
+            'freeboard5' : forms.Select(attrs={'class': 'baseInput', 'oninput': 'freeboard(this)'}),
+            'wetted1' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'wetted2' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'wetted3' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'wetted4' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'wetted5' : forms.Select(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'comments1' : forms.Textarea(attrs={'class': 'textBox', 'maxlength': '30', 'rows': '3', 'cols': '40', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'comments2' : forms.Textarea(attrs={'class': 'textBox', 'maxlength': '30', 'rows': '3', 'cols': '40', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'comments3' : forms.Textarea(attrs={'class': 'textBox', 'maxlength': '30', 'rows': '3', 'cols': '40', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'comments4' : forms.Textarea(attrs={'class': 'textBox', 'maxlength': '30', 'rows': '3', 'cols': '40', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'comments5' : forms.Textarea(attrs={'class': 'textBox', 'maxlength': '30', 'rows': '3', 'cols': '40', 'onchange': 'if_one_then_all()', 'type':'text'}),
+            'observer1' : forms.TextInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'observer2' : forms.TextInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'observer3' : forms.TextInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'observer4' : forms.TextInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
+            'observer5' : forms.TextInput(attrs={'class': 'baseInput', 'onchange': 'if_one_then_all()'}),
         }
     
     def __init__(self, *args, **kwargs):
@@ -1591,11 +1591,14 @@ class form8_form(ModelForm):
 
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
-
-        # Dynamically populate fields from instance or initial data
-        for field_name in self.Meta.fields.keys():
-            if hasattr(data_source, field_name):
-                self.fields[field_name].initial = getattr(data_source, field_name, None)
+        # print(f"The meta fields: {self.fields}")
+        # print(f"The data source: {data_source}")
+        # # Dynamically populate fields from instance or initial data
+        # for field_name in self.fields.keys():
+        #     print(field_name)
+        #     if field_name in data_source:
+        #         print(f"For {field_name} it takes the input: {data_source.get(field_name, None)}")
+        #         self.fields[field_name].initial = data_source.get(field_name, None)
 
 class form9_form(ModelForm):
     class Meta:

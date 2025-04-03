@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import JsonResponse, HttpResponseRedirect# type: ignore
 from ..models import form_settings_model, form30_model
 from ..forms import form30_form
-from ..utils import get_initial_data
+from ..utils import get_initial_data, fix_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 from django.utils.timezone import now, timedelta # type: ignore
 
@@ -12,6 +12,7 @@ lock = login_required(login_url='Login')
 
 @lock
 def form30(request, facility, fsID, selector):
+    fix_data(fsID)
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------

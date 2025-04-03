@@ -1,11 +1,19 @@
 function freeboard_check(truck) {
     const freeboard = document.getElementById('id_freeboard' + truck).value;
+    let newID = 'id_wetted' + truck
+    const formName = document.getElementById('formName').dataset.form;
+    var tempSaveKey = formName+"_tempFormData";
+    var currentData = JSON.parse(localStorage.getItem(tempSaveKey)) || { Experation: Date.now(), data: {} };
     if (freeboard == 'Yes') {
-        let newID = 'id_wetted' + truck
         document.getElementById(newID).value = 'N/A';
+        currentData.data[newID] = 'N/A';
+        console.log("Updated Local Storage to: N/A")
     } else if (freeboard == '') {
-        document.getElementById('id_wetted' + truck).value = '';
+        document.getElementById(newID).value = '';
+        currentData.data[newID] = '';
+        console.log("Updated Local Storage to: ''")
     }
+    localStorage.setItem(tempSaveKey, JSON.stringify(currentData));
 }
 function freeboard(elem) {
     freeboard_check(elem.name.slice(9));
