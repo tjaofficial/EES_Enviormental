@@ -42,7 +42,7 @@ def corrective_action_view(request, facility):
         if issueForm_query != "" and issueForm_query is not None:
             #print("Pre-Form-Search")
             #print(ca_forms)
-            ca_forms = ca_forms.filter(form__icontains=issueForm_query)
+            ca_forms = ca_forms.filter(formChoice__formChoice__form__icontains=issueForm_query)
             #print("Post-Form-Search")
             #print(ca_forms)
             return ca_forms

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import form3_model, form2_model, form1_readings_model, user_profile_model, daily_battery_profile_model, form5_readings_model, form5_model, Forms
+from ..models import form3_model, form1_model, form2_model, user_profile_model, daily_battery_profile_model, form5_model, Forms
 from django.apps import apps # type: ignore
 from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 from django.contrib.auth.decorators import login_required # type: ignore
@@ -30,7 +30,7 @@ def pt_admin1_view(request, facility):
             newList = []
         return newList
     # -------90 DAY PUSH ----------------
-    all_db_reads = form5_readings_model.objects.all()
+    all_db_reads = form5_model.objects.all()
     pushTravelsData = ninetyDayPushTravels(facility)
     od_30 = pushTravelsData['30days']
     
@@ -68,14 +68,14 @@ def pt_admin1_view(request, facility):
 
 @lock
 def pt_mth_input(request, facility):
-    submitted_ordered = form5_readings_model.objects.all()
+    submitted_ordered = form5_model.objects.all()
     now = datetime.datetime.now()
     today = datetime.date.today()
 
     def pt_sort(submitted_ordered):
         A = []
         for x in submitted_ordered:
-            date = x.form.date
+            date = x.date
             i = 1
             h = i+1
             j = i+2
@@ -202,14 +202,14 @@ def method303_rolling_avg(request, facility):
     A = []
     print("hello")
     def form_compile(daily_prof):
-        formA1 = form1_readings_model.objects.all()
+        formA1 = form1_model.objects.all()
         formA2 = form2_model.objects.all()
         formA3 = form3_model.objects.all()
         i = 1
         print("CHECK 1")
         for date_select in daily_prof:
             for logA1 in formA1:
-                if str(date_select.date_save) == str(logA1.form.date):
+                if str(date_select.date_save) == str(logA1.date):
                     A1 = logA1
 
                     for logA2 in formA2:

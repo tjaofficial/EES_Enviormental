@@ -271,143 +271,6 @@ def formA5_Model_Upadte():
     
     print("hello")
 
-def formA5_Readings_Upadte():
-    allFormData = form5_readings_model.objects.all() 
-    #not_these_fields = ['form']
-    for record in allFormData:
-        #fieldsList = [field.name for field in record._meta.get_fields() if isinstance(field, Field) and field.name not in not_these_fields]
-        #print(fieldsList)
-        formA5Ovens = {
-            "oven1": {
-                "oven_number": record.o1,
-                "start": str(record.o1_start),
-                "stop": str(record.o1_stop),
-                "highest_opacity": record.o1_highest_opacity,
-                "opacity_over_20": record.o1_instant_over_20,
-                "average_6_opacity": record.o1_average_6,
-                "average_6_over_35": record.o1_average_6_over_35,
-                "readings": {
-                    "push":{
-                        "1": record.o1_1_reads,
-                        "2": record.o1_2_reads,
-                        "3": record.o1_3_reads,
-                        "4": record.o1_4_reads,
-                        "5": record.o1_5_reads,
-                        "6": record.o1_6_reads,
-                        "7": record.o1_7_reads,
-                        "8": record.o1_8_reads,
-                    },
-                    "travel": {
-                        "1": record.o1_9_reads,
-                        "2": record.o1_10_reads,
-                        "3": record.o1_11_reads,
-                        "4": record.o1_12_reads,
-                        "5": record.o1_13_reads,
-                        "6": record.o1_14_reads,
-                        "7": record.o1_15_reads,
-                        "8": record.o1_16_reads,
-                    }
-                }
-            },
-            "oven2": {
-                "oven_number": record.o2,
-                "start": str(record.o2_start),
-                "stop": str(record.o2_stop),
-                "highest_opacity": record.o2_highest_opacity,
-                "opacity_over_20": record.o2_instant_over_20,
-                "average_6_opacity": record.o2_average_6,
-                "average_6_over_35": record.o2_average_6_over_35,
-                "readings": {
-                    "push":{
-                        "1": record.o2_1_reads,
-                        "2": record.o2_2_reads,
-                        "3": record.o2_3_reads,
-                        "4": record.o2_4_reads,
-                        "5": record.o2_5_reads,
-                        "6": record.o2_6_reads,
-                        "7": record.o2_7_reads,
-                        "8": record.o2_8_reads,
-                    },
-                    "travel": {
-                        "1": record.o2_9_reads,
-                        "2": record.o2_10_reads,
-                        "3": record.o2_11_reads,
-                        "4": record.o2_12_reads,
-                        "5": record.o2_13_reads,
-                        "6": record.o2_14_reads,
-                        "7": record.o2_15_reads,
-                        "8": record.o2_16_reads,
-                    }
-                }
-            },
-            "oven3": {
-                "oven_number": record.o3,
-                "start": str(record.o3_start),
-                "stop": str(record.o3_stop),
-                "highest_opacity": record.o3_highest_opacity,
-                "opacity_over_20": record.o3_instant_over_20,
-                "average_6_opacity": record.o3_average_6,
-                "average_6_over_35": record.o3_average_6_over_35,
-                "readings": {
-                    "push":{
-                        "1": record.o3_1_reads,
-                        "2": record.o3_2_reads,
-                        "3": record.o3_3_reads,
-                        "4": record.o3_4_reads,
-                        "5": record.o3_5_reads,
-                        "6": record.o3_6_reads,
-                        "7": record.o3_7_reads,
-                        "8": record.o3_8_reads,
-                    },
-                    "travel": {
-                        "1": record.o3_9_reads,
-                        "2": record.o3_10_reads,
-                        "3": record.o3_11_reads,
-                        "4": record.o3_12_reads,
-                        "5": record.o3_13_reads,
-                        "6": record.o3_14_reads,
-                        "7": record.o3_15_reads,
-                        "8": record.o3_16_reads,
-                    }
-                }
-            },
-            "oven4": {
-                "oven_number": record.o4,
-                "start": str(record.o4_start),
-                "stop": str(record.o4_stop),
-                "highest_opacity": record.o4_highest_opacity,
-                "opacity_over_20": record.o4_instant_over_20,
-                "average_6_opacity": record.o4_average_6,
-                "average_6_over_35": record.o4_average_6_over_35,
-                "readings": {
-                    "push":{
-                        "1": record.o4_1_reads,
-                        "2": record.o4_2_reads,
-                        "3": record.o4_3_reads,
-                        "4": record.o4_4_reads,
-                        "5": record.o4_5_reads,
-                        "6": record.o4_6_reads,
-                        "7": record.o4_7_reads,
-                        "8": record.o4_8_reads,
-                    },
-                    "travel": {
-                        "1": record.o4_9_reads,
-                        "2": record.o4_10_reads,
-                        "3": record.o4_11_reads,
-                        "4": record.o4_12_reads,
-                        "5": record.o4_13_reads,
-                        "6": record.o4_14_reads,
-                        "7": record.o4_15_reads,
-                        "8": record.o4_16_reads,
-                    }
-                }
-            }
-        }
-        #finalJson = json.loads(json.dumps({fieldName: getattr(record, fieldName) for fieldName in fieldsList}))
-        record.form.ovens_data = json.loads(json.dumps(formA5Ovens))
-        record.form.save()
-        print("hello2")
-
 def parse_form17_oven_dict(reading_data, ovens_data):
     inspecType = ovens_data["PEC_type"]
     ovens = {}
@@ -1326,7 +1189,7 @@ def ninetyDayPushTravels(facility):
     today = datetime.datetime.now().date()
     due_date_threshold = today + timedelta(days=30)
     most_recent_dates = {}
-    all_records = form5_model.objects.filter(facilityChoice__facility_name=facility)
+    all_records = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility)
     if all_records.exists():
         for record in all_records:
             record_date = record.date  # The date the record was created
@@ -1343,7 +1206,6 @@ def ninetyDayPushTravels(facility):
                             most_recent_dates[oven_number] = record_date
         
         # Calculate the 90-day deadlines and filter ovens due within 30 days
-        print(most_recent_dates)
         od_90 = []
         od_30 = []
         od_10 = []
@@ -1617,9 +1479,15 @@ def date_change(date):
     return parsed
 
 def time_change(time):
+    print(type(time))
     if isinstance(time, str):
         print(time)
-        time = str(datetime.datetime.strptime(time, "%H:%M"))[11:]
+        try:
+            time = datetime.datetime.strptime(time, "%H:%M")
+        except:
+            time = datetime.datetime.strptime(time, "%H:%M:%S")
+    time = time.strftime("%I:%M %p")
+    print(time)
     if time:
         hourNum = int(str(time)[0:2])
         minNum = str(time)[3:5]

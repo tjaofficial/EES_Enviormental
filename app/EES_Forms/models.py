@@ -484,7 +484,6 @@ class form_settings_model(models.Model):
         return str(self.id) + ' - ' + str(self.formChoice) + ' - ' + str(self.facilityChoice)
     
 class form7_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -543,63 +542,6 @@ class form7_model(models.Model):
                 setattr(self, field_name, {})  # Set it to an empty dictionary
 
         super().save(*args, **kwargs)
-
-class form7_readings_model(models.Model):
-    form = models.OneToOneField(
-        form7_model,
-        on_delete=models.CASCADE,
-    )
-    TRead1 = models.CharField(max_length=3)
-    TRead2 = models.CharField(max_length=3)
-    TRead3 = models.CharField(max_length=3)
-    TRead4 = models.CharField(max_length=3)
-    TRead5 = models.CharField(max_length=3)
-    TRead6 = models.CharField(max_length=3)
-    TRead7 = models.CharField(max_length=3)
-    TRead8 = models.CharField(max_length=3)
-    TRead9 = models.CharField(max_length=3)
-    TRead10 = models.CharField(max_length=3)
-    TRead11 = models.CharField(max_length=3)
-    TRead12 = models.CharField(max_length=3)
-    ARead1 = models.CharField(max_length=3)
-    ARead2 = models.CharField(max_length=3)
-    ARead3 = models.CharField(max_length=3)
-    ARead4 = models.CharField(max_length=3)
-    ARead5 = models.CharField(max_length=3)
-    ARead6 = models.CharField(max_length=3)
-    ARead7 = models.CharField(max_length=3)
-    ARead8 = models.CharField(max_length=3)
-    ARead9 = models.CharField(max_length=3)
-    ARead10 = models.CharField(max_length=3)
-    ARead11 = models.CharField(max_length=3)
-    ARead12 = models.CharField(max_length=3)
-    storage_1 = models.CharField(max_length=3, blank = True)
-    storage_2 = models.CharField(max_length=3, blank = True)
-    storage_3 = models.CharField(max_length=3, blank = True)
-    storage_4 = models.CharField(max_length=3, blank = True)
-    storage_5 = models.CharField(max_length=3, blank = True)
-    storage_6 = models.CharField(max_length=3, blank = True)
-    storage_7 = models.CharField(max_length=3, blank = True)
-    storage_8 = models.CharField(max_length=3, blank = True)
-    storage_9 = models.CharField(max_length=3, blank = True)
-    storage_10 = models.CharField(max_length=3, blank = True)
-    storage_11 = models.CharField(max_length=3, blank = True)
-    storage_12 = models.CharField(max_length=3, blank = True)
-    salt_1 = models.CharField(max_length=3, blank = True)
-    salt_2 = models.CharField(max_length=3, blank = True)
-    salt_3 = models.CharField(max_length=3, blank = True)
-    salt_4 = models.CharField(max_length=3, blank = True)
-    salt_5 = models.CharField(max_length=3, blank = True)
-    salt_6 = models.CharField(max_length=3, blank = True)
-    salt_7 = models.CharField(max_length=3, blank = True)
-    salt_8 = models.CharField(max_length=3, blank = True)
-    salt_9 = models.CharField(max_length=3, blank = True)
-    salt_10 = models.CharField(max_length=3, blank = True)
-    salt_11 = models.CharField(max_length=3, blank = True)
-    salt_12 = models.CharField(max_length=3, blank = True)
-
-    def __str__(self):
-        return str(self.form)
 
 class Profile(models.Model):
 
@@ -683,7 +625,6 @@ class user_profile_model(models.Model):
         return self.user.username
 
 class form1_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -724,123 +665,7 @@ class form1_model(models.Model):
     def __str__(self):
         return str(self.date)
 
-class form1_readings_model(models.Model):
-    form = models.OneToOneField(
-        form1_model,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-    c1_no = models.CharField(
-        max_length=2
-    )
-    c2_no = models.CharField(
-        max_length=2
-    )
-    c3_no = models.CharField(
-        max_length=2
-    )
-    c4_no = models.CharField(
-        max_length=2
-    )
-    c5_no = models.CharField(
-        max_length=2
-    )
-    c1_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c2_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c3_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c4_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c5_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c1_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c2_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c3_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c4_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c5_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-    )
-    c1_sec = models.FloatField(
-        max_length=5
-    )
-    c2_sec = models.FloatField(
-        max_length=5
-    )
-    c3_sec = models.FloatField(
-        max_length=5
-    )
-    c4_sec = models.FloatField(
-        max_length=5
-    )
-    c5_sec = models.FloatField(
-        max_length=5
-    )
-    c1_comments = models.CharField(
-        max_length=150
-    )
-    c2_comments = models.CharField(
-        max_length=150
-    )
-    c3_comments = models.CharField(
-        max_length=150
-    )
-    c4_comments = models.CharField(
-        max_length=150
-    )
-    c5_comments = models.CharField(
-        max_length=150
-    )
-    larry_car = models.CharField(
-        max_length=30,
-        choices=larry_car_choices
-    )
-    comments = models.CharField(
-        max_length=600
-    )
-    total_seconds = models.FloatField(
-        max_length=30
-    )
-
-    def __str__(self):
-        return str(self.form)
-
 class form2_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -922,7 +747,6 @@ class form2_model(models.Model):
         return str(self.date)
 
 class form3_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -1012,7 +836,6 @@ class form3_model(models.Model):
         return str(self.date)
 
 class form4_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -1072,7 +895,6 @@ class form4_model(models.Model):
         return str(self.date)
 
 class form5_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey('form_settings_model', on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(
         auto_now_add=False,
@@ -1109,152 +931,9 @@ class form5_model(models.Model):
     def __str__(self):
         return str(self.date)
 
-class form5_readings_model(models.Model):
-    form = models.OneToOneField(
-        form5_model,
-        on_delete=models.CASCADE,
-        primary_key=True,
-        related_name='foobar',
-    )
-    o1 = models.CharField(max_length=2)
-    o1_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o1_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o1_highest_opacity = models.IntegerField(
-    )
-    o1_instant_over_20 = models.CharField(max_length=30, choices=instant_over_20_choices)
-    o1_average_6 = models.FloatField(
-    )
-    o1_average_6_over_35 = models.CharField(max_length=30, choices=average_over_35_choices)
-    o2 = models.CharField(max_length=2)
-    o2_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o2_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o2_highest_opacity = models.IntegerField(
-    )
-    o2_instant_over_20 = models.CharField(max_length=30, choices=instant_over_20_choices)
-    o2_average_6 = models.FloatField(
-    )
-    o2_average_6_over_35 = models.CharField(max_length=30, choices=average_over_35_choices)
-    o3 = models.CharField(max_length=2)
-    o3_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o3_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o3_highest_opacity = models.IntegerField(
-    )
-    o3_instant_over_20 = models.CharField(max_length=30, choices=instant_over_20_choices)
-    o3_average_6 = models.FloatField(
-    )
-    o3_average_6_over_35 = models.CharField(max_length=30, choices=average_over_35_choices)
-    o4 = models.CharField(max_length=2)
-    o4_start = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o4_stop = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True
-    )
-    o4_highest_opacity = models.IntegerField(
-    )
-    o4_instant_over_20 = models.CharField(max_length=30, choices=instant_over_20_choices)
-    o4_average_6 = models.FloatField(
-    )
-    o4_average_6_over_35 = models.CharField(max_length=30, choices=average_over_35_choices)
-    o1_1_reads = models.CharField(max_length=3)
-    o1_2_reads = models.CharField(max_length=3)
-    o1_3_reads = models.CharField(max_length=3)
-    o1_4_reads = models.CharField(max_length=3)
-    o1_5_reads = models.CharField(max_length=3)
-    o1_6_reads = models.CharField(max_length=3)
-    o1_7_reads = models.CharField(max_length=3)
-    o1_8_reads = models.CharField(max_length=3)
-    o1_9_reads = models.CharField(max_length=3)
-    o1_10_reads = models.CharField(max_length=3)
-    o1_11_reads = models.CharField(max_length=3)
-    o1_12_reads = models.CharField(max_length=3)
-    o1_13_reads = models.CharField(max_length=3)
-    o1_14_reads = models.CharField(max_length=3)
-    o1_15_reads = models.CharField(max_length=3)
-    o1_16_reads = models.CharField(max_length=3)
-    o2_1_reads = models.CharField(max_length=3)
-    o2_2_reads = models.CharField(max_length=3)
-    o2_3_reads = models.CharField(max_length=3)
-    o2_4_reads = models.CharField(max_length=3)
-    o2_5_reads = models.CharField(max_length=3)
-    o2_6_reads = models.CharField(max_length=3)
-    o2_7_reads = models.CharField(max_length=3)
-    o2_8_reads = models.CharField(max_length=3)
-    o2_9_reads = models.CharField(max_length=3)
-    o2_10_reads = models.CharField(max_length=3)
-    o2_11_reads = models.CharField(max_length=3)
-    o2_12_reads = models.CharField(max_length=3)
-    o2_13_reads = models.CharField(max_length=3)
-    o2_14_reads = models.CharField(max_length=3)
-    o2_15_reads = models.CharField(max_length=3)
-    o2_16_reads = models.CharField(max_length=3)
-    o3_1_reads = models.CharField(max_length=3)
-    o3_2_reads = models.CharField(max_length=3)
-    o3_3_reads = models.CharField(max_length=3)
-    o3_4_reads = models.CharField(max_length=3)
-    o3_5_reads = models.CharField(max_length=3)
-    o3_6_reads = models.CharField(max_length=3)
-    o3_7_reads = models.CharField(max_length=3)
-    o3_8_reads = models.CharField(max_length=3)
-    o3_9_reads = models.CharField(max_length=3)
-    o3_10_reads = models.CharField(max_length=3)
-    o3_11_reads = models.CharField(max_length=3)
-    o3_12_reads = models.CharField(max_length=3)
-    o3_13_reads = models.CharField(max_length=3)
-    o3_14_reads = models.CharField(max_length=3)
-    o3_15_reads = models.CharField(max_length=3)
-    o3_16_reads = models.CharField(max_length=3)
-    o4_1_reads = models.CharField(max_length=3)
-    o4_2_reads = models.CharField(max_length=3)
-    o4_3_reads = models.CharField(max_length=3)
-    o4_4_reads = models.CharField(max_length=3)
-    o4_5_reads = models.CharField(max_length=3)
-    o4_6_reads = models.CharField(max_length=3)
-    o4_7_reads = models.CharField(max_length=3)
-    o4_8_reads = models.CharField(max_length=3)
-    o4_9_reads = models.CharField(max_length=3)
-    o4_10_reads = models.CharField(max_length=3)
-    o4_11_reads = models.CharField(max_length=3)
-    o4_12_reads = models.CharField(max_length=3)
-    o4_13_reads = models.CharField(max_length=3)
-    o4_14_reads = models.CharField(max_length=3)
-    o4_15_reads = models.CharField(max_length=3)
-    o4_16_reads = models.CharField(max_length=3)
-
-    def __str__(self):
-        return str(self.form)
-
 class pt_admin1_model(models.Model):
     form = models.OneToOneField(
-        form5_readings_model,
+        'form5_model',
         on_delete=models.CASCADE,
         primary_key=True,
     )
@@ -1270,7 +949,6 @@ class pt_admin1_model(models.Model):
         return self.date
 
 class form6_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -2025,7 +1703,6 @@ class form6_model(models.Model):
         }
 
 class form8_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -2323,7 +2000,6 @@ class form8_model(models.Model):
         }
 
 class form9_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 

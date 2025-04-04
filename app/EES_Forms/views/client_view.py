@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from ..models import issues_model, form1_readings_model, form2_model, form3_model, Event, form4_model, form5_readings_model, daily_battery_profile_model, form1_readings_model, User, user_profile_model, bat_info_model
+from ..models import issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, bat_info_model
 import datetime
 import json
 import calendar
@@ -17,11 +17,11 @@ def client_dashboard_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     supervisor = False
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    formA1 = form1_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
-    formA2 = form2_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    formA3 = form3_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    formA4 = form4_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    formA5 = form5_readings_model.objects.filter(form__facilityChoice__facility_name=facility).order_by('-form')
+    formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-form')
+    formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+    formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+    formA4 = form4_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+    formA5 = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-form')
     fsID1 = tryExceptFormDatabases(1,formA1, facility)
     fsID2 = tryExceptFormDatabases(2,formA2, facility) 
     fsID3 = tryExceptFormDatabases(3,formA3, facility)
@@ -40,7 +40,7 @@ def client_dashboard_view(request, facility):
         options = options[0]
     #VVV i may not need this because the facility is perminent for the client VVV
     if facility != CLIENT_VAR:
-        recent_logs = form1_readings_model.objects.all().filter(form__facilityChoice__facility_name=facility).order_by('-form')[:7]
+        recent_logs = form1_model.objects.all().filter(formSettings__facilityChoice__facility_name=facility).order_by('-form')[:7]
     else:
         recent_logs = ''
     year = str(now.year)
