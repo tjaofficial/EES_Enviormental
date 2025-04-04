@@ -54,7 +54,7 @@ def sup_dashboard_view(request, facility):
         options = options[0]
     
     if facility != 'supervisor':
-        recent_logs = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-form')[:7]
+        recent_logs = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')[:7]
     else:
         recent_logs = ''
     year = str(now.year)
@@ -123,10 +123,10 @@ def sup_dashboard_view(request, facility):
                     yValues = []
                     for dates in dateList:
                         if gStuff == 'charges':
-                            useModel = formA1.filter(form__date=dates)
+                            useModel = formA1.filter(date=dates)
                             if useModel.exists():
-                                xValues.append(int(useModel[0].total_seconds))
-                                yValues.append(str(useModel[0].form.date))
+                                xValues.append(int(useModel[0].ovens_data['total_seconds']))
+                                yValues.append(str(useModel[0].date))
                         elif gStuff == 'doors':
                             useModel = formA2.filter(date=dates)
                             if useModel.exists():
@@ -202,7 +202,7 @@ def sup_dashboard_view(request, facility):
                 emypty_dp_today = False
                 today = todays_log.date_save
                 if formA1.exists():
-                    most_recent_A1 = formA1[0].form.date
+                    most_recent_A1 = formA1[0].date
                     if most_recent_A1 == today:
                         A1data = formA1[0]
                         form_enteredA1 = True
@@ -254,7 +254,7 @@ def sup_dashboard_view(request, facility):
 
                 A5data = ""
                 if formA5.exists():
-                    most_recent_A5 = formA5[0].form.date
+                    most_recent_A5 = formA5[0].date
                     if most_recent_A5 == today:
                         A5data = formA5[0]
                         form_enteredA5 = True

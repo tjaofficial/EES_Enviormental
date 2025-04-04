@@ -1003,12 +1003,12 @@ class PrintCalendar(HTMLCalendar):
                 formInformation = iFormSettings.formChoice
                 name_of_model = formInformation.link + "_model"
                 if formID == 23:
-                    chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                    chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, formSettings__facilityChoice__facility_name=facility)
                 else:
                     try:#### ----- Set up a code to switch over to a number based model instead of labels
-                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, formSettings__facilityChoice__facility_name=facility)
                     except:
-                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
+                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, formSettings__facilityChoice__facility_name=facility)
                 
                 if chk_database.exists():
                     packetExists.extend(chk_database)

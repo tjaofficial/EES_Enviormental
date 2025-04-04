@@ -1799,7 +1799,7 @@ def pdf_template_23(formDate, facility):
     newDateN = str(parseDateN.year) + '-' + str(parseDateN.month) + '-' + '01'
     parseDateStart = datetime.datetime.strptime(newDateN, "%Y-%m-%d").date()
     parseDateStop = parseDateStart + datetime.timedelta(days=(daysInMonth[1] - 1))
-    dataN = form22_model.objects.filter(facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
+    dataN = form22_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date__year=parseDateN.year, date__month=parseDateN.month)
     new = 'Fugitive Dust Inspection'
     titleN = 'Method 9D Monthly Checklist - (N)'
     subTitleN = 'Facility Name: ' + facility
