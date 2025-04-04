@@ -29,11 +29,11 @@ def sup_dashboard_view(request, facility):
     updateAllFormSubmissions(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-form')
+    formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA4 = form4_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
-    formA5 = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-form')
+    formA5 = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     fsID1 = tryExceptFormDatabases(1,formA1, facility)
     fsID2 = tryExceptFormDatabases(2,formA2, facility) 
     fsID3 = tryExceptFormDatabases(3,formA3, facility)
@@ -48,7 +48,7 @@ def sup_dashboard_view(request, facility):
     emypty_dp_today = True
     colorMode = userColorMode(request.user)[0]  
     userMode = userColorMode(request.user)[1]
-    userProfile = user_profile_model.objects.get(user__id=request.user.id)
+    userProfile = request.user.user_profile
     userCompany = userProfile.company
     if options.exists():
         options = options[0]

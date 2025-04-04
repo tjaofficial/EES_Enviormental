@@ -395,6 +395,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
             print(keysList)
             # chek this utils
             newLabel, settingsDict = formSettingsFunc(keysList, request.POST, formData.id)
+            print(f"This is the new label: {newLabel}")
             settingsChange = selectedSettings.settings
             settingsChange['settings'] = settingsDict
             if newLabel:

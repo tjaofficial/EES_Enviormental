@@ -97,7 +97,7 @@
                                                     <td class="center">{{key}}</td>
                                                     {% for x in formSettingsModel %}
                                                         {% if x.id == form.settingsID %}
-                                                            <td class="">{{x.formChoice.header}} - {{x.formChoice.title}}</td>
+                                                            <td class="">{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
                                                         {% endif %}
                                                     {% endfor %}
                                                     <td class="center smallLink" style="display: flex; justify-content: flex-end;">

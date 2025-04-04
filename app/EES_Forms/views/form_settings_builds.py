@@ -13,14 +13,11 @@ withoutSettings = [2,4,6,9,21,23]
 def formSettingsFunc(keysList, requestPost, formID):
     settings = {}
     print(keysList)
-    for key in keysList:
+    newLabel = requestPost['newLabel'] if "newLabel" in requestPost else False
+    print(newLabel)
+    for key, value in requestPost.items():
         defaultDictUpdate = False
-        if key == "newLabel":
-            print("need to set up")
-            newLabel = requestPost[key]
-            #set newLabel variable equal to the new label name: newLabel = requestPost[key] 
-        elif key not in ['csrfmiddlewaretoken', 'update']:
-            newLabel = False
+        if key not in ['csrfmiddlewaretoken', 'update', 'newLabel']:
             mainLabel = key.split("-")[1]
             print(mainLabel)
             if formID in withoutSettings:

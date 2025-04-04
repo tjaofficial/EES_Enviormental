@@ -3129,7 +3129,6 @@ class formF7_model(models.Model):
         return str(self.date)
 
 class form17_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -3167,175 +3166,8 @@ class form17_model(models.Model):
 
     def __str__(self):
         return str(self.date)
-
-class form17_readings_model(models.Model):
-    form = models.OneToOneField(
-        form17_model,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-    PEC_read_1 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_2 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_3 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_4 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_5 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_6 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_7 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_8 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_9 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_10 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_11 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_12 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_13 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_14 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_15 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_16 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_17 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_18 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_19 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_20 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_21 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_22 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_23 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-    PEC_read_24 = models.CharField(
-        max_length=3, 
-        blank=True,
-        null=True
-    )
-
-    PEC_start = models.TimeField(
-        blank=True,
-        null=True
-    )
-    PEC_stop = models.TimeField(
-        blank=True,
-        null=True
-    )
-    PEC_oven1 = models.CharField(
-        max_length=2, 
-        blank=True,
-        null=True
-    )
-    PEC_oven2 = models.CharField(
-        max_length=2, 
-        blank=True,
-        null=True
-    )
-    PEC_time1 = models.TimeField(
-        blank=True,
-        null=True
-    )
-    PEC_time2 = models.TimeField(
-        blank=True,
-        null=True
-    )
-    PEC_type = models.CharField(
-        max_length=14,
-    )
-    PEC_average = models.FloatField(blank=True, null=True)
-    PEC_push_oven = models.IntegerField(blank=True, null=True)
-    PEC_push_time = models.TimeField(blank=True, null=True)
-    PEC_observe_time = models.TimeField(blank=True, null=True)
-    PEC_emissions_present = models.BooleanField(default=None, null=True)
-    
-    
-    def __str__(self):
-        return str(self.form)
 
 class form18_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -3373,57 +3205,8 @@ class form18_model(models.Model):
     
     def __str__(self):
         return str(self.date)
-
-class form18_readings_model(models.Model):
-    form = models.OneToOneField(
-        form18_model,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-    PEC_read_a_1 = models.CharField(max_length=3)
-    PEC_read_a_2 = models.CharField(max_length=3)
-    PEC_read_a_3 = models.CharField(max_length=3)
-    PEC_read_a_4 = models.CharField(max_length=3)
-    PEC_read_a_5 = models.CharField(max_length=3)
-    PEC_read_a_6 = models.CharField(max_length=3)
-    PEC_read_a_7 = models.CharField(max_length=3)
-    PEC_read_a_8 = models.CharField(max_length=3)
-    
-    PEC_read_b_1 = models.CharField(max_length=3)
-    PEC_read_b_2 = models.CharField(max_length=3)
-    PEC_read_b_3 = models.CharField(max_length=3)
-    PEC_read_b_4 = models.CharField(max_length=3)
-    PEC_read_b_5 = models.CharField(max_length=3)
-    PEC_read_b_6 = models.CharField(max_length=3)
-    PEC_read_b_7 = models.CharField(max_length=3)
-    PEC_read_b_8 = models.CharField(max_length=3)
-    
-    PEC_read_c_1 = models.CharField(max_length=3)
-    PEC_read_c_2 = models.CharField(max_length=3)
-    PEC_read_c_3 = models.CharField(max_length=3)
-    PEC_read_c_4 = models.CharField(max_length=3)
-    PEC_read_c_5 = models.CharField(max_length=3)
-    PEC_read_c_6 = models.CharField(max_length=3)
-    PEC_read_c_7 = models.CharField(max_length=3)
-    PEC_read_c_8 = models.CharField(max_length=3)
-    
-    PEC_oven_a = models.IntegerField()
-    PEC_oven_b = models.IntegerField()
-    PEC_oven_c = models.IntegerField()
-    PEC_start_a = models.TimeField()
-    PEC_start_b = models.TimeField()
-    PEC_start_c = models.TimeField()
-    PEC_average_a = models.FloatField(blank=True)
-    PEC_average_b = models.FloatField(blank=True)
-    PEC_average_c = models.FloatField(blank=True)
-    PEC_average_main = models.FloatField(blank=True)
-    
-    
-    def __str__(self):
-        return str(self.form)
 
 class form19_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -3462,82 +3245,7 @@ class form19_model(models.Model):
     def __str__(self):
         return str(self.date)
 
-class form19_readings_model(models.Model):
-    form = models.OneToOneField(
-        form19_model,
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
-    comb_formL = models.BooleanField(default=False, null=True)
-    comb_read_1 = models.CharField(max_length=3)
-    comb_read_2 = models.CharField(max_length=3)
-    comb_read_3 = models.CharField(max_length=3)
-    comb_read_4 = models.CharField(max_length=3)
-    comb_read_5 = models.CharField(max_length=3)
-    comb_read_6 = models.CharField(max_length=3)
-    comb_read_7 = models.CharField(max_length=3)
-    comb_read_8 = models.CharField(max_length=3)
-    comb_read_9 = models.CharField(max_length=3)
-    comb_read_10 = models.CharField(max_length=3)
-    comb_read_11 = models.CharField(max_length=3)
-    comb_read_12 = models.CharField(max_length=3)
-    comb_read_13 = models.CharField(max_length=3)
-    comb_read_14 = models.CharField(max_length=3)
-    comb_read_15 = models.CharField(max_length=3)
-    comb_read_16 = models.CharField(max_length=3)
-    comb_read_17 = models.CharField(max_length=3)
-    comb_read_18 = models.CharField(max_length=3)
-    comb_read_19 = models.CharField(max_length=3)
-    comb_read_20 = models.CharField(max_length=3)
-    comb_read_21 = models.CharField(max_length=3)
-    comb_read_22 = models.CharField(max_length=3)
-    comb_read_23 = models.CharField(max_length=3)
-    comb_read_24 = models.CharField(max_length=3)
-    comb_read_25 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_26 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_27 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_28 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_29 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_30 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_31 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_32 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_33 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_34 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_35 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_36 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_37 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_38 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_39 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_40 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_41 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_42 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_43 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_44 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_45 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_46 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_47 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_48 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_49 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_50 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_51 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_52 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_53 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_54 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_55 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_56 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_57 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_58 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_59 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_read_60 = models.CharField(max_length=3, null=True, blank=True,)
-    comb_start = models.TimeField()
-    comb_stop = models.TimeField()
-    comb_average = models.FloatField(blank=True)
-    
-    def __str__(self):
-        return str(self.form)
- 
 class form20_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -3623,7 +3331,6 @@ class form20_model(models.Model):
         return str(self.week_start)
  
 class form21_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -3893,7 +3600,6 @@ class form21_model(models.Model):
 
 
 class form22_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -4084,7 +3790,6 @@ class form22_readings_model(models.Model):
         return str(self.form)
 
 class form24_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -4152,7 +3857,6 @@ class form24_model(models.Model):
         return str(self.date)
  
 class form25_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -4310,7 +4014,6 @@ class Event(models.Model):
             raise ValidationError('Ending times must after starting times')
 
 class form29_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -5470,7 +5173,6 @@ class quarterly_trucks_model(models.Model):
         }
 
 class form27_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -5787,7 +5489,6 @@ class spill_kit_inventory_model(models.Model):
         return str(self.date) + ' - ' + str(self.skID)
     
 class form26_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -6037,7 +5738,6 @@ class TrafficData(models.Model):
         return f"Traffic on {self.date}"
 
 class form30_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
@@ -6072,7 +5772,6 @@ class form30_model(models.Model):
         return str(self.date) + " - " + str(self.area_name)
 
 class form31_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 
