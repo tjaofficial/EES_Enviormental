@@ -1480,38 +1480,40 @@ def date_change(date):
 
 def time_change(time):
     print(type(time))
-    if isinstance(time, str):
-        print(time)
-        try:
-            time = datetime.datetime.strptime(time, "%H:%M")
-        except:
-            time = datetime.datetime.strptime(time, "%H:%M:%S")
-    time = time.strftime("%I:%M %p")
-    print(time)
     if time:
-        hourNum = int(str(time)[0:2])
-        minNum = str(time)[3:5]
-        timeLabel = 'AM'
-        if hourNum > 12:
-            newHourNum = str(hourNum - 12)
-            timeLabel = 'PM'
-            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-        elif hourNum == 12:
-            newHourNum = str(time)[0:2]
-            timeLabel = 'PM'
-            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-        elif hourNum == 00:
-            newHourNum = '12'
-            newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+        if isinstance(time, str):
+            print(time)
+            try:
+                time = datetime.datetime.strptime(time, "%H:%M")
+            except:
+                time = datetime.datetime.strptime(time, "%H:%M:%S")
+        time = time.strftime("%I:%M %p")
+        print(time)
+        if time:
+            hourNum = int(str(time)[0:2])
+            minNum = str(time)[3:5]
+            timeLabel = 'AM'
+            if hourNum > 12:
+                newHourNum = str(hourNum - 12)
+                timeLabel = 'PM'
+                newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+            elif hourNum == 12:
+                newHourNum = str(time)[0:2]
+                timeLabel = 'PM'
+                newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+            elif hourNum == 00:
+                newHourNum = '12'
+                newTime = newHourNum + ':' + minNum + ' ' + timeLabel
+            else:
+                newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
+            return newTime
         else:
-            newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
-        return newTime
+            print('TIME_CHANGE ERROR: no time entered')
+            print('ERROR TIME ENTERED: ' + str(time))
+            print('RETURNING: "-" and moving on...')
+            return '-'
     else:
-        print('TIME_CHANGE ERROR: no time entered')
-        print('ERROR TIME ENTERED: ' + str(time))
-        print('RETURNING: "-" and moving on...')
-        return '-'
-
+        return False
 def date_time_change(dateTime):
     if isinstance(dateTime, str):
         dateTime = datetime.datetime.strptime(dateTime, "%Y-%m-%dT%H:%M")
@@ -1685,8 +1687,8 @@ def create_starting_forms():
             weekdays_only=False,
             weekend_only=False,
             link="form7",
-            header="Method 9",
-            title="Method 9D - Coal Field",
+            header="Method 9D",
+            title="Fugitive Dust Inspection Form",
         )
         D = Forms(
             form=8,

@@ -1088,6 +1088,7 @@ def pdf_template_9(primaryData, title, subTitle):
     return tableData, tableColWidths, style
 
 def pdf_template_17(primaryData, title, subTitle):
+    print(f"Why is this missing: {primaryData}")
     emissionsPresent = primaryData.ovens_data['non']['PEC_emissions_present']
     emissions = emissionsPresent if emissionsPresent else None
     reading_data = primaryData.reading_data
@@ -1162,12 +1163,12 @@ def pdf_template_17(primaryData, title, subTitle):
             # Table starts at (0,25)
             ['', methStartStop, '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '0', '15', '30', '45', '', '', '', '', ''],
-            ['', '', '', '', '', '', '', '0', ovens_data['PEC_read_1'], ovens_data['PEC_read_2'], ovens_data['PEC_read_3'], ovens_data['PEC_read_4'], '', '', '', '', ''],
-            ['', '', '', '', '', '', '', '1', ovens_data['PEC_read_5'], ovens_data['PEC_read_6'], ovens_data['PEC_read_7'], ovens_data['PEC_read_8'], '', '', '', '', ''],
-            ['', '', '', '', '', '', '', '2', ovens_data['PEC_read_9'], ovens_data['PEC_read_10'], ovens_data['PEC_read_11'], ovens_data['PEC_read_12'], '', '', '', '', ''],
-            ['', '', '', '', '', '', '', '3', ovens_data['PEC_read_13'], ovens_data['PEC_read_14'], ovens_data['PEC_read_15'], ovens_data['PEC_read_16'], '', '', '', '', ''],
-            ['', '', '', '', '', '', '', '4', ovens_data['PEC_read_17'], ovens_data['PEC_read_18'], ovens_data['PEC_read_19'], ovens_data['PEC_read_20'], '', '', '', '', ''],
-            ['', '', '', '', '', '', '', '5', ovens_data['PEC_read_21'], ovens_data['PEC_read_22'], ovens_data['PEC_read_23'], ovens_data['PEC_read_24'], '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '0', ovens_data['readings']['PEC_read_1'], ovens_data['readings']['PEC_read_2'], ovens_data['readings']['PEC_read_3'], ovens_data['readings']['PEC_read_4'], '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '1', ovens_data['readings']['PEC_read_5'], ovens_data['readings']['PEC_read_6'], ovens_data['readings']['PEC_read_7'], ovens_data['readings']['PEC_read_8'], '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '2', ovens_data['readings']['PEC_read_9'], ovens_data['readings']['PEC_read_10'], ovens_data['readings']['PEC_read_11'], ovens_data['readings']['PEC_read_12'], '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '3', ovens_data['readings']['PEC_read_13'], ovens_data['readings']['PEC_read_14'], ovens_data['readings']['PEC_read_15'], ovens_data['readings']['PEC_read_16'], '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '4', ovens_data['readings']['PEC_read_17'], ovens_data['readings']['PEC_read_18'], ovens_data['readings']['PEC_read_19'], ovens_data['readings']['PEC_read_20'], '', '', '', '', ''],
+            ['', '', '', '', '', '', '', '5', ovens_data['readings']['PEC_read_21'], ovens_data['readings']['PEC_read_22'], ovens_data['readings']['PEC_read_23'], ovens_data['readings']['PEC_read_24'], '', '', '', '', ''],
             ['', '', '', '', '', '', '', '', '', '', 'Average: ' + str(ovens_data['PEC_average']), '', '', '', '', '', ''],
         ]
         tableColWidths = (45,10,20,20,20,40,35,38,38,38,38,34,34,34,34,34,40)

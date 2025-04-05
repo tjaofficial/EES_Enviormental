@@ -11,7 +11,7 @@
                                 <div class="card_Form" style="margin-left: 50px;">
                                     <h3 class="card_Form_letter">{{key}}</h3>
                                     <div class="card_Form_title">
-                                        <h3>{{ matching_item.formChoice.title }}</h3>
+                                        <h3>{% if matching_item.settings.settings.custom_name %}{{matching_item.settings.settings.custom_name}}{% else %}{{ matching_item.formChoice.title }}{% endif %}</h3>
                                         <h4>{{ matching_item.formChoice.frequency }}</h4>
                                     </div>
                                     <h4 class="card_Form_date">{{matching_item.subChoice.dueDate}}</h4>       
@@ -41,7 +41,7 @@
                                     <div class="card_Form" style="margin-left: 50px;">
                                         <h3 class="card_Form_letter">{{ key }}</h3>
                                         <div class="card_Form_title">
-                                            <h3>{{ matching_item.formChoice.title }}</h3>
+                                            <h3>{% if matching_item.settings.settings.custom_name %}{{matching_item.settings.settings.custom_name}}{% else %}{{ matching_item.formChoice.title }}{% endif %}</h3>
                                             <h4>{{ matching_item.formChoice.frequency }}</h4>
                                         </div>
                                         <h4 class="card_Form_date">{{ matching_item.subChoice.dateSubmitted }}</h4>       

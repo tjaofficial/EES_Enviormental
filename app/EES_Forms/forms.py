@@ -230,33 +230,18 @@ class form1_form(ModelForm):
         'c5_sec': forms.NumberInput(attrs={'id': 'c5_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
         'c5_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
         'comments': Textarea(attrs={'id': 'comments', 'rows': 7, 'cols': 125, 'oninput': 'check_oven_numb()'}),
-        'c1_start': forms.TimeInput(attrs={'id': 'c1_start', 'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c2_start': forms.TimeInput(attrs={'id': 'c2_start', 'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c3_start': forms.TimeInput(attrs={'id': 'c3_start', 'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c4_start': forms.TimeInput(attrs={'id': 'c4_start', 'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c5_start': forms.TimeInput(attrs={'id': 'c5_start', 'oninput': 'timecheck_c5()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c1_stop': forms.TimeInput(attrs={'id': 'c1_stop', 'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c2_stop': forms.TimeInput(attrs={'id': 'c2_stop', 'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c3_stop': forms.TimeInput(attrs={'id': 'c3_stop', 'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c4_stop': forms.TimeInput(attrs={'id': 'c4_stop', 'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c5_stop': forms.TimeInput(attrs={
-            'id': 'c5_stop',
-            'oninput': 'timecheck_c5()',
-            'onchange': 'equal_start_stop()',
-            'type': 'time',
-            'style': 'width: 130px;',
-            "required": True}),
-        'larry_car': forms.Select(
-            attrs={'style': 'width: 60px;'}
-        ),
-        'total_seconds': forms.NumberInput(attrs={
-            'id': 'total_seconds', 
-            'oninput': 'sumTime()',
-            'min': '0',
-            'readonly': True,
-            'type': 'number', 
-            'step': '0.5', 
-            'style': 'width: 60px; text-align: center;'}),
+        'c1_start': forms.TimeInput(attrs={'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c2_start': forms.TimeInput(attrs={'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c3_start': forms.TimeInput(attrs={'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c4_start': forms.TimeInput(attrs={'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c5_start': forms.TimeInput(attrs={'oninput': 'timecheck_c5()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c1_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c2_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c3_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c4_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c5_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c5()', 'onchange': 'equal_start_stop()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'larry_car': forms.Select(attrs={'style': 'width: 60px;'}),
+        'total_seconds': forms.NumberInput(attrs={'id': 'total_seconds', 'oninput': 'sumTime()', 'min': '0', 'readonly': True, 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
     }
 
     def __init__(self, *args, **kwargs):
@@ -381,19 +366,16 @@ class form2_form(ModelForm):
             'inop_numbs': forms.TextInput(attrs={'onchange': 'pc_doors_not_observed()', 'oninput':'inoperable_ovens()', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
             'crew': forms.Select(attrs={'style': 'width:40px;'}),
             'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
-            'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_start', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
-            'p_stop': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'id': 'p_stop', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
+            'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
+            'p_stop': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
             'c_start': forms.TimeInput(attrs={
                 'oninput': 'timecheck_cokeDoors()',
-                'id': 'c_start',
-                'id': 'c_start', 'type': 'time',
+                'type': 'time',
                 'style': 'width: 120px;', 
                 'required': True
             }),
             'c_stop': forms.TimeInput(attrs={
                 'oninput': 'timecheck_cokeDoors()',
-                'id': 'c_start',
-                'id': 'c_stop',
                 'type': 'time',
                 'style': 'width: 120px;',
                 'required': True
@@ -758,14 +740,14 @@ class form5_form(ModelForm):
         'o2' : forms.NumberInput(attrs={'id' : 'o2', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
         'o3' : forms.NumberInput(attrs={'id' : 'o3', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
         'o4' : forms.NumberInput(attrs={'id' : 'o4', 'class': 'input', 'type': 'number', 'style':'width: 40px; text-align: center;'}),
-        'o1_start' : forms.TimeInput(attrs={'id': 'o1_start', 'oninput': 'timecheck_pt1()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o1_stop' : forms.TimeInput(attrs={'id': 'o1_stop', 'oninput': 'timecheck_pt1()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o2_start' : forms.TimeInput(attrs={'id': 'o2_start', 'oninput': 'timecheck_pt2()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o2_stop' : forms.TimeInput(attrs={'id': 'o2_stop', 'oninput': 'timecheck_pt2()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o3_start' : forms.TimeInput(attrs={'id': 'o3_start', 'oninput': 'timecheck_pt3()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o3_stop' : forms.TimeInput(attrs={'id': 'o3_stop', 'oninput': 'timecheck_pt3()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o4_start' : forms.TimeInput(attrs={'id': 'o4_start', 'oninput': 'timecheck_pt4()', 'type':'time', 'style':'width: 120px;', 'required':True}),
-        'o4_stop' : forms.TimeInput(attrs={'id': 'o4_stop', 'oninput': 'timecheck_pt4()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o1_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pt1()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o1_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pt1()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o2_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pt2()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o2_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pt2()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o3_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pt3()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o3_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pt3()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o4_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pt4()', 'type':'time', 'style':'width: 120px;', 'required':True}),
+        'o4_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pt4()', 'type':'time', 'style':'width: 120px;', 'required':True}),
         'o1_1_reads' : forms.TextInput(attrs={'id':'o1_1_reads', 'oninput':'averages_pt1()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
         'o1_2_reads' : forms.TextInput(attrs={'id':'o1_2_reads', 'class': 'input', 'oninput':'averages_pt1()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
         'o1_3_reads' : forms.TextInput(attrs={'id':'o1_3_reads', 'class': 'input', 'oninput':'averages_pt1()', 'type': 'text', 'style':'width: 50px; text-align: center;'}),
@@ -1094,7 +1076,7 @@ class form7_form(ModelForm):
                 self.fields[field].initial = initial.get(field, getattr(data_source, field, None))
 
         for i in range(1, 13):
-            for x in range(1,5):
+            for x in range(1,num_of_areas + 1):
                 field_name = f"{x}Read_{i}"
                 widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
                 self.fields[field_name] = forms.IntegerField(
@@ -1103,7 +1085,7 @@ class form7_form(ModelForm):
                     widget=widget
                 )
         
-        for i in range(1,5):
+        for i in range(1,num_of_areas + 1):
             areaSelectChoices = area_choices_dict[f"area_choices_{i}"] if area_choices_dict[f"area_choices_{i}"] else []
             self.fields[f"{i}_selection"] = forms.ChoiceField(
                 choices=areaSelectChoices,
@@ -2177,94 +2159,6 @@ class form21_form(ModelForm):
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
      
-
-
-
-
-class formM_form(ModelForm):
-    class Meta:
-        model = form22_model
-        fields = (
-            'date',
-            'paved',
-            'pav_start',
-            'pav_stop',
-            'unpaved',
-            'unp_start',
-            'unp_stop',
-            'parking',
-            'par_start',
-            'par_stop',
-            'observer',
-            'cert_date',
-            'comments',
-        )
-        
-        widgets = {
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'paved' : forms.Select(attrs={'style':''}),
-            'pav_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pav()', 'type':'time', 'style':'width: 120px;'}),
-            'pav_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pav()', 'type':'time', 'style':'width: 120px;'}),
-            'unpaved' : forms.Select(attrs={'style':''}),
-            'unp_start' : forms.TimeInput(attrs={'oninput': 'timecheck_unpav()', 'type':'time', 'style':'width: 120px;'}),
-            'unp_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_unpav()', 'type':'time', 'style':'width: 120px;'}),
-            'parking' : forms.Select(attrs={'style':''}),
-            'par_start' : forms.TimeInput(attrs={'oninput': 'timecheck_par()', 'type':'time', 'style':'width: 120px;'}),
-            'par_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_par()', 'type':'time', 'style':'width: 120px;'}),
-            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'cert_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
-        }
-class formM_readings_form(ModelForm):
-    class Meta:
-        model = form22_readings_model
-        fields = ('__all__')
-        exclude = ('form',)
-        widgets = {
-            'pav_1' : forms.TextInput(attrs={'oninput':'paved_average()', 'oninput':'autoFillZeros(id_pav_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'pav_2' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_3' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_4' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_5' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_6' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_7' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_8' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_9' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_10' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_11' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_12' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_1' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'oninput':'autoFillZeros(id_unp_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'unp_2' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_3' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_4' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_5' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_6' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_7' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_8' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_9' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_10' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_11' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_12' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_1' : forms.TextInput(attrs={'oninput':'parking_average()', 'oninput':'autoFillZeros(id_par_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
-            'par_2' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_3' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_4' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_5' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_6' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_7' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_8' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_9' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_10' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_11' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_12' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-            'pav_total' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'unp_total' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
-            'par_total' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
-        }
-
-
-
-
 class form24_form(ModelForm):
     class Meta:
         model = form24_model
@@ -2295,7 +2189,7 @@ class form24_form(ModelForm):
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
-class formP_form(ModelForm):
+class form25_form(ModelForm):
     class Meta:
         model = form25_model
         fields = ('__all__')
@@ -2316,31 +2210,80 @@ class formP_form(ModelForm):
             'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
             'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
         }
-class issues_form(ModelForm):
-    class Meta:
-        model = issues_model
-        fields = ('__all__')
-        widgets = {
-            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center; border: 1px solid black;'}),
-            'issues' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
-            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px; border-radius: 5px; background-color: white; border: 1px solid black; padding-left: .5rem;'}),
-            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
-            'cor_action' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
-        }
 
-class events_form(ModelForm):
+
+
+
+class form26_form(ModelForm):
     class Meta:
-        model = Event
+        model = form26_model
         fields = ('__all__')
         widgets = {
-            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'title' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            "date": forms.DateInput(attrs={'type': 'date'}),
+            "inspector": forms.TextInput(attrs={'type': 'text'}),
+            "skID": forms.NumberInput(attrs={'type': 'number', 'style': 'width:50px; text-align:center'}),
+            "type": forms.Select(attrs={"id": "skType", "onchange": "selectType()"}),
+            "counted_items": forms.NumberInput(attrs={'type': 'number'}),
+            "missing_items": forms.NumberInput(attrs={'type': 'number'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
+class form27_form(ModelForm):
+    class Meta:
+        model = form27_model
+        fields = ('__all__')
+        widgets = {
+            'quarter': forms.Select(attrs={'style':'width: 50px; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
+            'date': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'observer_5_1': forms.TextInput(attrs={'style':'width: 150px;'}),
+            'date_5_1': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_5_1': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_5_1': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_5_1': forms.Select(attrs={'style':'width: 50px;'}),
+            'observer_6_2': forms.TextInput(attrs={'style':'width: 150px;'}),
+            'date_6_2': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_6_2': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_6_2': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_6_2': forms.Select(attrs={'style':'width: 50px;'}),
+            'observer_7_3': forms.TextInput(attrs={'style':'width: 150px;'}) ,
+            'date_7_3': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_7_3': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_7_3': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_7_3': forms.Select(attrs={'style':'width: 50px;'}),
+            'observer_9_4': forms.TextInput(attrs={'style':'width: 150px;'}),
+            'date_9_4': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'time_9_4': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'comments_9_4': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
+            'rear_gate_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_interior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+            'box_exterior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+            'exhaust_9_4': forms.Select(attrs={'style':'width: 50px;'}),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
+
 class form29_form(ModelForm):
     class Meta:
         all_spks = False
@@ -2506,204 +2449,6 @@ class form29_form(ModelForm):
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
-class form27_form(ModelForm):
-    class Meta:
-        model = form27_model
-        fields = ('__all__')
-        widgets = {
-            'quarter': forms.Select(attrs={'style':'width: 50px; border-radius: 15px; font-size: 1rem; text-align: center; border-width: 2px; border-style: inset; border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));'}),
-            'date': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'observer_5_1': forms.TextInput(attrs={'style':'width: 150px;'}),
-            'date_5_1': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_5_1': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'comments_5_1': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'rear_gate_5_1': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_interior_5_1': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_exterior_5_1': forms.Select(attrs={'style':'width: 50px;'}),
-            'exhaust_5_1': forms.Select(attrs={'style':'width: 50px;'}),
-            'observer_6_2': forms.TextInput(attrs={'style':'width: 150px;'}),
-            'date_6_2': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_6_2': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'comments_6_2': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'rear_gate_6_2': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_interior_6_2': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_exterior_6_2': forms.Select(attrs={'style':'width: 50px;'}),
-            'exhaust_6_2': forms.Select(attrs={'style':'width: 50px;'}),
-            'observer_7_3': forms.TextInput(attrs={'style':'width: 150px;'}) ,
-            'date_7_3': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_7_3': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'comments_7_3': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'rear_gate_7_3': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_interior_7_3': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_exterior_7_3': forms.Select(attrs={'style':'width: 50px;'}),
-            'exhaust_7_3': forms.Select(attrs={'style':'width: 50px;'}),
-            'observer_9_4': forms.TextInput(attrs={'style':'width: 150px;'}),
-            'date_9_4': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_9_4': forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'comments_9_4': forms.Textarea(attrs={'rows': '3', 'type':'text', 'style':'width: 463px; font-size: 1.5rem; border-radius: 15px; height: 8rem;'}),
-            'rear_gate_9_4': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_interior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
-            'box_exterior_9_4': forms.Select(attrs={'style':'width: 50px;'}),
-            'exhaust_9_4': forms.Select(attrs={'style':'width: 50px;'}),
-        }
-        
-    def __init__(self, *args, **kwargs):
-        form_settings = kwargs.pop("form_settings", None)
-
-        if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
-        """ Extract JSON values and create dynamic form fields with the correct styles. """
-        super().__init__(*args, **kwargs)
-
-class sop_form(ModelForm):
-    class Meta:
-        model = sop_model
-        fields = ('__all__')
-        widgets = {
-            'name' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'revision_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'pdf_url' : forms.TextInput(attrs={'oninput': 'pdf_link_change()' , 'type':'text', 'style':'width:150px; display: none;', 'required':False}),
-        }
-        
-class signature_form(ModelForm):
-    class Meta:
-        model = signature_model
-        fields = ('__all__')
-        widgets = {
-            'supervisor': forms.TextInput(attrs={'type': 'text', 'id': 'form_name', 'style': 'font-size: 1.2rem;width: 13rem;border-radius: 1rem; text-align: center;'}),
-            'sign_date': forms.DateInput(attrs={'type': 'hidden', 'id': 'form_date', 'style': ''}),
-            'canvas': forms.TextInput(attrs={'type': 'hidden', 'id': 'form_canvas', 'style': ''}),
-        }
-     
-class company_form(ModelForm):
-    class Meta:
-        model = company_model
-        fields = ('__all__')
-        widgets = {
-            'company_name': forms.TextInput(attrs={'placeholder':'Company Name', 'style':'width: 250px;'}),
-            'address': forms.TextInput(attrs={'placeholder':'Street Address', 'style':'width: 250px;'}),
-            'city': forms.TextInput(attrs={'placeholder':'City', 'style':'width: 250px;'}),
-            'state': forms.TextInput(attrs={'placeholder':'State', 'style':'width: 250px;'}),
-            'zipcode': forms.TextInput(attrs={'placeholder':'Zipcode', 'style':'width: 250px;'}),
-            'phone': forms.TextInput(attrs={'placeholder':'Phone', 'oninput':"processPhone(event)", 'style':'width: 250px;'}),
-            'customerID': forms.TextInput(attrs={'style':'width: 250px;'}),
-        }   
-
-class company_Update_form(ModelForm):
-    class Meta:
-        model = company_model
-        fields = ('__all__')
-        widgets = {
-            'company_name': forms.TextInput(attrs={'class':'input', 'style':'width:100%;'}),
-            'address': forms.TextInput(attrs={'class':'input', 'style':'width:100%;'}),
-            'city': forms.TextInput(attrs={'class':'input', 'style':'width:9rem;'}),
-            'state': forms.TextInput(attrs={'class':'input', 'placeholder':'State', 'style':'width:3rem;'}),
-            'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
-            'phone': forms.TextInput(attrs={'class':'input', 'oninput':"processPhone(event)", 'placeholder':'(123)456-7890', 'style':'width: 100%;'}),
-            'customerID': forms.TextInput(attrs={'class':'input', 'style':'width: 250px;'}),
-        }   
-        
-class facility_forms_form(ModelForm):
-    class Meta:
-        model = facility_forms_model
-        fields = ('__all__')
-        
-class form26_form(ModelForm):
-    class Meta:
-        model = form26_model
-        fields = ('__all__')
-        widgets = {
-            "date": forms.DateInput(attrs={'type': 'date'}),
-            "inspector": forms.TextInput(attrs={'type': 'text'}),
-            "skID": forms.NumberInput(attrs={'type': 'number', 'style': 'width:50px; text-align:center'}),
-            "type": forms.Select(attrs={"id": "skType", "onchange": "selectType()"}),
-            "counted_items": forms.NumberInput(attrs={'type': 'number'}),
-            "missing_items": forms.NumberInput(attrs={'type': 'number'}),
-        }
-    
-    def __init__(self, *args, **kwargs):
-        form_settings = kwargs.pop("form_settings", None)
-
-        if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
-        """ Extract JSON values and create dynamic form fields with the correct styles. """
-        super().__init__(*args, **kwargs)
-        
-class formSubmissionRecords_form(ModelForm):
-    class Meta:
-        model = formSubmissionRecords_model
-        fields = ('__all__')
-        widgets = {
-            'formID': forms.NumberInput(attrs={'type': 'number'}),
-            'dateSubmitted': forms.DateInput(attrs={'type': 'date'}),
-            'dueDate': forms.DateInput(attrs={'type': 'date'}),
-            'facilityChoice': forms.Select(attrs={}),
-            'submitted': forms.CheckboxInput(attrs={})
-        }
-        
-class braintree_form(ModelForm):
-    class Meta:
-        model = braintree_model
-        fields = ('__all__')
-        widgets = {}
-        
-class FAQ_form(ModelForm):
-    class Meta:
-        model = FAQ_model
-        fields = ('__all__')
-        widgets = {}
-        
-class form_requests_form(ModelForm):
-    class Meta:
-        model = form_requests_model
-        fields = ('__all__')
-        widgets = {
-            'user': forms.Select(),
-            'name': forms.TextInput(attrs={'placeholder':'Form Title'}),
-            'type': forms.TextInput(attrs={'placeholder':'Type (ie. Environmental, Structural, Mechanical...)'}),
-            'how_data_is_collected': forms.Textarea(attrs={'placeholder':'What is the method or process of collecting data for this form?'}),
-            'inspection_of': forms.Textarea(attrs={'placeholder':'Describe what is being inspected.'}),
-            'form_example_file': forms.FileInput(attrs={}),
-            'form_example_url': forms.TextInput(attrs={}),
-            'optimize': forms.CheckboxInput(),
-            'detailed_description': forms.Textarea(attrs={'placeholder':'Detailed description of form including any other notes or details of functionality.'}),
-            'callBack_days': forms.Select(attrs={'style':'width:50%;'}),
-            'callBack_time': forms.TimeInput(attrs={'type':'time'}),
-            'callBack_time_freq': forms.Select(attrs={}),
-            'frequency': forms.Select(attrs={}),
-        }
-        
-class the_packets_form(ModelForm):
-    class Meta:
-        model = the_packets_model
-        fields = ('__all__')
-        widgets = {
-            'facilityChoice': forms.Select(choices=frequent_choices),
-            'name': forms.TextInput(attrs={'type':'text', 'placeholder':'Enter packet name...'}),
-            'formList': forms.TextInput(),
-        }
-        
-class form_settings_form(ModelForm):
-    class Meta:
-        model = form_settings_model
-        fields = ('__all__')
-        widgets = {
-            'facilityChoice': forms.Select(attrs={}),
-            'formChoice': forms.Select(attrs={}),
-            'packetChoice': forms.Select(attrs={}),
-            'settings': forms.TextInput(),
-        }
-
-class CustomSelectWidget(forms.Select):
-    """Custom Select Widget to add data-submitted attribute to options."""
-    
-    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
-        option = super().create_option(name, value, label, selected, index, subindex, attrs)
-
-        # 🔥 Add the `data-submitted` attribute with default "false"
-        option["attrs"]["data-submitted"] = "false"
-        return option   
-
 class form30_form(forms.ModelForm):
     class Meta:
         model = form30_model
@@ -2829,3 +2574,248 @@ class form31_form(forms.ModelForm):
         if not isinstance(data, dict):
             raise forms.ValidationError("Invalid data format for tank status.")
         return data
+
+
+
+class formM_form(ModelForm):
+    class Meta:
+        model = form22_model
+        fields = (
+            'date',
+            'paved',
+            'pav_start',
+            'pav_stop',
+            'unpaved',
+            'unp_start',
+            'unp_stop',
+            'parking',
+            'par_start',
+            'par_stop',
+            'observer',
+            'cert_date',
+            'comments',
+        )
+        
+        widgets = {
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'paved' : forms.Select(attrs={'style':''}),
+            'pav_start' : forms.TimeInput(attrs={'oninput': 'timecheck_pav()', 'type':'time', 'style':'width: 120px;'}),
+            'pav_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_pav()', 'type':'time', 'style':'width: 120px;'}),
+            'unpaved' : forms.Select(attrs={'style':''}),
+            'unp_start' : forms.TimeInput(attrs={'oninput': 'timecheck_unpav()', 'type':'time', 'style':'width: 120px;'}),
+            'unp_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_unpav()', 'type':'time', 'style':'width: 120px;'}),
+            'parking' : forms.Select(attrs={'style':''}),
+            'par_start' : forms.TimeInput(attrs={'oninput': 'timecheck_par()', 'type':'time', 'style':'width: 120px;'}),
+            'par_stop' : forms.TimeInput(attrs={'oninput': 'timecheck_par()', 'type':'time', 'style':'width: 120px;'}),
+            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'cert_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'comments' : Textarea(attrs={'rows':7, 'cols':125}),
+        }
+class formM_readings_form(ModelForm):
+    class Meta:
+        model = form22_readings_model
+        fields = ('__all__')
+        exclude = ('form',)
+        widgets = {
+            'pav_1' : forms.TextInput(attrs={'oninput':'paved_average()', 'oninput':'autoFillZeros(id_pav_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'pav_2' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_3' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_4' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_5' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_6' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_7' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_8' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_9' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_10' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_11' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_12' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_1' : forms.TextInput(attrs={'oninput':'unpaved_average()', 'oninput':'autoFillZeros(id_unp_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'unp_2' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_3' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_4' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_5' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_6' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_7' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_8' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_9' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_10' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_11' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_12' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_1' : forms.TextInput(attrs={'oninput':'parking_average()', 'oninput':'autoFillZeros(id_par_1.id)', 'type': 'text', 'style': 'width: 50px; text-align: center;'}),
+            'par_2' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_3' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_4' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_5' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_6' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_7' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_8' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_9' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_10' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_11' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_12' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+            'pav_total' : forms.NumberInput(attrs={'oninput':'paved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'unp_total' : forms.NumberInput(attrs={'oninput':'unpaved_average()', 'style': 'width: 50px; text-align: center;'}),
+            'par_total' : forms.NumberInput(attrs={'oninput':'parking_average()', 'style': 'width: 50px; text-align: center;'}),
+        }
+
+
+
+
+
+
+
+class issues_form(ModelForm):
+    class Meta:
+        model = issues_model
+        fields = ('__all__')
+        widgets = {
+            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center; border: 1px solid black;'}),
+            'issues' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
+            'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px; border-radius: 5px; background-color: white; border: 1px solid black; padding-left: .5rem;'}),
+            'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px; border-radius: 5px; background-color: white; border: 1px solid black;'}),
+            'cor_action' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
+        }
+
+class events_form(ModelForm):
+    class Meta:
+        model = Event
+        fields = ('__all__')
+        widgets = {
+            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'title' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+        }
+
+class sop_form(ModelForm):
+    class Meta:
+        model = sop_model
+        fields = ('__all__')
+        widgets = {
+            'name' : forms.TextInput(attrs={'style':'width: 150px;'}),
+            'revision_date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'pdf_url' : forms.TextInput(attrs={'oninput': 'pdf_link_change()' , 'type':'text', 'style':'width:150px; display: none;', 'required':False}),
+        }
+        
+class signature_form(ModelForm):
+    class Meta:
+        model = signature_model
+        fields = ('__all__')
+        widgets = {
+            'supervisor': forms.TextInput(attrs={'type': 'text', 'id': 'form_name', 'style': 'font-size: 1.2rem;width: 13rem;border-radius: 1rem; text-align: center;'}),
+            'sign_date': forms.DateInput(attrs={'type': 'hidden', 'id': 'form_date', 'style': ''}),
+            'canvas': forms.TextInput(attrs={'type': 'hidden', 'id': 'form_canvas', 'style': ''}),
+        }
+     
+class company_form(ModelForm):
+    class Meta:
+        model = company_model
+        fields = ('__all__')
+        widgets = {
+            'company_name': forms.TextInput(attrs={'placeholder':'Company Name', 'style':'width: 250px;'}),
+            'address': forms.TextInput(attrs={'placeholder':'Street Address', 'style':'width: 250px;'}),
+            'city': forms.TextInput(attrs={'placeholder':'City', 'style':'width: 250px;'}),
+            'state': forms.TextInput(attrs={'placeholder':'State', 'style':'width: 250px;'}),
+            'zipcode': forms.TextInput(attrs={'placeholder':'Zipcode', 'style':'width: 250px;'}),
+            'phone': forms.TextInput(attrs={'placeholder':'Phone', 'oninput':"processPhone(event)", 'style':'width: 250px;'}),
+            'customerID': forms.TextInput(attrs={'style':'width: 250px;'}),
+        }   
+
+class company_Update_form(ModelForm):
+    class Meta:
+        model = company_model
+        fields = ('__all__')
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class':'input', 'style':'width:100%;'}),
+            'address': forms.TextInput(attrs={'class':'input', 'style':'width:100%;'}),
+            'city': forms.TextInput(attrs={'class':'input', 'style':'width:9rem;'}),
+            'state': forms.TextInput(attrs={'class':'input', 'placeholder':'State', 'style':'width:3rem;'}),
+            'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
+            'phone': forms.TextInput(attrs={'class':'input', 'oninput':"processPhone(event)", 'placeholder':'(123)456-7890', 'style':'width: 100%;'}),
+            'customerID': forms.TextInput(attrs={'class':'input', 'style':'width: 250px;'}),
+        }   
+        
+class facility_forms_form(ModelForm):
+    class Meta:
+        model = facility_forms_model
+        fields = ('__all__')
+        
+class formSubmissionRecords_form(ModelForm):
+    class Meta:
+        model = formSubmissionRecords_model
+        fields = ('__all__')
+        widgets = {
+            'formID': forms.NumberInput(attrs={'type': 'number'}),
+            'dateSubmitted': forms.DateInput(attrs={'type': 'date'}),
+            'dueDate': forms.DateInput(attrs={'type': 'date'}),
+            'facilityChoice': forms.Select(attrs={}),
+            'submitted': forms.CheckboxInput(attrs={})
+        }
+        
+class braintree_form(ModelForm):
+    class Meta:
+        model = braintree_model
+        fields = ('__all__')
+        widgets = {}
+        
+class FAQ_form(ModelForm):
+    class Meta:
+        model = FAQ_model
+        fields = ('__all__')
+        widgets = {}
+        
+class form_requests_form(ModelForm):
+    class Meta:
+        model = form_requests_model
+        fields = ('__all__')
+        widgets = {
+            'user': forms.Select(),
+            'name': forms.TextInput(attrs={'placeholder':'Form Title'}),
+            'type': forms.TextInput(attrs={'placeholder':'Type (ie. Environmental, Structural, Mechanical...)'}),
+            'how_data_is_collected': forms.Textarea(attrs={'placeholder':'What is the method or process of collecting data for this form?'}),
+            'inspection_of': forms.Textarea(attrs={'placeholder':'Describe what is being inspected.'}),
+            'form_example_file': forms.FileInput(attrs={}),
+            'form_example_url': forms.TextInput(attrs={}),
+            'optimize': forms.CheckboxInput(),
+            'detailed_description': forms.Textarea(attrs={'placeholder':'Detailed description of form including any other notes or details of functionality.'}),
+            'callBack_days': forms.Select(attrs={'style':'width:50%;'}),
+            'callBack_time': forms.TimeInput(attrs={'type':'time'}),
+            'callBack_time_freq': forms.Select(attrs={}),
+            'frequency': forms.Select(attrs={}),
+        }
+        
+class the_packets_form(ModelForm):
+    class Meta:
+        model = the_packets_model
+        fields = ('__all__')
+        widgets = {
+            'facilityChoice': forms.Select(choices=frequent_choices),
+            'name': forms.TextInput(attrs={'type':'text', 'placeholder':'Enter packet name...'}),
+            'formList': forms.TextInput(),
+        }
+        
+class form_settings_form(ModelForm):
+    class Meta:
+        model = form_settings_model
+        fields = ('__all__')
+        widgets = {
+            'facilityChoice': forms.Select(attrs={}),
+            'formChoice': forms.Select(attrs={}),
+            'packetChoice': forms.Select(attrs={}),
+            'settings': forms.TextInput(),
+        }
+
+class CustomSelectWidget(forms.Select):
+    """Custom Select Widget to add data-submitted attribute to options."""
+    
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+
+        # 🔥 Add the `data-submitted` attribute with default "false"
+        option["attrs"]["data-submitted"] = "false"
+        return option   
+
+

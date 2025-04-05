@@ -533,7 +533,7 @@ class form7_model(models.Model):
         return super().clean()
 
     def __str__(self):
-        return str(self.date)
+        return f"Facility: {self.formSettings.facilityChoice.facility_name}, fsID: {self.formSettings.id}, Date: {self.date}"
 
     def save(self, *args, **kwargs):
         for i in range(1, 5):  # Covers area_json_1 to area_json_4

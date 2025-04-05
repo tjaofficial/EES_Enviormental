@@ -135,7 +135,7 @@ function createHTMLString(dataJSON, input_ID){
 
     //adds empty row at end of table
     tableHTML = tableHTML+htmlLayout(true, {}, input_ID);
-    console.log(tableHTML)
+    //console.log(tableHTML)
     document.getElementById(`${input_ID}_ctableBody`).innerHTML = tableHTML;
 
 }

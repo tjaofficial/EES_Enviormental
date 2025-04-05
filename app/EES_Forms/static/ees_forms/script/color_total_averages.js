@@ -61,13 +61,13 @@ if (formName == 7) {
         area1_average();
         console.log("Test 1")
     }
-    if (document.getElementById('areaCont1').style.display == 'block'){
+    if (document.getElementById('areaCont2').style.display == 'block'){
         area2_average();
     }
-    if (document.getElementById('areaCont1').style.display == 'block'){
+    if (document.getElementById('areaCont3').style.display == 'block'){
         area3_average();
     }
-    if (document.getElementById('areaCont1').style.display == 'block'){
+    if (document.getElementById('areaCont4').style.display == 'block'){
         area4_average();
     }
 }

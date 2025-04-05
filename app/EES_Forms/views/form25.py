@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form25_model
-from ..forms import formP_form
+from ..forms import form25_form
 from ..utils import fix_data, get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
@@ -44,7 +44,7 @@ def form25(request, facility, fsID, selector, weekend_day):
                     'month': month_name,
                     'weekend_day': ss_filler,
                 }
-            data = formP_form(initial=initial_data, form_settings=form_variables['freq'])
+            data = form25_form(initial=initial_data, form_settings=form_variables['freq'])
     # -----IF REQUEST.POST------------
         if request.method == "POST":
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
@@ -54,9 +54,9 @@ def form25(request, facility, fsID, selector, weekend_day):
                 raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
     # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
             if existing:
-                form = formP_form(request.POST, instance=database_form, form_settings=form_settings)
+                form = form25_form(request.POST, instance=database_form, form_settings=form_settings)
             else:
-                form = formP_form(request.POST, form_settings=form_settings)
+                form = form25_form(request.POST, form_settings=form_settings)
     # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
             exportVariables = (request, selector, facility, database_form, fsID)
             return redirect(*template_validate_save(form, form_variables, *exportVariables))

@@ -11,7 +11,7 @@ function checkFormFull(){
     for (let i = 0; i < x.length ;i++) {
         if (x[i].value == false){
             allFilledInputs=false;
-            console.log(x[i].id)
+            //console.log(x[i].id)
         }
     }
     if (allFilledInputs){

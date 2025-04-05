@@ -21,7 +21,6 @@ function inputEventListener(array) {
     array.forEach(item => {
         if (item.id || item.type === "radio") { // Handle radios properly
             item.addEventListener("input", saveToLocal);
-            console.log()
         }
     });
 }

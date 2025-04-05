@@ -1,12 +1,12 @@
 const formNameCheckTime = document.getElementById('formName').dataset.form;
 
 function check_time(startId, endId, timePopup) {
-    console.log(`${startId} & ${endId}`)
+    //console.log(`${startId} & ${endId}`)
     try {
         let inputStart = document.getElementById("id_" + startId),
             inputEnd = document.getElementById("id_" + endId);
-        const start = inputStart.value,
-            end = inputEnd.value;
+        const start = inputStart.value ? inputStart.value: false,
+            end = inputEnd.value ? inputEnd.value: false;
         if (end == false) {
             var popup = document.getElementById(timePopup).style.visibility = 'hidden';
             return;
@@ -31,7 +31,6 @@ function check_time(startId, endId, timePopup) {
             document.getElementById(timePopup).style.display = 'none';
             return true;
         }
-        console.log("Times Inputed")
     } catch(err) {
         console.log("Times Not Inputed")
         console.log(err)
@@ -43,10 +42,10 @@ function check_time(startId, endId, timePopup) {
  FORM 3 - OFFTAKES AND LIDS
 *************/
 function offtake_time() {
-    check_time('id_om_start', 'id_om_stop', 'om_timePopup');
+    check_time('om_start', 'om_stop', 'om_timePopup');
 }
 function lid_time() {
-    check_time('id_l_start', 'id_l_stop', 'l_timePopup');
+    check_time('l_start', 'l_stop', 'l_timePopup');
 }
 if (String(formNameCheckTime) == "3"){
     lid_time();

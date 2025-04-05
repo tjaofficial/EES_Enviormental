@@ -54,7 +54,7 @@ def form3(request, facility, fsID, selector):
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
                     'inop_ovens': todays_log.inop_ovens,
-                    'inop_numbs': inopNumbsParse,
+                    'inop_numbs': inopNumbsParse if inopNumbsParse else "-",
                     'notes': 'N/A',
                     'facility_name': facility,
                 }
