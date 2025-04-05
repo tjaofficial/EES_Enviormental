@@ -14,7 +14,7 @@ lock = login_required(login_url='Login')
 def form21(request, facility, fsID, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    last_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2)
+    last_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2 if form_variables['now'].weekday() < 5 else (-5 + form_variables['now'].weekday()))
     end_week = last_saturday + timedelta(days=6)
     today_number = form_variables['now'].weekday()
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
@@ -33,7 +33,10 @@ def form21(request, facility, fsID, selector):
             if existing:
                 initial_data = get_initial_data(form21_model, database_form)
             else:
-                initial_data = {'week_start': last_saturday, 'week_end': end_week} if today_number not in [5,6] else {}
+                initial_data = {
+                    'week_start': last_saturday, 
+                    'week_end': end_week
+                }
             data = form21_form(initial=initial_data, form_settings=form_variables['freq'])
     # -----IF REQUEST.POST------------
         if request.method == "POST":
@@ -53,7 +56,7 @@ def form21(request, facility, fsID, selector):
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-    return render(request, "shared/forms/daily/formL.html", {
+    return render(request, "shared/forms/daily/form21.html", {
         'fsID': fsID, 
         'picker': form_variables['picker'], 
         'facility': facility, 

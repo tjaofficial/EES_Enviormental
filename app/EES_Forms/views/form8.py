@@ -14,7 +14,7 @@ lock = login_required(login_url='Login')
 def form8(request, facility, fsID, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    last_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2)
+    last_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2 if form_variables['now'].weekday() < 5 else (-5 + form_variables['now'].weekday()))
     one_week = timedelta(days=6)
     end_week = last_saturday + one_week
     sunday = form_variables['now'] - timedelta(days=1)
