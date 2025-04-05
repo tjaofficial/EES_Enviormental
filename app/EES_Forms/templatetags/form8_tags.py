@@ -24,5 +24,5 @@ def get_instance(form, label, numb, selector):
         if label == iLabel:
             label_w_numb = f"{iLabel}{numb}"
             answer = getattr(form, label_w_numb) if selector != "form" else form[label_w_numb]
-    print(answer)
+    #print(answer)
     return answer

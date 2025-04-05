@@ -1169,7 +1169,7 @@ class form8_form(ModelForm):
         initial = kwargs.get("initial", {})
         instance = kwargs.get("instance")
 
-        print(initial)
+        #print(initial)
 
         # Ensure we are using an object that can retrieve attributes
         data_source = instance if instance else initial
@@ -2210,6 +2210,14 @@ class form25_form(ModelForm):
             'comments' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
             'actions_taken' : Textarea(attrs={'rows':5, 'cols':13,'style':'font-size: 1.2rem;'}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        form_settings = kwargs.pop("form_settings", None)
+
+        if not form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        super().__init__(*args, **kwargs)
 
 
 

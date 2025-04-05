@@ -9,7 +9,6 @@ def adminDash(request, selector):
     variables = {
         'selector': selector
     }
-    print(os.environ.get('BRAINTREE_MERCHANT_ID'))
     gateway = braintreeGateway()
     btSearchResults = gateway.subscription.search(
         braintree.SubscriptionSearch.status.in_list(

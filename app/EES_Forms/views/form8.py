@@ -14,7 +14,6 @@ lock = login_required(login_url='Login')
 def form8(request, facility, fsID, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, facility, selector)
-    unlock = form_variables['unlock']
     last_saturday = form_variables['now'] - timedelta(days=form_variables['now'].weekday() + 2)
     one_week = timedelta(days=6)
     end_week = last_saturday + one_week
@@ -28,17 +27,9 @@ def form8(request, facility, fsID, selector):
             return more_form_variables
         else:
             data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
-        # if selector != 'form':
-        #     form_query = form_variables['submitted_forms'].filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date())
-        #     database_model = form_query[0] if form_query.exists() else print('no data found with this date')
-        #     data = database_model
-        #     existing = True
-        #     search = True
-        #     unlock = True
-        #     initial_data = database_model
-        # elif form_variables['submitted_forms'].exists():
-        #     database_form = form_variables['submitted_forms'][0]
-        #     #print(database_form.whatever().values())
+
+        # if form_variables['submitted_forms'].exists():
+
         #     starting_saturday = database_form.week_start
         #     if form_variables['now'].weekday() not in {5, 6}:
         #         if starting_saturday == last_saturday:
@@ -122,7 +113,7 @@ def form8(request, facility, fsID, selector):
         'picker': form_variables['picker'], 
         "search": search, 
         "client": form_variables['client'], 
-        'unlock': unlock, 
+        'unlock': form_variables['unlock'], 
         'supervisor': form_variables['supervisor'], 
         'form': data, 
 

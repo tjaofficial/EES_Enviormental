@@ -68,7 +68,10 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
                     data = database_form if todays_log.date_save == database_form.date else "new_form"
                 except:
                     print("CHECK 2")
-                    starting_day = (now - timedelta(days=now.weekday())) if database_form.formSettings.formChoice.day_freq.lower() == "weekdays" else (now - timedelta(days=now.weekday() + 2 if now.weekday() <= 5 else 5))
+                    ## this needs to be optimized for a dynamic choice of when the week actually starts
+                    ## right now this is optimaized for weekdays or full weeks starting with saturdays
+                    ## at the very least it needs to be optimized for if the starting day of the week is Sat-Mon.
+                    starting_day = (now - timedelta(days=now.weekday())) if database_form.formSettings.formChoice.day_freq.lower() == "weekdays" else (now - timedelta(days=now.weekday() + 2 if now.weekday() < 5 else 5))
                     print(f"Last monday is: {starting_day}")
                     print(f"the record start date is: {database_form.week_start}")
                     existing = True if starting_day == database_form.week_start else False
