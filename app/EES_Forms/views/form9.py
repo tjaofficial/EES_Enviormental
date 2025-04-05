@@ -41,8 +41,8 @@ def form9(request, facility, fsID, selector):
                     'crew': todays_log.crew,
                     'foreman': todays_log.foreman,
                 }
-            form = form9_form(initial=initial_data, form_settings=form_variables['freq'])
             goose_neck_data_JSON = ''
+        data = form9_form(initial=initial_data, form_settings=form_variables['freq'])
     # -----IF REQUEST.POST------------
         if request.method == "POST":
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
@@ -52,12 +52,12 @@ def form9(request, facility, fsID, selector):
                 raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
     # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
             if existing:
-                form = form9_form(request.POST, instance=database_form, form_settings=form_settings)
+                data = form9_form(request.POST, instance=database_form, form_settings=form_settings)
             else:
-                form = form9_form(request.POST, form_settings=form_settings)
+                data = form9_form(request.POST, form_settings=form_settings)
     # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
             exportVariables = (request, selector, facility, database_form, fsID)
-            return redirect(*template_validate_save(form, form_variables, *exportVariables))
+            return redirect(*template_validate_save(data, form_variables, *exportVariables))
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
