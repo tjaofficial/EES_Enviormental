@@ -1249,8 +1249,8 @@ def ninetyDayPushTravels(facility):
         od_30 = sorted(od_30, key=lambda x: x["oven_number"])
         od_10 = sorted(od_10, key=lambda x: x["oven_number"])
         od_5 = sorted(od_5, key=lambda x: x["oven_number"])
-        min_days_left = min(item['days_left'] for item in od_90) if len(od_5) > 0 else []
-        od_closest = [entry for entry in od_5 if entry["days_left"] == min_days_left]
+        min_days_left = min(item['days_left'] for item in od_90 if isinstance(item['days_left'], int))
+        od_closest = [entry for entry in od_90 if entry["days_left"] == min_days_left]
     
         return {'30days': od_30, '10days': od_10, '5days': od_5, 'closest': od_closest, 'all': od_90}
     else:
