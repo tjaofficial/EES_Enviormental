@@ -587,6 +587,7 @@ FUNCTION_MAP = {
     "20": form20_issue_check,
     "21": form21_issue_check,
     "24": form24_issue_check,
+    "25": form25_issue_check,
     "26": form26_issue_check,
     "27": form27_issue_check,
     "29": form29_issue_check,

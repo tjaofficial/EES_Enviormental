@@ -1060,11 +1060,16 @@ class form7_form(ModelForm):
         print(f"These are the choices: {area_choices_dict}")
         super().__init__(*args, **kwargs)
 
-
         json_data_1 = getattr(data_source, "area_json_1", {}) or {}
         json_data_2 = getattr(data_source, "area_json_2", {}) or {}
         json_data_3 = getattr(data_source, "area_json_3", {}) or {}
         json_data_4 = getattr(data_source, "area_json_4", {}) or {}
+        json_dict = {
+            "1": json_data_1,
+            "2": json_data_2,
+            "3": json_data_3,
+            "4": json_data_4,
+        }
 
         general_fields = [
             "date", "estab", "county", "estab_no", "equip_loc",
@@ -1080,31 +1085,31 @@ class form7_form(ModelForm):
                 field_name = f"{x}Read_{i}"
                 widget = self.JSON_WIDGET_STYLES.get(field_name, forms.NumberInput(attrs={"type": "number", "style": "width: 50px; text-align: center;"}))
                 self.fields[field_name] = forms.IntegerField(
-                    initial=json_data_1.get("readings", {}).get(field_name, None),
+                    initial=json_dict[str(x)].get("readings", {}).get(field_name, None),
                     required=False,
                     widget=widget
                 )
-        
+        print(json_dict[str(1)].get(f"1_selection", "selection"))
         for i in range(1,num_of_areas + 1):
             areaSelectChoices = area_choices_dict[f"area_choices_{i}"] if area_choices_dict[f"area_choices_{i}"] else []
             self.fields[f"{i}_selection"] = forms.ChoiceField(
                 choices=areaSelectChoices,
-                initial=json_data_1.get(f"{i}_selection", ""),
+                initial=json_dict[str(i)].get(f"{i}_selection") or json_dict[str(i)].get("selection"),
                 required=False,
                 widget=self.JSON_WIDGET_STYLES.get(f"{i}_selection")
             )
             self.fields[f"{i}_start"] = forms.TimeField(
-                initial=json_data_1.get(f"{i}_start"),
+                initial=json_dict[str(i)].get(f"{i}_start") or json_dict[str(i)].get("start"),
                 required=False,
                 widget=self.JSON_WIDGET_STYLES.get(f"{i}_start")
             )
             self.fields[f"{i}_stop"] = forms.TimeField(
-                initial=json_data_1.get(f"{i}_stop", None),
+                initial=json_dict[str(i)].get(f"{i}_stop") or json_dict[str(i)].get("stop"),
                 required=False,
                 widget=self.JSON_WIDGET_STYLES.get(f"{i}_stop")
             )
             self.fields[f"{i}_average"] = forms.FloatField(
-                initial=json_data_1.get(f"{i}_average", None),
+                initial=json_dict[str(i)].get(f"{i}_average") or json_dict[str(i)].get("average"),
                 required=False,
                 widget=self.JSON_WIDGET_STYLES.get(f"{i}_average")
             )

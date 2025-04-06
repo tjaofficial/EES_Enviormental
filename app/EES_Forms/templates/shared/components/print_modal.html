@@ -41,7 +41,8 @@
                             let newPassVar = fsID + "-" + value
                             let html = "printIndex"
                             html += "/single/" + formGroup + "/" + newPassVar + "/" + selector
-                            linkButton.href = "../../../" + html
+                            linkButton.href = [24, 25].includes({{formGroup.formChoice.form}}) ? "../../../../": "../../../";
+                            linkButton.href += html;
                         }
                         labelPick();
                         function refreshPage() {

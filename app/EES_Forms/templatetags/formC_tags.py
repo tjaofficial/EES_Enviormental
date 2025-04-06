@@ -82,7 +82,8 @@ def get_reading_input(value, areaNumb, readingNumb):
 def get_area_attr(value, areaNumb, attr):
     field_name = f"{areaNumb}_{attr}"
     try:
-        return value[field_name] if field_name in value.fields else None
+        if field_name in value.fields.keys():
+            return value[field_name]
     except:
         return getattr(value, f"area_json_{areaNumb}")[attr] if getattr(value, f"area_json_{areaNumb}") != {} else ""
 

@@ -1003,12 +1003,12 @@ class PrintCalendar(HTMLCalendar):
                 formInformation = iFormSettings.formChoice
                 name_of_model = formInformation.link + "_model"
                 if formID == 23:
-                    chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, formSettings__facilityChoice__facility_name=facility)
+                    chk_database = form22_model.objects.filter(date__year=year, date__month=themonth, formSettings__id=iFormSettings.id)
                 else:
                     try:#### ----- Set up a code to switch over to a number based model instead of labels
-                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, formSettings__facilityChoice__facility_name=facility)
+                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, formSettings__id=iFormSettings.id)
                     except:
-                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, formSettings__facilityChoice__facility_name=facility)
+                        chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, formSettings__id=iFormSettings.id)
                 
                 if chk_database.exists():
                     packetExists.extend(chk_database)
@@ -1021,17 +1021,17 @@ class PrintCalendar(HTMLCalendar):
                     label = formPacket
             name_of_model = fsEntry.formChoice.link + "_model"
             if fsEntry.formChoice.id == 23:
-                chk_database = apps.get_model('EES_Forms', "form22_model").objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                chk_database = apps.get_model('EES_Forms', "form22_model").objects.filter(date__year=year, date__month=themonth, formSettings__id=fsEntry.id)
                 print(form22_model.objects.all())
                 originalStyle = True
             else:
                 try:
                     print("CHECK 1.1")
-                    chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, facilityChoice__facility_name=facility)
+                    chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(date__year=year, date__month=themonth, formSettings__id=fsEntry.id)
                     originalStyle = True
                 except:
                     print("CHECK 1.2")
-                    chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, facilityChoice__facility_name=facility)
+                    chk_database = apps.get_model('EES_Forms', name_of_model).objects.filter(week_start__year=year, week_start__month=themonth, formSettings__id=fsEntry.id)
                     originalStyle = False
             makeList = [forms]
             makeList.append(originalStyle)
@@ -1187,6 +1187,7 @@ def calculateProgessBar(facility, frequency):
 
 def ninetyDayPushTravels(facility):
     today = datetime.datetime.now().date()
+    batInfo = bat_info_model.objects.get(facility_name=facility)
     due_date_threshold = today + timedelta(days=30)
     most_recent_dates = {}
     all_records = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility)
@@ -1227,7 +1228,24 @@ def ninetyDayPushTravels(facility):
                 od_10.append(ovenDict)
             if difference.days <= 5:
                 od_5.append(ovenDict)
+        
+        totalOvens = int(batInfo.total_ovens)
+        for i in range(1,totalOvens+1):
+            already_exists = False
+            for pt_oven in od_90:
+                if i == int(pt_oven['oven_number']):
+                    already_exists = True
+            if not already_exists:
+                ovenDictBuild = {
+                    "oven_number": i,
+                    "most_recent_date": "-",
+                    "deadline": "-",
+                    "days_left": "-",
+                }
+                od_90.append(ovenDictBuild)
 
+
+        od_90 = sorted(od_90, key=lambda x: x["oven_number"])
         od_30 = sorted(od_30, key=lambda x: x["oven_number"])
         od_10 = sorted(od_10, key=lambda x: x["oven_number"])
         od_5 = sorted(od_5, key=lambda x: x["oven_number"])
@@ -2209,7 +2227,7 @@ def get_initial_data(modelName, modelInstance):
 
     allModelFields = [
         field.name for field in modelName._meta.get_fields() 
-        if isinstance(field, Field) and field.name not in ["id","facilityChoice"]
+        if isinstance(field, Field) and field.name not in ["id"]
     ]
     modelList = [modelInstance]
     try:

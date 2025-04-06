@@ -19,11 +19,11 @@ def form30(request, facility, fsID, selector):
     if form_variables['daily_prof'].exists():
         todays_log = form_variables['daily_prof'][0]
     # -----SET DECIDING VARIABLES------------
-        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request) 
+        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID) 
         if isinstance(more_form_variables, HttpResponseRedirect):
             return more_form_variables
         else:
-            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request)
+            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID)
     # -----SET RESPONSES TO DECIDING VARIABLES------------
         if search:
             database_form = ''

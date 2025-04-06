@@ -242,16 +242,16 @@ def archive_view(request, facility):
             print('check 1')
             print(fsModel)
             for fs in fsModel:
-                print(fs.formChoice.id)
+                print(int(fs.formChoice.form))
                 print(itemSearched)
-                if fs.formChoice.id == itemSearched:
+                if int(fs.formChoice.form) == itemSearched:
                     idSearchData = fs
                     break
             if idSearchData:
                 link = str(idSearchData.formChoice.link) + '_model'
                 chk_database = apps.get_model('EES_Forms', link).objects.filter(formSettings__facilityChoice__facility_name=facility)
                 for item in chk_database:
-                    fsList.append((item, idSearchData))
+                    fsList.append(item)
             return fsList
         else:
             return "none"
@@ -263,24 +263,23 @@ def archive_view(request, facility):
             for fs in fsModel:
                 fsPackets = fs.settings['packets']
                 for packetLabel in fsPackets:
-                    if fsPackets[packetLabel] == itemSearched:
+                    if fsPackets[packetLabel].lower() == itemSearched.lower():
                         if fs not in fsList1:
                             fsList1.append(fs)
-                            print("Found... fsID: " + str(fs.id))
+            print(fsList1)
             modelsList = []
-            for model in apps.get_models():
-                for fsSort in fsList1:
+            for fsSort in fsList1:
+                for model in apps.get_models():
                     if model.__name__[:4] == "form" and model.__name__[-6:] == '_model':
                         modelName = model.__name__[4:-6]
-                        if str(modelName) == str(fsSort.formChoice.id):
+                        if str(modelName) == str(fsSort.formChoice.form):
                             modelsList.append((model, fsSort))
             fsList = []
             for item in modelsList:
-                chk_database = item[0].objects.filter(formSettings__facilityChoice__facility_name=facility)
+                chk_database = item[0].objects.filter(formSettings=item[1])
                 for iForm in chk_database:
-                    duple = (iForm, item[1].formChoice)
-                    if duple not in fsList:
-                        fsList.append((iForm, item[1]))
+                    if iForm not in fsList:
+                        fsList.append(iForm)
             return fsList  
         else:
             return "none"
@@ -297,7 +296,7 @@ def archive_view(request, facility):
                 for fs in fsModel:
                     if model.__name__[:4] == "form" and model.__name__[-6:] == '_model':
                         modelName = model.__name__[4:-6]
-                        if str(modelName) == str(fs.formChoice.id):
+                        if str(modelName) == str(fs.formChoice.form):
                             modelsList.append((model, fs))
             fsList = []
             for item in modelsList:
@@ -306,9 +305,8 @@ def archive_view(request, facility):
                 except:
                     chk_database = item[0].objects.filter(Q(week_start__month=itemSearched.month) & Q(week_start__year=itemSearched.year))
                 for iForm in chk_database:
-                    duple = (iForm, item[1].formChoice)
-                    if duple not in fsList:
-                        fsList.append((iForm, item[1]))
+                    if iForm not in fsList:
+                        fsList.append(iForm)
             return fsList  
         else:
             return "none"
@@ -321,7 +319,7 @@ def archive_view(request, facility):
                 for fs in fsModel:
                     if model.__name__[:4] == "form" and model.__name__[-6:] == '_model':
                         modelName = model.__name__[4:-6]
-                        if str(modelName) == str(fs.formChoice.id):
+                        if str(modelName) == str(fs.formChoice.form):
                             modelsList.append((model, fs))
             fsList = []
             for item in modelsList:
@@ -330,9 +328,8 @@ def archive_view(request, facility):
                 except:
                     chk_database = item[0].objects.filter(week_start=itemSearched)
                 for iForm in chk_database:
-                    duple = (iForm, item[1].formChoice)
-                    if duple not in fsList:
-                        fsList.append((iForm, item[1]))
+                    if iForm not in fsList:
+                        fsList.append(iForm)
             return fsList  
         else:
             return "none"
@@ -344,7 +341,6 @@ def archive_view(request, facility):
     
     sortList = []
     finalList = []
-    diffrentOnes = [6,8,20,21,24,25]
     if monthYearQueryList != 'none':
         finalList = monthYearQueryList
     if IDQueryList != 'none':
@@ -373,10 +369,6 @@ def archive_view(request, facility):
                 if sort4 in finalList:
                     sortList.append(sort4)
             finalList = sortList
-    
-    
-    print(finalList)
-    print('chiecklsj')
     if request.method == 'POST':
         answer = request.POST
         if supervisor:
@@ -395,7 +387,6 @@ def archive_view(request, facility):
         "supervisor": supervisor, 
         "unlock": unlock, 
         'finalList': finalList,
-        'diffrentOnes': diffrentOnes
     })
 
 @lock

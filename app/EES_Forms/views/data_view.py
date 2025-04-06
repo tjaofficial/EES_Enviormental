@@ -32,8 +32,8 @@ def pt_admin1_view(request, facility):
     # -------90 DAY PUSH ----------------
     all_db_reads = form5_model.objects.all()
     pushTravelsData = ninetyDayPushTravels(facility)
+    print(pushTravelsData['all'])
     od_30 = pushTravelsData['30days']
-    
     od_10 = pushTravelsData['10days']
     od_5 = pushTravelsData['5days']
     od_recent = pushTravelsData['closest']

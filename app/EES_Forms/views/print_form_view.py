@@ -117,7 +117,7 @@ def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
         print(f"The label for this instance of form {formID} is: {formLabel}")
         try:
             formModel = apps.get_model('EES_Forms', formModelName)
-            formModel = formModel.objects.filter(formSettings__facilityChoice__facility_name=facility)
+            formModel = formModel.objects.filter(formSettings__id=fsEntry.id)
             print(f"Pulling all submitted data for {formModelName} from {facility}")
             print('')
             print(formModel)

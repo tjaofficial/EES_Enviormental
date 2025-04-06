@@ -162,20 +162,26 @@ def sup_dashboard_view(request, facility):
         quarterly_percent = False
         annually_percent = False
     # -------90 DAY PUSH ----------------
-    pushTravelsData = ninetyDayPushTravels(facility)
-    if pushTravelsData == 'EMPTY':
+    if facility != "supervisor":
+        pushTravelsData = ninetyDayPushTravels(facility)
+        if pushTravelsData == 'EMPTY':
+            od_30 = ''
+            od_10 = ''
+            od_5 = ''
+            od_recent = ''
+            all_ovens = ''
+        else:
+            od_30 = pushTravelsData['30days']
+            od_10 = pushTravelsData['10days']
+            od_5 = pushTravelsData['5days']
+            od_recent = pushTravelsData['closest']
+            print(od_5)
+            all_ovens = pushTravelsData['all']
+    else:
+        od_recent = ''
         od_30 = ''
         od_10 = ''
         od_5 = ''
-        od_recent = ''
-        all_ovens = ''
-    else:
-        od_30 = pushTravelsData['30days']
-        od_10 = pushTravelsData['10days']
-        od_5 = pushTravelsData['5days']
-        od_recent = pushTravelsData['closest']
-        print(od_5)
-        all_ovens = pushTravelsData['all']
     # ----CONTACTS-----------------
     allContacts = user_profile_model.objects.filter(company=userCompany)
     sortedFacilityData = getCompanyFacilities(request.user.username)

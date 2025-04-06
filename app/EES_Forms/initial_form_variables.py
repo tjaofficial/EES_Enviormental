@@ -32,7 +32,7 @@ def initiate_form_variables(fsID, requestUser, facility, selector):
     
     return dict(locals()) 
 
-def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, request):
+def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, request, fsID):
     existing = False
     search = False
     database_form = False
@@ -40,10 +40,10 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
     #print(submitted_forms)
     if selector not in ('form', 'edit'):
         try:
-            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date()).order_by('-date')
+            form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date(), formSettings__id=fsID).order_by('-date')
             print(f"The query filters by date", form_query)
         except:
-            form_query = submitted_forms.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date()).order_by('-week_start')
+            form_query = submitted_forms.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date(), formSettings__id=fsID).order_by('-week_start')
             print("check week")
         database_model = form_query[0] if form_query.exists() else False
         if database_model:
@@ -55,7 +55,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
             #return sendToDash(request.user)
     elif now == todays_log.date_save:
         if submitted_forms.exists():
-            database_form = submitted_forms[0]
+            database_form = submitted_forms.filter(formSettings__id=fsID)[0]
             if database_form.formSettings and database_form.formSettings.formChoice.frequency.lower() == "quarterly":
                 if what_quarter(todays_log.date_save) == what_quarter(database_form.date) and todays_log.date_save.year == database_form.date.year:
                     existing = True

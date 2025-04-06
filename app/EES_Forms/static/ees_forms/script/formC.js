@@ -33,18 +33,20 @@ function add_areas(areaNum) {
 
 function remove_area(areaNum) {
     const areaCont = document.getElementById("areaCont" + areaNum)
-    const areaUsed = document.getElementById(`areaUsed_${areaNum}`);
-    areaUsed.value = "false"
-    areaCont.style.display = 'none';
-    if (selector == "form"){
-        for (let x=1;x<13;x++){
-            document.getElementById("id_" + areaNum + 'Read_' + x).required = false;
+    if (areaCont) {
+        const areaUsed = document.getElementById(`areaUsed_${areaNum}`);
+        areaUsed.value = "false"
+        areaCont.style.display = 'none';
+        if (selector == "form"){
+            for (let x=1;x<13;x++){
+                document.getElementById("id_" + areaNum + 'Read_' + x).required = false;
+            }
+            document.getElementById("id_" + areaNum + '_start').required = false;
+            document.getElementById("id_" + areaNum + '_stop').required = false;
+            document.getElementById("id_" + areaNum + '_average').required = false;
+            document.getElementById('areaLabel' + areaNum).style.display = 'block';
+            document.getElementById("id_" + areaNum + '_selection').required = false;
         }
-        document.getElementById("id_" + areaNum + '_start').required = false;
-        document.getElementById("id_" + areaNum + '_stop').required = false;
-        document.getElementById("id_" + areaNum + '_average').required = false;
-        document.getElementById('areaLabel' + areaNum).style.display = 'block';
-        document.getElementById("id_" + areaNum + '_selection').required = false;
     }
 }
 

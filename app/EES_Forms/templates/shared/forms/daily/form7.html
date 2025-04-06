@@ -2,7 +2,7 @@
 {% block list%}{% load static %}{% load dashboard_tags %}{% load formC_tags %}
 <link href="{% static 'ees_forms/style/formC.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
-<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/tempSave_form7.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/formC.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/3minAutoFil.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
@@ -13,6 +13,7 @@
 <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
 <div id="areasFilled" style="display: hidden;" data-areas="{{areaFilled1}}"></div>
 <div id="selector" style="display: hidden;" data-selector="{{selector}}-{{existing}}"></div>
+<div id="tempSave_fsID" style="display: hidden;" data-tempsavefsid="{{fsID}}"></div>
 <div id="paperSize">
     <div class="mainCont">
         <form id="form" action="" method="POST" style="margin: auto; margin-bottom: 100px;">
