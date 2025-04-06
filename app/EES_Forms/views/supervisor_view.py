@@ -125,7 +125,7 @@ def sup_dashboard_view(request, facility):
                         if gStuff == 'charges':
                             useModel = formA1.filter(date=dates)
                             if useModel.exists():
-                                xValues.append(int(useModel[0].ovens_data['total_seconds']))
+                                xValues.append(float(useModel[0].ovens_data['total_seconds']))
                                 yValues.append(str(useModel[0].date))
                         elif gStuff == 'doors':
                             useModel = formA2.filter(date=dates)
