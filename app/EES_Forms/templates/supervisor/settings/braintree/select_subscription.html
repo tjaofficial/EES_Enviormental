@@ -17,7 +17,7 @@
                                 <h1>{{plan.name}}</h1>
                             </div>
                             <div class="priceBubble">
-                                ${{plan.price}}
+                                ${{plan.price|floatformat:2}}
                             </div>
                             <div style="padding: 0px 1rem;">
                                 <div>
@@ -89,10 +89,10 @@
                             </div>
                         </div>
                         <div style="padding: 0px 1rem 1rem;">
-                            <form method="post" autocomplete="off" action="../subscription/registration">
+                            <form method="POST" autocomplete="off">
                                 {% csrf_token %}
                                 <input type="hidden" value={{plan.pid}} name="planId">
-                                <input id="submit" type="submit" value="Select">
+                                <input id="submit" name="subSelect" type="submit" value="Select">
                             </form>
                         </div>
                     </div>

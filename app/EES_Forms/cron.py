@@ -22,7 +22,7 @@ def check_subscription_expiry():
         if subSettings:
             subID = subSettings['subscription_ID']
             sub = gateway.subscription.find(subID)
-            subStatus = sub.status
+            subStatus = sub.statuss
             if subStatus == "Canceled" and datetime.datetime.strptime(subSettings['next_billing_date'],"%Y-%m-%d").date() < today:
                 mainSupervisorProf = user_profile_model.objects.get(user=subscription.user)
                 listOfEmployees = getActiveCompanyEmployees(mainSupervisorProf.company)

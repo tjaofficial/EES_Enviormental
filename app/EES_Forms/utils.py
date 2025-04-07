@@ -1507,29 +1507,7 @@ def time_change(time):
                 time = datetime.datetime.strptime(time, "%H:%M:%S")
         time = time.strftime("%I:%M %p")
         print(time)
-        if time:
-            hourNum = int(str(time)[0:2])
-            minNum = str(time)[3:5]
-            timeLabel = 'AM'
-            if hourNum > 12:
-                newHourNum = str(hourNum - 12)
-                timeLabel = 'PM'
-                newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-            elif hourNum == 12:
-                newHourNum = str(time)[0:2]
-                timeLabel = 'PM'
-                newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-            elif hourNum == 00:
-                newHourNum = '12'
-                newTime = newHourNum + ':' + minNum + ' ' + timeLabel
-            else:
-                newTime = str(hourNum) + ':' + minNum + ' ' + timeLabel
-            return newTime
-        else:
-            print('TIME_CHANGE ERROR: no time entered')
-            print('ERROR TIME ENTERED: ' + str(time))
-            print('RETURNING: "-" and moving on...')
-            return '-'
+        return time
     else:
         return False
 def date_time_change(dateTime):

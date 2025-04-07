@@ -246,13 +246,10 @@ def sup_select_subscription(request, facility, selector):
                             empUser = emp.user
                             empUser.is_active = True
                             empUser.save()
-                            emp.settings['position'] = emp.settings['position'].replace("-activate", "")
-                            emp.save()
-                            x += 1
-                        else:
-                            emp.settings['position'] = emp.settings['position'].replace("-activate", "")
-                            emp.save()
-                            x += 1
+                        emp.settings['position'] = emp.settings['position'].replace("-activate", "")
+                        emp.save()
+                        x += 1
+                        
                 print('MADE IT TO FUCKING SAVE')
             else:
                 print(f"Error creating new subscription: {result.errors.deep_errors}")
@@ -426,7 +423,10 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
     customerId = accountData.company.braintree.settings['account']['customer_ID']
     if action[0:3] != "add":
         token = accountData.company.braintree.settings['payment_methods']['default']['payment_token'] if accountData.company.braintree.settings['payment_methods'] else False
-        payment_method = gateway.payment_method.find(token) if token else False
+        try:
+            payment_method = gateway.payment_method.find(token) if token else False
+        except:
+            payment_method = False
     variables = {
             'supervisor': supervisor, 
             "client": client, 
@@ -559,7 +559,11 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
         sub = gateway.subscription.find(subID)
         if sub.status == "Active":
             activeSub = sub
+            print(f"This si the billing peroiod: {activeSub.billing_period_end_date}")
             billing_period_end_date = activeSub.billing_period_end_date
+        else:
+            billing_period_end_date = False
+            print(f"Already been canceled")
         template = "supervisor/settings/braintree/sup_cancelSub.html"
         variables['token'] = token
         variables['payment_method'] = payment_method
@@ -625,13 +629,14 @@ def sup_card_update(request, facility, action, planId=False, seats=False):
                 braintreeUpdate = accountData.company.braintree
                 braintreeUpdate.settings['account']['status'] = 'canceled'
                 braintreeUpdate.settings['subscription']['status'] = 'canceled'
-                if braintreeUpdate.settings['past_subscriptions']:
-                    new_key = len(braintreeUpdate.settings['past_subscriptions']) + 1
-                    braintreeUpdate.settings['past_subscriptions'][new_key] = {
-                        "subscription_ID": subID,
-                        "start_date": activeSub.created_at,
-                        "end_date": billing_period_end_date
-                    }
+                if not braintreeUpdate.settings['past_subscriptions']:
+                    braintreeUpdate.settings['past_subscriptions'] = {}
+                new_key = len(braintreeUpdate.settings['past_subscriptions']) + 1
+                braintreeUpdate.settings['past_subscriptions'][new_key] = {
+                    "subscription_ID": subID,
+                    "start_date": activeSub.created_at,
+                    "end_date": billing_period_end_date
+                }
                 braintreeUpdate.save()
                 return redirect("Account", facility)
     
