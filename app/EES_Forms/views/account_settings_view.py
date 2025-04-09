@@ -157,10 +157,12 @@ def sup_select_subscription(request, facility, selector):
             if "form_data" in request.session:
                 del request.session['form_data']
             request.session['form_data'] = request.POST
-            currentPlanStatus = braintree_model.objects.get(user=request.user).settings['subscription']['status']
+            currentPlanStatus = braintree_model.objects.get(user=request.user).settings['subscription']
             url_addition = "registration"
-            if currentPlanStatus == "active":
-                url_addition += "-change"
+            if currentPlanStatus:
+                currentPlanStatus= currentPlanStatus['status']
+                if currentPlanStatus == "active":
+                    url_addition += "-change"
             return redirect('subscriptionSelect', facility, url_addition)
         if "confirmOrder" in request.POST:
             if "form_data" in request.session:
