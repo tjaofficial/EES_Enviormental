@@ -1896,7 +1896,7 @@ def create_starting_forms():
             header="STI SP001",
             title="Monthly Tank Inspection Checklist",
         )
-        spill_kits = Forms(
+        form29 = Forms(
             form=29,
             frequency="Monthly",
             day_freq='Everyday',
@@ -1906,7 +1906,7 @@ def create_starting_forms():
             header="Spill Kits Form",
             title="Inspection Check List",
         )
-        spill_kits = Forms(
+        form30 = Forms(
             form=30,
             frequency="Weekly",
             day_freq='Wednesday',
@@ -1916,7 +1916,7 @@ def create_starting_forms():
             header="Facility Waste Weekly",
             title="Inspection Form",
         )
-        spill_kits = Forms(
+        form31 = Forms(
             form=31,
             frequency="Monthly",
             day_freq='Everyday',
@@ -1955,7 +1955,9 @@ def create_starting_forms():
         spill_kits_inventory.save()
         quarterly_trucks.save()
         STI_SP001_monthly_inspection.save()
-        spill_kits.save()
+        form29.save()
+        form30.save()
+        form31.save()
         
 def updateAllFormSubmissions(facility):
     facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)

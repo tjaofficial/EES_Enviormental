@@ -311,9 +311,7 @@ def registerCompany(request):
                     braintreeSave = braintreeQuery[0]
                 else:
                     braintreeSave = braintree_model(
-                        user=request.user, 
-                        status='inactive', 
-                        registrations=0,
+                        user=request.user,
                         settings = json.loads(json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False}))
                     )
                     braintreeSave.save()
