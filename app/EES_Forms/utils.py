@@ -1906,6 +1906,26 @@ def create_starting_forms():
             header="Spill Kits Form",
             title="Inspection Check List",
         )
+        spill_kits = Forms(
+            form=30,
+            frequency="Weekly",
+            day_freq='Wednesday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="form30",
+            header="Facility Waste Weekly",
+            title="Inspection Form",
+        )
+        spill_kits = Forms(
+            form=31,
+            frequency="Monthly",
+            day_freq='Everyday',
+            weekdays_only=False,
+            weekend_only=False,
+            link="form31",
+            header="Monthly Tank Inspection",
+            title="Tank Inspection Form (Multiple)",
+        )
 
         A1.save()
         A2.save()
