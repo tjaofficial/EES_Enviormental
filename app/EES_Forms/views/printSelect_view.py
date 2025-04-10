@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.apps import apps # type: ignore
-from ..models import bat_info_model, the_packets_model
+from ..models import facility_model, the_packets_model
 from ..forms import *
 from django.core.exceptions import FieldError # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -14,7 +14,7 @@ lock = login_required(login_url='Login')
 @lock
 def printSelect(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     alertMessage = ''
     unlock = False
     client = False

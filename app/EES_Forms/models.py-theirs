@@ -331,7 +331,7 @@ class daily_battery_profile_model(models.Model):
 
     
     
-class bat_info_model(models.Model):
+class facility_model(models.Model):
     bat_num = models.CharField(max_length=30)
     total_ovens = models.CharField(max_length=30)
     facility_name = models.CharField(max_length=30)

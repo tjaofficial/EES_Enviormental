@@ -2,6 +2,7 @@ import braintree # type: ignore
 from django.shortcuts import redirect # type: ignore
 from .utils import braintreeGateway, get_braintree_query
 from .models import user_profile_model, braintree_model
+from django.views.decorators.clickjacking import xframe_options_exempt # type: ignore
 
 # def client_redirect(x):
 #     if not x.groups.filter(name='SGI Technician') or x.is_superuser:

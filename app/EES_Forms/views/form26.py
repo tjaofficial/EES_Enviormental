@@ -133,7 +133,7 @@ def form26(request, facility, fsID, month, skNumber, selector):
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
                 
-    return render(request, "shared/forms/monthly/spillKits_inventoryForm.html",{
+    return render(request, "shared/forms/monthly/form26.html",{
         'full_name': form_variables['full_name'],
         'skNumber': skNumber, 
         'facility': facility, 

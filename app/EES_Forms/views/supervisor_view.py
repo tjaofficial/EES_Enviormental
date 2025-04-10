@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.conf import settings # type: ignore
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
-from ..models import bat_info_model, issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model
+from ..models import facility_model, issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import datetime
 import calendar
@@ -44,7 +44,7 @@ def sup_dashboard_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
     last7days = now - datetime.timedelta(days=6)
-    options = bat_info_model.objects.filter(facility_name=facility)
+    options = facility_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
     colorMode = userColorMode(request.user)[0]  
     userMode = userColorMode(request.user)[1]
@@ -375,7 +375,7 @@ def sup_dashboard_view(request, facility):
 def register_view(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     user_profiles = user_profile_model.objects.all()
     accountData = user_profiles.get(user__username=request.user.username)
@@ -388,7 +388,7 @@ def register_view(request, facility, access_page):
     form = ''
     profile_form = ''
     data = ''
-    data2 = bat_info_model.objects.all()
+    data2 = facility_model.objects.all()
     facilityLink = False
     if checkIfMoreRegistrations(request.user):
         addMoreRegistrations = checkIfMoreRegistrations(request.user)[1]
@@ -505,7 +505,7 @@ def register_view(request, facility, access_page):
             print(form.errors)
             if form.is_valid():
                 print(request.POST['facility_name'])
-                facilityModel = bat_info_model.objects.filter(facility_name=request.POST['facility_name'])
+                facilityModel = facility_model.objects.filter(facility_name=request.POST['facility_name'])
                 if not facilityModel.exists():    
                     A = form.save(commit=False)
                     A.company = userProf.company
@@ -552,7 +552,7 @@ def register_view(request, facility, access_page):
                 return redirect('Contacts', facility)
         elif check_4:
             print('CHECK 4')
-            facility = bat_info_model.objects.filter(id=request.POST['facilityChoice'])[0]
+            facility = facility_model.objects.filter(id=request.POST['facilityChoice'])[0]
             finalPhone = parsePhone(request.POST['phone'])
             new_data = request.POST.copy()
             new_data['phone'] = finalPhone

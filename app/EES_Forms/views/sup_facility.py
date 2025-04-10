@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect # type: ignore
+from django.shortcuts import render, redirect, get_object_or_404 # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..models import bat_info_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
+from ..models import facility_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
 from ..forms import the_packets_form, form_settings_form
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
@@ -10,6 +10,8 @@ from ..utils import defaultPacketSettings, setUnlockClientSupervisor, checkIfFac
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
 from django.contrib import messages # type: ignore
+from django.views.decorators.clickjacking import xframe_options_exempt # type: ignore
+from django.http import HttpResponseServerError # type: ignore
 
 lock = login_required(login_url='Login')
 
@@ -22,7 +24,7 @@ def facilityList(request, facility):
     if client:
         return redirect('c_dashboard', facility)
     userProfData = user_profile_model.objects.get(user__username=request.user.username)
-    facList = bat_info_model.objects.filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
+    facList = facility_model.objects.filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
     facData = facility_forms_model.objects.all()
     formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
@@ -61,7 +63,7 @@ def facilityList(request, facility):
             return redirect('sup_dashboard', answer['facilitySelect'])
         elif 'newPacket' in answer.keys():
             dataCopy = answer.copy()
-            facChoice = bat_info_model.objects.get(id=int(answer['facilityID']))
+            facChoice = facility_model.objects.get(id=int(answer['facilityID']))
             dataCopy['facilityChoice'] = facChoice
             dataCopy['frequency'] = 'Weekly'
             packetFormData = packetForm(dataCopy)
@@ -209,7 +211,7 @@ def facilityForm(request, facility, packet):
         return redirect('IncompleteForms', facility)
     today = datetime.date.today()
     q = request.GET.get('q')
-    specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
+    specificFacility = facility_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
     formSettingsModel = form_settings_model.objects.all()
     packetQuery = the_packets_model.objects.get(id=packet)
@@ -451,10 +453,9 @@ def Add_Forms(request, facility):
     if client:
         return redirect('c_dashboard', facility)
     today = datetime.date.today()
-    specificFacility = bat_info_model.objects.filter(facility_name=facility)[0]
-    q = request.GET.get('q')
+    specificFacility = facility_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
-    totalAmountofForms = len(formList)
+    q = request.GET.get('q')
     if q:
         formList = formList.filter(
             Q(title__icontains=q) |
@@ -494,25 +495,6 @@ def Add_Forms(request, facility):
                 toBeDeleted = formSubmissionRecords_model.objects.get(id=settingsQuery.subChoice.id)
                 toBeDeleted.delete()
     #     elif selector =="list":
-    
-    # def doesSubExist(facilityLog, value, selector, delete):
-    #     if selector =="list":   
-    #         for x in value:
-    #             for formData in Forms.objects.all():
-    #                 if formData.id == x[0]:
-    #                     if not formSubmissionRecords_model.objects.filter(formID=formData, facilityChoice=facilityLog).exists():
-    #                         newSub = formSubmissionRecords_model(
-    #                             formID = formData,
-    #                             dateSubmitted = today - datetime.timedelta(days=9000),
-    #                             dueDate = today - datetime.timedelta(days=5000),
-    #                             facilityChoice = facilityLog,
-    #                             submitted = False
-    #                         )
-    #                         newSub.save()
-    #                     elif delete:
-    #                         toBeDeleted = formSubmissionRecords_model.objects.get(formID=formData, facilityChoice=facilityLog)
-    #                         toBeDeleted.delete()
-    #                     break
 
     if request.method == 'POST':
         answer = request.POST
@@ -522,77 +504,74 @@ def Add_Forms(request, facility):
         sameEntryNotif = False
         selectedList = []
         ## Builds the new list of forms selected and created a submission record for each
-        for item in range(1, totalAmountofForms+1):
-            formInputName = 'forms' + str(item)
-            if formInputName.replace(" ", "") in answer.keys():
-                formID = int(answer[formInputName.replace(" ", "")])
-                formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
-                settingsDict = {"active": "true", "packets": False, "settings":{}}
-                for x in answer.keys():
-                    # print("--------")
-                    # print(x)
-                    # print(answer[x])
-                    # print("--------")
-                    if len(x.split("-")) > 1:
-                        requestFormID = x.split("-")[0]
-                        requestInputName = x.split("-")[1]
-                        if requestFormID == str(formID):
-                            settingsDict["settings"][requestInputName] = answer[x] if not answer[x] else False
+        selected_form_ids = request.POST.getlist('selected_forms')
+        for formID in selected_form_ids:
+            formID = int(formID)
+            formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
+            settingsDict = {"active": "true", "packets": False, "settings":{}}
+            for x in answer.keys():
+                # print("--------")
+                # print(x)
+                # print(answer[x])
+                # print("--------")
+                if len(x.split("-")) > 1:
+                    requestFormID = x.split("-")[0]
+                    requestInputName = x.split("-")[1]
+                    if requestFormID == str(formID):
+                        settingsDict["settings"][requestInputName] = answer[x] if not answer[x] else False
 
-                keysList = []
-                for setts in answer.keys():
-                    if len(setts.split("-")) > 1:
-                        requestFormID = setts.split("-")[0]
-                        if requestFormID == str(formID):
-                            keysList.append(setts)
-                if formID == 7:
-                    newLabel, settingsDict["settings"] = formSettingsFunc(keysList, request.POST, formID)
+            keysList = []
+            for setts in answer.keys():
+                if len(setts.split("-")) > 1:
+                    requestFormID = setts.split("-")[0]
+                    if requestFormID == str(formID):
+                        keysList.append(setts)
+            if formID == 7:
+                newLabel, settingsDict["settings"] = formSettingsFunc(keysList, request.POST, formID)
 
 
-                print(settingsDict)
-                settingsDict = json.loads(json.dumps(settingsDict))
-                sameEntry = False
-                if formSettingsQuery.exists():
-                    A = formSettingsQuery[0]
-                    #check if the settings are the same
-                    oldSettings = A.settings
-                    sameEntry = True
-                    for existInp in oldSettings:
-                        for newInp in settingsDict:
-                            if existInp == newInp:
-                                if oldSettings[existInp] != settingsDict[newInp]:
-                                    sameEntry = False
-                if not sameEntry:
-                    newSettings = form_settings_model(
-                        facilityChoice = specificFacility,
-                        formChoice = formList.get(id=formID),
-                        settings = settingsDict,
-                    )
-                    newSettings.save()
-                    selectSettingID = newSettings.id
-                    print('made new form setting')
-                else:
-                    selectSettingID = A.id
-                    sameEntryNotif = True
-                    
-                doesSubExist(specificFacility, selectSettingID, "settingsID", False)
-                selectedList.append(selectSettingID)
-                print('made it')
+            print(settingsDict)
+            settingsDict = json.loads(json.dumps(settingsDict))
+            sameEntry = False
+            if formSettingsQuery.exists():
+                A = formSettingsQuery[0]
+                #check if the settings are the same
+                oldSettings = A.settings
+                sameEntry = True
+                for existInp in oldSettings:
+                    for newInp in settingsDict:
+                        if existInp == newInp:
+                            if oldSettings[existInp] != settingsDict[newInp]:
+                                sameEntry = False
+            if not sameEntry:
+                newSettings = form_settings_model(
+                    facilityChoice = specificFacility,
+                    formChoice = formList.get(id=formID),
+                    settings = settingsDict,
+                )
+                newSettings.save()
+                selectSettingID = newSettings.id
+                print('made new form setting')
             else:
-                continue
-            
-            if facilityFormsData.exists():
-                print(facilityFormsData[0].formData)
-                returnFacList = changeStringListIntoList(facilityFormsData[0].formData)
-                for oldForms in returnFacList:
-                    if int(oldForms) not in selectedList:
-                        selectedList.append(int(oldForms))
-            
+                selectSettingID = A.id
+                sameEntryNotif = True
+                
+            doesSubExist(specificFacility, selectSettingID, "settingsID", False)
+            selectedList.append(selectSettingID)
+            print('made it')
+        
+        if facilityFormsData.exists():
+            print(facilityFormsData[0].formData)
+            returnFacList = changeStringListIntoList(facilityFormsData[0].formData)
+            for oldForms in returnFacList:
+                if int(oldForms) not in selectedList:
+                    selectedList.append(int(oldForms))
+        
         print(selectedList)
         B = facilityFormsData[0]
         B.formData = selectedList
         B.save()
-        
+    
         if sameEntryNotif:
             messages.error(request,"Some of the forms selected already exist for " + str(facility) + ".")
         
@@ -609,3 +588,4 @@ def Add_Forms(request, facility):
         'pageData': pageData,
         'query': q
     })
+

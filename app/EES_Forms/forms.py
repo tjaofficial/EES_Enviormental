@@ -131,7 +131,7 @@ class pt_admin1_form(ModelForm):
 
 class bat_info_form(ModelForm):
     class Meta:
-        model = bat_info_model
+        model = facility_model
         fields = (
             'bat_num', 
             'total_ovens', 
@@ -2806,7 +2806,7 @@ class the_packets_form(ModelForm):
         fields = ('__all__')
         widgets = {
             'facilityChoice': forms.Select(choices=frequent_choices),
-            'name': forms.TextInput(attrs={'type':'text', 'placeholder':'Enter packet name...'}),
+            'name': forms.TextInput(attrs={'class': 'packet-input-input', 'type':'text', 'placeholder':'Enter packet name...'}),
             'formList': forms.TextInput(),
         }
         

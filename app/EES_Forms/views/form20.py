@@ -56,7 +56,7 @@ def form20(request, facility, fsID, selector):
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-    return render(request, "shared/forms/daily/formI.html", {
+    return render(request, "shared/forms/daily/form20.html", {
         'fsID': fsID, 
         'picker': form_variables['picker'], 
         'facility': facility, 

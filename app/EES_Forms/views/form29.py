@@ -108,7 +108,7 @@ def form29(request, facility, fsID, selector):
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
         return redirect('daily_battery_profile', facility, "login", batt_prof_date)
-    return render(request, "shared/forms/monthly/spillkits_form.html", {
+    return render(request, "shared/forms/monthly/form29.html", {
         'iFormList': iFormList, 
         'month': month, 
         'facility': facility, 

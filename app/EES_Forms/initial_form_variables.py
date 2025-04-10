@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from .models import form_settings_model, daily_battery_profile_model, bat_info_model
+from .models import form_settings_model, daily_battery_profile_model, facility_model
 from .utils import checkIfFacilitySelected, getFacSettingsInfo, setUnlockClientSupervisor, issueForm_picker, what_quarter
 from .form_issue_functions import call_dynamic_function
 from django.apps import apps # type: ignore
@@ -14,7 +14,7 @@ def initiate_form_variables(fsID, requestUser, facility, selector):
     unlock, client, supervisor = setUnlockClientSupervisor(requestUser)
     now = datetime.now().date()
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.filter(facility_name=facility)[0]
+    options = facility_model.objects.filter(facility_name=facility)[0]
     full_name = requestUser.get_full_name()
     picker = issueForm_picker(facility, selector, fsID)
     fsIDSelect = form_settings_model.objects.get(id=int(fsID))

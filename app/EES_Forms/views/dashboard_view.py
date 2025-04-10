@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect # type: ignore
-from ..models import user_profile_model, Forms, daily_battery_profile_model, signature_model, bat_info_model, the_packets_model, form_settings_model
+from ..models import user_profile_model, Forms, daily_battery_profile_model, signature_model, facility_model, the_packets_model, form_settings_model
 from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
@@ -24,7 +24,7 @@ def IncompleteForms(request, facility):
     signatures = signature_model.objects.all().order_by('-sign_date')
     sigExisting = False
     sigName = ''
-    facilityData = bat_info_model.objects.filter(facility_name=facility)[0]
+    facilityData = facility_model.objects.filter(facility_name=facility)[0]
     facPackets = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
     # ------- Signatures ---------------- 

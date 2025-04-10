@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.db.models import Q # type: ignore
 from ..utils import parsePhone, get_braintree_query, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultBatteryDashSettings, defaultNotifications
-from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, bat_info_model, account_reactivation_model
+from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, facility_model, account_reactivation_model
 from ..forms import CreateUserForm, user_profile_form, company_Update_form, bat_info_form
 import datetime
 import braintree # type: ignore
@@ -789,7 +789,7 @@ def sup_facility_settings(request, facility, facilityID, selector):
         braintreeData = braintreeData.get(user__id=request.user.id)
     else:
         print('handle if there is no braintree entry')
-    facInfoMain = bat_info_model.objects.get(id=facilityID)
+    facInfoMain = facility_model.objects.get(id=facilityID)
     #userProf = user_profile_model.objects.get(user__id=request.user.id)
     clientUserProfs = user_profile_model.objects.filter(facilityChoice=facInfoMain)
     facilityInfo = ''

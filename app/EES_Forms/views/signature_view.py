@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect # type: ignore
-from ..models import signature_model, daily_battery_profile_model, bat_info_model
+from ..models import signature_model, daily_battery_profile_model, facility_model
 from ..forms import signature_form
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -15,7 +15,7 @@ def signature(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    options = bat_info_model.objects.all().filter(facility_name=facility)[0]
+    options = facility_model.objects.all().filter(facility_name=facility)[0]
     count_bp = daily_battery_profile_model.objects.count()
 
     today = datetime.date.today()

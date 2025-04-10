@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from ..models import issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, bat_info_model
+from ..models import issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, facility_model
 import datetime
 import json
 import calendar
@@ -32,7 +32,7 @@ def client_dashboard_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
     last7days = now - datetime.timedelta(days=6)
-    options = bat_info_model.objects.filter(facility_name=facility)
+    options = facility_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
     userProfile = user_profile_model.objects.get(user__id=request.user.id)
     userCompany = userProfile.company

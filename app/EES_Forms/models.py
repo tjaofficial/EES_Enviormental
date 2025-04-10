@@ -334,7 +334,7 @@ class company_model(models.Model):
     def __str__(self):
         return self.company_name
 
-class bat_info_model(models.Model):
+class facility_model(models.Model):
     company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
     bat_num = models.IntegerField(
         null=True,
@@ -439,7 +439,7 @@ class formSubmissionRecords_model(models.Model):
     dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
     dueDate = models.DateField(auto_now=False, auto_now_add=False)
     facilityChoice = models.ForeignKey(
-        bat_info_model,
+        facility_model,
         on_delete=models.CASCADE, 
         null=True
     )
@@ -448,7 +448,7 @@ class formSubmissionRecords_model(models.Model):
         return str(self.id) + " - " + str(self.formID.form) + " - " + str(self.facilityChoice.facility_name)
 
 class the_packets_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(
         max_length=70
     )
@@ -461,7 +461,7 @@ class the_packets_model(models.Model):
         return str(self.id) + ' - ' + str(self.name) + ' - ' + str(self.facilityChoice)
     
 class form_settings_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE)
     formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
     packetChoice = models.ForeignKey(
         the_packets_model, 
@@ -558,7 +558,7 @@ class daily_battery_profile_model(models.Model):
     inop_numbs = models.CharField(max_length=50)
     date_save = models.DateField(auto_now_add=True, auto_now=False)
     time_log = models.TimeField(auto_now_add=True, auto_now=False)
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return str(self.date_save) + " - " +str(self.facilityChoice)
@@ -597,7 +597,7 @@ class user_profile_model(models.Model):
         blank=True,
     )
     facilityChoice = models.ForeignKey(
-        bat_info_model, 
+        facility_model, 
         on_delete=models.CASCADE, 
         blank=True, 
         null=True
@@ -3924,7 +3924,7 @@ class form25_model(models.Model):
         return str(self.date)
 
 class issues_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     userChoice = models.ForeignKey(
         'user_profile_model', 
         on_delete=models.CASCADE, 
@@ -3957,7 +3957,7 @@ class issues_model(models.Model):
 
 class Event(models.Model):
     enteredBy = models.CharField(max_length=40, blank=True, null=True)
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     personal = models.BooleanField()
     cal_title_choices = (
         ('P', 'Primary'),
@@ -4935,7 +4935,7 @@ class form29_model(models.Model):
         }
 
 class quarterly_trucks_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     quarter = models.CharField(
         choices=quarter_choices,
         max_length=4,
@@ -5428,7 +5428,7 @@ def sop_file_upload_path(instance, filename):
     return f'SOPs/{formatted_filename}'
 
 class sop_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=50
     )
@@ -5447,7 +5447,7 @@ class sop_model(models.Model):
         return str(self.name)
       
 class signature_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     supervisor = models.CharField(
         max_length=30
     )
@@ -5465,7 +5465,7 @@ class signature_model(models.Model):
     
 class facility_forms_model(models.Model):
     facilityChoice = models.OneToOneField(
-        bat_info_model,
+        facility_model,
         on_delete=models.CASCADE, 
         null=True
     )
@@ -5507,7 +5507,7 @@ class form26_model(models.Model):
   
 class notifications_model(models.Model):
     facilityChoice = models.ForeignKey(
-        bat_info_model,
+        facility_model,
         on_delete=models.CASCADE, 
         null=True
     )
@@ -5567,7 +5567,7 @@ class facility_tags_register_model(models.Model):
         ('rectangular', 'Rectangular')
     )
     tankID = models.CharField(max_length=20)
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     last_inspection_date = models.DateField(
         auto_now=False, 
         auto_now_add=False,
@@ -5623,7 +5623,7 @@ class facility_tags_register_model(models.Model):
         return str(self.facilityChoice.facility_name) + ' - ' + str(self.tankID)
     
 class form28_model(models.Model):
-    facilityChoice = models.ForeignKey(bat_info_model, on_delete=models.CASCADE, blank=True, null=True)
+    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     formSettings = models.ForeignKey(
         'form_settings_model', 
         on_delete=models.CASCADE, 

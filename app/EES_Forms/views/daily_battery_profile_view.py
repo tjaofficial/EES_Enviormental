@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
-from ..models import daily_battery_profile_model, user_profile_model, bat_info_model
+from ..models import daily_battery_profile_model, user_profile_model, facility_model
 from ..forms import daily_battery_profile_form
 from django.conf import settings # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
@@ -16,7 +16,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
     profile = user_profile_model.objects.all()
     now = datetime.datetime.now().date()
     form = daily_battery_profile_form
-    options = bat_info_model.objects.filter(facility_name=facility)[0]
+    options = facility_model.objects.filter(facility_name=facility)[0]
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     existing = False
     todays_log = ''
@@ -85,7 +85,7 @@ def facility_select_view(request, facility):
         daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer).order_by('-date_save')
         if answer != '':
             print('CHECK 01')
-            batteryQuery = bat_info_model.objects.get(facility_name=answer)
+            batteryQuery = facility_model.objects.get(facility_name=answer)
             print(batteryQuery)
             print(batteryQuery.is_battery)
             print(batteryQuery.dashboard)

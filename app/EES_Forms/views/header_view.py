@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
-from ..models import user_profile_model, bat_info_model, User
+from ..models import user_profile_model, facility_model, User
 from ..forms import bat_info_form
 from..utils import setUnlockClientSupervisor, checkIfFacilitySelected
 
@@ -46,10 +46,10 @@ def settings_view(request, facility):
     userID = request.user.id
     print(user_profile_model.objects.get(user__id=userID).facilityChoice)
     userProfFaci = user_profile_model.objects.get(user__id=userID).facilityChoice.facility_name
-    database_model = bat_info_model.objects.filter(facility_name=userProfFaci)
+    database_model = facility_model.objects.filter(facility_name=userProfFaci)
     print(database_model)
     
-    if len(bat_info_model.objects.all()) > 0:
+    if len(facility_model.objects.all()) > 0:
         if len(database_model) > 0:
             database_form = database_model[0]
             existing = True

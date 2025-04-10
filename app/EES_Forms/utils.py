@@ -1187,7 +1187,7 @@ def calculateProgessBar(facility, frequency):
 
 def ninetyDayPushTravels(facility):
     today = datetime.datetime.now().date()
-    batInfo = bat_info_model.objects.get(facility_name=facility)
+    batInfo = facility_model.objects.get(facility_name=facility)
     due_date_threshold = today + timedelta(days=30)
     most_recent_dates = {}
     all_records = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility)
@@ -1284,7 +1284,7 @@ def createNotificationDatabase(facility, user, fsID, date, notifSelector):
     print(fsID)
     todayNumb = datetime.date.today().weekday()
     nFormSettings = form_settings_model.objects.get(id=fsID)
-    nFacility = bat_info_model.objects.filter(facility_name=facility)
+    nFacility = facility_model.objects.filter(facility_name=facility)
     if nFacility.exists():
         nFacility = nFacility[0]
     nUserProfile = user_profile_model.objects.filter(user__username=user.username)
@@ -1438,7 +1438,7 @@ def braintreeGateway():
 
 def getCompanyFacilities(username):
     thisProfileData = user_profile_model.objects.filter(user__username=username)[0]
-    sortedFacilityData = bat_info_model.objects.filter(company__company_name=thisProfileData.company.company_name)
+    sortedFacilityData = facility_model.objects.filter(company__company_name=thisProfileData.company.company_name)
     
     return sortedFacilityData
 

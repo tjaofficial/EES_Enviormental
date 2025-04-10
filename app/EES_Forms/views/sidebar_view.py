@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect # type: ignore
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, bat_info_model, form22_model, formSubmissionRecords_model, form_settings_model
+from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, facility_model, form22_model, formSubmissionRecords_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
 import calendar
@@ -139,7 +139,7 @@ def corrective_action_view(request, facility):
             ca_forms = "empty"
     
     profile = user_profile_model.objects.all()
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     if request.method == 'POST':
         answer = request.POST
@@ -163,7 +163,7 @@ def corrective_action_view(request, facility):
 def calendar_view(request, facility, year, month):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     profile = user_profile_model.objects.all()
     try:
         month_number = int(month)
@@ -205,7 +205,7 @@ def calendar_view(request, facility, year, month):
 @lock
 def schedule_view(request, facility):
     supervisor = False
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
     today_year = int(datetime.date.today().year)
@@ -221,7 +221,7 @@ def schedule_view(request, facility):
 def archive_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     archiveForm_query = request.GET.get('archiveFormID')
     archiveFormLabel_query = request.GET.get('archiveFormLabel')
@@ -397,7 +397,7 @@ def search_forms_view(request, facility, access_page):
     ModelForms = Forms.objects.all()
     weekend = False
     monthList =''
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = get_facility_forms('facilityName', facility)
@@ -630,7 +630,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
     profile = user_profile_model.objects.get(user=request.user)
     now = datetime.datetime.now().date()
     todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
     sortedFacilityData = getCompanyFacilities(request.user.username)
     facilityForms = get_facility_forms('facilityName', facility)
@@ -826,7 +826,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
 def event_add_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     companyData = user_profile_model.objects.get(user__id=request.user.id).company
     listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
     
@@ -949,7 +949,7 @@ def event_detail_view(request, facility, access_page, event_id):
     today = datetime.date.today()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     companyData = user_profile_model.objects.get(user__id=request.user.id).company
     listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
     
@@ -1027,7 +1027,7 @@ def handlePhone(number):
 def shared_contacts_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     companyOfUser = user_profile_model.objects.get(user=request.user).company
     sortedFacilityData = getCompanyFacilities(request.user.username)
     
@@ -1092,7 +1092,7 @@ def sop_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)
-    options = bat_info_model.objects.filter(facility_name=facility)[0]
+    options = facility_model.objects.filter(facility_name=facility)[0]
     sops = sop_model.objects.filter(facilityChoice__facility_name=facility).order_by('name')
     sopForm = sop_form()
     

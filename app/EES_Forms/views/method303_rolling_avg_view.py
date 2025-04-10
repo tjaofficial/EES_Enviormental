@@ -1,5 +1,5 @@
 from django.shortcuts import render # type: ignore
-from ..models import Forms, form1_model, user_profile_model, daily_battery_profile_model, form2_model, form3_model, bat_info_model
+from ..models import Forms, form1_model, user_profile_model, daily_battery_profile_model, form2_model, form3_model, facility_model
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
@@ -17,7 +17,7 @@ def method303_rolling_avg(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    options = bat_info_model.objects.all()
+    options = facility_model.objects.all()
     now = datetime.datetime.now()
     today = datetime.date.today()
     daily_prof = daily_battery_profile_model.objects.all().order_by('date_save')

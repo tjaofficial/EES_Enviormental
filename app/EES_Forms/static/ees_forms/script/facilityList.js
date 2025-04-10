@@ -1,17 +1,37 @@
-show_formsList = (elem) => {
-    let list = elem.parentNode.parentNode.children[1];
-    if (list.style.display == 'none'){
-        list.style.display = 'table';
-    } else {
-        list.style.display = 'none';
-    }
-} 
+function show_formsList2(elem) {
+    const listContID = elem.dataset.clickbox;
+    const packetForms = document.getElementById(`packetForms${listContID}`);
 
-show_formsList_form = (elem) => {
-    let list = elem.parentNode.children[1];
-    console.log(list);
-    list.style.display = 'table';
-} 
+    // If it's open, close it
+    if (packetForms.classList.contains('open')) {
+        // Collapse with transition
+        packetForms.style.maxHeight = packetForms.scrollHeight + 'px'; // Set the current height to allow transition
+        requestAnimationFrame(() => {
+            packetForms.style.maxHeight = '0px';
+        });
+        packetForms.classList.remove('open');
+    } else {
+        // Expand
+        packetForms.classList.add('open');
+        packetForms.style.maxHeight = packetForms.scrollHeight + 'px';
+
+        // Optional: Remove the inline style after transition
+        packetForms.addEventListener('transitionend', function cleanup(e) {
+            if (packetForms.classList.contains('open')) {
+                packetForms.style.maxHeight = 'none'; // Let it grow naturally now
+            }
+            packetForms.removeEventListener('transitionend', cleanup);
+        });
+    }
+}
+
+function scrollToFacility(facilityID) {
+    const target = document.getElementById(`facility${facilityID}`);
+    if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+  
 
 open_delete_modal = (elem, packID) => {
     document.getElementById('delete'+String(packID)).style.display = 'flex';

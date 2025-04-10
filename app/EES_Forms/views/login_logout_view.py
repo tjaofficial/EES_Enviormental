@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib.auth import authenticate, login # type: ignore
 import datetime
 import json
-from ..models import user_profile_model, daily_battery_profile_model, bat_info_model, company_model, braintree_model, User
+from ..models import user_profile_model, daily_battery_profile_model, facility_model, company_model, braintree_model, User
 from ..forms import CreateUserForm, user_profile_form, company_form, braintree_form
 from ..utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
 from django.contrib.auth import logout # type: ignore
@@ -58,7 +58,7 @@ def login_view(request):
                     return redirect('companyReg')
                 if request.user.groups.filter(name=SUPER_VAR):
                     if userProf.settings['first_login']:
-                        if len(bat_info_model.objects.all()) > 0:
+                        if len(facility_model.objects.all()) > 0:
                             return redirect('sup_dashboard', SUPER_VAR)
                         else:
                             return redirect('Register', SUPER_VAR, 'facility')
