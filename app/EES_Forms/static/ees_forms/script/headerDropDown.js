@@ -6,7 +6,6 @@ window.addEventListener('click', closeModel);
 
 function closeModel(event) {
     if (event.target == modalHeaderDrop) {
-        console.log('hello')
         modalHeaderDrop.style.display = "none";
         profileMenu.style.display = "none";
         notificationMenu.style.display = "none";

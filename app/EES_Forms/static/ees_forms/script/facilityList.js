@@ -43,7 +43,6 @@ exit_modal = (packID, task) => {
     modalAdd.style.display = "none";
 }
 
-
 open_packet_modal = (elem, packID) => {
     document.getElementById('edit'+String(packID)).style.display = 'flex';
 }
@@ -51,6 +50,7 @@ open_packet_modal = (elem, packID) => {
 open_delete_facForm_modal = (elem, packID) => {
     document.getElementById('deleteFacForm'+String(packID)).style.display = 'flex';
 }
+
 exit_modal = (packID, task) => {
     var modalAdd = document.getElementById(task+String(packID));
     modalAdd.style.display = "none";

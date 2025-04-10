@@ -335,7 +335,19 @@ class company_model(models.Model):
         return self.company_name
 
 class facility_model(models.Model):
-    company = models.ForeignKey(company_model, on_delete=models.CASCADE, blank=True, null=True)
+    company = models.ForeignKey(
+        company_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
+    facilityForms = models.OneToOneField(
+        "facility_forms_model",
+        on_delete=models.PROTECT,
+        related_name='facility',
+        blank=True, 
+        null=True
+    )
     bat_num = models.IntegerField(
         null=True,
         blank=True
@@ -5475,7 +5487,7 @@ class facility_forms_model(models.Model):
         null=True
     )
     def __str__(self):
-        return str(self.facilityChoice)
+        return f"Record of forms used in: {self.facilityChoice}"
     
 class spill_kit_inventory_model(models.Model):
     date = models.DateField(auto_now=False, auto_now_add=False)

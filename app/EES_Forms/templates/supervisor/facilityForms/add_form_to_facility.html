@@ -1,46 +1,7 @@
 {% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
 <link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/add_to_facility_forms.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
-<style>
-    .pageStyle{
-        padding: 9px;
-        background: lightblue;
-        border: 1px black solid;
-        text-decoration: underline;
-    }
-
-    .paginator{
-        display: flex;
-        justify-content: center;
-    }
-    .paginator a {
-        color: black;
-        float: left;
-        padding: 4px 12px;
-        text-decoration: none;
-        transition: background-color .3s;
-        font-size: 15px;
-      }
-    .paginator a.active {
-        background-color: #253544;
-        color: white;
-        border: 1px solid #253544;
-      }
-    .paginator a:hover:not(.active) {
-        background-color: #959595;
-    }
-    .formDataDisplay{
-        margin: auto;
-        width: 100%;
-        height: 457px;
-    }
-    .formRows{
-        height: 24px;
-    }
-    .formRows:hover{
-        background-color: #00000017;
-    }
-</style>
 <div class='mainCont' style="width:1000px; max-width:unset;">
     <div class="card bottomOfPageMargin">
         <div class="cardHeader">
@@ -59,7 +20,7 @@
                     <input type="text" name="q" placeholder="search forms..."/><input type="submit" value="search"/>
                 </form>
             </div>
-            <form method='POST' action='' >
+            <form id="mainForm" method='POST' action='' >
                 {% csrf_token %}
                 <div>
                 {% comment %} <div style="height: 457px;"> {% endcomment %}
@@ -73,9 +34,9 @@
                         {% for form in pageData %}
                         <tr class="formRows">
                             <td class="rowCheckMark">
-                                <input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{form.id}}" name="forms{{form.id}}" type="checkbox" value="{{form.id}}"/>
+                                <input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{form.form}}" name="forms{{form.form}}" type="checkbox" value="{{form.form}}"/>
                             </td>
-                            <td class="rowFormID">{{form.id}} - </td>
+                            <td class="rowFormID">{{form.form}} - </td>
                             <td class="rowFormType">{{form.header}}</td>
                             <td>{{form.title}}</td>
                         </tr>
@@ -83,7 +44,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.id count=forloop.counter %}</td>
+                            <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.form count=form.form %}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -103,8 +64,9 @@
                     <a href="?{% if query %}q={{query}}&{% endif %}page={{pageData.next_page_number}}">&raquo</a>
                     {% endif %}
                 </div>
+                <input type="hidden" name="form_settings" id="formSettingsInput">
                 <div class="center" style="margin-top:10px;">
-                    <input type='submit' value='Save'/>
+                    <input id="submitForms" type='submit' value='Save'/>
                 </div>
             </form>
         </div>
@@ -113,71 +75,99 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let CHECKBOX_KEY = "selectedForms";
-        console.log(CHECKBOX_KEY)
+        //console.log(CHECKBOX_KEY)
         // Load existing selections on page load
-        let formTempData = localStorage.getItem(CHECKBOX_KEY)? JSON.parse(localStorage.getItem(CHECKBOX_KEY), "{}"): {};
+        let formTempData = localStorage.getItem(CHECKBOX_KEY)? JSON.parse(localStorage.getItem(CHECKBOX_KEY) || "{}"): {};
         console.log(formTempData)
         Object.keys(formTempData).forEach(id => {
             const checkbox = document.querySelector(`input[type='checkbox'][value='${id}']`);
             let saveFormSettings = formTempData[String(id)];
-            console.log(id)
-            console.log(checkbox)
+            //console.log("This is fsID")
+            //console.log(id)
+            //console.log("this is the checkox")
+            //console.log(checkbox)
             if (checkbox) {
                 checkbox.checked = true;
                 document.getElementById('settings' + String(id)).style.display = 'block';
                 Object.keys(saveFormSettings).forEach(inputName => {
                     let parsedInputName = `${id}-${inputName}`;
-                    console.log(document.querySelector(`[name="${parsedInputName}"]`))
-                    document.querySelector(`[name="${parsedInputName}"]`).value = saveFormSettings[inputName];
+                    //console.log(parsedInputName)
+
+                    let singleInput = document.querySelector(`[name="${parsedInputName}"]`)
+                    //console.log(singleInput)
+
+                    singleInput.value = saveFormSettings[inputName];
                 })
+
+                document.querySelectorAll(`[name^="${id}-"]`).forEach(extra => {
+                    //console.log(extra)
+                    if (extra.value){
+                        formTempData[String(id)][extra.name.split("-")[1]] = extra.value;
+                        localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
+                    }
+                    extra.addEventListener("change", function () {
+                        //console.log(this)
+                        //console.log("this is the split:")
+                        //console.log(this.name.split("-")[1]);
+                        formTempData[String(id)][this.name.split("-")[1]] = this.value;
+                        //console.log(formTempData)
+                        localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
+                    })
+                })
+                    
             }
         });
     
         // Listen for checkbox changes
         document.querySelectorAll("input[type='checkbox']").forEach(cb => {
             cb.addEventListener("change", function () {
-                console.log(formTempData)
-                const id = this.value;
-                if (this.checked) {
-                    //stored.add(id);
-                    formTempData[String(id)] = {};
-                    localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData))
-                    let extra_data = document.getElementById(`settings${id}`)
-                    console.log(extra_data)
-                    document.querySelectorAll(`[name^="${id}-"]`).forEach(extra => {
-                        if (extra.value){
-                            formTempData[String(id)][extra.name.slice(2)] = extra.value;
-                            localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
-                        }
-                        extra.addEventListener("change", function () {
-                            console.log(this.name.slice(2));
-                            formTempData[String(id)][this.name.slice(2)] = this.value;
-                            console.log(formTempData)
-                            localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
-                        })
-                    })
-                } else {
-                    delete formTempData[String(id)];
-                    localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData))
-                }
+                listen_to_meta_data(formTempData, this);
             });
         });
-    
-        // On form submit, add all stored checkboxes as hidden inputs
-        //document.querySelector("form[action='']").addEventListener("submit", function (e) {
-        //    const stored = JSON.parse(localStorage.getItem(CHECKBOX_KEY) || "[]");
-        //    stored.forEach(id => {
-        //        const hidden = document.createElement("input");
-        //        hidden.type = "hidden";
-        //        hidden.name = "selected_forms";
-        //        hidden.value = id;
-        //        this.appendChild(hidden);
-        //    });
-    
-        //    // optional: clear storage after submission
-        //    localStorage.removeItem(CHECKBOX_KEY);
-        //});
+        
+
+        function listen_to_meta_data(formTempData, elem) {
+            //console.log(formTempData)
+            const id = elem.value;
+            if (elem.checked) {
+                //stored.add(id);
+                formTempData[String(id)] = {};
+                localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData))
+                let extra_data = document.getElementById(`settings${id}`)
+                //console.log(extra_data)
+                document.querySelectorAll(`[name^="${id}-"]`).forEach(extra => {
+                    //console.log(extra)
+                    if (extra.value){
+                        formTempData[String(id)][extra.name.split("-")[1]] = extra.value;
+                        localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
+                    }
+                    extra.addEventListener("change", function () {
+                        //console.log(this)
+                        //console.log(this.name.split("-")[1]);
+                        formTempData[String(id)][this.name.split("-")[1]] = this.value;
+                        //console.log(formTempData)
+                        localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
+                    })
+                })
+            } else {
+                delete formTempData[String(id)];
+                localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData))
+            }
+        }
+        console.log(document.querySelector("#mainForm"))
+        document.querySelector("#mainForm").addEventListener("submit", function () {
+            const CHECKBOX_KEY = "selectedForms";
+            const stored = JSON.parse(localStorage.getItem(CHECKBOX_KEY) || "{}");
+            console.log(stored)
+            const hiddenInput = document.getElementById("formSettingsInput");
+            console.log(hiddenInput)
+            hiddenInput.value = JSON.stringify(stored);  // encode dict as JSON string
+        
+            // Optional: clear storage after submit
+            localStorage.removeItem(CHECKBOX_KEY);
+        });
     });
+    
 </script>
     
 {% endblock %}

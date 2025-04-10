@@ -10,52 +10,51 @@ from ..utils import defaultPacketSettings, setUnlockClientSupervisor, checkIfFac
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
 from django.contrib import messages # type: ignore
-from django.views.decorators.clickjacking import xframe_options_exempt # type: ignore
-from django.http import HttpResponseServerError # type: ignore
+from django.http import JsonResponse # type: ignore
+from django.views.decorators.csrf import csrf_exempt # type: ignore
 
 lock = login_required(login_url='Login')
 
 @lock
 def facilityList(request, facility):
+    hello = form_settings_model.objects.all()
+    for all in hello:
+        print(all.settings["active"])
+        if all.settings["active"] == "true":
+            all.settings["active"] = True
+        elif all.settings["active"] == "false":
+            all.settings["active"] = False
+        all.save()
+
+
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms', facility)
     if client:
         return redirect('c_dashboard', facility)
-    userProfData = user_profile_model.objects.get(user__username=request.user.username)
+    userProfData = request.user.user_profile
     facList = facility_model.objects.filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
-    facData = facility_forms_model.objects.all()
-    formData = Forms.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.username)
     formSettingsModelOG = form_settings_model.objects.all()
     packetData = the_packets_model.objects.all()
-    packetForm = the_packets_form
 
-    newFacList = []
-    for facil in facList:
-        facilityForms = get_facility_forms('facilityID', facil.id)
-        newFacList.append((facil, facilityForms))
-    print(newFacList)
     finalList = []
-    for newFac in newFacList:
-        formSettingsModel = formSettingsModelOG.filter(facilityChoice__id=newFac[0].id)
-        if len(newFac[1]) > 0:
+    for newFac in facList:
+        formSettingsModel = formSettingsModelOG.filter(facilityChoice=newFac)
+        facilityForms = get_facility_forms('facilityID', newFac.id)
+        if len(facilityForms) > 0:
             labelList = []
-            for label in newFac[1]:
-                for formSettings in formSettingsModel:
-                    if int(label) == formSettings.id:
-                        labelList.append((formSettings))
-                # labelList.append((label, label, singleForm.header + ' - ' + singleForm.title, singleForm))
-                # for singleForm in formData:
-                #     if label == singleForm.id:
+            for label in facilityForms:
+                fsIDRecord = formSettingsModel.get(id=int(label))
+                labelList.append((fsIDRecord))
             def myFunc(e):
                 return e.id
             labelList.sort(key=myFunc)
             
-            finalList.append((newFac[0], labelList))
+            finalList.append((newFac, labelList))
         else:
-            finalList.append((newFac[0], newFac[1]))
+            finalList.append((newFac, facilityForms))
     if request.method == 'POST':
         answer = request.POST
         print(answer)
@@ -66,7 +65,7 @@ def facilityList(request, facility):
             facChoice = facility_model.objects.get(id=int(answer['facilityID']))
             dataCopy['facilityChoice'] = facChoice
             dataCopy['frequency'] = 'Weekly'
-            packetFormData = packetForm(dataCopy)
+            packetFormData = the_packets_form(dataCopy)
 
             print(packetFormData.errors)
             if packetFormData.is_valid():
@@ -107,38 +106,44 @@ def facilityList(request, facility):
             print("DELETED PACKET")
             return redirect(facilityList, facility)
         elif 'facForm_delete' in answer.keys():
-            facFormID = answer['facFormID']
+            fsID = answer['facFormID']
             facID = answer['facID']
             #delete from all packets
             for pac in packetData.filter(facilityChoice__id=facID):
-                deleteList = []
                 for setList in pac.formList["formsList"]:
-                    if facFormID == pac.formList["formsList"][setList]['settingsID']:
-                        print('check 1')
-                        if setList not in deleteList:
-                            print('check 2')
-                            deleteList.append(setList)
-                print(deleteList)
-                for delForm in deleteList:
-                    print(pac.formList["formsList"])
-                    print(pac.formList["formsList"][delForm])
-                    del pac.formList["formsList"][delForm]
-                    finalDelete = pac
-                    finalDelete.save()
+                    if fsID == pac.formList["formsList"][setList]['settingsID']:
+                        print('check 2')
+                        del pac.formList["formsList"][setList]
+                        finalDelete = pac
+                        finalDelete.save()
+
+## at this point after clicking delete for a specific form
+## it has removed the form from every packet. Where im at now is
+## wondering that if it gets deleted from every packet... theres
+## no more reference to its old name. So if a client is trying
+## to print an old for (could be archived) the system will still
+## have the form in the database but that form will have an
+## invlaid input for the formSettings input. and can no longer
+## pull any data from the main source.
+
+## need to remove it from facility_form_model
+## change the model.settings["active"] to false
+
+
             #delete form facility forms model
-            thisFacilityForm = facData.get(facilityChoice__id=facID)
+            thisFacilityForm = facList.get(id=facID)
             makeFacFormsList = changeStringListIntoList(thisFacilityForm.formData)
             print(makeFacFormsList)
             for ids in makeFacFormsList:
                 print(ids)
-                if int(ids) ==  int(facFormID):
+                if int(ids) ==  int(fsID):
                     makeFacFormsList.remove(ids)
             thisFacilityForm.formData = makeFacFormsList
             facilityFormDelete = thisFacilityForm
             facilityFormDelete.save()
             #Change acive from "true" to 'false' to archive form from settings model
-            formToDelete = formSettingsModelOG.get(id=facFormID)
-            formToDelete.settings['active'] = "false"
+            formToDelete = formSettingsModelOG.get(id=fsID)
+            formToDelete.settings['active'] = False
             formToDelete.save()
             return redirect(facilityList, facility)
         elif 'packet_update' in answer.keys():
@@ -198,8 +203,7 @@ def facilityList(request, facility):
         'supervisor': supervisor, 
         'facilities': finalList,
         'packetData': packetData,
-        'packetForm': packetForm,
-        'formData': formData,
+        'packetForm': the_packets_form,
         'formSettingsModel': formSettingsModelOG,
     })
 
@@ -498,27 +502,27 @@ def Add_Forms(request, facility):
 
     if request.method == 'POST':
         answer = request.POST
-        print(answer)
+        settingsDictData = json.loads(answer['form_settings'])
         if 'facilitySelect' in answer.keys():
             return redirect('sup_dashboard', answer['facilitySelect'])
         sameEntryNotif = False
         selectedList = []
         ## Builds the new list of forms selected and created a submission record for each
-        selected_form_ids = request.POST.getlist('selected_forms')
+        selected_form_ids = settingsDictData.keys()
         for formID in selected_form_ids:
             formID = int(formID)
-            formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice=formList.get(id=formID))
-            settingsDict = {"active": "true", "packets": False, "settings":{}}
-            for x in answer.keys():
-                # print("--------")
-                # print(x)
-                # print(answer[x])
-                # print("--------")
-                if len(x.split("-")) > 1:
-                    requestFormID = x.split("-")[0]
-                    requestInputName = x.split("-")[1]
-                    if requestFormID == str(formID):
-                        settingsDict["settings"][requestInputName] = answer[x] if not answer[x] else False
+            formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice__form=formID)
+            settingsDict = {"active": True, "packets": False, "settings":{}}
+            for x in settingsDictData[str(formID)].keys():
+                print("--------")
+                print(x)
+                print(settingsDictData[str(formID)][x])
+                print("--------")
+                # if len(x.split("-")) > 1:
+                #     requestFormID = x.split("-")[0]
+                #     requestInputName = x.split("-")[1]
+                #     if requestFormID == str(formID):
+                settingsDict["settings"][x] = settingsDictData[str(formID)][x] if settingsDictData[str(formID)][x] else False
 
             keysList = []
             for setts in answer.keys():
@@ -588,4 +592,3 @@ def Add_Forms(request, facility):
         'pageData': pageData,
         'query': q
     })
-

@@ -3,9 +3,9 @@
 <link href="{% static 'ees_forms/style/forms_settings.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/secondary_form.css' %}" rel="stylesheet" />
 {% comment %} {% with isBreak=1 %}{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{ isBreak|add:'1' }}{% endif %}{% endfor %}{% if isBreak == 2 %}display:block;{% else %}display:none;{% endif %}{% endwith %} {% endcomment %}
-<div id="settings{{count}}" class="formCont" style="{% if count != '' %}margin-left: 32px;display:none;{% endif %}">
+<div id="settings{{formID}}" class="formCont" style="{% if formID != '' %}margin-left: 32px;display:none;{% endif %}">
     <div class="innerFormCont">
-        {% if formID == 1 %}
+        {% if formID == "1" %}
             <li class="form-line">    
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -28,33 +28,33 @@
                     <option value="alternating" {% if formSettings.settings.organize_ovens == "alternating"  %}selected{% endif %}>Alternating</option>
                 </select>
             </li>
-        {% elif formID == 2 %}
+        {% elif formID == "2" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
-        {% elif formID == 3 %}
+        {% elif formID == "3" %}
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
                 One pass option: <select name="{{formID}}-one_pass">
                     <option value="">------</option>
                     <option value="yes" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'yes' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Yes</option>
                     <option value="no" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'no' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>No</option>
                 </select><br>
-        {% elif formID == 4 %}
+        {% elif formID == "4" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
-        {% elif formID == 5 %}
+        {% elif formID == "5" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
             </li>
             <li class="form-line">
                 Larry Car Quantity: <input name="{{formID}}-larry_car_quantity" type="number"><br>
             </li>
-        {% elif formID == 6 %}
+        {% elif formID == "6" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
-        {% elif formID == 7 %}
+        {% elif formID == "7" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -126,7 +126,6 @@
                     }
                 }
                 window.onload = function initial_form7() {
-                    console.log('play')
                     let settingsDict = JSON.parse("{{formSettings.settings|escapejs}}".replaceAll("'", '"'))
                     const formIDjs = String("{{formData.id}}")
                     if (document.getElementById('areaNumberCont').childNodes[1].value > 0 && document.getElementById('areaNumberCont').childNodes[1].value) {
@@ -151,7 +150,7 @@
                 }
                 
             </script>
-        {% elif formID == 8 %}
+        {% elif formID == "8" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -191,11 +190,11 @@
                     }
                 }
             </script>
-        {% elif formID == 9 %}
+        {% elif formID == "9" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
-        {% elif formID == 17 %}
+        {% elif formID == "17" %}
             <li class="form-line">    
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -220,7 +219,7 @@
             <li class="form-line">
                 Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
             </li>
-        {% elif formID == 18 %}
+        {% elif formID == "18" %}
             <li class="form-line">    
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -245,7 +244,7 @@
             <li class="form-line">
                 Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
             </li>
-        {% elif formID == 19 %}
+        {% elif formID == "19" %}
             <li class="form-line">    
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -270,7 +269,7 @@
             <li class="form-line">
                 Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
             </li>
-        {% elif formID == 20 %}
+        {% elif formID == "20" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
@@ -281,11 +280,11 @@
                     <option value="6" {% if formSettings.settings.days_weekly == 7 %}selected{% endif %}>7</option>
                 </select><br>
             </li>
-        {% elif formID == 21 %}
+        {% elif formID == "21" %}
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
-        {% elif formID == 30 %}
+        {% elif formID == "30" %}
             <li class="form-line">
                 Custom title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} 
                 <input type='text' placeholder="{{formData.header}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
@@ -301,7 +300,6 @@
                     let numOfAreasInput = document.querySelector(".num_of_areas");
             
                     if (numOfAreasInput) {
-                        console.log('hello')
                         showOldData(numOfAreasInput)
                         updateWasteAreas(numOfAreasInput, "{{formID}}")
                         numOfAreasInput.addEventListener("input", function () {
@@ -382,7 +380,6 @@
                     let numOfWasteCatInput = document.querySelector(".num_of_waste_cat");
             
                     if (numOfWasteCatInput) {
-                        console.log('hello')
                         showOldCatData(numOfWasteCatInput)
                         updateWasteCats(numOfWasteCatInput, "{{formID}}")
                         numOfWasteCatInput.addEventListener("input", function () {
@@ -454,7 +451,7 @@
             <li class="form-line">
                 <div id="30-wasteCatNames" style="display: none; padding-left: 40px;"></div>
             </li>
-        {% elif formID == 31 %}
+        {% elif formID == "31" %}
             {{ formSettings.settings|json_script:"formSettingsData" }}
             <li class="form-line">
                 Custom title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} 

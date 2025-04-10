@@ -1,0 +1,38 @@
+.pageStyle{
+    padding: 9px;
+    background: lightblue;
+    border: 1px black solid;
+    text-decoration: underline;
+}
+
+.paginator{
+    display: flex;
+    justify-content: center;
+}
+.paginator a {
+    color: black;
+    float: left;
+    padding: 4px 12px;
+    text-decoration: none;
+    transition: background-color .3s;
+    font-size: 15px;
+  }
+.paginator a.active {
+    background-color: #253544;
+    color: white;
+    border: 1px solid #253544;
+  }
+.paginator a:hover:not(.active) {
+    background-color: #959595;
+}
+.formDataDisplay{
+    margin: auto;
+    width: 100%;
+    height: 457px;
+}
+.formRows{
+    height: 24px;
+}
+.formRows:hover{
+    background-color: #00000017;
+}

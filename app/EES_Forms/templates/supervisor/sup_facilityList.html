@@ -2,155 +2,6 @@
 <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/packet_div.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/facilityList.js' %}"></script>
-<style>
-    .drag:hover{
-        background: #0000ff3d;
-    }
-
-
-    .facility-container {
-        background: #ffffff;
-        border-radius: 10px;
-        margin-bottom: 30px;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    }
-
-    .facility-header {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    table th, table td {
-        padding: 5px 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .form-actions button,
-    .packet-actions button {
-        margin-left: 5px;
-        padding: 4px 8px;
-        border: none;
-        border-radius: 4px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-    }
-
-    .form-actions button:hover,
-    .packet-actions button:hover {
-        background-color: #0056b3;
-    }
-
-    .packet-box {
-        background: #f4f4f4;
-        padding: 10px;
-        border-radius: 6px;
-        margin-bottom: 10px;
-    }
-
-    .packet-title {
-        font-weight: bold;
-        cursor: pointer;
-        text-align: left;
-    }
-
-    .add-form-btn, .add-packet-btn {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .add-form-btn:hover, .add-packet-btn:hover {
-        background-color: #218838;
-    }
-
-    .packet-input {
-        margin-top: 10px;
-        display: flex;
-    }
-
-    .packet-input-input {
-        flex: 1;
-        padding: 6px;
-        border: 1px solid #ccc;
-        border-radius: 4px 0 0 4px;
-    }
-
-    .packet-input-button {
-        border-radius: 0 4px 4px 0;
-        height: 29px;
-    }
-    .packet-forms li {
-        list-style-type: disc;
-        display: list-item;
-        padding: unset;
-        margin: 6px 47px;
-    }
-    .packet-forms li:hover{
-        background: #0000ff3d;
-    }
-    .packet-forms {
-        overflow: hidden;
-        transition: max-height 0.4s ease;
-    }
-    .packet-forms.open {
-        max-height: 1000px; /* fallback for non-JS environments */
-    }
-    .form-preview {
-        position: absolute;
-        display: none;
-        z-index: 9999;
-        background: white;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        box-shadow: 0px 2px 12px rgba(0,0,0,0.15);
-        max-width: 300px;
-        pointer-events: none;
-        font-size: 0.9rem;
-    }
-    .facility-jump-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: start;
-        margin-bottom: 20px;
-        padding: 10px;
-        background: #f7f7f7;
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    
-    .facility-tile {
-        padding: 6px 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.95rem;
-        transition: background-color 0.2s ease;
-    }
-    
-    .facility-tile:hover {
-        background-color: #0056b3;
-    }
-      
-</style>
 <input type="hidden" id="totalFacilities" value="{{sortedFacilityData|length}}">
 <div class='mainCont' style="width: 50rem;">
     <div class="card" style="margin-bottom: 15px;">
@@ -182,14 +33,15 @@
                                     </thead>
                                     <tbody>
                                         {% for x in info.1 %}
-                                        <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
-                                            <td>{{x.id}}</td>
-                                            <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
-                                            <td class="form-actions">
-                                                <a href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}"><button>Edit</button></a>
-                                                <button onclick="open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
-                                            </td>
-                                        </tr>
+                                            {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
+                                            <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
+                                                <td>{{x.id}}</td>
+                                                <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
+                                                <td class="form-actions">
+                                                    <a href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}"><button>Edit</button></a>
+                                                    <button onclick="open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
+                                                </td>
+                                            </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
