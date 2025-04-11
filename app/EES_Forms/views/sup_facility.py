@@ -17,16 +17,6 @@ lock = login_required(login_url='Login')
 
 @lock
 def facilityList(request, facility):
-    hello = form_settings_model.objects.all()
-    for all in hello:
-        print(all.settings["active"])
-        if all.settings["active"] == "true":
-            all.settings["active"] = True
-        elif all.settings["active"] == "false":
-            all.settings["active"] = False
-        all.save()
-
-
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
@@ -132,12 +122,13 @@ def facilityList(request, facility):
 
             #delete form facility forms model
             thisFacilityForm = facList.get(id=facID)
-            makeFacFormsList = changeStringListIntoList(thisFacilityForm.formData)
-            print(makeFacFormsList)
+            print(thisFacilityForm)
+            makeFacFormsList = get_facility_forms('facilityID', thisFacilityForm.id)
             for ids in makeFacFormsList:
                 print(ids)
                 if int(ids) ==  int(fsID):
                     makeFacFormsList.remove(ids)
+            print(makeFacFormsList)
             thisFacilityForm.formData = makeFacFormsList
             facilityFormDelete = thisFacilityForm
             facilityFormDelete.save()

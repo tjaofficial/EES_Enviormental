@@ -6,7 +6,7 @@
             {% for item in facFormList1 %}
                 {% if item.id == form.settingsID %}
                     {% with item as matching_item %}
-                        {% if matching_item.settings.active == 'true' and not matching_item.subChoice.submitted %}
+                        {% if matching_item.settings.active and not matching_item.subChoice.submitted %}
                             <a href="{{ matching_item.formChoice.frequency }}/{{ matching_item.formChoice.form }}/{{ matching_item.id }}/form{% if matching_item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                                 <div class="card_Form" style="margin-left: 50px;">
                                     <h3 class="card_Form_letter">{{key}}</h3>
@@ -33,7 +33,7 @@
                 {% for item in facFormList1 %}
                     {% if item.id == form.settingsID %}
                         {% with item as matching_item %}
-                            {% if matching_item.settings.active == 'true' and matching_item.subChoice.submitted %}
+                            {% if matching_item.settings.active and matching_item.subChoice.submitted %}
                                 <a href="{{ matching_item.formChoice.frequency }}/{{ matching_item.formChoice.form }}/{{ matching_item.id }}/form
                                     {% if matching_item.formChoice.day_freq == 'Weekends' %}
                                         {% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}

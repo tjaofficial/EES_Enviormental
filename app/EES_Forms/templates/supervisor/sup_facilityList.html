@@ -18,7 +18,6 @@
             {% endfor %}
         </div>          
     </div>
-    
         {% if facilities|length > 0 %}
             <div class="contentCont center" style="padding: unset;">
                 {% for info in facilities %}
@@ -50,21 +49,20 @@
                                     No forms have been added. Add forms to this facility by clicking 'add forms' below
                                 </div>
                             {% endif %}
-                            <a href="{% url 'addingForms' info.0.facility_name %}">
-                                <button class="add-form-btn">
-                                    + Add Facility Form
-                                </button>
-                            </a>
-                            <div style="width: 100%; display: inline-flex; justify-content: center; margin-top: 38px;">
-                                <h4>Packets&nbsp;</h4>
-                                {% include 'shared/components/helpPack.html' with data="packets" popupCounter=forloop.counter %}
-                            </div>
-                            <form method='POST' style="margin: 15px;">
-                                {% csrf_token %}
-                                <input type="hidden" name="facilityID" value="{{info.0.id}}">
-                                {{packetForm.name}}<input class="add-packet-btn packet-input-button" type="submit" name="newPacket" value="Save">
-                            </form>
-                    
+                                <a href="{% url 'addingForms' info.0.facility_name %}">
+                                    <button class="add-form-btn">
+                                        + Add Facility Form
+                                    </button>
+                                </a>
+                                <div style="width: 100%; display: inline-flex; justify-content: center; margin-top: 38px;">
+                                    <h4>Packets&nbsp;</h4>
+                                    {% include 'shared/components/helpPack.html' with data="packets" popupCounter=forloop.counter %}
+                                </div>
+                                <form method='POST' style="margin: 15px;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="facilityID" value="{{info.0.id}}">
+                                    {{packetForm.name}}<input class="add-packet-btn packet-input-button" type="submit" name="newPacket" value="Save">
+                                </form>
                             {% with facID=forloop.counter %}
                                 {% for packet in packetData %}
                                     {% if packet.facilityChoice.facility_name == info.0.facility_name %}

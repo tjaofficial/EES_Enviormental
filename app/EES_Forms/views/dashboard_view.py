@@ -16,7 +16,6 @@ def IncompleteForms(request, facility):
     if facility == OBSER_VAR:
         return redirect('facilitySelect', 'observer')
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    profile = user_profile_model.objects.all()
     today = datetime.date.today()
     todays_num = today.weekday()
     today_str = str(today)
@@ -131,7 +130,6 @@ def IncompleteForms(request, facility):
         'profile_entered': profile_entered, 
         'form_check1': form_check1, 
         'form_check2': form_check2, 
-        'profile': profile, 
         'today_str': today_str, 
         'todays_num': todays_num, 
         'weekend_list': weekend_list, 
