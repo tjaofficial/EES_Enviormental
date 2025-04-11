@@ -227,12 +227,7 @@ def archive_view(request, facility):
     archiveFormLabel_query = request.GET.get('archiveFormLabel')
     archiveMonth_query = request.GET.get('archiveMonth')
     archiveDate_query = request.GET.get('archiveDate')
-    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility, settings__active='true')
-    varPull = [
-        archiveForm_query,
-        archiveMonth_query,
-        archiveDate_query,
-    ]
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility, settings__active=True)
     
     def getFsSearchID(itemSearched, fsModel):
         if itemSearched != '' and itemSearched is not None and fsModel.exists():
@@ -338,7 +333,7 @@ def archive_view(request, facility):
     labelQueryList = getFsSearchLabel(archiveFormLabel_query, formSettingsModel)
     monthYearQueryList = getFsSearchMonthYear(archiveMonth_query, formSettingsModel)
     dateQueryList = getFsSearchDate(archiveDate_query, formSettingsModel)
-    
+    print(IDQueryList)
     sortList = []
     finalList = []
     if monthYearQueryList != 'none':
