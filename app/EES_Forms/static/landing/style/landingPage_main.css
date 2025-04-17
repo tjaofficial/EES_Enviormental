@@ -21,9 +21,6 @@
     align-items: center;
 }
 .hero {
-    background-image: url('background.jpg'); /* Replace with your background image */
-    background-size: cover;
-    background-position: center;
     color: #fff;
     text-align: center;
     /* padding: 57px 0 0 0; */
@@ -106,7 +103,6 @@
 }
 
 .cta-section {
-    background-color: #1a3b52;
     color: #fff;
     text-align: center;
     padding: 80px 0;

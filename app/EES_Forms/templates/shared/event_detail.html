@@ -6,7 +6,7 @@
 <div class="mainCont center" style="width:35rem;">
     {% if access_page == 'view' %}
     <div class="card">
-        <div class="cardHeader">
+        <div class="cardHeader methodPlusBlue">
             {% include "shared/components/backArrow.html" with destination="calendar"%}
             View Event Details
         </div>
@@ -33,7 +33,7 @@
     </div>
     {% elif access_page == 'edit' %}
     <div class="card">
-        <div class="cardHeader">
+        <div class="cardHeader methodPlusBlue">
             {% include "shared/components/backArrow.html" with destination="calendar-event"%}
             Edit Event Details
         </div>

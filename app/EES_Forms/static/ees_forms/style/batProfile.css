@@ -13,3 +13,134 @@
     background-color: #253544;
     border-radius: 13px 13px 0px 0px;
 }
+.form-container {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 100%;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* Form Fields */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s;
+    outline: none;
+}
+
+.form-group label {
+    position: absolute;
+    top: 18px;
+    left: 15px;
+    font-size: 16px;
+    color: #777;
+    transition: 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #007bff;
+}
+
+.form-group input:focus + label, 
+.form-group select:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: 5px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+/* Select Dropdown Styling */
+select {
+    appearance: none;
+    background: white;
+    cursor: pointer;
+}
+
+/* Oven Input Section */
+.oven-container {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#oven-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag {
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.tag button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+/* No Ovens Button */
+#no-ovens-btn {
+    padding: 0 16px;
+    width: 100%;
+    border: none;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-align: right;
+}
+
+#no-ovens-btn:disabled {
+    /* background: gray; */
+    cursor: not-allowed;
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background: #0056b3;
+}
+#oven-input { 
+    width: 100%; 
+    font-size: 18px; 
+    padding: 15px; 
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: 0.3s;
+    outline: none;
+}

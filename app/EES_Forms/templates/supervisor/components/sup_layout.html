@@ -1,28 +1,17 @@
 {% load static %}
-<style>
-    .daily{
-        width: {{ daily_percent }}%; 
-        background-color: #348EFA;
-    }
-    .weekly{
-        width: {{ weekly_percent }}%; 
-        background-color: #F55667;
-    }
-    .monthly{
-        width: {{ monthly_percent }}%; 
-        background-color: #4ACFAE;
-    }
-    .quarterly{
-        width: {{ quarterly_percent }}%; 
-        background-color: #FCB050;
-    }
-    .annually{
-        width: {{ annually_percent }}%; 
-        background-color: #FCB050;
-    }
-</style>
 <html>
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>MethodPlus+ | Data Collection Made Easy</title>
+        <meta name="description" content="Revolutionize your inspections with MethodPlus+. Collect, manage, and export reports with ease. EPA-compliant & engineer-approved.">
+        <meta name="keywords" content="MethodPlus, EPA reports, industrial inspections, Method 303, Method 9, facility reports, compliance software">
+        <meta name="author" content="Voxol Universe">
+        <meta name="robots" content="index, follow">
+        <meta name="apple-mobile-web-app-title" content="MethodPlus+">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'landing/images/favicon/favicon-32x32.png' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon.png' %}">
         {% comment %} <link rel="shortcut icon" href=# /> {% endcomment %}
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script defer src="{% static 'ees_forms/script/sup_sidebar.js' %}"></script>
@@ -30,6 +19,7 @@
         <script defer src="{% static 'notifications/notifications.js' %}"></script>
         <script defer src="{% static 'ees_forms/script/headerDropDown.js' %}"></script>
         <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
+        <link href="{% static 'ees_forms/style/universal.css' %}" rel="stylesheet">
         <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
         <link href="{% static 'ees_forms/style/sup_layout.css' %}" rel="stylesheet" />
         <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />

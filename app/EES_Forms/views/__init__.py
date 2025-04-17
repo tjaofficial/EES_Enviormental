@@ -2,14 +2,14 @@ from .login_logout_view import login_view, logout_view, change_password, landing
 from .header_view import about_view, safety_view, settings_view
 from .sidebar_view import delete_selected_sops, corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view, formsProgress, profile_edit_view
 from .dashboard_view import IncompleteForms, default_dashboard
-from .supervisor_view import sup_dashboard_view, register_view, form_request_view
+from .supervisor_view import *
 from .data_view import pt_admin1_view, pt_mth_input
 from .crud_sop_view import delete_sop_view, update_sop_view
 from .client_view import client_dashboard_view
 from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 from .signature_view import signature
-from .billing import billing_view, landing_addCard_view
+from .billing import billing_view, landing_addCard_view, stripe_subscription_view, stripe_webhook, stripe_customer_portal, stripe_success
 from .landing_view import *
 from .admin_view import *
 from .sup_facility import *

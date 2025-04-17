@@ -1,21 +1,23 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #eaeaea;
+    color: #333;
+}
 .footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 20px 0;
 }
-body {
+.footerFont{
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #eaeaea;
-    color: #333;
-    width: 100%;
-    min-height: 100vh;
 }
-
+main {
+    width: 100%;
+    min-height: 50vh;
+}
 header {
-    background-color: #1a3b52;
     color: #fff;
     padding: 14px 0;
     position: relative;
@@ -34,7 +36,6 @@ header {
 }
 .footerContent{
     width: 100%;
-    background: #1a3b52;
     color: white;
     display: inline-flex;
     justify-content: center;

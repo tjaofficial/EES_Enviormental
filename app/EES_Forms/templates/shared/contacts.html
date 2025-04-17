@@ -6,7 +6,7 @@
 <input id="facilityCheck" type='hidden' value="{{ facility }}"/>
 <div class="mainCont" style="margin: 0px 0px; display: inline-flex;width: 100%;">
     <div class="card" style="min-width: 1021px; margin-right: 13px; height: 100%;">
-        <div class="cardHeader">Contacts</div>
+        <div class="cardHeader methodPlusBlue">Contacts</div>
         <div style="overflow: scroll; height: calc(100% - 70px);">
             {% if organized_list|length > 0 %}
                 <div class="contact_list_cont contentCont" style="padding:15px 23px;">
@@ -164,7 +164,7 @@
             </div>
     </div>
     <div class="card" id='replaceContent' style="width: 365px;min-width: 365px;">
-        <div class='cardHeader'>Profile</div>
+        <div class='cardHeader methodPlusBlue'>Profile</div>
     </div>
 </div>
 {% endblock %}

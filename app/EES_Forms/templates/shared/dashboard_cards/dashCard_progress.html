@@ -1,0 +1,75 @@
+{% load static %}{% load formC_tags %}
+<style>
+    .daily{
+        width: {{ daily_percent }}%; 
+        background-color: #348EFA;
+    }
+    .weekly{
+        width: {{ weekly_percent }}%; 
+        background-color: #F55667;
+    }
+    .monthly{
+        width: {{ monthly_percent }}%; 
+        background-color: #4ACFAE;
+    }
+    .quarterly{
+        width: {{ quarterly_percent }}%; 
+        background-color: #FCB050;
+    }
+    .annually{
+        width: {{ annually_percent }}%; 
+        background-color: #FCB050;
+    }
+</style>
+    <div class="grid-sliders progress_bars_whole">
+        {% if progressBar|get_category:'progressDaily' %}
+            <a href="./progress/daily#DailyProg">
+                <div class="skillBar progress_bar_div">
+                    <p>Daily Progress</p>
+                    <div class="container">
+                        <div class="skills daily"></div>
+                    </div>
+                </div>
+            </a>
+        {% endif %}
+        {% if progressBar|get_category:'progressWeekly' %}
+            <a href="./progress/weekly#WeeklyProg">
+                <div class="skillBar progress_bar_div">
+                    <p>Weekly Progress</p>
+                    <div class="container">
+                        <div class="skills weekly"></div>
+                    </div>
+                </div>
+            </a>
+        {% endif %}
+        {% if progressBar|get_category:'progressMonthly' %}
+            <a href="./progress/monthly#MonthlyProg">
+                <div class="skillBar progress_bar_div">
+                    <p>Monthly Progress</p>
+                    <div class="container">
+                        <div class="skills monthly"></div>
+                    </div>
+                </div>
+            </a>
+        {% endif %}
+        {% if progressBar|get_category:'progressQuarterly' %}
+            <a href="./progress/quarterly#QuarterlyProg">
+                <div class="skillBar progress_bar_div">
+                    <p>Quarterly Progress</p>
+                    <div class="container">
+                        <div class="skills quarterly"></div>
+                    </div>
+                </div> 
+            </a>
+        {% endif %}
+        {% if progressBar|get_category:'progressAnnually' %}
+            <a href="./progress/annually#AnnuallyProg">
+                <div class="skillBar progress_bar_div">
+                    <p>Annually Progress</p>
+                    <div class="container">
+                        <div class="skills annually"></div>
+                    </div>
+                </div>
+            </a>
+        {% endif %}
+    </div>

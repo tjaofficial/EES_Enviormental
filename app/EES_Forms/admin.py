@@ -9,6 +9,7 @@ from .utils import EventCalendar
 # Register your models here.
 
 admin.site.register(Forms)
+admin.site.register(subscription)
 admin.site.register(daily_battery_profile_model)
 admin.site.register(user_profile_model)
 admin.site.register(pt_admin1_model)

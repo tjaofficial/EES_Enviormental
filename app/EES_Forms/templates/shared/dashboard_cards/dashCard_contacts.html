@@ -1,0 +1,32 @@
+{% load static %}
+<div id="observers">
+    <div class="card-title headerBottomPadding">Contacts</div>
+    <div class="grid-observers">
+        <div class="grid-observ_header">
+            <p></p>
+            <p class="contactHeader">Name</p>
+            <p class="contactHeader center">Phone</p>
+            <p class="contactHeader center">Email</p>
+            <p class="contactHeader center">Certification Date</p>
+        </div>
+        {% for person in profile %}
+            {% if person.facilityChoice.facility_name == facility or person.position == "observer" or person.position == "supervisor"%}
+                <div class="grid-observ_singles">
+                    <span class="c_card_circle_oven c_circle_font_color">
+                        {% if person.profile_picture %}
+                            <img style="width: 40px;border-radius: 25px;" src="../../static/images/profile_pics/TJA.jpg">
+                        {% else %}
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
+                            </svg>
+                        {% endif %}
+                    </span>
+                    <p class="contactFont">{{ person.user.first_name }} {{ person.user.last_name }}</p>
+                    <p class="contactFont center">{{ person.phone }}</p>
+                    <p class="contactFont center">{{ person.user.email }}</p>
+                    <p class="contactFont center">{{ person.cert_date }}</p>
+                </div>
+                <hr>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

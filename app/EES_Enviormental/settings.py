@@ -215,3 +215,6 @@ CRONJOBS = [
     ('20 0 * * *', 'EES_Forms.cron.check_subscription_activations'),
 ]
 
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
+

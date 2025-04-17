@@ -2,7 +2,7 @@
 <link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
 <div class="mainCont">
     <div class="card">
-        <div class="cardHeader">
+        <div class="cardHeader methodPlusBlue">
           {% include "shared/components/backArrow.html" with destination="accountSettings" %}
           {% if action == "change" %}Change Card{% elif action == "update" %}Update Address{% endif %}
         </div>

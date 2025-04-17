@@ -1,0 +1,33 @@
+{% load static %}
+<div id="corrective_actions">
+    <div class="card-title headerBottomPadding">Latest Issues/Corrective Actions</div>
+    <div class="ca_holder">
+        <ul>
+            {% if facility != 'supervisor' %}
+                {% for x in ca_forms %}
+                    <a href="issues_view/{{x.formChoice.id}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                        <li class="sideAlign" {% if client %}style="{% if not x.viewed %}{% if x.out_of_compliance %}background-color: #ff8c8c{% else %}background-color: #ebee17;{% endif %}{% else %} background-color: white;{% endif %}"{% endif %}>
+                            <div class="ca_indie">
+                                <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">
+                                    {{ x.date }} - {{ x.formChoice.formChoice.form }}
+                                </div>
+                                <div style="text-align: left; width: 100%; font-size:.6rem; padding-left: 0.4rem;">
+                                    {{ x.issues }}
+                                </div>
+                            </div>
+                        </li>
+                    </a>
+                {% endfor %}
+            {% else %}
+                NO FACILITY SELECTED
+            {% endif %}
+        </ul>    
+    </div>
+    <div class="ca_footer">
+        <a href="{% url 'Corrective-Action' facility %}">
+            Show all issues
+            <svg style='height:1rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right" class="link_arrow" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path>
+            </svg>
+        </a>
+    </div>
+</div>

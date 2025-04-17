@@ -1,0 +1,114 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% load static %}{% block body %}
+<link rel="stylesheet" href="{% static 'ees_forms/style/subscribe.css' %}">
+
+{{ jsPlansQuery|json_script:"plans-data" }}
+<div class="subscribe-container">
+    <h2 class="subscribe-title">Subscribe to MethodPlus+</h2>
+
+    <form id="subscriptionForm" method="POST">
+        {% csrf_token %}
+
+        <!-- Step 1: Choose a Plan -->
+        <div id="step-1" class="step">
+        <h3 class="step-title">Choose your plan</h3>
+        <div class="plan-options">
+            {% for plan in plansQuery %}
+                <label class="plan-option">
+                    <input type="radio" name="plan" value="{{plan.name}}"> {{plan.name}}: ${{plan.price|floatformat:2}}/month
+                </label>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn next" onclick="nextStep()">Continue</button>
+        </div>
+
+        <!-- Step 2: Add-ons -->
+        <div id="step-2" class="step hidden">
+            <h3 class="step-title">Optional Additional Registrations</h3>
+            <label class="addon-option">
+                <input type="checkbox" id="extraUsersCheckbox" name="addons" value="extra_users" onchange="toggleExtraUsersInput()"> Extra Users ($75 per user)
+            </label>
+            <div id="extraUsersInputContainer" class="hidden">
+                <label for="extraUsersCount">How many extra users?</label>
+                <input type="number" id="extraUsersCount" name="extra_users_count" min="1" value="1">
+            </div>
+            <div class="button-row">
+                <button type="button" class="btn back" onclick="prevStep()">Back</button>
+                <button type="button" class="btn next" onclick="nextStep()">Continue</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Review & Submit -->
+        <div id="step-3" class="step hidden">
+        <h3 class="step-title">Review & Subscribe</h3>
+        <div id="reviewSection" class="review"></div>
+        <div class="button-row">
+            <button type="button" class="btn back" onclick="prevStep()">Back</button>
+            <button type="submit" class="btn submit">Proceed to Payment</button>
+        </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    function nextStep() {
+        document.getElementById(`step-${currentStep}`).classList.add('hidden');
+        currentStep++;
+        document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+        if (currentStep === 3) populateReview();
+    }
+
+    function prevStep() {
+        document.getElementById(`step-${currentStep}`).classList.add('hidden');
+        currentStep--;
+        document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+    }
+
+    function toggleExtraUsersInput() {
+        const checkbox = document.getElementById("extraUsersCheckbox");
+        const inputContainer = document.getElementById("extraUsersInputContainer");
+        if (checkbox.checked) {
+            inputContainer.classList.remove("hidden");
+        } else {
+            inputContainer.classList.add("hidden");
+        }
+    }
+
+    function populateReview() {
+        const plansQuery = JSON.parse(document.getElementById('plans-data').textContent);
+        const plan = document.querySelector('input[name="plan"]:checked');
+        const addons = document.querySelectorAll('input[name="addons"]:checked');
+        const review = document.getElementById('reviewSection');
+        console.log(review)
+        plansQuery.forEach(plans => {
+            console.log(plans.name)
+            console.log(plan)
+            if (plans.name == plan.value){
+                console.log(plans.name)
+
+                review.innerHTML = `<p><strong>Plan:</strong> ${plans.name}</p>`;
+                review.innerHTML += `<p><strong>Price:</strong> $${plans.price.toFixed(2)}</p>`;
+                review.innerHTML += `<p><strong>Description:</strong> ${plans.description}</p>`;
+
+            }
+        });
+
+        if (addons.length > 0) {
+            review.innerHTML += '<p><strong>Add-ons:</strong></p><ul>';
+            addons.forEach(a => {
+                if (a.value === "extra_users") {
+                    const count = document.getElementById("extraUsersCount").value;
+                    review.innerHTML += `<li>Extra Registrations - ${count} Additional ($${(count * 75).toFixed(2)})</li>`;
+                } else {
+                    review.innerHTML += `<li>${a.value}</li>`;
+                }
+            });
+            review.innerHTML += '</ul>';
+        } else {
+            review.innerHTML += '<p>No additional registrations.</p>';
+        }
+    }
+</script>
+{% endblock %}

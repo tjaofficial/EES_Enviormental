@@ -1,0 +1,38 @@
+{% load static %}
+<div id="latestActivity4">
+    <div class="card-title headerBottomPadding" style="display: flex;">
+        <div>90 Day Push Travel Evaluation</div>
+        <div style="position: relative; right: -59%;">
+            <a style="text-decoration: underline;" href="{% url 'pt_admin1' facility %}">see all</a>
+        </div>
+    </div>
+    <div class="myTabs">
+        <input onclick="displayGroupOfOvens('5Day')" type="radio" id="tab_5day" name="myTabs" checked="checked">
+        <label for="tab_5day">Due 5 Days</label>
+        <div id="data_5Day" class="tab" style='display:block;'>
+            <div class='dataPT'>
+                {% for x in od_5 %}
+                    <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <input onclick="displayGroupOfOvens('10Day')" type="radio" id="tab_10day" name="myTabs">
+        <label for="tab_10day">Due 10 Days</label>
+        <div id="data_10Day" class="tab" style='display:none;'>
+            <div class='dataPT'>
+                {% for x in od_10 %}
+                <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <input onclick="displayGroupOfOvens('30Day')" type="radio" id="tab_30day" name="myTabs">
+        <label for="tab_30day">Due 30 Days</label>
+        <div id="data_30Day" class="tab" style='display:none;'>
+            <div class='dataPT'>
+                {% for x in od_30 %}
+                <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

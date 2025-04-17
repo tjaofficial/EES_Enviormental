@@ -18,6 +18,13 @@ from django.views.decorators.csrf import csrf_exempt # type: ignore
 
 lock = login_required(login_url='Login')
 
+@lock
+def get_sidebar_data(request):
+    # Whatever your variables are
+    sidebar_data = {
+        # add whatever else you need
+    }
+    return JsonResponse(sidebar_data)
 
 @lock
 def corrective_action_view(request, facility):

@@ -215,7 +215,7 @@ braintreeSettings = {
         "price": "item",
         "registrations": "item",
         "next_billing_date": "item",
-        "status": "item",
+        "status": "item", # selected, canceled, active
     },
     "payment_methods": {
         "default": {
@@ -1443,25 +1443,21 @@ def getCompanyFacilities(username):
     return sortedFacilityData
 
 def checkIfMoreRegistrations(user):
-    profileData = user_profile_model.objects.get(user__id=user.id)
-    braintreeData = braintree_model.objects.filter(user__id=user.id)
+    profileData = user.user_profile
+    subscriptionData = profileData.company.subscription
     userCompany = profileData.company
-    listOfEmployees = user_profile_model.objects.filter(~Q(position="client"), company=userCompany, user__is_active=True)
-    if braintreeData.exists():
-        braintreeData = braintreeData.get(user__id=user.id)
-    else:
-        print('There is no braintree entry in database for this Company/User.')
+    active_registrations = len(user_profile_model.objects.filter(~Q(position="client"), company=userCompany, user__is_active=True))
+    if not subscriptionData:
+        print('There is no Stripe entry in database for this Company/User.')
         return False
-    if braintreeData.settings['subscription']:
-        if braintreeData.settings['subscription']['registrations']:
-            total_registrations = braintreeData.settings['subscription']['registrations']
-        else:
-            print('There is no data in the database entry for this Company/User.')
-            return False
+
+    if subscriptionData.settings['extra_users']:
+        total_registrations = int(subscriptionData.settings['extra_users'])+2
     else:
-        print('The data listed for Braintree-Subscription is False')
+        print('There is no Extra User Data in the database entry for this Company/User.')
         return False
-    active_registrations = len(listOfEmployees.filter(is_active=True))
+
+    print(f"Active: {active_registrations}, Allowed: {total_registrations}")
     if active_registrations >= total_registrations:
         addMore = False
     else:
@@ -2109,18 +2105,6 @@ def setDefaultSettings(profile, superUsername):
     createSettings['first_login'] = False
     createSettings['position'] = profile.position
     return createSettings
-
-def get_braintree_query(user):
-    profileData = user_profile_model.objects.get(user=user)
-    brainTreeQuery = braintree_model.objects.all()
-    if brainTreeQuery.exists():
-        for btEntry in brainTreeQuery:
-            leadSupervisor = user_profile_model.objects.get(user=btEntry.user)
-            if leadSupervisor.company.id == profileData.company.id:
-                return btEntry
-    else:
-        print('handle if there is zero braintree entries')
-        return False
 
 def parsePhone(phoneNumber):
     if phoneNumber[0] == "+":

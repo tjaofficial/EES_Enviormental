@@ -41,16 +41,18 @@ urlpatterns = [
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
-    path("<str:facility>/account/payment-method/<str:action>/<str:planId>/<str:seats>", views.sup_card_update, name="cardUpdate"),
     path("billing/payment-method/<str:planId>/<str:seats>", views.landing_addCard_view, name="cardAdd"),
     path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
     path("<str:facility>/account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
-    path("<str:facility>/subscription/change", views.sup_change_subscription, name="subscriptionChange"),
-    path("<str:facility>/subscription/billing", views.sup_billing_history, name="billingHistory"),
     path("<str:facility>/account/facility-settings/<int:facilityID>/<str:selector>", views.sup_facility_settings, name="selectedFacilitySettings"),
     
     ##---BILLING
-    path("billing/<str:step>", views.billing_view, name="billing"),
+    path("billing/subscribe/", views.stripe_subscription_view, name="stripe_subscribe"),
+    path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
+    path("billing/portal/", views.stripe_customer_portal, name="stripe_customer_portal"),
+    path("billing/success/", views.stripe_success, name="stripe_success"),
+
+    #path("billing/<str:step>", views.billing_view, name="billing"),
     
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
     path('<str:facility>/about', views.about_view, name='about'),
@@ -79,6 +81,15 @@ urlpatterns = [
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
     path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
+
+    ##------Dashboard Cards
+    path('ajax/card/progress/<str:facility>/', views.card_progress_bar, name='card_progress_bar'),
+    path('ajax/card/daily-forms/<str:facility>/', views.card_daily_battery_forms, name='card_daily_battery_forms'),
+    path('ajax/card/graphs/<str:facility>/', views.card_graphs, name='card_graphs'),
+    path('ajax/card/corrective-actions/<str:facility>/', views.card_corrective_actions, name='card_corrective_actions'),
+    path('ajax/card/info/<str:facility>/', views.card_info, name='card_info'),
+    path('ajax/card/90DayPushTravels/<str:facility>/', views.card_90DayPushTravels, name='card_90DayPushTravels'),
+    path('ajax/card/contacts/<str:facility>/', views.card_contacts, name='card_contacts'),
 
     ##---FORMS
     path("<str:facility>/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),

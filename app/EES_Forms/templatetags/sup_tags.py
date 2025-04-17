@@ -27,10 +27,17 @@ def list_of_packets(facility):
 
 @register.filter(name='string')
 def string(item):
-    item = str(item)
-    return item
+    return str(item)
 
 @register.filter(name='dateParse')
 def dateParse(string):
     parseDate = datetime.datetime.strptime(string, "%Y-%m-%d").date()
     return parseDate
+
+@register.filter(name='dateCheck')
+def dateCheck(string):
+    parseDate = datetime.datetime.strptime(string, "%Y-%m-%d").date()
+    if parseDate < datetime.datetime.today().date():
+        return False
+    else:
+        return True

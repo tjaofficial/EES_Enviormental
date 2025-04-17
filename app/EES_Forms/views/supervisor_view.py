@@ -10,7 +10,7 @@ from django.contrib import messages # type: ignore
 from django.contrib.auth.models import Group # type: ignore
 import json
 from ..utils import dashDict, parsePhone, setDefaultSettings, defaultBatteryDashSettings, defaultFacilitySettingsParsed, setUnlockClientSupervisor, weatherDict, calculateProgessBar, ninetyDayPushTravels, colorModeSwitch, userColorMode, checkIfFacilitySelected, getCompanyFacilities, checkIfMoreRegistrations, tryExceptFormDatabases, userGroupRedirect, updateAllFormSubmissions, setUnlockClientSupervisor, defaultBatteryDashSettings, generate_random_string
-from ..decor import isSubActive
+from ..decor import isSubActive, group_required
 from django.core.mail import send_mail # type: ignore
 from django.contrib.sites.shortcuts import get_current_site # type: ignore
 from django.utils.encoding import force_bytes # type: ignore
@@ -18,17 +18,20 @@ from django.utils.http import urlsafe_base64_encode  # type: ignore
 from django.template.loader import render_to_string  # type: ignore
 from ..tokens import create_token # type: ignore
 from django.utils.html import strip_tags # type: ignore
+from django.template.loader import render_to_string # type: ignore
+from django.http import JsonResponse # type: ignore
 
 lock = login_required(login_url='Login')
 
 @lock
 @isSubActive
+@group_required(SUPER_VAR)
 def sup_dashboard_view(request, facility):
-    permissions = [SUPER_VAR]
-    userGroupRedirect(request.user, permissions)
     updateAllFormSubmissions(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+
+
     formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
@@ -43,6 +46,13 @@ def sup_dashboard_view(request, facility):
     print(fsIDs)
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
+
+
+    formA11 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    print(formA11)
+    A1data1 = formA1[0] if formA1.exists() else False
+    print(A1data1)
+
     last7days = now - datetime.timedelta(days=6)
     options = facility_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
@@ -323,55 +333,262 @@ def sup_dashboard_view(request, facility):
     return render(request, "supervisor/sup_dashboard.html", {
         'notifs': notifs,
         'facility': facility, 
-        'form_enteredA5': form_enteredA5, 
-        'form_enteredA4': form_enteredA4, 
-        'form_enteredA3': form_enteredA3, 
-        'form_enteredA2': form_enteredA2,
-        'form_enteredA1': form_enteredA1, 
-        'date': date, 
-        "od_30": od_30, 
-        "od_10": od_10, 
-        "od_5": od_5, 
-        'od_recent': od_recent, 
-        'recent_logs': recent_logs, 
-        'lids': lids, 
-        'offtakes': offtakes, 
-        'ca_forms': ca_forms, 
-        'weather': weather, 
-        'todays_log': todays_log, 
-        'todays_obser': todays_obser, 
-        'profile': allContacts, 
-        'A1data': A1data, 
-        'A2data': A2data, 
-        'A3data': A3data, 
-        'A4data': A4data, 
-        'A5data': A5data, 
-        'push': push, 
-        'coke': coke,
-        'weekly_percent': weekly_percent, 
-        'monthly_percent': monthly_percent, 
-        'annually_percent': annually_percent, 
-        'daily_percent': daily_percent, 
-        'quarterly_percent': quarterly_percent,
-        'supervisor': supervisor, 
-        "client": client, 
-        'unlock': unlock, 
-        'sortedFacilityData': sortedFacilityData, 
-        'fsIDs': fsIDs,
-        'graphData': graphData,
-        'last7days': str(last7days),
-        'today': str(now),
-        'colorMode': colorMode,
-        'userMode': userMode,
-        'pLeaks': pLeaks,
-        'cLeaks': cLeaks,
+        # 'form_enteredA5': form_enteredA5, 
+        # 'form_enteredA4': form_enteredA4, 
+        # 'form_enteredA3': form_enteredA3, 
+        # 'form_enteredA2': form_enteredA2,
+        # 'form_enteredA1': form_enteredA1, 
+        # 'date': date, 
+        # "od_30": od_30, 
+        # "od_10": od_10, 
+        # "od_5": od_5, 
+        # 'od_recent': od_recent, 
+        # 'recent_logs': recent_logs, 
+        # 'lids': lids, 
+        # 'offtakes': offtakes, 
+        # 'ca_forms': ca_forms, 
+        # 'weather': weather, 
+        # 'todays_log': todays_log, 
+        # 'todays_obser': todays_obser, 
+        # 'profile': allContacts, 
+        # 'A1data': A1data, 
+        # 'A2data': A2data, 
+        # 'A3data': A3data, 
+        # 'A4data': A4data, 
+        # 'A5data': A5data, 
+        # 'push': push, 
+        # 'coke': coke,
+        # 'weekly_percent': weekly_percent, 
+        # 'monthly_percent': monthly_percent, 
+        # 'annually_percent': annually_percent, 
+        # 'daily_percent': daily_percent, 
+        # 'quarterly_percent': quarterly_percent,
+        # 'supervisor': supervisor, 
+        # "client": client, 
+        # 'unlock': unlock, 
+        # 'sortedFacilityData': sortedFacilityData, 
+        # 'fsIDs': fsIDs,
+        # 'graphData': graphData,
+        # 'last7days': str(last7days),
+        # 'today': str(now),
+        # 'colorMode': colorMode,
+        # 'userMode': userMode,
+        # 'pLeaks': pLeaks,
+        # 'cLeaks': cLeaks,
         'options': options,
-        'graphDataDump': graphDataDump,
+        # 'graphDataDump': graphDataDump,
         'userProfile': userProfile
     })
 
 @lock
+def card_progress_bar(request, facility):
+    options = facility_model.objects.filter(facility_name=facility)
+    if options.exists():
+        options = options.first()
+    progress_data = request.user.user_profile.settings['dashboard'][str(options.id)]['batteryDash']['progressBar']
+    daily_percent = calculateProgessBar(facility, 'Daily')
+    weekly_percent = calculateProgessBar(facility, "Weekly")
+    monthly_percent = calculateProgessBar(facility, 'Monthly')
+    quarterly_percent = calculateProgessBar(facility, 'Quarterly')
+    annually_percent = 0
+    
+    
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_progress.html", 
+        {"progressBar": progress_data,
+         'daily_percent': daily_percent,
+         'weekly_percent': weekly_percent,
+         'monthly_percent': monthly_percent,
+         'quarterly_percent': quarterly_percent,
+         'annually_percent': annually_percent}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+@lock
+def card_daily_battery_forms(request, facility):
+    now = datetime.datetime.now().date()
+    formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    formA4 = form4_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    formA5 = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    A1data = formA1[0] if formA1.exists() else False
+    A2data = formA2[0] if formA2.exists() else False
+    A3data = formA3[0] if formA3.exists() else False
+    A4data = formA4[0] if formA4.exists() else False
+    A5data = formA5[0] if formA5.exists() else False
+    
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_batteryDailyForms.html", 
+        {"A1data": A1data, "A2data": A2data, "A3data": A3data, "A4data": A4data, "A5data": A5data}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+@lock
+def card_graphs(request, facility):
+    formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+    formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+    formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+    now = datetime.datetime.now().date()
+    userProfile = request.user.user_profile
+    options = facility_model.objects.filter(facility_name=facility)
+    if options.exists():
+        options = options.first()
+
+    if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
+        baseIterations = userProfile.settings['dashboard'][str(options.id)]
+        graphSettings = baseIterations['batteryDash']['graphs']
+        setGraphRange = graphSettings['graphFrequencyData']
+    
+        canvasData = {}
+        dateList = []
+        def rangeNumber(rangeID):
+            dateList = []
+            if rangeID == 'weekly':
+                ranID = 6
+                oneWeekAgo = now - datetime.timedelta(days=ranID)
+                for x in range(0,ranID+1):
+                    dateList.append(oneWeekAgo + datetime.timedelta(days=x))
+            elif rangeID == 'monthly':
+                ranID = calendar.monthrange(now.year,now.month)[1]
+                for x in range(0,ranID):
+                    dateList.append(datetime.datetime.strptime(str(now.year) + "-" + str(now.month) + "-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
+            elif rangeID == 'annually':
+                ranID = 365 + calendar.isleap(now.year)
+                for x in range(0,ranID):
+                    dateList.append(datetime.datetime.strptime(str(now.year) + "-" + "01-01", "%Y-%m-%d").date() + datetime.timedelta(days=x))
+            else:
+                ranID = abs((datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() - datetime.datetime.strptime(setGraphRange['dates']['graphStop'], "%Y-%m-%d").date()).days)
+                for x in range(0,ranID):
+                    dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
+            return dateList
+        dateList = rangeNumber(setGraphRange['frequency'])
+        print('hello')
+        print(dateList)
+        for gStuff in graphSettings['dataChoice']:
+            if gStuff == 'graph90dayPT':
+                continue
+            if graphSettings['dataChoice'][gStuff]['show']:
+                canvasData[gStuff] = {
+                    'graphID': gStuff,
+                    'xValues': [],
+                    'yValues': [],
+                    'type': graphSettings['dataChoice'][gStuff]['type'],
+                }
+                xValues = []
+                yValues = []
+                for dates in dateList:
+                    if gStuff == 'charges':
+                        useModel = formA1.filter(date=dates)
+                        if useModel.exists():
+                            xValues.append(float(useModel[0].ovens_data['total_seconds']))
+                            yValues.append(str(useModel[0].date))
+                    elif gStuff == 'doors':
+                        useModel = formA2.filter(date=dates)
+                        if useModel.exists():
+                            xValues.append(int(useModel[0].leaking_doors))
+                            yValues.append(str(useModel[0].date))
+                    elif gStuff == 'lids':
+                        useModel = formA3.filter(date=dates)
+                        if useModel.exists():
+                            xValues.append(int(useModel[0].l_leaks))
+                            yValues.append(str(useModel[0].date))
+                    if str(dates) not in yValues:
+                        xValues.append(int(0))
+                        yValues.append(str(dates))
+                canvasData[gStuff]['xValues'] = xValues
+                canvasData[gStuff]['yValues'] = yValues
+        graphData = {
+            'canvasData': canvasData,
+            'today': str(now),
+            'frequency': setGraphRange, 
+        }
+        graphDataDump = json.dumps(graphData)
+        print(graphData)
+    
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_graphs.html", 
+        {'graphData': graphData, 'graphDataDump': graphDataDump, 'facility': facility}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+@lock
+def card_corrective_actions(request, facility):
+    ca_forms = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-id')
+
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_correctiveActions.html", 
+        {'ca_forms': ca_forms, 'facility': facility}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+@lock
+def card_info(request, facility):
+    now = datetime.datetime.now().date()
+    options = facility_model.objects.filter(facility_name=facility)
+    options = options.first() if options.exists() else False
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility, date_save=now)
+    daily_prof = daily_prof.first() if daily_prof else False
+    weather = weatherDict(False) if facility == 'supervisor' else weatherDict(options.city)
+    
+    todays_obser = 'Schedule Not Updated'
+    event_cal = Event.objects.all()
+    today = datetime.date.today()
+    if event_cal.exists():
+        for x in event_cal:
+            if x.date == today:
+                todays_obser = x.observer
+
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_info.html", 
+        {'weather': weather, "todays_log": daily_prof, 'facility': facility, 'todays_obser': todays_obser}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+@lock
+def card_90DayPushTravels(request, facility):
+    pushTravelsData = ninetyDayPushTravels(facility)
+    if pushTravelsData == 'EMPTY':
+        od_30 = ''
+        od_10 = ''
+        od_5 = ''
+        od_recent = ''
+        all_ovens = ''
+    else:
+        od_30 = pushTravelsData['30days']
+        od_10 = pushTravelsData['10days']
+        od_5 = pushTravelsData['5days']
+        od_recent = pushTravelsData['closest']
+        all_ovens = pushTravelsData['all']
+    
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_90DayPushTravels.html", 
+        {'od_5': od_5, 'od_10': od_10, 'od_30': od_30, 'facility': facility}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+@lock
+def card_contacts(request, facility):
+    allContacts = user_profile_model.objects.filter(company=request.user.user_profile.company)
+    
+    html = render_to_string(
+        "shared/dashboard_cards/dashCard_contacts.html", 
+        {'profile': allContacts}, 
+        request=request
+    )
+    return JsonResponse({"html": html})
+
+
+
+@lock
 @isSubActive
+@group_required(SUPER_VAR)
 def register_view(request, facility, access_page):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
@@ -395,50 +612,43 @@ def register_view(request, facility, access_page):
     else:
         addMoreRegistrations = False
 
-    if supervisor:
-        print('check 1')
-        if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
-            print('check 2')
-            if user_profiles.filter(user__id__exact=access_page).exists():
-                userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
-                userInfo = User.objects.all().filter(id__exact=access_page)[0]
-                pic = userProfileInfo.profile_picture
-                if userProfileInfo.phone:
-                    number = userProfileInfo.phone[2:]
-                    first = number[:3]
-                    middle = number[3:6]
-                    end = number[6:]
-                    parseNumber = '(' + first + ')' + middle + '-'+ end
-                else:
-                    parseNumber = ''
-                
-                initial_data = {
-                    'cert_date': userProfileInfo.cert_date,
-                    'phone': parseNumber,
-                    'position': userProfileInfo.position,
-                    'profile_picture': userProfileInfo.profile_picture,
-                    'certs': userProfileInfo.certs,
-                    'company': userProfileInfo.company
-                }
-                userData2 = user_profile_form(initial=initial_data)   
-        else:
-            print('check 3')
-            form = CreateUserForm()
-            profile_form = user_profile_form()
+    print('check 1')
+    if access_page != 'form' and access_page not in ['client', 'observer', 'facility']:
+        print('check 2')
+        if user_profiles.filter(user__id__exact=access_page).exists():
+            userProfileInfo = user_profiles.filter(user__id__exact=access_page)[0]
+            userInfo = User.objects.all().filter(id__exact=access_page)[0]
+            pic = userProfileInfo.profile_picture
+            if userProfileInfo.phone:
+                number = userProfileInfo.phone[2:]
+                first = number[:3]
+                middle = number[3:6]
+                end = number[6:]
+                parseNumber = '(' + first + ')' + middle + '-'+ end
+            else:
+                parseNumber = ''
             
-            data = bat_info_form()
-            
-            #"if there are no facilities linked to the request.user's company then we should get back false or "
-            userProf = user_profiles.filter(user__username=request.user.username)[0]
-            userFacility = options.filter(company=userProf.company)
-            if userFacility.exists():
-                facilityLink = True
-    elif request.user.groups.filter(name=CLIENT_VAR):
-        return redirect('c_dashboard')
-    elif request.user.groups.filter(name=OBSER_VAR):
-        return redirect('IncompleteForms', facility)
+            initial_data = {
+                'cert_date': userProfileInfo.cert_date,
+                'phone': parseNumber,
+                'position': userProfileInfo.position,
+                'profile_picture': userProfileInfo.profile_picture,
+                'certs': userProfileInfo.certs,
+                'company': userProfileInfo.company
+            }
+            userData2 = user_profile_form(initial=initial_data)   
     else:
-        return redirect('no_registration')
+        print('check 3')
+        form = CreateUserForm()
+        profile_form = user_profile_form()
+        
+        data = bat_info_form()
+        
+        #"if there are no facilities linked to the request.user's company then we should get back false or "
+        userProf = user_profiles.filter(user__username=request.user.username)[0]
+        userFacility = options.filter(company=userProf.company)
+        if userFacility.exists():
+            facilityLink = True
 
 
     if request.method == 'POST':
@@ -623,6 +833,7 @@ def register_view(request, facility, access_page):
     })
    
 @lock
+@group_required(SUPER_VAR)
 def form_request_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)

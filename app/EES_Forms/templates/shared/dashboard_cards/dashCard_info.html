@@ -1,0 +1,79 @@
+{% load static %}
+<div id="battery_weather">
+    <div class="card-title headerBottomPadding">Todays Battery/Weather Info.</div>
+    <div style="padding:10px; height: calc(100% - 34px); width:100%;">
+        <div style="overflow: scroll;" class="grid-battery-weather center bat_weather_class">
+            {% if facility != 'supervisor' %}
+            <p class="weather_battery_font">
+                <span>
+                    Observer:
+                </span>
+                <br>
+                {{ todays_obser }}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Foreman:
+                </span>
+                <br>
+                {% if todays_log.foreman %}{{ todays_log.foreman }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Crew:
+                </span>
+                <br>
+                {% if todays_log.foreman %}{{ todays_log.crew }}{% else %}N/A{% endif %}
+            </p>
+            {% if weather.city %}
+            <p class="weather_battery_font">
+                <span>
+                    City:
+                </span>
+                <br>
+                {% if weather %}{{ weather.city }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Temperature:
+                </span>
+                <br>
+                {% if weather %}{{ weather.temperature|floatformat:"0" }}° F{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Description:
+                </span>
+                <br>
+                {% if weather %}{{ weather.description }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Sunrise:
+                </span>
+                <br>
+                {% if weather %}{{ weather.sunrise }}{% else %}N/A{% endif %}
+            </p>
+            <p class="weather_battery_font">
+                <span>
+                    Sunset:
+                </span>
+                <br>
+                {% if weather %}{{ weather.sunset }}{% else %}N/A{% endif %}
+            </p>
+            {% else %}
+            <br>
+            <p class="weather_battery_font">
+                <span>
+                    Invalid City:
+                </span>
+                <br>
+                {{weather.error}}
+            </p>
+            {% endif %}
+            {% else %}
+            NO FACILITY SELECTED
+            {% endif %}
+        </div>
+    </div>
+</div>

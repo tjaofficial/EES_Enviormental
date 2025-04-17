@@ -3,12 +3,14 @@ from ..models import user_profile_model, Forms, daily_battery_profile_model, sig
 from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from EES_Enviormental.settings import OBSER_VAR
 import re
+from ..decor import group_required
 
 lock = login_required(login_url='Login')
 
 @lock
+@group_required(OBSER_VAR)
 def IncompleteForms(request, facility):
     formName = "obs_dash"
     permissions = [OBSER_VAR]

@@ -22,7 +22,7 @@ from ..tokens import create_token, check_token, delete_token
 from django.conf import settings # type: ignore
 from django.utils.html import strip_tags # type: ignore
 from django.core.exceptions import ValidationError # type: ignore
-
+from ..decor import group_required
 
 profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
@@ -286,7 +286,8 @@ def landingRegister(request):
         'userForm': userForm, 'profileForm': profileForm
     })
     
-@lock    
+@lock
+@group_required(SUPER_VAR)  
 def registerCompany(request):
     userProf = user_profile_model.objects.filter(user__id=request.user.id)[0]
     companyForm = company_form()
@@ -296,7 +297,7 @@ def registerCompany(request):
         new_data = request.POST.copy()
         new_data['phone'] = finalPhone
         form = company_form(new_data)
-        form2 = braintree_form(new_data)
+        #form2 = braintree_form(new_data)
         if company_model.objects.filter(company_name=request.POST['company_name']).exists():
             form.add_error('company_name', ValidationError("This Company already exists. Please choose a different company name or contact out Support Team."))
             messages.error(request,"This Company already exists. Please choose a different company name or contact out Support Team.")
@@ -307,23 +308,19 @@ def registerCompany(request):
             else:
                 print('Did not find duplciates in dataBase, ')
                 braintreeQuery = braintree_model.objects.filter(user__id=request.user.id)
-                if braintreeQuery.exists():
-                    braintreeSave = braintreeQuery[0]
-                else:
-                    braintreeSave = braintree_model(
-                        user=request.user,
-                        settings = json.loads(json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False}))
-                    )
-                    braintreeSave.save()
+                braintreeSave = braintreeQuery[0] if braintreeQuery.exists() else braintree_model(user=request.user, settings = json.loads(json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False})))
+                braintreeSave.save()
+
                 companySave = form.save(commit=False)
                 companySave.braintree = braintreeSave
                 companySave.save()
+
                 userProf.company = companySave
                 braintreeSave.save()
                 companySave.save()
                 userProf.save()
 
-                return redirect('billing', 'subscription')
+                return redirect('stripe_subscribe')
     return render(request, 'landing/registerCompany.html',{
         'companyForm': companyForm,
     })

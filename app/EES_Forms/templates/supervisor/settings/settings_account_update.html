@@ -6,7 +6,7 @@
 <script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
-        <div class="cardHeader">
+        <div class="cardHeader methodPlusBlue">
             {% include "shared/components/backArrow.html" with destination="accountSettings" %}
             {% if selector == "account" %}Account{% elif selector == "company" %}Company{% endif %} Settings
         </div>

@@ -26,6 +26,7 @@
     font-size: 21px;
     text-align: center;
     background-image: linear-gradient(to right, white, #727f90, white);
+    cursor: pointer;
 }
 .tabInfoCont{
     width: 80%;

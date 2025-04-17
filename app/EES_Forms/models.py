@@ -5551,6 +5551,9 @@ class braintreePlans(models.Model):
     planID = models.CharField(
         max_length=50
     )
+    priceID = models.CharField(
+        max_length=50
+    )
     name = models.CharField(
         max_length=150
     )
@@ -5798,7 +5801,46 @@ class form31_model(models.Model):
     def __str__(self):
         return f"Monthly Tanks: {self.date}"
     
+class stripe_model(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.PROTECT,
+        related_name='stripe'
+    )
+    settings = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
 
+    def __str__(self):
+        return str(self.id) + "-" + str(self.user.last_name)
+
+class subscription(models.Model):
+    companyChoice = models.OneToOneField(
+        "company_model", 
+        on_delete=models.PROTECT,
+        related_name='subscription'
+    )
+    subscriptionID = models.CharField(max_length=100)
+    plan = models.ForeignKey(
+        'braintreePlans', 
+        on_delete=models.PROTECT, 
+        blank=True, 
+        null=True
+    )
+    status = models.CharField(max_length=20)
+    customerID = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    settings = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return f"{self.companyChoice.company_name} - {self.plan}"
+    
 # class tank_library(models.Model):
 #     title = models.CharField(max_length=40)
 #     description = models.TextField()

@@ -1,0 +1,41 @@
+{% extends 'landing/landingPage_layout.html' %}
+{% load static %}{% load receipt_tags %}
+{% block body %}
+<link href="{% static 'ees_forms/style/selectPayment.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primary/primaryButton.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet" />
+<div class='mainCont' style="width: 48rem; margin: 20px auto;">
+    <div class='card'>
+        <div class="cardHeader methodPlusBlue methodPlusBlue">Purchase Confirmation</div>
+        <div class="contentCont" style="padding:32px;">
+            <div id="orderSummary" class="dataBoxes">
+                <div class="infoHeaders">Subscription Details</div>
+                <div class="tabInfoCont infoBoxes" style="height:fit-content">
+                    <div>{{planDetails.plan.name}} Subscription</div>
+                    <div>- {{planDetails.plan.description}}</div>
+                    <div class="priceRight">${{planDetails.plan.price|floatformat:2}}</div>
+                    <div>Additional Registrations</div>
+                    <div>- Add ({{planDetails.settings.extra_users}}) additional registrations</div>
+                    <div class="priceRight">${{registration_cost|floatformat:2}}</div><br>
+                    <hr><br>
+                    <div>Total Amount</div>
+                    <div class="priceRight">${{totalCost|floatformat:2}}</div>
+                </div>
+            </div><br>
+            <div style="text-align:justify;"> 
+                <p>Thank You! You're all set!</p>
+                <p>Your payment has been successfully processed and your subscription to MethodPlus+ has been confirmed. Check your email inbox for your Subscription Receipt and Account Details. If your email doesn't show up right away, make sure you check your Junk Folder.</p>
+                <p>You can access and manage your subscription and invoices in the secure <a href="{% url 'stripe_customer_portal' %}" style="text-decoration: underline;">Stripe Customer Portal</a>. If you have any questions, please visit the <a href="" style="text-decoration: underline;">FAQ</a> section or contact our <a href="" style="text-decoration: underline;">Support Team</a>.</p>
+                    
+                <p>Time to use your cutting-edge inspection form program designed to streamline and enhance the way you collect and manage critical data in real-time. Remember, MethodPlus+ is a powerful tool when it comes to collecting, storing, and viewing observation data. Take full advantage of all the functionality MethodPlus+ has to offer including tailored Forms to fit your needs.</p>
+
+                <p>Click below to get started with MethodPlus+</p><br>
+                <div style="margin:auto; text-align:center;">
+                    <a href="{% url 'Register' 'supervisor' 'facility' %}">
+                        <button class="primaryButton" id="submit">Get started</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}

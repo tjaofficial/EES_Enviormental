@@ -1,0 +1,51 @@
+{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
+<link href="{% static 'ees_forms/style/braintreePage.css' %}" rel="stylesheet">
+<div class="mainCont" style="margin-top:5rem;">
+    <div class="card">
+        <div class="cardHeader methodPlusBlue">
+            {% include "shared/components/backArrow.html" with destination="accountSettings" %}
+            Reactivate Subscription
+        </div>
+        <div class="contentCont">
+            <div id="iForm" style="margin: auto;display: block; width: 41rem;">
+                <form action="" id="Payment_Method_Form" method="post">
+                    {% csrf_token %}
+                    <div class="billingAddressCont" style="margin-bottom: 22px;">
+                        <h2 style="text-align: center; margin-bottom: 22px;">ATTENTION</h2>
+                        <p style="text-align: justify;">
+                            You are about to REACTIVATE your subscription to MethodPlus+. 
+                            The reactivated subscription will have all the same parameters
+                            as the previous subscripton and will continue on the same billing 
+                            cycle. 
+
+                            <span style="text-decoration: underline;">
+                                Employees and Clients will still have access to 
+                                all submitted files and data.
+                            </span> 
+                        </p>
+                        <br>
+                        <p>Are you sure you want to REACTIVATE your subscription?</p><br>
+                        <div class="tempInputStyle" style="width: 22rem; border: 3px solid red;">
+                            <input id="reactivate" class="input" oninput="allowSubmit()" type="text" name="reactivate" placeholder="Please type the word 'reactivate' to reactivate your subscription" style="text-align:center;"/>
+                        </div>
+                    </div>
+                    <input id="submitReactivate" type="submit" value="Reactivate Subscription" name="reactivateSub" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function allowSubmit(){
+        const input = document.getElementById('cancel').value;
+        const submit = document.getElementById('submitCancel');
+        if (input == 'cancel'){
+            submit.disabled = false;
+        } else {
+            submit.disabled = true;
+        }
+    }
+    allowSubmit();
+</script>
+{% endblock %}
