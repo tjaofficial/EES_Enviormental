@@ -1,6 +1,5 @@
 {% load static %}
 <link href="{% static 'ees_forms/style/sup_sideBar.css' %}" rel="stylesheet" />
-<div id="sideBar">
     <div class='menuItems'>
         <ul>
             <li>
@@ -91,4 +90,13 @@
             {% endif %}
         </ul>
     </div>
-</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch(`../ajax/sidebar/{{facility}}/`)
+            .then(res => res.json())
+            .catch(err => {
+                console.error("Error loading sidebar", err);
+            });
+
+    });
+</script>

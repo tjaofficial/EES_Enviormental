@@ -91,6 +91,9 @@ urlpatterns = [
     path('ajax/card/90DayPushTravels/<str:facility>/', views.card_90DayPushTravels, name='card_90DayPushTravels'),
     path('ajax/card/contacts/<str:facility>/', views.card_contacts, name='card_contacts'),
 
+    path('ajax/sidebar/<str:facility>/', views.sidebar_data, name='sidebar_data'),
+    path('ajax/header/<str:facility>/', views.header_data, name='header_data'),
+
     ##---FORMS
     path("<str:facility>/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("<str:facility>/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),

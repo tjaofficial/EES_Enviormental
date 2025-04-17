@@ -32,10 +32,10 @@
     </head>
     <body class="modeMainBackground">
         {{ facility|json_script:"facility" }}
-        {% include "supervisor/components/sup_header.html" %}
-        {% include "supervisor/components/sup_sideBar.html" %}
+        <header id="headerContainer"></header>
+        <nav id="sideBar"></nav>
         {% include "shared/components/headerDropDown.html" %}
-        <div class="mainContentContainer">
+        <main class="mainContentContainer">
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -49,6 +49,27 @@
             {% block list %}
             
             {% endblock %}
-        </div>
+        </main>
     </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch(`/ajax/header/{{ facility }}/`)
+                .then(res => res.text())  // NOTE: not `.json()` — it's HTML
+                .then(html => {
+                    document.getElementById("headerContainer").innerHTML = html;
+                })
+                .catch(err => {
+                    console.error("Error loading header", err);
+                });
+            
+            fetch(`/ajax/sidebar/{{ facility }}/`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById("sideBar").innerHTML = html;
+                })
+                .catch(err => {
+                    console.error("Error loading sidebar", err);
+                });
+        });
+    </script>
 <html>

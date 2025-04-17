@@ -1,6 +1,6 @@
 from .login_logout_view import login_view, logout_view, change_password, landingRegister, registerCompany, main_change_password, request_password_view, activate_view, reset_password_activate_view
 from .header_view import about_view, safety_view, settings_view
-from .sidebar_view import delete_selected_sops, corrective_action_view, schedule_view, archive_view, search_forms_view, calendar_view, issues_view, event_add_view, event_detail_view, shared_contacts_view, sop_view, formsProgress, profile_edit_view
+from .sidebar_view import *
 from .dashboard_view import IncompleteForms, default_dashboard
 from .supervisor_view import *
 from .data_view import pt_admin1_view, pt_mth_input

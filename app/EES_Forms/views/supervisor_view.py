@@ -419,9 +419,13 @@ def card_daily_battery_forms(request, facility):
     A4data = formA4[0] if formA4.exists() else False
     A5data = formA5[0] if formA5.exists() else False
     
-    html = render_to_string(
-        "shared/dashboard_cards/dashCard_batteryDailyForms.html", 
-        {"A1data": A1data, "A2data": A2data, "A3data": A3data, "A4data": A4data, "A5data": A5data}, 
+    html = render_to_string("shared/dashboard_cards/dashCard_batteryDailyForms.html", 
+        {"A1data": A1data, 
+         "A2data": A2data,
+         "A3data": A3data, 
+         "A4data": A4data, 
+         "A5data": A5data,
+         "now": str(now)}, 
         request=request
     )
     return JsonResponse({"html": html})
@@ -584,7 +588,20 @@ def card_contacts(request, facility):
     )
     return JsonResponse({"html": html})
 
-
+@lock
+def header_data(request, facility):
+    notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+    sortedFacilityData = getCompanyFacilities(request.user.username)
+    header_data = {
+        'facility': facility,
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+        'sortedFacilityData': sortedFacilityData,
+        'notifs': notifs
+    }
+    return render(request, "supervisor/components/sup_header.html", header_data)
 
 @lock
 @isSubActive

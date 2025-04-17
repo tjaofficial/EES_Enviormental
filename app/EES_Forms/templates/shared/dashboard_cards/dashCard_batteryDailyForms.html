@@ -4,9 +4,9 @@
         Todays Forms
     </div>
     <div class="nested">
-        <a class="no_link_css" {% if form_enteredA1 %} href="Daily/1/{{fsIDs.0.id}}/{{ date }}" {% else %} {% endif %}>
+        <a class="no_link_css" {% if A1data %} href="Daily/1/{{A1data.formSettings.id}}/{{ now }}"{% endif %}>
             <div id='A1card' class="inner-card formA_card">
-                {% if form_enteredA1 %}<p id='A1overlay' class="formA_overlay">Click for<br> Form A-1</p>{% else%}{% endif %}
+                {% if A1data %}<p id='A1overlay' class="formA_overlay">Click for<br> Form A-1</p>{% endif %}
                 <div class="card-title inner_font">Form A-1 - Charges</div>
                 <div class="dataHold todayFormsCenter">
                     {% if A1data %}
@@ -48,9 +48,9 @@
                 </div>
             </div>
         </a>
-        <a class="no_link_css" {% if form_enteredA2 %} href="Daily/2/{{fsIDs.1.id}}/{{ date }}" {% else %} {% endif %}>
+        <a class="no_link_css" {% if A2data %} href="Daily/2/{{A2data.formSettings.id}}/{{ now }}"{% endif %}>
             <div id='A2card' class="inner-card formA_card">
-                {% if form_enteredA2 %}<p id='A2overlay' class="formA_overlay">Click for<br> Form A-2</p>{% else%}{% endif %}
+                {% if A2data %}<p id='A2overlay' class="formA_overlay">Click for<br> Form A-2</p>{% endif %}
                 <div class="card-title inner_font">Form A-2 - Doors</div>
                 <div class="leakSectionHolder">
                     {% if A2data %}
@@ -80,9 +80,9 @@
                 </div>
             </div>
         </a>
-        <a class="no_link_css" {% if form_enteredA3 %} href="Daily/3/{{fsIDs.2.id}}/{{ date }}" {% else %} {% endif %}>
+        <a class="no_link_css" {% if A3data %} href="Daily/3/{{A3data.formSettings.id}}/{{ now }}"{% endif %}>
             <div id='A3card' class="inner-card formA_card">
-                {% if form_enteredA3 %}<p id='A3overlay' class="formA_overlay">Click for<br> Form A-3</p>{% else%}{% endif %}
+                {% if A3data %}<p id='A3overlay' class="formA_overlay">Click for<br> Form A-3</p>{% endif %}
                 <div class="card-title inner_font">Form A-3 - Lids  Standpipes</div>
                 <div class="leakSectionHolder">
                     {% if A3data %}
@@ -112,9 +112,9 @@
                 </div>
             </div>
         </a>
-        <a class="no_link_css" {% if form_enteredA4 %} href="Daily/4/{{fsIDs.3.id}}/{{ date }}" {% else %} {% endif %}>
+        <a class="no_link_css" {% if A4data %} href="Daily/4/{{A4data.formSettings.id}}/{{ now }}"{% endif %}>
             <div id='A4card' class="inner-card formA_card">
-                {% if form_enteredA4 %}<p id='A4overlay' class="formA_overlay">Click for<br> Form A-4</p>{% else%}{% endif %}
+                {% if A4data %}<p id='A4overlay' class="formA_overlay">Click for<br> Form A-4</p>{% endif %}
                 <div class="card-title inner_font">Form A-4 - Collection Main</div>
                 <div class="dataHold todayFormsCenter">
                     {% if A4data %}
@@ -157,9 +157,9 @@
                 </div>
             </div>
         </a>
-        <a class="no_link_css" {% if form_enteredA5 %} href="Daily/5/{{fsIDs.4.id}}/{{ date }}" {% else %} {% endif %}>
+        <a class="no_link_css" {% if A5data %} href="Daily/5/{{A5data.formSettings.id}}/{{ now }}"{% endif %}>
             <div id='A5card' class="inner-card formA_card">
-                {% if form_enteredA5 %}<p id='A5overlay' class="formA_overlay">Click for<br> Form A-5</p>{% else%}{% endif %}
+                {% if A5data %}<p id='A5overlay' class="formA_overlay">Click for<br> Form A-5</p>{% endif %}
                 <div class="card-title inner_font">Form A-5 - Push Travels</div>
                 <div class="dataHold todayFormsCenter">
                     {% if A5data %}
