@@ -5,7 +5,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile.prod
-    command: gunicorn EES_Enviormental.wsgi:application --bind 0.0.0.0:8000
+    command: daphne -b 0.0.0.0 -p 8000 EES_Enviormental.asgi:application
     volumes:
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
