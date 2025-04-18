@@ -16,8 +16,6 @@ import EES_Forms.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'EES_Enviormental.settings')
 
-from . import urls
-
 django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter({
