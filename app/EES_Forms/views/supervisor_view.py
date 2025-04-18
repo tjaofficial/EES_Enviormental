@@ -590,6 +590,7 @@ def card_contacts(request, facility):
 
 @lock
 def header_data(request, facility):
+    print("STEP 1")
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.username)

@@ -1335,15 +1335,15 @@ def createNotificationDatabase(facility, user, fsID, date, notifSelector):
     print("Form " + str(nFormSettings.id) + " notification was sent.")
    
 def notificationCalc(user, facility):
-    userProfile = user_profile_model.objects.filter(user__username=user.username)
-    if userProfile.exists():
-        userProfile = userProfile[0]
+    userProfile = user.user_profile
     notifications = notifications_model.objects.filter(facilityChoice__facility_name=facility)
     newNotifs = notifications.filter(clicked=False, hovered=False, user=userProfile)
     if newNotifs.exists():
         notifCount = len(newNotifs)
     else:
         notifCount = 0
+
+    print(notifCount)
     return notifCount
     
 def displayNotifications(user, facility):

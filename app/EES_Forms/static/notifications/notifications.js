@@ -1,4 +1,4 @@
-const websocketProtocol = window.location.protocol === "https" ? "wss" : "ws";
+const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 const facility = JSON.parse(document.getElementById('facility').textContent).replaceAll(" ","_")
 
 let url = `${websocketProtocol}://${window.location.host}/ws/notifications/${facility}/`

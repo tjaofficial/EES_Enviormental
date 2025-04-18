@@ -1,4 +1,6 @@
 const notifNumbElem = document.getElementById('alertNotif');
+console.log(document.getElementById('alertNotif'))
+console.log(notifNumbElem.innerText)
 const notifNumb = notifNumbElem.innerText;
 const yellowDot = document.getElementById('yellowDot')
 

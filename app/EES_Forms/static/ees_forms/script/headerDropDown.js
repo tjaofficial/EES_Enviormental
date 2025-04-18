@@ -1,3 +1,10 @@
+console.log("✅ headerDropDown.js loaded");
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".notification").addEventListener("click", function () {
+        headerDropDown(document.getElementById("notifDropdown"));
+    });
+});
+
 var modalHeaderDrop = document.getElementById('addModalHeaderDrop');
 var profileMenu = document.getElementById('profileDropdown');
 var notificationMenu = document.getElementById('notifDropdown');
@@ -12,7 +19,7 @@ function closeModel(event) {
     }
 }
 
-headerDropDown = (item) => {
+function headerDropDown(item) {
     if (!item) return;
     if (item.id == 'notifDropdown'){
         if (notificationMenu.style.display == 'none') {

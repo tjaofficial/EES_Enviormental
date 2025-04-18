@@ -15,9 +15,7 @@
         {% comment %} <link rel="shortcut icon" href=# /> {% endcomment %}
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script defer src="{% static 'ees_forms/script/sup_sidebar.js' %}"></script>
-        <script defer src="{% static 'ees_forms/script/notifications.js' %}"></script>
         <script defer src="{% static 'notifications/notifications.js' %}"></script>
-        <script defer src="{% static 'ees_forms/script/headerDropDown.js' %}"></script>
         <script defer src="{% static 'landing/script/messages_alert.js' %}"></script>
         <link href="{% static 'ees_forms/style/universal.css' %}" rel="stylesheet">
         <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
@@ -32,9 +30,11 @@
     </head>
     <body class="modeMainBackground">
         {{ facility|json_script:"facility" }}
-        <header id="headerContainer"></header>
+        <header id="headerContainer">
+            
+        </header>
+        
         <nav id="sideBar"></nav>
-        {% include "shared/components/headerDropDown.html" %}
         <main class="mainContentContainer">
             {% if messages %}
             <ul class="messages">
@@ -57,6 +57,15 @@
                 .then(res => res.text())  // NOTE: not `.json()` — it's HTML
                 .then(html => {
                     document.getElementById("headerContainer").innerHTML = html;
+
+                    const script = document.createElement('script');
+                    script.src = '{% static 'ees_forms/script/headerDropDown.js' %}';
+                    document.body.appendChild(script);
+
+                    const script2 = document.createElement('script');
+                    script2.src = '{% static 'ees_forms/script/notifications.js' %}';
+                    document.body.appendChild(script2);
+                    
                 })
                 .catch(err => {
                     console.error("Error loading header", err);
