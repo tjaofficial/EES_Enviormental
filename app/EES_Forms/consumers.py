@@ -1,8 +1,7 @@
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async
-from django.template import Context, Template
-from .models import notifications_model
+from channels.generic.websocket import AsyncWebsocketConsumer # type: ignore
+from channels.db import database_sync_to_async # type: ignore
+from django.template import Context, Template # type: ignore
 
 class NotifConsumer(AsyncWebsocketConsumer): 
     async def connect(self):
@@ -45,6 +44,7 @@ class NotifConsumer(AsyncWebsocketConsumer):
         }))
         
     def get_name(self, notifID, selector):
+        from .models import notifications_model
         notifSelect = notifications_model.objects.get(id=notifID)
         if selector == 'click':
             notifSelect.clicked = True
