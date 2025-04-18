@@ -6,6 +6,8 @@ services:
       context: ./app
       dockerfile: Dockerfile.prod
     command: daphne -b 0.0.0.0 -p 8000 EES_Enviormental.asgi:application
+    environment:
+      - DJANGO_SETTINGS_MODULE=EES_Enviormental.settings
     volumes:
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
