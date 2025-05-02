@@ -67,9 +67,9 @@ def sup_dashboard_view(request, facility):
     graphData = ''
     graphDataDump = ''
     if facility != SUPER_VAR:
-        if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
-            baseIterations = userProfile.settings['dashboard'][str(options.id)]
-            graphSettings = baseIterations['batteryDash']['graphs']
+        if userProfile.settings['facilities'][str(options.id)]['dashboard'] == "Battery":
+            baseIterations = userProfile.settings['facilities'][str(options.id)]['settings']
+            graphSettings = baseIterations['graphs']
             setGraphRange = graphSettings['graphFrequencyData']
         
             canvasData = {}
