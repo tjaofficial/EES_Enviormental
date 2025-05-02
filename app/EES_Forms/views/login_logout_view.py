@@ -200,8 +200,8 @@ def change_password(request, facility):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             userProf = user_profile_model.objects.get(user=request.user)
-            if not userProf.settings['first_login']:
-                userProf.settings['first_login'] = True
+            if not userProf.settings['profile']['first_login']:
+                userProf.settings['profile']['first_login'] = True
                 userProf.save()
             messages.success(request, 'Your password was successfully updated!')
             return redirect('Account', facility)
