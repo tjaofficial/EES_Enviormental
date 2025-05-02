@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect # type: ignore
-from django.http import HttpResponseNotFound, HttpResponse # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib.auth import authenticate, login # type: ignore
 import datetime
-import json
-from ..models import user_profile_model, daily_battery_profile_model, facility_model, company_model, braintree_model, User
-from ..forms import CreateUserForm, user_profile_form, company_form, braintree_form
+from ..models import user_profile_model, daily_battery_profile_model, facility_model, company_model, User
+from ..forms import CreateUserForm, user_profile_form, company_form
 from ..utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
 from django.contrib.auth import logout # type: ignore
 from django.contrib.auth.forms import PasswordChangeForm # type: ignore
@@ -19,7 +17,6 @@ from django.utils.encoding import force_bytes, force_str # type: ignore
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode # type: ignore
 from django.template.loader import render_to_string # type: ignore
 from ..tokens import create_token, check_token, delete_token
-from django.conf import settings # type: ignore
 from django.utils.html import strip_tags # type: ignore
 from django.core.exceptions import ValidationError # type: ignore
 from ..decor import group_required
@@ -57,7 +54,7 @@ def login_view(request):
                 if not userProf.company and userProf.is_active:
                     return redirect('companyReg')
                 if request.user.groups.filter(name=SUPER_VAR):
-                    if userProf.settings['first_login']:
+                    if userProf.settings['profile']['first_login']:
                         if len(facility_model.objects.all()) > 0:
                             return redirect('sup_dashboard', SUPER_VAR)
                         else:
@@ -289,9 +286,8 @@ def landingRegister(request):
 @lock
 @group_required(SUPER_VAR)  
 def registerCompany(request):
-    userProf = user_profile_model.objects.filter(user__id=request.user.id)[0]
+    userProf = request.user.user_profile
     companyForm = company_form()
-    print(userProf.company)
     if request.method == 'POST':
         finalPhone = parsePhone(request.POST['phone'])
         new_data = request.POST.copy()
@@ -307,19 +303,11 @@ def registerCompany(request):
                 print('CREATE PAGE TO SHOW POSSIBLE COMPANIES')
             else:
                 print('Did not find duplciates in dataBase, ')
-                braintreeQuery = braintree_model.objects.filter(user__id=request.user.id)
-                braintreeSave = braintreeQuery[0] if braintreeQuery.exists() else braintree_model(user=request.user, settings = json.loads(json.dumps({"account": {"status": "inactive", "customer_ID": False}, "subscription": False, "payment_methods": False})))
-                braintreeSave.save()
-
                 companySave = form.save(commit=False)
-                companySave.braintree = braintreeSave
                 companySave.save()
-
                 userProf.company = companySave
-                braintreeSave.save()
-                companySave.save()
                 userProf.save()
-
+                print("Created and Saved New Company")
                 return redirect('stripe_subscribe')
     return render(request, 'landing/registerCompany.html',{
         'companyForm': companyForm,

@@ -1,98 +1,261 @@
+{% load static %}{% load formC_tags %}
 <form method="POST" name="notifForm" id="notifForm">
     {% csrf_token %}
+    {% with accountData.settings.facilities|get_category:facilityIDString as facilityPass %}
     {% if page == 'noti' %}
-    <table id="notifSettings" name="notifSettings" class="tableClass">
-        <tr class='tableSpacer'>
-            <td colspan="2" class="labelClass"><hr></td>
-        </tr>
-        <tr class='tableSpacer'>
-            <th colspan="2" style="width: 30%;">
-                Notification Settings:
-            </th>
-        </tr>
-        <tr class='tableSpacer'>
-            <td class="labelClass">
-                Reset default settings: <span style="cursor:pointer;" onclick="setdefault()">click here</span>
-                <input id="defaultNotif" type="hidden" name="defaultNotif" value=false>
-                <script>
-                    function setdefault(){
-                        document.getElementById('defaultNotif').value = true;
-                        document.getElementById('notifForm').submit();
-                    }
-                </script>
-            </td>
-        </tr>
-        <tr class='tableSpacer'>
-            <td class="labelClass">Send me notifications for:</td>
-        </tr>
-        <tr class='tableSpacer'>
-            <td colspan="2" style="width: 30%;">
-                <div>
-                    <label class="container">Deviations - Out of Compliance
-                        <input id="compliance" type="checkbox" value="true" {% if facilityInfo.notifications.compliance %}checked{% endif %} name="compliance">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">Deviations
-                        <input id="deviations" type="checkbox" value="true" {% if facilityInfo.notifications.deviations %}checked{% endif %} name="deviations">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">Submitted Forms
-                        <input id="submitted" type="checkbox" value="true" {% if facilityInfo.notifications.submitted %}checked{% endif %} name="submitted">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">10 Day Push Travel Warnings
-                        <input id="10_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.10_day_pt %}checked{% endif %} name="10_day_pt">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">5 Day Push Travel Warnings
-                        <input id="5_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.5_day_pt %}checked{% endif %} name="5_day_pt">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-            </td>
-        </tr>
-    </table>
+        <table id="notifSettings" name="notifSettings" class="tableClass">
+            <tr class='tableSpacer'>
+                <td colspan="2" class="labelClass"><hr></td>
+            </tr>
+            <tr class='tableSpacer'>
+                <th colspan="2" style="width: 30%;">
+                    Notification Settings:
+                </th>
+            </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">
+                    Reset default settings: <span style="cursor:pointer;" onclick="setdefault()">click here</span>
+                    <input id="defaultNotif" type="hidden" name="defaultNotif" value=false>
+                    <script>
+                        function setdefault(){
+                            document.getElementById('defaultNotif').value = true;
+                            document.getElementById('notifForm').submit();
+                        }
+                    </script>
+                </td>
+            </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">Send me notifications for:</td>
+            </tr>
+            <tr class='tableSpacer'>
+                <td colspan="2" style="width: 30%;">
+                    <div style="padding-left: 42px;">
+                        <div class="notifOptionCont">
+                            Deviations - Out of Compliance
+                            <div id="compliance-sub" class="subContHolder">
+                                <label class="sub-container" for="compliance-methodplus">
+                                    MethodPlus
+                                    <input id="compliance-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.compliance.methodplus %}checked{% endif %} name="compliance-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="compliance-email">
+                                    Email
+                                    <input id="compliance-email" type="checkbox" value="true" {% if facilityPass.notifications.compliance.email %}checked{% endif %} name="compliance-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="compliance-sms">
+                                    SMS(Text)
+                                    <input id="compliance-sms" type="checkbox" value="true" {% if facilityPass.notifications.compliance.sms %}checked{% endif %} name="compliance-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            Deviations
+                            <div id="deviations-sub" class="subContHolder">
+                                <label class="sub-container" for="deviations-methodplus">
+                                    MethodPlus
+                                    <input id="deviations-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.deviations.methodplus %}checked{% endif %} name="deviations-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="deviations-email">
+                                    Email
+                                    <input id="deviations-email" type="checkbox" value="true" {% if facilityPass.notifications.deviations.email %}checked{% endif %} name="deviations-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="deviations-sms">
+                                    SMS(Text)
+                                    <input id="deviations-sms" type="checkbox" value="true" {% if facilityPass.notifications.deviations.sms %}checked{% endif %} name="deviations-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            Submitted Forms
+                            <div id="submitted-sub" class="subContHolder">
+                                <label class="sub-container" for="submitted-methodplus">
+                                    MethodPlus
+                                    <input id="submitted-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.submitted.methodplus %}checked{% endif %} name="submitted-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="submitted-email">
+                                    Email
+                                    <input id="submitted-email" type="checkbox" value="true" {% if facilityPass.notifications.submitted.email %}checked{% endif %} name="submitted-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="submitted-sms">
+                                    SMS(Text)
+                                    <input id="submitted-sms" type="checkbox" value="true" {% if facilityPass.notifications.submitted.sms %}checked{% endif %} name="submitted-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            10 Day Push Travel Warnings
+                            <div id="10_day_pt-sub" class="subContHolder">
+                                <label class="sub-container" for="10_day_pt-methodplus">
+                                    MethodPlus
+                                    <input id="10_day_pt-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.10_day_pt.methodplus %}checked{% endif %} name="10_day_pt-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="10_day_pt-email">
+                                    Email
+                                    <input id="10_day_pt-email" type="checkbox" value="true" {% if facilityPass.notifications.10_day_pt.email %}checked{% endif %} name="10_day_pt-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="10_day_pt-sms">
+                                    SMS(Text)
+                                    <input id="10_day_pt-sms" type="checkbox" value="true" {% if facilityPass.notifications.10_day_pt.sms %}checked{% endif %} name="10_day_pt-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            5 Day Push Travel Warnings
+                            <div id="5_day_pt-sub" class="subContHolder">
+                                <label class="sub-container" for="5_day_pt-methodplus">
+                                    MethodPlus
+                                    <input id="5_day_pt-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.5_day_pt.methodplus %}checked{% endif %} name="5_day_pt-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="5_day_pt-email">
+                                    Email
+                                    <input id="5_day_pt-email" type="checkbox" value="true" {% if facilityPass.notifications.5_day_pt.email %}checked{% endif %} name="5_day_pt-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="5_day_pt-sms">
+                                    SMS(Text)
+                                    <input id="5_day_pt-sms" type="checkbox" value="true" {% if facilityPass.notifications.5_day_pt.sms %}checked{% endif %} name="5_day_pt-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     {% else %}
-    <table name="notifSettings" class="tableClass">
-        <tr class='tableSpacer'>
-            <td colspan="2" class="labelClass"><hr></td>
-        </tr>
-        <tr class='tableSpacer'>
-            <th colspan="2" class='' style="width: 30%;">
-                Notification Settings:
-            </th>
-        </tr>
-        <tr class='tableSpacer'>
-            <td class="labelClass">Send me notifications for:</td>
-        </tr>
-        <tr class='tableSpacer'>
-            <td colspan="2" class='' style="width: 30%;">
-                <div>
-                    <label class="container">Deviations - Out of Compliance
-                        <input disabled id="compliance" type="checkbox" value="true" {% if facilityInfo.notifications.compliance %}checked{% endif %} name="compliance">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">Deviations
-                        <input disabled id="deviations" type="checkbox" value="true" {% if facilityInfo.notifications.deviations %}checked{% endif %} name="deviations">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">Submitted Forms
-                        <input disabled id="submitted" type="checkbox" value="true" {% if facilityInfo.notifications.submitted %}checked{% endif %} name="submitted">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">10 Day Push Travel Warnings
-                        <input disabled id="10_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.10_day_pt %}checked{% endif %} name="10_dayPush">
-                        <span class="checkmark"></span>
-                    </label>
-                    <label class="container">5 Day Push Travel Warnings
-                        <input disabled id="5_day_pt" type="checkbox" value="true" {% if facilityInfo.notifications.5_day_pt %}checked{% endif %} name="5_dayPush">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-            </td>
-        </tr>
-    </table>
+        <table name="notifSettings" class="tableClass">
+            <tr class='tableSpacer'>
+                <td colspan="2" class="labelClass"><hr></td>
+            </tr>
+            <tr class='tableSpacer'>
+                <th colspan="2" class='' style="width: 30%;">
+                    Notification Settings:
+                </th>
+            </tr>
+            <tr class='tableSpacer'>
+                <td class="labelClass">Send me notifications for:</td>
+            </tr>
+            <tr class='tableSpacer'>
+                <td colspan="2" class='' style="width: 30%;">
+                    <div style="padding-left: 42px;">
+                        <div class="notifOptionCont">    
+                            Deviations - Out of Compliance
+                            <div id="compliance-sub" class="subContHolder">
+                                <label class="sub-container" for="compliance-methodplus">
+                                    MethodPlus
+                                    <input disabled id="compliance-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.compliance.methodplus %}checked{% endif %} name="compliance-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="compliance-email">
+                                    Email
+                                    <input disabled id="compliance-email" type="checkbox" value="true" {% if facilityPass.notifications.compliance.email %}checked{% endif %} name="compliance-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="compliance-sms">
+                                    SMS(Text)
+                                    <input disabled id="compliance-sms" type="checkbox" value="true" {% if facilityPass.notifications.compliance.sms %}checked{% endif %} name="compliance-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            Deviations
+                            <div id="deviations-sub" class="subContHolder">
+                                <label class="sub-container" for="deviations-methodplus">
+                                    MethodPlus
+                                    <input disabled id="deviations-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.deviations.methodplus %}checked{% endif %} name="deviations-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="deviations-email">
+                                    Email
+                                    <input disabled id="deviations-email" type="checkbox" value="true" {% if facilityPass.notifications.deviations.email %}checked{% endif %} name="deviations-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="deviations-sms">
+                                    SMS(Text)
+                                    <input disabled id="deviations-sms" type="checkbox" value="true" {% if facilityPass.notifications.deviations.sms %}checked{% endif %} name="deviations-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            Submitted Forms
+                            <div id="submitted-sub" class="subContHolder">
+                                <label class="sub-container" for="submitted-methodplus">
+                                    MethodPlus
+                                    <input disabled id="submitted-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.submitted.methodplus %}checked{% endif %} name="submitted-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="submitted-email">
+                                    Email
+                                    <input disabled id="submitted-email" type="checkbox" value="true" {% if facilityPass.notifications.submitted.email %}checked{% endif %} name="submitted-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="submitted-sms">
+                                    SMS(Text)
+                                    <input disabled id="submitted-sms" type="checkbox" value="true" {% if facilityPass.notifications.submitted.sms %}checked{% endif %} name="submitted-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            10 Day Push Travel Warnings
+                            <div id="10_day_pt-sub" class="subContHolder">
+                                <label class="sub-container" for="10_day_pt-methodplus">
+                                    MethodPlus
+                                    <input disabled id="10_day_pt-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.10_day_pt.methodplus %}checked{% endif %} name="10_day_pt-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="10_day_pt-email">
+                                    Email
+                                    <input disabled id="10_day_pt-email" type="checkbox" value="true" {% if facilityPass.notifications.10_day_pt.email %}checked{% endif %} name="10_day_pt-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="10_day_pt-sms">
+                                    SMS(Text)
+                                    <input disabled id="10_day_pt-sms" type="checkbox" value="true" {% if facilityPass.notifications.10_day_pt.sms %}checked{% endif %} name="10_day_pt-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="notifOptionCont">
+                            5 Day Push Travel Warnings
+                            <div id="5_day_pt-sub" class="subContHolder">
+                                <label class="sub-container" for="5_day_pt-methodplus">
+                                    MethodPlus
+                                    <input disabled id="5_day_pt-methodplus" type="checkbox" value="true" {% if facilityPass.notifications.5_day_pt.methodplus %}checked{% endif %} name="5_day_pt-methodplus">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="5_day_pt-email">
+                                    Email
+                                    <input disabled id="5_day_pt-email" type="checkbox" value="true" {% if facilityPass.notifications.5_day_pt.email %}checked{% endif %} name="5_day_pt-email">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="sub-container" for="5_day_pt-sms">
+                                    SMS(Text)
+                                    <input disabled id="5_day_pt-sms" type="checkbox" value="true" {% if facilityPass.notifications.5_day_pt.sms %}checked{% endif %} name="5_day_pt-sms">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     {% endif %}
+    {% endwith %}
     <center>
     {% if page == 'noti' %}
     <input type="submit" name="notifSettingsForm" value="save">

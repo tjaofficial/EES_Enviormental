@@ -73,12 +73,6 @@ def IncompleteForms(request, facility):
                 packet.formList["formsList"].items(), key=lambda x: natural_sort_key(x[0])
             )
 
-
-
-
-
-
-
     facFormsIDList = get_facility_forms('facilityName', facility)
     facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     facFormList2 = []
@@ -98,8 +92,6 @@ def IncompleteForms(request, facility):
             if formInfo.weekdays_only and not formInfo.weekend_only or not formInfo.weekdays_only and not formInfo.weekend_only:
                 facFormList1.append(fsID)
     facFormList1.sort(key=lambda record: record.id)
-    print(facFormList1)
-    print("______________________")
     packetQuery2 = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
     listOfAllPacketIDs = []
     for anID in packetQuery2:

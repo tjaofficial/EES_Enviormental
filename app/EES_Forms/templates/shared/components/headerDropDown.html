@@ -96,23 +96,31 @@
     </div>
 </div>
 <div id="notifDropdown" class="profileDropdown" style="display: none; max-height: 41rem; overflow: scroll;">
-    {% for notif in notifs.unRead %}
-    <a href="{% if notif.3 == 'form24' or notif.3 == 'form25'%}{% url notif.3 facility notif.2.settingsID notif.2.date notif.2.weekend|lower %}{% else %}{% url notif.3 facility notif.2.settingsID notif.2.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.1.id}}">  
-        <div id="notifColor" class="notifCont" style="{% if notif.1.header == 'compliance' %}{% if not notif.1.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.1.hovered %}background-color: #ffff00ad;{% endif %}">
-            <div class="notifHeader">
-                {{notif.1.get_header_display}}<br>
-                {{notif.0.formChoice.title}}
-            </div>
-            <div class="notifNote">
-                {{notif.1.notes}}{{notif.1.body}}
-            </div>
-            <div class='notifTimeMarker'>
-                {{notif.1.created_at}}
-            </div>
+    {% for fac in sortedFacilityData %}
+        <div>
+            <div class="methodPlusBlue" style="padding: 3px 21px; font-size: 14px; font-weight: bold; color: white;">{{ fac.facility_name }}</div>
+            {% if notifs.unRead|length > 0 %}
+                {% for notif in notifs.unRead %}
+                <a href="{% if notif.3 == 'form24' or notif.3 == 'form25'%}{% url notif.3 facility notif.2.settingsID notif.2.date notif.2.weekend|lower %}{% else %}{% url notif.3 facility notif.2.settingsID notif.2.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.1.id}}">  
+                    <div id="notifColor" class="notifCont" style="{% if notif.1.header == 'compliance' %}{% if not notif.1.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.1.hovered %}background-color: #ffff00ad;{% endif %}">
+                        <div class="notifHeader">
+                            {{notif.1.get_header_display}}<br>
+                            {{notif.0.formChoice.title}}
+                        </div>
+                        <div class="notifNote">
+                            {{notif.1.notes}}{{notif.1.body}}
+                        </div>
+                        <div class='notifTimeMarker'>
+                            {{notif.1.created_at}}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="notifCont">
+                    No Notifications
+                </div>
+            {% endif %}
         </div>
-    </a>
     {% endfor %}
-    <div class="notifCont">
-        No Notifications
-    </div>
 </div>

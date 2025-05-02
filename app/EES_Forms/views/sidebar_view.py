@@ -854,14 +854,28 @@ def event_add_view(request, facility):
                 return redirect('sup_dashboard', answer['facilitySelect'])
         request_form = events_form(request.POST)
         if request_form.is_valid():
-            A = request_form.save(commit=False)
-            A.enteredBy = fullName
+            selected_days = request_form.cleaned_data['selected_days'].split(',')
+            allDay = True if answer.get('all_day') else False
             if facility == "supervisor":
-                A.personal = True
+                personal = True
             else:
-                A.facilityChoice = finalFacility
-                A.personal = False
-            A.save()
+                facilityChoice = finalFacility
+                personal = False
+
+            for date in selected_days:
+                clean_date = datetime.datetime.strptime(date.strip(), "%Y-%m-%d").date()
+                Event.objects.create(
+                    observer=answer['observer'],
+                    title=answer['title'],
+                    notes=answer['notes'],
+                    start_time=answer['start_time'],
+                    end_time=answer['end_time'],
+                    date=clean_date,
+                    enteredBy=fullName,
+                    personal=personal,
+                    allDay=allDay,
+                    facilityChoice=facilityChoice)
+
 
             cal_link = 'schedule/' + str(today_year) + '/' + today_month
 

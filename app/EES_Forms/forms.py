@@ -157,7 +157,7 @@ class bat_info_form(ModelForm):
             'county': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width: 9rem;'}),
             'estab_num': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
             'equip_location': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
-            'address': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width:100%;'}),
+            'address': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width:100%;', 'autocomplete': 'on'}),
             'state': forms.TextInput(attrs={'type': 'text', 'class':'input', 'placeholder':'XX', 'style': 'width: 3rem;'}),
             'district': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width: 9rem;'}),
             'city': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
@@ -2691,16 +2691,18 @@ class issues_form(ModelForm):
         }
 
 class events_form(ModelForm):
+    selected_days = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = Event
-        fields = ('__all__')
+        fields = ['title', 'observer', 'notes', 'start_time','end_time','allDay']
         widgets = {
             'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
             'title' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'description' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
-            'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
+            'notes' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            #'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
             'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
             'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'allDay' : forms.CheckboxInput(attrs={}),
         }
 
 class sop_form(ModelForm):

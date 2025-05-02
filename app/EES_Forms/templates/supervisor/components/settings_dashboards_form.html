@@ -14,9 +14,9 @@
         <tr class='tableSpacer'>
             <td class="labelClass">
                 Choose dashboard:
-                <select id="dashSelect" onchange="changeOptions(this)" name="dashSelect" data-dashops="{{dashDict}}">
+                <select id="dashSelect" onchange="changeOptions(this)" name="dashSelect" data-dashops="{{dashDict}}" {% if selector == "main" %}disabled{% endif %}>
                     {% for key, name in dashDict.items %}
-                    <option value="{{key}}" {% if facilityInfo.batteryDash.graphs.graphFrequencyData.frequency == 'weekly' %}selected{% endif %}>{{name}}</option>
+                    <option value="{{name}}" {% if facilityInfo.settings.graphs.graphFrequencyData.frequency == 'weekly' %}selected{% endif %}>{{name}}</option>
                     {% endfor %}
                 </select>
             </td>

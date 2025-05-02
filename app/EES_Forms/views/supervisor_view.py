@@ -30,8 +30,6 @@ def sup_dashboard_view(request, facility):
     updateAllFormSubmissions(facility)
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-
-
     formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
@@ -43,15 +41,9 @@ def sup_dashboard_view(request, facility):
     fsID4 = tryExceptFormDatabases(4,formA4, facility)
     fsID5 = tryExceptFormDatabases(5,formA5, facility)
     fsIDs = [fsID1,fsID2,fsID3,fsID4,fsID5]
-    print(fsIDs)
+
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     now = datetime.datetime.now().date()
-
-
-    formA11 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
-    print(formA11)
-    A1data1 = formA1[0] if formA1.exists() else False
-    print(A1data1)
 
     last7days = now - datetime.timedelta(days=6)
     options = facility_model.objects.filter(facility_name=facility)
@@ -63,32 +55,18 @@ def sup_dashboard_view(request, facility):
     if options.exists():
         options = options[0]
     
-    if facility != 'supervisor':
+    if facility != SUPER_VAR:
         recent_logs = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')[:7]
     else:
         recent_logs = ''
-    year = str(now.year)
-    if len(str(now.month)) == 1:
-        month = "0" + str(now.month)
-    else:
-        month = str(now.month)
-    if len(str(now.day)) == 1:
-        day = '0' + str(now.day)
-    else:
-        day = str(now.day)
-    date = year + '-' + month + '-' + day
-    form_enteredA1 = False
-    form_enteredA2 = False
-    form_enteredA3 = False
-    form_enteredA4 = False
-    form_enteredA5 = False
+
     today = datetime.date.today()
     todays_num = today.weekday()
     #---------- Graph Data ---------------------
     print('litty')
     graphData = ''
     graphDataDump = ''
-    if facility != 'supervisor':
+    if facility != SUPER_VAR:
         if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
             baseIterations = userProfile.settings['dashboard'][str(options.id)]
             graphSettings = baseIterations['batteryDash']['graphs']
@@ -159,7 +137,7 @@ def sup_dashboard_view(request, facility):
             }
             graphDataDump = json.dumps(graphData)
     # -------PROGRESS PERCENTAGES -----------------
-    if facility != 'supervisor':
+    if facility != SUPER_VAR:
         daily_percent = calculateProgessBar(facility, 'Daily')
         weekly_percent = calculateProgessBar(facility, "Weekly")
         monthly_percent = calculateProgessBar(facility, 'Monthly')
@@ -172,7 +150,7 @@ def sup_dashboard_view(request, facility):
         quarterly_percent = False
         annually_percent = False
     # -------90 DAY PUSH ----------------
-    if facility != "supervisor":
+    if facility != SUPER_VAR:
         pushTravelsData = ninetyDayPushTravels(facility)
         if pushTravelsData == 'EMPTY':
             od_30 = ''
@@ -185,7 +163,6 @@ def sup_dashboard_view(request, facility):
             od_10 = pushTravelsData['10days']
             od_5 = pushTravelsData['5days']
             od_recent = pushTravelsData['closest']
-            print(od_5)
             all_ovens = pushTravelsData['all']
     else:
         od_recent = ''
@@ -206,78 +183,12 @@ def sup_dashboard_view(request, facility):
     # ----ISSUES/CORRECTIVE ACTIONS----------
     ca_forms = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-id')
     # ----Weather API Pull-----------
-    if facility == 'supervisor':
+    if facility == SUPER_VAR:
         weather = weatherDict(False)
     else:
         weather = weatherDict(options.city)
     # ----OTHER-----------
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        if daily_prof.exists():
-            todays_log = daily_prof[0]
-            if now == todays_log.date_save:
-                emypty_dp_today = False
-                today = todays_log.date_save
-                if formA1.exists():
-                    most_recent_A1 = formA1[0].date
-                    if most_recent_A1 == today:
-                        A1data = formA1[0]
-                        form_enteredA1 = True
-                    else:
-                        A1data = ""
-                else:
-                    A1data = ""
-
-                A2data = ""
-                push = ""
-                coke = ""
-                pLeaks = 0
-                cLeaks = 0
-                if formA2.exists():
-                    most_recent_A2 = formA2[0]
-                    if most_recent_A2.date == today:
-                        A2data = most_recent_A2
-                        if most_recent_A2.p_leak_data and most_recent_A2.c_leak_data:
-                            push = json.loads(most_recent_A2.p_leak_data)
-                            coke = json.loads(most_recent_A2.c_leak_data)
-                            try:
-                                pLeaks = len(push['data'])
-                            except:
-                                pLeaks = 0
-                            try:
-                                cLeaks = len(coke['data'])
-                            except:
-                                cLeaks = 0
-                        form_enteredA2 = True
-                
-                A3data = ""
-                lids = ""
-                offtakes = ""
-                if formA3.exists():
-                    most_recent_A3 = formA3[0]
-                    if most_recent_A3.date == today:
-                        A3data = most_recent_A3
-                        if most_recent_A3.l_leak_json and most_recent_A3.om_leak_json:
-                            lids = json.loads(most_recent_A3.l_leak_json)
-                            offtakes = json.loads(most_recent_A3.om_leak_json)
-                        form_enteredA3 = True
-
-                A4data = ""
-                if formA4.exists():
-                    most_recent_A4 = formA4[0].date
-                    if most_recent_A4 == today:
-                        A4data = formA4[0]
-                        form_enteredA4 = True
-
-                A5data = ""
-                if formA5.exists():
-                    most_recent_A5 = formA5[0].date
-                    if most_recent_A5 == today:
-                        A5data = formA5[0]
-                        form_enteredA5 = True
-        else:
-            formA4 = ""
-            todays_log = ''
-
         if emypty_dp_today:
             if request.method == 'POST':
                 answer = request.POST
@@ -333,50 +244,7 @@ def sup_dashboard_view(request, facility):
     return render(request, "supervisor/sup_dashboard.html", {
         'notifs': notifs,
         'facility': facility, 
-        # 'form_enteredA5': form_enteredA5, 
-        # 'form_enteredA4': form_enteredA4, 
-        # 'form_enteredA3': form_enteredA3, 
-        # 'form_enteredA2': form_enteredA2,
-        # 'form_enteredA1': form_enteredA1, 
-        # 'date': date, 
-        # "od_30": od_30, 
-        # "od_10": od_10, 
-        # "od_5": od_5, 
-        # 'od_recent': od_recent, 
-        # 'recent_logs': recent_logs, 
-        # 'lids': lids, 
-        # 'offtakes': offtakes, 
-        # 'ca_forms': ca_forms, 
-        # 'weather': weather, 
-        # 'todays_log': todays_log, 
-        # 'todays_obser': todays_obser, 
-        # 'profile': allContacts, 
-        # 'A1data': A1data, 
-        # 'A2data': A2data, 
-        # 'A3data': A3data, 
-        # 'A4data': A4data, 
-        # 'A5data': A5data, 
-        # 'push': push, 
-        # 'coke': coke,
-        # 'weekly_percent': weekly_percent, 
-        # 'monthly_percent': monthly_percent, 
-        # 'annually_percent': annually_percent, 
-        # 'daily_percent': daily_percent, 
-        # 'quarterly_percent': quarterly_percent,
-        # 'supervisor': supervisor, 
-        # "client": client, 
-        # 'unlock': unlock, 
-        # 'sortedFacilityData': sortedFacilityData, 
-        # 'fsIDs': fsIDs,
-        # 'graphData': graphData,
-        # 'last7days': str(last7days),
-        # 'today': str(now),
-        # 'colorMode': colorMode,
-        # 'userMode': userMode,
-        # 'pLeaks': pLeaks,
-        # 'cLeaks': cLeaks,
         'options': options,
-        # 'graphDataDump': graphDataDump,
         'userProfile': userProfile
     })
 

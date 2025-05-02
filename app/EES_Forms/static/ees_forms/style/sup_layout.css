@@ -70,7 +70,6 @@ a {
     font-weight: 900;
     color: #263544;
 }
-
 .miniFont{
     font-size: 1rem;
     font-weight: 100;
@@ -81,16 +80,12 @@ a {
     font-weight: 100;
     text-align: center;
 }
-
 .dataLabels{
     justify-content: center;
     display:flex;
     margin-bottom: .3rem;
     margin-top: .3rem;
 }
-
-
-
 .grid-sliders{
     display:grid;
     grid-gap: .1rem;
@@ -170,15 +165,9 @@ a {
     justify-content: flex-start;
     padding: 1.5rem;
 }
-
-
 #companyBox{
     align-items: center;
     display: flex;
-}
-.facilitySelector{
-    position: absolute;
-    left: 323;
 }
 #topBar{
     width: 100%;
@@ -209,10 +198,6 @@ a {
     min-height: 205.688px;
     max-height: 205.688px;
 }
-.drop_down{
-    position: absolute;
-    right: 2rem;
-}
 .no_link_css{
     color:inherit; 
     text-decoration: none;
@@ -225,8 +210,7 @@ a {
     padding: 22px;
     width: 30%;
 }
-
-  .sidebar_item {
+.sidebar_item {
     font-weight: bolder;
     font-family: Arial, Helvetica, sans-serif;
     margin: 0px 10px 0px 10px;
@@ -236,7 +220,7 @@ a {
     align-items: center;
     justify-content: left;
 }
-  .sidebar_svg {
+.sidebar_svg {
     height: 2em;
     width: 2em;
     /* background-color: #40516a; */
@@ -256,10 +240,6 @@ a {
 .sidebar_svg svg {
     height: 82%;
 }
-.profileDropdown a{
-    text-decoration: none;
-    color: #001011;
-}
 .facilitySelectInput{
     background-color: #253544;
     color: white;
@@ -268,28 +248,6 @@ a {
     border-radius: 1rem;
     padding: 6px 28px;
     box-shadow: inset black 0px 0px 20px 0px;
-}
-.notification{
-    position: fixed;
-    right: 11rem; 
-}
-.notification #bell{
-    height: 25px;
-    fill:#ffffff
-}
-.notification #yellowDot{
-    position: absolute;
-    height: 12px;
-    fill: #ffea00;
-    bottom: 0px;
-    left: -4px;
-}
-.notificationCount{
-    position: absolute;
-    bottom: -1px;
-    font-size: 12px;
-    left: -2px;
-    font-weight: bold;
 }
 .mainContCenter{
     display: flex;

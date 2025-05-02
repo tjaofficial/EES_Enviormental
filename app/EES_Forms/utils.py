@@ -55,10 +55,6 @@ parseFormList = [
     (26, "R"),
     (27, "Q"),  
 ]
-dashDict = {
-    'formsDash': True, 
-    'batteryDash': False
-}
 dashDictOptions = {
     'formsDash': 'Default', 
     'batteryDash': 'Battery'
@@ -101,11 +97,11 @@ defaultBatteryDashSettings = {
     'contacts': True
 }
 defaultNotifications = {
-        'compliance': True,
-        'deviations': True,
-        'submitted': True,
-        '10_day_pt': False,
-        '5_day_pt': False
+        'compliance': {'methodplus': True, 'email': False, 'sms': False},
+        'deviations': {'methodplus': True, 'email': False, 'sms': False},
+        'submitted': {'methodplus': True, 'email': False, 'sms': False},
+        '10_day_pt': {'methodplus': False, 'email': False, 'sms': False},
+        '5_day_pt': {'methodplus': False, 'email': False, 'sms': False}
 }
 defaultFacilitySettings = {
     'dashboard': {
@@ -148,7 +144,11 @@ g2Settings = {
     'process_equip2': "-",
     'operating_mode2': "-",
 }
-
+dashDict = {
+    'dashboard': "Default", 
+    'settings': {},
+    'notifications': {}
+}
 hDefaultSettings = {
     "custom_name": False, 
     'height_above_ground_level': 350,
@@ -1287,9 +1287,7 @@ def createNotificationDatabase(facility, user, fsID, date, notifSelector):
     nFacility = facility_model.objects.filter(facility_name=facility)
     if nFacility.exists():
         nFacility = nFacility[0]
-    nUserProfile = user_profile_model.objects.filter(user__username=user.username)
-    if nUserProfile.exists():
-        nUserProfile = nUserProfile[0]
+    nUserProfile = user.user_profile
     companyUsers = user_profile_model.objects.filter(company__company_name=nUserProfile.company.company_name )
     # subForm = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=formID)
     # if subForm.exists():
@@ -1322,6 +1320,7 @@ def createNotificationDatabase(facility, user, fsID, date, notifSelector):
     for person in companyUsers:
         n = notifications_model(
             facilityChoice=nFacility,
+            formSettings=nFormSettings,
             user = person,
             clicked = False,
             hovered = False,
@@ -1332,7 +1331,8 @@ def createNotificationDatabase(facility, user, fsID, date, notifSelector):
         )
         if n not in companyUsers:
             n.save()
-    print("Form " + str(nFormSettings.id) + " notification was sent.")
+    print("Form " + str(nFormSettings.id) + " notification was created and saved.")
+    return n
    
 def notificationCalc(user, facility):
     userProfile = user.user_profile
@@ -1373,15 +1373,31 @@ def displayNotifications(user, facility):
 def createNotification(facility, request, fsID, date, notifSelector, issueID):
     print('notif1 - check 1')
     user = request.user
-    createNotificationDatabase(facility, user, fsID, date, notifSelector)
+    notifID = createNotificationDatabase(facility, user, fsID, date, notifSelector)
+    notifs = checkIfFacilitySelected(user, facility)
     facilityParse = 'notifications_' + facility.replace(" ","_")
     notifCount = str(notificationCalc(user, facility))
     channel_layer = get_channel_layer()
+
+    if notifID.formSettings.formChoice.form in ['form24', 'form25']:
+        formModelName = notifID.formSettings.formChoice.form
+        formModel = apps.get_model('EES_Forms', formModelName)
+        day_select = formModel.objects.get(date=notifID.created_at).weekend_day
+    else:
+        day_select = ''
+        
+    notif_html = render_to_string("shared/components/notification_item.html", {
+        "notif": notifID,
+        "facility": facility,
+        'day_select': day_select
+    })
+
     async_to_sync(channel_layer.group_send)(
         facilityParse, {
             'type': 'notification',
             'count': notifCount,
-            'facility': facility
+            'facility': facility,
+            'html': notif_html
         }
     )
     if notifSelector == 'compliance':
@@ -2072,38 +2088,54 @@ def generate_random_string(length=12):
     letters_and_digits = string.ascii_letters + string.digits
     return ''.join(random.choice(letters_and_digits) for i in range(length))
 
-def change_dashboard_setting(dashboard_pick, observer):
-    profileSetDash = {
-        'formsDash': True, 
-        'batteryDash': False
-    }
-    for key in dashDict.keys():
-        if dashboard_pick == key:
-            if not observer:
-                profileSetDash[key] = defaultBatteryDashSettings
-            else:
-                profileSetDash[key] = True
+def change_dashboard_setting(dashChoice, position):
+    if dashChoice == 'Default':
+        setSettings = {}
+        setNotifications = {}
+    elif dashChoice == "Battery":
+        if position == OBSER_VAR:
+            setSettings = {}
         else:
-            profileSetDash[key] = False
-    return profileSetDash
+            setSettings = defaultBatteryDashSettings
+        setNotifications = defaultNotifications
+    
+    setFacilityDash = {
+        'dashboard': dashChoice, 
+        'settings': setSettings,
+        'notifications': setNotifications
+    }
+    return setFacilityDash
 
 def setDefaultSettings(profile, superUsername):
     today = datetime.datetime.now()
-    createSettings = {'dashboard':{}}
+    createSettings = {'facilities': {}, 'profile': {}}
     try:
         companyFacilities = getCompanyFacilities(superUsername)
         for facility in companyFacilities:
-            createSettings['dashboard'][str(facility.id)] = dashDict
+            createSettings['facilities'][str(facility.id)] = dashDict
             if facility.is_battery == 'Yes':
-                if profile.position != OBSER_VAR:
-                    createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', False)
-                else:
-                    createSettings['dashboard'][str(facility.id)] = change_dashboard_setting('batteryDash', True)
+                dashChoice = 'Battery'
+            else:
+                dashChoice = 'Default'
+            createSettings['facilities'][str(facility.id)] = change_dashboard_setting(dashChoice, profile.position)
     except:
-        createSettings['dashboard'] = False
-    createSettings['notifications'] = defaultNotifications
-    createSettings['first_login'] = False
-    createSettings['position'] = profile.position
+        createSettings['facilities'] = {}
+    createSettings['profile'] = {
+        'notifications': {
+            'calendar': {
+                'methodplus': True, 
+                'email': False, 
+                'sms': False
+            }, 
+            'certification_exp': {
+                'methodplus': True, 
+                'email': False, 
+                'sms': False
+            }
+        },
+        'first_login': False,
+        'position': profile.position
+    }
     return createSettings
 
 def parsePhone(phoneNumber):

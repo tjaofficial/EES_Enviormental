@@ -37,6 +37,7 @@ urlpatterns = [
     path("<str:facility>/facilityFormSettings/<str:fsID>/<str:packetID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
     path("<str:facility>/profileEdits/<str:userID>", views.profile_edit_view, name="profileEdits"),
     path('<str:facility>/form-select/add-forms', views.Add_Forms, name='addingForms'),
+    path('ajax/facilityList/companyFacilityInfo/', views.get_facility_form_data, name='get_facility_form_data'),
 
     
     ##--ACCOUNT SETTINGS-----
@@ -93,6 +94,7 @@ urlpatterns = [
 
     path('ajax/sidebar/<str:facility>/', views.sidebar_data, name='sidebar_data'),
     path('ajax/header/<str:facility>/', views.header_data, name='header_data'),
+
 
     ##---FORMS
     path("<str:facility>/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),

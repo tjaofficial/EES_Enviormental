@@ -1,24 +1,25 @@
 {% extends "observer/components/obs_layout.html" %}
-{% block list%}{% load static %}
-
-<link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-
-<div class="mainCont" style="margin-top:6rem; width: 29rem;">
-    <div class="card">
-        <div class="cardHeader methodPlusBlue">Select Client/Facility</div>
-        <div class="contentCont">
-            <form method="POST" action="">
-                {% csrf_token %}
-                Facility: <select id='facility_id' name='facility'>
-                    <option value=''>-------</option>
-                    {% for option in options %}
-                    <option value="{{option.facility_name}}">{{option.facility_name}}</option>
-                    {% endfor %}
-                </select>
-                {% include "shared/components/submitButton.html" with label="submit" %}
-            </form>
+{% load static %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+{% endblock %}
+{% block list%}
+    <div class="mainCont" style="margin-top:6rem; width: 29rem;">
+        <div class="card">
+            <div class="cardHeader methodPlusBlue">Select Client/Facility</div>
+            <div class="contentCont">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    Facility: <select id='facility_id' name='facility'>
+                        <option value=''>-------</option>
+                        {% for option in options %}
+                        <option value="{{option.facility_name}}">{{option.facility_name}}</option>
+                        {% endfor %}
+                    </select>
+                    {% include "shared/components/submitButton.html" with label="submit" %}
+                </form>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

@@ -384,12 +384,12 @@ def pdf_template_A3(primaryData, title, subTitle):
         ['', 'P = Piping', '', '', '', '', '', '', '', '', '', ''],
         ['', 'O = Other', '', '', '', '', '', '', '', '', '', ''],
         ['', 'MS = Mini Standpipe', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '                                    Pve X 100                ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
-        ['', 'Percent Leaking Lids = ---------------------- = ------------------------ = ' + str(primaryData.l_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '          Povn(N - Ni) - Pno        4(85 - ' + str(primaryData.inop_ovens) + ') - ' + str(primaryData.l_not_observed), '', '', '', '', '', '', ''],
-        ['', '', '', '                                    Pve X 100                  ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
-        ['', 'Percent Leaking Offtakes = ---------------------- = ------------------------ = ' + str(primaryData.om_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '           Povn(N - Ni) - Pno          2(85 - ' + str(primaryData.inop_ovens) + ') + 0 - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
+        ['', '', '', '                              Pve X 100                      ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
+        ['', 'Percent Leaking Lids = ---------------------------  =  ------------------------ = ' + str(primaryData.l_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '    Povn(N - Ni) - Pno            4(85 - ' + str(primaryData.inop_ovens) + ') - ' + str(primaryData.l_not_observed), '', '', '', '', '', '', ''],
+        ['', '', '', '                               Pve X 100                       ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
+        ['', 'Percent Leaking Offtakes = --------------------------  =  --------------------------- = ' + str(primaryData.om_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '     Povn(N - Ni) - Pno           2(85 - ' + str(primaryData.inop_ovens) + ') + 0 - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
         ['', 'Where: Ly = Leaking Doors Observed, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + primaryData.notes + '</para>', styles['Normal'])]
@@ -1066,7 +1066,7 @@ def pdf_template_9(primaryData, title, subTitle):
         
         ('ALIGN', (1,6), (4,7), 'CENTER'),
         ('FONT', (1,6), (4,7), 'Helvetica-Bold', 10),
-        ('ALIGN', (2,8 + count), (2,12 + count), 'CENTER'),
+        ('ALIGN', (2,8 + count), (2,13 + count), 'CENTER'),
         
     ]
     

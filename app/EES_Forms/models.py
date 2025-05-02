@@ -47,7 +47,6 @@ crew_choices = (
     ('C', 'C'),
     ('D', 'D')
 )
-
 plume_type_choices = (
     ('N/A', 'N/A'),
     ('Fugitive', 'Fugitive'),
@@ -3968,8 +3967,17 @@ class issues_model(models.Model):
         return str(self.date) + " - " + str(self.facilityChoice)
 
 class Event(models.Model):
-    enteredBy = models.CharField(max_length=40, blank=True, null=True)
-    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
+    enteredBy = models.CharField(
+        max_length=40, 
+        blank=True, 
+        null=True
+    )
+    facilityChoice = models.ForeignKey(
+        facility_model, 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     personal = models.BooleanField()
     cal_title_choices = (
         ('P', 'Primary'),
@@ -3980,7 +3988,7 @@ class Event(models.Model):
         ('QT', 'Quarterly Trucks'),
         ('BH2-S', 'Boilerhouse Stacks'),
     )
-
+    allDay = models.BooleanField()
     observer = models.CharField(
         max_length=30,
         blank=True,
@@ -5523,6 +5531,12 @@ class notifications_model(models.Model):
         on_delete=models.CASCADE, 
         null=True
     )
+    formSettings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        blank=True, 
+        null=True
+    )
     user = models.ForeignKey(
         user_profile_model,
         on_delete=models.CASCADE, 
@@ -5545,7 +5559,7 @@ class notifications_model(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return str(self.created_at) + " - " + str(self.facilityChoice) + " - " + str(self.user) + " - " + str(self.header)
+        return f"{self.id}-{self.created_at}-SELF_FORM_SETTINGS-{self.user}-{self.header}"
     
 class braintreePlans(models.Model):
     planID = models.CharField(
@@ -5822,7 +5836,9 @@ class subscription(models.Model):
         on_delete=models.PROTECT,
         related_name='subscription'
     )
-    subscriptionID = models.CharField(max_length=100)
+    subscriptionID = models.CharField(
+        max_length=100
+    )
     plan = models.ForeignKey(
         'braintreePlans', 
         on_delete=models.PROTECT, 

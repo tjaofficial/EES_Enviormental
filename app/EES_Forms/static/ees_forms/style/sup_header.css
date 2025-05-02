@@ -9,3 +9,56 @@
     font-weight: 100; 
     font-size:1rem;
 }
+.yellowDot {
+    background: yellow;
+    border-radius: 29px;
+    height: 14px;
+    width: 18px;
+    text-align: center;
+    color: black;
+    align-content: center;
+}
+/* 
+1 didgit
+left: -12px
+width: 18px
+
+2 digits
+left: -12px
+width: 18px
+
+3 digits
+
+
+
+4 digits
+
+
+*/
+.notificationCount{
+    position: absolute;
+    bottom: -1px;
+    font-size: 12px;
+    left: -12px;
+    font-weight: bold;
+}
+.notification{
+    position: fixed;
+    right: 11rem; 
+}
+.notification #bell{
+    height: 25px;
+    fill:#ffffff
+}
+.profileDropdown a{
+    text-decoration: none;
+    color: #001011;
+}
+.drop_down{
+    position: absolute;
+    right: 2rem;
+}
+.facilitySelector{
+    position: absolute;
+    left: 323px;
+}

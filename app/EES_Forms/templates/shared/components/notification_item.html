@@ -1,0 +1,32 @@
+{% load static %}
+<a href="
+    {% if notif.formSettings.formChoice.link == 'form24' or notif.formSettings.formChoice.link == 'form25'%}
+        {% url notif.formSettings.formChoice.link facility notif.formSettings.id notif.created_at.date day_select|lower %}
+    {% else %}
+        {% url notif.formSettings.formChoice.link facility notif.formSettings.id notif.created_at.date %}
+    {% endif %}"
+   onmouseover="setNotificationHover(this)"
+   onclick="setNotificationClick(this)"
+   id="{{ notif.id }}">  
+    <div class="notifCont"
+        style="{% if notif.header == 'compliance' %}
+                    {% if not notif.hovered %}
+                        background-color: #ff6868
+                    {% else %}
+                        background-color: #d28d8d
+                    {% endif %}
+                {% elif not notif.hovered %}
+                    background-color: #ffff00ad;
+                {% endif %}">
+        <div class="notifHeader">
+            {{ notif.get_header_display }}<br>
+            {{ notif.formSettings.formChoice.title }}
+        </div>
+        <div class="notifNote">
+            {{ notif.notes }}{{ notif.body }}
+        </div>
+        <div class="notifTimeMarker">
+            {{ notif.created_at }}
+        </div>
+    </div>
+</a>

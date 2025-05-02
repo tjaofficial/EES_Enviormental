@@ -2,7 +2,7 @@
     position: fixed;
     right: 17px;
     top: 55px;
-    width: 15rem;
+    width: 20rem;
     background-color: #b2b6b9;
     border-radius: 1rem;
     box-shadow: 1px 3px 7px 0px #9898a6;
@@ -19,7 +19,7 @@
 
 .notifHeader{
     font-weight: bold;
-    font-size: 15px;
+    font-size: 13px;
 }
 
 .notifNote{

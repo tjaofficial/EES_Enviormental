@@ -1,29 +1,36 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% load static %}{% block list%}{% load formC_tags %}
-<script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
-<link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/selected_facility_settings.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
-<script defer src="{% static 'ees_forms/script/selected_facility_settings.js' %}"></script>
-<style>
-    .container input:checked ~ .checkmark {
-        background-color: gray;
-    }
-</style>
-{% if selector == 'batd' %}
-<style>
-    #batteryDashSettings .container input:checked ~ .checkmark {
-        background-color: #2196F3;
-    }
-</style>
-{% elif selector == 'noti' %}
-<style>
-    #notifSettings .container input:checked ~ .checkmark {
-        background-color: #2196F3;
-    }
-</style>
-{% endif %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/selected_facility_settings.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
+    <script defer src="{% static 'ees_forms/script/selected_facility_settings.js' %}"></script>
+    <style>
+        .container input:checked ~ .checkmark {
+            background-color: gray;
+        }
+        .sub-container input:checked ~ .checkmark {
+            background-color: gray;
+        }
+    </style>
+    {% if selector == 'batd' %}
+    <style>
+        #batteryDashSettings .container input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+    </style>
+    {% elif selector == 'noti' %}
+    <style>
+        #notifSettings .container input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+        #notifSettings .sub-container input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+    </style>
+    {% endif %}
+{% endblock %}
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
         <div class="cardHeader methodPlusBlue">
@@ -35,7 +42,9 @@
                 {% include '../components/settings_facilityInfo_form.html' with page=selector %}
                 {% include '../components/settings_dashboards_form.html' with page=selector %}
                 {% include '../components/settings_notif_form.html' with page=selector %}
-                {% include '../components/settings_facilitySettings_form.html' with page=selector %}
+                {% if supervisor %}
+                    {% include '../components/settings_facilitySettings_form.html' with page=selector %}
+                {% endif %}
             </div>
         </div>
     </div>

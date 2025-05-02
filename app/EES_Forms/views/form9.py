@@ -42,7 +42,7 @@ def form9(request, facility, fsID, selector):
                     'foreman': todays_log.foreman,
                 }
             goose_neck_data_JSON = ''
-        data = form9_form(initial=initial_data, form_settings=form_variables['freq'])
+            data = form9_form(initial=initial_data, form_settings=form_variables['freq'])
     # -----IF REQUEST.POST------------
         if request.method == "POST":
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------

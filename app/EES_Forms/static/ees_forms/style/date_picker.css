@@ -1,0 +1,49 @@
+/* Container holding all the day buttons */
+.multi-day-picker {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+    gap: 10px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    max-width: 500px;
+    margin: auto;
+  }
+  
+  /* Each day cell (label with checkbox inside) */
+  .day-picker-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .day-picker-item:hover {
+    background: #f1f1f1;
+    border-color: #007bff;
+  }
+  
+  /* Hide the default checkbox */
+  .day-picker-item input[type="checkbox"] {
+    display: none;
+  }
+  
+  /* Style the "selected" state */
+  .day-picker-item.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  /* Label text (day number) */
+  .day-picker-item span {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  

@@ -23,9 +23,7 @@ def facilityList(request, facility):
         return redirect('IncompleteForms', facility)
     if client:
         return redirect('c_dashboard', facility)
-    userProfData = request.user.user_profile
-    facList = facility_model.objects.filter(company__company_name=userProfData.company.company_name).order_by('facility_name')
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    facList = getCompanyFacilities(request.user.username)
     formSettingsModelOG = form_settings_model.objects.all()
     packetData = the_packets_model.objects.all()
 
@@ -186,8 +184,7 @@ def facilityList(request, facility):
             packEntry.save()
             return redirect(facilityList, facility)
     return render(request, 'supervisor/sup_facilityList.html', {
-        'notifs': notifs, 
-        'sortedFacilityData': sortedFacilityData, 
+        'notifs': notifs,
         'facility': facility, 
         'unlock': unlock, 
         'client': client, 
@@ -197,6 +194,18 @@ def facilityList(request, facility):
         'packetForm': the_packets_form,
         'formSettingsModel': formSettingsModelOG,
     })
+
+@lock
+def get_facility_form_data(request):
+    facList = []
+    facilities_qs = getCompanyFacilities(request.user.username)
+    for facility in facilities_qs:
+        facList.append({
+            "facility_name": facility.facility_name,
+            "facility_id": facility.id,
+        })
+
+    return JsonResponse(facList, safe=False)
 
 @lock    
 def facilityForm(request, facility, packet):
@@ -360,6 +369,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
         return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
     selectedSettings = form_settings_model.objects.get(id=fsID)
     formData = Forms.objects.get(id=selectedSettings.formChoice.id)
+    #NEEDS A FAIL MESSAGE
     #fsID = False
     print(formData.id)
     if packetID[:5] != 'facID':
@@ -433,7 +443,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
         'supervisor': supervisor, 
         'formLabel': formLabel,
         'formData': formData,
-        'formID': int(formData.id),
+        'formID': str(formData.id),
         'formSettings': formSettings,
         'packetSettings': packetSettings,
         'packetID': packetID

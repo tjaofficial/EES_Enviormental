@@ -1,27 +1,30 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%} {% load static %}
-<script src="{% static 'ees_forms/script/atrament.min.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/personnel_signature.js' %}"></script>
-<link href="{% static 'ees_forms/style/personnel_signature.css' %}" rel="stylesheet">
-<section>
-    <div class="signature_container">
-        <div class="signature_underlay">
+{% load static %}
+{% block extra_head %}
+    <script src="{% static 'ees_forms/script/atrament.min.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/personnel_signature.js' %}"></script>
+    <link href="{% static 'ees_forms/style/personnel_signature.css' %}" rel="stylesheet">
+{%endblock%}
+{% block list%} 
+    <section>
+        <div class="signature_container">
+            <div class="signature_underlay">
 
-        </div>
-        <canvas id="signature_canvas">
+            </div>
+            <canvas id="signature_canvas">
 
-        </canvas>
-    </div>
-    <form method='POST' id="form_container">
-        {% csrf_token %}
-        <div class="supNameCont">
-            Print Supervisor Name: {{ data.supervisor }}
+            </canvas>
         </div>
-        {{ data.sign_date }}
-        {{ data.canvas }}
-        <div class='submitCont'>
-            {% include "shared/components/submitButton.html" with label="form" %}
-        </div>
-    </form>
-</section>
+        <form method='POST' id="form_container">
+            {% csrf_token %}
+            <div class="supNameCont">
+                Print Supervisor Name: {{ data.supervisor }}
+            </div>
+            {{ data.sign_date }}
+            {{ data.canvas }}
+            <div class='submitCont'>
+                {% include "shared/components/submitButton.html" with label="form" %}
+            </div>
+        </form>
+    </section>
 {%endblock%}

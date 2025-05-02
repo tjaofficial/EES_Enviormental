@@ -12,8 +12,29 @@
     margin-left: 41px;
   }
   
+  .sub-container{
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: 6px 13px 7px 13px;
+  }
+
   /* Hide the browser's default checkbox */
   .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .sub-container input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -50,6 +71,9 @@
   .container input:checked ~ .checkmark:after {
     display: block;
   }
+  .sub-container input:checked ~ .checkmark:after {
+    display: block;
+  }
   
   /* Style the checkmark/indicator */
   .container .checkmark:after {
@@ -63,7 +87,27 @@
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+  .sub-container .checkmark:after {
+    left: 4px;
+    top: 1px;
+    width: 3px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 
 form{
     width: 100%;
+}
+
+.subContHolder {
+  display: flex;
+  margin-left: 40px;
+}
+
+.notifOptionCont {
+  margin-bottom: 15px;
 }

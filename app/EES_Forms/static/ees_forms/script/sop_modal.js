@@ -20,11 +20,11 @@ spanAdd.onclick = function() {
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modalAdd) {
-    modalAdd.style.display = "none";
-  }
-}
+// window.onclick = function(event) {
+//   if (event.target == modalAdd) {
+//     modalAdd.style.display = "none";
+//   }
+// }
 
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('addModal');

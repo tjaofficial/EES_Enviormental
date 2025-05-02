@@ -1,94 +1,98 @@
-{% extends "observer/components/obs_layout.html" %}{% block list%}{% load static %}
-<link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-<div class="mainCont mainContCenter" style="width:34rem;">
-    <div class="card">
-        <div class='cardHeader methodPlusBlue'>
-            {% if access_page == "edit" %}
-                {% include "shared/components/backArrow.html" with destination="dashboard" %}
-            {% endif %}
-            Battery Information
+{% extends "observer/components/obs_layout.html" %}
+{% load static %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/batProfile.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+{% endblock %}
+{% block list%}
+    <div class="mainCont mainContCenter" style="width:34rem;">
+        <div class="card">
+            <div class='cardHeader methodPlusBlue'>
+                {% if access_page == "edit" %}
+                    {% include "shared/components/backArrow.html" with destination="dashboard" %}
+                {% endif %}
+                Battery Information
+            </div>
+            <form class="contentCont" method="POST" action="">
+                {% csrf_token %}
+                {{ form.facility }}
+                <div class="form-group">
+                    {{ form.foreman }}
+                    <label for="foreman">Foreman Name</label>
+                    {{ form.foreman.errors }}
+                </div>
+                <div class="form-group">
+                    {{ form.crew }}
+                    {{ form.crew.errors }}
+                </div>
+                {% comment %} Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br> {% endcomment %}
+                <!-- Inoperable Ovens Input -->
+                <div class="oven-container">
+                    <h3>Inoperable Ovens</h3>
+                    <input type="number" id="oven-input" placeholder="Enter oven number..." />
+                    <div id="oven-tags"></div>
+                    {{ form.inop_numbs }} 
+                    <button type="button" id="no-ovens-btn">No Inoperable Ovens</button>
+                </div>
+                <!-- Submit Button -->
+                <button class="submit-btn methodPlusBlue">Submit</button>
+                <br><br>
+                {% if access_page == 'login' or access_page == 'edit' %}
+                <p>
+                    Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
+                </p>
+                {% endif %}
+            </form>
         </div>
-        <form class="contentCont" method="POST" action="">
-            {% csrf_token %}
-            {{ form.facility }}
-            <div class="form-group">
-                {{ form.foreman }}
-                <label for="foreman">Foreman Name</label>
-                {{ form.foreman.errors }}
-            </div>
-            <div class="form-group">
-                {{ form.crew }}
-                {{ form.crew.errors }}
-            </div>
-            {% comment %} Inoperable Oven Number(s): <br>{{ form.inop_numbs }}<br> {% endcomment %}
-            <!-- Inoperable Ovens Input -->
-            <div class="oven-container">
-                <h3>Inoperable Ovens</h3>
-                <input type="number" id="oven-input" placeholder="Enter oven number..." />
-                <div id="oven-tags"></div>
-                {{ form.inop_numbs }} 
-                <button type="button" id="no-ovens-btn">No Inoperable Ovens</button>
-            </div>
-            <!-- Submit Button -->
-            <button class="submit-btn methodPlusBlue">Submit</button>
-            <br><br>
-            {% if access_page == 'login' or access_page == 'edit' %}
-            <p>
-                Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
-            </p>
-            {% endif %}
-        </form>
     </div>
-</div>
-<script>
-    let ovenNumbers = [];
+    <script>
+        let ovenNumbers = [];
 
-    function updateTags() {
-        document.getElementById("oven-tags").innerHTML = ovenNumbers.map(num => 
-            `<span class="tag methodPlusBlue">${num} <button onclick="removeOven('${num}')">&times;</button></span>`
-        ).join("");
-        document.getElementById("oven-hidden-input").value = ovenNumbers.join(",");
-    }
+        function updateTags() {
+            document.getElementById("oven-tags").innerHTML = ovenNumbers.map(num => 
+                `<span class="tag methodPlusBlue">${num} <button onclick="removeOven('${num}')">&times;</button></span>`
+            ).join("");
+            document.getElementById("oven-hidden-input").value = ovenNumbers.join(",");
+        }
 
-    document.getElementById("oven-input").addEventListener("keydown", function(event) {
-        if (event.key === "Enter" || event.key === " " || event.key === "Tab") {
-            event.preventDefault();
-            let value = this.value.trim();
+        document.getElementById("oven-input").addEventListener("keydown", function(event) {
+            if (event.key === "Enter" || event.key === " " || event.key === "Tab") {
+                event.preventDefault();
+                let value = this.value.trim();
 
-            if (value && !ovenNumbers.includes(value)) {
-                ovenNumbers.push(value);
-                updateTags();
-                this.value = "";
-                document.getElementById("no-ovens-btn").disabled = true;
+                if (value && !ovenNumbers.includes(value)) {
+                    ovenNumbers.push(value);
+                    updateTags();
+                    this.value = "";
+                    document.getElementById("no-ovens-btn").disabled = true;
+                }
+            }
+        });
+
+        function removeOven(value) {
+            ovenNumbers = ovenNumbers.filter(num => num !== value);
+            updateTags();
+
+            if (ovenNumbers.length === 0) {
+                document.getElementById("no-ovens-btn").disabled = false;
             }
         }
-    });
 
-    function removeOven(value) {
-        ovenNumbers = ovenNumbers.filter(num => num !== value);
-        updateTags();
-
-        if (ovenNumbers.length === 0) {
-            document.getElementById("no-ovens-btn").disabled = false;
-        }
-    }
-
-    document.getElementById("no-ovens-btn").addEventListener("click", function() {
-        ovenNumbers = ["None"];
-        updateTags();
-        this.disabled = true;
-        document.getElementById("oven-input").disabled = true;
-    });
-
-    // Preload Data When Editing a Form
-    window.onload = function() {
-        let existingOvens = document.getElementById("oven-hidden-input").value;
-        if (existingOvens) {
-            ovenNumbers = existingOvens.split(",").map(item => item.trim());
+        document.getElementById("no-ovens-btn").addEventListener("click", function() {
+            ovenNumbers = ["None"];
             updateTags();
-        }
-    };
-</script>
+            this.disabled = true;
+            document.getElementById("oven-input").disabled = true;
+        });
+
+        // Preload Data When Editing a Form
+        window.onload = function() {
+            let existingOvens = document.getElementById("oven-hidden-input").value;
+            if (existingOvens) {
+                ovenNumbers = existingOvens.split(",").map(item => item.trim());
+                updateTags();
+            }
+        };
+    </script>
 {% endblock %}

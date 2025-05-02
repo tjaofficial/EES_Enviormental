@@ -26,6 +26,7 @@ function show_formsList2(elem) {
 }
 
 function scrollToFacility(facilityID) {
+    console.log(facilityID)
     const target = document.getElementById(`facility${facilityID}`);
     if (target) {
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });

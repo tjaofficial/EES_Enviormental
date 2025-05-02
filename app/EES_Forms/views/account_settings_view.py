@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect # type: ignore
+from django.shortcuts import render, redirect, get_object_or_404 # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.db.models import Q # type: ignore
 from ..utils import parsePhone, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultNotifications
@@ -515,9 +515,7 @@ def sup_facility_settings(request, facility, facilityID, selector):
         }
         facilityInfo = bat_info_form(initial=initial_data)
     elif selector in ['batd', 'noti', 'main']:
-        facilityInfo = facInfoMain.settings
-
-
+        facilityInfo = request.user.user_profile.settings['facilities'][str(facilityID)]
 
     if supervisor:
         facility = 'supervisor'
@@ -535,20 +533,19 @@ def sup_facility_settings(request, facility, facilityID, selector):
     if request.method == "POST":
         answer = request.POST
         print(answer)
-        if 'facilitySelect' in answer.keys():
+        if 'facilitySelect' in answer:
             if answer['facilitySelect'] != '':
                 return redirect('sup_dashboard', answer['facilitySelect'])
         else:
-            if 'facilityInfoSave' in answer.keys():
+            if 'facilityInfoSave' in answer:
                 form = bat_info_form(answer, instance=facInfoMain)
                 if form.is_valid():
                     form.save()
-                    #print('saved it')
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'batteryDashSave' in answer.keys():
+            elif 'batteryDashSave' in answer:
                 if not unlock:
-                    accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = {}
-                    batDashSettings = accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash']
+                    accountData.settings['facilities'][str(facInfoMain.id)]['settings'] = {}
+                    batDashSettings = accountData.settings['facilities'][str(facInfoMain.id)]['settings']
                     progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
                     if 'progressBar' in answer.keys():
                         if answer['progressBar'] == 'true':
@@ -613,31 +610,43 @@ def sup_facility_settings(request, facility, facilityID, selector):
                 A = accountData
                 A.save()
                 return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'notifSettingsForm' in answer.keys():
-                accountData.settings['notifications'] = {}
-                notificatoinSettingsData = accountData.settings['notifications']
+            elif 'notifSettingsForm' in answer:
+                accountData.settings['facilities'][str(facilityID)]['notifications'] = {}
+                notificatoinSettingsData = accountData.settings['facilities'][str(facilityID)]['notifications']
                 notifOptions = ['compliance', 'deviations', 'submitted', '10_day_pt', '5_day_pt']
                 for notifOp in notifOptions:
-                    notificatoinSettingsData[notifOp] = False
-                    if notifOp in answer.keys():
-                        if answer[notifOp] == 'true':
-                            notificatoinSettingsData[notifOp] = True
-                            
+                    methodPlusOpt = True if f"{notifOp}-methodplus" in answer.keys() else False
+                    emailOpt = True if f"{notifOp}-email" in answer.keys() else False
+                    smsOpt = True if f"{notifOp}-sms" in answer.keys() else False
+                    notificatoinSettingsData[notifOp] = {
+                        "methodplus": methodPlusOpt,
+                        "email": emailOpt, 
+                        "sms": smsOpt
+                    }
                 A = accountData
                 A.save()
                 return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'defaultBatteryDash' in answer.keys():
+            elif 'defaultBatteryDash' in answer:
                 if answer['defaultBatteryDash'] == 'true':
                     A  = accountData
-                    A.settings['dashBoard'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.username)['dashboard']))
+                    A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.username)['facilities']))
                     A.save()
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'defaultNotif' in answer.keys():
+            elif 'defaultNotif' in answer:
                 if answer['defaultNotif'] == 'true':
                     A  = accountData
-                    A.settings['notifications'] = json.loads(json.dumps(defaultNotifications))
+                    A.settings['facilities'][str(facilityID)]['notifications'] = json.loads(json.dumps(defaultNotifications))
                     A.save()
                     return redirect('selectedFacilitySettings', facility, facilityID, 'main')
+            elif 'cancelAccount' in answer:
+                print("hello")
+                clientAccountProf = get_object_or_404(user_profile_model, id=int(answer['registerID']))
+                clietnAccount = clientAccountProf.user
+                print(clietnAccount)
+                clientAccountProf.delete()
+                clietnAccount.delete()
+
+
             
     return render(request, 'supervisor/settings/selected_facility_settings.html',{
         'notifs': notifs,
@@ -653,7 +662,6 @@ def sup_facility_settings(request, facility, facilityID, selector):
         'selector': selector,
         'accountData': accountData,
         'listOfEmployees': listOfEmployees,
-        'accountData': accountData,
         'active_registrations': active_registrations,
         'userProfileQuery': userProfileQuery,
         'dashDict': json.loads(json.dumps(dashDictOptions))

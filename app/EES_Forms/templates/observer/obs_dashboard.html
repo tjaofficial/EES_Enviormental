@@ -1,187 +1,227 @@
 {% extends "observer/components/obs_layout.html" %}
-{% load dashboard_tags %}{% block list%}
-{% load static %}
-<script defer src="{% static 'ees_forms/script/dashboard.js' %}"></script>
-<link href="{% static 'ees_forms/style/obs_dashboard.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
-<div class="mainCont forms">
-    <div style="display: flex;">
-        <div class="card2">
-            <div class="card2_header methodPlusBlue" >
-                <h2 class="card2_title">
-                    Closest Oven Due
-                </h2>
-            </div>
-            <div class="card2_Form">
-                {% if od_recent|length == 0 %}
-                    NONE
-                {% else %}
-                    {% for x in od_recent %}
-                        {% if forloop.counter < 5 %}
-                            Oven #{{ x.oven_number }} - {{ x.deadline }}<br>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                <br>
-                <a href="{% url 'pt_admin1' facility%}">
-                    <h4>View All</h4>
-                </a>
-            </div>
-        </div>
-        <div class="card2">
-            <div class="card2_header methodPlusBlue" >
-                <h2 class="card2_title">
-                    Battery Profile {{ todays_log.date }}
-                </h2>
-            </div>
-            {% if profile_entered %}
-            <div class="card3_Form">
-                Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
-                Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
-                Inoperable Oven(s):<br>
-                {{ inopNumbsParse }}<br>
-                <br>
-                
-                <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
-                    <h4>Edit</h4>
-                </a>
-            </div>
-            {% else %}
-            <div class="card3_Form">
-                None
-                <br>
-                
-                <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
-                    <h4>Add</h4>
-                </a>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    <div style="display: flex;">
-        <div class="card2">
-            <div class="card2_header methodPlusBlue" >
-                <h2 class="card2_title">
-                    Todays Weather
-                </h2>
-            </div>
-            <div class="card2_Form">
-                <table class="c_client_card_background c_font_color">
-                    {% if weather.city %}
-                    <tr>
-                        <td id="table_left">
-                            City:
-                        </td>
-                        <td id="table_right">
-                            {{ weather.city }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="table_left">
-                            Temp:
-                        </td>
-                        <td id="table_right">
-                            {{ weather.temperature|floatformat:"0" }}° F
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="table_left">
-                            Description:
-                        </td>
-                        <td id="table_right">
-                            {{ weather.description }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="table_left">
-                            Sunrise: 
-                        </td>
-                        <td id="table_right">
-                            {{ weather.sunrise }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td id="table_left">
-                            Sunset: 
-                        </td>
-                        <td id="table_right">
-                            {{ weather.sunset }}
-                        </td>
-                    </tr>
+{% load static %}{% load dashboard_tags %}
+{% block extra_head %}
+    <script defer src="{% static 'ees_forms/script/dashboard.js' %}"></script>
+    <link href="{% static 'ees_forms/style/obs_dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+{% endblock %}
+{% block list%}
+    <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+    <div class="mainCont forms">
+        <div style="display: flex;">
+            <div class="card2">
+                <div class="card2_header methodPlusBlue" >
+                    <h2 class="card2_title">
+                        Closest Oven Due
+                    </h2>
+                </div>
+                <div class="card2_Form">
+                    {% if od_recent|length == 0 %}
+                        NONE
                     {% else %}
-                    <p class="weather_battery_font">
-                        <span>
-                            Invalid City:
-                        </span>
-                        <br><br>
-                        {{weather.error}}
-                    </p>
+                        {% for x in od_recent %}
+                            {% if forloop.counter < 5 %}
+                                Oven #{{ x.oven_number }} - {{ x.deadline }}<br>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
-                </table>
+                    <br>
+                    <a href="{% url 'pt_admin1' facility%}">
+                        <h4>View All</h4>
+                    </a>
+                </div>
             </div>
-        </div>
-        <div class="card2">
-            <div class="card2_header methodPlusBlue" >
-                <h2 class="card2_title">
-                    Supervisor Sign Off
-                </h2>
-            </div>
-            <div class="card2_Form">
-                {% if not sigExisting %}
-                <a href="{% url 'signature' facility %}">
-                    <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
-                        <p style="font-size: 28px; margin-top: -8px;">
-                            Tap to Sign
-                        </p>
-                    </div>
-                </a>
+            <div class="card2">
+                <div class="card2_header methodPlusBlue" >
+                    <h2 class="card2_title">
+                        Battery Profile {{ todays_log.date }}
+                    </h2>
+                </div>
+                {% if profile_entered %}
+                <div class="card3_Form">
+                    Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
+                    Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
+                    Inoperable Oven(s):<br>
+                    {{ inopNumbsParse }}<br>
+                    <br>
+                    
+                    <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
+                        <h4>Edit</h4>
+                    </a>
+                </div>
                 {% else %}
-                <a>
-                    <div style="height: 119px; margin: auto; padding: 28px 0px; justify-content: center; align-items: center;">
-                        <p style="font-size: 28px; margin-top: -8px;">
-                            Complete
-                        </p><br>
-                        <p>{{sigName}}</p>
-                    </div>
-                </a>
+                <div class="card3_Form">
+                    None
+                    <br>
+                    
+                    <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
+                        <h4>Add</h4>
+                    </a>
+                </div>
                 {% endif %}
             </div>
         </div>
-    </div>
-</div>
-<section class="mainCont forms">
-    <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
-        <span style="float: left; position: relative; left: 22px; top: 16px;">
-            <select id="packetSelect" name="formsDisplayed" onchange='packetChange(this)' style="position: absolute; margin-right: 25rem;" data-allpackets="{{listOfAllPacketIDs}}">
-                <option value="0">Facility Forms</option>
-                {% for pack in facPackets%}
-                    <option value="{{pack.id}}">{{pack.name}}</option>
-                {% endfor %}
-            </select>
-        </span>
-        <div class="cardHeader methodPlusBlue formList-headers">
-            <h2 class="card_title">
-                Incomplete Forms
-            </h2>
-            {% comment %} <select name="cardOrder" id="cardDropdown" onchange='sort()' style="position: absolute; margin-right: -26rem;">
-                <option value="all">All Forms</option>
-                <option value="daily">Daily Forms</option>
-                <option value="weekly">Weekly Forms</option>
-                <option value="monthly">Monthly Forms</option>
-                <option value="quarterly">Quarterly Forms</option>
-                <option value="sAnnual">Semi-Annual Forms</option>
-                <option value="annual">Annual Forms</option>
-            </select> {% endcomment %}
-        </div> 
-        {% for packet in packetQuery %}
-            <div id="i{{packet.id}}" style="display: none;">
-                {% include 'observer/components/insert_packet_forms_card.html' with packet=packet complete='false' %}
+        <div style="display: flex;">
+            <div class="card2">
+                <div class="card2_header methodPlusBlue" >
+                    <h2 class="card2_title">
+                        Todays Weather
+                    </h2>
+                </div>
+                <div class="card2_Form">
+                    <table class="c_client_card_background c_font_color">
+                        {% if weather.city %}
+                        <tr>
+                            <td id="table_left">
+                                City:
+                            </td>
+                            <td id="table_right">
+                                {{ weather.city }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="table_left">
+                                Temp:
+                            </td>
+                            <td id="table_right">
+                                {{ weather.temperature|floatformat:"0" }}° F
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="table_left">
+                                Description:
+                            </td>
+                            <td id="table_right">
+                                {{ weather.description }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="table_left">
+                                Sunrise: 
+                            </td>
+                            <td id="table_right">
+                                {{ weather.sunrise }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="table_left">
+                                Sunset: 
+                            </td>
+                            <td id="table_right">
+                                {{ weather.sunset }}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <p class="weather_battery_font">
+                            <span>
+                                Invalid City:
+                            </span>
+                            <br><br>
+                            {{weather.error}}
+                        </p>
+                        {% endif %}
+                    </table>
+                </div>
             </div>
-        {% endfor %}
-        <div id="i0" style="display: block;">
-            {% for item in facFormList1 %}
-                {% if not item.subChoice.submitted %}
+            <div class="card2">
+                <div class="card2_header methodPlusBlue" >
+                    <h2 class="card2_title">
+                        Supervisor Sign Off
+                    </h2>
+                </div>
+                <div class="card2_Form">
+                    {% if not sigExisting %}
+                    <a href="{% url 'signature' facility %}">
+                        <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
+                            <p style="font-size: 28px; margin-top: -8px;">
+                                Tap to Sign
+                            </p>
+                        </div>
+                    </a>
+                    {% else %}
+                    <a>
+                        <div style="height: 119px; margin: auto; padding: 28px 0px; justify-content: center; align-items: center;">
+                            <p style="font-size: 28px; margin-top: -8px;">
+                                Complete
+                            </p><br>
+                            <p>{{sigName}}</p>
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="mainCont forms">
+        <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
+            <span style="float: left; position: relative; left: 22px; top: 16px;">
+                <select id="packetSelect" name="formsDisplayed" onchange='packetChange(this)' style="position: absolute; margin-right: 25rem;" data-allpackets="{{listOfAllPacketIDs}}">
+                    <option value="0">Facility Forms</option>
+                    {% for pack in facPackets%}
+                        <option value="{{pack.id}}">{{pack.name}}</option>
+                    {% endfor %}
+                </select>
+            </span>
+            <div class="cardHeader methodPlusBlue formList-headers">
+                <h2 class="card_title">
+                    Incomplete Forms
+                </h2>
+                {% comment %} <select name="cardOrder" id="cardDropdown" onchange='sort()' style="position: absolute; margin-right: -26rem;">
+                    <option value="all">All Forms</option>
+                    <option value="daily">Daily Forms</option>
+                    <option value="weekly">Weekly Forms</option>
+                    <option value="monthly">Monthly Forms</option>
+                    <option value="quarterly">Quarterly Forms</option>
+                    <option value="sAnnual">Semi-Annual Forms</option>
+                    <option value="annual">Annual Forms</option>
+                </select> {% endcomment %}
+            </div> 
+            {% for packet in packetQuery %}
+                <div id="i{{packet.id}}" style="display: none;">
+                    {% include 'observer/components/insert_packet_forms_card.html' with packet=packet complete='false' %}
+                </div>
+            {% endfor %}
+            <div id="i0" style="display: block;">
+                {% for item in facFormList1 %}
+                    {% if not item.subChoice.submitted %}
+                        <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
+                            <div class="card_Form" style="margin-left: 50px;">
+                                <h3 class="card_Form_letter">
+                                    {{item.id}}
+                                </h3>
+                                <div class="card_Form_title">
+                                    <h3>
+                                        {{ item.formChoice.title }}
+                                    </h3>
+                                    <h4>
+                                        {{ item.formChoice.frequency }}
+                                    </h4>
+                                </div>
+                                <h4 class="card_Form_date">
+                                    {{item.subChoice.dueDate}}
+                                </h4>       
+                            </div>      
+                        </a>
+                    {% endif %}
+                    {% empty %}
+                    <h2 class="card_empty no_forms"> No Forms </h2>
+                {% endfor %}
+            </div> 
+        </div>            
+        <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
+            <div class="cardHeader methodPlusBlue formList-headers">
+                <h2 class="card_title">
+                    Complete Forms
+                </h2>
+            </div>
+            {% for packet in packetQuery %}
+                <div id="c{{packet.id}}" style="display: none;">
+                    {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' complete='true' %}
+                </div>
+            {% endfor %}
+            <div id="c0" style="display: block;">
+                {% for item in facFormList1 %}
+                    {% if item.subChoice.submitted %}
                     <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                         <div class="card_Form" style="margin-left: 50px;">
                             <h3 class="card_Form_letter">
@@ -196,55 +236,15 @@
                                 </h4>
                             </div>
                             <h4 class="card_Form_date">
-                                {{item.subChoice.dueDate}}
+                                {{item.subChoice.dateSubmitted}}
                             </h4>       
                         </div>      
                     </a>
-                {% endif %}
-                {% empty %}
-                <h2 class="card_empty no_forms"> No Forms </h2>
-            {% endfor %}
-        </div> 
-    </div>            
-    <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
-        <div class="cardHeader methodPlusBlue formList-headers">
-            <h2 class="card_title">
-                Complete Forms
-            </h2>
-        </div>
-        {% for packet in packetQuery %}
-            <div id="c{{packet.id}}" style="display: none;">
-                {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' complete='true' %}
+                    {% endif %}
+                    {% empty %}
+                    <h2 class="card_empty no_forms"> No Forms </h2>
+                {% endfor %}
             </div>
-        {% endfor %}
-        <div id="c0" style="display: block;">
-            {% for item in facFormList1 %}
-                {% if item.subChoice.submitted %}
-                <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
-                    <div class="card_Form" style="margin-left: 50px;">
-                        <h3 class="card_Form_letter">
-                            {{item.id}}
-                        </h3>
-                        <div class="card_Form_title">
-                            <h3>
-                                {{ item.formChoice.title }}
-                            </h3>
-                            <h4>
-                                {{ item.formChoice.frequency }}
-                            </h4>
-                        </div>
-                        <h4 class="card_Form_date">
-                            {{item.subChoice.dateSubmitted}}
-                        </h4>       
-                    </div>      
-                </a>
-                {% endif %}
-                {% empty %}
-                <h2 class="card_empty no_forms"> No Forms </h2>
-            {% endfor %}
         </div>
-    </div>
-</section>
-
-
+    </section>
 {% endblock %}
