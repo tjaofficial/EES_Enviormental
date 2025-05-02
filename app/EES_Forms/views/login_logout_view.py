@@ -63,12 +63,12 @@ def login_view(request):
                         return redirect('PasswordChange', SUPER_VAR)
                 elif request.user.groups.filter(name=CLIENT_VAR):
                     facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
-                    if userProf.settings['first_login']:
+                    if userProf.settings['profile']['first_login']:
                         return redirect('c_dashboard', facility)
                     else:
                         return redirect('PasswordChange', facility)
                 elif request.user.groups.filter(name=OBSER_VAR):
-                    if userProf.settings['first_login']:
+                    if userProf.settings['profile']['first_login']:
                         return redirect('facilitySelect', 'observer')
                     else:
                         return redirect('PasswordChange', OBSER_VAR)
