@@ -107,41 +107,43 @@
         </a>
     </div>
 {% else %}
-    {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash' %}
-        <div class="grid-dashboard">
-            <div id="dash-card-progress_bar" class="dash-card card skinny cardPadd progress" data-url="{% url 'card_progress_bar' facility %}">Loading...</div>
-            <div id="dash-card-daily_battery_forms" class="dash-card card longest cardPadd" data-url="{% url 'card_daily_battery_forms' facility %}">Loading...</div>
-            <div id="dash-card-graphs" class="dash-card card halfs cardPadd" data-url="{% url 'card_graphs' facility %}">Loading...</div>
-            <div id="dash-card-corrective_actions" class="dash-card card quarters cardPadd" data-url="{% url 'card_corrective_actions' facility %}">Loading...</div>
-            <div id="dash-card-info" class="dash-card card quarters cardPadd" data-url="{% url 'card_info' facility %}">Loading...</div>
-            <div id="dash-card-90DayPushTravels" class="dash-card card halfs cardPadd" data-url="{% url 'card_90DayPushTravels' facility %}">Loading...</div>
-            <div id="dash-card-contacts" class="dash-card card halfs cardPadd" data-url="{% url 'card_contacts' facility %}">Loading...</div>
-            <div style="grid-column: span 1; width: 10px;"></div>
+    {% with facilitySettings=userProfile.settings.facilities|get_category:options.id %}
+        {% if facilitySettings.dashboard == "Battery" %}
+            <div class="grid-dashboard">
+                <div id="dash-card-progress_bar" class="dash-card card skinny cardPadd progress" data-url="{% url 'card_progress_bar' facility %}">Loading...</div>
+                <div id="dash-card-daily_battery_forms" class="dash-card card longest cardPadd" data-url="{% url 'card_daily_battery_forms' facility %}">Loading...</div>
+                <div id="dash-card-graphs" class="dash-card card halfs cardPadd" data-url="{% url 'card_graphs' facility %}">Loading...</div>
+                <div id="dash-card-corrective_actions" class="dash-card card quarters cardPadd" data-url="{% url 'card_corrective_actions' facility %}">Loading...</div>
+                <div id="dash-card-info" class="dash-card card quarters cardPadd" data-url="{% url 'card_info' facility %}">Loading...</div>
+                <div id="dash-card-90DayPushTravels" class="dash-card card halfs cardPadd" data-url="{% url 'card_90DayPushTravels' facility %}">Loading...</div>
+                <div id="dash-card-contacts" class="dash-card card halfs cardPadd" data-url="{% url 'card_contacts' facility %}">Loading...</div>
+                <div style="grid-column: span 1; width: 10px;"></div>
 
-            {% comment %} {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
-                {% include 'shared/dashboard_cards/dashCard_progress.html' with progressBar=userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
-            {% endif %}
-            {% include 'shared/dashboard_cards/dashCard_batteryDailyForms.html' %}
-            
-            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'graphs' %}
-                {% include 'shared/dashboard_cards/dashCard_graphs.html' %}
-            {% endif %}
-            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'correctiveActions' %}
-                {% include 'shared/dashboard_cards/dashCard_correctiveActions.html' with ca_forms=ca_forms facility=facility %}
-            {% endif %}
-            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'infoWeather' %}
-                {% include 'shared/dashboard_cards/dashCard_info.html' with weather=weather todays_log=todays_log facility=facility %}
-            {% endif %}
-            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'90dayPT' %}
-                {% include 'shared/dashboard_cards/dashCard_90DayPushTravels.html' with od_5=od_5 od_10=od_10 od_30=od_30 %}
-            {% endif %}
-            {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'contacts' %}
-                {% include 'shared/dashboard_cards/dashCard_contacts.html' with profile=profile facility=facility %}
-            {% endif %} {% endcomment %}
-            <div style="grid-column: span 8; min-height: 6px;"></div>
-        </div>
-    {% else %}
-        Heloo
-    {% endif %}
+                {% comment %} {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
+                    {% include 'shared/dashboard_cards/dashCard_progress.html' with progressBar=userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
+                {% endif %}
+                {% include 'shared/dashboard_cards/dashCard_batteryDailyForms.html' %}
+                
+                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'graphs' %}
+                    {% include 'shared/dashboard_cards/dashCard_graphs.html' %}
+                {% endif %}
+                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'correctiveActions' %}
+                    {% include 'shared/dashboard_cards/dashCard_correctiveActions.html' with ca_forms=ca_forms facility=facility %}
+                {% endif %}
+                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'infoWeather' %}
+                    {% include 'shared/dashboard_cards/dashCard_info.html' with weather=weather todays_log=todays_log facility=facility %}
+                {% endif %}
+                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'90dayPT' %}
+                    {% include 'shared/dashboard_cards/dashCard_90DayPushTravels.html' with od_5=od_5 od_10=od_10 od_30=od_30 %}
+                {% endif %}
+                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'contacts' %}
+                    {% include 'shared/dashboard_cards/dashCard_contacts.html' with profile=profile facility=facility %}
+                {% endif %} {% endcomment %}
+                <div style="grid-column: span 8; min-height: 6px;"></div>
+            </div>
+        {% else %}
+            Display other Dashboard
+        {% endif %}
+    {% endwith %}
 {% endif %}
 {% endblock %}

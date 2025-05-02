@@ -54,6 +54,8 @@
                         <a href="
                             {% if items.formSettings.formChoice.form == '24' or items.formSettings.formChoice.form == '25' %}
                                 {% url items.formSettings.formChoice.link facility items.formSettings.id items.date items.weekend_day %}
+                            {% elif items.formSettings.formChoice.form == '20' or items.formSettings.formChoice.form == '6' or items.formSettings.formChoice.form == '21' %}
+                                {% url items.formSettings.formChoice.link facility items.formSettings.id items.week_start %}
                             {% else %}
                                 {% url items.formSettings.formChoice.link facility items.formSettings.id items.date %}
                             {% endif %}
@@ -72,7 +74,7 @@
                             {% else %}
                                 {{items.formSettings.formChoice.title}}
                             {% endif %} - 
-                            {{items.date}}
+                            {% if items.date %}{{items.date}}{% else %}{{items.week_end}}{% endif %}
                         </a>
                     </li>
                 {% endfor %}

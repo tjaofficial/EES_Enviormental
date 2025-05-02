@@ -699,7 +699,7 @@ class form5_form(ModelForm):
         "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
         "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
         "plume_type": forms.Select(
-            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            choices=[("", "---------"),("N/A", "N/A"),("Fugitive", "Fugitive"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
             attrs={"class": "input", "required": True}
         ),
         "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
@@ -1595,7 +1595,7 @@ class form17_form(ModelForm):
         "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
         "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
         "plume_type": forms.Select(
-            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            choices=[("", "---------"),("N/A", "N/A"),("Fugitive", "Fugitive"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
             attrs={"class": "input", "required": True}
         ),
         "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
@@ -1790,7 +1790,7 @@ class form18_form(ModelForm):
         "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
         "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
         "plume_type": forms.Select(
-            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            choices=[("", "---------"),("N/A", "N/A"),("Fugitive", "Fugitive"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
             attrs={"class": "input", "required": True}
         ),
         "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),
@@ -1944,7 +1944,7 @@ class form19_form(ModelForm):
         "direction_from": forms.TextInput(attrs={"oninput": "this.value = this.value.toUpperCase()", "class": "input", "type": "text", "style": "width: 50px; text-align: center;"}),
         "plume_opacity_determined_stop": forms.TextInput(attrs={"class": "input", "type": "text", "style": "width: 250px;"}),
         "plume_type": forms.Select(
-            choices=[("", "---------"),("N/A", "N/A"),("Fugative", "Fugative"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
+            choices=[("", "---------"),("N/A", "N/A"),("Fugitive", "Fugitive"),("Continuous", "Continuous"),("Intermittent", "Intermittent")],
             attrs={"class": "input", "required": True}
         ),
         "op_mode1": forms.TextInput(attrs={"name": "op_mode1", "maxlength": "30", "required": True, "class": "input", "type": "text", "style": "width: 150px;"}),

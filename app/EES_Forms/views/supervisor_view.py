@@ -253,7 +253,7 @@ def card_progress_bar(request, facility):
     options = facility_model.objects.filter(facility_name=facility)
     if options.exists():
         options = options.first()
-    progress_data = request.user.user_profile.settings['dashboard'][str(options.id)]['batteryDash']['progressBar']
+    progress_data = request.user.user_profile.settings['facilities'][str(options.id)]['settings']['progressBar']
     daily_percent = calculateProgessBar(facility, 'Daily')
     weekly_percent = calculateProgessBar(facility, "Weekly")
     monthly_percent = calculateProgessBar(facility, 'Monthly')
@@ -309,9 +309,9 @@ def card_graphs(request, facility):
     if options.exists():
         options = options.first()
 
-    if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
-        baseIterations = userProfile.settings['dashboard'][str(options.id)]
-        graphSettings = baseIterations['batteryDash']['graphs']
+    if userProfile.settings['facilities'][str(options.id)]['dashboard'] == "Battery":
+        baseIterations = userProfile.settings['facilities'][str(options.id)]['settings']
+        graphSettings = baseIterations['graphs']
         setGraphRange = graphSettings['graphFrequencyData']
     
         canvasData = {}

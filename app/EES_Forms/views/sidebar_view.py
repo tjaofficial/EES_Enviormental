@@ -374,6 +374,10 @@ def archive_view(request, facility):
                 if sort4 in finalList:
                     sortList.append(sort4)
             finalList = sortList
+
+    # Needs code for sorting the finalList. Take and create dict or list but create
+    # defining factor to be the date and then sort them.
+    
     if request.method == 'POST':
         answer = request.POST
         if supervisor:
