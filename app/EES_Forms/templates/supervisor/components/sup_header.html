@@ -5,7 +5,7 @@
 {{ notifSettings|json_script:"notifSettings" }}
 <div id="topBar" class="methodPlusBlue">
     <div id="companyBox">
-        <img class="icon" src="{% if company.icon.url %}{{ company.icon.url }}{% endif %}" alt="Company Icon">
+        <img class="icon" src="{% if company.icon %}{{ company.icon.url }}{% endif %}" alt="Company Icon">
         <h2 class="companyName">{{company.company_name}}</h2>
     </div>
     {% if selector or facility == 'register' or client %}
