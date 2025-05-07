@@ -10,7 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet # type: ignore
 from reportlab.lib.units import inch, mm # type: ignore
 from reportlab.pdfgen import canvas # type: ignore
 from ..models import issues_model, user_profile_model,form_settings_model, the_packets_model
-from ..utils import date_change, time_change
+from ..utils.main_utils import date_change, time_change
 import io
 from django.contrib import messages # type: ignore
 import datetime

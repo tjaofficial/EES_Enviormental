@@ -9,18 +9,6 @@ from django.urls import reverse # type: ignore
      
 # client = client_redirect
 
-def isSubActive(func):
-    def wrapper(request, facility, *args, **kwargs):
-        stripeEntry = request.user.user_profile.company.subscription
-        if stripeEntry:
-            status = stripeEntry.status
-        if status == "active":
-            return func(request, facility, *args, **kwargs)
-        else:
-            print("no customer ID")
-            return redirect('subscriptionSelect', facility, 'subscription')
-    return wrapper
-
 def group_required(group_name):
     def decorator(view_func):
         @wraps(view_func)

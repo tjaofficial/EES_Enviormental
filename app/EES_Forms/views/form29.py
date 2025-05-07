@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form29_model, form26_model
 from ..forms import form29_form
-from ..utils import createNotification, get_initial_data, stringToDate, updateSubmissionForm
+from ..utils.main_utils import createNotification, get_initial_data, stringToDate, updateSubmissionForm
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
 import json

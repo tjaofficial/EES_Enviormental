@@ -92,7 +92,7 @@
     width: 100%;
     background-color: #ddd;
     border-radius: 2rem;
-    height: 30%;
+    height: 18px;
     margin-top: .7rem;
 }
 .dataHold{
@@ -193,7 +193,8 @@
     padding: 14px;
     border: #00000024 solid 1px;
     border-radius: 6px;
-    height: calc(100% - 1rem - 11px);
+    /* height: calc(80% - 1rem - 11px); */
+    height: 340px;
 }
 .dataStyle:hover{
     background: gray;

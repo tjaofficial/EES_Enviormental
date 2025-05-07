@@ -5,7 +5,7 @@ from ..models import daily_battery_profile_model, user_profile_model, facility_m
 from ..forms import daily_battery_profile_form
 from django.conf import settings # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import setUnlockClientSupervisor, getCompanyFacilities
+from ..utils.main_utils import setUnlockClientSupervisor, getCompanyFacilities
 import re
 
 lock = login_required(login_url='Login')
@@ -76,7 +76,7 @@ def daily_battery_profile_view(request, facility, access_page, date):
 @lock
 def facility_select_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    profileFacs = getCompanyFacilities(request.user.username)
+    profileFacs = getCompanyFacilities(request.user.user_profile.company.company_name)
     profile = user_profile_model.objects.all()
     loginPage = True
     now = datetime.datetime.now().date()

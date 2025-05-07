@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError # type: ignore
 from django.urls import reverse # type: ignore
 import datetime
+import uuid
 import os
 from django.utils.text import slugify # type: ignore
 
@@ -244,7 +245,7 @@ notification_header_choices = (
     ("event","EVENT"),
     ("schedule","SCHEDULE UPDATED"),
     ("submitted","FORM SUBMITTED"),
-    ("corrective","CORRECTIVE ACTION")
+    ("deviations","CORRECTIVE ACTION")
 )
 weekly_range_choices = (
     ('0','Monday'),
@@ -330,6 +331,18 @@ class company_model(models.Model):
         blank=True, 
         null=True
     )
+    icon = models.ImageField(
+        upload_to='images/icons/',
+        blank=True, 
+        null=True
+    )
+
+    def save(self, *args, **kwargs):
+        if self.icon and not self.icon.name.startswith('images/icons/'):
+            ext = self.icon.name.split('.')[-1]
+            self.icon.name = f"{uuid.uuid4().hex}.{ext}"
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.company_name
 
@@ -592,7 +605,7 @@ class user_profile_model(models.Model):
         upload_to='images/profile_pics'
     )
     phone = models.CharField(
-        max_length=75,
+        max_length=15,
         null=False,
         blank=False,
     )
@@ -5544,8 +5557,10 @@ class notifications_model(models.Model):
     )
     clicked = models.BooleanField(default=False)
     hovered = models.BooleanField(default=False)
-    formData = models.CharField(
-        max_length=150,
+    formData = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
     )
     header = models.CharField(
         max_length=50,

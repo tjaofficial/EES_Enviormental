@@ -2,7 +2,7 @@ from django.shortcuts import render # type: ignore
 import datetime
 from ..models import Forms, user_profile_model
 from django.contrib.auth.decorators import login_required # type: ignore
-from ..utils import setUnlockClientSupervisor
+from ..utils.main_utils import setUnlockClientSupervisor
 
 
 lock = login_required(login_url='Login')

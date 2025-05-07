@@ -4,7 +4,7 @@ import datetime
 from ..models import Forms, user_profile_model, daily_battery_profile_model, formF1_model, formF2_model, formF3_model, formF4_model, formF5_model, formF6_model, formF7_model
 from ..forms import formF1_form, formF2_form, formF3_form, formF4_form, formF5_form, formF6_form, formF7_form
 from dateutil.relativedelta import relativedelta # type: ignore
-from ..utils import updateSubmissionForm
+from ..utils.main_utils import updateSubmissionForm
 
 lock = login_required(login_url='Login')
 

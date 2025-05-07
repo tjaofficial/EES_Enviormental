@@ -17,6 +17,7 @@
         <link href="{% static 'landing/style/landingPage_layout.css' %}" rel="stylesheet">
         <link href="{% static 'landing/style/messages_alert.css' %}" rel="stylesheet">
         <script defer src="{% static 'landing/script/nav_bar.js' %}"></script>
+        {% block extra_head %}{% endblock %}
     </head>
     <body>
         <header class="methodPlusBlue">

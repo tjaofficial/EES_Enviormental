@@ -3,7 +3,7 @@ import braintree # type: ignore
 import os
 from ..models import FAQ_model, braintree_model
 from ..forms import FAQ_form
-from ..utils import braintreeGateway, get_list_of_braintree_status
+from ..utils.main_utils import braintreeGateway, get_list_of_braintree_status
 
 def adminDash(request, selector):
     variables = {

@@ -87,6 +87,19 @@
                                         <label class="sub_label">Certification Date</label>
                                     </span>
                                 </div>
+                                <div id='facilityNameDiv' style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                        <span>
+                                            <select class="input" name="id_facility_choice" required>
+                                                <option value="">-------</option>
+                                                {% for fac in facilityList %}
+                                                    <option value="{{fac.id}}" {% if userInfo.userprofile.facilityChoice.id == fac.id %}selected{% endif %}>{{fac.facility_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </span>
+                                        <label class="sub_label">Facility Select</label>
+                                    </span>
+                                </div>
                                 <div style="display:block;">
                                     <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
                                         <span><input value="{{userProfileInfo.certs}}" type="text" name="certs" class="input" style='width:100%;' maxlength="254" id="certs"></span>

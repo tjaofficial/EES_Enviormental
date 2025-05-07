@@ -6,7 +6,7 @@ import calendar
 from django.core.exceptions import FieldError # type: ignore
 from django.db.models import Q # type: ignore
 from django.apps import apps # type: ignore
-from ..utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor
+from ..utils.main_utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib import messages # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, USE_S3
@@ -150,7 +150,7 @@ def corrective_action_view(request, facility):
     
     profile = user_profile_model.objects.all()
     options = facility_model.objects.all()
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     if request.method == 'POST':
         answer = request.POST
         print(answer)
@@ -203,7 +203,7 @@ def calendar_view(request, facility, year, month):
     calend = Calendar()
     calend.setfirstweekday(6)
     html_cal = calend.formatmonth(year, month_number, year, facility, withyear=True)
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
@@ -232,7 +232,7 @@ def archive_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     archiveForm_query = request.GET.get('archiveFormID')
     archiveFormLabel_query = request.GET.get('archiveFormLabel')
     archiveMonth_query = request.GET.get('archiveMonth')
@@ -408,7 +408,7 @@ def search_forms_view(request, facility, access_page):
     monthList =''
     options = facility_model.objects.all()
     profile = user_profile_model.objects.all()
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     facilityForms = get_facility_forms('facilityName', facility)
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     formSubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
@@ -641,11 +641,11 @@ def issues_view(request, facility, fsID, form_date, access_page):
     todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
     options = facility_model.objects.all()
     issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     facilityForms = get_facility_forms('facilityName', facility)
     existing = False
     complince = False
-    notifSelector = ['corrective', 'submitted']
+    notifSelector = ['deviations', 'submitted']
     if access_page[-1] == 'c':
         compliance = True
         notifSelector.append('compliance')
@@ -717,8 +717,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                 data = issues_form(dataCopy)
             if data.is_valid():
                 data.save()
-                for notifSel in notifSelector:
-                    createNotification(facility, request, fsID, now, notifSel, data.save())
+                createNotification(facility, request, fsID, now, notifSelector, data.save())
                 updateSubmissionForm(fsID, True, todays_log.date_save)
                 return redirect('IncompleteForms', facility)
     elif access_page == 'issue':
@@ -766,8 +765,7 @@ def issues_view(request, facility, fsID, form_date, access_page):
                 data.save()
                 print(data.save().id)
                 if access_page == 'resubmit':
-                    for notifSel in notifSelector:
-                        createNotification(facility, request, fsID, now, notifSel, data.save())
+                    createNotification(facility, request, fsID, now, notifSelector, data.save())
                     updateSubmissionForm(fsID, True, picker.date)
                     return redirect('IncompleteForms', facility)
                 else:
@@ -847,7 +845,7 @@ def event_add_view(request, facility):
     profile = user_profile_model.objects.all()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     form_var = events_form()
     fullName = request.user.first_name + " " + request.user.last_name
 
@@ -907,7 +905,7 @@ def profile_edit_view(request, facility, userID):
         return redirect('c_dashboard')
     elif unlock:
         return redirect('IncompleteForms', facility)
-    
+    facilityList = getCompanyFacilities(request.user.user_profile.company.company_name)
     user_profiles = user_profile_model.objects.all()
     pic = ''
     
@@ -938,6 +936,8 @@ def profile_edit_view(request, facility, userID):
             new_data['date_joined'] = userInfo.date_joined
             new_data['is_active'] = userInfo.is_active
             new_data['groups'] = userInfo.groups.all()[0]
+            if 'id_facility_choice' in request.POST:
+                new_data['facilityChoice'] = facility_model.objects.get(id=request.POST['id_facility_choice'])
             B = UserChangeForm(
                 new_data,
                 instance=userInfo
@@ -962,7 +962,8 @@ def profile_edit_view(request, facility, userID):
         'pic': pic, 
         'userInfo': userInfo,
         'userProfileInfo': userProfileInfo,
-        'parseNumber': parseNumber
+        'parseNumber': parseNumber,
+        'facilityList': facilityList
     })
 
 @lock
@@ -1052,7 +1053,7 @@ def shared_contacts_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
     companyOfUser = user_profile_model.objects.get(user=request.user).company
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     
     companyProfiles = user_profile_model.objects.filter(company=companyOfUser).order_by('user')
     userProfile = companyProfiles.get(user__id=request.user.id)
@@ -1114,7 +1115,7 @@ def delete_selected_sops(request, facility):
 def sop_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     options = facility_model.objects.filter(facility_name=facility)[0]
     sops = sop_model.objects.filter(facilityChoice__facility_name=facility).order_by('name')
     sopForm = sop_form()
@@ -1185,7 +1186,7 @@ def sop_view(request, facility):
 def formsProgress(request, facility, section):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     if unlock:
         return redirect('IncompleteForms', facility)
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)

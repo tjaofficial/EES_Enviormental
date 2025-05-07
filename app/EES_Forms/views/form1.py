@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect, JsonResponse  # type: ignore
 from ..models import form_settings_model, daily_battery_profile_model, form1_model, form1_model
 from ..forms import form1_form
-from ..utils import form1_json_build, parse_form1_oven_dict, get_initial_data
+from ..utils.main_utils import form1_json_build, parse_form1_oven_dict, get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist # type: ignore

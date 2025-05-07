@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404 # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.db.models import Q # type: ignore
-from ..utils import parsePhone, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultNotifications
+from ..utils.main_utils import parsePhone, setDefaultSettings, dashDictOptions, checkIfFacilitySelected, setUnlockClientSupervisor, braintreeGateway, getCompanyFacilities, defaultNotifications
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, facility_model, account_reactivation_model
 from ..forms import CreateUserForm, user_profile_form, company_Update_form, bat_info_form
 from EES_Enviormental.settings import SUPER_VAR
@@ -13,335 +13,6 @@ from ..decor import group_required
 lock = login_required(login_url='Login')
 
 @lock
-@group_required(SUPER_VAR)
-def sup_select_subscription(request, facility, selector):
-    notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    user = request.user
-    gateway = braintreeGateway()
-    
-    variables = {
-        'notifs': notifs,
-        'supervisor': supervisor, 
-        "client": client, 
-        'unlock': unlock,
-        'facility': facility,
-        'selector': selector
-    }
-    plans = braintreePlans.objects.all()
-    print(selector[14:])
-    if selector == 'subscription':
-        cPlan = []
-        for plan in plans:
-            oPlan = {
-                'pid': plan.id,
-                'description': plan.description.split("\n"),
-                'name': plan.name,
-                'price': plan.price,
-                'Customizable_Forms': 'Customizable Forms',
-                'Real_time_Data_Entry': 'Real-time Data Entry',
-                'Multimedia_Integration': 'Multimedia Integration',
-                'Advanced_Reporting': 'Advanced Reporting',
-                'Collaborative_Workflows': 'Collaborative Workflows',
-                'Security_and_Compliance': 'Security and Compliance',
-                'Offline_Accessibility': 'Offline Accessibility',
-                }
-            cPlan.append(oPlan)
-        cPlan.sort(key=lambda d: d['price'])
-        print(cPlan[0]['description'])
-        variables['planList'] = cPlan
-        link = "supervisor/settings/braintree/select_subscription.html"
-    elif len(selector) >= 12 and selector[:12] == "registration":
-        print('fuking madeit')
-        form_data = request.session.get('form_data')
-        print(form_data)
-        change = False
-        if selector[13:] == 'change':
-            change = True
-        for iPlans in plans:
-            if iPlans.id == int(form_data['planId']):
-                selectedPlan = iPlans
-        variables['selectedPlan'] = selectedPlan
-        link = "supervisor/settings/braintree/select_registration_amount.html"
-    elif len(selector) >= 7 and selector[:7] == "payment":
-        subChange = False
-        if selector[8:] == 'subChange':
-            subChange = True
-        form_data = request.session.get('form_data')
-        print(form_data)
-        if 'seats' not in request.POST.keys():
-            seats = int(form_data['seats'])
-            planID = int(form_data['planID'])
-        else:
-            seats = int(request.POST['seats'])
-            planID = int(request.POST['planId'])
-        addRegistrationCost = format(seats*75, '.2f')
-        accountData = user_profile_model.objects.get(user__id=user.id)
-        customerId = accountData.company.braintree.settings['account']['customer_ID']
-        for plan in plans:
-            if plan.id == planID:
-                planDetails = plan
-        totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
-        btQuery = braintree_model.objects.get(user=request.user)
-
-        if subChange:
-            subChange = {
-                'plan_cost': planDetails.price,
-                'addRegistrationCost': format(seats*75, '.2f'),
-                'total_cost': totalCost,
-                'old_total': btQuery.settings['subscription']['price'],
-                'due': format(float(totalCost) - float(btQuery.settings['subscription']['price']), '.2f')
-            }
-
-        if customerId and customerId != 'none':
-            print("check 1")
-            customer = gateway.customer.find(customerId)
-            print(customer)
-            print(customer.payment_methods)
-        else:
-            print("check 2")
-            newCustomer = gateway.customer.create({
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "company": accountData.company.company_name,
-                "email": user.email,
-                "phone": accountData.phone
-            })
-            if newCustomer.is_success:
-                userCompany = company_model.objects.get(id=accountData.company.id)
-                userCompany.braintree.settings['account']['customer_ID'] = newCustomer.customer.id
-                userCompany.braintree.save()
-                userCompany.save()
-                customer = gateway.customer.find(userCompany.braintree.settings['account']['customer_ID'])
-            else:
-                for i in newCustomer.errors.deep_errors:
-                    print(i.code)
-                    if i.code == "81724":
-                        print("Duplicate card exists.")
-        cardsOnFile = customer.credit_cards
-        print(cardsOnFile)
-        dataTemplateUse = request.POST
-        variables['dataTemplateUse'] = dataTemplateUse
-        variables['customer'] = customer
-        variables['cardsOnFile'] = cardsOnFile
-        variables['selectedPlan'] = planID
-        variables['seats'] = seats
-        variables['totalData']  = request.POST
-        variables['planDetails'] = planDetails
-        variables['addRegistrationCost'] = addRegistrationCost
-        variables['totalCost'] = totalCost
-        variables['subChange'] = subChange
-        link = "supervisor/settings/braintree/select_payment.html"
-    elif selector == "receipt":
-        print(request.POST)
-        form_data = request.session.get('form_data')
-        print(form_data)
-        seats = form_data['seats']
-        accountData = user_profile_model.objects.get(user__username=user.username)
-        customerId = accountData.company.braintree.settings['account']['customer_ID']
-        for plan in plans:
-            if plan.id == int(form_data['planId']):
-                planDetails = plan
-        addRegistrationCost = format(int(seats)*75, '.2f')
-        totalCost = format(float(planDetails.price) + float(addRegistrationCost), '.2f')
-
-        variables['totalData']  = form_data
-        variables['planDetails'] = planDetails
-        variables['addRegistrationCost'] = addRegistrationCost
-        variables['totalCost'] = totalCost
-        link = "supervisor/settings/braintree/select_receipt.html"
-    
-    if request.method == "POST":
-        print(request.POST)
-        if "subSelect" in request.POST:
-            if "form_data" in request.session:
-                del request.session['form_data']
-            request.session['form_data'] = request.POST
-            currentPlanStatus = braintree_model.objects.get(user=request.user).settings['subscription']
-            url_addition = "registration"
-            if currentPlanStatus:
-                currentPlanStatus= currentPlanStatus['status']
-                if currentPlanStatus == "active":
-                    url_addition += "-change"
-            return redirect('subscriptionSelect', facility, url_addition)
-        if "confirmOrder" in request.POST:
-            if "form_data" in request.session:
-                del request.session['form_data']
-            request.session['form_data'] = request.POST
-            if request.POST['paymentToken'] == "default":
-                btData = braintree_model.objects.get(user=request.user)
-                paymentToken = btData.settings['payment_methods']['default']['payment_token']
-                request.session['form_data']['paymentToken'] == btData.settings['payment_methods']['default']['payment_token']
-                print(paymentToken)
-            
-
-            if subChange:
-                result = gateway.transaction.sale({
-                    "amount": str(subChange['due']),
-                    "payment_method_token": paymentToken,
-                    "options": {
-                        "submit_for_settlement": True
-                    }
-                })
-                if result.is_success:
-                    print("Prorated difference charged successfully.")
-                else:
-                    print(f"Error charging prorated amount: {result.errors.deep_errors}")
-                    # send error message and reset the page dont allow to go any further
-
-            addOnEdits = {"plan_id": planDetails.planID}
-            if int(seats) == 0:
-                print('check 2')
-                if btQuery.settings['subscription']['registrations']-2 != 0:
-                    addOnEdits["add_ons"] = {
-                        "remove": ["86gr"]
-                    }
-            else:
-                if btQuery.settings['subscription']['registrations']-2 != 0:
-                    print('check 3')
-                    addOnEdits["add_ons"] = {
-                        "update": [{
-                            "existing_id": "86gr",
-                            "quantity": int(seats)
-                        }]
-                    }
-                else:
-                    print('check 4')
-                    addOnEdits["add_ons"] = {
-                        "add": [{
-                            "inherited_from_id": "86gr",
-                            "quantity": int(seats),
-                        }]
-                    }
-            if btQuery.settings['subscription']['status'] == 'canceled':
-                addOnEdits["payment_method_token"] = paymentToken
-                result = gateway.subscription.create(addOnEdits)
-                btSubId = result.subscription.id
-                btBillingDate = result.subscription.next_billing_date
-            elif btQuery.settings['subscription']['status'] == 'active':
-                result = gateway.subscription.update(btQuery.settings['subscription']['subscription_ID'], addOnEdits)
-                btSubId = btQuery.settings['subscription']['subscription_ID']
-                btBillingDate = btQuery.settings['subscription']['next_billing_date']
-            if result.is_success:
-                print("New Subscription created successfully.")
-                #else:
-                    #cancelSub = gateway.subscription.cancel(userComp.braintree.settings.['subscription']['subscription_ID]')
-                btCopy = btQuery
-                btSettings = btCopy.settings
-                btSettings['subscription']['subscription_ID'] = btSubId
-                btSettings['subscription']['plan_id'] = planDetails.planID
-                btSettings['subscription']['plan_name'] = planDetails.name
-                btSettings['subscription']['price'] = totalCost
-                btSettings['subscription']['registrations'] = int(seats) + 2
-                btSettings['subscription']['next_billing_date'] = str(btBillingDate)
-                btSettings['subscription']['status'] = "active"
-                btSettings['account']['status'] = 'active'
-                btCopy.save()
-
-                seatsCalc = btSettings['subscription']['registrations']
-                mainSupervisorProf = user_profile_model.objects.get(user=request.user)
-                userProfileQuery = user_profile_model.objects.filter(~Q(position="client"), company=mainSupervisorProf.company, settings__position__endswith="activate", user__is_active=False)
-                if userProfileQuery.exists():
-                    x = 2
-                    for emp in userProfileQuery:
-                        if x <= seatsCalc:
-                            empUser = emp.user
-                            empUser.is_active = True
-                            empUser.save()
-                        emp.settings['position'] = emp.settings['position'].replace("-activate", "")
-                        emp.save()
-                        x += 1
-                        
-                print('MADE IT TO FUCKING SAVE')
-            else:
-                print(f"Error creating new subscription: {result.errors.deep_errors}")
-                # send error message and reset the page dont allow to go any further
-
-            return redirect('subscriptionSelect', facility, 'receipt')
-        if "confirmRegistration" in request.POST:
-            print(request.POST)
-            seatsPost = request.POST['seats']
-            planIDPost = request.POST['planId']
-
-            if change:
-                print("check 1")
-                braintreeQuery = braintree_model.objects.get(user=request.user)
-                #sub right now            
-                old_sub = braintreeQuery.settings['subscription']
-                # if old_sub['subscription']['status'] != 'canceled':
-                if old_sub:
-                    old_price = float(old_sub['price'])
-                    braintreeSubID = old_sub['subscription_ID']
-                else:
-                    old_price = 0
-                    braintreeSubID = False
-                #new sub
-                new_sub = plans.get(id=planIDPost)
-                seats_price = 75 * int(seatsPost)
-                new_price = new_sub.price + int(seats_price)
-                if new_price <= old_price:
-                    addOnEdits = {"plan_id": new_sub.planID}
-                    if int(seatsPost) == 0:
-                        print('check 2')
-                        if old_sub['registrations']-2 != 0:
-                            addOnEdits["add_ons"] = {
-                                "remove": ["86gr"]
-                            }
-                    else:
-                        if old_sub['registrations']-2 != 0:
-                            print('check 3')
-                            addOnEdits["add_ons"] = {
-                                "update": [{
-                                    "existing_id": "86gr",
-                                    "quantity": int(seatsPost)
-                                }]
-                            }
-                        else:
-                            print('check 4')
-                            addOnEdits["add_ons"] = {
-                                "add": [{
-                                    "inherited_from_id": "86gr",
-                                    "quantity": int(seatsPost),
-                                }]
-                            }
-
-                    result = gateway.subscription.update(braintreeSubID, addOnEdits)
-
-                    if not result.is_success:
-                        print('ERROR CREATING NEW SUBSCRIPTION')
-                        for i in result.errors.deep_errors:
-                            print(i)
-                    else:
-                        print(result)
-                        btQueryCopy = braintreeQuery
-                        btStettings = btQueryCopy.settings
-                        btStettings['subscription']['subscription_ID'] = braintreeSubID
-                        btStettings['subscription']['plan_id'] = new_sub.planID
-                        btStettings['subscription']['plan_name'] = new_sub.name
-                        btStettings['subscription']['price'] = new_price
-                        btStettings['subscription']['registrations'] = int(seatsPost) + 2
-                        btStettings['subscription']['next_billing_date'] = str(datetime.datetime.today().date())
-                        btQueryCopy.save()
-                        print('MADE IT TO FUCKING SAVE')
-                        return redirect('Account', facility)
-
-                    # save/replace old sub in braintree with new sub, hopefully you can keep the same cycle date
-                    # update local braintree Settings, use the JSON to set whether or not the 
-                else:
-                    # go to payment page to pay the differece
-                    if "form_data" in request.session:
-                        del request.session['form_data']
-                    request.session['form_data'] = {"planID": planIDPost, "seats": seatsPost}
-                    return redirect('subscriptionSelect', facility, 'payment-subChange')
-            else:
-                if "form_data" in request.session:
-                    del request.session['form_data']
-                request.session['form_data'] = {"planID": planIDPost, "seats": seatsPost}
-                return redirect('subscriptionSelect', facility, 'payment')
-
-    return render(request, link, variables)
-
-@lock
 def sup_account_view(request, facility):
     notifs = checkIfFacilitySelected(request.user, facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
@@ -350,7 +21,7 @@ def sup_account_view(request, facility):
         facility = 'supervisor'
     elif unlock:
         facility = 'observer'
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     userProfileQuery = user_profile_model.objects.all()
     accountData = request.user.user_profile
     userCompany = accountData.company
@@ -402,7 +73,6 @@ def sup_account_view(request, facility):
         'facility': facility,
         'accountData': accountData,
         'listOfEmployees': listOfEmployees,
-        'accountData': accountData,
         'stripeData': stripeData,
         'active_registrations': active_registrations,
         'userProfileQuery': userProfileQuery,
@@ -451,6 +121,7 @@ def sup_update_account(request, facility, selector):
             'state': primaryModel.state,
             'zipcode': primaryModel.zipcode,
             'phone': parsePhone(primaryModel.phone),
+            'icon': primaryModel.icon
         }
         primaryForm = company_Update_form(initial=initial_data)
     
@@ -467,18 +138,17 @@ def sup_update_account(request, facility, selector):
             if unlock:
                 user.cert_date = dataFromForm['cert_date']
             user.phone = parsePhone(dataFromForm['phone'])
+            if dataFromForm['two_factor_enabled'] == "no":
+                user.settings['profile']['two_factor_enabled'] = False
+            else:
+                user.settings['profile']['two_factor_enabled'] = True
             user.save()
         elif selector == "company":
-            primaryModel.company_name = dataFromForm['company_name']
-            primaryModel.address = dataFromForm['address']
-            primaryModel.city = dataFromForm['city']
-            primaryModel.state = dataFromForm['state']
-            primaryModel.zipcode = dataFromForm['zipcode']
-            primaryModel.phone = parsePhone(dataFromForm['phone'])
-            
-        primaryModel.save()
+            formFill = company_Update_form(request.POST, request.FILES, instance=primaryModel)
+            if formFill.is_valid():
+                formFill.save()
+                print("saved tthat shit")
         return redirect("Account", facility)
-
     return render(request, 'supervisor/settings/settings_account_update.html', variables)
     
 @lock

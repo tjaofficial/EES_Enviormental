@@ -1,0 +1,32 @@
+{% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'landing/style/verify_2fa.css' %}">
+    <link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
+    <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block body %}
+    <div class='topCont noOverflowCenter'>
+        <div id="signup" class="verify-container">
+            <form method="POST">
+                {% csrf_token %}
+                <h2>2-Step Verification</h2>
+                <p>We've sent a 6-digit code to <strong>{{ phone }}</strong>. Enter it below to continue.</p>
+
+                {% comment %} {% if messages %}
+                    <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %} {% endcomment %}
+
+                <input type="text" name="code" placeholder="Enter verification code" required maxlength="6">
+                <button id="submit" type="submit">Verify</button>
+            </form>
+            <p class="resend">
+                Didn't get it? <span id="resendBtn" onclick="resendCode()" style="text-decoration: underline; cursor: pointer;">Resend</span>
+            </p>
+        </div>
+    </div>
+    <script src="{% static 'landing/script/verify_2fa.js' %}"></script>
+{% endblock %}

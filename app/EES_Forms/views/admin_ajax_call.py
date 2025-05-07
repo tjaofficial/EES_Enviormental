@@ -2,7 +2,7 @@ from django.http import JsonResponse # type: ignore
 import datetime
 import braintree # type: ignore
 import os
-from ..utils import braintreeGateway
+from ..utils.main_utils import braintreeGateway
 from ..models import braintreePlans
 
 # Configure Braintree gateway

@@ -1,28 +1,40 @@
 const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 const facility = JSON.parse(document.getElementById('facility').textContent).replaceAll(" ","_")
-
-let url = `${websocketProtocol}://${window.location.host}/ws/notifications/${facility}/`
+const notifSettings = JSON.parse(document.getElementById('notifSettings').textContent);
+let url = `${websocketProtocol}://${window.location.host}/ws/notifications/`
 
 const notifSocket = new WebSocket(url)
 
 notifSocket.onmessage = function(event) {
     let messageData = JSON.parse(event.data)
-    console.log(messageData)
+    console.log(messageData);
+    let facilityID = messageData['facID'];
+    let notif_type = messageData['notif_type'];
+    const notifCheck = notifSettings[facilityID]['notifications'][notif_type]['methodplus'];
+    
+    if (!notifCheck) return;
+    
     if (messageData.type === 'notification') {
-        showNotificationFunction(messageData.count);
         if (messageData.html) {
-            appendNotificationToDropdown(messageData.html);
+            appendNotificationToDropdown(messageData.html, facilityID);
         }
+        fetch('/ajax/notification-count/')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById("alertNotif");
+                if (badge) {
+                    badge.innerHTML = data.count;
+                    badge.style.display = data.count > 0 ? "block" : "none";
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching updated notif count", err);
+            });
     }
 };
 
-function showNotificationFunction(notificationHTML) {
-    const notificationsContainer = document.getElementById("alertNotif");
-    notificationsContainer.innerHTML = notificationHTML;
-};
-
-function appendNotificationToDropdown(notifHTML) {
-    const dropdown = document.getElementById("notifDropdown");
+function appendNotificationToDropdown(notifHTML, facilityID) {
+    const dropdown = document.getElementById(`facilityID_${facilityID}`);
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = notifHTML.trim();
 
@@ -35,8 +47,7 @@ function appendNotificationToDropdown(notifHTML) {
     if (noNotifElement) {
         noNotifElement.remove();
     }
-
-    dropdown.prepend(newNotif);
+    dropdown.parentNode.insertBefore(newNotif, dropdown.nextSibling);
 }
 
 function setNotificationHover(e) {

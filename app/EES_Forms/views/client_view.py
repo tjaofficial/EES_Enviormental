@@ -1,19 +1,21 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, facility_model
+from ..decor import group_required
 import datetime
 import json
 import calendar
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from ..utils import colorModeSwitch, setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases,updateAllFormSubmissions, ninetyDayPushTravels
+from ..utils.main_utils import userColorMode, colorModeSwitch, setUnlockClientSupervisor, weatherDict, calculateProgessBar, getCompanyFacilities,checkIfFacilitySelected, userGroupRedirect, tryExceptFormDatabases,updateAllFormSubmissions, ninetyDayPushTravels
 
 lock = login_required(login_url='Login')
 
 @lock
+@group_required(CLIENT_VAR)
 def client_dashboard_view(request, facility):
     updateAllFormSubmissions(facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     notifs = checkIfFacilitySelected(request.user, facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
@@ -25,26 +27,26 @@ def client_dashboard_view(request, facility):
     fsID4 = tryExceptFormDatabases(4,formA4, facility)
     fsID5 = tryExceptFormDatabases(5,formA5, facility)
     fsIDs = [fsID1,fsID2,fsID3,fsID4,fsID5]
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    
     now = datetime.datetime.now().date()
+
     last7days = now - datetime.timedelta(days=6)
     options = facility_model.objects.filter(facility_name=facility)
     emypty_dp_today = True
+    colorMode = userColorMode(request.user)[0]  
+    userMode = userColorMode(request.user)[1]
     userProfile = request.user.user_profile
     userCompany = userProfile.company
     if options.exists():
         options = options[0]
 
     today = datetime.date.today()
-    todays_num = today.weekday()
-    
     #---------- Graph Data ---------------------
-    print('litty')
     graphData = ''
     graphDataDump = ''
-    if userProfile.settings['dashboard'][str(options.id)]['batteryDash']:
-        baseIterations = userProfile.settings['dashboard'][str(options.id)]
-        graphSettings = baseIterations['batteryDash']['graphs']
+    if userProfile.settings['facilities'][str(options.id)]['dashboard'] == "Battery":
+        baseIterations = userProfile.settings['facilities'][str(options.id)]['settings']
+        graphSettings = baseIterations['graphs']
         setGraphRange = graphSettings['graphFrequencyData']
     
         canvasData = {}
@@ -70,7 +72,6 @@ def client_dashboard_view(request, facility):
                     dateList.append(datetime.datetime.strptime(setGraphRange['dates']['graphStart'], "%Y-%m-%d").date() + datetime.timedelta(days=x))
             return dateList
         dateList = rangeNumber(setGraphRange['frequency'])
-        print('hello')
         print(dateList)
         for gStuff in graphSettings['dataChoice']:
             if gStuff == 'graph90dayPT':
@@ -133,12 +134,12 @@ def client_dashboard_view(request, facility):
         all_ovens = pushTravelsData['all']
     # ----CONTACTS-----------------
     allContacts = user_profile_model.objects.filter(company=userCompany)
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     # ----USER ON SCHEDULE----------
     todays_obser = 'Schedule Not Updated'
     event_cal = Event.objects.all()
     today = datetime.date.today()
-    if len(event_cal) > 0:
+    if event_cal.exists():
         for x in event_cal:
             if x.date == today:
                 todays_obser = x.observer
@@ -165,6 +166,11 @@ def client_dashboard_view(request, facility):
                 'todays_obser': todays_obser,
                 'profile': allContacts, 
                 'weather': weather, 
+                'od_recent': od_recent,
+                'weekly_percent': weekly_percent, 
+                'monthly_percent': monthly_percent, 
+                'annually_percent': annually_percent, 
+                'daily_percent': daily_percent, 
                 'supervisor': supervisor, 
                 "client": client, 
                 'unlock': unlock,
@@ -174,8 +180,13 @@ def client_dashboard_view(request, facility):
                 'graphData': graphData,
                 'last7days': str(last7days),
                 'today': str(now),
+                'colorMode': colorMode,
+                'userMode': userMode,
                 'options': options,
                 'graphDataDump': graphDataDump,
+                "od_30": od_30, 
+                "od_10": od_10, 
+                "od_5": od_5, 
                 'userProfile': userProfile
             })
     if request.method == 'POST':

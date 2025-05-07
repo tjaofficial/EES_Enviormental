@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect# type: ignore
 from ..models import form_settings_model, form31_model
 from ..forms import form31_form
-from ..utils import get_initial_data, fix_data
+from ..utils.main_utils import get_initial_data, fix_data
 from ..initial_form_variables import template_validate_save, initiate_form_variables, existing_or_new_form
 import json
 

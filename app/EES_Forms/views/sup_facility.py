@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 import json
 from .form_settings_builds import formSettingsFunc
-from ..utils import defaultPacketSettings, setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
+from ..utils.main_utils import defaultPacketSettings, setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
 from django.contrib import messages # type: ignore
@@ -23,7 +23,7 @@ def facilityList(request, facility):
         return redirect('IncompleteForms', facility)
     if client:
         return redirect('c_dashboard', facility)
-    facList = getCompanyFacilities(request.user.username)
+    facList = getCompanyFacilities(request.user.user_profile.company.company_name)
     formSettingsModelOG = form_settings_model.objects.all()
     packetData = the_packets_model.objects.all()
 
@@ -198,7 +198,7 @@ def facilityList(request, facility):
 @lock
 def get_facility_form_data(request):
     facList = []
-    facilities_qs = getCompanyFacilities(request.user.username)
+    facilities_qs = getCompanyFacilities(request.user.user_profile.company.company_name)
     for facility in facilities_qs:
         facList.append({
             "facility_name": facility.facility_name,
@@ -241,7 +241,7 @@ def facilityForm(request, facility, packet):
             Q(header__icontains=q)
         ).distinct()
     
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     p = Paginator(newFormList, 15)
     page = request.GET.get('page')
     pageData = p.get_page(page)
@@ -471,7 +471,7 @@ def Add_Forms(request, facility):
     print("-------------------------")
     print(formList[0].form)
     facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     p = Paginator(formList, 15)
     page = request.GET.get('page')
     pageData = p.get_page(page)

@@ -1,8 +1,13 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}{% load formC_tags %}
-<link href="{% static 'ees_forms/style/supDash.css' %}" rel="stylesheet" />
-<script defer src="{% static 'ees_forms/script/sup_dashboard.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/dashboardCards.js' %}"></script>
+{% extends "supervisor/components/sup_layout.html" %}
+{% load static %}{% block list%}{% load formC_tags %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/supDash.css' %}" rel="stylesheet" />
+    <script defer src="{% static 'ees_forms/script/sup_dashboard.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/dashboardCards.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
+{% endblock %}
 {% if facility == 'supervisor' %}
     <div class='mainAppCont'>
         <a class='appCont grid-item addOns' href="{% url 'Schedule' facility %}"> 
@@ -118,27 +123,6 @@
                 <div id="dash-card-90DayPushTravels" class="dash-card card halfs cardPadd" data-url="{% url 'card_90DayPushTravels' facility %}">Loading...</div>
                 <div id="dash-card-contacts" class="dash-card card halfs cardPadd" data-url="{% url 'card_contacts' facility %}">Loading...</div>
                 <div style="grid-column: span 1; width: 10px;"></div>
-
-                {% comment %} {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
-                    {% include 'shared/dashboard_cards/dashCard_progress.html' with progressBar=userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'progressBar' %}
-                {% endif %}
-                {% include 'shared/dashboard_cards/dashCard_batteryDailyForms.html' %}
-                
-                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'graphs' %}
-                    {% include 'shared/dashboard_cards/dashCard_graphs.html' %}
-                {% endif %}
-                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'correctiveActions' %}
-                    {% include 'shared/dashboard_cards/dashCard_correctiveActions.html' with ca_forms=ca_forms facility=facility %}
-                {% endif %}
-                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'infoWeather' %}
-                    {% include 'shared/dashboard_cards/dashCard_info.html' with weather=weather todays_log=todays_log facility=facility %}
-                {% endif %}
-                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'90dayPT' %}
-                    {% include 'shared/dashboard_cards/dashCard_90DayPushTravels.html' with od_5=od_5 od_10=od_10 od_30=od_30 %}
-                {% endif %}
-                {% if userProfile.settings.dashboard|get_category:options.id|get_category:'batteryDash'|get_category:'contacts' %}
-                    {% include 'shared/dashboard_cards/dashCard_contacts.html' with profile=profile facility=facility %}
-                {% endif %} {% endcomment %}
                 <div style="grid-column: span 8; min-height: 6px;"></div>
             </div>
         {% else %}

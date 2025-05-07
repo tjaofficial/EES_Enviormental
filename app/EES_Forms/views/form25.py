@@ -4,7 +4,7 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form25_model
 from ..forms import form25_form
-from ..utils import fix_data, get_initial_data
+from ..utils.main_utils import fix_data, get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
 

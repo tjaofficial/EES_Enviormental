@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from ..models import user_profile_model, Forms, daily_battery_profile_model, signature_model, facility_model, the_packets_model, form_settings_model
-from ..utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
+from ..utils.main_utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from EES_Enviormental.settings import OBSER_VAR

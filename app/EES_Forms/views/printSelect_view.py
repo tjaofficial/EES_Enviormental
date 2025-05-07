@@ -6,7 +6,7 @@ from ..forms import *
 from django.core.exceptions import FieldError # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
-from ..utils import checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
+from ..utils.main_utils import checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
 import datetime
 
 lock = login_required(login_url='Login')
@@ -28,7 +28,7 @@ def printSelect(request, facility):
         supervisor = True
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     facilityForms = get_facility_forms('facilityName', facility)
     selectList = []
     fsList = []

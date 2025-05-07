@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from ..models import user_profile_model, Forms
 from ..forms import user_profile_form
-from ..utils import setUnlockClientSupervisor, checkIfFacilitySelected
+from ..utils.main_utils import setUnlockClientSupervisor, checkIfFacilitySelected
 import datetime
 import os
 

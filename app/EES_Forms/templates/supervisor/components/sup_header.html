@@ -2,10 +2,11 @@
 <link href="{% static 'ees_forms/style/sup_header.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/notifications.js' %}"></script>
 <script defer src="{% static 'ees_forms/script/headerDropDown.js' %}"></script>
-<div id="topBar">
+{{ notifSettings|json_script:"notifSettings" }}
+<div id="topBar" class="methodPlusBlue">
     <div id="companyBox">
-        <img class="icon" src="{% static './images/Sidocklogo.jpeg' %}">
-        <h2 class="companyName">Sidock Group, Inc.</h2>
+        <img class="icon" src="{{ company.icon.url }}" alt="Company Icon">
+        <h2 class="companyName">{{company.company_name}}</h2>
     </div>
     {% if selector or facility == 'register' or client %}
     {% else %}

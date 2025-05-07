@@ -3,6 +3,8 @@ from django.forms import ModelForm, Textarea # type: ignore
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm # type: ignore
 from django.contrib.auth.models import User # type: ignore
 import datetime
+from PIL import Image # type: ignore
+from io import BytesIO
 from .models import *
 from types import SimpleNamespace
 
@@ -2750,8 +2752,22 @@ class company_Update_form(ModelForm):
             'state': forms.TextInput(attrs={'class':'input', 'placeholder':'State', 'style':'width:3rem;'}),
             'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
             'phone': forms.TextInput(attrs={'class':'input', 'oninput':"processPhone(event)", 'placeholder':'(123)456-7890', 'style':'width: 100%;'}),
-            'customerID': forms.TextInput(attrs={'class':'input', 'style':'width: 250px;'}),
+            'icon': forms.ClearableFileInput(attrs={'class':'input'}),
         }   
+    
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+
+        if image:
+            img = Image.open(image)
+            width, height = img.size
+
+            if width < 64 or height < 64:
+                raise ValidationError("Image is too small. Minimum size is 64x64 pixels.")
+            if width > 512 or height > 512:
+                raise ValidationError("Image is too large. Maximum size is 512x512 pixels.")
+
+        return image
         
 class facility_forms_form(ModelForm):
     class Meta:

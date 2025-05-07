@@ -1,7 +1,9 @@
 {% extends 'landing/landingPage_layout.html' %}{% load static %}
+{% block extra_head %}
+    <link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
+    <link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
+{% endblock %}
 {% block body %}
-<link href="{% static 'landing/style/landing_register.css' %}" rel="stylesheet">
-<link href="{% static 'landing/style/landingPage_login.css' %}" rel="stylesheet">
 <div class='topCont noOverflowCenter'>
     <div id="login" class="regCont" style="width: 479px;margin-top:unset;">
         <form id='signup' name="login" action="" method="POST">

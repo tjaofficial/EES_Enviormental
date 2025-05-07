@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form6_model
 from ..forms import form6_form
-from ..utils import weatherDict, get_initial_data
+from ..utils.main_utils import weatherDict, get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import json
 from datetime import timedelta

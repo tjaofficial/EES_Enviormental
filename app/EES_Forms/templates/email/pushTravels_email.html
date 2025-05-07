@@ -1,0 +1,48 @@
+{% autoescape off %}
+<style>
+    .mainContEmail{
+        background-color: lightblue;
+        padding: 27px;
+        margin: auto;
+        width: 400px;
+        border-radius: 16px;
+    }
+    .cardHeader {
+        font-size: 20px;
+        font-weight: bolder;
+        padding: 1rem;
+        background-color: #253544;
+        color: white;
+        border-radius: 13px 13px 0px 0px;
+        text-align: center;
+        font-family: sans-serif;
+    }
+</style>
+<div style="background-color: #ebebeb; margin: auto; width: 524px; border-radius: 16px;">
+    <div style="font-size: 20px; font-weight: bolder; padding: 1rem; background-color: #253544; color: white; border-radius: 13px 13px 0px 0px; text-align: center; font-family: sans-serif;">
+        NOTICE: 10 Day Push Travel Warning
+    </div>
+    <div style="padding: 27px;font-size: 18px; color:black;">
+        Hi {{ user.user.first_name|title }},<br>
+        We are sending this notification email to inform you that a form was submitted for:<br><br> 
+        
+        {{ issue.facilityChoice.facility_name }}<br><br>
+
+        Form Details:
+        Date: {{ issue.date }} at approximately {{ issue.time }}<br><br>
+
+        Form: {{form.formChoice.header}} - {{form.formChoice.title}}<br>
+        
+        Please login to view notification.<br>
+        <div style="text-align:center;">
+            <br>
+            <a href="http://{{domain}}{% url 'Login' %}" style="text-decoration: none;">
+                {% include "shared/components/submitButton.html" with label="Login" %}<br>
+            </a>
+        </div>
+        <div style="font-size:12px;">
+            If you you would like to stop receiving compliance emails, login and adjust your Notification/E-mail settings.
+        </div>
+    </div>
+</div>
+{% endautoescape %}

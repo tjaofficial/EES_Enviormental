@@ -34,7 +34,13 @@
                     Subscription Settings
                 </div>   
                 <div class="tabInfoCont" style="padding: 20px 0px; height: fit-content;">
-                    {% include "supervisor/settings/settings_subscription.html" %}
+                    {% if accountData.settings.profile.position == "supervisor-m" %}
+                        {% include "supervisor/settings/settings_subscription.html" %}
+                    {% else %}
+                        <p style="width: 81%; margin: auto; text-align: justify;">
+                            Subscription settings can only be modified by a <em>Primary Supervisor</em>. 
+                            Please contact one to make changes or request a permissions update.</p>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}

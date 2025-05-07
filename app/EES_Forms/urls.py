@@ -28,6 +28,8 @@ urlpatterns = [
     path("reset/<str:uidb64>/<str:token>/", views.reset_password_activate_view, name="reset"),
     path("request-password", views.request_password_view, name='requestPassword'),
     path("change-password", views.main_change_password, name='mainPasswordChange'),
+    path("auth/verify_2fa", views.verify_2fa, name='verify_2fa'),
+    path("resend_2fa_code/", views.resend_2fa_code, name="resend_2fa_code"),
     
     ##---SUPERVISOR PAGES-----
     path("<str:facility>/Register/<str:access_page>", views.register_view, name="Register"),
@@ -42,8 +44,6 @@ urlpatterns = [
     
     ##--ACCOUNT SETTINGS-----
     path("<str:facility>/account", views.sup_account_view, name="Account"),
-    path("billing/payment-method/<str:planId>/<str:seats>", views.landing_addCard_view, name="cardAdd"),
-    path("<str:facility>/account/subscription/<str:selector>", views.sup_select_subscription, name="subscriptionSelect"),
     path("<str:facility>/account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
     path("<str:facility>/account/facility-settings/<int:facilityID>/<str:selector>", views.sup_facility_settings, name="selectedFacilitySettings"),
     
@@ -52,8 +52,6 @@ urlpatterns = [
     path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
     path("billing/portal/", views.stripe_customer_portal, name="stripe_customer_portal"),
     path("billing/success/", views.stripe_success, name="stripe_success"),
-
-    #path("billing/<str:step>", views.billing_view, name="billing"),
     
     path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
     path('<str:facility>/about', views.about_view, name='about'),
@@ -82,6 +80,7 @@ urlpatterns = [
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
     path("<str:facility>/progress/<str:section>", views.formsProgress, name="Progress"),
+    path("ajax/notification-count/", views.get_unread_notification_count, name="notification_count"),
 
     ##------Dashboard Cards
     path('ajax/card/progress/<str:facility>/', views.card_progress_bar, name='card_progress_bar'),
@@ -143,7 +142,6 @@ urlpatterns = [
     path('<str:facility>/printIndex/<str:type>/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
     path('<str:facility>/PrintSelect', views.printSelect, name='PrintSelect'),
     path('<str:facility>/calSelect/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
-    path('billing-history/invoice/<str:invoiceID>', views.invoices, name='invoicePDF'),
 
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
 

@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib.auth import authenticate, login # type: ignore
 import datetime
+import time
 from ..models import user_profile_model, daily_battery_profile_model, facility_model, company_model, User
 from ..forms import CreateUserForm, user_profile_form, company_form
-from ..utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
+from ..utils.main_utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
 from django.contrib.auth import logout # type: ignore
 from django.contrib.auth.forms import PasswordChangeForm # type: ignore
 from django.contrib.auth import update_session_auth_hash, get_user_model # type: ignore
@@ -20,6 +21,9 @@ from ..tokens import create_token, check_token, delete_token
 from django.utils.html import strip_tags # type: ignore
 from django.core.exceptions import ValidationError # type: ignore
 from ..decor import group_required
+from django.http import JsonResponse # type: ignore
+from ..utils.twilio_verify import send_verification_code, check_verification_code
+from twilio.base.exceptions import TwilioRestException # type: ignore
 
 profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
@@ -44,40 +48,49 @@ def login_view(request):
         user = authenticate(request, username=username.lower(), password=password)
         
         if user is not None:
-            login(request, user)
-            print('check 1')
-            userProf = user_profile_model.objects.filter(user__id=request.user.id)
-            if request.user.is_superuser:
-                return redirect('adminDash', "overview")
-            elif userProf.exists():
-                userProf = userProf[0]
-                if not userProf.company and userProf.is_active:
-                    return redirect('companyReg')
-                if request.user.groups.filter(name=SUPER_VAR):
-                    if userProf.settings['profile']['first_login']:
-                        if len(facility_model.objects.all()) > 0:
-                            return redirect('sup_dashboard', SUPER_VAR)
-                        else:
-                            return redirect('Register', SUPER_VAR, 'facility')
-                    else:
-                        return redirect('PasswordChange', SUPER_VAR)
-                elif request.user.groups.filter(name=CLIENT_VAR):
-                    facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
-                    if userProf.settings['profile']['first_login']:
-                        return redirect('c_dashboard', facility)
-                    else:
-                        return redirect('PasswordChange', facility)
-                elif request.user.groups.filter(name=OBSER_VAR):
-                    if userProf.settings['profile']['first_login']:
-                        return redirect('facilitySelect', 'observer')
-                    else:
-                        return redirect('PasswordChange', OBSER_VAR)
-                else:
-                    messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
-                    return redirect('Login')
+            if user.user_profile.settings['profile']['two_factor_enabled']:
+                request.session["2fa_user_id"] = user.id
+                status = send_verification_code(user.user_profile.phone)
+                print("CHECK 399")
+                if status == "too_many_attempts":
+                    messages.error(request, "Too many verification attempts. Please wait a few minutes before trying again.")
+                    return redirect("Login")
+                return redirect("verify_2fa")  # to a page where user enters the code
             else:
-                messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
-                return redirect('Login')
+                login(request, user)
+                print('check 1')
+                userProf = user_profile_model.objects.filter(user__id=request.user.id)
+                if request.user.is_superuser:
+                    return redirect('adminDash', "overview")
+                elif userProf.exists():
+                    userProf = userProf[0]
+                    if not userProf.company and userProf.is_active:
+                        return redirect('companyReg')
+                    if request.user.groups.filter(name=SUPER_VAR):
+                        if userProf.settings['profile']['first_login']:
+                            if len(facility_model.objects.all()) > 0:
+                                return redirect('sup_dashboard', SUPER_VAR)
+                            else:
+                                return redirect('Register', SUPER_VAR, 'facility')
+                        else:
+                            return redirect('PasswordChange', SUPER_VAR)
+                    elif request.user.groups.filter(name=CLIENT_VAR):
+                        facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
+                        if userProf.settings['profile']['first_login']:
+                            return redirect('c_dashboard', facility)
+                        else:
+                            return redirect('PasswordChange', facility)
+                    elif request.user.groups.filter(name=OBSER_VAR):
+                        if userProf.settings['profile']['first_login']:
+                            return redirect('facilitySelect', 'observer')
+                        else:
+                            return redirect('PasswordChange', OBSER_VAR)
+                    else:
+                        messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
+                        return redirect('Login')
+                else:
+                    messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
+                    return redirect('Login')
         else:
             messages.error(request,"Incorrect username or password")
             return redirect('Login')
@@ -199,7 +212,7 @@ def change_password(request, facility):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            userProf = user_profile_model.objects.get(user=request.user)
+            userProf = request.user.user_profile
             if not userProf.settings['profile']['first_login']:
                 userProf.settings['profile']['first_login'] = True
                 userProf.save()
@@ -248,8 +261,8 @@ def landingRegister(request):
             profile.user = user
             profile.is_active = False
             profile.settings = setDefaultSettings(profile, user.username)
-            profile.settings['first_login'] = True
-            profile.settings['position'] = SUPER_VAR + "-m"
+            profile.settings['profile']['first_login'] = True
+            profile.settings['profile']['position'] = SUPER_VAR + "-m"
             
             profile.save()
             
@@ -283,6 +296,99 @@ def landingRegister(request):
         'userForm': userForm, 'profileForm': profileForm
     })
     
+def send_code(request):
+    phone = request.GET.get('phone')
+    status = send_verification_code(phone)
+    return JsonResponse({'status': status})
+
+def verify_code(request):
+    phone = request.GET.get('phone')
+    code = request.GET.get('code')
+    is_verified = check_verification_code(phone, code)
+    return JsonResponse({'verified': is_verified})
+
+def verify_2fa(request):
+    user_id = request.session.get("2fa_user_id")
+    if not user_id:
+        messages.error(request, "Session expired. Please log in again.")
+        return redirect("Login")
+
+    user = User.objects.filter(id=user_id).first()
+    if not user or not hasattr(user, "user_profile") or not user.user_profile.phone:
+        messages.error(request, "Invalid verification attempt.")
+        return redirect("Login")
+
+    if request.method == "POST":
+        code = request.POST.get("code", "").strip()
+        phone = user.user_profile.phone
+
+        if check_verification_code(phone, code):
+            login(request, user)
+            request.session.pop("2fa_user_id", None)
+            messages.success(request, "2FA verification successful!")
+            #return redirect("dashboard")
+            userProf = user_profile_model.objects.filter(user__id=request.user.id)
+        
+            if request.user.is_superuser:
+                return redirect('adminDash', "overview")
+            elif userProf.exists():
+                userProf = userProf[0]
+                if not userProf.company and userProf.is_active:
+                    return redirect('companyReg')
+                if request.user.groups.filter(name=SUPER_VAR):
+                    if userProf.settings['profile']['first_login']:
+                        if len(facility_model.objects.all()) > 0:
+                            return redirect('sup_dashboard', SUPER_VAR)
+                        else:
+                            return redirect('Register', SUPER_VAR, 'facility')
+                    else:
+                        return redirect('PasswordChange', SUPER_VAR)
+                elif request.user.groups.filter(name=CLIENT_VAR):
+                    facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
+                    if userProf.settings['profile']['first_login']:
+                        return redirect('c_dashboard', facility)
+                    else:
+                        return redirect('PasswordChange', facility)
+                elif request.user.groups.filter(name=OBSER_VAR):
+                    if userProf.settings['profile']['first_login']:
+                        return redirect('facilitySelect', 'observer')
+                    else:
+                        return redirect('PasswordChange', OBSER_VAR)
+                else:
+                    messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
+                    return redirect('Login')
+            else:
+                messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
+                return redirect('Login')
+        else:
+            messages.error(request, "Invalid verification code. Please try again.")
+
+    return render(request, "landing/verify_2fa.html", {
+        "phone": user.user_profile.phone
+    })
+
+def resend_2fa_code(request):
+    user_id = request.session.get("2fa_user_id")
+    if not user_id:
+        return JsonResponse({"error": "Session expired"}, status=400)
+
+    user = User.objects.filter(id=user_id).first()
+    if not user or not hasattr(user, "user_profile"):
+        return JsonResponse({"error": "User not found"}, status=404)
+
+    now = time.time()
+    last_sent = request.session.get("2fa_last_sent", 0)
+
+    if now - last_sent < 60:
+        return JsonResponse({"error": "Cooldown active"}, status=429)
+
+    try:
+        send_verification_code(user.user_profile.phone)
+        request.session["2fa_last_sent"] = now
+        return JsonResponse({"success": True})
+    except TwilioRestException as e:
+        return JsonResponse({"error": str(e)}, status=e.status)
+
 @lock
 @group_required(SUPER_VAR)  
 def registerCompany(request):

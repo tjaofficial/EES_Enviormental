@@ -1,6 +1,6 @@
 from reportlab.platypus import Paragraph # type: ignore
 from reportlab.lib.styles import getSampleStyleSheet # type: ignore
-from ..utils import time_change, date_change, date_time_change, truck_choices, area_choices, emptyInputs, road_choices, inventoryResponse, quarterParse, formBNone
+from ..utils.main_utils import time_change, date_change, date_time_change, truck_choices, area_choices, emptyInputs, road_choices, inventoryResponse, quarterParse, formBNone
 from reportlab.lib import colors # type: ignore
 import json
 from ..models import form22_model, braintreePlans

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
-from .models import *
+from ..models import *
 from django.db.models import Q # type: ignore
 from django.apps import apps # type: ignore
 import ast
@@ -24,6 +24,7 @@ from django.conf import settings # type: ignore
 from django.contrib import messages # type: ignore
 from django.db.models import Field, Min # type: ignore
 from django.contrib.contenttypes.models import ContentType # type: ignore
+from ..utils.twilio_verify import send_sms_message
 
 #from .admin import EventAdmin
 parseFormList = [
@@ -1279,61 +1280,6 @@ def colorModeSwitch(request):
 
     return redirect(request.META['HTTP_REFERER'])
 
-def createNotificationDatabase(facility, user, fsID, date, notifSelector):
-    print('notif - check 1')
-    print(fsID)
-    todayNumb = datetime.date.today().weekday()
-    nFormSettings = form_settings_model.objects.get(id=fsID)
-    nFacility = facility_model.objects.filter(facility_name=facility)
-    if nFacility.exists():
-        nFacility = nFacility[0]
-    nUserProfile = user.user_profile
-    companyUsers = user_profile_model.objects.filter(company__company_name=nUserProfile.company.company_name )
-    # subForm = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility, formID__id=formID)
-    # if subForm.exists():
-    #     subForm = subForm[0]
-    #     if subForm.formID.id not in {26,27}:
-    #         ModelName =  'form' + subForm.formID.form.replace('-','') + '_model'
-    #     else:
-    #         ModelName = subForm.formID.form.replace(' ', '_').lower() + '_model'
-    # modelData = apps.get_model('EES_Forms', ModelName).objects.all()
-    newHeader =  notifSelector        
-    if notifSelector == 'submitted':
-        formID = nFormSettings.formChoice.id
-        if todayNumb in {5,6}:
-            if todayNumb == 5:
-                todayName = 'Saturday'
-            else:
-                todayName = 'Sunday'
-        else:
-            todayName = False
-        newNotifData = json.dumps({'settingsID': fsID, 'date': str(date), 'weekend': todayName})
-    else:
-        todayName = False
-    if notifSelector in ['corrective', 'compliance']:
-        newNotifData = json.dumps({'settingsID': fsID, 'date': str(date)})
-    elif notifSelector == '90days':
-        newNotifData = json.dumps({'ovenNumber': formID, 'date': str(date)})
-    elif notifSelector == 'messages':
-        print('Inbox Messages: TBA')
-
-    for person in companyUsers:
-        n = notifications_model(
-            facilityChoice=nFacility,
-            formSettings=nFormSettings,
-            user = person,
-            clicked = False,
-            hovered = False,
-            formData = newNotifData,
-            header = newHeader,
-            body = "Click here to view.",
-            notes = "Submitted by " + user.first_name + " " + user.last_name + ". "
-        )
-        if n not in companyUsers:
-            n.save()
-    print("Form " + str(nFormSettings.id) + " notification was created and saved.")
-    return n
-   
 def notificationCalc(user, facility):
     userProfile = user.user_profile
     notifications = notifications_model.objects.filter(facilityChoice__facility_name=facility)
@@ -1348,95 +1294,180 @@ def notificationCalc(user, facility):
     
 def displayNotifications(user, facility):
     notifCount = notificationCalc(user, facility)
-    nUserProfile = user_profile_model.objects.filter(user__username=user.username)
-    if nUserProfile.exists():
-        nUserProfile = nUserProfile[0]
-    allNotifs = notifications_model.objects.filter(facilityChoice__facility_name=facility, user=nUserProfile).order_by('-created_at')
-    facForms = get_facility_forms('facilityName', facility)
+    nUserProfile = user.user_profile
     
-    unReadList = []
-    readList = []
-    unReadNotifs = allNotifs.filter(clicked=False, hovered=False)
-    readNotifs = allNotifs.filter(hovered=False)
-    if unReadNotifs.exists():
-        for unRead in unReadNotifs:
-            notifFormData = json.loads(unRead.formData)
-            for fsID in facForms:
-                if int(notifFormData['settingsID']) == int(fsID):
-                    settingEntry = form_settings_model.objects.get(id=int(fsID))
-                    formPullData = (settingEntry, unRead, notifFormData, settingEntry.formChoice.link)
-                    unReadList.append(formPullData)   
-    print('______Notificitons______________________________________________')
+    allNotifs = notifications_model.objects.filter(facilityChoice__facility_name=facility, user=nUserProfile).order_by('-created_at')
+    
+    unReadNotifs = allNotifs.filter(clicked=False, hovered=False)       
+    readNotifs = allNotifs.filter(clicked=True)
+    print('-------Notifications have been processed------')
+    return {'notifCount': notifCount, 'unRead': unReadNotifs, "read": readNotifs}
 
-    return {'notifCount': notifCount, 'unRead': unReadList, "read": readNotifs}
-        
-def createNotification(facility, request, fsID, date, notifSelector, issueID):
-    print('notif1 - check 1')
-    user = request.user
-    notifID = createNotificationDatabase(facility, user, fsID, date, notifSelector)
-    notifs = checkIfFacilitySelected(user, facility)
-    facilityParse = 'notifications_' + facility.replace(" ","_")
-    notifCount = str(notificationCalc(user, facility))
-    channel_layer = get_channel_layer()
+def distributeNotifications(facility, request, fsID, date, notifKeywordList, issueID):
+    print(f"Start Notification Process for {facility} fsID {fsID}")
+    print(f"Notifications types: {notifKeywordList}")
+    userProf = request.user.user_profile
+    formSettings = form_settings_model.objects.get(id=fsID)
+    companyUsers = user_profile_model.objects.filter(company__company_name=userProf.company.company_name, user__is_active=True)
+    print(f"Users who will be receiving notifications: {companyUsers}")
 
-    if notifID.formSettings.formChoice.form in ['form24', 'form25']:
-        formModelName = notifID.formSettings.formChoice.form
-        formModel = apps.get_model('EES_Forms', formModelName)
-        day_select = formModel.objects.get(date=notifID.created_at).weekend_day
-    else:
-        day_select = ''
-        
-    notif_html = render_to_string("shared/components/notification_item.html", {
-        "notif": notifID,
-        "facility": facility,
-        'day_select': day_select
-    })
+    def createMethodPlusNotif(notifCategory, sendingUser, receivingUser, date):
+        print(f"Creating 'Method Plus' Notification for {facility} fsID {fsID}")
+        todayName = False
+        todayNumb = datetime.date.today().weekday()
+        if notifCategory == 'submitted':
+            if todayNumb in {5,6}:
+                if todayNumb == 5:
+                    todayName = 'Saturday'
+                else:
+                    todayName = 'Sunday'
+            newNotifData = {'settingsID': fsID, 'date': str(date), 'weekend': todayName}
+            newNote = "Submitted by " + sendingUser.first_name + " " + sendingUser.last_name + ". "
+        elif notifCategory in ['deviations', 'compliance']:
+            newNotifData = {'settingsID': fsID, 'date': str(date)}
+            newNote = "Submitted by " + sendingUser.first_name + " " + sendingUser.last_name + ". "
+        elif notifCategory in ['10_day_pt', '5_day_pt']:
+            formID = formSettings.formChoice.id
+            newNotifData = {'ovenNumber': formID, 'date': str(date)}
+            ten_day_note = "Oven has reach the 10 day warning."
+            five_day_note = "Oven has reach the 5 day warning."
+            newNote = ten_day_note if notifCategory == "10_day_pt" else five_day_note
+        elif notifCategory == 'messages':
+            print('Inbox Messages: TBA')
+            newNote = "newMessage sent."
 
-    async_to_sync(channel_layer.group_send)(
-        facilityParse, {
-            'type': 'notification',
-            'count': notifCount,
-            'facility': facility,
-            'html': notif_html
-        }
-    )
-    if notifSelector == 'compliance':
-        print('mail check 1')
-        fsEntry = form_settings_model.objects.get(id=issueID.form)
-        userProfile = user_profile_model.objects.get(user=user)
-        sendToList = []
-        facProfileQuery = user_profile_model.objects.filter(facilityChoice__facility_name=facility)
-        supProfileQuery = user_profile_model.objects.filter(company=userProfile.company, position='supervisor')
-        for person in facProfileQuery:
-            sendToList.append(person)
-        for person in supProfileQuery:
-            sendToList.append(person)
-        print(sendToList)   
-        mail_subject = 'MethodPlus: COMPLIANCE ISSUES'   
-        current_site = get_current_site(request)
-        for recipient in sendToList:
-            html_message = render_to_string('email/compliance_email.html', {  
-                'user': recipient,  
-                'domain': current_site.domain,
-                'form': fsEntry,
-                'issue': issueID
+        N = notifications_model(
+            facilityChoice=formSettings.facilityChoice,
+            formSettings=formSettings,
+            user = receivingUser,
+            clicked = False,
+            hovered = False,
+            formData = newNotifData,
+            header = notifCategory,
+            body = "Click here to view.",
+            notes = newNote
+        )
+        return(N)
+    
+    def sendMethodPlusNotif(newNotification):
+        notifQuery = notifications_model.objects.all()
+        if newNotification not in notifQuery:
+            newNotification.save()
+            print(f"Notfiication for '{newNotification.header}' has succesfully been created within MethodPlus Database")
+
+            companyParse = f'notifications_{userProf.company.company_name.replace(" ","_")}'
+            #notifCount = len(notifQuery.filter(user=receivingUser, hovered=False, clicked=False, facilityChoice__company=userProf.company))
+            channel_layer = get_channel_layer()
+
+            if newNotification.formSettings.formChoice.form in ['24', '25']:
+                formModelName = newNotification.formSettings.formChoice.link
+                formModel = apps.get_model('EES_Forms', f"{formModelName}_model")
+                day_select = formModel.objects.get(date=newNotification.created_at).weekend_day
+                #messages.error(request,'ERROR: ID-11850007 Contact Support Team')
+            else:
+                day_select = ''
+            
+            notif_html = render_to_string("shared/components/notification_item.html", {
+                "notif": newNotification,
+                "facility": facility,
+                'day_select': day_select
             })
-            plain_message = strip_tags(html_message)
-            to_email = recipient.user.email 
-            print(to_email)
-            send_mail(
-                mail_subject,
-                plain_message,
-                settings.EMAIL_HOST_USER,
-                [to_email],
-                html_message=html_message,
-                fail_silently=False
+
+            async_to_sync(channel_layer.group_send)(
+                companyParse, {
+                    'type': 'notification',
+                    'notif_type': newNotification.header,
+                    #'count': notifCount,
+                    'facility': facility,
+                    'facID': str(formSettings.facilityChoice.id),
+                    'html': notif_html
+                }
             )
-            print('mail check 2')
+            print(f"Notfiication for '{newNotification.header}' has succesfully been sent to update the notif counter for the current user")
+
+    def sendEmailNotif(notifCategory, receivingUser):
+        print(f"Creating 'Email' Notification for {facility} fsID {fsID}")
+        header_dict = dict(notification_header_choices)
+        header_dict.get(notifCategory, "Unknown Header")
+        mail_subject = f'MethodPlus: {header_dict.get(notifCategory, "Unknown Header")}'
+        current_site = get_current_site(request)
+
+        html_message = render_to_string(f'email/{notifCategory}_email.html', {  
+            'user': receivingUser,  
+            'domain': current_site.domain,
+            'form': formSettings,
+            'issue': issueID
+        })
+        plain_message = strip_tags(html_message)
+        to_email = receivingUser.user.email 
+        print(to_email)
+        send_mail(
+            mail_subject,
+            plain_message,
+            settings.EMAIL_HOST_USER,
+            [to_email],
+            html_message=html_message,
+            fail_silently=False
+        )
+        print(f"Sending a '{notifCategory}' notifications to email")
+
+    def sendSMSNotif(notifCategory, receivingUser):
+        print(f"Sending a '{notifCategory}' notifications to SMS")
+
+        number = receivingUser.phone
+        if notifCategory == 'compliance':
+            message = f"Notice: A form recently submitted is out of compliance for {facility}. Log in to MethodPlus+ to review review the details."
+        elif notifCategory == 'deviations':
+            message = f"Notice: A corrective action has been submitted for {facility}. Please log in to your MethodPlus+ account to review the details."
+        elif notifCategory == 'submitted':
+            message = f"Update: A new form has been submitted. Please log in to your MethodPlus+ account to review the details."
+        elif notifCategory == '10_day_pt':
+            message = f"Reminder: A Push Travel oven reading is due in 10 days. Log in to your MethodPlus+ account for more information."
+        elif notifCategory == '5_day_pt':
+            message = f"Reminder: A Push Travel oven reading is due in 5 days. Log in to your MethodPlus+ account for more information."
+        elif notifCategory == 'schedule':
+            message = f"More words"
+
+        try:
+            sid = send_sms_message(number, message)
+            print(f"Message sent! User: {receivingUser.user.first_name}")
+        except Exception as e:
+            print(f"Failed to send SMS: {e}")
+    
+    newNotifList = []
+    for notifCategory in notifKeywordList:
+        setter = 0
+        for users in companyUsers:
+            print(f"Sending Notifications to {users.user.first_name} {users.user.last_name}")
+            userNotifSettings = users.settings['facilities'][str(formSettings.facilityChoice.id)]['notifications']
+            for nKey, notifMedium in userNotifSettings[notifCategory].items():
+                if nKey == "methodplus" and notifMedium:
+                    newNotif = createMethodPlusNotif(notifCategory, userProf.user, users, date)
+                    if setter == 0:
+                        newNotifList.append(newNotif)
+                    setter += 1
+                if nKey == "email" and notifMedium:
+                    sendEmailNotif(notifCategory, users)
+                if nKey == "sms" and notifMedium:
+                    sendSMSNotif(notifCategory, users)
+
+    for newNotification in newNotifList:
+        sendMethodPlusNotif(newNotification)
+
+def createNotification(facility, request, fsID, date, notifSelector, issueID):
+    print(f"Start Notification Process for {facility} fsID {fsID}")
+    distributeNotifications(facility, request, fsID, date, notifSelector, issueID)
+    print("_________________________________")
     
 def checkIfFacilitySelected(user, facility):
-    if facility not in ['supervisor', 'observer']:
-        notifs = displayNotifications(user, facility)
+    if facility not in ['observer']:
+        notifDict = {}
+        sortedFacilityData = getCompanyFacilities(user.user_profile.company.company_name)
+        for fac in sortedFacilityData:
+            notifDict[fac.facility_name] = {'facName': fac, "notifData": displayNotifications(user, fac)}
+        notifs = notifDict
+        totalNotifs = sum([facil['notifData']['notifCount'] for key, facil in notifDict.items()])
+        notifDict['notifCount'] = totalNotifs
     else:
         notifs = ''
     return notifs
@@ -1452,10 +1483,8 @@ def braintreeGateway():
     )
     return gateway
 
-def getCompanyFacilities(username):
-    thisProfileData = user_profile_model.objects.filter(user__username=username)[0]
-    sortedFacilityData = facility_model.objects.filter(company__company_name=thisProfileData.company.company_name)
-    
+def getCompanyFacilities(company_name):
+    sortedFacilityData = facility_model.objects.filter(company__company_name=company_name)
     return sortedFacilityData
 
 def checkIfMoreRegistrations(user):
@@ -2134,7 +2163,8 @@ def setDefaultSettings(profile, superUsername):
             }
         },
         'first_login': False,
-        'position': profile.position
+        'position': profile.position,
+        'two_factor_enabled': True
     }
     return createSettings
 

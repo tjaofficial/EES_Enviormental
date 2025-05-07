@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import issues_model, form22_model, form22_readings_model, paved_roads, unpaved_roads, parking_lots
 from ..forms import formM_form, formM_readings_form
-from ..utils import fix_data, get_initial_data,updateSubmissionForm, createNotification
+from ..utils.main_utils import fix_data, get_initial_data,updateSubmissionForm, createNotification
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 from datetime import datetime,date
 

@@ -3,7 +3,7 @@ import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import form3_model, form1_model, form2_model, user_profile_model, daily_battery_profile_model, form5_model, Forms
 from django.apps import apps # type: ignore
-from ..utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
+from ..utils.main_utils import ninetyDayPushTravels, setUnlockClientSupervisor, getCompanyFacilities
 from django.contrib.auth.decorators import login_required # type: ignore
 
 
@@ -20,7 +20,7 @@ def pt_admin1_view(request, facility):
     daily_prof = daily_battery_profile_model.objects.all().order_by('-date_save')
     todays_log = daily_prof[0]
     data = form5_model.objects.all()
-    sortedFacilityData = getCompanyFacilities(request.user.username)
+    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     def checkIfAllNone(theGroup):
         dayCount = 0
         for ovenData in theGroup:

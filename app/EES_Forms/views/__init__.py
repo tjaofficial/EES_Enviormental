@@ -1,4 +1,4 @@
-from .login_logout_view import login_view, logout_view, change_password, landingRegister, registerCompany, main_change_password, request_password_view, activate_view, reset_password_activate_view
+from .login_logout_view import *
 from .header_view import about_view, safety_view, settings_view
 from .sidebar_view import *
 from .dashboard_view import IncompleteForms, default_dashboard
@@ -9,14 +9,13 @@ from .client_view import client_dashboard_view
 from .print_form_view import form_PDF
 from .printSelect_view import printSelect
 from .signature_view import signature
-from .billing import billing_view, landing_addCard_view, stripe_subscription_view, stripe_webhook, stripe_customer_portal, stripe_success
+from .billing import stripe_subscription_view, stripe_webhook, stripe_customer_portal, stripe_success
 from .landing_view import *
 from .admin_view import *
 from .sup_facility import *
 from .calSelect_view import *
 from .account_settings_view import *
-from .invoice_view import *
-
+from .dashboard_cards_view import *
 
 from .daily_battery_profile_view import *
 from .weekly_forms_view import *

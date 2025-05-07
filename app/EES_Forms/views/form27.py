@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form27_model
 from ..forms import form27_form
-from ..utils import what_quarter, get_initial_data, fix_data
+from ..utils.main_utils import what_quarter, get_initial_data, fix_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 from datetime import datetime
 

@@ -11,121 +11,156 @@
             {% if selector == "account" %}Account{% elif selector == "company" %}Company{% endif %} Settings
         </div>
         <div class="contentCont" style="padding: 15px 32px;">
-            <form method="post" action=''>
+            <form method="post" action='' enctype="multipart/form-data">
                 {% csrf_token %}
                 {% if selector == "account" %}
-                <div style="text-align:left;width: 33rem;margin: auto;">
-                    <li class="form-line">
-                        <div class="label">Profile Information</div>
-                        <div class="inputCont">
-                            <div style="display:block;">
-                                <div style="width: 294px;">
-                                    <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                        <span>
-                                            <input disabled type="text" name="first_name" value="{{initial_data.first_name}}" class="input" style="width:9rem;" maxlength="150">
-                                            <input type="hidden" name="first_name" value="{{initial_data.first_name}}" class="input" style="width:9rem;" maxlength="150" id="id_first_name">
+                    <div style="text-align:left;width: 33rem;margin: auto;">
+                        <li class="form-line">
+                            <div class="label">Profile Information</div>
+                            <div class="inputCont">
+                                <div style="display:block;">
+                                    <div style="width: 294px;">
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                            <span>
+                                                <input disabled type="text" name="first_name" value="{{initial_data.first_name}}" class="input" style="width:9rem;" maxlength="150">
+                                                <input type="hidden" name="first_name" value="{{initial_data.first_name}}" class="input" style="width:9rem;" maxlength="150" id="id_first_name">
+                                            </span>
+                                            <label class="sub_label">First Name</label>
                                         </span>
-                                        <label class="sub_label">First Name</label>
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                            <span>
+                                                <input disabled type="text" name="last_name" value="{{initial_data.last_name}}" class="input" style="width:9rem;" maxlength="150">
+                                                <input type="hidden" name="last_name" value="{{initial_data.last_name}}" class="input" style="width:9rem;" maxlength="150" id="id_last_name">
+                                            </span>
+                                            <label class="sub_label">Last Name</label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                        <span>
+                                            <input disabled type="text" name="username" value="{{initial_data.username}}" style="width:100%;" class="input" maxlength="150" required>
+                                            <input type="hidden" name="username" value="{{initial_data.username}}" style="width:100%;" class="input" maxlength="150" required id="id_username">
+                                        </span>
+                                        <label class="sub_label">Username</label>
                                     </span>
-                                    <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                </div>
+                                <div style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
                                         <span>
-                                            <input disabled type="text" name="last_name" value="{{initial_data.last_name}}" class="input" style="width:9rem;" maxlength="150">
-                                            <input type="hidden" name="last_name" value="{{initial_data.last_name}}" class="input" style="width:9rem;" maxlength="150" id="id_last_name">
+                                            <input type="email" name="email" value="{{initial_data.email}}" class="input" placeholder="johndoe@mail.com" style="width:100%;" maxlength="254" id="id_email">
                                         </span>
-                                        <label class="sub_label">Last Name</label>
+                                        <label class="sub_label">Email</label>
+                                    </span>
+                                </div>
+                                <div style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                        <span>
+                                            <input oninput="processPhone(event)" type="text" name="phone" value="{{initial_data.phone}}" class="input" style="width:100%;" placeholder="(123) 456-7890" maxlength="14" required id="id_phone">
+                                        </span>
+                                        <label class="sub_label">Phone</label>              
                                     </span>
                                 </div>
                             </div>
-                            <div style="display:block;">
+                        </li>
+                        <li class="form-line">
+                            <div class="label">Security Settings</div>
+                            <div class="inputCont">
                                 <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                    <span>
-                                        <input disabled type="text" name="username" value="{{initial_data.username}}" style="width:100%;" class="input" maxlength="150" required>
-                                        <input type="hidden" name="username" value="{{initial_data.username}}" style="width:100%;" class="input" maxlength="150" required id="id_username">
-                                    </span>
-                                    <label class="sub_label">Username</label>
+                                    <label>
+                                        <input type="radio" name="two_factor_enabled" value="yes" 
+                                        {% if user.user_profile.settings.profile.two_factor_enabled %} checked {% endif %}>
+                                        Yes
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="two_factor_enabled" value="no" 
+                                        {% if not user.user_profile.settings.profile.two_factor_enabled %} checked {% endif %}>
+                                        No
+                                    </label>
+                                    <label class="sub_label">Enable Two-Factor Authentication (2FA)</label>
                                 </span>
                             </div>
-                            <div style="display:block;">
-                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                    <span>
-                                        <input type="email" name="email" value="{{initial_data.email}}" class="input" placeholder="johndoe@mail.com" style="width:100%;" maxlength="254" id="id_email">
-                                    </span>
-                                    <label class="sub_label">Email</label>
-                                </span>
-                            </div>
-                            <div style="display:block;">
-                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                    <span>
-                                        <input oninput="processPhone(event)" type="text" name="phone" value="{{initial_data.phone}}" class="input" style="width:100%;" placeholder="(123) 456-7890" maxlength="14" required id="id_phone">
-                                    </span>
-                                    <label class="sub_label">Phone</label>              
-                                </span>
-                            </div>
-                        </div>
-                    </li>
-                </div>
+                        </li>
+                    </div>
                 {% elif selector == "company" %}
-                <div style="text-align:left;width: 33rem;margin: auto;">
-                    <li class="form-line">
-                        <div class="label">Company Name</div>
-                        <div class="inputCont">
-                            <div style="display:block;">
-                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                    <span>{{primaryForm.company_name}}</span>
-                                    <label class="sub_label">Name</label>
-                                </span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="form-line">
-                        <div class="label">Address</div>
-                        <div class="inputCont" style="width: 294px;">
-                            <div style="display:block;">
-                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                    <span>
-                                        {{primaryForm.address}}
-                                    </span>
-                                    <label class="sub_label">Street Address</label>
-                                </span>
-                            </div>
-                            <div style="display:block;">
-                                <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                    <span>
-                                        <input type="text" name="address2" class="input" style="width:100%;" id="id_address2">
-                                    </span>
-                                    <label class="sub_label">Street Address Line 2</label>
-                                </span>
-                            </div>
-                            <div style="display:block;">
-                                <div style="width: 290px;">
-                                    <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                        <span>{{primaryForm.city}}</span>
-                                        <label class="sub_label">City</label>
-                                    </span>
-                                    <span style="display: inline-block;padding-bottom: 10px;width: 3rem;">
-                                        <span>{{primaryForm.state}}</span>
-                                        <label class="sub_label">State</label>
-                                    </span>
-                                    <span style="display: inline-block;padding-bottom: 10px;width: 4rem;">
-                                        <span>{{primaryForm.zipcode}}</span>
-                                        <label class="sub_label">Zipcode</label>
+                    <div style="text-align:left;width: 33rem;margin: auto;">
+                        <li class="form-line">
+                            <div class="label">Company Name</div>
+                            <div class="inputCont">
+                                <div style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                        <span>{{primaryForm.company_name}}</span>
+                                        <label class="sub_label">Name</label>
                                     </span>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="form-line">
-                        <div class="label">Company Information</div>
-                        <div class="inputCont">
-                            <div style="display:block;">
-                                <span style="width: 290px; display: inline-block; padding-bottom: 10px;">
-                                    <span>{{primaryForm.phone}}</span>
-                                    <label class="sub_label">Phone</label>
-                                </span>
+                        </li>
+                        <li class="form-line">
+                            <div class="label">Address</div>
+                            <div class="inputCont" style="width: 294px;">
+                                <div style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                        <span>
+                                            {{primaryForm.address}}
+                                        </span>
+                                        <label class="sub_label">Street Address</label>
+                                    </span>
+                                </div>
+                                <div style="display:block;">
+                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                        <span>
+                                            <input type="text" name="address2" class="input" style="width:100%;" id="id_address2">
+                                        </span>
+                                        <label class="sub_label">Street Address Line 2</label>
+                                    </span>
+                                </div>
+                                <div style="display:block;">
+                                    <div style="width: 290px;">
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                            <span>{{primaryForm.city}}</span>
+                                            <label class="sub_label">City</label>
+                                        </span>
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 3rem;">
+                                            <span>{{primaryForm.state}}</span>
+                                            <label class="sub_label">State</label>
+                                        </span>
+                                        <span style="display: inline-block;padding-bottom: 10px;width: 4rem;">
+                                            <span>{{primaryForm.zipcode}}</span>
+                                            <label class="sub_label">Zipcode</label>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </div>
+                        </li>
+                        <li class="form-line">
+                            <div class="label">Phone</div>
+                            <div class="inputCont">
+                                <div style="display:block;">
+                                    <span style="width: 290px; display: inline-block; padding-bottom: 10px;">
+                                        <span>{{primaryForm.phone}}</span>
+                                        <label class="sub_label">Phone</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="form-line">
+                            <div class="label">Icon/Logo</div>
+                            <div class="inputCont">
+                                <div style="display:block;">
+                                    <span style="width: 290px; display: inline-block; padding-bottom: 10px;">
+                                        <span>{{primaryForm.icon}}</span>
+                                        <label class="sub_label">Icon</label>
+                                        {% if primaryForm.icon.value %}
+                                            <div class="current-upload-info">
+                                                <span>Currently:</span> <a href="{{ primaryForm.icon.value.url }}" target="_blank">{{ primaryForm.icon.value.name }}</a>
+                                                {{ primaryForm.icon.clear_checkbox }} <label for="{{ primaryForm.icon.clear_checkbox.id_for_label }}">Clear</label>
+                                            </div>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
                 {% endif %}
                 <p style="text-align:center"><input type="submit" value="Save"/></p>
             </form>

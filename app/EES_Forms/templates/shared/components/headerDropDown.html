@@ -96,22 +96,22 @@
     </div>
 </div>
 <div id="notifDropdown" class="profileDropdown" style="display: none; max-height: 41rem; overflow: scroll;">
-    {% for fac in sortedFacilityData %}
+    {% for key, fac in notifs.items %}
         <div>
-            <div class="methodPlusBlue" style="padding: 3px 21px; font-size: 14px; font-weight: bold; color: white;">{{ fac.facility_name }}</div>
-            {% if notifs.unRead|length > 0 %}
-                {% for notif in notifs.unRead %}
-                <a href="{% if notif.3 == 'form24' or notif.3 == 'form25'%}{% url notif.3 facility notif.2.settingsID notif.2.date notif.2.weekend|lower %}{% else %}{% url notif.3 facility notif.2.settingsID notif.2.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.1.id}}">  
-                    <div id="notifColor" class="notifCont" style="{% if notif.1.header == 'compliance' %}{% if not notif.1.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.1.hovered %}background-color: #ffff00ad;{% endif %}">
+            <div id="facilityID_{{fac.facName.id}}" class="methodPlusBlue" style="padding: 3px 21px; font-size: 14px; font-weight: bold; color: white;">{{key}}</div>
+            {% if fac.notifData.unRead|length > 0 %}
+                {% for notif in fac.notifData.unRead %}
+                <a href="{% if notif.formSettings.formChoice.link == 'form24' or notif.formSettings.formChoice.link == 'form25'%}{% url notif.formSettings.formChoice.link facility notif.formData.settingsID notif.formData.date notif.formData.weekend|lower %}{% else %}{% url notif.formSettings.formChoice.link facility notif.formData.settingsID notif.formData.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.id}}">  
+                    <div id="notifColor" class="notifCont" style="{% if notif.header == 'compliance' %}{% if not notif.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.hovered %}background-color: #ffff00ad;{% endif %}">
                         <div class="notifHeader">
-                            {{notif.1.get_header_display}}<br>
-                            {{notif.0.formChoice.title}}
+                            {{notif.get_header_display}}<br>
+                            {{notif.formSettings.formChoice.title}}
                         </div>
                         <div class="notifNote">
-                            {{notif.1.notes}}{{notif.1.body}}
+                            {{notif.notes}}{{notif.body}}
                         </div>
                         <div class='notifTimeMarker'>
-                            {{notif.1.created_at}}
+                            {{notif.created_at}}
                         </div>
                     </div>
                 </a>
