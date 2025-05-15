@@ -66,7 +66,7 @@ def form2_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -92,7 +92,7 @@ def form3_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -118,7 +118,7 @@ def form4_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -150,7 +150,7 @@ def form5_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -216,7 +216,7 @@ def form7_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -241,7 +241,7 @@ def form8_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     new_latest_form = form_variables['submitted_forms'][0]
     filled_out = True
     for items in new_latest_form.whatever().values():
@@ -283,7 +283,7 @@ def form9_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -308,7 +308,7 @@ def form17_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -333,7 +333,7 @@ def form18_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -358,7 +358,7 @@ def form19_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -383,7 +383,7 @@ def form20_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
 
     if savedForm.is_fully_filled():
         createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
@@ -411,7 +411,7 @@ def form21_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     
     if savedForm.is_fully_filled():
         createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
@@ -439,7 +439,7 @@ def form24_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -465,7 +465,7 @@ def form25_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
@@ -494,7 +494,7 @@ def form27_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     if savedForm.is_fully_filled():
         createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
@@ -520,7 +520,7 @@ def form29_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     if savedForm.is_fully_filled():
         createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
@@ -544,7 +544,7 @@ def form30_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
@@ -567,7 +567,7 @@ def form31_issue_check(savedForm, form_variables, request, selector, facility, d
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
