@@ -27,7 +27,7 @@
                     {% endfor %}
                 </select><br><br>
                 <div style="text-align: right;">
-                    <a id="linkButton" href="{% url 'printIndex' facility 'single' formGroup fsID selector %}" target="_blank" onclick="refreshPage()">
+                    <a id="linkButton" href="{% url 'printIndex' 'single' formGroup fsID selector %}" target="_blank" onclick="refreshPage()">
                         <div class="button-8" role="button" style='height:25px;'>PRINT</div>
                     </a>
                     <script>
@@ -39,9 +39,9 @@
                             formGroup = "{{ formGroup.formChoice.frequency }}",
                             selector = "{{ selector }}";
                             let newPassVar = fsID + "-" + value
-                            let html = "printIndex"
+                            let html = `print-index`
                             html += "/single/" + formGroup + "/" + newPassVar + "/" + selector
-                            linkButton.href = [24, 25].includes({{formGroup.formChoice.form}}) ? "../../../../": "../../../";
+                            linkButton.href = [24, 25].includes({{formGroup.formChoice.form}}) ? "../../../../../": "../../../../";
                             linkButton.href += html;
                         }
                         labelPick();

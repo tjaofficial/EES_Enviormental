@@ -5,7 +5,7 @@
         <ul>
             {% if facility != 'supervisor' %}
                 {% for x in ca_forms %}
-                    <a href="issues_view/{{x.formChoice.id}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                    <a href="{% url 'issues_view' x.id 'issue' %}">
                         <li class="sideAlign" {% if client %}style="{% if not x.viewed %}{% if x.out_of_compliance %}background-color: #ff8c8c{% else %}background-color: #ebee17;{% endif %}{% else %} background-color: white;{% endif %}"{% endif %}>
                             <div class="ca_indie">
                                 <div style="width: 311px; padding-bottom:0.3rem; padding-left: 0.4rem;">

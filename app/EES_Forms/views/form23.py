@@ -10,9 +10,10 @@ import calendar
 lock = login_required(login_url='Login')
 
 @lock
-def form23(request, facility, fsID, selector):
+def form23(request, fsID, selector):
     # -----SET MAIN VARIABLES------------
-    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    form_variables = initiate_form_variables(fsID, request.user, selector)
+    facility = form_variables['facilityName']
     grouped_data = {
         "roads": defaultdict(list),
         "paved_roads": defaultdict(list),

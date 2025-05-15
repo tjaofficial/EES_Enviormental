@@ -1,9 +1,9 @@
 {% load static %}
 <a href="
     {% if notif.formSettings.formChoice.link == 'form24' or notif.formSettings.formChoice.link == 'form25'%}
-        {% url notif.formSettings.formChoice.link facility notif.formSettings.id notif.created_at.date day_select|lower %}
+        {% url notif.formSettings.formChoice.link notif.formSettings.id notif.created_at.date day_select|lower %}
     {% else %}
-        {% url notif.formSettings.formChoice.link facility notif.formSettings.id notif.created_at.date %}
+        {% url notif.formSettings.formChoice.link notif.formSettings.id notif.created_at.date %}
     {% endif %}"
    onmouseover="setNotificationHover(this)"
    onclick="setNotificationClick(this)"

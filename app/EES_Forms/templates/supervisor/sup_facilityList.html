@@ -13,7 +13,7 @@
             {% include "shared/components/backArrow.html" with destination="dashboard"%}
             Facilities
         </div>
-        <div style="text-align:center; width:100%; padding: 25px;">Need more forms? <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">Submit a form Request</a></div>
+        <div style="text-align:center; width:100%; padding: 25px;">Need more forms? <a href="{% url 'requestForm' %}" style="text-decoration: underline;">Submit a form Request</a></div>
         <div class="facility-jump-bar">
             {% for info in facilities %}
                 <button class="facility-tile" onclick="scrollToFacility('{{ info.0.id }}')">

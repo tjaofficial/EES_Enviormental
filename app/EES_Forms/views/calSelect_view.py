@@ -10,8 +10,9 @@ import calendar
 lock = login_required(login_url='Login')
 
 @lock
-def calSelect(request, facility, type, forms, year, month):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def calSelect(request, type, forms, year, month):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
         
     monthConvert = calendar.month_name[month]
@@ -54,5 +55,16 @@ def calSelect(request, facility, type, forms, year, month):
     html_cal = calend.formatmonth(year, month, year, type, formSelect, facility, withyear=True)
 
     return render(request,"shared/calSelect.html",{
-        'notifs': notifs, 'prev_year': prev_year, 'next_year': next_year, "type": type, "forms": forms, 'prev_month': prev_month, 'next_month': next_month, "facility": facility, "html_cal": html_cal, 'supervisor': supervisor, "client": client, 'unlock': unlock,
+        'notifs': notifs,
+        'prev_year': prev_year,
+        'next_year': next_year,
+        "type": type,
+        "forms": forms,
+        'prev_month': prev_month,
+        'next_month': next_month,
+        "facility": facility,
+        "html_cal": html_cal,
+        'supervisor': supervisor,
+        "client": client,
+        'unlock': unlock
     }) 

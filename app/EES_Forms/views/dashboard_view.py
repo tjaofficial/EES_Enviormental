@@ -11,12 +11,11 @@ lock = login_required(login_url='Login')
 
 @lock
 @group_required(OBSER_VAR)
-def IncompleteForms(request, facility):
+def IncompleteForms(request):
+    facility = getattr(request, 'facility', None)
     formName = "obs_dash"
     permissions = [OBSER_VAR]
     userGroupRedirect(request.user, permissions)
-    if facility == OBSER_VAR:
-        return redirect('facilitySelect', 'observer')
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     today = datetime.date.today()
     todays_num = today.weekday()
@@ -25,7 +24,7 @@ def IncompleteForms(request, facility):
     signatures = signature_model.objects.all().order_by('-sign_date')
     sigExisting = False
     sigName = ''
-    facilityData = facility_model.objects.filter(facility_name=facility)[0]
+    facilityData = facility
     facPackets = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
     # ------- Signatures ---------------- 
@@ -48,14 +47,14 @@ def IncompleteForms(request, facility):
         od_recent = pushTravelsData['closest']
         all_ovens = pushTravelsData['all']
     # -------Battery Profile Data------------
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice=facility, date_save=now).order_by('-date_save')
     profile_entered = False
     if daily_prof.exists():
         todays_log = daily_prof[0]
-        if now == todays_log.date_save:
-            profile_entered = True
+        profile_entered = True
     else:
         todays_log = ''
+    inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","") if todays_log else ''
     # --------Weather API Pull---------------
     weather = weatherDict(facilityData.city)
     # ---------Form Data--------------------
@@ -112,7 +111,7 @@ def IncompleteForms(request, facility):
     form_checkAll2 = ["", ]
     form_checkDaily2 = ["", ]
     
-    inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
+    
 
     return render(request, "observer/obs_dashboard.html", {
         'form_checkDaily2': form_checkDaily2, 

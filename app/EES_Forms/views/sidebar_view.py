@@ -19,10 +19,9 @@ from django.views.decorators.csrf import csrf_exempt # type: ignore
 lock = login_required(login_url='Login')
 
 @lock
-def sidebar_data(request, facility):
+def sidebar_data(request):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sidebar_data = {
-        'facility': facility,
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
@@ -30,15 +29,16 @@ def sidebar_data(request, facility):
     return render(request, "supervisor/components/sup_sideBar.html", sidebar_data)
 
 @lock
-def corrective_action_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def corrective_action_view(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     issueForm_query = request.GET.get('issueForm')
     issueMonth_query = request.GET.get('issueMonth')
     issueDate_query = request.GET.get('issueDate')
     issue_contains_query = request.GET.get('issue_contains')
     notified_query = request.GET.get('notified')
-    ca_forms = issues_model.objects.all().filter(facilityChoice__facility_name=facility).order_by('-id')
+    ca_forms = issues_model.objects.filter(formChoice__facilityChoice=facility).order_by('-id')
     
     varPull = [
         issueForm_query,
@@ -170,8 +170,9 @@ def corrective_action_view(request, facility):
     })
 
 @lock
-def calendar_view(request, facility, year, month):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def calendar_view(request, year, month):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
     profile = user_profile_model.objects.all()
@@ -202,18 +203,33 @@ def calendar_view(request, facility, year, month):
 
     calend = Calendar()
     calend.setfirstweekday(6)
-    html_cal = calend.formatmonth(year, month_number, year, facility, withyear=True)
+    html_cal = calend.formatmonth(year, month_number, year, request.user.user_profile, withyear=True)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
             return redirect('sup_dashboard', answer['facilitySelect'])
     return render(request, "ees_forms/schedule.html", {
-        'notifs': notifs, 'sortedFacilityData': sortedFacilityData, 'options': options, 'facility': facility, "supervisor": supervisor, 'year': year, 'month': month, 'prev_month': prev_month, 'next_month': next_month, 'events': events, 'html_cal': html_cal, 'prev_year': prev_year, 'next_year': next_year, 'profile': profile, 'unlock': unlock, 'client': client,
+        'notifs': notifs, 
+        'sortedFacilityData': sortedFacilityData, 
+        'options': options, 
+        "supervisor": supervisor, 
+        'year': year, 
+        'month': month, 
+        'prev_month': prev_month, 
+        'next_month': next_month, 
+        'events': events, 
+        'html_cal': html_cal, 
+        'prev_year': prev_year, 
+        'next_year': next_year, 
+        'profile': profile, 
+        'unlock': unlock, 
+        'client': client,
+        'facility': facility
     })
 
 @lock
-def schedule_view(request, facility):
+def schedule_view(request):
     supervisor = False
     options = facility_model.objects.all()
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
@@ -221,23 +237,23 @@ def schedule_view(request, facility):
     today_year = int(datetime.date.today().year)
     today_month = str(calendar.month_name[datetime.date.today().month])
 
-    return redirect('schedule/' + str(today_year) + '/' + str(today_month))
+    return redirect('Calendar', str(today_year), str(today_month))
 
     return render(request, "ees_forms/scheduling.html", {
         'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'supervisor': supervisor,
     })
 
 @lock
-def archive_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def archive_view(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = facility_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     archiveForm_query = request.GET.get('archiveFormID')
     archiveFormLabel_query = request.GET.get('archiveFormLabel')
     archiveMonth_query = request.GET.get('archiveMonth')
     archiveDate_query = request.GET.get('archiveDate')
-    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility, settings__active=True)
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice=facility, settings__active=True)
     
     def getFsSearchID(itemSearched, fsModel):
         if itemSearched != '' and itemSearched is not None and fsModel.exists():
@@ -390,7 +406,6 @@ def archive_view(request, facility):
     return render(request, 'shared/archive.html', {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
-        'options': options, 
         'facility': facility,
         'client': client, 
         "supervisor": supervisor, 
@@ -400,7 +415,7 @@ def archive_view(request, facility):
 
 @lock
 def search_forms_view(request, facility, access_page):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     readingsData = False
     ModelForms = Forms.objects.all()
@@ -633,205 +648,88 @@ def search_forms_view(request, facility, access_page):
         })
 
 @lock
-def issues_view(request, facility, fsID, form_date, access_page):
-    notifs = checkIfFacilitySelected(request.user, facility)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    profile = user_profile_model.objects.get(user=request.user)
+def issues_view(request, issueID, access_page):
+    issueSelect = issues_model.objects.get(id=issueID) if access_page[:4] != 'form' else form_settings_model.objects.get(id=issueID)
+    facility = issueSelect.formChoice.facilityChoice.facility_name if access_page[:4] != 'form' else issueSelect.facilityChoice.facility_name
     now = datetime.datetime.now().date()
-    todays_log = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = facility_model.objects.all()
-    issueModel = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date')
-    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
-    facilityForms = get_facility_forms('facilityName', facility)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+    notifs = checkIfFacilitySelected(request.user)
     existing = False
-    complince = False
-    notifSelector = ['deviations', 'submitted']
+    search = False
+    notifSelector = ['deviations']
     if access_page[-1] == 'c':
-        compliance = True
         notifSelector.append('compliance')
         access_page = access_page[:-2]
-    else:
-        compliance = False
-    if todays_log.exists():
-        todays_log = todays_log[0]
-    formSetting= form_settings_model.objects.get(id=fsID)
 
-    def create_link_elements():
-        for facForms in facilityForms:
-            settingsID = int(facForms)
-            if settingsID == formSetting.id:
-                formID = int(formSetting.formChoice.id)
-                main_url = formSetting.formChoice.frequency + '/' + str(formID) + '/' + str(fsID) + '/'
-                if formSetting.formChoice.id in {24,25}:
-                    weekendNameDict = {5:'saturday', 6: 'sunday'}
-                    today = datetime.date.today().weekday()
-                    for dayNumber in weekendNameDict:
-                        if today == dayNumber:
-                            day = weekendNameDict[dayNumber]
-                else:
-                    day = False
-            else:
-                continue
-            return main_url, day, formID, settingsID
     if access_page == 'form':
-        main_url, day, formID, settingsID = create_link_elements()
-        if day:
-            link = main_url + access_page + '/' + day
-        else:
-            link = main_url + access_page
         existing = False
-        picker = 'n/a'
-        
-        if issueModel.exists():
-            database_form = issueModel[0]
-            if todays_log.date_save == database_form.date:
-                if database_form.formChoice.id == settingsID:
-                    existing = True
+    elif access_page == 'issue':
+        existing = True
+        search = True
+        form = issueSelect
+        if client:
+            issueSelect.viewed = True
+            issueSelect.save()
+    elif access_page == 'edit' or access_page == 'resubmit':
+        existing = True
+    else:
+        print("go back")
+
+    if search:
+        print("search")
+    else:
         if existing:
             initial_data = {
-                'formChoice': database_form.formChoice,
-                'issues': database_form.issues,
-                'notified': database_form.notified,
-                'time': database_form.time,
-                'date': database_form.date,
-                'cor_action': database_form.cor_action
+                'issues': issueSelect.issues,
+                'notified': issueSelect.notified,
+                'time': issueSelect.time,
+                'date': issueSelect.date,
+                'cor_action': issueSelect.cor_action
             }
         else:
-            print("check 1")
             initial_data = {
-                'date': todays_log.date_save,
-                'formChoice': form_settings_model.objects.get(id=settingsID)
+                'date': now,
+                'formChoice': issueSelect
             }
-            print(initial_data)
-            picker = ''
+
         form = issues_form(initial=initial_data)
-        if request.method == "POST":
-            dataCopy = request.POST.copy()
-            dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
-            dataCopy["out_of_compliance"] = compliance
-            dataCopy["userChoice"] = profile
-            if existing:
-                data = issues_form(dataCopy, instance=database_form)
-            else:
-                dataCopy['formChoice'] = formSetting
-                data = issues_form(dataCopy)
-            if data.is_valid():
-                data.save()
-                createNotification(facility, request, fsID, now, notifSelector, data.save())
-                updateSubmissionForm(fsID, True, todays_log.date_save)
-                return redirect('IncompleteForms', facility)
-    elif access_page == 'issue':
-        main_url, day, formID, settingsID = create_link_elements()
-        if day:
-            link = main_url + form_date + '/' + day
+
+    if request.method == "POST":
+        copyRequest = request.POST.copy()
+        copyRequest['formChoice'] = issueSelect if not existing else issueSelect.formChoice
+        copyRequest['userChoice'] = request.user.user_profile
+        if existing:
+            data = issues_form(copyRequest, instance=issueSelect)
         else:
-            link = main_url + form_date
-        org = issues_model.objects.filter(date__exact=form_date)
-        database_form = org[0]
-        for entry in org:
-            if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                if int(fsID) == int(entry.formChoice.id):
-                    existing = True
-                    picker = entry
-                    form = issues_form()
-                    if client:
-                        entry.viewed = True
-                        entry.save()
-    elif access_page == 'edit' or access_page == 'resubmit':
-        org = issues_model.objects.filter(formChoice=formSetting).order_by('-date')
-        database_form = org[0]
-        for entry in org:
-            if datetime.datetime.strptime(form_date, '%Y-%m-%d').date() == entry.date:
-                picker = entry
-                link = ''
-                existing=True
-        initial_data = {
-            'form': picker.formChoice.formChoice.id,
-            'issues': picker.issues,
-            'notified': picker.notified,
-            'time': picker.time,
-            'date': picker.date,
-            'cor_action': picker.cor_action
-        }
-
-        form = issues_form(initial=initial_data)
-
-        if request.method == "POST":
-            dataCopy = request.POST.copy()
-            dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
-            dataCopy["out_of_compliance"] = compliance
-            data = issues_form(dataCopy, instance=picker)
-            if data.is_valid():
-                data.save()
-                print(data.save().id)
-                if access_page == 'resubmit':
-                    createNotification(facility, request, fsID, now, notifSelector, data.save())
-                    updateSubmissionForm(fsID, True, picker.date)
-                    return redirect('IncompleteForms', facility)
-                else:
-                    return redirect('issues_view', facility, fsID, form_date, 'issue')
-    else:
-        existing = False
-        picker = 'n/a'
-        if issues_model.objects.count() != 0:
-            org = issues_model.objects.all().order_by('-date')
-            database_form = org[0]
-            if todays_log.date_save == database_form.date:
-                if database_form.formChoice.formChoice.id == fsID:
-                    existing = True
-
-    if existing:
-        initial_data = {
-            'form': database_form.formChoice.formChoice.id,
-            'issues': database_form.issues,
-            'notified': database_form.notified,
-            'time': database_form.time,
-            'date': database_form.date,
-            'cor_action': database_form.cor_action
-        }
-    else:
-        initial_data = {
-            'date': todays_log.date_save,
-            'formChoice': form_settings_model.objects.get(id=settingsID)
-        }
-
-    form = issues_form(initial=initial_data)
-
-    # if request.method == "POST":
-    #     dataCopy = request.POST.copy()
-    #     dataCopy["facilityChoice"] = options.filter(facility_name=facility)[0]
-    #     if existing:
-    #         data = issues_form(dataCopy, instance=database_form)
-    #     else:
-    #         data = issues_form(dataCopy)
-    #     if data.is_valid():
-    #         print('check #1')
-    #         data.save()
-    #         createNotification(facility, request, fsID, now, 'submitted')
-    #         createNotification(facility, request, fsID, now, 'corrective')
-    #         updateSubmissionForm(fsID, True, todays_log.date_save)
-    #         return redirect('IncompleteForms', facility)
+            data = issues_form(copyRequest)
+        if data.is_valid():
+            print('check #1')
+            A = data.save()
+            if not existing:
+                notifSelector.append('submitted')
+            createNotification(facility, request, A.formChoice.id, now, notifSelector, A.id)
+            if not existing:
+                updateSubmissionForm(A.formChoice.id, True, now)
+            
+            if existing:
+                return redirect('issues_view', A.id, 'issue')
+            else:
+                return redirect('IncompleteForms')
 
     return render(request, "shared/issues_template.html", {
         'notifs': notifs, 
-        'sortedFacilityData': sortedFacilityData, 
-        'options': options, 
         'facility': facility, 
         'form': form, 
         'access_page': access_page, 
-        'picker': picker, 
-        "form_date": form_date, 
-        'link': link, 
-        'profile': profile, 
         "unlock": unlock, 
         "client": client, 
         "supervisor": supervisor,
-        "initial_data": initial_data
+        'issueSelect': issueSelect
     })
 
 @lock
 def event_add_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
     companyData = user_profile_model.objects.get(user__id=request.user.id).company
@@ -899,12 +797,12 @@ def event_add_view(request, facility):
 
 @lock
 def profile_edit_view(request, facility, userID):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if client:
         return redirect('c_dashboard')
     elif unlock:
-        return redirect('IncompleteForms', facility)
+        return redirect('IncompleteForms')
     facilityList = getCompanyFacilities(request.user.user_profile.company.company_name)
     user_profiles = user_profile_model.objects.all()
     pic = ''
@@ -968,7 +866,7 @@ def profile_edit_view(request, facility, userID):
 
 @lock
 def event_detail_view(request, facility, access_page, event_id):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     today = datetime.date.today()
     today_year = int(today.year)
@@ -1048,8 +946,9 @@ def handlePhone(number):
     return parsedNumber
     
 @lock
-def shared_contacts_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def shared_contacts_view(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
     companyOfUser = user_profile_model.objects.get(user=request.user).company
@@ -1112,12 +1011,13 @@ def delete_selected_sops(request, facility):
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
 
 @lock
-def sop_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def sop_view(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
-    options = facility_model.objects.filter(facility_name=facility)[0]
-    sops = sop_model.objects.filter(facilityChoice__facility_name=facility).order_by('name')
+    options = facility
+    sops = sop_model.objects.filter(facilityChoice=facility).order_by('name')
     sopForm = sop_form()
     
     if request.method == 'POST':
@@ -1183,13 +1083,14 @@ def sop_view(request, facility):
     })
    
 @lock 
-def formsProgress(request, facility, section):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def formsProgress(request, section):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     if unlock:
-        return redirect('IncompleteForms', facility)
-    formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+        return redirect('IncompleteForms')
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice=facility)
     clientForms = get_facility_forms('facilityName', facility)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
     freqList = ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually']

@@ -150,7 +150,7 @@ def card_graphs(request, facility):
 
 @lock
 def card_corrective_actions(request, facility):
-    ca_forms = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-id')
+    ca_forms = issues_model.objects.filter(formChoice__facilityChoice__facility_name=facility).order_by('-id')
 
     html = render_to_string(
         "shared/dashboard_cards/dashCard_correctiveActions.html", 

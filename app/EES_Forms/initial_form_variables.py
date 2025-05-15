@@ -7,26 +7,27 @@ from django.shortcuts import redirect # type: ignore
 from django.contrib import messages # type: ignore
 
 
-def initiate_form_variables(fsID, requestUser, facility, selector):
+def initiate_form_variables(fsID, requestUser, selector):
+    fsIDSelect = form_settings_model.objects.get(id=int(fsID))
+    facilityName = fsIDSelect.facilityChoice.facility_name
     freq = getFacSettingsInfo(fsID)
     formName = freq.formChoice.form
-    notifs = checkIfFacilitySelected(requestUser, facility)
+    notifs = checkIfFacilitySelected(requestUser)
     unlock, client, supervisor = setUnlockClientSupervisor(requestUser)
     now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
-    options = facility_model.objects.filter(facility_name=facility)[0]
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facilityName).order_by('-date_save')
+    options = freq.facilityChoice
     full_name = requestUser.get_full_name()
-    picker = issueForm_picker(facility, selector, fsID)
-    fsIDSelect = form_settings_model.objects.get(id=int(fsID))
+    picker = issueForm_picker(facilityName, selector, fsID)
     try:
         selectedModel = apps.get_model('EES_Forms', freq.formChoice.link + "_model")
-        #print(selectedModel.objects.all())
+        # print(selectedModel.objects.all())
         try:
-            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
+            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facilityName).order_by('-date')
             #print("CHECK submitted forms")
-            print(submitted_forms)
+            # print(submitted_forms)
         except:
-            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-week_start')
+            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facilityName).order_by('-week_start')
     except:
         submitted_forms = False
     
@@ -38,18 +39,26 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
     database_form = False
     data = False
     #print(submitted_forms)
+    print(selector)
     if selector not in ('form', 'edit'):
         try:
+            # print(submitted_forms)
             form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date(), formSettings__id=fsID).order_by('-date')
             print(f"The query filters by date", form_query)
         except:
-            form_query = submitted_forms.filter(week_start=datetime.strptime(selector, "%Y-%m-%d").date(), formSettings__id=fsID).order_by('-week_start')
-            print("check week")
+            selectorDateParsed = datetime.strptime(selector, "%Y-%m-%d").date()
+            todays_num = selectorDateParsed.weekday()
+            print(todays_num)
+            startDate = selectorDateParsed - timedelta(days=todays_num)
+            print(startDate)
+            form_query = submitted_forms.filter(week_start=startDate, formSettings__id=fsID).order_by('-week_start')
+            print(f"check week", form_query)
         database_model = form_query[0] if form_query.exists() else False
         if database_model:
             data = database_model
             existing = True
             search = True
+            print(f"archive and everything is true")
         else:
             messages.error(request,"ERROR: ID-11850005. Contact Support Team.")
             #return sendToDash(request.user)

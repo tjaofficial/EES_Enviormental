@@ -1,19 +1,21 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%}{% load static %}
-<link href="{% static 'ees_forms/style/issueForm.css' %}" rel="stylesheet" />
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/issueForm.css' %}" rel="stylesheet" />
+{% endblock %}
 <div class='mainCont mainContCenter'>    
     <div>
         <div class="issue_card">
             <div class="cardHeader methodPlusBlue">
             {% if access_page == 'form' %}
-                {% comment %} {% include "shared/components/backArrow.html" with destination="corrective_action-form" link=link %} {% endcomment %}
+                {% include "shared/components/backArrow.html" with destination="corrective_action-form" fsID=issueSelect date=form.date.value %}
                 Fill Out a Corrective Action Form
             {% elif access_page == 'issue' %}
                 {% include "shared/components/backArrow.html" with destination="corrective_action" %}
-                Corrective Action LogID - #{{ picker.id }}
+                Corrective Action LogID - #{{ issueSelect.id }}
             {% elif access_page == 'edit' or access_page == 'resubmit'%}
-                    {% include "shared/components/backArrow.html" with destination="corrective_action-edit" date=link %}
-                    EDIT - Corrective Action LogID - #{{ picker.id }}  
+                {% include "shared/components/backArrow.html" with destination="corrective_action-edit" issueID=issueSelect.id %}
+                EDIT - Corrective Action LogID - #{{ issueSelect.id }}  
             {% endif %}
             </div>
             <div class="issue_contentCont">
@@ -40,45 +42,37 @@
                 {% elif access_page == 'issue' %}
                     <br>
                     <div style="display: flex; margin: auto; width: fit-content;">
-                        <h4 class="issue_labels">Form:</h4> 
-                        
-                            &nbsp;&nbsp;{{ picker.formChoice.id }}
+                        <h4 class="issue_labels">Form:</h4>
+                        &nbsp;&nbsp;{{ form.formChoice.id }}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        
                         <h4 class="issue_labels">Date:</h4> 
-                        
-                            &nbsp;&nbsp;{{ picker.date }}
+                        &nbsp;&nbsp;{{ form.date }}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <h4 class="issue_labels">Time:</h4> 
-                        
-                            &nbsp;&nbsp;{{ picker.time }}
-                    
+                        &nbsp;&nbsp;{{ form.time }}
                     </div>
                     <br>
                     <h4 class="issue_labels">Describe Issues:</h4>
                     <div class="issue_box">
-                        "{{ picker.issues }}"
+                        "{{ form.issues }}"
                     </div>
                     <br><br>
                     <h4 class="issue_labels">Corrective Action Taken:</h4>
                     <div class="issue_box">
-                        "{{ picker.cor_action }}"
+                        "{{ form.cor_action }}"
                     </div>
                     <br><br>
                     <div class="issue_bottomCont">
-                        <h4 class="issue_labels">
-                            EES Personnel Notified:
-                        </h4>&nbsp; {{ picker.notified }}
+                        <h4 class="issue_labels">EES Personnel Notified:</h4>
+                        &nbsp; {{ form.notified }}
                     </div>
                     <div>
-                        <a href="../../../{{link}}">Click here to view form</a>
+                        <a href="{% url form.formChoice.formChoice.link form.formChoice.id form.date %}">Click here to view form</a>
                     </div>
                     {% if unlock %}
-                    <div style="text-align: right;">
-                        <a href="{% url  'issues_view' facility picker.formChoice.id picker.date 'edit' %}">
-                            Edit
-                        </a>
-                    </div>
+                        <div style="text-align: right;">
+                            <a href="{% url 'issues_view' issueSelect.id 'edit' %}">Edit</a>
+                        </div>
                     {% endif %}
                     <br>
                 {% elif access_page == 'edit' or access_page == 'resubmit' %}
@@ -86,7 +80,7 @@
                         {% csrf_token %}
                         <br>
                         <div style="text-align:center;">
-                            Form: {{ picker.formChoice.id }} 
+                            Form: {{ issueSelect.formChoice.id }} 
                             Date: {{ form.date }}
                             Time: {{ form.time }}
                         </div>

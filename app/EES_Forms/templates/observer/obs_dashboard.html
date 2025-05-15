@@ -26,7 +26,7 @@
                         {% endfor %}
                     {% endif %}
                     <br>
-                    <a href="{% url 'pt_admin1' facility%}">
+                    <a href="{% url 'pt_admin1' facility %}">
                         <h4>View All</h4>
                     </a>
                 </div>
@@ -37,28 +37,20 @@
                         Battery Profile {{ todays_log.date }}
                     </h2>
                 </div>
-                {% if profile_entered %}
                 <div class="card3_Form">
-                    Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
-                    Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
-                    Inoperable Oven(s):<br>
-                    {{ inopNumbsParse }}<br>
+                    {% if profile_entered %}
+                        Foreman: &nbsp;&nbsp;{{ todays_log.foreman }}<br>
+                        Crew: &nbsp;&nbsp;{{ todays_log.crew }}<br>
+                        Inoperable Oven(s):<br>
+                        {{ inopNumbsParse }}<br>
+                    {% else %}
+                        None
+                    {% endif %}
                     <br>
-                    
-                    <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
+                    <a href="{% url 'daily_battery_profile' 'edit' now %}">
                         <h4>Edit</h4>
                     </a>
                 </div>
-                {% else %}
-                <div class="card3_Form">
-                    None
-                    <br>
-                    
-                    <a href="daily_battery_profile/edit/{{now.year}}-{% if now.month < 10 %}0{{now.month}}{% else %}{{now.month}}{% endif %}-{{now.day}}">
-                        <h4>Add</h4>
-                    </a>
-                </div>
-                {% endif %}
             </div>
         </div>
         <div style="display: flex;">
@@ -131,7 +123,7 @@
                 </div>
                 <div class="card2_Form">
                     {% if not sigExisting %}
-                    <a href="{% url 'signature' facility %}">
+                    <a href="{% url 'signature' %}">
                         <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
                             <p style="font-size: 28px; margin-top: -8px;">
                                 Tap to Sign
@@ -184,7 +176,7 @@
             <div id="i0" style="display: block;">
                 {% for item in facFormList1 %}
                     {% if not item.subChoice.submitted %}
-                        <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
+                        <a href="{% url item.formChoice.link item.id 'form' %}{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                             <div class="card_Form" style="margin-left: 50px;">
                                 <h3 class="card_Form_letter">
                                     {{item.id}}
@@ -222,7 +214,7 @@
             <div id="c0" style="display: block;">
                 {% for item in facFormList1 %}
                     {% if item.subChoice.submitted %}
-                    <a href="{{ item.formChoice.frequency }}/{{ item.formChoice.form }}/{{item.id}}/form{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
+                    <a href="{% url item.formChoice.link item.id 'form' %}{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
                         <div class="card_Form" style="margin-left: 50px;">
                             <h3 class="card_Form_letter">
                                 {{item.id}}

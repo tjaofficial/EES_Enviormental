@@ -5,7 +5,7 @@
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
 {% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
-<div class="mainCont mainContCenter" style="width: 845px; align-items:unset; position:relative; padding-bottom: 48px; left:unset;">
+<div class="mainCont mainContCenter" style="width: 845px; align-items:unset; position:relative; padding-bottom: 48px; left:unset; overflow: unset;">
     <div style="width: 55rem;">
         <div class="card">
             <div class="cardHeader methodPlusBlue"> 
@@ -13,7 +13,7 @@
                 Archive Search
             </div>
             <div class='contentCont'>
-                <form method="GET" action="./archive" style="text-align: center;">
+                <form method="GET" action="{% url 'archive' %}" style="text-align: center;">
                     <div class="CR_dataCont">
                         <div class="inputCont">
                             Search Form ID {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
@@ -53,11 +53,11 @@
                         - 
                         <a href="
                             {% if items.formSettings.formChoice.form == '24' or items.formSettings.formChoice.form == '25' %}
-                                {% url items.formSettings.formChoice.link facility items.formSettings.id items.date items.weekend_day %}
+                                {% url items.formSettings.formChoice.link items.formSettings.id items.date items.weekend_day %}
                             {% elif items.formSettings.formChoice.form == '20' or items.formSettings.formChoice.form == '6' or items.formSettings.formChoice.form == '21' or items.formSettings.formChoice.form == '8'%}
-                                {% url items.formSettings.formChoice.link facility items.formSettings.id items.week_start %}
+                                {% url items.formSettings.formChoice.link items.formSettings.id items.week_start %}
                             {% else %}
-                                {% url items.formSettings.formChoice.link facility items.formSettings.id items.date %}
+                                {% url items.formSettings.formChoice.link items.formSettings.id items.date %}
                             {% endif %}
                         ">
                             {{items.formSettings.id}} - 

@@ -831,6 +831,7 @@ def pdf_template_6(primaryData, title, subTitle, formInformation):
 
 def pdf_template_7(primaryData, title, subTitle):
     formSettings = primaryData.formSettings.settings['settings']
+    print(primaryData.formSettings)
     date = Paragraph('<para align=center font=Times-Roman><b>Date:</b> ' + date_change(primaryData.date) + '</para>', styles['Normal'])
     tableData = [
         [title],
@@ -853,6 +854,7 @@ def pdf_template_7(primaryData, title, subTitle):
     for areaDict in areaData:
         if areaDict:
             tableCount += 1
+            print(formSettings)
             areaName = formSettings[f"area{tableCount+1}"]['name']
             startStop = Paragraph('<para align=center><b>Start:</b>&#160;' + time_change(areaDict['start']) + '&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<b>End:</b>&#160;' + time_change(areaDict['stop'])+ '</para>', styles['Normal'])
             readings = areaDict['readings']

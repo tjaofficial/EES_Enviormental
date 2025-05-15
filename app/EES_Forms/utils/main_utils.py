@@ -1,3 +1,16 @@
+from django.shortcuts import redirect # type: ignore
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
+from channels.layers import get_channel_layer # type: ignore
+from asgiref.sync import async_to_sync # type: ignore
+from django.contrib.sites.shortcuts import get_current_site   # type: ignore
+from django.template.loader import render_to_string  # type: ignore
+from django.utils.html import strip_tags # type: ignore
+from django.core.mail import send_mail # type: ignore
+from django.conf import settings # type: ignore
+from django.contrib import messages # type: ignore
+from django.db.models import Field, Min # type: ignore
+from django.contrib.contenttypes.models import ContentType # type: ignore
+from ..utils.twilio_verify import send_sms_message
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
 from ..models import *
@@ -12,19 +25,7 @@ import calendar
 import random
 import string
 import time
-from django.shortcuts import redirect # type: ignore
-from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-from channels.layers import get_channel_layer # type: ignore
-from asgiref.sync import async_to_sync # type: ignore
-from django.contrib.sites.shortcuts import get_current_site   # type: ignore
-from django.template.loader import render_to_string  # type: ignore
-from django.utils.html import strip_tags # type: ignore
-from django.core.mail import send_mail # type: ignore
-from django.conf import settings # type: ignore
-from django.contrib import messages # type: ignore
-from django.db.models import Field, Min # type: ignore
-from django.contrib.contenttypes.models import ContentType # type: ignore
-from ..utils.twilio_verify import send_sms_message
+import re
 
 #from .admin import EventAdmin
 parseFormList = [
@@ -830,14 +831,14 @@ class Calendar(HTMLCalendar):
         
         
  
-    def formatmonth(self, theyear, themonth, year, facility, withyear=True):
+    def formatmonth(self, theyear, themonth, year, user_prof, withyear=True):
         """
         Return a formatted month as a table.
         """
-        if facility == "supervisor":
+        if user_prof.position == "supervisor":
             events = Event.objects.filter(date__month=themonth, personal=True)
         else:
-            events = Event.objects.filter(date__month=themonth, facilityChoice__facility_name=facility)
+            events = Event.objects.filter(date__month=themonth, userProf=user_prof)
  
         v = []
         a = v.append
@@ -897,9 +898,10 @@ class PrintCalendar(HTMLCalendar):
                     if h.date.year == year:
                         selectedFormDate = h
                         if type == 'single':
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
+                           
+                            forms_html += "<a href='../../../../../print-index/" + type + "/Daily/" + str(selectedForm) + "-" + str(label) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
+                            forms_html += "<a href='../../../../../print-index/" + type + "/Daily/" + str(selectedForm) + "/" + str(selectedFormDate.date.year) + "-" + formatTheDayNumber(selectedFormDate.date.month) +"-"+ formatTheDayNumber(selectedFormDate.date.day) +"' target='_blank'>Submitted Packet</a><br>"
                         
                         eventCell = True
                         break
@@ -933,7 +935,7 @@ class PrintCalendar(HTMLCalendar):
                     if h.year == year and h.day == day:
                         print('check 1')
                         selectedFormDate = h
-                        forms_html += "<a href='../../../../printIndex/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.year) + "-"+ formatTheDayNumber(selectedFormDate.month) +"-"+ formatTheDayNumber(selectedFormDate.day) +"' target='_blank'>Submitted Packet</a><br>"
+                        forms_html += "<a href='../../../../../print-index/" + type + "/" + packFreq + "/"+ str(selectedForm) + "/" + str(selectedFormDate.year) + "-"+ formatTheDayNumber(selectedFormDate.month) +"-"+ formatTheDayNumber(selectedFormDate.day) +"' target='_blank'>Submitted Packet</a><br>"
                         eventCell = True
                         break
             elif packFreq == 'Monthly':
@@ -944,15 +946,15 @@ class PrintCalendar(HTMLCalendar):
                 for form in forms_from_day:
                     if form.date.year == year:
                         if type == 'single':
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../../print-index/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
                         else:
-                            forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
+                            forms_html += "<a href='../../../../../print-index/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.date.year) + "-"+ formatTheDayNumber(form.date.month) +"-"+ formatTheDayNumber(form.date.day) +"' target='_blank'>Submitted Form</a><br>"
                         eventCell = True
             else:
                 forms_from_day = forms.filter(week_start__day=day)
                 for form in forms_from_day:
                     if form.week_start.year == year:
-                        forms_html += "<a href='../../../../printIndex/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"' target='_blank'>Submitted Form</a><br>"
+                        forms_html += "<a href='../../../../../print-index/" + type + "/Daily/" + str(selectedForm[0]) + "-" + str(label) + "/" + str(form.week_start.year) + "-"+ formatTheDayNumber(form.week_start.month) +"-"+ formatTheDayNumber(form.week_start.day) +"' target='_blank'>Submitted Form</a><br>"
                         eventCell = True
         
         forms_html += "</ul>"
@@ -1188,10 +1190,10 @@ def calculateProgessBar(facility, frequency):
 
 def ninetyDayPushTravels(facility):
     today = datetime.datetime.now().date()
-    batInfo = facility_model.objects.get(facility_name=facility)
+    batInfo = facility
     due_date_threshold = today + timedelta(days=30)
     most_recent_dates = {}
-    all_records = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility)
+    all_records = form5_model.objects.filter(formSettings__facilityChoice=facility)
     if all_records.exists():
         for record in all_records:
             record_date = record.date  # The date the record was created
@@ -1354,8 +1356,8 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
         if newNotification not in notifQuery:
             newNotification.save()
             print(f"Notfiication for '{newNotification.header}' has succesfully been created within MethodPlus Database")
-
-            companyParse = f'notifications_{userProf.company.company_name.replace(" ","_")}'
+            clean_name = re.sub(r'[^a-zA-Z0-9_.-]', '_', userProf.company.company_name)[:90]
+            companyParse = f'notifications_{clean_name}'
             #notifCount = len(notifQuery.filter(user=receivingUser, hovered=False, clicked=False, facilityChoice__company=userProf.company))
             channel_layer = get_channel_layer()
 
@@ -1456,11 +1458,13 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
 
 def createNotification(facility, request, fsID, date, notifSelector, issueID):
     print(f"Start Notification Process for {facility} fsID {fsID}")
+    if not isinstance(notifSelector, list):
+        notifSelector = [notifSelector]
     distributeNotifications(facility, request, fsID, date, notifSelector, issueID)
     print("_________________________________")
     
-def checkIfFacilitySelected(user, facility):
-    if facility not in ['observer']:
+def checkIfFacilitySelected(user):
+    if user.user_profile.position not in ['observer']:
         notifDict = {}
         sortedFacilityData = getCompanyFacilities(user.user_profile.company.company_name)
         for fac in sortedFacilityData:

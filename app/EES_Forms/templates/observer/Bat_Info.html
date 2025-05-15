@@ -5,7 +5,7 @@
     <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet">
     <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 {% endblock %}
-{% block list%}
+{% block list %}
     <div class="mainCont mainContCenter" style="width:34rem;">
         <div class="card">
             <div class='cardHeader methodPlusBlue'>
@@ -39,9 +39,9 @@
                 <button class="submit-btn methodPlusBlue">Submit</button>
                 <br><br>
                 {% if access_page == 'login' or access_page == 'edit' %}
-                <p>
-                    Don't have this information yet? <a href="{% url 'IncompleteForms' facility %}" style="text-decoration: underline;">Skip To Forms</a>
-                </p>
+                    <p>
+                        Don't have this information yet? <a href="{% url 'IncompleteForms' %}" style="text-decoration: underline;">Skip To Forms</a>
+                    </p>
                 {% endif %}
             </form>
         </div>

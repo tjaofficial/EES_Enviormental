@@ -24,9 +24,12 @@ lock = login_required(login_url='Login')
 
 @lock
 @group_required(SUPER_VAR)
-def sup_dashboard_view(request, facility):
+def sup_dashboard_view(request):
+    facility = getattr(request, 'facility', None)
+    # if not facility:
+    #     return redirect('select_facility_page')  # or handle default
     updateAllFormSubmissions(facility)
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
@@ -43,20 +46,18 @@ def sup_dashboard_view(request, facility):
     now = datetime.datetime.now().date()
 
     last7days = now - datetime.timedelta(days=6)
-    options = facility_model.objects.filter(facility_name=facility)
+    options = facility
     emypty_dp_today = True
     colorMode = userColorMode(request.user)[0]  
     userMode = userColorMode(request.user)[1]
     userProfile = request.user.user_profile
     userCompany = userProfile.company
-    if options.exists():
-        options = options[0]
 
     today = datetime.date.today()
     #---------- Graph Data ---------------------
     graphData = ''
     graphDataDump = ''
-    if facility != SUPER_VAR:
+    if facility:
         if userProfile.settings['facilities'][str(options.id)]['dashboard'] == "Battery":
             baseIterations = userProfile.settings['facilities'][str(options.id)]['settings']
             graphSettings = baseIterations['graphs']
@@ -126,7 +127,7 @@ def sup_dashboard_view(request, facility):
             }
             graphDataDump = json.dumps(graphData)
     # -------PROGRESS PERCENTAGES -----------------
-    if facility != SUPER_VAR:
+    if facility:
         daily_percent = calculateProgessBar(facility, 'Daily')
         weekly_percent = calculateProgessBar(facility, "Weekly")
         monthly_percent = calculateProgessBar(facility, 'Monthly')
@@ -139,7 +140,7 @@ def sup_dashboard_view(request, facility):
         quarterly_percent = False
         annually_percent = False
     # -------90 DAY PUSH ----------------
-    if facility != SUPER_VAR:
+    if facility:
         pushTravelsData = ninetyDayPushTravels(facility)
         if pushTravelsData == 'EMPTY':
             od_30 = ''
@@ -170,9 +171,9 @@ def sup_dashboard_view(request, facility):
             if x.date == today:
                 todays_obser = x.observer
     # ----ISSUES/CORRECTIVE ACTIONS----------
-    ca_forms = issues_model.objects.filter(facilityChoice__facility_name=facility).order_by('-id')
+    ca_forms = issues_model.objects.filter(formChoice=facility).order_by('-id')
     # ----Weather API Pull-----------
-    if facility == SUPER_VAR:
+    if not facility:
         weather = weatherDict(False)
     else:
         weather = weatherDict(options.city)
@@ -181,10 +182,7 @@ def sup_dashboard_view(request, facility):
         if emypty_dp_today:
             if request.method == 'POST':
                 answer = request.POST
-                if 'facilitySelect' in answer.keys():
-                    if answer['facilitySelect'] != '':
-                        return redirect('sup_dashboard', answer['facilitySelect'])
-                elif 'colorMode' in answer.keys():
+                if 'colorMode' in answer.keys():
                     print("CHECK 1")
                     colorModeSwitch(request)
                     return redirect(request.META['HTTP_REFERER'])
@@ -221,10 +219,7 @@ def sup_dashboard_view(request, facility):
             })
     if request.method == 'POST':
         answer = request.POST
-        if 'facilitySelect' in answer.keys():
-            if answer['facilitySelect'] != '':
-                return redirect('sup_dashboard', answer['facilitySelect'])
-        elif 'colorMode' in answer.keys():
+        if 'colorMode' in answer.keys():
             print(answer['colorMode'])
             colorModeSwitch(request)
             
@@ -237,14 +232,13 @@ def sup_dashboard_view(request, facility):
     })
 
 @lock
-def header_data(request, facility):
+def header_data(request):
     print("STEP 1")
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     notifSettings = request.user.user_profile.settings['facilities']
     header_data = {
-        'facility': facility,
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
@@ -267,8 +261,9 @@ def get_unread_notification_count(request):
 
 @lock
 @group_required(SUPER_VAR)
-def register_view(request, facility, access_page):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def register_view(request, access_page):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
@@ -485,7 +480,7 @@ def register_view(request, facility, access_page):
                     fail_silently=False
                 )
                 messages.success(request, 'Account was created for ' + username + ". An activation link has been sent to their email.")
-                return redirect('Contacts', facility)
+                return redirect('Contacts')
         else:
             print('TOO FAR')        
     return render(request, "supervisor/register.html", {
@@ -513,7 +508,7 @@ def register_view(request, facility, access_page):
 @lock
 @group_required(SUPER_VAR)
 def form_request_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     form = form_requests_form

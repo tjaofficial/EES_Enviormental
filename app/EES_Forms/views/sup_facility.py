@@ -16,11 +16,12 @@ from django.views.decorators.csrf import csrf_exempt # type: ignore
 lock = login_required(login_url='Login')
 
 @lock
-def facilityList(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def facilityList(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
-        return redirect('IncompleteForms', facility)
+        return redirect('IncompleteForms')
     if client:
         return redirect('c_dashboard', facility)
     facList = getCompanyFacilities(request.user.user_profile.company.company_name)
@@ -209,10 +210,10 @@ def get_facility_form_data(request):
 
 @lock    
 def facilityForm(request, facility, packet):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
-        return redirect('IncompleteForms', facility)
+        return redirect('IncompleteForms')
     today = datetime.date.today()
     q = request.GET.get('q')
     specificFacility = facility_model.objects.filter(facility_name=facility)[0]
@@ -360,10 +361,10 @@ def facilityForm(request, facility, packet):
     
 @lock
 def facility_form_settings(request, facility, fsID, packetID, formLabel):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
-        return redirect('IncompleteForms', facility)
+        return redirect('IncompleteForms')
     if client:
         userProfile = user_profile_model.objects.get(user=request.user)
         return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
@@ -451,10 +452,10 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
     
 @lock
 def Add_Forms(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
-        return redirect('IncompleteForms', facility)
+        return redirect('IncompleteForms')
     if client:
         return redirect('c_dashboard', facility)
     today = datetime.date.today()

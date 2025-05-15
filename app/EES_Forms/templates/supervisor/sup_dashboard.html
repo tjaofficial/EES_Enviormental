@@ -6,11 +6,10 @@
     <script defer src="{% static 'ees_forms/script/dashboardCards.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-
 {% endblock %}
-{% if facility == 'supervisor' %}
+{% if not facility %}
     <div class='mainAppCont'>
-        <a class='appCont grid-item addOns' href="{% url 'Schedule' facility %}"> 
+        <a class='appCont grid-item addOns' href="{% url 'Schedule' %}"> 
             <div style="width:100%;">
                 <div class='appHeader'>SCHEDULE</div>
                 <div class='appIcon'>
@@ -20,7 +19,7 @@
                 </div>
             </div>
         </a>
-        <a class='appCont grid-item addOns' href="{% url 'Contacts' facility %}"> 
+        <a class='appCont grid-item addOns' href="{% url 'Contacts' %}"> 
                 <div class='appHeader'>CONTACTS</div>
                 <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -28,7 +27,7 @@
                     </svg>
                 </div>
         </a>
-        <a id="accountLink" class='appCont grid-item addOns' href="{% url 'Account' facility %}"> 
+        <a id="accountLink" class='appCont grid-item addOns' href="{% url 'Account' %}"> 
             <div style="width:100%;">
                 <div class='appHeader'>ACCOUNT</div>
                 <div class='appIcon'>
@@ -50,7 +49,7 @@
                 localStorage.setItem(locakStorageKey, JSON.stringify(settingsTabPositions));
             })
         </script>
-        <a id="settingsLink" class='appCont grid-item addOns' href="{% url 'Account' facility %}"> 
+        <a id="settingsLink" class='appCont grid-item addOns' href="{% url 'Account' %}"> 
             <div class='appHeader'>SETTINGS</div>
             <div class='appIcon'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -70,7 +69,7 @@
                 localStorage.setItem(locakStorageKey, JSON.stringify(settingsTabPositions));
             })
         </script>
-        <a class='appCont grid-item addOns' href="{% url 'Register' facility 'observer'%}"> 
+        <a class='appCont grid-item addOns' href="{% url 'Register' 'observer'%}"> 
                 <div class='appHeader'>ADD USER</div>
                 <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -78,7 +77,7 @@
                     </svg>
                 </div>
         </a>
-        <a class='appCont grid-item addOns' href="{% url 'facilityList' facility %}"> 
+        <a class='appCont grid-item addOns' href="{% url 'facilityList' %}"> 
                 <div class='appHeader'>ADD FORM</div>
                 <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -86,7 +85,7 @@
                     </svg>
                 </div>
         </a>
-        <a class='appCont grid-item addOns' href="{% url 'Register' facility 'facility'%}"> 
+        <a class='appCont grid-item addOns' href="{% url 'Register' 'facility'%}"> 
                 <div class='appHeader'>ADD FACILITY</div>
                 <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -94,7 +93,7 @@
                     </svg>
                 </div>
         </a>
-        <a class='appCont grid-item addOns' href="{% url 'Register' facility 'client'%}"> 
+        <a class='appCont grid-item addOns' href="{% url 'Register' 'client'%}"> 
                 <div class='appHeader'>ADD CLIENT</div>
                 <div class='appIcon'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -102,7 +101,7 @@
                     </svg>
                 </div>
         </a>
-        <a class='appCont grid-item addOns' href="{% url 'requestForm' facility %}"> 
+        <a class='appCont grid-item addOns' href="{% url 'requestForm' %}"> 
             <div class='appHeader'>REQUEST FORMS</div>
             <div class='appIcon'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

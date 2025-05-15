@@ -13,14 +13,12 @@ from ..decor import group_required
 lock = login_required(login_url='Login')
 
 @lock
-def sup_account_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def sup_account_view(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     stripeData = request.user.user_profile.company.subscription # need to fix this
-    if supervisor:
-        facility = 'supervisor'
-    elif unlock:
-        facility = 'observer'
+
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     userProfileQuery = user_profile_model.objects.all()
     accountData = request.user.user_profile
@@ -82,13 +80,13 @@ def sup_account_view(request, facility):
 
 @lock
 def sup_update_account(request, facility, selector):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if supervisor:
         facility = 'supervisor'
     elif unlock:
         facility = 'observer'
-    user = user_profile_model.objects.get(user__id=request.user.id)
+    user = request.user
     variables = {
         'supervisor': supervisor, 
         "client": client, 
@@ -98,20 +96,18 @@ def sup_update_account(request, facility, selector):
         'selector': selector
     }
     if selector == "account":
-        primaryModel = User.objects.get(id=request.user.id)
+        primaryModel = ""
+        primaryForm = ""
         initial_data = {
-            'username': user.user.username,
-            'first_name': user.user.first_name,
-            'last_name': user.user.last_name,
-            'email': user.user.email,
-            'cert_date': user.cert_date,
-            'phone': parsePhone(user.phone),
-            'certs': user.certs,
-            'profile_picture': user.profile_picture,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'cert_date': user.user_profile.cert_date,
+            'phone': parsePhone(user.user_profile.phone),
+            'certs': user.user_profile.certs,
+            'profile_picture': user.user_profile.profile_picture,
         }
-        primaryForm = CreateUserForm(initial=initial_data)
-        secondaryForm = user_profile_form(initial=initial_data)
-        variables['secondaryForm'] = secondaryForm
     elif selector == "company":
         primaryModel = company_model.objects.get(id=user.company.id)
         initial_data = {
@@ -153,7 +149,7 @@ def sup_update_account(request, facility, selector):
     
 @lock
 def sup_facility_settings(request, facility, facilityID, selector):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     braintreeData = braintree_model.objects.filter(user__id=request.user.id)
     if braintreeData.exists():

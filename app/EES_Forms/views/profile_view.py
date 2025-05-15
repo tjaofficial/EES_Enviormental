@@ -11,40 +11,28 @@ lock = login_required(login_url='Login')
 
 @lock
 def profile(request, facility, access_page):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    profile = user_profile_model.objects.all()
-    existing = False
+    profile = request.user.user_profile
     today = datetime.date.today()
     user_select = ''
     pic = ''
-    if len(profile) > 0:
-        same_user = user_profile_model.objects.filter(user__exact=request.user.id)[0]
-        if same_user:
-            existing = True
-            user_select = same_user
-            pic = same_user.profile_picture
-            cert = same_user.cert_date
-    if existing:
-        initial_data = {
-            'cert_date': user_select.cert_date,
-            'profile_picture': user_select.profile_picture,
-            'phone': user_select.phone,
-            'position': user_select.position,
-        }
-        pic_form = user_profile_form(initial=initial_data)
-    else:
-        pic_form = user_profile_form()
+
+    initial_data = {
+        'cert_date': profile.cert_date,
+        'profile_picture': profile.profile_picture,
+        'phone': profile.phone,
+        'position': profile.position,
+    }
+    pic_form = user_profile_form(initial=initial_data)
 
     if request.method == "POST":
-        if existing:
-            form = user_profile_form(request.POST, request.FILES, instance=user_select)
-        else:
-            form = user_profile_form(request.POST)
+        form = user_profile_form(request.POST, request.FILES, instance=profile)
 
         if form.is_valid():
             A = form.save(commit=False)
-            A.cert_date = cert
+            A.cert_date = profile.cert_date
 
             form.save()
 
@@ -62,7 +50,6 @@ def profile(request, facility, access_page):
         'pic': pic, 
         'pic_form': pic_form, 
         'access_page': access_page, 
-        'profile': profile,
     })
 
 @lock

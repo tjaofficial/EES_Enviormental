@@ -7,24 +7,26 @@ from django.conf import settings # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..utils.main_utils import setUnlockClientSupervisor, getCompanyFacilities
 import re
+from ..decor import group_required
 
 lock = login_required(login_url='Login')
 
 @lock
-def daily_battery_profile_view(request, facility, access_page, date):
+@group_required(OBSER_VAR)
+def daily_battery_profile_view(request, access_page, date):
+    facility = getattr(request, 'facility', None)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     now = datetime.datetime.now().date()
     form = daily_battery_profile_form
-    options = facility_model.objects.filter(facility_name=facility)[0]
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility).order_by('-date_save')
+    options = facility
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice=facility, date_save=now)
     existing = False
     todays_log = ''
 
     if daily_prof.exists():
         todays_log = daily_prof[0]
-        if now == todays_log.date_save:
-            existing = True
+        existing = True
     
     if existing:
         if todays_log.inop_numbs == "-":
@@ -67,39 +69,40 @@ def daily_battery_profile_view(request, facility, access_page, date):
                     newList.append(x)
                 A.inop_numbs = newList
             A.save()
-            return redirect('IncompleteForms', facility)
+            return redirect('IncompleteForms')
 
     return render(request, "observer/Bat_Info.html", {
-        'supervisor': supervisor, "client": client, 'unlock': unlock, 'form': form, 'todays_log': todays_log, 'profile': profile, 'access_page': access_page, 'facility': facility
+        'supervisor': supervisor,
+        "client": client,
+        'unlock': unlock,
+        'form': form,
+        'todays_log': todays_log,
+        'profile': profile,
+        'access_page': access_page,
+        'facility': facility
     })
 
 @lock
-def facility_select_view(request, facility):
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+@group_required(OBSER_VAR)
+def facility_select_view(request):
     profileFacs = getCompanyFacilities(request.user.user_profile.company.company_name)
-    profile = user_profile_model.objects.all()
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     loginPage = True
     now = datetime.datetime.now().date()
     if request.method == 'POST':
-        answer = request.POST['facility']
-        daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer).order_by('-date_save')
-        if answer != '':
-            print('CHECK 01')
-            batteryQuery = facility_model.objects.get(facility_name=answer)
-            print(batteryQuery)
-            print(batteryQuery.is_battery)
-            print(batteryQuery.dashboard)
-            if batteryQuery.is_battery == 'Yes' and batteryQuery.dashboard == 'battery':
-                print('CHECK 02')
-                if daily_prof.exists():
-                    todays_log = daily_prof[0]
-                    if now == todays_log.date_save:
-                        return redirect('IncompleteForms', answer)
-                batt_prof = '../../' + answer + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-                return redirect(batt_prof)
-            elif batteryQuery.dashboard == "default":
-                print('CHECK 03')
-                return redirect('defaultDash', answer)
+        print("did it make it here?")
+        answer = request.POST
+        daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer['facility'], date_save=now).order_by('-date_save')
+        batterySelect = facility_model.objects.get(facility_name=answer['facility'])
+        if batterySelect.is_battery == 'Yes' and batterySelect.dashboard == 'battery':
+            print('CHECK 02')
+            if daily_prof.exists():
+                return redirect('IncompleteForms', answer['facility'])
+            batt_prof = '../../' + answer['facility'] + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+            return redirect(batt_prof)
+        elif batterySelect.dashboard == "default":
+            print('CHECK 03')
+            return redirect('defaultDash', answer['facility'])
 
     return render(request, "observer/facility_select.html", {
         'supervisor': supervisor, 
@@ -107,6 +110,4 @@ def facility_select_view(request, facility):
         'unlock': unlock, 
         'options': profileFacs, 
         'loginPage': loginPage, 
-        'profile': profile, 
-        'facility': facility
     })

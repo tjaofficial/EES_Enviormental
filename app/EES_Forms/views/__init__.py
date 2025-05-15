@@ -16,6 +16,7 @@ from .sup_facility import *
 from .calSelect_view import *
 from .account_settings_view import *
 from .dashboard_cards_view import *
+from .set_facility import *
 
 from .daily_battery_profile_view import *
 from .weekly_forms_view import *

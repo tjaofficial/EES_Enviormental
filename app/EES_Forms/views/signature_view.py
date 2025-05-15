@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect # type: ignore
-from ..models import signature_model, daily_battery_profile_model, facility_model
+from ..models import signature_model, daily_battery_profile_model
 from ..forms import signature_form
 import datetime
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 
-def signature(request, facility):
+def signature(request):
+    facility = getattr(request, 'facility', None)
     existing = False
     unlock = False
     client = False
@@ -15,7 +16,7 @@ def signature(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    options = facility_model.objects.all().filter(facility_name=facility)[0]
+    options = facility
     count_bp = daily_battery_profile_model.objects.count()
 
     today = datetime.date.today()
@@ -50,7 +51,11 @@ def signature(request, facility):
         if A_valid:
             data.save()
             
-            return redirect('IncompleteForms', facility)
+            return redirect('IncompleteForms')
     return render(request, "observer/personnel_signature.html", {
-        'facility': facility, 'unlock': unlock, 'client': client, 'supervisor': supervisor, 'data': data
+        'facility': facility, 
+        'unlock': unlock, 
+        'client': client, 
+        'supervisor': supervisor, 
+        'data': data
     })

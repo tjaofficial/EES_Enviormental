@@ -9,7 +9,7 @@ profile = user_profile_model.objects.all()
 
 @lock
 def about_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
 
@@ -24,7 +24,7 @@ def about_view(request, facility):
 
 @lock
 def safety_view(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+    notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
 
@@ -41,7 +41,7 @@ def safety_view(request, facility):
 def settings_view(request, facility):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if not client:
-        return redirect('IncompleteForms', facility)
+        return redirect('IncompleteForms')
     existing = False
     userID = request.user.id
     print(user_profile_model.objects.get(user__id=userID).facilityChoice)
@@ -85,7 +85,7 @@ def settings_view(request, facility):
         print(data.errors)
         if A_valid:
             data.save()
-            return redirect('IncompleteForms', facility)
+            return redirect('IncompleteForms')
     
     return render(request, 'ees_forms/ees_settings.html', {
         'data': data, 'facility': facility

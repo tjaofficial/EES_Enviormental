@@ -12,8 +12,9 @@ import datetime
 lock = login_required(login_url='Login')
 
 @lock
-def printSelect(request, facility):
-    notifs = checkIfFacilitySelected(request.user, facility)
+def printSelect(request):
+    facility = getattr(request, 'facility', None)
+    notifs = checkIfFacilitySelected(request.user)
     options = facility_model.objects.all()
     alertMessage = ''
     unlock = False
@@ -26,8 +27,8 @@ def printSelect(request, facility):
         client = True
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
+    formSettingsQuery = form_settings_model.objects.filter(facilityChoice=facility)
+    packetQuery = the_packets_model.objects.filter(facilityChoice=facility)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     facilityForms = get_facility_forms('facilityName', facility)
     selectList = []
@@ -63,14 +64,14 @@ def printSelect(request, facility):
                 formGroup = 'single'
                 formIdentity = forms
                 
-                return redirect('printIndex', facility, formGroup, formIdentity, formDate)
+                return redirect('printIndex', facility.facility_name, formGroup, formIdentity, formDate)
             if str(answer['formLabels']) == str(forms):
-                return redirect("CalSelect", facility, answer['type'], forms, inputDate.year, inputDate.month)
+                return redirect("CalSelect", answer['type'], forms, inputDate.year, inputDate.month)
             else:
                 forms = str(forms) + '-' + str(answer['formLabels'])
-                return redirect("CalSelect", facility, answer['type'], forms, inputDate.year, inputDate.month)
+                return redirect("CalSelect", answer['type'], forms, inputDate.year, inputDate.month)
         elif answer['type'] == "group":
-            return redirect("CalSelect", facility, answer['type'], answer['formGroups'], inputDate.year, inputDate.month)
+            return redirect("CalSelect", answer['type'], answer['formGroups'], inputDate.year, inputDate.month)
             
         try:
             if forms != '':

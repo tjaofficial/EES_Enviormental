@@ -6,32 +6,32 @@
                 <p id='adminLabel' style="color:white;" href=#>{% if client %}Directory{% elif supervisor %}Supervisor{% endif %}</p>
                 <ul id='adminGroup' style='display:block;'>
                     <li>
-                        <a href="{% if client %}{% url 'c_dashboard' facility %}{% elif supervisor %}{% url 'sup_dashboard' facility %}{% endif %}">
+                        <a href="{% if client %}{% url 'c_dashboard' %}{% elif supervisor %}{% url 'sup_dashboard' %}{% endif %}">
                             Dashboard
                         </a>
                     </li>
                     {% if client %}
                     {% elif supervisor %}
                         <li>
-                            <a href="{% url 'Register' facility 'form'%}">
+                            <a href="{% url 'Register' 'form'%}">
                                 Register New Profile
                             </a>
                         </li>
                     {% endif %}
                     <li>
-                        <a href="{% url 'Contacts'  facility %}">
+                        <a href="{% url 'Contacts' %}">
                             Profiles/Contacts
                         </a>
                     </li>
                     {% if supervisor %}
                         <li>
-                            <a href="{% url 'facilityList' facility %}">
+                            <a href="{% url 'facilityList' %}">
                                 Client Forms
                             </a>
                         </li>
                     {% endif %}
                     <li>
-                        <a href="{% url 'Schedule' facility %}">
+                        <a href="{% url 'Schedule' %}">
                             Calendar
                         </a>
                     </li>
@@ -60,13 +60,13 @@
                         Records/Data
                     </a>
                     <ul style='display: block;'>
-                        <li><a href="{% url 'archive' facility %}">Archive</a></li>
+                        {% comment %} <li><a href="{% url 'archive' facility %}">Archive</a></li>
                         <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
-                        <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
+                        <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>{% endcomment %}
                         {% comment %} <li><a href=#>Weekly Reports</a></li>
                         <li><a href="{% url 'rolling_avg' facility %}">Rolling Averages</a></li> {% endcomment %}
-                        <li><a href="{% url 'Sop' facility %}">SOP's</a></li>
-                        <li><a href="{% url 'pt_admin1' facility %}">90 Day Push/Travel</a></li>
+                        {% comment %}<li><a href="{% url 'Sop' facility %}">SOP's</a></li>
+                        <li><a href="{% url 'pt_admin1' facility %}">90 Day Push/Travel</a></li> {% endcomment %}
                     </ul>
                 </li>
             {% elif supervisor %}
@@ -76,12 +76,12 @@
                             {{facility}}
                         </a>
                         <ul id='sbClientGroup' style="display: block;">
-                            <li><a href="{% url 'archive' facility %}">Archive</a></li>
+                            {% comment %} <li><a href="{% url 'archive' facility %}">Archive</a></li>
                             <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
                             <li><a href="{% url 'Sop' facility %}">SOP's</a></li>
                             <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>
-                            <li><a href="{% url 'Schedule' facility %}">Schedule</a></li>
-                            <li><a href="{% url 'Add Event' facility %}">Add Events</a></li>
+                            <li><a href="{% url 'Schedule' %}">Schedule</a></li>
+                            <li><a href="{% url 'Add Event' facility %}">Add Events</a></li> {% endcomment %}
                             {% comment %} <li><a href=#>Weekly Reports</a></li>
                             <li><a href="{% url 'rolling_avg' facility %}">Data Records</a></li> {% endcomment %}
                         </ul>

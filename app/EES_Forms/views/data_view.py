@@ -12,6 +12,8 @@ lock = login_required(login_url='Login')
 
 @lock
 def pt_admin1_view(request, facility):
+    facility = getattr(request, 'facility', None)
+    print(facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     allForms = Forms.objects.all()
     today = datetime.date.today()

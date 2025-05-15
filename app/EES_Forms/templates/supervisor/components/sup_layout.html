@@ -31,7 +31,7 @@
         {% block extra_head %}{% endblock %}
     </head>
     <body class="modeMainBackground">
-        {{ facility|json_script:"facility" }}
+        {{ facility.facility_name|json_script:"facility" }}
         <header id="headerContainer">
             
         </header>
@@ -55,7 +55,7 @@
     </body>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            fetch(`/ajax/header/{{ facility }}/`)
+            fetch(`/ajax/header/`)
                 .then(res => res.text())  // NOTE: not `.json()` — it's HTML
                 .then(html => {
                     document.getElementById("headerContainer").innerHTML = html;
@@ -71,13 +71,17 @@
                     const script3 = document.createElement('script');
                     script3.src = '{% static 'notifications/notifications.js' %}';
                     document.body.appendChild(script3);
+
+                    const script4 = document.createElement('script');
+                    script4.src = '{% static 'ees_forms/script/facility_picker.js' %}';
+                    document.body.appendChild(script4);
                     
                 })
                 .catch(err => {
                     console.error("Error loading header", err);
                 });
             
-            fetch(`/ajax/sidebar/{{ facility }}/`)
+            fetch(`/ajax/sidebar/`)
                 .then(res => res.text())
                 .then(html => {
                     document.getElementById("sideBar").innerHTML = html;

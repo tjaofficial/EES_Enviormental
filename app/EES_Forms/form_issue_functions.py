@@ -38,7 +38,7 @@ def form1_issue_check(savedForm, form_variables, request, selector, facility, da
         if compliance:
             issue_page = issue_page + "-c"
             
-        return ('issues_view', facility, fsID, str(database_form.date), issue_page)
+        return ('issues_view', fsID, issue_page)
     createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False)        
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms', facility)

@@ -3948,7 +3948,6 @@ class form25_model(models.Model):
         return str(self.date)
 
 class issues_model(models.Model):
-    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
     userChoice = models.ForeignKey(
         'user_profile_model', 
         on_delete=models.CASCADE, 
@@ -3977,11 +3976,12 @@ class issues_model(models.Model):
     viewed = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.date) + " - " + str(self.facilityChoice)
+        return f"CorrectiveAction: {self.id} - {self.date} - {self.issues}"
 
 class Event(models.Model):
-    enteredBy = models.CharField(
-        max_length=40, 
+    userProf = models.ForeignKey(
+        'user_profile_model',
+        on_delete=models.CASCADE, 
         blank=True, 
         null=True
     )

@@ -4,7 +4,7 @@
 <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
 <script defer src="{% static 'ees_forms/script/corrective_actions.js' %}"></script>
-<div class='mainCont mainContCenter' style="width: 845px; align-items:unset; position:relative; padding-bottom: 48px; left:unset;">
+<div class='mainCont mainContCenter' style="width: 845px; align-items:unset; position:relative; padding-bottom: 48px; left:unset; overflow: unset;">
     <div>
         <div class="card">
             <div class="cardHeader methodPlusBlue"> 
@@ -12,7 +12,7 @@
                 Corrective Action Search
             </div>
             <div class='contentCont'>
-                <form method="GET" action="./Corrective-Action" style="text-align: center;">
+                <form method="GET" action="{% url 'Corrective-Action' %}" style="text-align: center;">
                     <div class="CR_dataCont">
                         <div class="inputCont">
                             Search Form ID: {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
@@ -58,7 +58,7 @@
                     "{% if varPull.0 %}{{varPull.0}}, {% endif %}{% if varPull.1 %}{{varPull.1}}, {% endif %}{% if varPull.2 %}{{varPull.2}}, {% endif %}{% if varPull.3 %}{{varPull.3}}, {% endif %}{% if varPull.4 %}{{varPull.4}}{% endif %}"
                 {% else %}
                     {% for x in ca_forms %}
-                        <a href="issues_view/{{x.formChoice.id}}/{{x.date.year}}-{% if x.date.month < 10 %}0{{x.date.month}}{%else%}{{x.date.month}}{% endif %}-{% if x.date.day < 10 %}0{{x.date.day}}{%else%}{{x.date.day}}{% endif %}/issue">
+                        <a href="../../issues_view/{{x.id}}/issue">
                             <div class="card CR_tiles" style="width: 600px;{% if client and not x.viewed %} background-color: #ebee17;{% endif %}">
                                 <div class='CR_dateHeader'>
                                     {{ x.date }} - {{x.formChoice.id}}

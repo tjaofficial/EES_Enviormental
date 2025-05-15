@@ -2684,7 +2684,6 @@ class issues_form(ModelForm):
         model = issues_model
         fields = ('__all__')
         widgets = {
-            'form' : forms.TextInput(attrs={'type':'text', 'style':'width:50px; text-align: center; border: 1px solid black;'}),
             'issues' : Textarea(attrs={'rows':7, 'style':'width: 100%; border-radius: 18px; padding: .5rem;'}),
             'notified' : forms.TextInput(attrs={'type':'text', 'style':'width:150px; border-radius: 5px; background-color: white; border: 1px solid black; padding-left: .5rem;'}),
             'time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px; border-radius: 5px; background-color: white; border: 1px solid black;'}),

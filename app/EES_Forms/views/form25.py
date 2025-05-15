@@ -11,10 +11,11 @@ import calendar
 lock = login_required(login_url='Login')
 
 @lock
-def form25(request, facility, fsID, selector, weekend_day):
+def form25(request, fsID, selector, weekend_day):
     fix_data(fsID)
     # -----SET MAIN VARIABLES------------
-    form_variables = initiate_form_variables(fsID, request.user, facility, selector)
+    form_variables = initiate_form_variables(fsID, request.user, selector)
+    facility = form_variables['facilityName']
     month_name = calendar.month_name[form_variables['now'].month]
     if weekend_day == 'saturday':
         ss_filler = 5
@@ -23,46 +24,49 @@ def form25(request, facility, fsID, selector, weekend_day):
     else:
         ss_filler = ''
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
-    if form_variables['daily_prof'].exists():
-        todays_log = form_variables['daily_prof'][0]
-    # -----SET DECIDING VARIABLES------------
-        more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID) 
-        if isinstance(more_form_variables, HttpResponseRedirect):
-            return more_form_variables
+    if request.user.user_profile.position == "observer": 
+        if form_variables['daily_prof'].exists():
+            todays_log = form_variables['daily_prof'][0]
         else:
-            data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID)
-    # -----SET RESPONSES TO DECIDING VARIABLES------------
-        if search:
-            database_form = ''
-        else:
-            if existing:
-                initial_data = get_initial_data(form25_model, database_form)
-            else:
-                initial_data = {
-                    'date': form_variables['now'],
-                    'observer': form_variables['full_name'],
-                    'month': month_name,
-                    'weekend_day': ss_filler,
-                }
-            data = form25_form(initial=initial_data, form_settings=form_variables['freq'])
-    # -----IF REQUEST.POST------------
-        if request.method == "POST":
-    # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
-            try:
-                form_settings = form_variables['freq']
-            except form_settings_model.DoesNotExist:
-                raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
-    # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
-            if existing:
-                form = form25_form(request.POST, instance=database_form, form_settings=form_settings)
-            else:
-                form = form25_form(request.POST, form_settings=form_settings)
-    # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
-            exportVariables = (request, selector, facility, database_form, fsID)
-            return redirect(*template_validate_save(form, form_variables, *exportVariables))
+            batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
+            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
     else:
-        batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
-        return redirect('daily_battery_profile', 'login', batt_prof_date)
+        todays_log = ""
+    # -----SET DECIDING VARIABLES------------
+    more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID) 
+    if isinstance(more_form_variables, HttpResponseRedirect):
+        return more_form_variables
+    else:
+        data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID)
+    # -----SET RESPONSES TO DECIDING VARIABLES------------
+    if search:
+        database_form = ''
+    else:
+        if existing:
+            initial_data = get_initial_data(form25_model, database_form)
+        else:
+            initial_data = {
+                'date': form_variables['now'],
+                'observer': form_variables['full_name'],
+                'month': month_name,
+                'weekend_day': ss_filler,
+            }
+        data = form25_form(initial=initial_data, form_settings=form_variables['freq'])
+    # -----IF REQUEST.POST------------
+    if request.method == "POST":
+    # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
+        try:
+            form_settings = form_variables['freq']
+        except form_settings_model.DoesNotExist:
+            raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
+    # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
+        if existing:
+            form = form25_form(request.POST, instance=database_form, form_settings=form_settings)
+        else:
+            form = form25_form(request.POST, form_settings=form_settings)
+    # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
+        exportVariables = (request, selector, facility, database_form, fsID)
+        return redirect(*template_validate_save(form, form_variables, *exportVariables))
     return render(request, "shared/forms/weekly/form25.html", {
         'fsID': fsID, 
         'picker': form_variables['picker'], 

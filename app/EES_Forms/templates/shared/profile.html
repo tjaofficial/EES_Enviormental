@@ -13,25 +13,25 @@
         </div>
         <div class="contentCont">
             {% if access_page == 'main' %}
-            <div style="text-align: center;">
-                <img class="prof_pic_view" src="../../../media/{{ pic }}">
-                <br><br>
-                <a href="{% url 'profile' facility 'photo_change' %}">Change ID Photo</a>
-                <br><br>
-            </div>
+                <div style="text-align: center;">
+                    <img class="prof_pic_view" src="../../../media/{{ pic }}">
+                    <br><br>
+                    <a href="{% url 'profile' 'photo_change' %}">Change ID Photo</a>
+                    <br><br>
+                </div>
             {% else %}
-            <div style="text-align: center; ">
-                <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
-                <br><br>
-                <a href="{% url 'profile' facility 'photo_change' %}">Add ID Photo</a>
-                <form action="" method="POST" enctype='multipart/form-data'>
-                    {% csrf_token %}
-                    {{ pic_form.profile_picture }}
-                    <br>
-                    {% include 'shared/components/submitButton.html' with label='upload' %}
-                </form>
-                <br><br>
-            </div>
+                <div style="text-align: center; ">
+                    <svg style='width: 5rem;' aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg>
+                    <br><br>
+                    <a href="{% url 'profile' 'photo_change' %}">Add ID Photo</a>
+                    <form action="" method="POST" enctype='multipart/form-data'>
+                        {% csrf_token %}
+                        {{ pic_form.profile_picture }}
+                        <br>
+                        {% include 'shared/components/submitButton.html' with label='upload' %}
+                    </form>
+                    <br><br>
+                </div>
             {% endif %}
             <div style="text-align: center;">
                 <table style="border-collapse: collapse; margin: auto;" class="table_font">
@@ -64,7 +64,7 @@
                             Phone:
                         </td>
                         <td colspan="2" id='obj_data'>
-                            {{ user_select.phone }}
+                            {{ request.user.user_profile.phone }}
                         </td>
                     </tr>
                     <tr>
@@ -81,8 +81,8 @@
                             Position:
                         </td>
                         <td colspan="2" style="padding-top: 25px; padding-bottom: 25px;">
-                            {{ user_select.cert_date }}<br><br>
-                            {{ user_select.position }}
+                            {{ request.user.user_profile.cert_date }}<br><br>
+                            {{ request.user.user_profile.position }}
                         </td>
                     </tr>
                 </table>

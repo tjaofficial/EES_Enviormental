@@ -48,21 +48,23 @@ class PageNumCanvas(canvas.Canvas):
         self.drawRightString(200*mm, 10*mm, page)
       
 @lock
-def form_PDF(request, facility, type, formGroup, formIdentity, formDate):
+def form_PDF(request, type, formGroup, formIdentity, formDate):
     print(f"This a '{type}' form")
     print(f"Frequency: {formGroup}")
     startingDayNumb = int(request.user.user_profile.company.settings.weekly_start_day)
+    if "-" in formIdentity:
+        fsID = formIdentity.split('-')[0]
+        facility = form_settings_model.objects.get(id=int(fsID)).facilityChoice.facility_name
+    else:
+        facility = the_packets_model.objects.get(id=int(formIdentity)).facilityChoice.facility_name
+    
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-
     packetBeingPrinted = ''
     if type == 'single':
         if formGroup in ['Daily', 'Weekly', 'Monthly']:
             fsID, label = map(lambda x: int(x) if x.isdigit() else x, formIdentity.split('-'))
-            formSettingsEntry = formSettingsQuery.get(id=fsID)
+            formSettingsEntry = form_settings_model.objects.get(id=fsID)
             formsBeingUsed = [(label,formSettingsEntry)]
-
-
-
 
     elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
