@@ -51,7 +51,7 @@
                 </div>
             </a> {% endcomment %}
         {% endif %}
-        <a href="{% if supervisor %}{% url 'Account' 'supervisor' %}{% elif client %}{% url 'Account' %}{% elif unlock %}{% url 'Account' 'observer' %}{% endif %}">
+        <a href="{% url 'Account' %}">
             <div class="sidebar_item modeTextColor">
                 <div class="sidebar_svg">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">

@@ -48,9 +48,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
         except:
             selectorDateParsed = datetime.strptime(selector, "%Y-%m-%d").date()
             todays_num = selectorDateParsed.weekday()
-            print(todays_num)
             startDate = selectorDateParsed - timedelta(days=todays_num)
-            print(startDate)
             form_query = submitted_forms.filter(week_start=startDate, formSettings__id=fsID).order_by('-week_start')
             print(f"check week", form_query)
         database_model = form_query[0] if form_query.exists() else False
@@ -88,7 +86,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
                     print(existing)
     else:
         batt_prof_date = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
-        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+        return redirect('daily_battery_profile', "login", batt_prof_date)
     
     return data, existing, search, database_form
 
