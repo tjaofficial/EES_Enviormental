@@ -7,6 +7,7 @@ urlpatterns = [
     path("sup-dashboard/", views.sup_dashboard_view, name='sup_dashboard'),
     path("client-dashboard", views.client_dashboard_view, name="c_dashboard"),
     path("adminDash/<str:selector>", views.adminDash, name="adminDash"),
+    
     path("<str:facility>/default-dashboard", views.default_dashboard, name="defaultDash"),
     
     ##---ADMIN PAGES -------
@@ -30,44 +31,30 @@ urlpatterns = [
     path("change-password", views.main_change_password, name='mainPasswordChange'),
     path("auth/verify_2fa", views.verify_2fa, name='verify_2fa'),
     path("resend_2fa_code/", views.resend_2fa_code, name="resend_2fa_code"),
-    
     ##---SUPERVISOR PAGES-----
     path("register-main/<str:access_page>", views.register_view, name="Register"),
     path("facilitylist", views.facilityList, name="facilityList"),
     path("request-form", views.form_request_view, name='requestForm'),
     path('ajax/facilityList/companyFacilityInfo/', views.get_facility_form_data, name='get_facility_form_data'),
     path('set-facility/', views.set_facility, name='set_facility'),
-    
-    
-    
-    path("<str:facility>/password", views.change_password, name='PasswordChange'),
-    path("<str:facility>/facilityFormSettings/<str:fsID>/<str:packetID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
-    path("<str:facility>/profileEdits/<str:userID>", views.profile_edit_view, name="profileEdits"),
-    path('<str:facility>/form-select/add-forms', views.Add_Forms, name='addingForms'),
-
-    
+    path("facility-form-settings/<str:fsID>/<str:packetID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
+    path('form-select/add-forms', views.Add_Forms, name='addingForms'),
+    path("profileEdits/<str:userID>", views.profile_edit_view, name="profileEdits"),
+    path("password/", views.change_password, name='PasswordChange'),
+    path('packet-form-select/<str:facility>/<str:packet>', views.facilityForm, name='facilityForms'),
     ##--ACCOUNT SETTINGS-----
     path("account/", views.sup_account_view, name="Account"),
     path("account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
     path("account/facility-settings/<int:facilityID>/<str:selector>", views.sup_facility_settings, name="selectedFacilitySettings"),
-    
     ##---BILLING
     path("billing/subscribe/", views.stripe_subscription_view, name="stripe_subscribe"),
     path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
     path("billing/portal/", views.stripe_customer_portal, name="stripe_customer_portal"),
     path("billing/success/", views.stripe_success, name="stripe_success"),
-    
-    path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
-    path('<str:facility>/about', views.about_view, name='about'),
-    path('safety', views.safety_view, name='safety'),
-    path('<str:facility>/settings', views.settings_view, name='settings'),
-    path('<str:facility>/<str:packet>/form_select', views.facilityForm, name='facilityForms'),
-    
     ##---OBSERVER PAGES-------
     path("facility-select/", views.facility_select_view, name="facilitySelect"),
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("personel-signature/",views.signature, name="signature"),
-
     ##---SHARED PAGES-----
     path('archive/', views.archive_view, name='archive'),
     path("corrective-action/search/", views.corrective_action_view, name="Corrective-Action"),
@@ -80,30 +67,18 @@ urlpatterns = [
     path('print-select-calendar/<str:type>/<str:forms>/<int:year>/<int:month>', views.calSelect, name='CalSelect'),
     path('print-index/<str:type>/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
     path("profile/<str:access_page>", views.profile, name="profile"),
-    
-    
-    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
-    path("<str:facility>/add_event", views.event_add_view, name="Add Event"),
-    path("<str:facility>/event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
-    path('delete_selected_sops/<str:facility>/', views.delete_selected_sops, name='delete_selected_sops'),
-    path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
-    path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
-    path("ajax/notification-count/", views.get_unread_notification_count, name="notification_count"),
-    ##path('search_forms/<str:facility>/<str:access_page>/', views.search_forms_view, name='search_forms'),
-
-    ##------Dashboard Cards
-    path('ajax/card/progress/<str:facility>/', views.card_progress_bar, name='card_progress_bar'),
-    path('ajax/card/daily-forms/<str:facility>/', views.card_daily_battery_forms, name='card_daily_battery_forms'),
-    path('ajax/card/graphs/<str:facility>/', views.card_graphs, name='card_graphs'),
-    path('ajax/card/corrective-actions/<str:facility>/', views.card_corrective_actions, name='card_corrective_actions'),
-    path('ajax/card/info/<str:facility>/', views.card_info, name='card_info'),
-    path('ajax/card/90DayPushTravels/<str:facility>/', views.card_90DayPushTravels, name='card_90DayPushTravels'),
-    path('ajax/card/contacts/<str:facility>/', views.card_contacts, name='card_contacts'),
-
+    path("add_event/", views.event_add_view, name="Add Event"),
+    ##------AJAX
+    path('ajax/card/progress/', views.card_progress_bar, name='card_progress_bar'),
+    path('ajax/card/daily-forms/', views.card_daily_battery_forms, name='card_daily_battery_forms'),
+    path('ajax/card/graphs/', views.card_graphs, name='card_graphs'),
+    path('ajax/card/corrective-actions/', views.card_corrective_actions, name='card_corrective_actions'),
+    path('ajax/card/info/', views.card_info, name='card_info'),
+    path('ajax/card/90DayPushTravels/', views.card_90DayPushTravels, name='card_90DayPushTravels'),
+    path('ajax/card/contacts/', views.card_contacts, name='card_contacts'),
     path('ajax/sidebar/', views.sidebar_data, name='sidebar_data'),
     path('ajax/header/', views.header_data, name='header_data'),
-
-
+    path("ajax/notification-count/", views.get_unread_notification_count, name="notification_count"),
     ##---FORMS
     path("form/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("form/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),
@@ -138,23 +113,33 @@ urlpatterns = [
     path("api/get-inop/", views.inop_check_form_1, name="get-inop"),
     path("get-existing-form/", views.get_existing_form, name="get_existing_form"),
     path("get-submitted-areas/", views.get_submitted_areas, name="get_submitted_areas"),
-
-    
     ##---COKE_BATTERY_DATA
     path("analytics/battery/push-travel-90-days/<str:facility>", views.pt_admin1_view, name="pt_admin1"),
+    path("method303-rolling-avg/", views.method303_rolling_avg, name="rolling_avg"),
     
+
+
     
+
+    
+    ##----OTHER-------NOT CHANGED
+    path("<str:facility>/DeleteProf/<str:profile_pic_id>", views.delete_prof_pic_view, name="DeleteProf"),
+    path('<str:facility>/about', views.about_view, name='about'),
+    path('safety', views.safety_view, name='safety'),
+    path('<str:facility>/settings', views.settings_view, name='settings'),
+    ##---SHARED PAGES-----NOT CHANGED
+    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
+    path("<str:facility>/event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
+    path('delete_selected_sops/<str:facility>/', views.delete_selected_sops, name='delete_selected_sops'),
+    path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
+    path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),
+    #path('search_forms/<str:facility>/<str:access_page>/', views.search_forms_view, name='search_forms'),
+    ##---DATA PAGES-----NOT CHANGED
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("<str:facility>/pt_mth_input", views.pt_mth_input, name="pt_mth_input"),
-    path("<str:facility>/method303_rolling_avg", views.method303_rolling_avg, name="rolling_avg"),
     path("admin_data/<str:facility>", views.admin_data_view, name="admin_data"),
-
-
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
-
     # path("calendar", views.CalendarView.as_view(), name='calendar'),
-    
-    
     # path('pdf_view', views.render_pdf_view, name="pdf_view"),
     #path('pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
     #path('pdf_download/', views.DownloadPDF.as_view(), name="pdf_download"),

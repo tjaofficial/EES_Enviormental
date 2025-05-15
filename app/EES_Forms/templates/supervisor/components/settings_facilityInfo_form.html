@@ -230,7 +230,7 @@
     {% if page == 'faci' %}
         <input type="submit" name="facilityInfoSave" value="save">
     {% else %}
-        <a href="{% url 'selectedFacilitySettings' facility facilityID 'faci' %}">edit</a>
+        <a href="{% url 'selectedFacilitySettings' facilityID 'faci' %}">edit</a>
     {% endif %}
     </center>
 </form>

@@ -1191,7 +1191,6 @@ def calculateProgessBar(facility, frequency):
 def ninetyDayPushTravels(facility):
     today = datetime.datetime.now().date()
     batInfo = facility
-    due_date_threshold = today + timedelta(days=30)
     most_recent_dates = {}
     all_records = form5_model.objects.filter(formSettings__facilityChoice=facility)
     if all_records.exists():

@@ -69,7 +69,7 @@ def login_view(request):
                     if request.user.groups.filter(name=SUPER_VAR):
                         if userProf.settings['profile']['first_login']:
                             if len(facility_model.objects.all()) > 0:
-                                return redirect('sup_dashboard', SUPER_VAR)
+                                return redirect('sup_dashboard')
                             else:
                                 return redirect('Register', SUPER_VAR, 'facility')
                         else:
@@ -77,7 +77,7 @@ def login_view(request):
                     elif request.user.groups.filter(name=CLIENT_VAR):
                         facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
                         if userProf.settings['profile']['first_login']:
-                            return redirect('c_dashboard', facility)
+                            return redirect('c_dashboard')
                         else:
                             return redirect('PasswordChange', facility)
                     elif request.user.groups.filter(name=OBSER_VAR):
@@ -205,7 +205,7 @@ def main_change_password(request):
         'form': form
     })
     
-def change_password(request, facility):
+def change_password(request):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -217,14 +217,13 @@ def change_password(request, facility):
                 userProf.settings['profile']['first_login'] = True
                 userProf.save()
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('Account', facility)
+            return redirect('Account')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'ees_forms/ees_password.html', {
         'form': form, 
-        'facility': facility,
         'unlock': unlock,
         'supervisor': supervisor, 
         "client": client, 

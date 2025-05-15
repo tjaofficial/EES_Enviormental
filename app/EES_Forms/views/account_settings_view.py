@@ -79,25 +79,19 @@ def sup_account_view(request):
     })
 
 @lock
-def sup_update_account(request, facility, selector):
+def sup_update_account(request, selector):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    if supervisor:
-        facility = 'supervisor'
-    elif unlock:
-        facility = 'observer'
     user = request.user
     variables = {
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
-        'facility': facility,
         'notifs': notifs,
         'selector': selector
     }
     if selector == "account":
         primaryModel = ""
-        primaryForm = ""
         initial_data = {
             'username': user.username,
             'first_name': user.first_name,
@@ -109,7 +103,7 @@ def sup_update_account(request, facility, selector):
             'profile_picture': user.user_profile.profile_picture,
         }
     elif selector == "company":
-        primaryModel = company_model.objects.get(id=user.company.id)
+        primaryModel = company_model.objects.get(id=user.user_profile.company.id)
         initial_data = {
             'company_name': primaryModel.company_name,
             'address': primaryModel.address,
@@ -120,8 +114,8 @@ def sup_update_account(request, facility, selector):
             'icon': primaryModel.icon
         }
         primaryForm = company_Update_form(initial=initial_data)
-    
-    variables['primaryForm'] = primaryForm
+        variables['primaryForm'] = primaryForm
+
     variables['initial_data'] = initial_data
     if request.method == 'POST':
         print(request.POST)
@@ -144,20 +138,14 @@ def sup_update_account(request, facility, selector):
             if formFill.is_valid():
                 formFill.save()
                 print("saved tthat shit")
-        return redirect("Account", facility)
+        return redirect("Account")
     return render(request, 'supervisor/settings/settings_account_update.html', variables)
     
 @lock
-def sup_facility_settings(request, facility, facilityID, selector):
+def sup_facility_settings(request, facilityID, selector):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    braintreeData = braintree_model.objects.filter(user__id=request.user.id)
-    if braintreeData.exists():
-        braintreeData = braintreeData.get(user__id=request.user.id)
-    else:
-        print('handle if there is no braintree entry')
     facInfoMain = facility_model.objects.get(id=facilityID)
-    #userProf = user_profile_model.objects.get(user__id=request.user.id)
     clientUserProfs = user_profile_model.objects.filter(facilityChoice=facInfoMain)
     facilityInfo = ''
 
@@ -183,10 +171,6 @@ def sup_facility_settings(request, facility, facilityID, selector):
     elif selector in ['batd', 'noti', 'main']:
         facilityInfo = request.user.user_profile.settings['facilities'][str(facilityID)]
 
-    if supervisor:
-        facility = 'supervisor'
-    elif unlock:
-        facility = 'observer'
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
@@ -198,119 +182,114 @@ def sup_facility_settings(request, facility, facilityID, selector):
         
     if request.method == "POST":
         answer = request.POST
-        print(answer)
-        if 'facilitySelect' in answer:
-            if answer['facilitySelect'] != '':
-                return redirect('sup_dashboard', answer['facilitySelect'])
-        else:
-            if 'facilityInfoSave' in answer:
-                form = bat_info_form(answer, instance=facInfoMain)
-                if form.is_valid():
-                    form.save()
-                    return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'batteryDashSave' in answer:
-                if not unlock:
-                    accountData.settings['facilities'][str(facInfoMain.id)]['settings'] = {}
-                    batDashSettings = accountData.settings['facilities'][str(facInfoMain.id)]['settings']
-                    progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
-                    if 'progressBar' in answer.keys():
-                        if answer['progressBar'] == 'true':
-                            batDashSettings['progressBar'] = {}
-                            for progOpt in progressOptions:
-                                progInput = False
-                                if progOpt in answer.keys():
-                                    if answer[progOpt] == 'true':
-                                        progInput = True
-                                batDashSettings['progressBar'][progOpt] = progInput
-                    else:
-                        batDashSettings['progressBar'] = False
-                    if 'graphs' in answer.keys():
-                        if answer['graphs'] == 'true':
-                            batDashSettings['graphs'] = {}
-                            graphOptions = ['charges', 'doors', 'lids', 'graph90dayPT']
-                            if answer['graphFrequency'] == 'dates':
-                                batDashSettings['graphs']['graphFrequencyData'] = {
-                                    'frequency': answer['graphFrequency'],
-                                    'dates': {
-                                        'graphStart': answer['graphStart'],
-                                        'graphStop': answer['graphStop']
-                                    }
-                                }
-                            else:
-                                batDashSettings['graphs']['graphFrequencyData'] = {
-                                    'frequency': answer['graphFrequency'],
-                                    'dates': False
-                                }
-                            batDashSettings['graphs']['dataChoice'] = {}
-                            for graphOpt in graphOptions:
-                                graphInput = False
-                                if graphOpt in answer.keys():
-                                    if answer[graphOpt] == 'true':
-                                        graphInput = True
-                                batDashSettings['graphs']['dataChoice'][graphOpt] = {'show': graphInput, 'type': 'bar'}
-                    else:
-                        batDashSettings['graphs'] = False
-                    if 'correctiveActions' in answer.keys():
-                        if answer['correctiveActions'] == 'true':
-                            batDashSettings['correctiveActions'] = True
-                    else:
-                        batDashSettings['correctiveActions'] = False
-                    if 'infoWeather' in answer.keys():
-                        if answer['infoWeather'] == 'true':
-                            batDashSettings['infoWeather'] = True
-                    else:
-                        batDashSettings['infoWeather'] = False
-                    if '90dayPT' in answer.keys():
-                        if answer['90dayPT'] == 'true':
-                            batDashSettings['90dayPT'] = True
-                    else:
-                        batDashSettings['90dayPT'] = False
-                    if 'contacts' in answer.keys():
-                        if answer['contacts'] == 'true':
-                            batDashSettings['contacts'] = True
-                    else:
-                        batDashSettings['contacts'] = False
-                    print(batDashSettings)
+        if 'facilityInfoSave' in answer:
+            form = bat_info_form(answer, instance=facInfoMain)
+            if form.is_valid():
+                form.save()
+                return redirect('selectedFacilitySettings', facilityID, 'main')
+        elif 'batteryDashSave' in answer:
+            if not unlock:
+                accountData.settings['facilities'][str(facInfoMain.id)]['settings'] = {}
+                batDashSettings = accountData.settings['facilities'][str(facInfoMain.id)]['settings']
+                progressOptions = ['progressDaily', 'progressWeekly', 'progressMonthly', 'progressQuarterly', 'progressAnnually']
+                if 'progressBar' in answer.keys():
+                    if answer['progressBar'] == 'true':
+                        batDashSettings['progressBar'] = {}
+                        for progOpt in progressOptions:
+                            progInput = False
+                            if progOpt in answer.keys():
+                                if answer[progOpt] == 'true':
+                                    progInput = True
+                            batDashSettings['progressBar'][progOpt] = progInput
                 else:
-                    accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = True
-                A = accountData
+                    batDashSettings['progressBar'] = False
+                if 'graphs' in answer.keys():
+                    if answer['graphs'] == 'true':
+                        batDashSettings['graphs'] = {}
+                        graphOptions = ['charges', 'doors', 'lids', 'graph90dayPT']
+                        if answer['graphFrequency'] == 'dates':
+                            batDashSettings['graphs']['graphFrequencyData'] = {
+                                'frequency': answer['graphFrequency'],
+                                'dates': {
+                                    'graphStart': answer['graphStart'],
+                                    'graphStop': answer['graphStop']
+                                }
+                            }
+                        else:
+                            batDashSettings['graphs']['graphFrequencyData'] = {
+                                'frequency': answer['graphFrequency'],
+                                'dates': False
+                            }
+                        batDashSettings['graphs']['dataChoice'] = {}
+                        for graphOpt in graphOptions:
+                            graphInput = False
+                            if graphOpt in answer.keys():
+                                if answer[graphOpt] == 'true':
+                                    graphInput = True
+                            batDashSettings['graphs']['dataChoice'][graphOpt] = {'show': graphInput, 'type': 'bar'}
+                else:
+                    batDashSettings['graphs'] = False
+                if 'correctiveActions' in answer.keys():
+                    if answer['correctiveActions'] == 'true':
+                        batDashSettings['correctiveActions'] = True
+                else:
+                    batDashSettings['correctiveActions'] = False
+                if 'infoWeather' in answer.keys():
+                    if answer['infoWeather'] == 'true':
+                        batDashSettings['infoWeather'] = True
+                else:
+                    batDashSettings['infoWeather'] = False
+                if '90dayPT' in answer.keys():
+                    if answer['90dayPT'] == 'true':
+                        batDashSettings['90dayPT'] = True
+                else:
+                    batDashSettings['90dayPT'] = False
+                if 'contacts' in answer.keys():
+                    if answer['contacts'] == 'true':
+                        batDashSettings['contacts'] = True
+                else:
+                    batDashSettings['contacts'] = False
+                print(batDashSettings)
+            else:
+                accountData.settings['dashboard'][str(facInfoMain.id)]['batteryDash'] = True
+            A = accountData
+            A.save()
+            return redirect('selectedFacilitySettings', facilityID, 'main')
+        elif 'notifSettingsForm' in answer:
+            accountData.settings['facilities'][str(facilityID)]['notifications'] = {}
+            notificatoinSettingsData = accountData.settings['facilities'][str(facilityID)]['notifications']
+            notifOptions = ['compliance', 'deviations', 'submitted', '10_day_pt', '5_day_pt']
+            for notifOp in notifOptions:
+                methodPlusOpt = True if f"{notifOp}-methodplus" in answer.keys() else False
+                emailOpt = True if f"{notifOp}-email" in answer.keys() else False
+                smsOpt = True if f"{notifOp}-sms" in answer.keys() else False
+                notificatoinSettingsData[notifOp] = {
+                    "methodplus": methodPlusOpt,
+                    "email": emailOpt, 
+                    "sms": smsOpt
+                }
+            A = accountData
+            A.save()
+            return redirect('selectedFacilitySettings', facilityID, 'main')
+        elif 'defaultBatteryDash' in answer:
+            if answer['defaultBatteryDash'] == 'true':
+                A  = accountData
+                A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.username)['facilities']))
                 A.save()
-                return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'notifSettingsForm' in answer:
-                accountData.settings['facilities'][str(facilityID)]['notifications'] = {}
-                notificatoinSettingsData = accountData.settings['facilities'][str(facilityID)]['notifications']
-                notifOptions = ['compliance', 'deviations', 'submitted', '10_day_pt', '5_day_pt']
-                for notifOp in notifOptions:
-                    methodPlusOpt = True if f"{notifOp}-methodplus" in answer.keys() else False
-                    emailOpt = True if f"{notifOp}-email" in answer.keys() else False
-                    smsOpt = True if f"{notifOp}-sms" in answer.keys() else False
-                    notificatoinSettingsData[notifOp] = {
-                        "methodplus": methodPlusOpt,
-                        "email": emailOpt, 
-                        "sms": smsOpt
-                    }
-                A = accountData
+                return redirect('selectedFacilitySettings', facilityID, 'main')
+        elif 'defaultNotif' in answer:
+            if answer['defaultNotif'] == 'true':
+                A  = accountData
+                A.settings['facilities'][str(facilityID)]['notifications'] = json.loads(json.dumps(defaultNotifications))
                 A.save()
-                return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'defaultBatteryDash' in answer:
-                if answer['defaultBatteryDash'] == 'true':
-                    A  = accountData
-                    A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.username)['facilities']))
-                    A.save()
-                    return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'defaultNotif' in answer:
-                if answer['defaultNotif'] == 'true':
-                    A  = accountData
-                    A.settings['facilities'][str(facilityID)]['notifications'] = json.loads(json.dumps(defaultNotifications))
-                    A.save()
-                    return redirect('selectedFacilitySettings', facility, facilityID, 'main')
-            elif 'cancelAccount' in answer:
-                print("hello")
-                clientAccountProf = get_object_or_404(user_profile_model, id=int(answer['registerID']))
-                clietnAccount = clientAccountProf.user
-                print(clietnAccount)
-                clientAccountProf.delete()
-                clietnAccount.delete()
+                return redirect('selectedFacilitySettings', facilityID, 'main')
+        elif 'cancelAccount' in answer:
+            print("hello")
+            clientAccountProf = get_object_or_404(user_profile_model, id=int(answer['registerID']))
+            clietnAccount = clientAccountProf.user
+            print(clietnAccount)
+            clientAccountProf.delete()
+            clietnAccount.delete()
 
 
             
@@ -319,7 +298,6 @@ def sup_facility_settings(request, facility, facilityID, selector):
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
-        'facility': facility,
         'facilityID': facilityID,
         'facilityIDString': str(facilityID),
         'facilityInfo': facilityInfo,

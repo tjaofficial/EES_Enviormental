@@ -1,7 +1,10 @@
-{% extends "supervisor/components/sup_layout.html" %}{% load static %}{% block list%}
-<link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
-<link href="{% static 'ees_forms/style/add_to_facility_forms.css' %}" rel="stylesheet" />
-<script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
+{% extends "supervisor/components/sup_layout.html" %}
+{% load static %}{% block list%}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
+    <link href="{% static 'ees_forms/style/add_to_facility_forms.css' %}" rel="stylesheet" />
+    <script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
+{% endblock %}
 <div class='mainCont' style="width:1000px; max-width:unset;">
     <div class="card bottomOfPageMargin">
         <div class="cardHeader methodPlusBlue">
@@ -11,7 +14,7 @@
         <div style='padding: 15px 32px;'>
             <div style="text-align:center; width:100%;margin-bottom:25px;">
                 Don't see the form you want? 
-                <a href="{% url 'requestForm' 'supervisor' %}" style="text-decoration: underline;">
+                <a href="{% url 'requestForm' %}" style="text-decoration: underline;">
                     Submit a form Request
                 </a>
             </div>

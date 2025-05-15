@@ -3,15 +3,15 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from ..models import facility_model, user_profile_model, facility_forms_model, Forms, formSubmissionRecords_model, form_settings_model, the_packets_model
 from ..forms import the_packets_form, form_settings_form
 from django.contrib.auth.decorators import login_required # type: ignore
-import datetime
-import json
 from .form_settings_builds import formSettingsFunc
 from ..utils.main_utils import defaultPacketSettings, setUnlockClientSupervisor, checkIfFacilitySelected, getCompanyFacilities, get_facility_forms, changeStringListIntoList
 from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
 from django.contrib import messages # type: ignore
 from django.http import JsonResponse # type: ignore
-from django.views.decorators.csrf import csrf_exempt # type: ignore
+import datetime
+import json
+from ..decor import group_required
 
 lock = login_required(login_url='Login')
 
@@ -360,14 +360,14 @@ def facilityForm(request, facility, packet):
     })
     
 @lock
-def facility_form_settings(request, facility, fsID, packetID, formLabel):
+def facility_form_settings(request, fsID, packetID, formLabel):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if unlock:
         return redirect('IncompleteForms')
     if client:
         userProfile = user_profile_model.objects.get(user=request.user)
-        return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
+        return redirect('c_dashboard')
     selectedSettings = form_settings_model.objects.get(id=fsID)
     formData = Forms.objects.get(id=selectedSettings.formChoice.id)
     #NEEDS A FAIL MESSAGE
@@ -423,7 +423,7 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
                 #     packetInstance.formList['formsList'][newLabel] = {"settingsID": A.id}
                 #     packetInstance.save()
                 messages.success(request,"The form settings were updated.")
-                return redirect('facilityList', 'supervisor')
+                return redirect('facilityList')
             #     if packetSettings:
             #         newLabel = request.POST['newLabel']
             #         if newLabel not in [formLabel, ""]:
@@ -438,7 +438,6 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
     
     return render (request, 'supervisor/facilityForms/facilityFormSettings.html', {
         'notifs': notifs,
-        'facility': facility, 
         'unlock': unlock, 
         'client': client, 
         'supervisor': supervisor, 
@@ -451,15 +450,12 @@ def facility_form_settings(request, facility, fsID, packetID, formLabel):
     })
     
 @lock
-def Add_Forms(request, facility):
+@group_required(SUPER_VAR)
+def Add_Forms(request):
+    facilitySelect = getattr(request, 'facility', None)
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    if unlock:
-        return redirect('IncompleteForms')
-    if client:
-        return redirect('c_dashboard', facility)
     today = datetime.date.today()
-    specificFacility = facility_model.objects.filter(facility_name=facility)[0]
     formList = Forms.objects.all().order_by('form')
     q = request.GET.get('q')
     if q:
@@ -471,8 +467,6 @@ def Add_Forms(request, facility):
     # packetQuery = the_packets_model.objects.get(name=packet, facilityChoice__facility_name=facility)
     print("-------------------------")
     print(formList[0].form)
-    facilityFormsData = facility_forms_model.objects.filter(facilityChoice=specificFacility)
-    sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     p = Paginator(formList, 15)
     page = request.GET.get('page')
     pageData = p.get_page(page)
@@ -505,15 +499,13 @@ def Add_Forms(request, facility):
     if request.method == 'POST':
         answer = request.POST
         settingsDictData = json.loads(answer['form_settings'])
-        if 'facilitySelect' in answer.keys():
-            return redirect('sup_dashboard', answer['facilitySelect'])
         sameEntryNotif = False
         selectedList = []
         ## Builds the new list of forms selected and created a submission record for each
         selected_form_ids = settingsDictData.keys()
         for formID in selected_form_ids:
             formID = int(formID)
-            formSettingsQuery = formSettingsModel.filter(facilityChoice=specificFacility, formChoice__form=formID)
+            formSettingsQuery = formSettingsModel.filter(facilityChoice=facilitySelect, formChoice__form=formID)
             settingsDict = {"active": True, "packets": False, "settings":{}}
             for x in settingsDictData[str(formID)].keys():
                 print("--------")
@@ -551,7 +543,7 @@ def Add_Forms(request, facility):
                                 sameEntry = False
             if not sameEntry:
                 newSettings = form_settings_model(
-                    facilityChoice = specificFacility,
+                    facilityChoice = facilitySelect,
                     formChoice = formList.get(id=formID),
                     settings = settingsDict,
                 )
@@ -562,31 +554,28 @@ def Add_Forms(request, facility):
                 selectSettingID = A.id
                 sameEntryNotif = True
                 
-            doesSubExist(specificFacility, selectSettingID, "settingsID", False)
+            doesSubExist(facilitySelect, selectSettingID, "settingsID", False)
             selectedList.append(selectSettingID)
             print('made it')
         
-        if facilityFormsData.exists():
-            print(facilityFormsData[0].formData)
-            returnFacList = changeStringListIntoList(facilityFormsData[0].formData)
-            for oldForms in returnFacList:
-                if int(oldForms) not in selectedList:
-                    selectedList.append(int(oldForms))
+        returnFacList = changeStringListIntoList(facilitySelect.formData)
+        for oldForms in returnFacList:
+            if int(oldForms) not in selectedList:
+                selectedList.append(int(oldForms))
         
         print(selectedList)
-        B = facilityFormsData[0]
+        B = facilitySelect
         B.formData = selectedList
         B.save()
     
         if sameEntryNotif:
-            messages.error(request,"Some of the forms selected already exist for " + str(facility) + ".")
+            messages.error(request,"Some of the forms selected already exist for " + str(facilitySelect.facility_name) + ".")
         
-        messages.success(request,"All selected forms were added to " + str(facility) + ".")
+        messages.success(request,"All selected forms were added to " + str(facilitySelect.facility_name) + ".")
         print("Forms Have Been Saved")
         return redirect('facilityList', 'supervisor')
     return render(request, 'supervisor/facilityForms/add_form_to_facility.html', {
         'notifs': notifs, 
-        'facility': facility, 
         'unlock': unlock, 
         'client': client, 
         'supervisor': supervisor, 

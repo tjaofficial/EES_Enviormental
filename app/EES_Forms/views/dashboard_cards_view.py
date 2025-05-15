@@ -10,11 +10,9 @@ import json
 lock = login_required(login_url='Login')
 
 @lock
-def card_progress_bar(request, facility):
-    options = facility_model.objects.filter(facility_name=facility)
-    if options.exists():
-        options = options.first()
-    progress_data = request.user.user_profile.settings['facilities'][str(options.id)]['settings']['progressBar']
+def card_progress_bar(request):
+    facility = getattr(request, 'facility', None)
+    progress_data = request.user.user_profile.settings['facilities'][str(facility.id)]['settings']['progressBar']
     daily_percent = calculateProgessBar(facility, 'Daily')
     weekly_percent = calculateProgessBar(facility, "Weekly")
     monthly_percent = calculateProgessBar(facility, 'Monthly')
@@ -23,25 +21,27 @@ def card_progress_bar(request, facility):
     
     
     html = render_to_string(
-        "shared/dashboard_cards/dashCard_progress.html", 
-        {"progressBar": progress_data,
-         'daily_percent': daily_percent,
-         'weekly_percent': weekly_percent,
-         'monthly_percent': monthly_percent,
-         'quarterly_percent': quarterly_percent,
-         'annually_percent': annually_percent}, 
+        "shared/dashboard_cards/dashCard_progress.html", {
+            "progressBar": progress_data,
+            'daily_percent': daily_percent,
+            'weekly_percent': weekly_percent,
+            'monthly_percent': monthly_percent,
+            'quarterly_percent': quarterly_percent,
+            'annually_percent': annually_percent
+        }, 
         request=request
     )
     return JsonResponse({"html": html})
 
 @lock
-def card_daily_battery_forms(request, facility):
+def card_daily_battery_forms(request):
+    facility = getattr(request, 'facility', None)
     now = datetime.datetime.now().date()
-    formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
-    formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
-    formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
-    formA4 = form4_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
-    formA5 = form5_model.objects.filter(formSettings__facilityChoice__facility_name=facility, date=now)
+    formA1 = form1_model.objects.filter(formSettings__facilityChoice=facility, date=now)
+    formA2 = form2_model.objects.filter(formSettings__facilityChoice=facility, date=now)
+    formA3 = form3_model.objects.filter(formSettings__facilityChoice=facility, date=now)
+    formA4 = form4_model.objects.filter(formSettings__facilityChoice=facility, date=now)
+    formA5 = form5_model.objects.filter(formSettings__facilityChoice=facility, date=now)
     A1data = formA1[0] if formA1.exists() else False
     A2data = formA2[0] if formA2.exists() else False
     A3data = formA3[0] if formA3.exists() else False
@@ -60,18 +60,16 @@ def card_daily_battery_forms(request, facility):
     return JsonResponse({"html": html})
 
 @lock
-def card_graphs(request, facility):
+def card_graphs(request):
+    facility = getattr(request, 'facility', None)
     formA1 = form1_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA2 = form2_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     formA3 = form3_model.objects.filter(formSettings__facilityChoice__facility_name=facility).order_by('-date')
     now = datetime.datetime.now().date()
     userProfile = request.user.user_profile
-    options = facility_model.objects.filter(facility_name=facility)
-    if options.exists():
-        options = options.first()
 
-    if userProfile.settings['facilities'][str(options.id)]['dashboard'] == "Battery":
-        baseIterations = userProfile.settings['facilities'][str(options.id)]['settings']
+    if userProfile.settings['facilities'][str(facility.id)]['dashboard'] == "Battery":
+        baseIterations = userProfile.settings['facilities'][str(facility.id)]['settings']
         graphSettings = baseIterations['graphs']
         setGraphRange = graphSettings['graphFrequencyData']
     
@@ -149,8 +147,9 @@ def card_graphs(request, facility):
     return JsonResponse({"html": html})
 
 @lock
-def card_corrective_actions(request, facility):
-    ca_forms = issues_model.objects.filter(formChoice__facilityChoice__facility_name=facility).order_by('-id')
+def card_corrective_actions(request):
+    facility = getattr(request, 'facility', None)
+    ca_forms = issues_model.objects.filter(formChoice__facilityChoice=facility).order_by('-id')
 
     html = render_to_string(
         "shared/dashboard_cards/dashCard_correctiveActions.html", 
@@ -160,13 +159,12 @@ def card_corrective_actions(request, facility):
     return JsonResponse({"html": html})
 
 @lock
-def card_info(request, facility):
+def card_info(request):
+    facility = getattr(request, 'facility', None)
     now = datetime.datetime.now().date()
-    options = facility_model.objects.filter(facility_name=facility)
-    options = options.first() if options.exists() else False
     daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facility, date_save=now)
     daily_prof = daily_prof.first() if daily_prof else False
-    weather = weatherDict(False) if facility == 'supervisor' else weatherDict(options.city)
+    weather = weatherDict(False) if facility == 'supervisor' else weatherDict(facility.city)
     
     todays_obser = 'Schedule Not Updated'
     event_cal = Event.objects.all()
@@ -177,14 +175,19 @@ def card_info(request, facility):
                 todays_obser = x.observer
 
     html = render_to_string(
-        "shared/dashboard_cards/dashCard_info.html", 
-        {'weather': weather, "todays_log": daily_prof, 'facility': facility, 'todays_obser': todays_obser}, 
+        "shared/dashboard_cards/dashCard_info.html", {
+            'weather': weather, 
+            "todays_log": daily_prof, 
+            'facility': facility, 
+            'todays_obser': todays_obser
+        }, 
         request=request
     )
     return JsonResponse({"html": html})
 
 @lock
-def card_90DayPushTravels(request, facility):
+def card_90DayPushTravels(request):
+    facility = getattr(request, 'facility', None)
     pushTravelsData = ninetyDayPushTravels(facility)
     if pushTravelsData == 'EMPTY':
         od_30 = ''
@@ -207,7 +210,7 @@ def card_90DayPushTravels(request, facility):
     return JsonResponse({"html": html})
 
 @lock
-def card_contacts(request, facility):
+def card_contacts(request):
     allContacts = user_profile_model.objects.filter(company=request.user.user_profile.company)
     
     html = render_to_string(

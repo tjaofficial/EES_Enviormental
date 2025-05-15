@@ -16,15 +16,15 @@ def group_required(group_name):
             if not request.user.groups.filter(name=group_name).exists():
                 user_group = request.user.groups.first() 
                 redirect_choices = {
-                    CLIENT_VAR: ("c_dashboard", [request.user.user_profile.company.company_name]), 
-                    OBSER_VAR: ("facilitySelect", ["observer"]), 
-                    SUPER_VAR: ("sup_dashboard", ["supervisor"]),
+                    CLIENT_VAR: ("c_dashboard"), 
+                    OBSER_VAR: ("facilitySelect"), 
+                    SUPER_VAR: ("sup_dashboard"),
                 }
                 #delete laterVVVV
                 superuser = True
                 if user_group and user_group.name in redirect_choices:
-                    view_name, view_args = redirect_choices[user_group.name]
-                    return redirect(reverse(view_name, args=view_args))
+                    view_name = redirect_choices[user_group.name]
+                    return redirect(reverse(view_name))
                 elif superuser:
                     return view_func(request, *args, **kwargs)
                 else:

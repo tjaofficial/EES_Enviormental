@@ -8,10 +8,10 @@
                 {% for facilities in sortedFacilityData %}
                     {% if client %}
                         {% if facility == facilities.facility_name %}
-                            <a href="{% url 'selectedFacilitySettings' facility facilities.id 'main' %}" style="text-decoration: underline;">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a><br>
+                            <a href="{% url 'selectedFacilitySettings' facilities.id 'main' %}" style="text-decoration: underline;">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a><br>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'selectedFacilitySettings' facility facilities.id 'main' %}" style="text-decoration: underline;">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a><br>
+                        <a href="{% url 'selectedFacilitySettings' facilities.id 'main' %}" style="text-decoration: underline;">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a><br>
                     {% endif %}
                 {% endfor %}
             </td>

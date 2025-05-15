@@ -228,7 +228,7 @@
     {% if page == 'batd' %}
         <input type="submit" name="batteryDashSave" value="save">
     {% else %}
-        <a href="{% url 'selectedFacilitySettings' facility facilityID 'batd' %}#batteryDashSettings">edit</a>
+        <a href="{% url 'selectedFacilitySettings' facilityID 'batd' %}#batteryDashSettings">edit</a>
     {% endif %}
     </center>
 {% comment %} </form> {% endcomment %}

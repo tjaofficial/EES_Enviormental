@@ -187,7 +187,7 @@ def pt_mth_input(request, facility):
     })
 
 @lock
-def method303_rolling_avg(request, facility):
+def method303_rolling_avg(request):
     unlock = False
     client = False
     supervisor = False
@@ -269,9 +269,10 @@ def method303_rolling_avg(request, facility):
             print(y)
             break
                 
-            
-        
-
     return render(request, "ees_forms/method303_rolling_avg.html", {
-        'facility': facility, "now": now, 'todays_log': todays_log,  "today": today, 'list_of_records': list_of_records, 'profile': profile,
+        "now": now, 
+        'todays_log': todays_log, 
+         "today": today, 
+        'list_of_records': list_of_records, 
+        'profile': profile
     })

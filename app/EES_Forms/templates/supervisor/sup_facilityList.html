@@ -41,7 +41,7 @@
                                             <td>{{x.id}}</td>
                                             <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
                                             <td class="form-actions">
-                                                <a href="{% url 'facilityFormSettings' info.0.facility_name x.id 'facID' 'none' %}"><button>Edit</button></a>
+                                                <a href="{% url 'facilityFormSettings' x.id 'facID' 'none' %}"><button>Edit</button></a>
                                                 <button onclick="open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
                                             </td>
                                         </tr>
@@ -53,7 +53,7 @@
                                 No forms have been added. Add forms to this facility by clicking 'add forms' below
                             </div>
                         {% endif %}
-                            <a href="{% url 'addingForms' info.0.facility_name %}">
+                            <a href="{% url 'addingForms' %}">
                                 <button class="add-form-btn">
                                     + Add Facility Form
                                 </button>
@@ -90,7 +90,7 @@
                                                                         {% endif %}
                                                                     </span>
                                                                     <span class="form-actions" style="width: 122px;">
-                                                                        <a href="{% url 'facilityFormSettings' info.0.facility_name form.settingsID packet.id key %}">
+                                                                        <a href="{% url 'facilityFormSettings' form.settingsID packet.id key %}">
                                                                             <button onclick="event.stopPropagation()">Edit</button>
                                                                         </a>
                                                                         <button onclick="event.stopPropagation(); open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>

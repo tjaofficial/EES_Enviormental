@@ -20,11 +20,13 @@ lock = login_required(login_url='Login')
 
 @lock
 def sidebar_data(request):
+    facility = getattr(request, 'facility', None)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sidebar_data = {
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock,
+        'facility': facility
     }
     return render(request, "supervisor/components/sup_sideBar.html", sidebar_data)
 
@@ -728,19 +730,13 @@ def issues_view(request, issueID, access_page):
     })
 
 @lock
-def event_add_view(request, facility):
+def event_add_view(request):
+    facility = getattr(request, 'facility', None)
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    options = facility_model.objects.all()
-    companyData = user_profile_model.objects.get(user__id=request.user.id).company
+    companyData = request.user.user_profile.company
     listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
-    
-    if options.filter(facility_name=facility).exists():
-        finalFacility = options.filter(facility_name=facility)[0]
-    else:
-        print("MT")
     today = datetime.date.today()
-    profile = user_profile_model.objects.all()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
@@ -749,9 +745,6 @@ def event_add_view(request, facility):
 
     if request.method == "POST":
         answer = request.POST
-        for x in answer:
-            if x == 'facilitySelect':
-                return redirect('sup_dashboard', answer['facilitySelect'])
         request_form = events_form(request.POST)
         if request_form.is_valid():
             selected_days = request_form.cleaned_data['selected_days'].split(',')
@@ -759,7 +752,7 @@ def event_add_view(request, facility):
             if facility == "supervisor":
                 personal = True
             else:
-                facilityChoice = finalFacility
+                facilityChoice = facility
                 personal = False
 
             for date in selected_days:
@@ -783,12 +776,11 @@ def event_add_view(request, facility):
 
     return render(request, "supervisor/event_add.html", {
         'notifs': notifs, 
-        'sortedFacilityData': sortedFacilityData,'options': options, 
+        'sortedFacilityData': sortedFacilityData,
         'facility': facility, 
         'today_year': today_year, 
         'today_month': today_month, 
         'form': form_var, 
-        'profile': profile, 
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
@@ -796,7 +788,7 @@ def event_add_view(request, facility):
     })
 
 @lock
-def profile_edit_view(request, facility, userID):
+def profile_edit_view(request, userID):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if client:
@@ -821,10 +813,6 @@ def profile_edit_view(request, facility, userID):
             parseNumber = ''
         
     if request.method == 'POST':
-        answer = request.POST
-        if 'facilitySelect' in answer.keys():
-            if answer['facilitySelect'] != '':
-                return redirect('sup_dashboard', answer['facilitySelect'])
         if request.POST.get('edit_user', False):
             print('CHECK 3')
             finalPhone = '+1' + ''.join(filter(str.isdigit, request.POST['phone']))
@@ -850,9 +838,8 @@ def profile_edit_view(request, facility, userID):
             if A.is_valid() and B.is_valid():
                 A.save()
                 B.save()
-                return redirect('Contacts', facility)
+                return redirect('Contacts')
     return render(request, "supervisor/profile_edits.html", {
-        'facility': facility,
         'notifs': notifs, 
         "unlock": unlock, 
         "client": client, 
