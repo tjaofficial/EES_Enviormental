@@ -3,6 +3,7 @@ from django.forms import ModelForm, Textarea # type: ignore
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm # type: ignore
 from django.contrib.auth.models import User # type: ignore
 import datetime
+import re
 from PIL import Image # type: ignore
 from io import BytesIO
 from .models import *
@@ -59,6 +60,20 @@ class CreateUserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'autofocus': False})
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("This email has already been used. Please enter a different email.")
+        return email
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username', '').lower()
+        
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("This username already exists. Please enter a different username.")
+        
+        return username
 
 class daily_battery_profile_form(ModelForm):
     class Meta:
@@ -125,6 +140,17 @@ class user_profile_form(forms.ModelForm):
             'company': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 150px;'}),
             'certs': forms.TextInput(attrs={'class':'input', 'type': 'text', 'style': 'width: 300px;'}),
         }
+    
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        
+        # Strip out common formatting characters
+        digits_only = re.sub(r'\D', '', phone or "")
+        
+        if len(digits_only) < 10:
+            raise ValidationError("Please enter a valid phone number. (e.g., 1234567890, (123)456-7890)")
+
+        return phone
 
 class pt_admin1_form(ModelForm):
     class Meta:
@@ -162,12 +188,12 @@ class bat_info_form(ModelForm):
             'address': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width:100%;', 'autocomplete': 'on'}),
             'state': forms.TextInput(attrs={'type': 'text', 'class':'input', 'placeholder':'XX', 'style': 'width: 3rem;'}),
             'district': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width: 9rem;'}),
-            'city': forms.TextInput(attrs={'type': 'text','class':'input', 'style': ''}),
+            'city': forms.TextInput(attrs={'type': 'text','class':'input', 'style': 'width: 140px;'}),
             'bat_height': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;'}),
-            'bat_height_label': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
-            'bat_main': forms.Select(attrs={'class':'input', 'style':'height: 24px;width: 81px;'}),
+            'bat_height_label': forms.Select(attrs={'class':'input', 'style':'height: 37px; width: 81px;'}),
+            'bat_main': forms.Select(attrs={'class':'input', 'style':'height: 37px; width: 81px;'}),
             'bat_lids': forms.NumberInput(attrs={'type': 'number','class':'input', 'style': 'width: 6rem;'}),
-            'is_battery': forms.Select(attrs={'class':'input', 'style':'height: 24px; width: 81px;'}),
+            'is_battery': forms.Select(attrs={'class':'input', 'style':'height: 37px; width: 81px;'}),
             'zipcode': forms.TextInput(attrs={'class':'input', 'style':'width: 4rem;'}),
         }
 

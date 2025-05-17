@@ -165,7 +165,8 @@ def sup_facility_settings(request, facilityID, selector):
             'bat_main': facInfoMain.bat_main, 
             'bat_lids': facInfoMain.bat_lids, 
             'city': facInfoMain.city,
-            'is_battery': facInfoMain.is_battery
+            'is_battery': facInfoMain.is_battery,
+            'zipcode': facInfoMain.zipcode
         }
         facilityInfo = bat_info_form(initial=initial_data)
     elif selector in ['batd', 'noti', 'main']:

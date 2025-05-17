@@ -1,0 +1,184 @@
+#all-day-event-ul{
+    display: block;
+    list-style-type: disc;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+.all-day-li{
+    display: list-item;
+    list-style-type: disc;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+}
+.sidebar_font{
+    font-size: 0.9rem;
+    font-weight: 100;
+}
+td:hover{
+    background: lightblue;
+    transform: scale(1.08); /* slightly enlarge */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* deeper shadow */
+    border-radius: 8px;
+}
+
+.event-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.event-header {
+    background-color: #17364B;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    border-radius: 8px 8px 0 0;
+    margin: -1.5rem -1.5rem 1rem -1.5rem;
+}
+
+.event-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.event-block {
+    border-left: 4px solid #17364B;
+    padding-left: 1rem;
+}
+
+.event-block:hover {
+    transform: scale(1.05); /* slightly enlarge */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* deeper shadow */
+    background-color: #ffffff;
+}
+
+.event-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    text-align: left;
+    padding: 6px 0px;
+}
+
+.event-time {
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 0.25rem;
+}
+
+.event-meta {
+    font-size: 0.9rem;
+    color: #444;
+    line-height: 1.4;
+    text-align: left;
+    margin-left: 35px;
+    margin-bottom: 0.25rem;
+    padding-bottom: 10px;
+}
+.events-adjust{
+    width: 85%;
+    margin: auto;
+}
+#sideBarBody {
+    height: 94%;
+    overflow: scroll;
+    max-height: 875px;
+}
+#date-header {
+    font-size: 96px;
+    font-weight: lighter;
+    text-align: left;
+    padding-left: 29px;
+}
+#add-event {
+    font-size: 31px;
+    color: #5F5F5F;
+    font-weight: bold;
+}
+#calendar-cont {
+    background-color: #D9D9D9;
+    margin: auto;
+    width: 90%;
+    border-radius: 6px;
+    height: 67%;
+}
+#calendar-font {
+    padding: 10px 0px;
+    font-size: 16px;
+    color: #5F5F5F;
+    text-shadow: 0px 4px 4px #0000003b;
+    font-weight: bold;
+}
+#calendar-select-cont{
+    margin: auto;
+    background: #5DA8DC;
+    width: 87%;
+    height: 43px;
+    border-radius: 7px;
+}
+#calendar-select{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    gap: 10px;
+}
+#settings-dots {
+    font-size: 34px;
+    position: relative;
+    top: -9px;
+}
+#plus-button{
+    background-color: #84a4ba;
+    border-radius: 47px;
+    width: 47px;
+    height: 47px;
+}
+#add-event-cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+    margin-bottom: 11px;
+    gap: 15px;
+}
+.closeAdd {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    padding-right: 15px;
+    position: relative;
+    top: -8px;
+    right: -7px;
+}
+#next-month {
+    rotate: 180deg;
+    height: 32px;
+    color: #cacaca;
+    position: relative;
+    top: -5px;
+    float: right;
+}
+#previous-month {
+    height: 2rem;
+    color: #cacaca;
+    position: relative;
+    top: -5px;
+    float: left;
+}
+#main-side {
+    min-width: 340px; 
+    display: block;
+}

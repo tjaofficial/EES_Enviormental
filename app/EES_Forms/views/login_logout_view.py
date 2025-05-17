@@ -38,8 +38,9 @@ def login_view(request):
         elif request.user.groups.filter(name=SUPER_VAR):
             return redirect('sup_dashboard', SUPER_VAR)
         elif request.user.groups.filter(name=CLIENT_VAR):
-            facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
-            return redirect('c_dashboard', facility)
+            facility = request.user.user_profile.facilityChoice
+            request.session['selected_facility'] = facility.id
+            return redirect('c_dashboard')
         elif request.user.groups.filter(name=OBSER_VAR):
             return redirect('facilitySelect')
     if request.method == 'POST':
@@ -59,11 +60,10 @@ def login_view(request):
             else:
                 login(request, user)
                 print('check 1')
-                userProf = user_profile_model.objects.filter(user__id=request.user.id)
                 if request.user.is_superuser:
                     return redirect('adminDash', "overview")
-                elif userProf.exists():
-                    userProf = userProf[0]
+                else:
+                    userProf = request.user.user_profile
                     if not userProf.company and userProf.is_active:
                         return redirect('companyReg')
                     if request.user.groups.filter(name=SUPER_VAR):
@@ -75,7 +75,8 @@ def login_view(request):
                         else:
                             return redirect('PasswordChange', SUPER_VAR)
                     elif request.user.groups.filter(name=CLIENT_VAR):
-                        facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
+                        facility = request.user.user_profile.facilityChoice
+                        request.session['selected_facility'] = facility.id
                         if userProf.settings['profile']['first_login']:
                             return redirect('c_dashboard')
                         else:
@@ -88,9 +89,9 @@ def login_view(request):
                     else:
                         messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
                         return redirect('Login')
-                else:
-                    messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
-                    return redirect('Login')
+                # else:
+                #     messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
+                #     return redirect('Login')
         else:
             messages.error(request,"Incorrect username or password")
             return redirect('Login')

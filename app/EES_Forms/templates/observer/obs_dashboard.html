@@ -5,7 +5,7 @@
     <link href="{% static 'ees_forms/style/obs_dashboard.css' %}" rel="stylesheet">
     <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
 {% endblock %}
-{% block list%}
+{% block list %}
     <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
     <div class="mainCont forms">
         <div style="display: flex;">
@@ -123,22 +123,22 @@
                 </div>
                 <div class="card2_Form">
                     {% if not sigExisting %}
-                    <a href="{% url 'signature' %}">
-                        <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
-                            <p style="font-size: 28px; margin-top: -8px;">
-                                Tap to Sign
-                            </p>
-                        </div>
-                    </a>
+                        <a href="{% url 'signature' %}">
+                            <div style="height: 119px; margin: auto; display: flex; justify-content: center; align-items: center;">
+                                <p style="font-size: 28px; margin-top: -8px;">
+                                    Tap to Sign
+                                </p>
+                            </div>
+                        </a>
                     {% else %}
-                    <a>
-                        <div style="height: 119px; margin: auto; padding: 28px 0px; justify-content: center; align-items: center;">
-                            <p style="font-size: 28px; margin-top: -8px;">
-                                Complete
-                            </p><br>
-                            <p>{{sigName}}</p>
-                        </div>
-                    </a>
+                        <a>
+                            <div style="height: 119px; margin: auto; padding: 28px 0px; justify-content: center; align-items: center;">
+                                <p style="font-size: 28px; margin-top: -8px;">
+                                    Complete
+                                </p><br>
+                                <p>{{sigName}}</p>
+                            </div>
+                        </a>
                     {% endif %}
                 </div>
             </div>
@@ -149,7 +149,7 @@
             <span style="float: left; position: relative; left: 22px; top: 16px;">
                 <select id="packetSelect" name="formsDisplayed" onchange='packetChange(this)' style="position: absolute; margin-right: 25rem;" data-allpackets="{{listOfAllPacketIDs}}">
                     <option value="0">Facility Forms</option>
-                    {% for pack in facPackets%}
+                    {% for pack in facPackets %}
                         <option value="{{pack.id}}">{{pack.name}}</option>
                     {% endfor %}
                 </select>
@@ -168,15 +168,15 @@
                     <option value="annual">Annual Forms</option>
                 </select> {% endcomment %}
             </div> 
-            {% for packet in packetQuery %}
-                <div id="i{{packet.id}}" style="display: none;">
-                    {% include 'observer/components/insert_packet_forms_card.html' with packet=packet complete='false' %}
+            {% for packetData in packetList %}
+                <div id="i{{packetData.packet.id}}" style="display: none;">
+                    {% include 'observer/components/insert_packet_forms_card.html' with packet=packetData complete='false' %}
                 </div>
             {% endfor %}
             <div id="i0" style="display: block;">
-                {% for item in facFormList1 %}
+                {% for item in allActiveFacFormsList %}
                     {% if not item.subChoice.submitted %}
-                        <a href="{% url item.formChoice.link item.id 'form' %}{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
+                        <a href="{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url item.formChoice.link item.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url item.formChoice.link item.id 'form' 'sunday' %}{% endif %}{% elif item.formChoice.link != 'form26' %}{% url item.formChoice.link item.id 'form' %}{% endif %}">
                             <div class="card_Form" style="margin-left: 50px;">
                                 <h3 class="card_Form_letter">
                                     {{item.id}}
@@ -195,7 +195,7 @@
                             </div>      
                         </a>
                     {% endif %}
-                    {% empty %}
+                {% empty %}
                     <h2 class="card_empty no_forms"> No Forms </h2>
                 {% endfor %}
             </div> 
@@ -206,34 +206,34 @@
                     Complete Forms
                 </h2>
             </div>
-            {% for packet in packetQuery %}
-                <div id="c{{packet.id}}" style="display: none;">
-                    {% include 'observer/components/insert_packet_forms_card.html' with packetID='{{packet.id}}' complete='true' %}
+            {% for packetData in packetList %}
+                <div id="c{{packetData.packet.id}}" style="display: none;">
+                    {% include 'observer/components/insert_packet_forms_card.html' with packet=packetData complete='true' %}
                 </div>
             {% endfor %}
             <div id="c0" style="display: block;">
-                {% for item in facFormList1 %}
+                {% for item in allActiveFacFormsList %}
                     {% if item.subChoice.submitted %}
-                    <a href="{% url item.formChoice.link item.id 'form' %}{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
-                        <div class="card_Form" style="margin-left: 50px;">
-                            <h3 class="card_Form_letter">
-                                {{item.id}}
-                            </h3>
-                            <div class="card_Form_title">
-                                <h3>
-                                    {{ item.formChoice.title }}
+                        <a href="{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url item.formChoice.link item.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url item.formChoice.link item.id 'form' 'sunday' %}{% endif %}{% url item.formChoice.link item.id 'form' %}{% endif %}">
+                            <div class="card_Form" style="margin-left: 50px;">
+                                <h3 class="card_Form_letter">
+                                    {{item.id}}
                                 </h3>
-                                <h4>
-                                    {{ item.formChoice.frequency }}
-                                </h4>
-                            </div>
-                            <h4 class="card_Form_date">
-                                {{item.subChoice.dateSubmitted}}
-                            </h4>       
-                        </div>      
-                    </a>
+                                <div class="card_Form_title">
+                                    <h3>
+                                        {{ item.formChoice.title }}
+                                    </h3>
+                                    <h4>
+                                        {{ item.formChoice.frequency }}
+                                    </h4>
+                                </div>
+                                <h4 class="card_Form_date">
+                                    {{item.subChoice.dateSubmitted}}
+                                </h4>       
+                            </div>      
+                        </a>
                     {% endif %}
-                    {% empty %}
+                {% empty %}
                     <h2 class="card_empty no_forms"> No Forms </h2>
                 {% endfor %}
             </div>

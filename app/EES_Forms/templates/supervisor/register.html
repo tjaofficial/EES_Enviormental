@@ -1,331 +1,331 @@
 {% extends "supervisor/components/sup_layout.html" %}
 {% block list%}{% load static %}
-{% comment %} <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet"> {% endcomment %}
-<link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-<script defer src="{% static 'ees_forms/script/register.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
-<body>
+{% block extra_head %}
+    {% comment %} <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet"> {% endcomment %}
+    <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+    <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
+{% endblock %}
     <input id='access_page' type='hidden' value={{access_page}} />
     <div id='addMoreRegistrations' style='display:none;' data-registrations={{addMoreRegistrations}}></div>
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
-    <div class="mainCont" style="width: 43rem;">
-        <div id='card' class="card">
-            <div class='tabContainer'>
-                <div id='tab1' class='cardHeaderTabs tabs topLeftCont start'>Observer/Supervisor</div>
-                <div id='tab2' class='cardHeaderTabs tabs middleCont'>Facility</div>
-                <div id='tab3' class='cardHeaderTabs tabs topRightCont'>Client</div>
-            </div>
-            <div id="login" class='contentCont' style='display: block;'>
-                {% if addMoreRegistrations %}
-                    <div class="innerCardHeader">
-                        <h1 style="padding: 1rem;">Register New Observer/Supervisor</h1>
-                        <hr style="width: 450px; margin: auto;">
-                    </div>
-                    <br>
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <div style="text-align:left;width: 33rem;margin: auto;">
-                            <li class="form-line">
-                                <div class="label">Employee Info.</div>
-                                <div class="inputCont">
-                                    <div style="display:flex;">
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                            <span><input type="text" name="first_name" class="input" maxlength="150" id="id_first_name" style="width:8.5rem;"></span>
-                                            <label class="sub_label">First Name</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                            <span><input type="text" name="last_name" class="input" maxlength="150" id="id_last_name" style="width: 9rem;"></span>
-                                            <label class="sub_label">Last Name</label>
-                                        </span>
-                                    </div>
-                                    <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span><input style='width:100%;' type="text" name="username" class="input" maxlength="150" required="" id="id_username"></span>
-                                            <label class="sub_label">Username</label>
-                                        </span>
-                                    </div>
-                                    <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span><input type="email" name="email" class="input" style='width:100%;' maxlength="254" id="id_email"></span>
-                                            <label class="sub_label">E-mail</label>
-                                        </span>
-                                    </div>
-                                    <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span><input type="text" oninput="processPhone(event)" name="phone" class="input" style="width: 100%;" placeholder="(123)456-7890" maxlength="75" required id="id_phone"></span>
-                                            <label class="sub_label">Phone</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="form-line">
-                                <div class="label">Work Position:</div>
-                                <div class="inputCont" style="width: 294px;">
-                                    <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span>
-                                                <select class='input' name="position" oninput="cert_date1()" style="width: 160px;" required id="id_position">
-                                                    <option value="" selected="">---------</option>
-                                                    <option value="observer">Observer</option>
-                                                    <option value="supervisor">Supervisor</option>
-                                                </select>
-                                            </span>
-                                            <label class="sub_label">Position</label>
-                                        </span>
-                                    </div>
-                                    <div id='certDateDiv' style="display:none;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span><input type="date" name="cert_date" class="input" id="id_cert_date" required></span>
-                                            <label class="sub_label">Certification Date</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </li>
-                            <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice }}</div>
-                        </div>
-                        <input type="submit" name="create_user" value="submit">
-                    </form>
-                    {% for message in messages %}
-                        <p>{{message}}</p>
-                    {% endfor%}
-                {% else %}
-                    You have used all of your registrations available within your plan. If you would like to upgrade to a larger plan or add more registrations <a href="{% url 'Account' 'supervisor' %}#subscription" style="text-decoration: underline;">click here</a>
-                {% endif %}
-            </div>
-            <div id="newFacility" class='contentCont' style='display: none;'>
-                <div class="innerCardHeader">
-                    <h1 style="padding: 1rem;">Register New Facility</h1>
-                    <hr style="width: 450px; margin: auto;">
+        <div class="mainCont" style="width: 43rem;">
+            <div id='card' class="card">
+                <div class='tabContainer'>
+                    <div id='tab1' class='cardHeaderTabs tabs topLeftCont start'>Observer/Supervisor</div>
+                    <div id='tab2' class='cardHeaderTabs tabs middleCont'>Facility</div>
+                    <div id='tab3' class='cardHeaderTabs tabs topRightCont'>Client</div>
                 </div>
-                <br>
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div style="text-align:left;width: 33rem;margin: auto;">
-                        <li class="form-line">
-                            <div class="label">Facility Name</div>
-                            <div class="inputCont">
-                                <div style="display:block;">
-                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                        <span>{{data.facility_name}}</span>
-                                        <label class="sub_label">Name</label>
-                                    </span>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="form-line">
-                            <div class="label">Address</div>
-                            <div class="inputCont" style="width: 294px;">
-                                <div style="display:block;">
-                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                        <span>
-                                            {{data.address}}
-                                        </span>
-                                        <label class="sub_label">Street Address</label>
-                                    </span>
-                                </div>
-                                <div style="display:block;">
-                                    <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                        <span>
-                                            <input type="text" name="address2" class="input" style="width:100%;" id="id_address2">
-                                        </span>
-                                        <label class="sub_label">Street Address Line 2</label>
-                                    </span>
-                                </div>
-                                <div style="display:block;">
-                                    <div style="width: 290px;">
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 10rem;">
-                                            <span>{{data.city}}</span>
-                                            <label class="sub_label">City</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 3rem;">
-                                            <span>{{data.state}}</span>
-                                            <label class="sub_label">State</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 4rem;">
-                                            <span>{{data.zipcode}}</span>
-                                            <label class="sub_label">Zipcode</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="form-line">
-                            <div class="label">Is this facility a Coke Battery?</div>
-                            <div class="inputCont" style="width: 294px;">
-                                <div style="display:block;">
-                                    <div style="width: 294px;">
-                                        <span style="display: inline-block;padding-bottom: 12px;width: 9rem;">
-                                            <span>
-                                                <select class="input" style="height:24px;width:81px;" name="cokeBattery" id="cokeBattery" onchange="batteryInformation()">
-                                                    <option value="">------</option>
-                                                    <option value="Yes">Yes</option>
-                                                    <option value="No">No</option>
-                                                </select>
-                                            </span>
-                                            <label class="sub_label"></label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li id="batteryInfo" class="form-line" style="display:none;">
-                            <div class="label">Battery Information</div>
-                            <div class="inputCont" style="width: 294px;">
-                                <div style="display:block;">
-                                    <div style="width: 294px;">
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                            <span>{{data.district}}</span>
-                                            <label class="sub_label">District</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                            <span>{{data.county}}</span>
-                                            <label class="sub_label">County</label>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div style="display:block;">
-                                    <span style="width: 7rem;;display: inline-block;padding-bottom: 10px;">
-                                        <span>{{data.bat_num}}</span>
-                                        <label class="sub_label">Battery Number</label>
-                                    </span>
-                                    <span style="width: 11rem;display: inline-block;padding-bottom: 10px;">
-                                        <span>{{data.estab_num}}</span>
-                                        <label class="sub_label">Establishment Number</label>
-                                    </span>
-                                </div>
-                                <div style="display:block;">
-                                    <div style="width: 294px;">
-                                        <span style="display: inline-block;padding-bottom: 12px;width: 9rem;">
-                                            <span>{{data.equip_location}}</span>
-                                            <label class="sub_label">Equipment Location</label>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div style="display:block;">
-                                    <div style="width: 294px;">
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 5rem;">
-                                            <span>{{data.bat_main}}</span>
-                                            <label class="sub_label">Battery Main</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 6rem;">
-                                            <span>{{data.total_ovens}}</span>
-                                            <label class="sub_label">Number of Ovens</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 6rem;">
-                                            <span>{{data.bat_lids}}</span>
-                                            <label class="sub_label">Lids Per Oven</label>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div style="display:block;">
-                                    <div style="width: 294px;">
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 6rem;">
-                                            <span>{{data.bat_height}}</span>
-                                            <label class="sub_label">Height of Battery</label>
-                                        </span>
-                                        <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                            <span>{{data.bat_height_label}}</span>
-                                            <label class="sub_label">ft/m</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                    <center><input type="submit" name="create_facility"></center>
-                </form>
-                {% for message in messages %}
-                    <p>{{message}}</p>
-                {% endfor%}
-            </div>
-            <div id="newClient" class='contentCont' style='display: none;'>
-                {% if facilityLink %}
-                    <div class="innerCardHeader">
-                        <h1 style="padding: 1rem;">Register New Client</h1>
-                        <hr style="width: 450px; margin: auto;">
-                    </div>
-                    <br>
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <div style="text-align:left;width: 33rem;margin: auto;">
-                            <li class="form-line">
-                                <div class="label">Choose Facility</div>
-                                <div class="inputCont" style="width: 294px;">
-                                    <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span>
-                                                <select class="input" name="facilityChoice" id="id_2_facilityChoice" required>
-                                                    <option value="" selected="">---------</option>
-                                                    {% for place in data2 %}
-                                                    <option value="{{place.id}}">{{place.facility_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </span>
-                                            <label class="sub_label">Facility</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="form-line">
-                                <div class="label">Client Information</div>
-                                <div class="inputCont">
-                                    <div style="display:block;">
-                                        <div style="width: 294px;">
+                <div id="login" class='contentCont' style='display: block;'>
+                    {% if addMoreRegistrations %}
+                        <div class="innerCardHeader">
+                            <h1 style="padding: 1rem;">Register New Observer/Supervisor</h1>
+                            <hr style="width: 450px; margin: auto;">
+                        </div>
+                        <br>
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <div style="text-align:left;width: 33rem;margin: auto;">
+                                <li class="form-line">
+                                    <div class="label">Employee Info.</div>
+                                    <div class="inputCont">
+                                        <div style="display:flex;">
                                             <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                                <span>
-                                                    <input class="input" type="text" name="first_name" style="width:9rem;" id="id_2_first_name">
-                                                </span>
+                                                <span><input type="text" name="first_name" class="input" maxlength="150" id="id_first_name" style="width:8.5rem;"></span>
                                                 <label class="sub_label">First Name</label>
                                             </span>
                                             <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
-                                                <span>
-                                                    <input class="input" type="text" name="last_name" style="width:9rem;" id="id_2_last_name">
-                                                </span>
+                                                <span><input type="text" name="last_name" class="input" maxlength="150" id="id_last_name" style="width: 9rem;"></span>
                                                 <label class="sub_label">Last Name</label>
+                                            </span>
+                                        </div>
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span><input style='width:100%;' type="text" name="username" class="input" maxlength="150" required="" id="id_username"></span>
+                                                <label class="sub_label">Username</label>
+                                            </span>
+                                        </div>
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span><input type="email" name="email" class="input" style='width:100%;' maxlength="254" id="id_email"></span>
+                                                <label class="sub_label">E-mail</label>
+                                            </span>
+                                        </div>
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span><input type="text" oninput="processPhone(event)" name="phone" class="input" style="width: 100%;" placeholder="(123)456-7890" maxlength="75" required id="id_phone"></span>
+                                                <label class="sub_label">Phone</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="form-line">
+                                    <div class="label">Work Position:</div>
+                                    <div class="inputCont" style="width: 294px;">
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span>
+                                                    <select class='input' name="position" oninput="cert_date1()" style="width: 160px;" required id="id_position">
+                                                        <option value="" selected="">---------</option>
+                                                        <option value="observer">Observer</option>
+                                                        <option value="supervisor">Supervisor</option>
+                                                    </select>
+                                                </span>
+                                                <label class="sub_label">Position</label>
+                                            </span>
+                                        </div>
+                                        <div id='certDateDiv' style="display:none;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span><input type="date" name="cert_date" class="input" id="id_cert_date" required></span>
+                                                <label class="sub_label">Certification Date</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice }}</div>
+                            </div>
+                            <input type="submit" name="create_user" value="submit">
+                        </form>
+                        {% for message in messages %}
+                            <p>{{message}}</p>
+                        {% endfor%}
+                    {% else %}
+                        You have used all of your registrations available within your plan. If you would like to upgrade to a larger plan or add more registrations <a href="{% url 'Account' 'supervisor' %}#subscription" style="text-decoration: underline;">click here</a>
+                    {% endif %}
+                </div>
+                <div id="newFacility" class='contentCont' style='display: none;'>
+                    <div class="innerCardHeader">
+                        <h1 style="padding: 1rem;">Register New Facility</h1>
+                        <hr style="width: 450px; margin: auto;">
+                    </div>
+                    <br>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div style="text-align:left;width: 33rem;margin: auto;">
+                            <li class="form-line">
+                                <div class="label">Facility Name</div>
+                                <div class="inputCont">
+                                    <div style="display:block;">
+                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                            <span>{{data.facility_name}}</span>
+                                            <label class="sub_label">Name</label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="form-line">
+                                <div class="label">Address</div>
+                                <div class="inputCont" style="width: 294px;">
+                                    <div style="display:block;">
+                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                            <span>
+                                                {{data.address}}
+                                            </span>
+                                            <label class="sub_label">Street Address</label>
+                                        </span>
+                                    </div>
+                                    <div style="display:block;">
+                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                            <span>
+                                                <input type="text" name="address2" class="input" style="width:100%;" id="id_address2">
+                                            </span>
+                                            <label class="sub_label">Street Address Line 2</label>
+                                        </span>
+                                    </div>
+                                    <div style="display:block;">
+                                        <div style="width: 290px;">
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 10rem;">
+                                                <span>{{data.city}}</span>
+                                                <label class="sub_label">City</label>
+                                            </span>
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 3rem;">
+                                                <span>{{data.state}}</span>
+                                                <label class="sub_label">State</label>
+                                            </span>
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 4rem;">
+                                                <span>{{data.zipcode}}</span>
+                                                <label class="sub_label">Zipcode</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="form-line">
+                                <div class="label">Is this facility a Coke Battery?</div>
+                                <div class="inputCont" style="width: 294px;">
+                                    <div style="display:block;">
+                                        <div style="width: 294px;">
+                                            <span style="display: inline-block;padding-bottom: 12px;width: 9rem;">
+                                                <span>
+                                                    <select class="input" style="height:24px;width:81px;" name="cokeBattery" id="cokeBattery" onchange="batteryInformation()">
+                                                        <option value="">------</option>
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </span>
+                                                <label class="sub_label"></label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li id="batteryInfo" class="form-line" style="display:none;">
+                                <div class="label">Battery Information</div>
+                                <div class="inputCont" style="width: 294px;">
+                                    <div style="display:block;">
+                                        <div style="width: 294px;">
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                                <span>{{data.district}}</span>
+                                                <label class="sub_label">District</label>
+                                            </span>
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                                <span>{{data.county}}</span>
+                                                <label class="sub_label">County</label>
                                             </span>
                                         </div>
                                     </div>
                                     <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span>
-                                                <input class="input" type="text" name="username" style="width:100%;" autofocus="" required="" id="id_2_username">
-                                            </span>
-                                            <label class="sub_label">Username</label>
+                                        <span style="width: 7rem;;display: inline-block;padding-bottom: 10px;">
+                                            <span>{{data.bat_num}}</span>
+                                            <label class="sub_label">Battery Number</label>
+                                        </span>
+                                        <span style="width: 11rem;display: inline-block;padding-bottom: 10px;">
+                                            <span>{{data.estab_num}}</span>
+                                            <label class="sub_label">Establishment Number</label>
                                         </span>
                                     </div>
                                     <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span>
-                                                <input class="input" type="email" name="email" placeholder="johndoe@mail.com" style="width:100%;" id="id_2_email">
+                                        <div style="width: 294px;">
+                                            <span style="display: inline-block;padding-bottom: 12px;width: 9rem;">
+                                                <span>{{data.equip_location}}</span>
+                                                <label class="sub_label">Equipment Location</label>
                                             </span>
-                                            <label class="sub_label">Email</label>
-                                        </span>
+                                        </div>
                                     </div>
                                     <div style="display:block;">
-                                        <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
-                                            <span>
-                                                <input class="input" oninput="processPhone(event)" type="text" name="phone" placeholder="(123)456-7890" style="width:100%;" required="" id="id_2_phone">
+                                        <div style="width: 294px;">
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 5rem;">
+                                                <span>{{data.bat_main}}</span>
+                                                <label class="sub_label">Battery Main</label>
                                             </span>
-                                            <label class="sub_label">Phone</label>
-                                        </span>
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 6rem;">
+                                                <span>{{data.total_ovens}}</span>
+                                                <label class="sub_label">Number of Ovens</label>
+                                            </span>
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 6rem;">
+                                                <span>{{data.bat_lids}}</span>
+                                                <label class="sub_label">Lids Per Oven</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div style="display:block;">
+                                        <div style="width: 294px;">
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 6rem;">
+                                                <span>{{data.bat_height}}</span>
+                                                <label class="sub_label">Height of Battery</label>
+                                            </span>
+                                            <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                                <span>{{data.bat_height_label}}</span>
+                                                <label class="sub_label">ft/m</label>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
-                        </div>           
-                        <center><input type="submit" name="create_client"></center>
+                        </div>
+                        <center><input type="submit" name="create_facility"></center>
                     </form>
-
                     {% for message in messages %}
                         <p>{{message}}</p>
                     {% endfor%}
-                {% else %}
-                    <h1>No Facility in database</h1>
-                    <p>There must be a Facility for a Client to be added to. Please select the "Facility" tab and add a new facility. </p>
-                {% endif %}
+                </div>
+                <div id="newClient" class='contentCont' style='display: none;'>
+                    {% if facilityLink %}
+                        <div class="innerCardHeader">
+                            <h1 style="padding: 1rem;">Register New Client</h1>
+                            <hr style="width: 450px; margin: auto;">
+                        </div>
+                        <br>
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <div style="text-align:left;width: 33rem;margin: auto;">
+                                <li class="form-line">
+                                    <div class="label">Choose Facility</div>
+                                    <div class="inputCont" style="width: 294px;">
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span>
+                                                    <select class="input" name="facilityChoice" id="id_2_facilityChoice" required>
+                                                        <option value="" selected="">---------</option>
+                                                        {% for place in data2 %}
+                                                        <option value="{{place.id}}">{{place.facility_name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </span>
+                                                <label class="sub_label">Facility</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="form-line">
+                                    <div class="label">Client Information</div>
+                                    <div class="inputCont">
+                                        <div style="display:block;">
+                                            <div style="width: 294px;">
+                                                <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                                    <span>
+                                                        <input class="input" type="text" name="first_name" style="width:9rem;" id="id_2_first_name">
+                                                    </span>
+                                                    <label class="sub_label">First Name</label>
+                                                </span>
+                                                <span style="display: inline-block;padding-bottom: 10px;width: 9rem;">
+                                                    <span>
+                                                        <input class="input" type="text" name="last_name" style="width:9rem;" id="id_2_last_name">
+                                                    </span>
+                                                    <label class="sub_label">Last Name</label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span>
+                                                    <input class="input" type="text" name="username" style="width:100%;" autofocus="" required="" id="id_2_username">
+                                                </span>
+                                                <label class="sub_label">Username</label>
+                                            </span>
+                                        </div>
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span>
+                                                    <input class="input" type="email" name="email" placeholder="johndoe@mail.com" style="width:100%;" id="id_2_email">
+                                                </span>
+                                                <label class="sub_label">Email</label>
+                                            </span>
+                                        </div>
+                                        <div style="display:block;">
+                                            <span style="width: 290px;display: inline-block;padding-bottom: 10px;">
+                                                <span>
+                                                    <input class="input" oninput="processPhone(event)" type="text" name="phone" placeholder="(123)456-7890" style="width:100%;" required="" id="id_2_phone">
+                                                </span>
+                                                <label class="sub_label">Phone</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>           
+                            <center><input type="submit" name="create_client"></center>
+                        </form>
+
+                        {% for message in messages %}
+                            <p>{{message}}</p>
+                        {% endfor%}
+                    {% else %}
+                        <h1>No Facility in database</h1>
+                        <p>There must be a Facility for a Client to be added to. Please select the "Facility" tab and add a new facility. </p>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
     {% endif %}
-</body>
 {% endblock %}

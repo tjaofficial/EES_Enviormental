@@ -4,7 +4,7 @@ from channels.layers import get_channel_layer # type: ignore
 from asgiref.sync import async_to_sync # type: ignore
 from django.contrib.sites.shortcuts import get_current_site   # type: ignore
 from django.template.loader import render_to_string  # type: ignore
-from django.utils.html import strip_tags # type: ignore
+from django.utils.html import strip_tags, escape # type: ignore
 from django.core.mail import send_mail # type: ignore
 from django.conf import settings # type: ignore
 from django.contrib import messages # type: ignore
@@ -810,16 +810,47 @@ class Calendar(HTMLCalendar):
         Return a day as a table cell.
         """        
         events_from_day = events.filter(date__day=day)
+
+        allDayEvents = events_from_day.filter(allDay=True)
+        add_day_event_data = [
+            {
+                "title": event.title,
+                "url": event.get_absolute_url(),
+                "observer": event.observer,
+                'allDay': event.allDay,
+                'notes': event.notes,
+                'id': event.id
+            }
+            for event in allDayEvents
+        ]
+
+        otherEvents = events_from_day.filter(~Q(allDay=True))
+        add_other_event_data = [
+            {
+                "title": event.title,
+                "url": event.get_absolute_url(),
+                "observer": event.observer,
+                'start_time': str(event.start_time),
+                'end_time': str(event.end_time),
+                'allDay': event.allDay,
+                'notes': event.notes,
+                'id': event.id
+            }
+            for event in otherEvents
+        ]
+
+        safe_json_allDay = escape(json.dumps(add_day_event_data))
+        safe_json_other = escape(json.dumps(add_other_event_data))
+
         events_html = "<ul>"
         for event in events_from_day:
-            if event.date.year == year:
-                events_html += event.get_absolute_url() + "<br>"
+            events_html += event.get_absolute_url() + "<br>"
         events_html += "</ul>"
 
         if day == 0:
             return '<td class="noday">&nbsp;</td>'  # day outside month
         else:
-            return '<td class="%s">%d%s</td>' % (self.cssclasses[weekday], day, events_html)
+            return f'<td id="day-{day}" class="{self.cssclasses[weekday]}" data-allday="{safe_json_allDay}" data-other="{safe_json_other}">{day}{events_html}</td>'
 
  
     def formatweek(self, theweek, events, year):
@@ -835,10 +866,10 @@ class Calendar(HTMLCalendar):
         """
         Return a formatted month as a table.
         """
-        if user_prof.position == "supervisor":
-            events = Event.objects.filter(date__month=themonth, personal=True)
-        else:
-            events = Event.objects.filter(date__month=themonth, userProf=user_prof)
+        # if user_prof.position == "supervisor":
+        #     events = Event.objects.filter(date__month=themonth, date__year=year, personal=True)
+        # else:
+        events = Event.objects.filter(date__month=themonth, date__year=year, userProf__company=user_prof.company)
  
         v = []
         a = v.append
@@ -2322,3 +2353,32 @@ happy = {
         "number_of_options": 7
     }
 }
+
+packetList = [
+    {
+        "PACKET": "PACKET_SELECTED",
+        "FORMS": {
+            "COMPLETE": [
+                "FSID_SELECTION",
+                "FSID_SELECTION"
+            ],
+            "INCOMPLETE": [
+                "FSID_SELECTION",
+                "FSID_SELECTION"
+            ]
+        }
+    },
+    {
+        "PACKET": "PACKET_SELECTED",
+        "FORMS": {
+            "COMPLETE": [
+                "FSID_SELECTION",
+                "FSID_SELECTION"
+            ],
+            "INCOMPLETE": [
+                "FSID_SELECTION",
+                "FSID_SELECTION"
+            ]
+        }
+    },
+]

@@ -764,13 +764,14 @@ def event_add_view(request):
                     start_time=answer['start_time'],
                     end_time=answer['end_time'],
                     date=clean_date,
-                    enteredBy=fullName,
+                    userProf=request.user.user_profile,
                     personal=personal,
                     allDay=allDay,
-                    facilityChoice=facilityChoice)
+                    facilityChoice=facilityChoice
+                )
 
 
-            cal_link = 'schedule/' + str(today_year) + '/' + today_month
+            cal_link = '../schedule/' + str(today_year) + '/' + today_month
 
             return redirect(cal_link)
 

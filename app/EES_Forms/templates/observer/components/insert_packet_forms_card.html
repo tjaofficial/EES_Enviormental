@@ -1,56 +1,17 @@
-{% load static %}
-{% if complete == 'false' %}
+{% load static %}{% load dashboard_tags %}
 <div>
-    {% for key, form in packet.formList.sortedFormsList %}
-        {% with matching_item=None %}
-            {% for item in facFormList1 %}
-                {% if item.id == form.settingsID %}
-                    {% with item as matching_item %}
-                        {% if matching_item.settings.active and not matching_item.subChoice.submitted %}
-                            <a href="{% url matching_item.formChoice.link matching_item.id 'form' %}{% if matching_item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
-                                <div class="card_Form" style="margin-left: 50px;">
-                                    <h3 class="card_Form_letter">{{key}}</h3>
-                                    <div class="card_Form_title">
-                                        <h3>{% if matching_item.settings.settings.custom_name %}{{matching_item.settings.settings.custom_name}}{% else %}{{ matching_item.formChoice.title }}{% endif %}</h3>
-                                        <h4>{{ matching_item.formChoice.frequency }}</h4>
-                                    </div>
-                                    <h4 class="card_Form_date">{{matching_item.subChoice.dueDate}}</h4>       
-                                </div>      
-                            </a>
-                        {% endif %}
-                    {% endwith %}
-                {% endif %}
-            {% endfor %}
-        {% endwith %}
-        {% empty %}
+    {% for form in packet.forms|complete_check:complete %}
+        <a href="{% if form.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url form.0.formChoice.link form.0.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url form.0.formChoice.link form.0.id 'form' 'sunday' %}{% endif %}{% else %}{% url form.0.formChoice.link form.0.id 'form' %}{% endif %}">
+            <div class="card_Form" style="margin-left: 50px;">
+                <h3 class="card_Form_letter">{{form.1}}</h3>
+                <div class="card_Form_title">
+                    <h3>{% if form.0.settings.settings.custom_name %}{{form.0.settings.settings.custom_name}}{% else %}{{ form.0.formChoice.title }}{% endif %}</h3>
+                    <h4>{{ form.0.formChoice.frequency }}</h4>
+                </div>
+                <h4 class="card_Form_date">{{form.0.subChoice.dueDate}}</h4>       
+            </div>      
+        </a>
+    {% empty %}
         <h2 class="card_empty no_forms"> No Forms </h2>
-    {% endfor %}
+    {% endfor %} 
 </div>
-{% else %}
-    <div>
-        {% for key, form in packet.formList.sortedFormsList %}
-            {% with matching_item=None %}
-                {% for item in facFormList1 %}
-                    {% if item.id == form.settingsID %}
-                        {% with item as matching_item %}
-                            {% if matching_item.settings.active and matching_item.subChoice.submitted %}
-                                <a href="{% url matching_item.formChoice.link matching_item.id 'form' %}{% if matching_item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}/saturday{% elif todays_num == 6 %}/sunday{% endif %}{% endif %}">
-                                    <div class="card_Form" style="margin-left: 50px;">
-                                        <h3 class="card_Form_letter">{{ key }}</h3>
-                                        <div class="card_Form_title">
-                                            <h3>{% if matching_item.settings.settings.custom_name %}{{matching_item.settings.settings.custom_name}}{% else %}{{ matching_item.formChoice.title }}{% endif %}</h3>
-                                            <h4>{{ matching_item.formChoice.frequency }}</h4>
-                                        </div>
-                                        <h4 class="card_Form_date">{{ matching_item.subChoice.dateSubmitted }}</h4>       
-                                    </div>      
-                                </a>
-                            {% endif %}
-                        {% endwith %}
-                    {% endif %}
-                {% endfor %}
-            {% endwith %}
-            {% empty %}
-                <h2 class="card_empty no_forms"> No Forms </h2>
-        {% endfor %}
-    </div>
-{% endif %}

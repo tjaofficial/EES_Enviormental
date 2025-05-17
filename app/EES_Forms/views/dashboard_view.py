@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from ..models import user_profile_model, Forms, daily_battery_profile_model, signature_model, facility_model, the_packets_model, form_settings_model
-from ..utils.main_utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, get_facility_forms, updateAllFormSubmissions
+from ..utils.main_utils import weatherDict, ninetyDayPushTravels, setUnlockClientSupervisor,userGroupRedirect, setUnlockClientSupervisor, updateAllFormSubmissions
 from django.contrib.auth.decorators import login_required # type: ignore
 import datetime
 from EES_Enviormental.settings import OBSER_VAR
@@ -12,20 +12,15 @@ lock = login_required(login_url='Login')
 @lock
 @group_required(OBSER_VAR)
 def IncompleteForms(request):
-    facility = getattr(request, 'facility', None)
     formName = "obs_dash"
-    permissions = [OBSER_VAR]
-    userGroupRedirect(request.user, permissions)
-    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+    facility = getattr(request, 'facility', None)
     today = datetime.date.today()
     todays_num = today.weekday()
-    today_str = str(today)
     now = datetime.datetime.now().date()
     signatures = signature_model.objects.all().order_by('-sign_date')
+    facPackets = the_packets_model.objects.filter(facilityChoice=facility)
     sigExisting = False
     sigName = ''
-    facilityData = facility
-    facPackets = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
     # ------- Signatures ---------------- 
     if signatures.exists():
@@ -56,92 +51,88 @@ def IncompleteForms(request):
         todays_log = ''
     inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","") if todays_log else ''
     # --------Weather API Pull---------------
-    weather = weatherDict(facilityData.city)
+    weather = weatherDict(facility.city)
     # ---------Form Data--------------------
     def natural_sort_key(value):
         """Extracts numbers from alphanumeric keys for correct sorting."""
         return [int(text) if text.isdigit() else text for text in re.split(r'(\d+)', value)]
 
-    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
 
-    for packet in packetQuery:
-        # Ensure formList and formsList exist
-        if hasattr(packet, "formList") and "formsList" in packet.formList:
-            # Sort the dictionary keys naturally (A1, A2, ..., B, C, G1, G2, ...)
-            packet.formList["sortedFormsList"] = sorted(
-                packet.formList["formsList"].items(), key=lambda x: natural_sort_key(x[0])
-            )
+    #-----New Dashoard Filter-------
+    packetList = []
+    print(f"List of packets within {facility}: {facPackets}")
+    for packet in facPackets:
+        complete_forms = []
+        incomplete_forms = []
 
-    facFormsIDList = get_facility_forms('facilityName', facility)
-    facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-    facFormList2 = []
-    for facFormID in facFormsIDList:
-        try:
-            facFormList2.append(facFormsSettingsModel.get(id=int(facFormID)))
-        except:
-            continue
+        for key, fsID in packet.formList['formsList'].items():
+            formSettings = form_settings_model.objects.get(id=fsID['settingsID'])
+            formSubmitted = formSettings.subChoice.submitted
+            formLabel = key
+            formInfo = formSettings.formChoice
 
-    facFormList1 = []
-    for fsID in facFormList2:
-        formInfo = fsID.formChoice
+            if formSettings.settings['active']:
+                if todays_num in [5,6] and formInfo.day_freq in ['5', '6', 'Weekends', 'Everyday']:
+                    if formInfo.weekend_only and not formInfo.weekdays_only or not formInfo.weekend_only and not formInfo.weekdays_only:
+                        if formSubmitted:
+                            complete_forms.append((formSettings, formLabel))
+                        else:
+                            incomplete_forms.append((formSettings, formLabel))
+                elif todays_num in [0,1,2,3,4] and formInfo.day_freq in ['0','1','2','3','4','Weekdays','Everyday']:
+                    if formInfo.weekdays_only and not formInfo.weekend_only or not formInfo.weekdays_only and not formInfo.weekend_only:
+                        if formSubmitted:
+                            complete_forms.append((formSettings, formLabel))
+                        else:
+                            incomplete_forms.append((formSettings, formLabel))
+        
+        complete_forms.sort(key=lambda x: natural_sort_key(x[1] or ''))
+        incomplete_forms.sort(key=lambda x: natural_sort_key(x[1] or ''))
+
+        packetList.append({
+            "packet": packet,
+            "forms": {
+                "complete": complete_forms,
+                "incomplete": incomplete_forms
+            }
+        })
+
+
+    allActiveFacFormsList = []
+    allActiveFacForms = form_settings_model.objects.filter(settings__active=True, facilityChoice=facility)
+    for items in allActiveFacForms:
+        formInfo = items.formChoice
         if todays_num in [5,6] and formInfo.day_freq in ['5', '6', 'Weekends', 'Everyday']:
             if formInfo.weekend_only and not formInfo.weekdays_only or not formInfo.weekend_only and not formInfo.weekdays_only:
-                facFormList1.append(fsID)
+                allActiveFacFormsList.append(items)
         elif todays_num in [0,1,2,3,4] and formInfo.day_freq in ['0','1','2','3','4','Weekdays','Everyday']:
             if formInfo.weekdays_only and not formInfo.weekend_only or not formInfo.weekdays_only and not formInfo.weekend_only:
-                facFormList1.append(fsID)
-    facFormList1.sort(key=lambda record: record.id)
-    packetQuery2 = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
+                allActiveFacFormsList.append(items)
+    allActiveFacFormsList.sort(key=lambda x: natural_sort_key(str(x.id)))
+
+    print(allActiveFacFormsList)
     listOfAllPacketIDs = []
-    for anID in packetQuery2:
+    for anID in facPackets:
         listOfAllPacketIDs.append(anID.id)
 
 # ---------Update All Form Subs--------------------
     updateAllFormSubmissions(facility)
 
-    if todays_num == 6:
-        saturday = False
-    else:
-        saturday = True
-
-    weekend_list = [5, 6]
-    form_check1 = ["", ]
-    form_check2 = ["", ]
-    form_checkAll = ["", ]
-    form_checkAll2 = ["", ]
-    form_checkDaily2 = ["", ]
-    
-    
-
     return render(request, "observer/obs_dashboard.html", {
-        'form_checkDaily2': form_checkDaily2, 
-        'form_checkAll': form_checkAll, 
-        "today": today, 
         'od_recent': od_recent, 
         "todays_log": todays_log, 
         'now': now, 
         'profile_entered': profile_entered, 
-        'form_check1': form_check1, 
-        'form_check2': form_check2, 
-        'today_str': today_str, 
         'todays_num': todays_num, 
-        'weekend_list': weekend_list, 
         'weather': weather, 
-        'saturday': saturday, 
-        #'sorting_array': sorting_array,
-        "form_checkAll2": form_checkAll2,
         'sigExisting': sigExisting,
         'facility': facility,
         'sigName': sigName,
         'inopNumbsParse': inopNumbsParse,
         'facPackets': facPackets,
-        'facFormList1': facFormList1,
-        'packetQuery': packetQuery,
         'listOfAllPacketIDs': listOfAllPacketIDs,
         'formName': formName,
-        'supervisor': supervisor, 
-        "client": client, 
-        'unlock': unlock,
+        'packetList': packetList,
+        'allActiveFacFormsList': allActiveFacFormsList
     })
 
 @lock

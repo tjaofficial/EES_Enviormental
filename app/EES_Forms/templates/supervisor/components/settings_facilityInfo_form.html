@@ -35,13 +35,17 @@
                 </div>
                 <div style="display:block;">
                     <div style="width: 290px;">
-                        <span style="display: inline-block;width: 10rem;">
+                        <span style="display: inline-block;width: 9rem;">
                             <span>{{facilityInfo.city}}</span>
                             <label for="id_city" class="sub_label">City</label>
                         </span>
-                        <span style="display: inline-block;width: 5rem;">
+                        <span style="display: inline-block;width: 3.3rem;">
                             <span>{{facilityInfo.state}}</span>
                             <label for="id_state" class="sub_label">State</label>
+                        </span>
+                        <span style="display: inline-block;width: 4rem;">
+                            <span>{{facilityInfo.zipcode}}</span>
+                            <label for="id_zipcode" class="sub_label">Zipcode</label>
                         </span>
                     </div>
                 </div>
@@ -54,7 +58,7 @@
                     <div style="width: 294px;">
                         <span style="display: inline-block;padding-bottom: 12px;width: 9rem;">
                             <span>
-                                <select class="input" style="height:24px; width:81px;" name="is_battery" id="cokeBattery" onchange="batteryInformation()">
+                                <select class="input" style="height: 37px; width:81px;" name="is_battery" id="cokeBattery" onchange="batteryInformation()">
                                     <option value="">------</option>
                                     <option value="Yes" {% if facInfoMain.is_battery == 'Yes' %}selected{% endif %}>Yes</option>
                                     <option value="No" {% if facInfoMain.is_battery == 'No' %}selected{% endif %}>No</option>

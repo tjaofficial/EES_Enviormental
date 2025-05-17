@@ -1,120 +1,121 @@
 {% extends "supervisor/components/sup_layout.html" %}
-{% load static %}{% block list%}{% load sup_tags %}
+{% load static %}{% load sup_tags %}
 {% block extra_head %}
     <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
     <link href="{% static 'ees_forms/style/packet_div.css' %}" rel="stylesheet" />
     <link href="{% static 'ees_forms/style/facilityList_2.css' %}" rel="stylesheet" />
     <script defer src="{% static 'ees_forms/script/facilityList.js' %}"></script>
 {% endblock %}
-<input type="hidden" id="totalFacilities" value="{{facilities}}">
-<div class='mainCont' style="width: 50rem;">
-    <div class="card" style="margin-bottom: 15px;">
-        <div class="cardHeader methodPlusBlue">
-            {% include "shared/components/backArrow.html" with destination="dashboard"%}
-            Facilities
+{% block list%}
+    <input type="hidden" id="totalFacilities" value="{{facilities}}">
+    <div class='mainCont' style="width: 50rem;">
+        <div class="card" style="margin-bottom: 15px;">
+            <div class="cardHeader methodPlusBlue">
+                {% include "shared/components/backArrow.html" with destination="dashboard"%}
+                Facilities
+            </div>
+            <div style="text-align:center; width:100%; padding: 25px;">Need more forms? <a href="{% url 'requestForm' %}" style="text-decoration: underline;">Submit a form Request</a></div>
+            <div class="facility-jump-bar">
+                {% for info in facilities %}
+                    <button class="facility-tile" onclick="scrollToFacility('{{ info.0.id }}')">
+                        {{ info.0.facility_name }}
+                    </button>
+                {% endfor %}
+            </div>          
         </div>
-        <div style="text-align:center; width:100%; padding: 25px;">Need more forms? <a href="{% url 'requestForm' %}" style="text-decoration: underline;">Submit a form Request</a></div>
-        <div class="facility-jump-bar">
-            {% for info in facilities %}
-                <button class="facility-tile" onclick="scrollToFacility('{{ info.0.id }}')">
-                    {{ info.0.facility_name }}
-                </button>
-            {% endfor %}
-        </div>          
-    </div>
-    {% if facilities|length > 0 %}
-        <div class="contentCont center" style="padding: unset;">
-            {% for info in facilities %}
-                <div id="facilities">
-                    <!-- Template Facility -->
-                    <div class="facility-container">
-                        <div id="facility{{info.0.id}}" class="facility-header" data-totalforms="{{info.1|length}}" data-facid="{{info.0.id}}" data-packlist="{{info.0.facility_name|list_of_packets}}">{{info.0.facility_name}}</div>
-                        {% if info.1|length > 0 %}
-                            <table>
-                                <thead>
-                                <tr><th>ID</th><th>Form Title</th><th>Actions</th></tr>
-                                </thead>
-                                <tbody>
-                                    {% for x in info.1 %}
-                                        {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
-                                        <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
-                                            <td>{{x.id}}</td>
-                                            <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
-                                            <td class="form-actions">
-                                                <a href="{% url 'facilityFormSettings' x.id 'facID' 'none' %}"><button>Edit</button></a>
-                                                <button onclick="open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            <div class="contentCont center">
-                                No forms have been added. Add forms to this facility by clicking 'add forms' below
-                            </div>
-                        {% endif %}
-                            <a href="{% url 'addingForms' %}">
-                                <button class="add-form-btn">
-                                    + Add Facility Form
-                                </button>
-                            </a>
-                            <div style="width: 100%; display: inline-flex; justify-content: center; margin-top: 38px;">
-                                <h4>Packets&nbsp;</h4>
-                                {% include 'shared/components/helpPack.html' with data="packets" popupCounter=forloop.counter %}
-                            </div>
-                            <form method='POST' style="margin: 15px;">
-                                {% csrf_token %}
-                                <input type="hidden" name="facilityID" value="{{info.0.id}}">
-                                {{packetForm.name}}<input class="add-packet-btn packet-input-button" type="submit" name="newPacket" value="Save">
-                            </form>
-                        {% with facID=forloop.counter %}
-                            {% for packet in packetData %}
-                                {% if packet.facilityChoice.facility_name == info.0.facility_name %}
-                                    {% include 'supervisor/components/facility_delete_modal.html' with packID=forloop.counter %}
-                                    {% include 'supervisor/components/facility_packet_modal.html' with packID=forloop.counter|stringformat:'s' facID=facID|stringformat:'s' %}
-                                    <div class="packet-box" onclick="show_formsList2(this)" data-clickbox="{{packet.id}}">
-                                        {% include 'supervisor/facilityForms/packet_div.html' with page='facilityList' %}
-                                        <div id="packetForms{{packet.id}}" class="packet-forms" style="max-height: 0px; text-align: left;" onclick="event.stopPropagation()">
-                                            <ul>
-                                                {% for key, form in packet.formList.formsList.items %}
-                                                    {% for x in formSettingsModel %}
-                                                        {% if x.id == form.settingsID %}
-                                                            <li>
-                                                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                                    <span>
-                                                                        Form {{key}} - {{x.formChoice.header}} - 
-                                                                        {% if x.settings.settings.custom_name %}
-                                                                            {{x.settings.settings.custom_name}}
-                                                                        {% else %}
-                                                                            {{x.formChoice.title}}
-                                                                        {% endif %}
-                                                                    </span>
-                                                                    <span class="form-actions" style="width: 122px;">
-                                                                        <a href="{% url 'facilityFormSettings' form.settingsID packet.id key %}">
-                                                                            <button onclick="event.stopPropagation()">Edit</button>
-                                                                        </a>
-                                                                        <button onclick="event.stopPropagation(); open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
-                                                                    </span>
-                                                                </div>
-                                                            </li>
-                                                        {% endif %}
+        {% if facilities|length > 0 %}
+            <div class="contentCont center" style="padding: unset;">
+                {% for info in facilities %}
+                    <div id="facilities">
+                        <!-- Template Facility -->
+                        <div class="facility-container">
+                            <div id="facility{{info.0.id}}" class="facility-header" data-totalforms="{{info.1|length}}" data-facid="{{info.0.id}}" data-packlist="{{info.0.facility_name|list_of_packets}}">{{info.0.facility_name}}</div>
+                            {% if info.1|length > 0 %}
+                                <table>
+                                    <thead>
+                                    <tr><th>ID</th><th>Form Title</th><th>Actions</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for x in info.1 %}
+                                            {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
+                                            <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
+                                                <td>{{x.id}}</td>
+                                                <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
+                                                <td class="form-actions">
+                                                    <a href="{% url 'facilityFormSettings' x.id 'facID' 'none' %}"><button>Edit</button></a>
+                                                    <button onclick="open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <div class="contentCont center">
+                                    No forms have been added. Add forms to this facility by clicking 'add forms' below
+                                </div>
+                            {% endif %}
+                                <a href="{% url 'addingForms' %}">
+                                    <button class="add-form-btn">
+                                        + Add Facility Form
+                                    </button>
+                                </a>
+                                <div style="width: 100%; display: inline-flex; justify-content: center; margin-top: 38px;">
+                                    <h4>Packets&nbsp;</h4>
+                                    {% include 'shared/components/helpPack.html' with data="packets" popupCounter=forloop.counter %}
+                                </div>
+                                <form method='POST' style="margin: 15px;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="facilityID" value="{{info.0.id}}">
+                                    {{packetForm.name}}<input class="add-packet-btn packet-input-button" type="submit" name="newPacket" value="Save">
+                                </form>
+                            {% with facID=forloop.counter %}
+                                {% for packet in packetData %}
+                                    {% if packet.facilityChoice.facility_name == info.0.facility_name %}
+                                        {% include 'supervisor/components/facility_delete_modal.html' with packID=forloop.counter %}
+                                        {% include 'supervisor/components/facility_packet_modal.html' with packID=forloop.counter|stringformat:'s' facID=facID|stringformat:'s' %}
+                                        <div class="packet-box" onclick="show_formsList2(this)" data-clickbox="{{packet.id}}">
+                                            {% include 'supervisor/facilityForms/packet_div.html' with page='facilityList' %}
+                                            <div id="packetForms{{packet.id}}" class="packet-forms" style="max-height: 0px; text-align: left;" onclick="event.stopPropagation()">
+                                                <ul>
+                                                    {% for key, form in packet.formList.formsList.items %}
+                                                        {% for x in formSettingsModel %}
+                                                            {% if x.id == form.settingsID %}
+                                                                <li>
+                                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                                        <span>
+                                                                            Form {{key}} - {{x.formChoice.header}} - 
+                                                                            {% if x.settings.settings.custom_name %}
+                                                                                {{x.settings.settings.custom_name}}
+                                                                            {% else %}
+                                                                                {{x.formChoice.title}}
+                                                                            {% endif %}
+                                                                        </span>
+                                                                        <span class="form-actions" style="width: 122px;">
+                                                                            <a href="{% url 'facilityFormSettings' form.settingsID packet.id key %}">
+                                                                                <button onclick="event.stopPropagation()">Edit</button>
+                                                                            </a>
+                                                                            <button onclick="event.stopPropagation(); open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
                                                     {% endfor %}
-                                                {% endfor %}
-                                            </ul>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        {% endwith %}                
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}                
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    <form method="POST" style="display:none;" name="updatePacket">
-        {% csrf_token %}
-        <input id="formSettingsID" type="hidden" name="packet_update">
-    </form>
-</div>
-<script src="{% static 'ees_forms/script/facilityListDrag.js' %}"></script>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <form method="POST" style="display:none;" name="updatePacket">
+            {% csrf_token %}
+            <input id="formSettingsID" type="hidden" name="packet_update">
+        </form>
+    </div>
+    <script src="{% static 'ees_forms/script/facilityListDrag.js' %}"></script>
 {% endblock %}

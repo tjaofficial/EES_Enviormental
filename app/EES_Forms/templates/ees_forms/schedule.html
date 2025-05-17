@@ -1,52 +1,109 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list %}{% load static %}
-<link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
-<link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
-<div>
-    {% include "shared/components/backArrow.html" %}
-</div>
-<div class="mainCont" style="max-width:none;">
-    <div class="card" id="card_fitter">
-        <div class="headerCont">
-            <div class="cardHeader methodPlusBlue">{% if facility == "supervisor" %}Calendar{% else %}Schedule{% endif %}</div>
-            <div class="buttonInHeader" style="display: flex; margin-left: 25px;">
-                <div style="width: 300px; text-align: left;">
-                    <a href="../../schedule/{{ prev_year }}/{{ prev_month }}">
-                        <button>
-                            Previous Month
-                        </button>
+{% load static %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/calendar.css' %}" rel="stylesheet">
+    <link href="{% static 'calendar/style/cal_sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
+    <script defer src="{% static 'calendar/script/calendar.js' %}"></script>
+{% endblock %}
+{% block list %}
+    <div>
+        {% include "shared/components/backArrow.html" %}
+    </div>
+    <div class="mainCont" style="max-width:none; display: flex; gap: 10px;">
+        <div class="card" id="card_fitter" style="width: 70%">
+            <div class="headerCont">
+                <div class="cardHeader methodPlusBlue">{% if facility == "supervisor" %}Calendar{% else %}Schedule{% endif %}</div>
+                {% comment %} <div class="buttonInHeader" style="display: flex; margin-left: 25px;">
+                    <div style="width: 300px; text-align: left;">
+                        <a href="../../schedule/{{ prev_year }}/{{ prev_month }}">
+                            <button>
+                                Previous Month
+                            </button>
+                        </a>
+                    </div> {% endcomment %}
+                    {% comment %} {% if supervisor %}
+                    <div style="width: 100%; text-align: right;">
+                        <a href="../../add_event">
+                            <button>
+                                Add Event
+                            </button>
+                        </a>
+                    </div>
+                    {% endif %} {% endcomment %}
+                    {% comment %} <div style="width: 300px; text-align: right; margin-right: 25px;">
+                        <a href="../../schedule/{{ next_year }}/{{ next_month }}"> 
+                            <button>
+                                Next Month
+                            </button>    
+                        </a>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+            <div class="contentCont" style="padding: 20px 0px;">
+                <div class="clearfix">
+                    <div class="calendar">
+                        {{ html_cal|safe }}
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <div id="main-side" class="card">
+            <div class="headerCont">
+                <div class="cardHeader methodPlusBlue">
+                    <a href="{% url 'Calendar' prev_year prev_month %}">
+                        <svg id="previous-month" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
+                        </svg>
                     </a>
-                </div>
-                {% if supervisor %}
-                <div style="width: 100%; text-align: right;">
-                    <a href="../../add_event">
-                        <button>
-                            Add Event
-                        </button>
-                    </a>
-                </div>
-                {% else %}
-                {% endif %}
-                <div style="width: 300px; text-align: right; margin-right: 25px;">
-                    <a href="../../schedule/{{ next_year }}/{{ next_month }}"> 
-                        <button>
-                            Next Month
-                        </button>    
+                    <a href="{% url 'Calendar' next_year next_month %}">
+                        <svg id="next-month" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                            <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
+                        </svg>
                     </a>
                 </div>
             </div>
+            <div id="sideBarBody" class="contentCont" style="padding: 20px 0px;">
+                <section style="height: 100%;">
+                    <div id="date-header">
+                        <span>{{month.upper|slice:":3"}}</span>
+                        <span>{{year}}</span>
+                    </div>
+                    <div id="add-event-cont">
+                        <div id="add-event">ADD EVENT</div>
+                        <a href="{% url 'Add Event' %}" style="display: flex;">
+                            <span id="plus-button"></span>
+                        </a>
+                    </div>
+                    <div id="calendar-cont">
+                        <div id="calendar-font">CALENDAR</div>
+                        <div id="calendar-select-cont">
+                            <div id="calendar-select">
+                                <input type="checkbox" id="FACILITY_NAME" name="FACILITY_NAME">
+                                <div style="font-weight: bold;font-size: 14px;width: 80%;text-align: left;">
+                                    FACILITY_NAME
+                                </div>
+                                <div id="settings-dots">...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
-        <div class="contentCont" style="padding: 20px 0px;">
-            <div class="clearfix">
-                <div class="calendar">
-                    {{ html_cal|safe }}
+        <div id="selected-side" class="card" style="min-width: 340px; display: none;">
+            <div class="headerCont">
+                <div class="cardHeader methodPlusBlue">
+                    DATE_HERE
+                    <span class="closeAdd">&times;</span>
                 </div>
-            </div>  
+            </div>
+            <div id="sideBarBody" class="contentCont" style="padding: 20px 0px;">
+                <div id="all-day-cont"></div>
+                <hr style="">
+                <div id="events-cont"></div>    
+            </div>
         </div>
     </div>
-</div>
-
-        
 {% endblock %}
 
 

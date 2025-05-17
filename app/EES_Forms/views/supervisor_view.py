@@ -2,10 +2,8 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.conf import settings # type: ignore
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
-from ..models import facility_model, issues_model, form1_model, form2_model, form3_model, Event, form4_model, form5_model, daily_battery_profile_model, User, user_profile_model, facility_forms_model, notifications_model
+from ..models import facility_model, User, user_profile_model, facility_forms_model, notifications_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
-import datetime
-import calendar
 from django.contrib import messages # type: ignore
 from django.contrib.auth.models import Group # type: ignore
 import json
@@ -193,7 +191,12 @@ def register_view(request, access_page):
                 messages.success(request, 'Account was created for ' + username + ". An activation link has been sent to their email.")
                 return redirect('sup_dashboard', facility)
             else:
-                messages.error(request, "The Information Entered Was Invalid.")
+                if 'username' in form.errors:
+                    messages.error(request, form.errors['username'][0])
+                elif 'email' in form.errors:
+                    messages.error(request,"This email has already been used. Please enter a different email.")
+                else:
+                    messages.error(request, "The Information Entered Was Invalid.")
         elif check_2:
             print(request.POST)
             copyRequest = request.POST.copy()
