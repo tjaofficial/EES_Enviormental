@@ -61,6 +61,7 @@ urlpatterns = [
     path("corrective-action/issues_view/<int:issueID>/<str:access_page>", views.issues_view, name="issues_view"),
     path("sop/", views.sop_view, name="Sop"),
     path("schedule_view/", views.schedule_view, name="Schedule"),
+    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
     path("contacts", views.shared_contacts_view, name="Contacts"),
     path("progress/<str:section>", views.formsProgress, name="Progress"),
     path('print-select/', views.printSelect, name='PrintSelect'),
@@ -128,7 +129,7 @@ urlpatterns = [
     path('safety', views.safety_view, name='safety'),
     path('<str:facility>/settings', views.settings_view, name='settings'),
     ##---SHARED PAGES-----NOT CHANGED
-    path("schedule/<int:year>/<str:month>", views.calendar_view, name="Calendar"),
+    
     path("<str:facility>/event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
     path('delete_selected_sops/<str:facility>/', views.delete_selected_sops, name='delete_selected_sops'),
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),

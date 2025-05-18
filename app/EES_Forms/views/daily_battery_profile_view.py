@@ -89,6 +89,7 @@ def facility_select_view(request):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     loginPage = True
     now = datetime.datetime.now().date()
+    print("ON PAGE NOW")
     if request.method == 'POST':
         print("did it make it here?")
         answer = request.POST
@@ -97,7 +98,7 @@ def facility_select_view(request):
         if batterySelect.is_battery == 'Yes' and batterySelect.dashboard == 'battery':
             print('CHECK 02')
             if daily_prof.exists():
-                return redirect('IncompleteForms', answer['facility'])
+                return redirect('IncompleteForms')
             batt_prof = '../../' + answer['facility'] + '/daily_battery_profile/login/' + str(now.year) + '-' + str(now.month) + '-' + str(now.day)
             return redirect(batt_prof)
         elif batterySelect.dashboard == "default":

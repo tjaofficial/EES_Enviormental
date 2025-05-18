@@ -2719,17 +2719,30 @@ class issues_form(ModelForm):
 
 class events_form(ModelForm):
     selected_days = forms.CharField(widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # grab the user passed from the view
+        super().__init__(*args, **kwargs)
+
+        if user:
+            facilities = facility_model.objects.filter(company=user.user_profile.company)
+            self.fields['calendarChoice'].choices = [(f.facility_name, f.facility_name) for f in facilities]
+
     class Meta:
         model = Event
-        fields = ['title', 'observer', 'notes', 'start_time','end_time','allDay']
+        fields = ['title', 'observer', 'notes', 'start_time','end_time','allDay', 'facilityChoice', 'calendarChoice', 'repeat', 'alerts']
         widgets = {
-            'observer' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'title' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'notes' : forms.TextInput(attrs={'type':'text', 'style':'width:150px;'}),
+            'facilityChoice': forms.Select(attrs={}),
+            'calendarChoice': forms.Select(attrs={}),
+            'observer' : forms.TextInput(attrs={}),
+            'title' : forms.TextInput(attrs={'placeholder': "e.g., Stack Inspection - Battery A", 'style':'width: 100%;'}),
+            'notes' : forms.TextInput(attrs={'type':'text'}),
             #'date' : forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'start_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'end_time' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
+            'start_time' : forms.TimeInput(attrs={'type':'time'}),
+            'end_time' : forms.TimeInput(attrs={'type':'time'}),
             'allDay' : forms.CheckboxInput(attrs={}),
+            'repeat' : forms.CheckboxInput(attrs={}),
+            'alerts' : forms.CheckboxInput(attrs={}),
         }
 
 class sop_form(ModelForm):

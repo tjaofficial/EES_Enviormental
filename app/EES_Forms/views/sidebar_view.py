@@ -241,9 +241,9 @@ def schedule_view(request):
 
     return redirect('Calendar', str(today_year), str(today_month))
 
-    return render(request, "ees_forms/scheduling.html", {
-        'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'supervisor': supervisor,
-    })
+    # return render(request, "ees_forms/scheduling.html", {
+    #     'options': options, 'facility': facility, 'today_year': today_year, 'today_month': today_month, 'supervisor': supervisor,
+    # })
 
 @lock
 def archive_view(request):

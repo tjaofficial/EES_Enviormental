@@ -5,65 +5,65 @@
 <link href="{% static 'ees_forms/style/event_detail.css' %}" rel="stylesheet">
 <div class="mainCont center" style="width:35rem;">
     {% if access_page == 'view' %}
-    <div class="card">
-        <div class="cardHeader methodPlusBlue">
-            {% include "shared/components/backArrow.html" with destination="calendar"%}
-            View Event Details
+        <div class="card">
+            <div class="cardHeader methodPlusBlue">
+                {% include "shared/components/backArrow.html" with destination="calendar"%}
+                View Event Details
+            </div>
+            <div class="contentCont">
+                {% if facility != "supervisor" %}
+                Observer: {{ my_event.observer }}<br><br>
+                {% endif %}
+                Title: {{ my_event.title }}<br><br>{% comment %} {{ my_event.get_title_display }} {% endcomment %}
+                Date: {{ my_event.date }}<br><br>
+                Time: {{my_event.start_time|time:"h:i:A" }} - {{ my_event.end_time|time:"h:i:A" }}<br><br>
+                Description: {{ my_event.notes }}<br><br>
+                <br>
+                {% if supervisor %}
+                <div style="display: inline-flex;">
+                    <a id="editButton" href="{% url 'Event Details' facility event_id 'edit' %}">Edit</a>
+                    <form name="deleteEvent" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="delete" value="delete">
+                        <input id="deleteButton" type="submit" value="delete">
+                    </form>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        <div class="contentCont">
-            {% if facility != "supervisor" %}
-            Observer: {{ my_event.observer }}<br><br>
-            {% endif %}
-            Title: {{ my_event.title }}<br><br>{% comment %} {{ my_event.get_title_display }} {% endcomment %}
-            Date: {{ my_event.date }}<br><br>
-            Time: {{my_event.start_time|time:"h:i:A" }} - {{ my_event.end_time|time:"h:i:A" }}<br><br>
-            Description: {{ my_event.notes }}<br><br>
-            <br>
-            {% if supervisor %}
-            <div style="display: inline-flex;">
-                <a id="editButton" href="{% url 'Event Details' facility event_id 'edit' %}">Edit</a>
-                <form name="deleteEvent" method="POST">
+    {% elif access_page == 'edit' %}
+        <div class="card">
+            <div class="cardHeader methodPlusBlue">
+                {% include "shared/components/backArrow.html" with destination="calendar-event"%}
+                Edit Event Details
+            </div>
+            <div class='contentCont'>
+                <form action="" method="POST">
                     {% csrf_token %}
-                    <input type="hidden" name="delete" value="delete">
-                    <input id="deleteButton" type="submit" value="delete">
+                    <div style="margin:auto;">
+                        {% if facility != "supervisor" %}
+                        Observer:<select name="observer" id="observers">
+                            <option value="">-----</option>
+                            {% for observer in listOfObservers %}
+                                {% if my_event.observer.value == observer.user.last_name %} 
+                                    <option value="{{observer.user.last_name}}" selected>{{observer.user.last_name}}</option>
+                                {% else %}
+                                    <option value="{{observer.user.last_name}}">{{observer.user.last_name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select><br><br>
+                        {% endif %}
+                        Title: {{ my_event.title }}<br><br>
+                        Date: {{ my_event.date }}<br><br>
+                        Start: {{ my_event.start_time }}<br><br>
+                        End: {{ my_event.end_time }}<br><br>
+                        Description:<br> {{ my_event.notes }}<br>
+                        <br>
+                        <input type="submit" value="Save">
+                    </div>  
                 </form>
             </div>
-            {% endif %}
         </div>
-    </div>
-    {% elif access_page == 'edit' %}
-    <div class="card">
-        <div class="cardHeader methodPlusBlue">
-            {% include "shared/components/backArrow.html" with destination="calendar-event"%}
-            Edit Event Details
-        </div>
-        <div class='contentCont'>
-            <form action="" method="POST">
-                {% csrf_token %}
-                <div style="margin:auto;">
-                    {% if facility != "supervisor" %}
-                    Observer:<select name="observer" id="observers">
-                        <option value="">-----</option>
-                        {% for observer in listOfObservers %}
-                            {% if my_event.observer.value == observer.user.last_name %} 
-                                <option value="{{observer.user.last_name}}" selected>{{observer.user.last_name}}</option>
-                            {% else %}
-                                <option value="{{observer.user.last_name}}">{{observer.user.last_name}}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select><br><br>
-                    {% endif %}
-                    Title: {{ my_event.title }}<br><br>
-                    Date: {{ my_event.date }}<br><br>
-                    Start: {{ my_event.start_time }}<br><br>
-                    End: {{ my_event.end_time }}<br><br>
-                    Description:<br> {{ my_event.notes }}<br>
-                    <br>
-                    <input type="submit" value="Save">
-                </div>  
-            </form>
-        </div>
-    </div>
     {% endif %}
 </div>
 

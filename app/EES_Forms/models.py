@@ -3991,7 +3991,6 @@ class Event(models.Model):
         blank=True, 
         null=True
     )
-    personal = models.BooleanField()
     cal_title_choices = (
         ('P', 'Primary'),
         ('BU', 'Back Up'),
@@ -4018,6 +4017,22 @@ class Event(models.Model):
     start_time = models.TimeField(u'Starting time', help_text=u'Starting time', null=True, default='00:00:00')
     end_time = models.TimeField(u'Final time', help_text=u'Final time', null=True, blank=True, default='23:59:00')
     notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
+    calendarChoice = models.CharField(
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    repeat = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+    alerts = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
+
 
     class META:
         verbose_name = u'Scheduling'
