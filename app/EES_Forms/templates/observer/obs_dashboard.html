@@ -214,7 +214,7 @@
             <div id="c0" style="display: block;">
                 {% for item in allActiveFacFormsList %}
                     {% if item.subChoice.submitted %}
-                        <a href="{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url item.formChoice.link item.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url item.formChoice.link item.id 'form' 'sunday' %}{% endif %}{% url item.formChoice.link item.id 'form' %}{% endif %}">
+                        <a href="{% if item.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url item.formChoice.link item.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url item.formChoice.link item.id 'form' 'sunday' %}{% endif %}{% elif item.formChoice.link != 'form26' %}{% url item.formChoice.link item.id 'form' %}{% endif %}">
                             <div class="card_Form" style="margin-left: 50px;">
                                 <h3 class="card_Form_letter">
                                     {{item.id}}

@@ -17,7 +17,8 @@ def formSettingsFunc(keysList, requestPost, formID):
     print(newLabel)
     for key, value in requestPost.items():
         defaultDictUpdate = False
-        if key not in ['csrfmiddlewaretoken', 'update', 'newLabel']:
+        if key not in ['csrfmiddlewaretoken', 'update', 'newLabel'] and key in keysList:
+            print(key.split("-"))
             mainLabel = key.split("-")[1]
             print(mainLabel)
             if formID in withoutSettings:

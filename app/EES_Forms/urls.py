@@ -41,7 +41,7 @@ urlpatterns = [
     path('form-select/add-forms', views.Add_Forms, name='addingForms'),
     path("profileEdits/<str:userID>", views.profile_edit_view, name="profileEdits"),
     path("password/", views.change_password, name='PasswordChange'),
-    path('packet-form-select/<str:facility>/<str:packet>', views.facilityForm, name='facilityForms'),
+    path('packet-form-select/<str:packet>', views.facilityForm, name='facilityForms'),
     ##--ACCOUNT SETTINGS-----
     path("account/", views.sup_account_view, name="Account"),
     path("account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),

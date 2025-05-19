@@ -353,13 +353,6 @@ class facility_model(models.Model):
         blank=True, 
         null=True
     )
-    facilityForms = models.OneToOneField(
-        "facility_forms_model",
-        on_delete=models.PROTECT,
-        related_name='facility',
-        blank=True, 
-        null=True
-    )
     bat_num = models.IntegerField(
         null=True,
         blank=True
@@ -455,21 +448,14 @@ class Forms(models.Model):
         return self.form
 
 class formSubmissionRecords_model(models.Model):
-    formID = models.ForeignKey(
-        Forms,
-        on_delete=models.CASCADE, 
-        null=True
-    )
     dateSubmitted = models.DateField(auto_now=False, auto_now_add=False)
     dueDate = models.DateField(auto_now=False, auto_now_add=False)
-    facilityChoice = models.ForeignKey(
-        facility_model,
-        on_delete=models.CASCADE, 
-        null=True
-    )
     submitted = models.BooleanField(default=False)
     def __str__(self):
-        return str(self.id) + " - " + str(self.formID.form) + " - " + str(self.facilityChoice.facility_name)
+        form_settings = getattr(self, 'form_settings', None)
+        fsID = getattr(form_settings, 'id', "N/A")
+        formID = getattr(form_settings, 'formChoice', "N/A")
+        return f"Id: {self.id} - fsID: {fsID} - FormID: {formID}"
 
 class the_packets_model(models.Model):
     facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE, blank=True, null=True)
@@ -487,17 +473,12 @@ class the_packets_model(models.Model):
 class form_settings_model(models.Model):
     facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE)
     formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
-    packetChoice = models.ForeignKey(
-        the_packets_model, 
+    subChoice = models.OneToOneField(
+        'formSubmissionRecords_model', 
         on_delete=models.CASCADE,
         blank=True,
-        null=True
-    )
-    subChoice = models.ForeignKey(
-        formSubmissionRecords_model, 
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True
+        null=True,
+        related_name='form_settings'
     )
     settings = models.JSONField(
         default=dict,
@@ -5515,7 +5496,8 @@ class facility_forms_model(models.Model):
     facilityChoice = models.OneToOneField(
         facility_model,
         on_delete=models.CASCADE, 
-        null=True
+        null=True,
+        related_name='facility_forms'
     )
     formData = models.CharField(
         max_length=10000,

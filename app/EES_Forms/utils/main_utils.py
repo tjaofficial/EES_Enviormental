@@ -118,12 +118,13 @@ defaultUserSettings = {
     'colorMode': 'light',
     'landingDash': 'default'
 }
-
+defaultGlobalFormSettingsDict = {"active": True, "packets": False, "settings":{}}
 defaultPacketSettings = {
     'formsList': False,
     'settings': {
         'weekly_start_day': 'saturday',
-        'frequency': 'weekly'
+        'frequency': 'weekly',
+        'active': True
     }
 }
 
@@ -1012,7 +1013,6 @@ class PrintCalendar(HTMLCalendar):
         Return a formatted month as a table.
         """
         formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-        formList = get_facility_forms('facilityName', facility)
         #ogFormID = forms
         if type == 'single':
             formsList = forms.split('-')
@@ -1205,13 +1205,9 @@ def weatherDict(city):
     return weather
 
 def calculateProgessBar(facility, frequency):
-    formSubRecords = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
-    forms_comp = [] 
-    for formSub in formSubRecords.filter(submitted=True):
-        if formSub.formID.frequency == frequency:
-            forms_comp.append(formSub.formID.id)
-    count_comp = len(forms_comp)
-    count_total = len(formSubRecords.filter(formID__frequency=frequency))
+    formSettingsQuery = form_settings_model.objects.filter(facilityChoice=facility, formChoice__frequency=frequency)
+    count_total = formSettingsQuery.count()
+    count_comp = formSettingsQuery.filter(subChoice__submitted=True).count()
     if count_total == 0:
         percent_completed = False
     else:
@@ -1678,14 +1674,6 @@ def inventoryResponse(tagOn, sk):
         return "No"
     else:
         return "N/A"      
-    
-def get_facility_forms(selector, facilityID):
-    if selector == 'facilityName':
-        facilityFormsString = facility_forms_model.objects.get(facilityChoice__facility_name=facilityID)
-    elif selector == 'facilityID':
-        facilityFormsString = facility_forms_model.objects.get(facilityChoice__id=facilityID)
-    facilityFormsList = changeStringListIntoList(facilityFormsString.formData)
-    return facilityFormsList
 
 def create_starting_forms():
     # ADD IN THE FORMS IF DATABASE HAS LESS THAN 5----------

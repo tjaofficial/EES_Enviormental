@@ -37,7 +37,7 @@
                         {% for form in pageData %}
                         <tr class="formRows">
                             <td class="rowCheckMark">
-                                <input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{form.form}}" name="forms{{form.form}}" type="checkbox" value="{{form.form}}"/>
+                                <input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{form.form}}" name="forms{{form.form}}" type="checkbox" value="{{form.form}}">
                             </td>
                             <td class="rowFormID">{{form.form}} - </td>
                             <td class="rowFormType">{{form.header}}</td>
@@ -47,7 +47,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.form count=form.form %}</td>
+                            <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.form count=form.form form_add='true'%}</td>
                         </tr>
                         {% endfor %}
                     </table>

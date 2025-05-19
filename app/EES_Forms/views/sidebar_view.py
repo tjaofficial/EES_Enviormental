@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect # type: ignore
-from ..models import user_profile_model, issues_model, Forms, Event, daily_battery_profile_model, User, sop_model, facility_model, form22_model, formSubmissionRecords_model, form_settings_model
+from ..models import user_profile_model, issues_model, Forms, Event, User, sop_model, facility_model, form22_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
 import datetime
 import calendar
 from django.core.exceptions import FieldError # type: ignore
 from django.db.models import Q # type: ignore
 from django.apps import apps # type: ignore
-from ..utils.main_utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities,get_facility_forms, createNotification, setUnlockClientSupervisor
+from ..utils.main_utils import Calendar, updateSubmissionForm, setUnlockClientSupervisor, colorModeSwitch, checkIfFacilitySelected, getCompanyFacilities, createNotification, setUnlockClientSupervisor
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.contrib import messages # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR, USE_S3
@@ -426,9 +426,7 @@ def search_forms_view(request, facility, access_page):
     options = facility_model.objects.all()
     profile = user_profile_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
-    facilityForms = get_facility_forms('facilityName', facility)
     formSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
-    formSubs = formSubmissionRecords_model.objects.filter(facilityChoice__facility_name=facility)
     if access_page != 'search':
         fsID = int(access_page.split("-")[1])
         access_page = access_page[:-4]
@@ -570,14 +568,12 @@ def search_forms_view(request, facility, access_page):
         
         if searchedText:
             form_list = formSettingsModel.filter(Q(formChoice__form__icontains=searchedText) | Q(formChoice__frequency__icontains=searchedText) | Q(formChoice__title__icontains=searchedText)).order_by('id')
-            #form_list = formSubs.filter(Q(formID__form__icontains=searchedText) | Q(formID__frequency__icontains=searchedText) | Q(formID__title__icontains=searchedText)).order_by('formID')
             print(form_list)
             forms = []
+            # you can optimaze and get rid of this
             for settignsEntry in form_list:
-                for facilityForm in facilityForms:
-                    if settignsEntry.id == facilityForm:
-                        forms.append(settignsEntry)
-                        #forms.append((facilityForm, settignsEntry))
+                forms.append(settignsEntry)
+            #forms.append((facilityForm, settignsEntry))
             # forms = form_list
             print(forms)
             letterForms = []
@@ -1079,26 +1075,20 @@ def formsProgress(request, section):
     if unlock:
         return redirect('IncompleteForms')
     formSettingsModel = form_settings_model.objects.filter(facilityChoice=facility)
-    clientForms = get_facility_forms('facilityName', facility)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
     freqList = ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually']
-    for formInfo in clientForms:
-        print("Cross Reference " + str(formInfo) + "...")
-        for x in formSettingsModel:
-            print("With " + str(x.id) + "...")
-            if formInfo == x.id:
-                print("Found a MATCH! Adding to finalList.")
-                formTitle = x.formChoice.header + ' - ' + x.formChoice.title
-                if x.formChoice.frequency == 'Daily':
-                    finalList['Daily'].append((formInfo, formTitle, x.subChoice.submitted))
-                elif x.formChoice.frequency == 'Weekly':
-                    finalList['Weekly'].append((formInfo, formTitle, x.subChoice.submitted))
-                elif x.formChoice.frequency == 'Monthly':
-                    finalList['Monthly'].append((formInfo, formTitle, x.subChoice.submitted))
-                elif x.formChoice.frequency == 'Quarterly':
-                    finalList['Quarterly'].append((formInfo, formTitle, x.subChoice.submitted))
-                elif x.formChoice.frequency == 'Anually':
-                    finalList['Annually'].append((formInfo, formTitle, x.subChoice.submitted))
+    for x in formSettingsModel:
+        formTitle = x.formChoice.header + ' - ' + x.formChoice.title
+        if x.formChoice.frequency == 'Daily':
+            finalList['Daily'].append((x.subChoice, formTitle, x.subChoice.submitted))
+        elif x.formChoice.frequency == 'Weekly':
+            finalList['Weekly'].append((x.subChoice, formTitle, x.subChoice.submitted))
+        elif x.formChoice.frequency == 'Monthly':
+            finalList['Monthly'].append((x.subChoice, formTitle, x.subChoice.submitted))
+        elif x.formChoice.frequency == 'Quarterly':
+            finalList['Quarterly'].append((x.subChoice, formTitle, x.subChoice.submitted))
+        elif x.formChoice.frequency == 'Anually':
+            finalList['Annually'].append((x.subChoice, formTitle, x.subChoice.submitted))
     for each in finalList:
         if len(finalList[each]) == 0:
             finalList[each] = 'No forms added'

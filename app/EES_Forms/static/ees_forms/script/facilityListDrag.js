@@ -10,13 +10,13 @@ fetch('/ajax/facilityList/companyFacilityInfo/')
             let totalForms = facilityDiv.dataset.totalforms;//29
             let facilityNumber = facilityDiv.dataset.facid;
             let packetIDList = JSON.parse(facilityDiv.dataset.packlist);
-            for (let x=1;x<=parseInt(totalForms);x++){
+            item.fsIDList.forEach((fsID) => {
                 //console.log(x)
-                let itemBeingDraggedID = String(facilityNumber) + "drag" + String(x);
-                //console.log(itemBeingDraggedID)
+                let itemBeingDraggedID = String(facilityNumber) + "drag" + String(fsID);
+                console.log(itemBeingDraggedID)
                 const dragItem = document.getElementById(itemBeingDraggedID);
-                //console.log(dragItem)
-                dragItem.addEventListener('dragstart',function(event){
+                console.log(dragItem)
+                dragItem.addEventListener('dragstart', function(event){
                     //console.log(event.toElement.dataset.fsid);
                     let fsIDFacID = String(event.target.dataset.fsid)+'-'+String(facilityNumber)
                     event.dataTransfer.setData("Text", fsIDFacID);
@@ -57,7 +57,7 @@ fetch('/ajax/facilityList/companyFacilityInfo/')
                         }
                     }
                 })
-            }
+            });
             for (let i=0;i<packetIDList.length;i++){
                 let packetID = packetIDList[i]
                 let dropZone = document.getElementById('dropZone'+String(packetID));

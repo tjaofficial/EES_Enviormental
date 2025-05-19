@@ -56,3 +56,18 @@ exit_modal = (packID, task) => {
     var modalAdd = document.getElementById(task+String(packID));
     modalAdd.style.display = "none";
 }
+
+function addFacilityForm(elem){
+    const selectedFacilityID = elem.dataset.facility;
+    const link = elem.dataset.link;
+    fetch("/set-facility/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
+        },
+        body: JSON.stringify({ id: selectedFacilityID })
+    }).then(() => {
+        window.location.href = link;
+    });
+}

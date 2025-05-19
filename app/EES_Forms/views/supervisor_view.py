@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.conf import settings # type: ignore
 from ..forms import CreateUserForm, user_profile_form, bat_info_form, form_requests_form
-from ..models import facility_model, User, user_profile_model, facility_forms_model, notifications_model
+from ..models import facility_model, User, user_profile_model, notifications_model
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.contrib import messages # type: ignore
 from django.contrib.auth.models import Group # type: ignore
@@ -228,11 +228,6 @@ def register_view(request, access_page):
                             ups.settings['dashboard'][str(A.id)]['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
                             ups.settings['dashboard'][str(A.id)]['formsDash'] = False
                         ups.save()
-                    newfacilityForm = facility_forms_model(
-                        facilityChoice = A,
-                        formData = ''
-                    )
-                    newfacilityForm.save()
                     
                     messages.success(request, 'Facility Created')
                     return redirect('sup_dashboard', facility)

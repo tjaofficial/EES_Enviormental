@@ -6,7 +6,7 @@ from ..forms import *
 from django.core.exceptions import FieldError # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
-from ..utils.main_utils import checkIfFacilitySelected, getCompanyFacilities, get_facility_forms
+from ..utils.main_utils import checkIfFacilitySelected, getCompanyFacilities
 import datetime
 
 lock = login_required(login_url='Login')
@@ -30,7 +30,6 @@ def printSelect(request):
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice=facility)
     packetQuery = the_packets_model.objects.filter(facilityChoice=facility)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
-    facilityForms = get_facility_forms('facilityName', facility)
     selectList = []
     fsList = []
     for fs in formSettingsQuery:
@@ -39,14 +38,14 @@ def printSelect(request):
             labelList.append((fs.settings['packets'][label], int(label)))
         fsList.append((fs.id, labelList))
     formSettingsQueryJson = json.dumps(fsList)
-    if len(facilityForms) == 0:
+    if len(formSettingsQuery) == 0:
         print('No facility forms have been assigned/No facility has been selected')
     else:
+        #this needs to be optimaized, the "select list" can be removes as an empty list and 
+        #made to equal the formSettingsQuery
         print('something is in here')
-        for fsID in facilityForms:
-            for settingsEntry in formSettingsQuery:
-                if int(fsID) == settingsEntry.id:
-                    selectList.append(settingsEntry)
+        for settingsEntry in formSettingsQuery:
+            selectList.append(settingsEntry)
 
     if request.method == "POST":
         answer = request.POST

@@ -3,7 +3,7 @@
 <link href="{% static 'ees_forms/style/forms_settings.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/secondary_form.css' %}" rel="stylesheet" />
 {% comment %} {% with isBreak=1 %}{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{ isBreak|add:'1' }}{% endif %}{% endfor %}{% if isBreak == 2 %}display:block;{% else %}display:none;{% endif %}{% endwith %} {% endcomment %}
-<div id="settings{{formID}}" class="formCont" style="{% if formID == '' %}margin-left: 32px;display:none;{% endif %}">
+<div id="settings{{formID}}" class="formCont" style="{% if form_add == 'true' %}margin-left: 32px;display:none;{% endif %}">
     <div class="innerFormCont">
         {% if formID == "1" %}
             <li class="form-line">    

@@ -1,13 +1,11 @@
-{% load static %}
+{% load static %}{% load sup_tags %}
 {% if page == 'facilityList' %}
     <div id="dropZone{{packet.id}}" class="packet_button" style="display:flex; justify-content: space-between;" data-selector="{{packet.name}}" data-packetid="{{packet.id}}" data-facid="{{info.0.id}}">
         <div class="packetBars" data-packetid="{{packet.id}}" data-facid="{{info.0.id}}" style="cursor: pointer; align-content: center;">
-            {{packet.name}} - forms({{packet.formList.formsList|length}})
+            {{packet.name}} - forms({{packet.formList.formsList|total_active_packet_forms}})
         </div>
         <div class="packet-actions">
-            <a href="{% url 'facilityForms' packet.facilityChoice.facility_name packet.id %}" onclick="event.stopPropagation();">
-                <button>Edit</button>
-            </a>
+            <button onclick="event.stopPropagation(); addFacilityForm(this)" data-facility="{{info.0.id}}" data-link="{% url 'facilityForms' packet.id %}">Add/Remove Forms</button>
             <button onclick="event.stopPropagation(); open_packet_modal(this, {{ forloop.counter }})">Settings</button>
             <button onclick="event.stopPropagation(); open_delete_modal(this, {{ forloop.counter }})">Delete</button>
         </div>
@@ -15,7 +13,7 @@
     {% elif page == 'obsDash' %}
     <div class="packet_button" style="display:flex;" data-selector="{{packet.name}}" data-packetID="{{packet.id}}">
         <div onclick="show_formsList(this)" style="width:100%;">
-            {{packet.name}} - forms({{packet.formList.formsList|length}})
+            {{packet.name}} - forms({{packet.formList.formsList|total_active_packet_forms}})
         </div>
     </div>
 {% endif %}

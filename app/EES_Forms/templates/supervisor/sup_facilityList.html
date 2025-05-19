@@ -37,15 +37,17 @@
                                     </thead>
                                     <tbody>
                                         {% for x in info.1 %}
-                                            {% include 'supervisor/components/facility_form_delete_modal.html' with packID=forloop.counter %}
-                                            <tr class="drag" id="{{info.0.id}}drag{{forloop.counter}}" draggable="true" data-fsid="{{x.id}}">
-                                                <td>{{x.id}}</td>
-                                                <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
-                                                <td class="form-actions">
-                                                    <a href="{% url 'facilityFormSettings' x.id 'facID' 'none' %}"><button>Edit</button></a>
-                                                    <button onclick="open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
-                                                </td>
-                                            </tr>
+                                            {% if x.settings.active %}
+                                                {% include 'supervisor/components/facility_form_delete_modal.html' with packID=x.id %}
+                                                <tr class="drag" id="{{info.0.id}}drag{{x.id}}" draggable="true" data-fsid="{{x.id}}">
+                                                    <td>{{x.id}}</td>
+                                                    <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
+                                                    <td class="form-actions">
+                                                        <a href="{% url 'facilityFormSettings' x.id 'facID' 'none' %}"><button>Form Settings</button></a>
+                                                        <button onclick="open_delete_facForm_modal(this, {{ x.id }})">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -54,11 +56,11 @@
                                     No forms have been added. Add forms to this facility by clicking 'add forms' below
                                 </div>
                             {% endif %}
-                                <a href="{% url 'addingForms' %}">
-                                    <button class="add-form-btn">
+                                {% comment %} <a href="{% url 'addingForms' %}"> {% endcomment %}
+                                    <button class="add-form-btn" onclick="addFacilityForm(this)" data-facility="{{info.0.id}}" data-link="{% url 'addingForms' %}">
                                         + Add Facility Form
-                                    </button>
-                                </a>
+                                    </button>                                  
+                                {% comment %} </a> {% endcomment %}
                                 <div style="width: 100%; display: inline-flex; justify-content: center; margin-top: 38px;">
                                     <h4>Packets&nbsp;</h4>
                                     {% include 'shared/components/helpPack.html' with data="packets" popupCounter=forloop.counter %}
@@ -79,7 +81,7 @@
                                                 <ul>
                                                     {% for key, form in packet.formList.formsList.items %}
                                                         {% for x in formSettingsModel %}
-                                                            {% if x.id == form.settingsID %}
+                                                            {% if x.id == form.settingsID and form.active and x.settings.active %}
                                                                 <li>
                                                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                                                         <span>
@@ -90,9 +92,9 @@
                                                                                 {{x.formChoice.title}}
                                                                             {% endif %}
                                                                         </span>
-                                                                        <span class="form-actions" style="width: 122px;">
+                                                                        <span class="form-actions" style="width: 172px;">
                                                                             <a href="{% url 'facilityFormSettings' form.settingsID packet.id key %}">
-                                                                                <button onclick="event.stopPropagation()">Edit</button>
+                                                                                <button onclick="event.stopPropagation()">Change Label</button>
                                                                             </a>
                                                                             <button onclick="event.stopPropagation(); open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
                                                                         </span>

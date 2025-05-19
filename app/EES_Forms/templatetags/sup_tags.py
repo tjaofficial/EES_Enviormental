@@ -1,5 +1,5 @@
 from django import template # type: ignore
-from ..models import the_packets_model
+from ..models import the_packets_model, form_settings_model
 import json
 import datetime
 register = template.Library()
@@ -41,3 +41,14 @@ def dateCheck(string):
         return False
     else:
         return True
+    
+@register.filter
+def total_active_packet_forms(formsList):
+    newList = []
+    for key, form in formsList.items(): 
+        fsSelect = form_settings_model.objects.get(id=form['settingsID'])
+        if form['active'] and fsSelect.settings['active']:
+            newList.append(form)
+    print(newList)
+    total_forms = len(newList)
+    return total_forms
