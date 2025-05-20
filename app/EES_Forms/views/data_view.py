@@ -23,14 +23,7 @@ def pt_admin1_view(request, facility):
     todays_log = daily_prof[0]
     data = form5_model.objects.all()
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
-    def checkIfAllNone(theGroup):
-        dayCount = 0
-        for ovenData in theGroup:
-            if ovenData[1] == 'N/A':
-                dayCount += 1
-        if dayCount > 0:
-            newList = []
-        return newList
+
     # -------90 DAY PUSH ----------------
     all_db_reads = form5_model.objects.all()
     pushTravelsData = ninetyDayPushTravels(facility)

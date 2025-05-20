@@ -17,12 +17,12 @@ class FacilityMiddleware:
                     request.facility = facility_model.objects.get(id=facility_id)
                 except facility_model.DoesNotExist:
                     request.facility = None
-                    print("IF no facililty then revert back to Default check 2")
+                    #print("IF no facililty then revert back to Default check 2")
             except:
                 request.facility = None
-                print("IF no facililty then revert back to Default check 3")
+                #print("IF no facililty then revert back to Default check 3")
         else:
             request.facility = None
-            print("IF no facililty then revert back to Default check 1")
+            #print("IF no facililty then revert back to Default check 1")
 
         return self.get_response(request)

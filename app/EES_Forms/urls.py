@@ -42,6 +42,7 @@ urlpatterns = [
     path("profileEdits/<str:userID>", views.profile_edit_view, name="profileEdits"),
     path("password/", views.change_password, name='PasswordChange'),
     path('packet-form-select/<str:packet>', views.facilityForm, name='facilityForms'),
+    path('ajax/packets/update-label/', views.update_packet_form_label, name="updateFormLabel"),
     ##--ACCOUNT SETTINGS-----
     path("account/", views.sup_account_view, name="Account"),
     path("account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),

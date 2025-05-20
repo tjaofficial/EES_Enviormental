@@ -46,7 +46,7 @@ def sup_dashboard_view(request):
 
 @lock
 def header_data(request):
-    print("STEP 1")
+    #print("STEP 1")
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)

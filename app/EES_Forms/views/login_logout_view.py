@@ -36,7 +36,7 @@ def login_view(request):
         if request.user.is_superuser:
             return redirect('adminDash', "overview")
         elif request.user.groups.filter(name=SUPER_VAR):
-            return redirect('sup_dashboard', SUPER_VAR)
+            return redirect('sup_dashboard')
         elif request.user.groups.filter(name=CLIENT_VAR):
             facility = request.user.user_profile.facilityChoice
             request.session['selected_facility'] = facility.id

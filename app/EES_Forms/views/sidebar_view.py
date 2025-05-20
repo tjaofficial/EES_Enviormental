@@ -285,10 +285,11 @@ def archive_view(request):
             print('Starting to search labels...')
             for fs in fsModel:
                 fsPackets = fs.settings['packets']
-                for packetLabel in fsPackets:
-                    if fsPackets[packetLabel].lower() == itemSearched.lower():
-                        if fs not in fsList1:
-                            fsList1.append(fs)
+                if fsPackets:
+                    for packetLabel in fsPackets:
+                        if fsPackets[packetLabel].lower() == itemSearched.lower():
+                            if fs not in fsList1:
+                                fsList1.append(fs)
             print(fsList1)
             modelsList = []
             for fsSort in fsList1:

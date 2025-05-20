@@ -1317,7 +1317,7 @@ def notificationCalc(user, facility):
     else:
         notifCount = 0
 
-    print(notifCount)
+    #print(notifCount)
     return notifCount
     
 def displayNotifications(user, facility):
@@ -1328,19 +1328,19 @@ def displayNotifications(user, facility):
     
     unReadNotifs = allNotifs.filter(clicked=False, hovered=False)       
     readNotifs = allNotifs.filter(clicked=True)
-    print('-------Notifications have been processed------')
+    #print('-------Notifications have been processed------')
     return {'notifCount': notifCount, 'unRead': unReadNotifs, "read": readNotifs}
 
 def distributeNotifications(facility, request, fsID, date, notifKeywordList, issueID):
-    print(f"Start Notification Process for {facility} fsID {fsID}")
-    print(f"Notifications types: {notifKeywordList}")
+    #print(f"Start Notification Process for {facility} fsID {fsID}")
+    #print(f"Notifications types: {notifKeywordList}")
     userProf = request.user.user_profile
     formSettings = form_settings_model.objects.get(id=fsID)
     companyUsers = user_profile_model.objects.filter(company__company_name=userProf.company.company_name, user__is_active=True)
-    print(f"Users who will be receiving notifications: {companyUsers}")
+    #print(f"Users who will be receiving notifications: {companyUsers}")
 
     def createMethodPlusNotif(notifCategory, sendingUser, receivingUser, date):
-        print(f"Creating 'Method Plus' Notification for {facility} fsID {fsID}")
+        #print(f"Creating 'Method Plus' Notification for {facility} fsID {fsID}")
         todayName = False
         todayNumb = datetime.date.today().weekday()
         if notifCategory == 'submitted':
@@ -1361,7 +1361,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
             five_day_note = "Oven has reach the 5 day warning."
             newNote = ten_day_note if notifCategory == "10_day_pt" else five_day_note
         elif notifCategory == 'messages':
-            print('Inbox Messages: TBA')
+            #print('Inbox Messages: TBA')
             newNote = "newMessage sent."
 
         N = notifications_model(
@@ -1381,7 +1381,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
         notifQuery = notifications_model.objects.all()
         if newNotification not in notifQuery:
             newNotification.save()
-            print(f"Notfiication for '{newNotification.header}' has succesfully been created within MethodPlus Database")
+            #print(f"Notfiication for '{newNotification.header}' has succesfully been created within MethodPlus Database")
             clean_name = re.sub(r'[^a-zA-Z0-9_.-]', '_', userProf.company.company_name)[:90]
             companyParse = f'notifications_{clean_name}'
             #notifCount = len(notifQuery.filter(user=receivingUser, hovered=False, clicked=False, facilityChoice__company=userProf.company))
@@ -1411,10 +1411,10 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
                     'html': notif_html
                 }
             )
-            print(f"Notfiication for '{newNotification.header}' has succesfully been sent to update the notif counter for the current user")
+            #print(f"Notfiication for '{newNotification.header}' has succesfully been sent to update the notif counter for the current user")
 
     def sendEmailNotif(notifCategory, receivingUser):
-        print(f"Creating 'Email' Notification for {facility} fsID {fsID}")
+        #print(f"Creating 'Email' Notification for {facility} fsID {fsID}")
         header_dict = dict(notification_header_choices)
         header_dict.get(notifCategory, "Unknown Header")
         mail_subject = f'MethodPlus: {header_dict.get(notifCategory, "Unknown Header")}'
@@ -1428,7 +1428,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
         })
         plain_message = strip_tags(html_message)
         to_email = receivingUser.user.email 
-        print(to_email)
+        #print(to_email)
         send_mail(
             mail_subject,
             plain_message,
@@ -1437,10 +1437,10 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
             html_message=html_message,
             fail_silently=False
         )
-        print(f"Sending a '{notifCategory}' notifications to email")
+        #print(f"Sending a '{notifCategory}' notifications to email")
 
     def sendSMSNotif(notifCategory, receivingUser):
-        print(f"Sending a '{notifCategory}' notifications to SMS")
+        #print(f"Sending a '{notifCategory}' notifications to SMS")
 
         number = receivingUser.phone
         if notifCategory == 'compliance':
@@ -1466,7 +1466,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
     for notifCategory in notifKeywordList:
         setter = 0
         for users in companyUsers:
-            print(f"Sending Notifications to {users.user.first_name} {users.user.last_name}")
+            #print(f"Sending Notifications to {users.user.first_name} {users.user.last_name}")
             userNotifSettings = users.settings['facilities'][str(formSettings.facilityChoice.id)]['notifications']
             for nKey, notifMedium in userNotifSettings[notifCategory].items():
                 if nKey == "methodplus" and notifMedium:
@@ -1483,11 +1483,11 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
         sendMethodPlusNotif(newNotification)
 
 def createNotification(facility, request, fsID, date, notifSelector, issueID):
-    print(f"Start Notification Process for {facility} fsID {fsID}")
+    #print(f"Start Notification Process for {facility} fsID {fsID}")
     if not isinstance(notifSelector, list):
         notifSelector = [notifSelector]
     distributeNotifications(facility, request, fsID, date, notifSelector, issueID)
-    print("_________________________________")
+    #print("_________________________________")
     
 def checkIfFacilitySelected(user):
     if user.user_profile.position not in ['observer']:
@@ -2023,13 +2023,14 @@ def create_starting_forms():
         form31.save()
         
 def updateAllFormSubmissions(facility):
-    facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
+    facFormsSettingsModel = form_settings_model.objects.filter(facilityChoice=facility)
     today = datetime.date.today()
     todays_num = today.weekday()
     weekday_fri = today + datetime.timedelta(days=4 - todays_num)
     for fsForm in facFormsSettingsModel:
         sub = fsForm.subChoice
-        if sub.formID.frequency == 'Monthly':
+        formChoice = fsForm.formChoice
+        if formChoice.frequency == 'Monthly':
             numbOfDaysInMonth = calendar.monthrange(today.year, today.month)[1]
             lastDayOfMonth = str(today.year) + '-' + str(today.month) + '-' + str(numbOfDaysInMonth)
             sub.dueDate = datetime.datetime.strptime(lastDayOfMonth, "%Y-%m-%d").date()
@@ -2037,7 +2038,7 @@ def updateAllFormSubmissions(facility):
             if sub.dateSubmitted.year != dueDate.year or sub.dateSubmitted.month != dueDate.month:
                 sub.submitted = False
             sub.save()
-        elif sub.formID.frequency == 'Quarterly':
+        elif formChoice.frequency == 'Quarterly':
             if what_quarter(today) == 1:
                 monthDue = 3
                 yearDue = today.year
@@ -2061,9 +2062,9 @@ def updateAllFormSubmissions(facility):
             if what_quarter(A) != what_quarter(B):
                 sub.submitted = False
             sub.save()
-        elif sub.formID.frequency == 'Weekly':
+        elif formChoice.frequency == 'Weekly':
             if todays_num in {0, 1, 2, 3, 4}:
-                if sub.formID.day_freq == 'Weekends':
+                if formChoice.day_freq == 'Weekends':
                     sub.dueDate = weekday_fri - datetime.timedelta(days=5)
                 start_sat = weekday_fri - datetime.timedelta(days=6)
                 sub.dueDate = weekday_fri
@@ -2072,13 +2073,13 @@ def updateAllFormSubmissions(facility):
                 sub.dueDate = start_sat + datetime.timedelta(days=11 - todays_num)
             A = sub.dateSubmitted
             B = sub.dueDate
-            if sub.formID.day_freq == 'Weekends' and A != B:
+            if formChoice.day_freq == 'Weekends' and A != B:
                 sub.submitted = False   
             elif A < start_sat or A > sub.dueDate:
                 sub.submitted = False
             sub.save()
-        elif sub.formID.frequency == 'Daily':
-            if sub.formID.weekend_only and todays_num not in {5,6}:
+        elif formChoice.frequency == 'Daily':
+            if formChoice.weekend_only and todays_num not in {5,6}:
                 sub.save()
                 continue
             else:    
@@ -2104,25 +2105,6 @@ def monthDayAdjust(input):
         return '0'+str(input)
     else:
         return str(input)
-    
-def changeStringListIntoList(ffFormData):
-    facilityForms = ffFormData
-    if facilityForms:
-        if facilityForms == '[]':
-            returnList = []
-        else:
-            facilityForms = ast.literal_eval(facilityForms[1:-1])
-            if str(facilityForms)[0] != "(":
-                returnList = [facilityForms]
-            else:
-                returnList = []
-                for x in facilityForms:
-                    returnList.append(x)     
-    else:
-        returnList = []
-        # messages.error(request,'ERROR: ID-11850003 Contact Support Team')
-    
-    return returnList
 
 def getFacSettingsInfo(fsID):
     fsPull = form_settings_model.objects.get(id=int(fsID))

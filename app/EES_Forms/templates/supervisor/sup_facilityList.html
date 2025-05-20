@@ -44,7 +44,7 @@
                                                     <td>{{x.formChoice.header}} - {% if x.settings.settings.custom_name %}{{x.settings.settings.custom_name}}{% else %}{{x.formChoice.title}}{% endif %}</td>
                                                     <td class="form-actions">
                                                         <a href="{% url 'facilityFormSettings' x.id 'facID' 'none' %}"><button>Form Settings</button></a>
-                                                        <button onclick="open_delete_facForm_modal(this, {{ x.id }})">Delete</button>
+                                                        <button onclick="open_delete_facForm_modal(this, {{ x.id }})">Archive</button>
                                                     </td>
                                                 </tr>
                                             {% endif %}
@@ -70,9 +70,9 @@
                                     <input type="hidden" name="facilityID" value="{{info.0.id}}">
                                     {{packetForm.name}}<input class="add-packet-btn packet-input-button" type="submit" name="newPacket" value="Save">
                                 </form>
-                            {% with facID=forloop.counter %}
+                            
                                 {% for packet in packetData %}
-                                    {% if packet.facilityChoice.facility_name == info.0.facility_name %}
+                                    {% if packet.facilityChoice.facility_name == info.0.facility_name and packet.formList.settings.active %}
                                         {% include 'supervisor/components/facility_delete_modal.html' with packID=forloop.counter %}
                                         {% include 'supervisor/components/facility_packet_modal.html' with packID=forloop.counter|stringformat:'s' facID=facID|stringformat:'s' %}
                                         <div class="packet-box" onclick="show_formsList2(this)" data-clickbox="{{packet.id}}">
@@ -82,9 +82,10 @@
                                                     {% for key, form in packet.formList.formsList.items %}
                                                         {% for x in formSettingsModel %}
                                                             {% if x.id == form.settingsID and form.active and x.settings.active %}
+                                                                {% include 'supervisor/components/facility_packet_form_delete_modal.html' with packID=forloop.counter fsID=x.id %}
                                                                 <li>
-                                                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                                        <span>
+                                                                    <div id="outter-packet-forms-cont-{{packet.id}}-{{x.id}}" style="display: flex; justify-content: space-between; align-items: center;">
+                                                                        <span id="packet-form-label-{{packet.id}}-{{x.id}}">
                                                                             Form {{key}} - {{x.formChoice.header}} - 
                                                                             {% if x.settings.settings.custom_name %}
                                                                                 {{x.settings.settings.custom_name}}
@@ -92,11 +93,9 @@
                                                                                 {{x.formChoice.title}}
                                                                             {% endif %}
                                                                         </span>
-                                                                        <span class="form-actions" style="width: 172px;">
-                                                                            <a href="{% url 'facilityFormSettings' form.settingsID packet.id key %}">
-                                                                                <button onclick="event.stopPropagation()">Change Label</button>
-                                                                            </a>
-                                                                            <button onclick="event.stopPropagation(); open_delete_facForm_modal(this, {{ forloop.counter }})">Delete</button>
+                                                                        <span class="form-actions" style="width: 180px;">
+                                                                            <button type="button" id="change-label-btn-{{packet.id}}-{{x.id}}" onclick="event.stopPropagation(); changePacketFormLabel({{packet.id}}, {{x.id}});">Change Label</button>
+                                                                            <button type="button" id="delete-packet-btn-{{packet.id}}-{{x.id}}"onclick="event.stopPropagation(); openDeletePacketModal(this, {{ x.id }});">Remove</button>
                                                                         </span>
                                                                     </div>
                                                                 </li>
@@ -108,7 +107,7 @@
                                         </div>
                                     {% endif %}
                                 {% endfor %}
-                            {% endwith %}                
+                                       
                         </div>
                     </div>
                 {% endfor %}

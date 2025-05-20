@@ -2806,12 +2806,7 @@ class company_Update_form(ModelForm):
                 raise ValidationError("Image is too large. Maximum size is 512x512 pixels.")
 
         return image
-        
-class facility_forms_form(ModelForm):
-    class Meta:
-        model = facility_forms_model
-        fields = ('__all__')
-        
+           
 class formSubmissionRecords_form(ModelForm):
     class Meta:
         model = formSubmissionRecords_model
@@ -2873,7 +2868,6 @@ class form_settings_form(ModelForm):
         widgets = {
             'facilityChoice': forms.Select(attrs={}),
             'formChoice': forms.Select(attrs={}),
-            'packetChoice': forms.Select(attrs={}),
             'settings': forms.TextInput(),
         }
 

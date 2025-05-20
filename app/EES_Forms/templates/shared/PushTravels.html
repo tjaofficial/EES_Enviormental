@@ -70,9 +70,11 @@
             </table>
         </div>
         <br>
-        <a href="shared/forms/daily/formA5/new" >
-            <div style='background-color: #b4b4b4;padding: 15px;font-size: 1.5rem;border: black 2px solid;width: 279px;border-radius: 47px;box-shadow: 3px 3px 7px 0px;margin: auto;margin-top: 15px;margin-bottom: 15px;'>Submit Missing Data</div>
-        </a>
+        {% if unlock %}
+            <a href="shared/forms/daily/formA5/new" >
+                <div style='background-color: #b4b4b4;padding: 15px;font-size: 1.5rem;border: black 2px solid;width: 279px;border-radius: 47px;box-shadow: 3px 3px 7px 0px;margin: auto;margin-top: 15px;margin-bottom: 15px;'>Submit Missing Data</div>
+            </a>
+        {% endif %}
         <!--<div style='background-color: #253544;box-shadow: #0000007d 4px 7px 12px 3px;margin: 2rem;padding:1rem;border-radius: 1rem;'>
             <div style='height: 300px;width: 41rem;margin: auto;background-color: #dfe5e9;border-radius: 1rem;'>
                 Please Select a Form

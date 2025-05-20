@@ -4,16 +4,15 @@
     <div id="cancelReg" class="modal-content">
         <span onclick="exit_modal({{packID}}, 'delete')" class="closeAdd">&times;</span>
         <div class='modalHeader'>
-            <h1>Delete <span class="registerName">{{packet.name}}</span>?</h1>
+            <h1>Archive <span class="registerName">{{packet.name}}</span>?</h1>
         </div>
         <div class='modalContent'>
             <form action="" method="POST">
                 {% csrf_token %}
                 <div style="color:black;text-align:justify;">
-                    Are you sure you would like to delete the {{packet.name}}? 
-                    Deleting this packet will permanentely delete the packet 
-                    from the database but will NOT delete any of the forms 
-                    added to the packet.
+                    Are you sure you would like to archive the {{packet.name}}? 
+                    Archiving this packet will NOT delete any of the forms 
+                    currently within the packet.
                     <br><br>
                     <p>Please type "delete" below and confirm</p><br>
                     <input id="deletePacket{{packID}}" oninput="checkDeletePacket(this, {{packID}}, 'p')" type="text" name="theTextSubmitted" style="width: 250px;" required/>

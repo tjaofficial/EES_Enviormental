@@ -5492,21 +5492,6 @@ class signature_model(models.Model):
     def __str__(self):
         return str(self.sign_date)
     
-class facility_forms_model(models.Model):
-    facilityChoice = models.OneToOneField(
-        facility_model,
-        on_delete=models.CASCADE, 
-        null=True,
-        related_name='facility_forms'
-    )
-    formData = models.CharField(
-        max_length=10000,
-        blank=True,
-        null=True
-    )
-    def __str__(self):
-        return f"Record of forms used in: {self.facilityChoice}"
-    
 class spill_kit_inventory_model(models.Model):
     date = models.DateField(auto_now=False, auto_now_add=False)
     inspector = models.CharField(max_length=40)

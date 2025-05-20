@@ -22,10 +22,12 @@ lock = login_required(login_url='Login')
 
     
 class PageNumCanvas(canvas.Canvas):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, form_label=None, fs_id=None, **kwargs):
         #Constructor
         canvas.Canvas.__init__(self, *args, **kwargs)
         self.pages = []
+        self.form_label = form_label
+        self.fs_id = fs_id
     #----------------------------------------------------------------------
     def showPage(self):
         #On a page break, add information to the list
@@ -46,6 +48,11 @@ class PageNumCanvas(canvas.Canvas):
         page = "Page %s of %s" % (self._pageNumber, page_count)
         self.setFont("Helvetica", 9)
         self.drawRightString(200*mm, 10*mm, page)
+
+        # Center bottom: MethodPlus info
+        if self.form_label and self.fs_id:
+            footer_text = f"MethodPlus+: Form {self.form_label} (fsID: {self.fs_id})"
+            self.drawCentredString(105 * mm, 10 * mm, footer_text)
       
 @lock
 def form_PDF(request, type, formGroup, formIdentity, formDate):
@@ -98,6 +105,7 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
     elems = []
     for fsIDPackage in formsBeingUsed:
         fsEntry = fsIDPackage[1]
+        footerFsID = fsEntry.id
         packetID = fsIDPackage[0]
         formID = int(fsEntry.formChoice.form)
         formInformation = fsEntry.formChoice
@@ -116,6 +124,7 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
             # else:
         else:
             formLabel = packetID
+        footerLabel = formLabel
         print(f"The label for this instance of form {formID} is: {formLabel}")
         try:
             formModel = apps.get_model('EES_Forms', formModelName)
@@ -315,7 +324,12 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
     print("_________________________________")
     print('Finished creating PDFs...')      
     try:
-        pdf.build(elems, canvasmaker=PageNumCanvas)
+        pdf_canvas = PageNumCanvas
+
+        pdf.build(
+            elems, 
+            canvasmaker=lambda *args, **kwargs: pdf_canvas(*args, form_label=footerLabel, fs_id=footerFsID, **kwargs)
+        )
             # get buffer
         stream.seek(0)
         pdf_buffer = stream.getbuffer()

@@ -51,7 +51,10 @@ def facilityList(request):
             print('delete-packet')
             packToArchive = packetData.get(id=answer['packID'])
             print(packToArchive)
-            packToArchive['settings']['active'] = False
+            packToArchive.formList['settings']['active'] = False
+            for packForm in packToArchive.formList["formsList"]:
+                packToArchive.formList["formsList"][packForm]['active'] = False
+            packToArchive.save()
             print("ARCHIVED PACKET")
             return redirect(facilityList)
         elif 'facForm_delete' in answer.keys():
@@ -70,6 +73,22 @@ def facilityList(request):
             formToArchive = formSettingsModelOG.get(id=fsID)
             formToArchive.settings['active'] = False
             formToArchive.save()
+            return redirect(facilityList)
+        elif 'pacForm_delete' in answer.keys():
+            fsIDDelte = answer['pacForm_delete'][14:]
+            fsID = answer[f'facFormID{fsIDDelte}']
+            pacID = answer[f'pacID{fsIDDelte}']
+            print(f"This is the pacID {pacID}")
+            #-----Archives selected form from all packets-----
+            pac = packetData.get(id=pacID)
+            for setList in pac.formList["formsList"]:
+                print(fsID)
+                print(pac.formList["formsList"][setList]['settingsID'])
+                if int(fsID) == pac.formList["formsList"][setList]['settingsID']:
+                    print('check 2')
+                    pac.formList["formsList"][setList]['active'] = False
+                    finalArchive = pac
+                    finalArchive.save()
             return redirect(facilityList)
         elif 'packet_update' in answer.keys():
             #receiving fsID and packetID in format of "27-6"
@@ -387,3 +406,28 @@ def Add_Forms(request):
         'pageData': pageData,
         'query': q
     })
+
+@lock
+@group_required(SUPER_VAR)
+def update_packet_form_label(request):
+    data = json.loads(request.body)
+    packetID = data.get("packet_ID")
+    fsID = data.get("fs_ID")
+    new_label = data.get("newLabel")
+    packetSelect = the_packets_model.objects.get(id=packetID)
+    fsSelect = form_settings_model.objects.get(id=fsID)
+    
+    for key, item in packetSelect.formList['formsList'].items():
+        if item['settingsID'] == int(fsID):
+            packetSelect.formList['formsList'][new_label] = packetSelect.formList['formsList'].pop(key)
+            break
+    fsSelect.settings['packets'][str(packetID)] = new_label
+    
+    packetSelect.save()
+    fsSelect.save()
+    
+    return JsonResponse({"success": True, "new_label": new_label})
+
+
+
+
