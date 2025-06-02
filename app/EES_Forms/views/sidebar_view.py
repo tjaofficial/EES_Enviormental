@@ -256,7 +256,7 @@ def archive_view(request):
     archiveMonth_query = request.GET.get('archiveMonth')
     archiveDate_query = request.GET.get('archiveDate')
     formSettingsModel = form_settings_model.objects.filter(facilityChoice=facility, settings__active=True)
-    
+    print(formSettingsModel)
     def getFsSearchID(itemSearched, fsModel):
         if itemSearched != '' and itemSearched is not None and fsModel.exists():
             fsList = []
@@ -557,10 +557,7 @@ def search_forms_view(request, facility, access_page):
     if request.method == "POST":
         print('found it----------------')
         passedData = request.POST
-        if 'searched' in passedData.keys():
-            searchedText = passedData['searched']
-        else:
-            searchedText = False
+        searchedText = passedData['searched'] if 'searched' in passedData.keys() else False
         database = ''
         database2 = ''
         att_check = ''
@@ -568,39 +565,12 @@ def search_forms_view(request, facility, access_page):
         weekend = False
         
         if searchedText:
-            form_list = formSettingsModel.filter(Q(formChoice__form__icontains=searchedText) | Q(formChoice__frequency__icontains=searchedText) | Q(formChoice__title__icontains=searchedText)).order_by('id')
-            print(form_list)
-            forms = []
-            # you can optimaze and get rid of this
-            for settignsEntry in form_list:
-                forms.append(settignsEntry)
-            #forms.append((facilityForm, settignsEntry))
-            # forms = form_list
+            forms = formSettingsModel.filter(Q(formChoice__form__icontains=searchedText) | Q(formChoice__frequency__icontains=searchedText) | Q(formChoice__title__icontains=searchedText)).order_by('id')
             print(forms)
             letterForms = []
             for x in forms:
-                if x.formChoice.id not in {26,27}:
-                    modelTry1 = 'form' + x.formChoice.form.replace('-','') + '_model'
-                    modelTry2 = x.formChoice.link + '_model'
-                else:
-                    modelTry1 = x.formChoice.form.replace(' ', '_').lower() + '_model'
-                    modelTry2 = x.formChoice.link + '_model'
-                try:
-                    chk_database = apps.get_model('EES_Forms', modelTry1).objects.count()
-                    newModelName = True
-                except:
-                    chk_database = apps.get_model('EES_Forms', modelTry2).objects.count()
-                    newModelName = False
-                if newModelName:
-                    if x.formChoice.id not in {26,27}:
-                        letterForms.append([x, 'form' + x.formChoice.form.replace('-','') + '_model', x.formChoice])
-                    else:
-                        letterForms.append([x, x.formChoice.form.replace(' ', '_').lower() + '_model', x.formChoice])
-                else:
-                    if x.formChoice.id not in {26,27}:
-                        letterForms.append([x, x.formChoice.link + '_model', x.formChoice])
-                    else:
-                        letterForms.append([x, x.formChoice.link + '_model', x.formChoice])
+                modelName = f'form{x.formChoice.form}_model'
+                letterForms.append([x, modelName, x.formChoice])
         else:
             messages.error(request,"Please enter a form 'Name' or 'Label' to search.")
             return redirect('archive', facility)

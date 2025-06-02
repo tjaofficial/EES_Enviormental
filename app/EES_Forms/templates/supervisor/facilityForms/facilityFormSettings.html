@@ -12,10 +12,10 @@
                 <div>
                     {% if packetID != 'facID' %}Change Label: <input type="text" name="newLabel" value="{{formLabel}}"><br>{% endif %}
                     Form Description: {{formData.header}} - {{formData.title}}<br>
-                    Form ID: {{formData.form}}
+                    Form ID: {{formID}}
                 </div><br>        
                 <h4>Form Settings</h4>
-                {% include 'supervisor/components/form_settings_insert.html' with formID=formID count="" %}
+                {% include 'supervisor/components/form_settings_insert.html' with formID=formID count="" selector="single-form"%}
                 {% include 'shared/components/submitButton.html' with label='update' %}
             </form>
         </div>

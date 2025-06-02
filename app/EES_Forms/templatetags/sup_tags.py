@@ -52,3 +52,8 @@ def total_active_packet_forms(formsList):
     print(newList)
     total_forms = len(newList)
     return total_forms
+
+@register.filter
+def get_month_from_date_string(item):
+    month = datetime.datetime.strptime(item, "%Y-%m-%d").month
+    return month

@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.formCont input, .formCont select').forEach((item) =>{
-        item.disabled = true;
+        const formIDGrab = document.querySelector('#formID').dataset.formid;
+        const settingsCont = document.getElementById('settings' + String(formIDGrab));
+        if (!settingsCont.dataset.selector){
+            item.disabled = true;
+        }
     });
 });
 
@@ -9,7 +13,7 @@ toggleSettings = (checkbox) => {
     //console.log(count)
     //console.log('settings' + String(count))
     const settingsCont = document.getElementById('settings' + String(count));
-    const inputs = settingsCont.querySelectorAll('input');
+    const inputs = settingsCont.querySelectorAll('input, select');
     //console.log(settingsCont)
     if (checkbox.checked == true){
         settingsCont.style.display = 'block';

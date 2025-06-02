@@ -56,6 +56,7 @@ urlpatterns = [
     path("facility-select/", views.facility_select_view, name="facilitySelect"),
     path("daily_battery_profile/<str:access_page>/<str:date>", views.daily_battery_profile_view, name="daily_battery_profile"),
     path("personel-signature/",views.signature, name="signature"),
+    path('check-bat-profile/', views.check_bat_profile, name='set_facility'),
     ##---SHARED PAGES-----
     path('archive/', views.archive_view, name='archive'),
     path("corrective-action/search/", views.corrective_action_view, name="Corrective-Action"),
@@ -107,7 +108,7 @@ urlpatterns = [
     path("form/Monthly/23/<int:fsID>/<str:selector>", views.form23, name="form23"),
     path("form/Daily/24/<int:fsID>/<str:selector>/<str:weekend_day>", views.form24, name="form24"),
     path("form/Daily/25/<int:fsID>/<str:selector>/<str:weekend_day>", views.form25, name="form25"),
-    path("form/Monthly/26/inventory/<int:fsID>/<str:month>/<int:skNumber>/<str:selector>", views.form26, name="skInventory"),
+    path("form/Monthly/26/inventory/<int:fsID>/<str:month>/<int:skNumber>/<str:selector>", views.form26, name="form26"),
     path("form/Quarterly/27/<int:fsID>/<str:selector>", views.form27, name="form27"),
     path("form/Monthly/29/<int:fsID>/<str:selector>", views.form29, name="form29"),
     path("form/Weekly/30/<int:fsID>/<str:selector>", views.form30, name="form30"),
@@ -139,7 +140,7 @@ urlpatterns = [
     ##---DATA PAGES-----NOT CHANGED
     path("weekly_forms", views.weekly_forms, name="weekly_forms"),
     path("<str:facility>/pt_mth_input", views.pt_mth_input, name="pt_mth_input"),
-    path("admin_data/<str:facility>", views.admin_data_view, name="admin_data"),
+    path("admin_data", views.admin_data_view, name="admin_data"),
     # path("pdf/<form>/<date>/", views.render_pdf_view, name="formA1_pdf"),
     # path("calendar", views.CalendarView.as_view(), name='calendar'),
     # path('pdf_view', views.render_pdf_view, name="pdf_view"),

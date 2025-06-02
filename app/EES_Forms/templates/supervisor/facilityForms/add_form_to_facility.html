@@ -37,7 +37,7 @@
                         {% for form in pageData %}
                         <tr class="formRows">
                             <td class="rowCheckMark">
-                                <input onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{form.form}}" name="forms{{form.form}}" type="checkbox" value="{{form.form}}">
+                                <input class="formCheckBox" onload="toggleSettings(this)" onclick="toggleSettings(this)" data-count="{{form.form}}" name="forms{{form.form}}" type="checkbox" value="{{form.form}}">
                             </td>
                             <td class="rowFormID">{{form.form}} - </td>
                             <td class="rowFormType">{{form.header}}</td>
@@ -85,34 +85,47 @@
         Object.keys(formTempData).forEach(id => {
             const checkbox = document.querySelector(`input[type='checkbox'][value='${id}']`);
             let saveFormSettings = formTempData[String(id)];
-            //console.log("This is fsID")
-            //console.log(id)
+            console.log("This is fsID")
+            console.log(id)
             //console.log("this is the checkox")
             //console.log(checkbox)
+            console.log(saveFormSettings)
             if (checkbox) {
                 checkbox.checked = true;
                 document.getElementById('settings' + String(id)).style.display = 'block';
                 Object.keys(saveFormSettings).forEach(inputName => {
                     let parsedInputName = `${id}-${inputName}`;
-                    //console.log(parsedInputName)
-
                     let singleInput = document.querySelector(`[name="${parsedInputName}"]`)
-                    //console.log(singleInput)
+                    if (!singleInput) return;
 
-                    singleInput.value = saveFormSettings[inputName];
+                    if (singleInput.type === "checkbox") {
+                        singleInput.checked = saveFormSettings[inputName] === "true";
+                    } else {
+                        singleInput.value = saveFormSettings[inputName];
+                    }
+                    //console.log(document.getElementById("29-input_tag_on").outerHTML);
                 })
 
                 document.querySelectorAll(`[name^="${id}-"]`).forEach(extra => {
                     //console.log(extra)
+                    let nameKey = extra.name.split("-")[1];
                     if (extra.value){
-                        formTempData[String(id)][extra.name.split("-")[1]] = extra.value;
+                        if (extra.type === "checkbox") {
+                            formTempData[String(id)][nameKey] = extra.checked ? "true" : "false";
+                        } else {
+                            formTempData[String(id)][nameKey] = extra.value;
+                        }
                         localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
                     }
                     extra.addEventListener("change", function () {
                         //console.log(this)
                         //console.log("this is the split:")
                         //console.log(this.name.split("-")[1]);
-                        formTempData[String(id)][this.name.split("-")[1]] = this.value;
+                        if (this.type === "checkbox") {
+                            formTempData[String(id)][nameKey] = this.checked ? "true" : "false";
+                        } else {
+                            formTempData[String(id)][nameKey] = this.value;
+                        }
                         //console.log(formTempData)
                         localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
                     })
@@ -122,7 +135,7 @@
         });
     
         // Listen for checkbox changes
-        document.querySelectorAll("input[type='checkbox']").forEach(cb => {
+        document.querySelectorAll(".formCheckBox").forEach(cb => {
             cb.addEventListener("change", function () {
                 listen_to_meta_data(formTempData, this);
             });
@@ -131,23 +144,35 @@
 
         function listen_to_meta_data(formTempData, elem) {
             //console.log(formTempData)
-            const id = elem.value;
+            const id = elem.dataset.count;
             if (elem.checked) {
                 //stored.add(id);
+                console.log(formTempData)
                 formTempData[String(id)] = {};
+                console.log(formTempData)
                 localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData))
                 let extra_data = document.getElementById(`settings${id}`)
                 //console.log(extra_data)
-                document.querySelectorAll(`[name^="${id}-"]`).forEach(extra => {
+                extra_data.querySelectorAll(`[name^="${id}-"]`).forEach(extra => {
                     //console.log(extra)
-                    if (extra.value){
+                    if (extra.type === "checkbox"){
+                        formTempData[String(id)][extra.name.split("-")[1]] = extra.checked ? "true" : "false";
+                    } else if (extra.value){
                         formTempData[String(id)][extra.name.split("-")[1]] = extra.value;
-                        localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
                     }
+                    localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
                     extra.addEventListener("change", function () {
                         //console.log(this)
                         //console.log(this.name.split("-")[1]);
-                        formTempData[String(id)][this.name.split("-")[1]] = this.value;
+                        if (this.type === "checkbox"){
+                            formTempData[String(id)][this.name.split("-")[1]] = extra.checked ? "true" : "false";
+                        } else {
+                            if (this.value){
+                                formTempData[String(id)][this.name.split("-")[1]] = this.value;
+                            } else {
+                                delete formTempData[String(id)][this.name.split("-")[1]];
+                            }
+                        }
                         //console.log(formTempData)
                         localStorage.setItem(CHECKBOX_KEY, JSON.stringify(formTempData));
                     })

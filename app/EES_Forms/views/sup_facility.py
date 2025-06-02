@@ -226,19 +226,13 @@ def facilityForm(request, packet):
     })
     
 @lock
+@group_required(SUPER_VAR) 
 def facility_form_settings(request, fsID, packetID, formLabel):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    if unlock:
-        return redirect('IncompleteForms')
-    if client:
-        userProfile = user_profile_model.objects.get(user=request.user)
-        return redirect('c_dashboard')
     selectedSettings = form_settings_model.objects.get(id=fsID)
-    formData = Forms.objects.get(id=selectedSettings.formChoice.id)
-    #NEEDS A FAIL MESSAGE
-    #fsID = False
-    print(formData.id)
+    formData = selectedSettings.formChoice
+    formID = formData.form
     if packetID[:5] != 'facID':
         packetSettings = the_packets_model.objects.get(id=packetID)
         print('check 2')
@@ -255,53 +249,49 @@ def facility_form_settings(request, fsID, packetID, formLabel):
                 
     formSettings = selectedSettings.settings
     if request.method == "POST":
-        if 'facilitySelect' in request.POST.keys():
-            return redirect('sup_dashboard', request.POST['facilitySelect'])
+        copyPOST = request.POST.copy()
+        copyPOST['facilityChoice'] = selectedSettings.facilityChoice
+        copyPOST['formChoice'] = selectedSettings.formChoice
+        copyPOST['subChoice'] = selectedSettings.subChoice
+        keysList = []
+        for inputs in request.POST.keys():
+            keysList.append(inputs)
+        print("--------------------------")
+        print(keysList)
+        # chek this utils
+        newLabel, settingsDict = formSettingsFunc(keysList, request.POST, int(formID))
+        print(settingsDict)
+        print(f"This is the new label: {newLabel}")
+        settingsChange = selectedSettings.settings
+        settingsChange['settings'] = settingsDict
+        if newLabel:
+            settingsChange['packets'][str(packetID)] = newLabel
+        copyPOST['settings'] = settingsChange
+        formWData = form_settings_form(copyPOST, instance=selectedSettings)
+        if formWData.is_valid():
+            print('it fucking saved')
+            A = formWData.save()
+            if packetSettings:
+                print('check 7')
+                packetInstance = packetSettings
+                packetInstance.formList['formsList'][newLabel] = packetInstance.formList['formsList'].pop(formLabel)
+                packetInstance.save()
+            #else:
+            #     packetInstance = packetSettings
+            #     packetInstance.formList['formsList'][newLabel] = {"settingsID": A.id}
+            #     packetInstance.save()
+            messages.success(request,"The form settings were updated.")
+            return redirect('facilityList')
+        #     if packetSettings:
+        #         newLabel = request.POST['newLabel']
+        #         if newLabel not in [formLabel, ""]:
+        #             packetSettings.formList['formsList'][newLabel] = packetSettings.formList['formsList'][formLabel]
+        #             del packetSettings.formList['formsList'][formLabel]
+        #             A = packetSettings
+        #             A.save()
+                
         else:
-            copyPOST = request.POST.copy()
-            copyPOST['facilityChoice'] = selectedSettings.facilityChoice
-            copyPOST['formChoice'] = selectedSettings.formChoice
-            copyPOST['subChoice'] = selectedSettings.subChoice
-            keysList = []
-            for inputs in request.POST.keys():
-                keysList.append(inputs)
-            print("--------------------------")
-            print(keysList)
-            # chek this utils
-            newLabel, settingsDict = formSettingsFunc(keysList, request.POST, formData.id)
-            print(f"This is the new label: {newLabel}")
-            settingsChange = selectedSettings.settings
-            settingsChange['settings'] = settingsDict
-            if newLabel:
-                settingsChange['packets'][str(packetID)] = newLabel
-            copyPOST['settings'] = settingsChange
-            formWData = form_settings_form(copyPOST, instance=selectedSettings)
-            if formWData.is_valid():
-                print('it fucking saved')
-                A = formWData.save()
-                if packetSettings:
-                    print('check 7')
-                    packetInstance = packetSettings
-                    packetInstance.formList['formsList'][newLabel] = packetInstance.formList['formsList'].pop(formLabel)
-                    packetInstance.save()
-                #else:
-                #     packetInstance = packetSettings
-                #     packetInstance.formList['formsList'][newLabel] = {"settingsID": A.id}
-                #     packetInstance.save()
-                messages.success(request,"The form settings were updated.")
-                return redirect('facilityList')
-            #     if packetSettings:
-            #         newLabel = request.POST['newLabel']
-            #         if newLabel not in [formLabel, ""]:
-            #             packetSettings.formList['formsList'][newLabel] = packetSettings.formList['formsList'][formLabel]
-            #             del packetSettings.formList['formsList'][formLabel]
-            #             A = packetSettings
-            #             A.save()
-                    
-            else:
-                messages.error(request,"Check your inputs and make sure informationw as entered in correctly.")
-            
-    
+            messages.error(request,"Check your inputs and make sure informationw as entered in correctly.")
     return render (request, 'supervisor/facilityForms/facilityFormSettings.html', {
         'notifs': notifs,
         'unlock': unlock, 
@@ -309,7 +299,7 @@ def facility_form_settings(request, fsID, packetID, formLabel):
         'supervisor': supervisor, 
         'formLabel': formLabel,
         'formData': formData,
-        'formID': str(formData.id),
+        'formID': str(formID),
         'formSettings': formSettings,
         'packetSettings': packetSettings,
         'packetID': packetID
@@ -379,7 +369,7 @@ def Add_Forms(request):
             if not likeFormsList:
                 newSettings = form_settings_model(
                     facilityChoice = facilitySelect,
-                    formChoice = formList.get(id=formID),
+                    formChoice = formList.get(form=formID),
                     settings = settingsDict,
                 )
                 newSub = formSubmissionRecords_model(

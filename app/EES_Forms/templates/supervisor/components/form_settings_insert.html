@@ -3,7 +3,8 @@
 <link href="{% static 'ees_forms/style/forms_settings.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/secondary_form.css' %}" rel="stylesheet" />
 {% comment %} {% with isBreak=1 %}{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{ isBreak|add:'1' }}{% endif %}{% endfor %}{% if isBreak == 2 %}display:block;{% else %}display:none;{% endif %}{% endwith %} {% endcomment %}
-<div id="settings{{formID}}" class="formCont" style="{% if form_add == 'true' %}margin-left: 32px;display:none;{% endif %}">
+<div id="formID" style="display: none;" data-formid="{{formID}}"></div>
+<div id="settings{{formID}}" class="formCont" style="{% if form_add == 'true' %}margin-left: 32px;display:none;{% endif %}" data-selector="{{selector}}">
     <div class="innerFormCont">
         {% if formID == "1" %}
             <li class="form-line">    
@@ -284,6 +285,78 @@
             <li class="form-line">
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
+        {% elif formID == "29" %}
+            <li class="form-line">
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+            </li>
+            <li class="form-line" id="spill-kit-input-options" data-count={{formID}}>
+                Inputs for Spill Kits?<br>
+                <label for="{{formID}}-input_tag_on">
+                    <input type="checkbox" id="{{formID}}-input_tag_on" name="{{formID}}-input_tag_on" {% if formSettings.settings.input_tag_on %}checked{% endif %}>
+                    Tag On
+                </label>
+                <label for="{{formID}}-input_tag_id">
+                    <input type="checkbox" id="{{formID}}-input_tag_id" name="{{formID}}-input_tag_id" {% if formSettings.settings.input_tag_id %}checked{% endif %}>
+                    Tag ID
+                </label>
+                <label for="{{formID}}-input_complete">
+                    <input type="checkbox" id="{{formID}}-input_complete" name="{{formID}}-input_complete" {% if formSettings.settings.input_complete %}checked{% endif %}>
+                    Complete Kit
+                </label>
+                <label for="{{formID}}-input_inventory">
+                    <input type="checkbox" id="{{formID}}-input_inventory" name="{{formID}}-input_inventory" {% if formSettings.settings.input_inventory %}checked{% endif %}>
+                    Inventory Sheet
+                </label>
+                <label for="{{formID}}-input_comments">
+                    <input type="checkbox" id="{{formID}}-input_comments" name="{{formID}}-input_comments" {% if formSettings.settings.input_comments %}checked{% endif %}>
+                    Comments
+                </label>
+            </li>
+            <li class="form-line" id="areaNumberCont" data-count={{formID}}>
+                Amount of Spill Kits onsite? <input type="number" id="{{formID}}-number_of_areas" name="{{formID}}-number_of_areas" class="numb-of" min="1" value="{% if formSettings.settings.number_of_areas != 0 %}{{formSettings.settings.number_of_areas}}{% endif %}">
+            </li>
+            <li class="form-line">
+                Spill Kit Labels: 
+                <select name="{{formID}}-label_style" onchange="displaySpillKits(this, {{formID}})">
+                    <option value="">------</option>
+                    <option value="Numbered" {% if formSettings.settings.label_style == "Numbered" %}selected{% endif %}>Numbered</option>
+                    <option value="Lettered" {% if formSettings.settings.label_style == "Lettered" %}selected{% endif %}>Lettered</option>
+                    <option value="Custom" {% if formSettings.settings.label_style == "Custom" %}selected{% endif %}>Custom</option>
+                </select>
+            </li>
+            <li class="form-line">
+                <div id="{{formID}}-areaNames" style="display: block;"></div>
+            </li>
+            <script>
+                function displaySpillKits(elem, count){
+                    console.log(document.getElementById(`${count}-input_tag_on`).value)
+                    const htmlDIV = document.getElementById(String(count)+"-areaNames"),
+                    label_style = elem.value,
+                    areas = document.getElementById(`${count}-number_of_areas`).value;
+                    console.log(elem.value)
+                    if (label_style == 'Custom'){
+                        let buildHTML = "";
+                        for(i=0; i<areas; i++){
+                            buildHTML += `<div id="spill-kit-labels" style="padding-bottom:25px;">`
+                            buildHTML += `Label for Spill Kit ${i+1}: <input class='input_text' name='${String(count)}-area${i+1}' type='text' required value=""><br>`
+                            buildHTML += `</div>`
+                        } 
+                        htmlDIV.innerHTML = buildHTML;
+                        htmlDIV.style.display = 'block';
+                    } else {
+                        htmlDIV.innerHTML = "";
+                        htmlDIV.style.display = 'none';
+                    }
+                }
+                window.onload = function initial_form29() {
+                    let settingsDict = JSON.parse("{{formSettings.settings|escapejs}}".replaceAll("'", '"'))
+                    const formIDjs = String("{{formData.form}}")
+                    if (document.getElementById('areaNumberCont').childNodes[1].value > 0 && document.getElementById('areaNumberCont').childNodes[1].value) {
+                        let areaElem = document.getElementById('areaNumberCont');
+                        displaySpillKits(document.getElementById(`${count}-number_of_areas`), {{formID}})
+                    }
+                }
+            </script>
         {% elif formID == "30" %}
             <li class="form-line">
                 Custom title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} 

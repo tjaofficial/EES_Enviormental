@@ -9,7 +9,8 @@ lock = login_required(login_url='Login')
 
 
 @lock
-def admin_data_view(request, facility):
+def admin_data_view(request):
+    facility = getattr(request, 'facility', None)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     profile = user_profile_model.objects.all()
     today = datetime.date.today()

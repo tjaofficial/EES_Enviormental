@@ -1,0 +1,11 @@
+
+#spill-kit-input-options input{
+    margin:5px 0px 5px 30px;
+}
+.numb-of {
+    width: 40px;
+    margin-right: 5px;
+}
+#spill-kit-labels input[type="text"] {
+    width: 60px;
+}

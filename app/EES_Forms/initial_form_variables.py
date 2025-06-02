@@ -9,25 +9,27 @@ from django.contrib import messages # type: ignore
 
 def initiate_form_variables(fsID, requestUser, selector):
     fsIDSelect = form_settings_model.objects.get(id=int(fsID))
-    facilityName = fsIDSelect.facilityChoice.facility_name
+    facility = fsIDSelect.facilityChoice
+    facilityName = facility.facility_name
     freq = getFacSettingsInfo(fsID)
     formName = freq.formChoice.form
     notifs = checkIfFacilitySelected(requestUser)
     unlock, client, supervisor = setUnlockClientSupervisor(requestUser)
     now = datetime.now().date()
-    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=facilityName).order_by('-date_save')
+    print(f'This is the date right now:{now}')
+    daily_prof = daily_battery_profile_model.objects.filter(facilityChoice=facility).order_by('-date_save')
     options = freq.facilityChoice
     full_name = requestUser.get_full_name()
     picker = issueForm_picker(facilityName, selector, fsID)
     try:
-        selectedModel = apps.get_model('EES_Forms', freq.formChoice.link + "_model")
+        selectedModel = apps.get_model('EES_Forms', fsIDSelect.formChoice.link + "_model")
         # print(selectedModel.objects.all())
         try:
-            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facilityName).order_by('-date')
+            submitted_forms = selectedModel.objects.filter(formSettings=fsIDSelect).order_by('-date')
             #print("CHECK submitted forms")
             # print(submitted_forms)
         except:
-            submitted_forms = selectedModel.objects.filter(formSettings__facilityChoice__facility_name=facilityName).order_by('-week_start')
+            submitted_forms = selectedModel.objects.filter(formSettings=fsIDSelect).order_by('-week_start')
     except:
         submitted_forms = False
     
@@ -42,7 +44,7 @@ def existing_or_new_form(todays_log, selector, submitted_forms, now, facility, r
     print(selector)
     if selector not in ('form', 'edit'):
         try:
-            # print(submitted_forms)
+            print(submitted_forms)
             form_query = submitted_forms.filter(date=datetime.strptime(selector, "%Y-%m-%d").date(), formSettings__id=fsID).order_by('-date')
             print(f"The query filters by date", form_query)
         except:

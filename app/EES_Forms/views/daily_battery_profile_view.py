@@ -94,6 +94,7 @@ def facility_select_view(request):
         print("did it make it here?")
         answer = request.POST
         daily_prof = daily_battery_profile_model.objects.filter(facilityChoice__facility_name=answer['facility'], date_save=now).order_by('-date_save')
+        print(daily_prof)
         batterySelect = facility_model.objects.get(facility_name=answer['facility'])
         if batterySelect.is_battery == 'Yes' and batterySelect.dashboard == 'battery':
             print('CHECK 02')

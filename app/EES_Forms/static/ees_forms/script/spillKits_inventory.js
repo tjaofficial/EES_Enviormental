@@ -7,11 +7,11 @@ function selectType(){
         var skType = document.getElementById("skTypeDiv").firstChild.nodeValue;
     }
     console.log(skType);
-     if (skType == "universal drum"){
-        document.getElementById("table2").style.visibility = "visible";
-        document.getElementById("table1").style.visibility = "collapse";
+    if (skType == "universal drum"){
+        document.getElementById("table2").style.display = "block";
+        document.getElementById("table1").style.display = "none";
         if (selector == "form" || selector == "edit") {
-            document.getElementById("submitHere").style.visibility = "visible";
+            document.getElementById("submitHere").style.display = "block";
 
             document.getElementById("t2count1").placeholder = 16;
             document.getElementById("t2count2").placeholder = 10;
@@ -24,10 +24,10 @@ function selectType(){
             document.getElementById("t2count9").placeholder = 6;
         }
     } else if (skType == "oil XL cart"){
-        document.getElementById("table1").style.visibility = "visible";
-        document.getElementById("table2").style.visibility = "collapse";
+        document.getElementById("table1").style.display = "block";
+        document.getElementById("table2").style.display = "none";
         if (selector == "form" || selector == "edit") {
-            document.getElementById("submitHere").style.visibility = "visible";
+            document.getElementById("submitHere").style.display = "block";
 
             document.getElementById("t1count1").placeholder = 2;
             document.getElementById("t1count2").placeholder = 3;
@@ -43,9 +43,9 @@ function selectType(){
         
     } else {
         if (selector == "form" || selector == "edit") {
-            document.getElementById("table1").style.visibility = "collapse";
-            document.getElementById("table2").style.visibility = "collapse";
-            document.getElementById("submitHere").style.visibility = "collapse";
+            document.getElementById("table1").style.display = "none";
+            document.getElementById("table2").style.display = "none";
+            document.getElementById("submitHere").style.display = "none";
         }
      }
 }

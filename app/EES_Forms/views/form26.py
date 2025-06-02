@@ -14,7 +14,7 @@ def form26(request, fsID, month, skNumber, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, selector)
     facility = form_variables['facilityName']
-    print(form_variables['freq'])
+    form29_fsID = request.session.get('form29_fsID')
     attachedTo = form29_model.objects.filter(month=month)
     formAttached = attachedTo[0] if len(attachedTo) > 0 else "form"
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
@@ -134,7 +134,9 @@ def form26(request, fsID, month, skNumber, selector):
         else:
             form = form26_form(copyData, form_settings=form_settings)
     # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
-        exportVariables = (request, selector, facility, database_form, fsID)
+        exportVariables = (request, selector, facility, database_form, fsID, form29_fsID)
+        print(form_variables)
+        notif = form_variables['notifs']
         return redirect(*template_validate_save(form, form_variables, *exportVariables))
     return render(request, "shared/forms/monthly/form26.html",{
         'full_name': form_variables['full_name'],
@@ -152,4 +154,5 @@ def form26(request, fsID, month, skNumber, selector):
         'fsID': fsID,
         'notifs': form_variables['notifs'],
         'freq': form_variables['freq'],
+        'form29_fsID': form29_fsID
     })

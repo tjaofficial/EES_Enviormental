@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load sup_tags %}{% load tz %}
 <link href="{% static 'ees_forms/style/darkModeSlider.css' %}" rel="stylesheet">
 <link href="{% static 'ees_forms/style/headerDropDown.css' %}" rel="stylesheet">
 {% if colorMode %}
@@ -102,7 +102,7 @@
             <div id="facilityID_{{fac.facName.id}}" class="methodPlusBlue" style="padding: 3px 21px; font-size: 14px; font-weight: bold; color: white;">{{key}}</div>
             {% if fac.notifData.unRead|length > 0 %}
                 {% for notif in fac.notifData.unRead %}
-                <a href="{% if notif.formSettings.formChoice.link == 'form24' or notif.formSettings.formChoice.link == 'form25'%}{% url notif.formSettings.formChoice.link notif.formData.settingsID notif.formData.date notif.formData.weekend|lower %}{% else %}{% url notif.formSettings.formChoice.link notif.formData.settingsID notif.formData.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.id}}">  
+                <a href="{% if notif.formSettings.formChoice.link == 'form24' or notif.formSettings.formChoice.link == 'form25'%}{% url notif.formSettings.formChoice.link notif.formData.settingsID notif.formData.date notif.formData.weekend|lower %}{% elif notif.formSettings.formChoice.link == 'form26' %}{% url notif.formSettings.formChoice.link notif.formSettings.id notif.formData.date|get_month_from_date_string notif.formData.spillKitID notif.formData.date %}{% else %}{% url notif.formSettings.formChoice.link notif.formData.settingsID notif.formData.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.id}}">  
                     <div id="notifColor" class="notifCont" style="{% if notif.header == 'compliance' %}{% if not notif.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.hovered %}background-color: #ffff00ad;{% endif %}">
                         <div class="notifHeader">
                             {{notif.get_header_display}}<br>
@@ -112,7 +112,7 @@
                             {{notif.notes}}{{notif.body}}
                         </div>
                         <div class='notifTimeMarker'>
-                            {{notif.created_at}}
+                            {{notif.created_at|localtime}}
                         </div>
                     </div>
                 </a>

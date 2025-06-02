@@ -15,6 +15,7 @@ def formSettingsFunc(keysList, requestPost, formID):
     print(keysList)
     newLabel = requestPost['newLabel'] if "newLabel" in requestPost else False
     print(newLabel)
+    print(formID)
     for key, value in requestPost.items():
         defaultDictUpdate = False
         if key not in ['csrfmiddlewaretoken', 'update', 'newLabel'] and key in keysList:
@@ -52,6 +53,12 @@ def formSettingsFunc(keysList, requestPost, formID):
                 elif mainLabel[:3] == 'cat':
                     if mainLabel not in settings.keys():
                         settings[mainLabel] = requestPost[key]
+            elif formID == 29:
+                print("made it")
+                if mainLabel in ['custom_name','number_of_areas','label_style']:
+                    defaultDictUpdate = True
+                elif mainLabel in ['input_comments', 'input_complete','input_inventory','input_tag_id', 'input_tag_on']:
+                    settings[mainLabel] = True
             elif formID == 20:
                 if mainLabel == 'custom_name':
                     defaultDictUpdate = True

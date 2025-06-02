@@ -12,7 +12,6 @@ admin.site.register(Forms)
 admin.site.register(subscription)
 admin.site.register(daily_battery_profile_model)
 admin.site.register(user_profile_model)
-admin.site.register(pt_admin1_model)
 admin.site.register(form1_model)
 admin.site.register(form2_model)
 admin.site.register(form3_model)
@@ -62,6 +61,7 @@ admin.site.register(form_settings_model)
 admin.site.register(account_reactivation_model)
 admin.site.register(form30_model)
 admin.site.register(form31_model)
+admin.site.register(SpillKit_model)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']

@@ -152,11 +152,6 @@ class user_profile_form(forms.ModelForm):
 
         return phone
 
-class pt_admin1_form(ModelForm):
-    class Meta:
-        model = pt_admin1_model
-        fields = ('add_days', 'days_left')
-
 class bat_info_form(ModelForm):
     class Meta:
         model = facility_model
@@ -2272,7 +2267,7 @@ class form26_form(ModelForm):
         form_settings = kwargs.pop("form_settings", None)
 
         if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+            raise ValueError("Error: `form_settings` must be provided when initializing form26_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
@@ -2486,10 +2481,21 @@ class form29_form(ModelForm):
         form_settings = kwargs.pop("form_settings", None)
 
         if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
+            raise ValueError("Error: `form_settings` must be provided when initializing form29_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
 
+class SpillKit_form(forms.ModelForm):
+    class Meta:
+        model = SpillKit_model
+        fields = ['label', 'tag_on', 'serial', 'complete', 'report', 'comment']
+        widgets= {
+            'tag_on' : forms.Select(attrs={'oninput': 'rows_true()', 'onchange': 'showInventorySK(this)', 'style':'width: 50px;'}),
+            'serial' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 70px; text-align: center;'}),
+            'complete' : forms.Select(attrs={'oninput': 'rows_true()', 'style':'width: 50px;'}),
+            'report' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;'}),
+            'comment' : forms.TextInput(attrs={'oninput': 'rows_true()', 'type':'text', 'style':'width: 130px; text-align: center;'}),
+        }
 class form30_form(forms.ModelForm):
     class Meta:
         model = form30_model

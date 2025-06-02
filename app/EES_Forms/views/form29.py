@@ -2,10 +2,11 @@ from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
-from ..models import form_settings_model, form29_model, form26_model
-from ..forms import form29_form
+from ..models import form_settings_model, form29_model, form26_model, SpillKit_model
+from ..forms import form29_form, SpillKit_form
 from ..utils.main_utils import createNotification, get_initial_data, stringToDate, updateSubmissionForm
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
+from django.forms import inlineformset_factory # type: ignore
 import calendar
 import json
 from datetime import datetime
@@ -16,7 +17,19 @@ lock = login_required(login_url='Login')
 def form29(request, fsID, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, selector)
-    facility = form_variables['facilityName']
+    request.session['form29_fsID'] = fsID
+    print(f"This si what im looking for: {form_variables['freq'].settings}")
+    facility = getattr(request, 'facility', None)
+    number_of_areas = int(form_variables['freq'].settings['settings']['number_of_areas'])
+    form26_fsID = form_settings_model.objects.get(formChoice__form="26", facilityChoice=facility)
+    print(f"This is the count: {number_of_areas}")
+    SpillKitFormSet = inlineformset_factory(
+        form29_model, 
+        SpillKit_model, 
+        form=SpillKit_form, 
+        extra=number_of_areas,
+        can_delete=False
+    )
     sk_form = form29_form(form_settings=form_variables['freq'])
     month_name = calendar.month_name[form_variables['now'].month]
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
@@ -25,15 +38,15 @@ def form29(request, fsID, selector):
             todays_log = form_variables['daily_prof'][0]
         else:
             batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
-            return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+            return redirect('daily_battery_profile', facility.facility_name, "login", batt_prof_date)
     else:
         todays_log = ""
     # -----SET DECIDING VARIABLES------------
-    more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID) 
+    more_form_variables = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility.facility_name, request, fsID) 
     if isinstance(more_form_variables, HttpResponseRedirect):
         return more_form_variables
     else:
-        data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility, request, fsID)
+        data, existing, search, database_form = existing_or_new_form(todays_log, selector, form_variables['submitted_forms'], form_variables['now'], facility.facility_name, request, fsID)
     # -----SET RESPONSES TO DECIDING VARIABLES------------
     if selector != 'form':
         form_query = form_variables['submitted_forms'].filter(date=datetime.strptime(selector, "%Y-%m-%d").date())
@@ -50,7 +63,7 @@ def form29(request, fsID, selector):
                 existing = True
     else:
         batt_prof_date = str(form_variables['now'].year) + '-' + str(form_variables['now'].month) + '-' + str(form_variables['now'].day)
-        return redirect('daily_battery_profile', facility, "login", batt_prof_date)
+        return redirect('daily_battery_profile', facility.facility_name, "login", batt_prof_date)
 
     iFormList = {}
     if search:
@@ -76,8 +89,17 @@ def form29(request, fsID, selector):
                 'observer': form_variables['full_name'],
                 'date': form_variables['now'],
                 'month': month_name,
+                **{ f"id_sk-0-label{i}": i+1 for i in range(number_of_areas)}
             }
         data = form29_form(initial=initial_data, form_settings=form_variables['freq'])
+        form29_instance = form29_model()
+        formset = SpillKitFormSet(
+            instance=form29_instance,
+            prefix="sk"
+        )
+        for i, form in enumerate(formset.forms):
+            form.fields['label'].initial = f"{i+1}"
+
     # -----IF REQUEST.POST------------
     if request.method == "POST":
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
@@ -94,7 +116,7 @@ def form29(request, fsID, selector):
         else:
             form = form29_form(copyPOST, form_settings=form_settings)
     # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
-        exportVariables = (request, selector, facility, database_form, fsID)
+        exportVariables = (request, selector, facility.facility_name, database_form, fsID)
         return redirect(*template_validate_save(form, form_variables, *exportVariables))
         if form.is_valid():
             form.save()
@@ -115,7 +137,7 @@ def form29(request, fsID, selector):
     return render(request, "shared/forms/monthly/form29.html", {
         'iFormList': iFormList, 
         'month': month, 
-        'facility': facility, 
+        'facility': facility.facility_name, 
         'sk_form': data, 
         'selector': selector, 
         'supervisor': form_variables['supervisor'], 
@@ -126,5 +148,8 @@ def form29(request, fsID, selector):
         'existing': existing,
         'fsID': fsID,
         'notifs': form_variables['notifs'],
-        'freq': form_variables['freq']
+        'freq': form_variables['freq'],
+        'formset': formset,
+        'number_of_areas': number_of_areas,
+        'form26_fsID': form26_fsID.id
     })

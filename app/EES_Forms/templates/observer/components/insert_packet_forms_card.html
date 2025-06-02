@@ -1,16 +1,18 @@
 {% load static %}{% load dashboard_tags %}
 <div>
     {% for form in packet.forms|complete_check:complete %}
-        <a href="{% if form.0.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url form.0.formChoice.link form.0.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url form.0.formChoice.link form.0.id 'form' 'sunday' %}{% endif %}{% else %}{% url form.0.formChoice.link form.0.id 'form' %}{% endif %}">
-            <div class="card_Form" style="margin-left: 50px;">
-                <h3 class="card_Form_letter">{{form.1}}</h3>
-                <div class="card_Form_title">
-                    <h3>{% if form.0.settings.settings.custom_name %}{{form.0.settings.settings.custom_name}}{% else %}{{ form.0.formChoice.title }}{% endif %}</h3>
-                    <h4>{{ form.0.formChoice.frequency }}</h4>
-                </div>
-                <h4 class="card_Form_date">{{form.0.subChoice.dueDate}}</h4>       
-            </div>      
-        </a>
+        {% if form.0.settings.active %}
+            <a href="{% if form.0.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url form.0.formChoice.link form.0.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url form.0.formChoice.link form.0.id 'form' 'sunday' %}{% endif %}{% else %}{% url form.0.formChoice.link form.0.id 'form' %}{% endif %}">
+                <div class="card_Form" style="margin-left: 50px;">
+                    <h3 class="card_Form_letter">{{form.1}}</h3>
+                    <div class="card_Form_title">
+                        <h3>{% if form.0.settings.settings.custom_name %}{{form.0.settings.settings.custom_name}}{% else %}{{ form.0.formChoice.title }}{% endif %}</h3>
+                        <h4>{{ form.0.formChoice.frequency }}</h4>
+                    </div>
+                    <h4 class="card_Form_date">{{form.0.subChoice.dueDate}}</h4>       
+                </div>      
+            </a>
+        {% endif %}
     {% empty %}
         <h2 class="card_empty no_forms"> No Forms </h2>
     {% endfor %} 

@@ -1331,7 +1331,7 @@ def displayNotifications(user, facility):
     #print('-------Notifications have been processed------')
     return {'notifCount': notifCount, 'unRead': unReadNotifs, "read": readNotifs}
 
-def distributeNotifications(facility, request, fsID, date, notifKeywordList, issueID):
+def distributeNotifications(facility, request, fsID, date, notifKeywordList, issueID, savedForm):
     #print(f"Start Notification Process for {facility} fsID {fsID}")
     #print(f"Notifications types: {notifKeywordList}")
     userProf = request.user.user_profile
@@ -1339,7 +1339,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
     companyUsers = user_profile_model.objects.filter(company__company_name=userProf.company.company_name, user__is_active=True)
     #print(f"Users who will be receiving notifications: {companyUsers}")
 
-    def createMethodPlusNotif(notifCategory, sendingUser, receivingUser, date):
+    def createMethodPlusNotif(notifCategory, sendingUser, receivingUser, date, savedForm):
         #print(f"Creating 'Method Plus' Notification for {facility} fsID {fsID}")
         todayName = False
         todayNumb = datetime.date.today().weekday()
@@ -1349,7 +1349,8 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
                     todayName = 'Saturday'
                 else:
                     todayName = 'Sunday'
-            newNotifData = {'settingsID': fsID, 'date': str(date), 'weekend': todayName}
+            print(f'This is the date right now: {date}')
+            newNotifData = {'settingsID': fsID, 'date': str(date), 'weekend': todayName, "spillKitID": savedForm.skID}
             newNote = "Submitted by " + sendingUser.first_name + " " + sendingUser.last_name + ". "
         elif notifCategory in ['deviations', 'compliance']:
             newNotifData = {'settingsID': fsID, 'date': str(date)}
@@ -1379,6 +1380,9 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
     
     def sendMethodPlusNotif(newNotification):
         notifQuery = notifications_model.objects.all()
+        variables = {}
+        variables['notif'] = newNotification
+        variables['facility'] = facility
         if newNotification not in notifQuery:
             newNotification.save()
             #print(f"Notfiication for '{newNotification.header}' has succesfully been created within MethodPlus Database")
@@ -1390,16 +1394,13 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
             if newNotification.formSettings.formChoice.form in ['24', '25']:
                 formModelName = newNotification.formSettings.formChoice.link
                 formModel = apps.get_model('EES_Forms', f"{formModelName}_model")
-                day_select = formModel.objects.get(date=newNotification.created_at).weekend_day
+                variables['day_select'] = formModel.objects.get(date=newNotification.created_at.localtime()).weekend_day
                 #messages.error(request,'ERROR: ID-11850007 Contact Support Team')
-            else:
-                day_select = ''
+            elif newNotification.formSettings.formChoice.form in ['26']:
+                variables['month'] = date.month
+                variables['skNumber'] = savedForm.skID
             
-            notif_html = render_to_string("shared/components/notification_item.html", {
-                "notif": newNotification,
-                "facility": facility,
-                'day_select': day_select
-            })
+            notif_html = render_to_string("shared/components/notification_item.html", variables)
 
             async_to_sync(channel_layer.group_send)(
                 companyParse, {
@@ -1470,7 +1471,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
             userNotifSettings = users.settings['facilities'][str(formSettings.facilityChoice.id)]['notifications']
             for nKey, notifMedium in userNotifSettings[notifCategory].items():
                 if nKey == "methodplus" and notifMedium:
-                    newNotif = createMethodPlusNotif(notifCategory, userProf.user, users, date)
+                    newNotif = createMethodPlusNotif(notifCategory, userProf.user, users, date, savedForm)
                     if setter == 0:
                         newNotifList.append(newNotif)
                     setter += 1
@@ -1482,11 +1483,12 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
     for newNotification in newNotifList:
         sendMethodPlusNotif(newNotification)
 
-def createNotification(facility, request, fsID, date, notifSelector, issueID):
+def createNotification(facility, request, fsID, date, notifSelector, issueID, savedForm):
     #print(f"Start Notification Process for {facility} fsID {fsID}")
     if not isinstance(notifSelector, list):
         notifSelector = [notifSelector]
-    distributeNotifications(facility, request, fsID, date, notifSelector, issueID)
+    savedForm = False if not savedForm else savedForm
+    distributeNotifications(facility, request, fsID, date, notifSelector, issueID, savedForm)
     #print("_________________________________")
     
 def checkIfFacilitySelected(user):
