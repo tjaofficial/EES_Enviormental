@@ -162,6 +162,14 @@ def register_view(request, access_page):
                 profile.user = user
                 profile.company = userCompany
                 profile.settings = setDefaultSettings(profile, request.user.username)
+                for f in sortedFacilityData:
+                    if f.facility_name not in [x['name'] for x in profile.settings['calendar']['calendars']['default']]:
+                        profile.settings["calendar"]['calendars']['default'].append(
+                            {
+                                "name": f.facility_name, 
+                                "color": "#0000ff63"
+                            }
+                        )
                 profile.save()
 
                 group = Group.objects.get(name=profile.position)
@@ -217,6 +225,12 @@ def register_view(request, access_page):
                         A.dashboard = 'default'
                     A.save()
                     for ups in user_profiles.filter(company=A.company).exclude(position=CLIENT_VAR):
+                        ups.settings["calendar"]['calendars']['default'].append(
+                            {
+                                "name": A.facility_name, 
+                                "color": "#0000ff63"
+                            }
+                        )
                         if 'dashboard' in ups.settings.keys():
                             if ups.settings['dashboard']:
                                 ups.settings['dashboard'][str(A.id)] = dashDict
@@ -266,6 +280,13 @@ def register_view(request, access_page):
                 profile.user = user
                 profile.company = userProf.company
                 profile.settings = setDefaultSettings(profile, request.user.username)
+
+                profile.settings["calendar"]['calendars']['default'].append(
+                    {
+                        "name": facility.facility_name, 
+                        "color": "#0000ff63"
+                    }
+                )
                 profile.save()
                 
                 group = Group.objects.get(name=profile.position)

@@ -3984,7 +3984,8 @@ class Event(models.Model):
     calendarChoice = models.CharField(
         max_length=50,
         null=True,
-        blank=True
+        blank=True,
+        default="Personal"
     )
     repeat = models.JSONField(
         default=dict,

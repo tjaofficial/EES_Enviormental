@@ -409,10 +409,10 @@ def registerCompany(request):
                 print('CREATE PAGE TO SHOW POSSIBLE COMPANIES')
             else:
                 print('Did not find duplciates in dataBase, ')
-                companySave = form.save(commit=False)
-                companySave.save()
+                companySave = form.save()
                 userProf.company = companySave
                 userProf.save()
+
                 print("Created and Saved New Company")
                 return redirect('stripe_subscribe')
     return render(request, 'landing/registerCompany.html',{

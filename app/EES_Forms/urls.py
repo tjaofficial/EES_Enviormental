@@ -82,6 +82,8 @@ urlpatterns = [
     path('ajax/sidebar/', views.sidebar_data, name='sidebar_data'),
     path('ajax/header/', views.header_data, name='header_data'),
     path("ajax/notification-count/", views.get_unread_notification_count, name="notification_count"),
+    path("ajax/event-calendar/", views.ajax_calendar, name="ajax_calendar"),
+    path("ajax/events-for-day/", views.events_for_day, name="events_for_day"),
     ##---FORMS
     path("form/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("form/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),

@@ -5,13 +5,15 @@
     <link href="{% static 'calendar/style/cal_sidebar.css' %}" rel="stylesheet">
     <link href="{% static 'ees_forms/style/primaryCard.css' %}" rel="stylesheet">
     <script defer src="{% static 'calendar/script/calendar.js' %}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 {% endblock %}
 {% block list %}
     <div>
         {% include "shared/components/backArrow.html" %}
     </div>
     <div class="mainCont" style="max-width:none; display: flex; gap: 10px;">
-        <div class="card" id="card_fitter" style="width: 70%">
+        <div class="card" id="card_fitter" style="width: unset; min-width: 1200px">
             <div class="headerCont">
                 <div class="cardHeader methodPlusBlue">{% if facility == "supervisor" %}Calendar{% else %}Schedule{% endif %}</div>
                 {% comment %} <div class="buttonInHeader" style="display: flex; margin-left: 25px;">
@@ -42,9 +44,171 @@
             </div>
             <div class="contentCont" style="padding: 20px 0px;">
                 <div class="clearfix">
-                    <div class="calendar">
+                    {% comment %} <div class="calendar">
                         {{ html_cal|safe }}
-                    </div>
+                    </div> {% endcomment %}
+                    <div id="calendar"></div>
+                    <script defer>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const calendarGroups = {{ calendars.default|safe }};
+                            const calendarEl = document.getElementById('calendar');
+                            const calendar = new FullCalendar.Calendar(calendarEl, {
+                                initialView: 'dayGridMonth',
+                                events: function(fetchInfo, successCallback, failureCallback) {
+                                    const selectedGroups = Array.from(document.querySelectorAll('.calendar-filter:checked'))
+                                        .map(cb => cb.name);
+                                
+                                    fetch('/ajax/event-calendar/', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRFToken': getCookie('csrftoken')
+                                        },
+                                        body: JSON.stringify({ groups: selectedGroups })
+                                    })
+                                    .then(res => res.json())
+                                    .then(data => successCallback(data))
+                                    .catch(err => failureCallback(err));
+                                },
+                                eventColor: '#378006',
+                                eventContent: function(info) {
+                                    console.log(calendarGroups)
+                                    console.log(info.event.extendedProps.group)
+                                    const group = calendarGroups.find(group => group.name === info.event.extendedProps.group);
+                                    const bgColor = group ? group.color : 'yellow';
+                                    return {
+                                        html: `
+                                            <div class="fc-event-custom" style="background-color:${bgColor}">
+                                                <small>${info.timeText}</small>
+                                                <strong>${info.event.extendedProps.observer} - ${info.event.title}</strong>
+                                            </div>
+                                        `
+                                    };
+                                    
+                                },
+                                viewDidMount: function () {
+                                    document.querySelectorAll('.fc-daygrid-day').forEach(day => {
+                                        day.classList.add('growHover');
+                                    });
+                                    document.querySelectorAll('.fc-scroller-liquid-absolute').forEach(el => {
+                                        el.style.overflow = 'visible';
+                                    });
+                                    document.querySelector('.fc-daygrid-day.fc-day-today').style.backgroundColor = 'rgb(255 220 40 / 47%)';
+                                },
+                                datesSet: function () {
+                                    document.querySelectorAll('.fc-daygrid-day').forEach(dayEl => {
+                                        dayEl.onclick = () => {
+                                            const date = dayEl.getAttribute('data-date');
+                                            console.log('You clicked:', date);
+                    
+                                            fetch(`../../ajax/events-for-day/?date=${date}`)
+                                                .then(res => res.json())
+                                                .then(events => {
+                                                    updateSidebar(events, date);
+                                                })
+                                        };
+                                    });
+                                }
+                            });
+                            calendar.render();
+
+                            document.querySelectorAll('.calendar-filter').forEach(cb => {
+                                cb.addEventListener('change', () => {
+                                    calendar.refetchEvents();  // Refresh events based on filters
+                                });
+                            });
+                            
+                            function updateSidebar(events, date) {
+                                if (events.length === 0) return;
+                                document.querySelector("#selected-side-header").innerHTML = "Selected Date: " + date;
+                                document.querySelector("#selected-side").style.display = "block";
+                                document.querySelector("#main-side").style.display = "none";
+
+                                const allDayCont = document.getElementById('all-day-cont');
+                                const newAllDay = document.createElement("div");
+                                const otherEventsCont = document.getElementById('events-cont');
+                                const newOther = document.createElement("div");
+                                newAllDay.id = "all-day-cont";
+                                newAllDay.classList.add("events-adjust");
+                                newAllDay.innerHTML = `<h3>All-Day Events</h3>`;
+                                newOther.id = "events-cont";
+                                newOther.classList.add("events-adjust")
+                                newOther.innerHTML = `<h3>Scheduled Events</h3>`;
+                            
+                                events.forEach(e => {
+                                    if (e.allDay){
+                                        const tempDiv = document.createElement("div");
+                                        tempDiv.classList.add("event-block");
+                                        tempDiv.dataset.eventid = `${e.id}`;
+                                        tempDiv.innerHTML += `
+                                            <div class="event-title" onclick="toggleEventBody(${e.id})">
+                                                ${e.title} - ${e.observer}
+                                            </div>
+                                            <div id="event-body-${e.id}" class="event-meta" style="display: none;">
+                                                <div><strong>Observer:</strong> ${e.observer}</div>
+                                                <div><strong>Location:</strong> ${e.location || 'Unknown'}</div>
+                                                <div><strong>Repeat:</strong> ${e.repeat || 'None'}</div>
+                                                <div><strong>Alerts:</strong> ${e.alerts || 'None'}</div>
+                                            </div>
+                                        `;
+                                        newAllDay.appendChild(tempDiv);
+                                    } else {
+                                        const tempDiv2 = document.createElement("div");
+                                        tempDiv2.classList.add("event-block");
+                                        tempDiv2.dataset.eventid = `${e.id}`;
+                                        tempDiv2.innerHTML += `
+                                            <div class="event-title" onclick="toggleEventBody(${e.id})">
+                                                ${formatTimeTo12Hour(e.start_time)} - ${e.title} - ${e.observer}
+                                            </div>
+                                            <div id="event-body-${e.id}" class="event-meta" style="display: none;">
+                                                <div><strong>Time:</strong> ${formatTimeTo12Hour(e.start_time)} - ${formatTimeTo12Hour(e.end_time)}</div>
+                                                <div><strong>Observer:</strong> ${e.observer}</div>
+                                                <div><strong>Location:</strong> ${e.location || 'Unknown'}</div>
+                                                <div><strong>Repeat:</strong> ${e.repeat || 'None'}</div>
+                                                <div><strong>Alerts:</strong> ${e.alerts || 'None'}</div>
+                                            </div>
+                                        `;
+                                        newOther.appendChild(tempDiv2);
+                                    }
+                                });
+                                allDayCont.replaceWith(newAllDay);
+                                otherEventsCont.replaceWith(newOther);
+                            }
+
+                        });
+                        function toggleEventBody(id) {
+                            const el = document.getElementById(`event-body-${id}`);
+                            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                        }
+                        function formatTimeTo12Hour(timeString) {
+                            const [hours, minutes] = timeString.split(":");
+                            const date = new Date();
+                            date.setHours(hours, minutes);
+                        
+                            return date.toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true
+                            }).toUpperCase(); // optional: to match "AM"/"PM" in caps
+                        }
+                        
+                        function getCookie(name) {
+                            let cookieValue = null;
+                            if (document.cookie && document.cookie !== "") {
+                                const cookies = document.cookie.split(";");
+                                for (let i = 0; i < cookies.length; i++) {
+                                    const cookie = cookies[i].trim();
+                                    // Does this cookie string begin with the name we want?
+                                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                        break;
+                                    }
+                                }
+                            }
+                            return cookieValue;
+                        }
+                        
+                    </script>
                 </div>  
             </div>
         </div>
@@ -77,30 +241,32 @@
                     </div>
                     <div id="calendar-cont">
                         <div id="calendar-font">CALENDAR</div>
-                        <div id="calendar-select-cont">
-                            <div id="calendar-select">
-                                <input type="checkbox" id="FACILITY_NAME" name="FACILITY_NAME">
-                                <div style="font-weight: bold;font-size: 14px;width: 80%;text-align: left;">
-                                    FACILITY_NAME
+                        {% for cal_group_info in calendars.default %}
+                            <div id="calendar-select-cont" style="background-color:{{cal_group_info.color}}">
+                                <div id="calendar-select">
+                                    <input type="checkbox" id="{{cal_group_info.name}}" class="calendar-filter" name="{{cal_group_info.name}}">
+                                    <div style="font-weight: bold;font-size: 14px;width: 80%;text-align: left;">
+                                        {{cal_group_info.name|upper}}
+                                    </div>
+                                    <div id="settings-dots">...</div>
                                 </div>
-                                <div id="settings-dots">...</div>
                             </div>
-                        </div>
+                        {% endfor %}
+
                     </div>
                 </section>
             </div>
         </div>
-        <div id="selected-side" class="card" style="min-width: 340px; display: none;">
+        <div id="selected-side" class="card" style="width: 340px; display: none;">
             <div class="headerCont">
                 <div class="cardHeader methodPlusBlue">
-                    DATE_HERE
+                    <span id="selected-side-header">DATE_HERE</span>
                     <span class="closeAdd">&times;</span>
                 </div>
             </div>
-            <div id="sideBarBody" class="contentCont" style="padding: 20px 0px;">
-                <div id="all-day-cont"></div>
-                <hr style="">
-                <div id="events-cont"></div>    
+            <div id="sideBarBody" class="contentCont">
+                <div id="all-day-cont" class="events-adjust"></div>
+                <div id="events-cont" class="events-adjust"></div>    
             </div>
         </div>
     </div>

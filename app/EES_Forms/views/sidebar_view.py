@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect # type: ignore
 from ..models import user_profile_model, issues_model, Forms, Event, User, sop_model, facility_model, form22_model, form_settings_model
 from ..forms import issues_form, events_form, sop_form, user_profile_form, UserChangeForm
-import datetime
+from datetime import datetime, time
 import calendar
+from django.utils.dateparse import parse_date # type: ignore
 from django.core.exceptions import FieldError # type: ignore
 from django.db.models import Q # type: ignore
 from django.apps import apps # type: ignore
@@ -65,7 +66,7 @@ def corrective_action_view(request):
         if issueMonth_query != "" and issueMonth_query is not None:
             #print("Pre-Month-Search")
             #print(ca_forms)
-            issueMonth_query = datetime.datetime.strptime(issueMonth_query, "%Y-%m").date()
+            issueMonth_query = datetime.strptime(issueMonth_query, "%Y-%m").date()
             ca_forms = ca_forms.filter(date__month=issueMonth_query.month, date__year=issueMonth_query.year)
             #print("Post-Month-Search")
             #print(ca_forms)
@@ -75,7 +76,7 @@ def corrective_action_view(request):
     
     def issueDateFunc(issueDate_query, ca_forms):
         if issueDate_query != "" and issueDate_query is not None:
-            issueDate_query = datetime.datetime.strptime(issueDate_query, "%Y-%m-%d").date()
+            issueDate_query = datetime.strptime(issueDate_query, "%Y-%m-%d").date()
             ca_forms = ca_forms.filter(date__year=issueDate_query.year, date__month=issueDate_query.month, date__day=issueDate_query.day)
             return ca_forms
         else:
@@ -177,7 +178,7 @@ def calendar_view(request, year, month):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     options = facility_model.objects.all()
-    profile = user_profile_model.objects.all()
+    profile = request.user.user_profile
     try:
         month_number = int(month)
         month = calendar.month_name[month_number]
@@ -185,21 +186,11 @@ def calendar_view(request, year, month):
         month = month.title()
         month_number = list(calendar.month_name).index(month)
         month_number = int(month_number)
-        
 
-    if month_number == 1:
-        prev_month = str(calendar.month_name[12])
-        prev_year = str(year - 1)
-    else:
-        prev_month = str(calendar.month_name[month_number - 1])
-        prev_year = year
-
-    if month_number == 12:
-        next_month = str(calendar.month_name[1])
-        next_year = str(year + 1)
-    else:
-        next_month = str(calendar.month_name[month_number + 1])
-        next_year = year
+    prev_month = str(calendar.month_name[12]) if month_number == 1 else str(calendar.month_name[month_number - 1])
+    prev_year = str(year - 1) if month_number == 1 else year
+    next_month = str(calendar.month_name[1]) if month_number == 12 else str(calendar.month_name[month_number + 1])
+    next_year = str(year + 1) if month_number == 12 else year
 
     events = Event.objects.all()
 
@@ -224,11 +215,60 @@ def calendar_view(request, year, month):
         'html_cal': html_cal, 
         'prev_year': prev_year, 
         'next_year': next_year, 
-        'profile': profile, 
+        'calendars': profile.settings['calendar']['calendars'], 
         'unlock': unlock, 
         'client': client,
         'facility': facility
     })
+
+@lock
+def ajax_calendar(request):
+    facility = getattr(request, 'facility', None)
+    data = json.loads(request.body)
+    groups = data.get("groups", [])
+    events = Event.objects.filter(facilityChoice=facility, calendarChoice__in=groups) if groups else Event.objects.filter(facilityChoice=facility)
+    print(f"These are the event in the filter: {events}")
+    data = [
+        {
+            'id': e.id,
+            'title': e.title,
+            'start': datetime.combine(e.date, e.start_time).isoformat() if e.start_time else e.date.isoformat(),
+            'end':  datetime.combine(e.date, e.end_time).isoformat() if e.end_time else None,
+            'allDay': e.allDay,
+            'extendedProps': {
+                'group': e.calendarChoice,
+                'observer': e.observer,
+                'repeat': e.repeat,
+                'alerts': e.alerts,
+                'location': e.facilityChoice.facility_name
+            }
+        }
+        for e in events
+    ]
+    return JsonResponse(data, safe=False)
+
+@lock
+def events_for_day(request):
+    facility = getattr(request, 'facility', None)
+    date_str = request.GET.get('date')
+    date = parse_date(date_str)
+    events = Event.objects.filter(facilityChoice=facility, date=date)
+    data = [
+        {
+            'id': e.id,
+            'title': e.title,
+            'start': datetime.combine(e.date, e.start_time).isoformat() if e.start_time else e.date.isoformat(),
+            'end':  datetime.combine(e.date, e.end_time).isoformat() if e.end_time else None,
+            'group': e.calendarChoice,
+            'allDay': True,
+            'observer': e.observer,
+            'repeat': e.repeat,
+            'alerts': e.alerts,
+            'location': e.facilityChoice.facility_name
+        }
+        for e in events
+    ]
+    return JsonResponse(data, safe=False)
 
 @lock
 def schedule_view(request):
@@ -236,8 +276,8 @@ def schedule_view(request):
     options = facility_model.objects.all()
     if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
         supervisor = True
-    today_year = int(datetime.date.today().year)
-    today_month = str(calendar.month_name[datetime.date.today().month])
+    today_year = int(datetime.now().date().year)
+    today_month = str(calendar.month_name[datetime.now().date().month])
 
     return redirect('Calendar', str(today_year), str(today_month))
 
@@ -310,7 +350,7 @@ def archive_view(request):
                             
     def getFsSearchMonthYear(itemSearched, fsModel):
         if itemSearched != "" and itemSearched is not None and fsModel.exists():
-            itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m").date()
+            itemSearched = datetime.strptime(itemSearched, "%Y-%m").date()
             # formIDList = []
             # for fs in fsModel:
             #     formIDList.append((fs.formChoice.id, fs))
@@ -337,7 +377,7 @@ def archive_view(request):
  
     def getFsSearchDate(itemSearched, fsModel):
         if itemSearched != "" and itemSearched is not None and fsModel.exists():
-            itemSearched = datetime.datetime.strptime(itemSearched, "%Y-%m-%d").date()
+            itemSearched = datetime.strptime(itemSearched, "%Y-%m-%d").date()
             modelsList = []
             for model in apps.get_models():
                 for fs in fsModel:
@@ -620,7 +660,7 @@ def search_forms_view(request, facility, access_page):
 def issues_view(request, issueID, access_page):
     issueSelect = issues_model.objects.get(id=issueID) if access_page[:4] != 'form' else form_settings_model.objects.get(id=issueID)
     facility = issueSelect.formChoice.facilityChoice.facility_name if access_page[:4] != 'form' else issueSelect.facilityChoice.facility_name
-    now = datetime.datetime.now().date()
+    now = datetime.now().date()
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     notifs = checkIfFacilitySelected(request.user)
     existing = False
@@ -703,12 +743,18 @@ def event_add_view(request):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     companyData = request.user.user_profile.company
     listOfObservers = user_profile_model.objects.filter(company__id=companyData.id, position='observer')
-    today = datetime.date.today()
+    today = datetime.now().date()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     form_var = events_form()
     fullName = request.user.first_name + " " + request.user.last_name
+
+
+    facilities = getCompanyFacilities(request.user.user_profile.company.company_name)
+    userCalendars = request.user.user_profile.settings['calendar']['calendars']['default']
+    cal_select_choices = [group['name'] for group in userCalendars] + [f.facility_name for f in facilities]
+
 
     if request.method == "POST":
         answer = request.POST
@@ -716,6 +762,7 @@ def event_add_view(request):
         if request_form.is_valid():
             selected_days = request_form.cleaned_data['selected_days'].split(',')
             allDay = True if answer.get('all_day') else False
+            calendarChoice = answer['calendarChoice']
             if facility == "supervisor":
                 personal = True
             else:
@@ -723,7 +770,7 @@ def event_add_view(request):
                 personal = False
 
             for date in selected_days:
-                clean_date = datetime.datetime.strptime(date.strip(), "%Y-%m-%d").date()
+                clean_date = datetime.strptime(date.strip(), "%Y-%m-%d").date()
                 Event.objects.create(
                     observer=answer['observer'],
                     title=answer['title'],
@@ -732,7 +779,7 @@ def event_add_view(request):
                     end_time=answer['end_time'],
                     date=clean_date,
                     userProf=request.user.user_profile,
-                    personal=personal,
+                    calendarChoice=calendarChoice,
                     allDay=allDay,
                     facilityChoice=facilityChoice
                 )
@@ -752,7 +799,8 @@ def event_add_view(request):
         'supervisor': supervisor, 
         "client": client, 
         'unlock': unlock, 
-        'listOfObservers': listOfObservers
+        'listOfObservers': listOfObservers,
+        'cal_select_choices': cal_select_choices
     })
 
 @lock
@@ -823,7 +871,7 @@ def profile_edit_view(request, userID):
 def event_detail_view(request, facility, access_page, event_id):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
-    today = datetime.date.today()
+    today = datetime.now().date()
     today_year = int(today.year)
     today_month = str(calendar.month_name[today.month])
     options = facility_model.objects.all()

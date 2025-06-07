@@ -19,7 +19,12 @@
                 </span>
                 <br>
                 <span class="input-package" style="width: 100%;">
-                    {{form.calendarChoice}}
+                    <select name="calendarChoice" maxlength="50" id="id_calendarChoice">
+                        <option value="">-------</option>
+                        {% for items in cal_select_choices %}
+                            <option value="{{items}}">{{items}}</option>
+                        {% endfor %}
+                    </select>
                     <label for="id_calendarChoice">Calendar</label>
                 </span>
                 <br>

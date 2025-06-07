@@ -39,7 +39,7 @@ def form1_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -67,7 +67,7 @@ def form2_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -93,7 +93,7 @@ def form3_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -119,7 +119,7 @@ def form4_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -151,7 +151,7 @@ def form5_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -181,7 +181,7 @@ def form6_issue_check(savedForm, form_variables, request, selector, facility, da
             
         return ('issues_view', fsID, str(database_form.week_start), issue_page)
     if filled_out:
-        createNotification(facility, request, fsID, form_variables['now'], 'submitted', False, False)
+        createNotification(facility, request, fsID, form_variables['now'], 'submitted', False, savedForm)
         updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     else:
         # if formSubmissionRecords_model.objects.filter(formID__id=form_variables['formName'], facilityChoice__facility_name=facility).exists():
@@ -217,7 +217,7 @@ def form7_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -252,7 +252,7 @@ def form8_issue_check(savedForm, form_variables, request, selector, facility, da
             break
     print(filled_out)
     if filled_out:
-        createNotification(facility, request, fsID, form_variables['now'], 'submitted', False, False)
+        createNotification(facility, request, fsID, form_variables['now'], 'submitted', False, savedForm)
         updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     else:
         # if formSubmissionRecords_model.objects.filter(formID__id=form_variables['formName'], facilityChoice__facility_name=facility).exists():
@@ -284,7 +284,7 @@ def form9_issue_check(savedForm, form_variables, request, selector, facility, da
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -309,7 +309,7 @@ def form17_issue_check(savedForm, form_variables, request, selector, facility, d
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -334,7 +334,7 @@ def form18_issue_check(savedForm, form_variables, request, selector, facility, d
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -359,7 +359,7 @@ def form19_issue_check(savedForm, form_variables, request, selector, facility, d
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -386,7 +386,7 @@ def form20_issue_check(savedForm, form_variables, request, selector, facility, d
         return ('issues_view', fsID, issue_page)
 
     if savedForm.is_fully_filled():
-        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -414,7 +414,7 @@ def form21_issue_check(savedForm, form_variables, request, selector, facility, d
         return ('issues_view', fsID, issue_page)
     
     if savedForm.is_fully_filled():
-        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -440,7 +440,7 @@ def form24_issue_check(savedForm, form_variables, request, selector, facility, d
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -467,7 +467,7 @@ def form25_issue_check(savedForm, form_variables, request, selector, facility, d
             
         return ('issues_view', fsID, issue_page)
     
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -501,7 +501,7 @@ def form27_issue_check(savedForm, form_variables, request, selector, facility, d
             
         return ('issues_view', fsID, issue_page)
     if savedForm.is_fully_filled():
-        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -527,7 +527,7 @@ def form29_issue_check(savedForm, form_variables, request, selector, facility, d
             
         return ('issues_view', fsID, issue_page)
     if savedForm.is_fully_filled():
-        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+        createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -550,7 +550,7 @@ def form30_issue_check(savedForm, form_variables, request, selector, facility, d
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 
@@ -573,7 +573,7 @@ def form31_issue_check(savedForm, form_variables, request, selector, facility, d
             issue_page = issue_page + "-c"
             
         return ('issues_view', fsID, issue_page)
-    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=False)
+    createNotification(facility=facility, request=request, fsID=fsID, date=form_variables['now'], notifSelector=['submitted'], issueID=False, savedForm=savedForm)
     updateSubmissionForm(fsID, True, form_variables['daily_prof'][0].date_save)
     return ('IncompleteForms',)
 

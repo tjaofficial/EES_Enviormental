@@ -1334,6 +1334,7 @@ def displayNotifications(user, facility):
 def distributeNotifications(facility, request, fsID, date, notifKeywordList, issueID, savedForm):
     #print(f"Start Notification Process for {facility} fsID {fsID}")
     #print(f"Notifications types: {notifKeywordList}")
+    print(savedForm)
     userProf = request.user.user_profile
     formSettings = form_settings_model.objects.get(id=fsID)
     companyUsers = user_profile_model.objects.filter(company__company_name=userProf.company.company_name, user__is_active=True)
@@ -1350,7 +1351,10 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
                 else:
                     todayName = 'Sunday'
             print(f'This is the date right now: {date}')
-            newNotifData = {'settingsID': fsID, 'date': str(date), 'weekend': todayName, "spillKitID": savedForm.skID}
+            newNotifData = {'settingsID': fsID, 'date': str(date), 'weekend': todayName}
+            print(savedForm)
+            if savedForm.formSettings.formChoice.form == "26":
+                newNotifData['spillKitID'] = savedForm.skID
             newNote = "Submitted by " + sendingUser.first_name + " " + sendingUser.last_name + ". "
         elif notifCategory in ['deviations', 'compliance']:
             newNotifData = {'settingsID': fsID, 'date': str(date)}
@@ -1485,6 +1489,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
 
 def createNotification(facility, request, fsID, date, notifSelector, issueID, savedForm):
     #print(f"Start Notification Process for {facility} fsID {fsID}")
+    print(savedForm)
     if not isinstance(notifSelector, list):
         notifSelector = [notifSelector]
     savedForm = False if not savedForm else savedForm
@@ -2143,7 +2148,8 @@ def change_dashboard_setting(dashChoice, position):
 
 def setDefaultSettings(profile, superUsername):
     today = datetime.datetime.now()
-    createSettings = {'facilities': {}, 'profile': {}}
+    createSettings = {'facilities': {}, 'profile': {}, 'calendar': {}}
+    ## SET SETTINGS FOR FACILITIES
     try:
         companyFacilities = getCompanyFacilities(superUsername)
         for facility in companyFacilities:
@@ -2155,13 +2161,10 @@ def setDefaultSettings(profile, superUsername):
             createSettings['facilities'][str(facility.id)] = change_dashboard_setting(dashChoice, profile.position)
     except:
         createSettings['facilities'] = {}
+    
+    ## SET SETTINGS FOR PROFILE
     createSettings['profile'] = {
         'notifications': {
-            'calendar': {
-                'methodplus': True, 
-                'email': False, 
-                'sms': False
-            }, 
             'certification_exp': {
                 'methodplus': True, 
                 'email': False, 
@@ -2171,6 +2174,26 @@ def setDefaultSettings(profile, superUsername):
         'first_login': False,
         'position': profile.position,
         'two_factor_enabled': True
+    }
+
+    ## SET SETTINGS FOR CALENDAR
+    createSettings['calendar'] = {
+        "notifications": {
+            "event_added": {
+                "methodplus": True, 
+                "email": False, 
+                "sms": False
+            }
+        },
+        "calendars": {
+            "default": [
+                {
+                    "name": "personal", 
+                    "color": "#ff000082"
+                }    
+            ],
+            "custom": []
+        }
     }
     return createSettings
 
@@ -2354,3 +2377,131 @@ packetList = [
         }
     },
 ]
+
+user_prof_settings = {
+    "facilities": {
+        "6": {
+            "dashboard": "Battery", 
+            "settings": {
+                "progressBar": {
+                    "progressDaily": True, 
+                    "progressWeekly": True, 
+                    "progressMonthly": True, 
+                    "progressQuarterly": True, 
+                    "progressAnnually": False
+                }, 
+                "graphs": {
+                    "graphFrequencyData": {
+                        "frequency": "weekly", 
+                        "dates": False
+                    }, 
+                    "dataChoice": {
+                        "charges": {
+                            "show": True, 
+                            "type": "bar"
+                        }, 
+                        "doors": {
+                            "show": True, 
+                            "type": "bar"
+                        }, 
+                        "lids": {
+                            "show": True, 
+                            "type": "bar"
+                        }, 
+                        "graph90dayPT": {
+                            "show": False, 
+                            "type": "bar"
+                        }
+                    }
+                }, 
+                "correctiveActions": True, 
+                "infoWeather": True, 
+                "90dayPT": True, 
+                "contacts": True
+            }, 
+            "notifications": {
+                "compliance": {
+                    "methodplus": True, 
+                    "email": False, 
+                    "sms": False
+                }, 
+                "deviations": {
+                    "methodplus": True, 
+                    "email": False, 
+                    "sms": False
+                }, 
+                "submitted": {
+                    "methodplus": True, 
+                    "email": False, 
+                    "sms": False
+                }, 
+                "10_day_pt": {
+                    "methodplus": False, 
+                    "email": False, 
+                    "sms": False
+                }, 
+                "5_day_pt": {
+                    "methodplus": False, 
+                    "email": False, 
+                    "sms": False
+                }
+            }
+        }, 
+        "7": {
+            "dashboard": "Default", 
+            "settings": {}, 
+            "notifications": {}
+        }, 
+        "10": {
+            "dashboard": "Default", 
+            "settings": {}, 
+            "notifications": {}
+        }, 
+        "11": {
+            "dashboard": "Default", 
+            "settings": {}, 
+            "notifications": {}
+        }
+    }, 
+    "profile": {
+        "notifications": {
+            "calendar": {
+                "methodplus": True, 
+                "email": False, 
+                "sms": False
+            }, 
+            "certification_exp": {
+                "methodplus": True, 
+                "email": False, 
+                "sms": False
+            }
+        }, 
+        "first_login": True, 
+        "position": "supervisor-m", 
+        "two_factor_enabled": False,
+    },
+    "calendar": {
+        "notifications": {
+            "event_added": {
+                "methodplus": True, 
+                "email": False, 
+                "sms": False
+            }
+        },
+        "calendars": {
+            "personal": {
+                "name": "personal",
+                "type": "default"
+            },
+            "company": {
+                "name": "personal",
+                "type": "default"
+            },
+            "facilities": [],
+            "custom": []
+        }
+    }
+}
+
+
+
