@@ -13,6 +13,7 @@ withoutSettings = [2,4,6,9,21,23]
 def formSettingsFunc(keysList, requestPost, formID):
     settings = {}
     print(keysList)
+    print(f'THis eight here: {requestPost}')
     newLabel = requestPost['newLabel'] if "newLabel" in requestPost else False
     print(newLabel)
     print(formID)
@@ -63,7 +64,9 @@ def formSettingsFunc(keysList, requestPost, formID):
                 if mainLabel == 'custom_name':
                     defaultDictUpdate = True
                 elif mainLabel == 'days_weekly':
-                    settings[mainLabel] = int(requestPost[key])
+                    print("Well we are here")
+                    print(requestPost.getlist(key))
+                    settings[mainLabel] = requestPost.getlist(key)
             elif formID == 19:
                 if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2']:
                     defaultDictUpdate = True

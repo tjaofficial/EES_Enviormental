@@ -16,6 +16,7 @@ from django.utils.text import slugify # type: ignore
 from django.http import JsonResponse # type: ignore
 import json
 from django.views.decorators.csrf import csrf_exempt # type: ignore
+from django.apps import apps # type: ignore
 
 lock = login_required(login_url='Login')
 
@@ -658,7 +659,19 @@ def search_forms_view(request, facility, access_page):
 
 @lock
 def issues_view(request, issueID, access_page):
-    issueSelect = issues_model.objects.get(id=issueID) if access_page[:4] != 'form' else form_settings_model.objects.get(id=issueID)
+    is_date = True
+    try:
+        parsed_date = datetime.strptime(access_page, '%Y-%m-%d')
+    except ValueError:
+        is_date = False
+
+    if is_date:
+        issueSelect = issues_model.objects.get(formChoice__id=issueID, date=parsed_date) 
+    elif access_page.startswith('form'): 
+        issueSelect = form_settings_model.objects.get(id=issueID)
+    else:
+        issueSelect = issues_model.objects.get(id=issueID) 
+
     facility = issueSelect.formChoice.facilityChoice.facility_name if access_page[:4] != 'form' else issueSelect.facilityChoice.facility_name
     now = datetime.now().date()
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
@@ -666,7 +679,8 @@ def issues_view(request, issueID, access_page):
     existing = False
     search = False
     notifSelector = ['deviations']
-    if access_page[-1] == 'c':
+
+    if access_page.endswith('c'):
         notifSelector.append('compliance')
         access_page = access_page[:-2]
 
@@ -679,10 +693,11 @@ def issues_view(request, issueID, access_page):
         if client:
             issueSelect.viewed = True
             issueSelect.save()
-    elif access_page == 'edit' or access_page == 'resubmit':
+    elif is_date:
         existing = True
     else:
-        print("go back")
+        messages.error(request,"ERROR: ID-11850009. Contact Support Team.")
+        return redirect('IncompleteForms')
 
     if search:
         print("search")
@@ -716,7 +731,11 @@ def issues_view(request, issueID, access_page):
             A = data.save()
             if not existing:
                 notifSelector.append('submitted')
-            createNotification(facility, request, A.formChoice.id, now, notifSelector, A.id)
+            
+            formModel = apps.get_model('EES_Forms', f"{A.formChoice.formChoice.link}_model")
+            formDate = now if not existing else issueSelect.date
+            savedForm = formModel.objects.get(date=formDate, formSettings=A.formChoice)
+            createNotification(facility, request, A.formChoice.id, now, notifSelector, A.id, savedForm=savedForm)
             if not existing:
                 updateSubmissionForm(A.formChoice.id, True, now)
             

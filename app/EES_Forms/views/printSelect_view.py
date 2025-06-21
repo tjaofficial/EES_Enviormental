@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.apps import apps # type: ignore
-from ..models import facility_model, the_packets_model
+from ..models import facility_model, the_packets_model, form_settings_model
 from ..forms import *
+from django.http import JsonResponse # type: ignore
 from django.core.exceptions import FieldError # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
@@ -121,3 +122,25 @@ def printSelect(request):
         'packetQuery': packetQuery,
         'formSettingsQuery': formSettingsQueryJson
     })
+
+@lock
+def print_label_request(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        freq_id = data.get("freq_id")
+
+        try:
+            freq = form_settings_model.objects.get(id=freq_id)
+        except form_settings_model.DoesNotExist:
+            return JsonResponse({'error': 'Invalid freq_id'}, status=400)
+
+        packets = freq.settings.get('packets', {})
+        seen = set()
+        unique_labels = []
+
+        for key, label in packets.items():
+            if not label.startswith("no") and label not in seen:
+                seen.add(label)
+                unique_labels.append({"key": key, "label": label})
+
+        return JsonResponse({'labels': unique_labels})

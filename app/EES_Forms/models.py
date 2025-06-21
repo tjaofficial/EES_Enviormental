@@ -3307,6 +3307,11 @@ class form20_model(models.Model):
         blank=True,
         null=True
     )
+    data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
+    )
 
     def is_fully_filled(self):
         """Check if all days (0-4) have both time and observer fields filled."""

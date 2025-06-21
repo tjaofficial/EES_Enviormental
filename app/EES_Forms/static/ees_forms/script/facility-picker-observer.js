@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             //console.log("Check result:", data);
             if (data.exists) {
+                const redirectUrl = document.getElementById('redirectInfo').dataset.redirectUrl;
                 window.location.href = redirectUrl;
             } else {
                 //alert("No bat profile found for today. Redirecting to create one.");

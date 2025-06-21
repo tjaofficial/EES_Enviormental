@@ -29,7 +29,7 @@ def form1_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -57,7 +57,7 @@ def form2_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -83,7 +83,7 @@ def form3_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -109,7 +109,7 @@ def form4_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -141,7 +141,7 @@ def form5_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -170,7 +170,7 @@ def form6_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -207,7 +207,7 @@ def form7_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -232,7 +232,7 @@ def form8_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -274,7 +274,7 @@ def form9_issue_check(savedForm, form_variables, request, selector, facility, da
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -299,7 +299,7 @@ def form17_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -324,7 +324,7 @@ def form18_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -349,7 +349,7 @@ def form19_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -374,7 +374,7 @@ def form20_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -402,7 +402,7 @@ def form21_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -430,7 +430,7 @@ def form24_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -456,7 +456,7 @@ def form25_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -490,7 +490,7 @@ def form27_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -516,7 +516,7 @@ def form29_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -540,7 +540,7 @@ def form30_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:
@@ -563,7 +563,7 @@ def form31_issue_check(savedForm, form_variables, request, selector, facility, d
     if issueFound:
         if finder:
             if selector == 'form':
-                issue_page = 'resubmit'
+                issue_page = savedForm.date
             else:
                 issue_page = 'issue'
         else:

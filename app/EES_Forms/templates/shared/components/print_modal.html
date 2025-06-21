@@ -20,12 +20,41 @@
                 Select form label you would like to print:
                 <select id="labelSelect" onchange="labelPick()">
                     <option value="" selected>------</option>
-                    {% for key, label in freq.settings.packets.items  %}
-                        {% if label|slice:"0:2" != 'no' %}
-                            <option value="{{key}}">{{label}}</option>
-                        {% endif %}
-                    {% endfor %}
                 </select><br><br>
+                <script>
+                    function getCookie(name) {
+                        const cookieValue = document.cookie
+                            .split('; ')
+                            .find(row => row.startsWith(name + '='))
+                            ?.split('=')[1];
+                        return decodeURIComponent(cookieValue || '');
+                    }
+
+                    function fetchLabels(freqID) {
+                        fetch('/ajax/print-label-request/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken'),
+                            },
+                            body: JSON.stringify({ freq_id: freqID })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            const labelSelect = document.getElementById("labelSelect");
+                            labelSelect.innerHTML = `<option value="" selected>------</option>`; // Reset
+
+                            data.labels.forEach(labelData => {
+                                const option = document.createElement("option");
+                                option.value = labelData.key;
+                                option.textContent = labelData.label;
+                                labelSelect.appendChild(option);
+                                console.log(labelSelect);
+                            });
+                        });
+                    }
+                    fetchLabels({{freq.id}});
+                </script>
                 <div style="text-align: right;">
                     <a id="linkButton" href="{% url 'printIndex' 'single' formGroup fsID selector %}" target="_blank" onclick="refreshPage()">
                         <div class="button-8" role="button" style='height:25px;'>PRINT</div>

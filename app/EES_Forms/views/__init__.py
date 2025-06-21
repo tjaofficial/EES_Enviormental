@@ -7,7 +7,7 @@ from .data_view import pt_admin1_view, pt_mth_input
 from .crud_sop_view import delete_sop_view, update_sop_view
 from .client_view import client_dashboard_view
 from .print_form_view import form_PDF
-from .printSelect_view import printSelect
+from .printSelect_view import *
 from .signature_view import signature
 from .billing import stripe_subscription_view, stripe_webhook, stripe_customer_portal, stripe_success
 from .landing_view import *

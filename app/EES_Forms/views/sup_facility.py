@@ -46,6 +46,7 @@ def facilityList(request):
                 print(A)
                 A.formList = defaultPacketSettings
                 A.save()
+                messages.success(request,f"New packet {A.name} has been created for {A.facilityChoice.facility_name}.")
             print('New Packet has been saved')
         elif 'sub_delete' in answer.keys():
             print('delete-packet')

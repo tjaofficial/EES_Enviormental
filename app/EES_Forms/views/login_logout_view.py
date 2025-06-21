@@ -205,7 +205,8 @@ def main_change_password(request):
     return render(request, 'landing/landing_passwordChange.html', {
         'form': form
     })
-    
+
+@lock
 def change_password(request):
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     if request.method == 'POST':

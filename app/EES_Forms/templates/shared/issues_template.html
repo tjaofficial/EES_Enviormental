@@ -13,7 +13,7 @@
             {% elif access_page == 'issue' %}
                 {% include "shared/components/backArrow.html" with destination="corrective_action" %}
                 Corrective Action LogID - #{{ issueSelect.id }}
-            {% elif access_page == 'edit' or access_page == 'resubmit'%}
+            {% else %}
                 {% include "shared/components/backArrow.html" with destination="corrective_action-edit" issueID=issueSelect.id %}
                 EDIT - Corrective Action LogID - #{{ issueSelect.id }}  
             {% endif %}
@@ -75,7 +75,7 @@
                         </div>
                     {% endif %}
                     <br>
-                {% elif access_page == 'edit' or access_page == 'resubmit' %}
+                {% else %}
                     <form action="" method="POST" style="padding-bottom: 25px;">
                         {% csrf_token %}
                         <br>

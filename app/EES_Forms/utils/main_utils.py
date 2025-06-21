@@ -13,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType # type: ignore
 from ..utils.twilio_verify import send_sms_message
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
+from django.utils.timezone import localtime # type: ignore
 from ..models import *
 from django.db.models import Q # type: ignore
 from django.apps import apps # type: ignore
@@ -1397,8 +1398,9 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
 
             if newNotification.formSettings.formChoice.form in ['24', '25']:
                 formModelName = newNotification.formSettings.formChoice.link
+                local_dt = localtime(newNotification.created_at)
                 formModel = apps.get_model('EES_Forms', f"{formModelName}_model")
-                variables['day_select'] = formModel.objects.get(date=newNotification.created_at.localtime()).weekend_day
+                variables['day_select'] = formModel.objects.get(date=local_dt.date()).weekend_day
                 #messages.error(request,'ERROR: ID-11850007 Contact Support Team')
             elif newNotification.formSettings.formChoice.form in ['26']:
                 variables['month'] = date.month
@@ -2503,5 +2505,13 @@ user_prof_settings = {
     }
 }
 
-
+defaultDataForm20 = {
+    "Monday": False,
+    "Tuesday": False,
+    "Wednesday": False,
+    "Thursday": False,
+    "Friday": False,
+    "Saturday": False,
+    "Sunday": False
+}
 

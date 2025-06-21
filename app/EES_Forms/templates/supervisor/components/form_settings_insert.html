@@ -275,11 +275,29 @@
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
             <li class="form-line">
-                How many days per week: 
-                <select name="{{formID}}-days_weekly" class="customName" class="selectInput" id="id_freeboard{{forloop.counter}}" required>
-                    <option value="5" {% if formSettings.settings.days_weekly == 5 %}selected{% endif %}>5</option>
-                    <option value="6" {% if formSettings.settings.days_weekly == 7 %}selected{% endif %}>7</option>
-                </select><br>
+                Select days to be collected: 
+                <div style="margin-left: 25px;">
+                    <input type="checkbox" id="day_saturday" name="{{formID}}-days_weekly" value="5" {% if 5 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_saturday">Saturday</label><br>
+
+                    <input type="checkbox" id="day_sunday" name="{{formID}}-days_weekly" value="6" {% if 6 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_sunday">Sunday</label><br>
+
+                    <input type="checkbox" id="day_monday" name="{{formID}}-days_weekly" value="0" {% if 0 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_monday">Monday</label><br>
+
+                    <input type="checkbox" id="day_tuesday" name="{{formID}}-days_weekly" value="1" {% if 1 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_tuesday">Tuesday</label><br>
+
+                    <input type="checkbox" id="day_wednesday" name="{{formID}}-days_weekly" value="2" {% if 2 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_wednesday">Wednesday</label><br>
+
+                    <input type="checkbox" id="day_thursday" name="{{formID}}-days_weekly" value="3" {% if 3 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_thursday">Thursday</label><br>
+
+                    <input type="checkbox" id="day_friday" name="{{formID}}-days_weekly" value="4" {% if 4 in formSettings.settings.days_weekly %}checked{% endif %}>
+                    <label for="day_friday">Friday</label><br>
+                </div>
             </li>
         {% elif formID == "21" %}
             <li class="form-line">

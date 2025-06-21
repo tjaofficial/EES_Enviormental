@@ -84,6 +84,7 @@ urlpatterns = [
     path("ajax/notification-count/", views.get_unread_notification_count, name="notification_count"),
     path("ajax/event-calendar/", views.ajax_calendar, name="ajax_calendar"),
     path("ajax/events-for-day/", views.events_for_day, name="events_for_day"),
+    path("ajax/print-label-request/", views.print_label_request, name="print-label-request"),
     ##---FORMS
     path("form/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("form/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),
