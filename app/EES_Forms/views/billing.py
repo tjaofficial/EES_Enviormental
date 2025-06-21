@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse # type: ignore
 from ..models import braintreePlans, subscription
+from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.views.decorators.csrf import csrf_exempt # type: ignore
 from django.contrib.sites.shortcuts import get_current_site # type: ignore
 from django.utils.encoding import force_bytes # type: ignore
@@ -11,6 +12,7 @@ from django.template.loader import render_to_string # type: ignore
 from django.utils.html import strip_tags # type: ignore
 from django.core.mail import send_mail # type: ignore
 from django.conf import settings # type: ignore
+from ..decor import group_required
 from ..models import User
 from datetime import datetime
 from django.urls import reverse # type: ignore
@@ -237,9 +239,10 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 @lock
+@group_required(SUPER_VAR)
 def stripe_customer_portal(request):
     try:
-        return_url = request.GET.get("next", reverse("Account", args=["supervisor"]))
+        return_url = request.GET.get("next", reverse("Account"))
         subscriptionQuery = request.user.user_profile.company.subscription
         session = stripe.billing_portal.Session.create(
             customer=subscriptionQuery.customerID,
