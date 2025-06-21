@@ -3252,61 +3252,6 @@ class form20_model(models.Model):
         blank=True,
         null=True
     )
-    time_0 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True
-    )
-    time_1 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True
-    )
-    time_2 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True
-    )
-    time_3 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True
-    )
-    time_4 = models.TimeField(
-        auto_now_add=False,
-        auto_now=False,
-        blank=True,
-        null=True
-    )
-    obser_0 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True
-    )
-    obser_1 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True
-    )
-    obser_2 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True
-    )
-    obser_3 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True
-    )
-    obser_4 = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True
-    )
     data = models.JSONField(
         default=dict,
         null=True,

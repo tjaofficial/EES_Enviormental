@@ -14,22 +14,6 @@ lock = login_required(login_url='Login')
 
 @lock
 def form20(request, fsID, selector):
-    def change_database():
-        formQuery = form20_model.objects.all()
-        for x in formQuery:
-            dict = {
-                "Monday": {"observer": x.obser_0, "time": str(x.time_0)} if x.time_0 else False,
-                "Tuesday": {"observer": x.obser_1, "time": str(x.time_1)} if x.time_1 else False,
-                "Wednesday": {"observer": x.obser_2, "time": str(x.time_2)} if x.time_2 else False,
-                "Thursday": {"observer": x.obser_3, "time": str(x.time_3)} if x.time_3 else False,
-                "Friday": {"observer": x.obser_4, "time": str(x.time_4)} if x.time_4 else False,
-                "Saturday": False,
-                "Sunday": False
-            }
-            dict = json.loads(json.dumps(dict))
-            x.data = dict
-            x.save()
-    done = change_database()
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, selector)
     facility = form_variables['facilityName']
