@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group # type: ignore
 from django.contrib.auth.models import User # type: ignore
 from django.contrib.auth.models import Permission # type: ignore
 from django.contrib.contenttypes.models import ContentType # type: ignore
-from ..utils.main_utils import braintreeGateway, create_starting_forms
+from ..utils.main_utils import create_starting_forms
 
 def add_forms_to_database():
     if Group.objects.count() < 3:
