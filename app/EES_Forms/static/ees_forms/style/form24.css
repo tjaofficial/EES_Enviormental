@@ -1,0 +1,135 @@
+.td_head_style{
+    vertical-align: bottom; 
+    text-align: center; 
+    border: 1px solid black;
+}
+.span_head_style{
+    writing-mode: vertical-rl; 
+    transform: rotate(180deg); 
+    white-space: nowrap; 
+    padding-top: .5rem;
+    padding-left: .4rem;
+    padding-right: .4rem;
+    padding-bottom: .5rem;
+    text-align: left; 
+}
+.data_rows_water{
+    border: 1px solid black;
+    text-align: center;
+    padding: .4rem;
+}
+.data_rows_water select{
+    font-size: 1.2rem;
+}
+
+
+
+
+
+
+
+.form-container {
+	max-width: 700px;
+	margin: auto;
+	background: white;
+	padding: 1rem;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.observation-card {
+	padding: 1rem;
+	/* border: 2px solid #005f73; */
+	border-radius: 8px;
+	margin-bottom: 1rem;
+	background: #1a3b5226;
+	width: 40rem;
+}
+.questions {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+.question {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.toggle-buttons {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.toggle-buttons input {
+  	display: none;
+}
+
+.yes-btn, .no-btn {
+	padding: 0.5rem 1rem;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	user-select: none;
+}
+.yes-btn {
+  	background-color: #b7efc5;
+}
+.no-btn {
+  	background-color: #f4978e;
+}
+.toggle-buttons input:checked + label {
+  	border: 2px solid #000;
+}
+.comments, .actions-taken {
+  	margin-top: 1rem;
+}
+textarea {
+	width: 100%;
+	height: 80px;
+	resize: vertical;
+	padding: 0.5rem;
+	font-size: 1rem;
+}
+.submit-button-new {
+	width: 100%;
+	padding: 1rem;
+	background: #0077b6;
+	color: white;
+	border: none;
+	border-radius: 10px;
+	font-size: 1.2rem;
+	margin-top: 1rem;
+	cursor: pointer;
+}
+
+.submit-button:hover {
+  	background: #023e8a;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.form-control {
+    font-size: 1.3rem;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+.input-large {
+    height: 60px;
+}
+
+.textarea-large {
+    min-height: 120px;
+}

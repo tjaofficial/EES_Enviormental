@@ -58,7 +58,7 @@ urlpatterns = [
     path("personel-signature/",views.signature, name="signature"),
     path('check-bat-profile/', views.check_bat_profile, name='set_facility'),
     ##---SHARED PAGES-----
-    path('archive/', views.archive_view, name='archive'),
+    path('archive/', views.archive, name='archive'),
     path("corrective-action/search/", views.corrective_action_view, name="Corrective-Action"),
     path("corrective-action/issues_view/<int:issueID>/<str:access_page>", views.issues_view, name="issues_view"),
     path("sop/", views.sop_view, name="Sop"),
@@ -85,6 +85,7 @@ urlpatterns = [
     path("ajax/event-calendar/", views.ajax_calendar, name="ajax_calendar"),
     path("ajax/events-for-day/", views.events_for_day, name="events_for_day"),
     path("ajax/print-label-request/", views.print_label_request, name="print-label-request"),
+    path('ajax/archive/search/', views.archive_search_api, name='archive_search_api'),
     ##---FORMS
     path("form/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("form/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),
@@ -109,8 +110,8 @@ urlpatterns = [
     path("form/Daily/21/<int:fsID>/<str:selector>", views.form21, name="form21"),
     path("form/Daily/22/<int:fsID>/<str:selector>", views.form22, name="form22"),
     path("form/Monthly/23/<int:fsID>/<str:selector>", views.form23, name="form23"),
-    path("form/Daily/24/<int:fsID>/<str:selector>/<str:weekend_day>", views.form24, name="form24"),
-    path("form/Daily/25/<int:fsID>/<str:selector>/<str:weekend_day>", views.form25, name="form25"),
+    path("form/24/<int:fsID>/<str:selector>", views.form24, name="form24"),
+    path("form/25/<int:fsID>/<str:selector>", views.form25, name="form25"),
     path("form/Monthly/26/inventory/<int:fsID>/<str:month>/<int:skNumber>/<str:selector>", views.form26, name="form26"),
     path("form/Quarterly/27/<int:fsID>/<str:selector>", views.form27, name="form27"),
     path("form/Monthly/29/<int:fsID>/<str:selector>", views.form29, name="form29"),

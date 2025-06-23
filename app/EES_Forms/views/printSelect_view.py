@@ -7,7 +7,7 @@ from django.http import JsonResponse # type: ignore
 from django.core.exceptions import FieldError # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 import json
-from ..utils.main_utils import checkIfFacilitySelected, getCompanyFacilities
+from ..utils.main_utils import checkIfFacilitySelected, getCompanyFacilities, setUnlockClientSupervisor
 import datetime
 
 lock = login_required(login_url='Login')
@@ -18,26 +18,18 @@ def printSelect(request):
     notifs = checkIfFacilitySelected(request.user)
     options = facility_model.objects.all()
     alertMessage = ''
-    unlock = False
-    client = False
-    supervisor = False
-    
-    if request.user.groups.filter(name=OBSER_VAR):
-        unlock = True
-    if request.user.groups.filter(name=CLIENT_VAR):
-        client = True
-    if request.user.groups.filter(name=SUPER_VAR) or request.user.is_superuser:
-        supervisor = True
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice=facility)
     packetQuery = the_packets_model.objects.filter(facilityChoice=facility)
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     selectList = []
     fsList = []
     for fs in formSettingsQuery:
-        labelList = []
-        for label in fs.settings['packets']:
-            labelList.append((fs.settings['packets'][label], int(label)))
-        fsList.append((fs.id, labelList))
+        if fs.settings['packets']:
+            labelList = []
+            for label in fs.settings['packets']:
+                labelList.append((fs.settings['packets'][label], int(label)))
+            fsList.append((fs.id, labelList))
     formSettingsQueryJson = json.dumps(fsList)
     if len(formSettingsQuery) == 0:
         print('No facility forms have been assigned/No facility has been selected')

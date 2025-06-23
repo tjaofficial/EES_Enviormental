@@ -3737,58 +3737,14 @@ class form24_model(models.Model):
     observer = models.CharField(
         max_length=30
     )
-    month = models.CharField(
-        max_length=30
-    )
     date = models.DateField(
         auto_now_add=False,
         auto_now=False
     )
-    weekend_day = models.CharField(
-        max_length=30,
-        choices=weekend_choices
-    )
-    Q_1 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_2 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_3 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_4 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_5 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_6 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_7 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_8 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_9 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    comments = models.CharField(
-        max_length=300
-    )
-    actions_taken = models.CharField(
-        max_length=150
+    data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
     )
 
     def __str__(self):
@@ -3804,58 +3760,14 @@ class form25_model(models.Model):
     observer = models.CharField(
         max_length=30
     )
-    month = models.CharField(
-        max_length=30
-    )
     date = models.DateField(
         auto_now_add=False,
         auto_now=False
     )
-    weekend_day = models.CharField(
-        max_length=30,
-        choices=weekend_choices
-    )
-    Q_1 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_2 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_3 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_4 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_5 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_6 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_7 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_8 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    Q_9 = models.CharField(
-        max_length=30,
-        choices=yes_no_choices,
-    )
-    comments = models.CharField(
-        max_length=300
-    )
-    actions_taken = models.CharField(
-        max_length=150
+    data = models.JSONField(
+        default=dict,
+        null=True,
+        blank=True
     )
 
     def __str__(self):

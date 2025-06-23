@@ -2,7 +2,7 @@
 <div>
     {% for form in packet.forms|complete_check:complete %}
         {% if form.0.settings.active %}
-            <a href="{% if form.0.formChoice.day_freq == 'Weekends' %}{% if todays_num == 5 %}{% url form.0.formChoice.link form.0.id 'form' 'saturday' %}{% elif todays_num == 6 %}{% url form.0.formChoice.link form.0.id 'form' 'sunday' %}{% endif %}{% else %}{% url form.0.formChoice.link form.0.id 'form' %}{% endif %}">
+            <a href="{% url form.0.formChoice.link form.0.id 'form' %}">
                 <div class="card_Form" style="margin-left: 50px;">
                     <h3 class="card_Form_letter">{{form.1}}</h3>
                     <div class="card_Form_title">

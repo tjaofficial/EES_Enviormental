@@ -2186,7 +2186,70 @@ class form21_form(ModelForm):
             raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
-     
+
+class YesNoToggleWidget(forms.Widget):
+    template_name = 'widgets/yes_no_toggle.html'
+
+    def __init__(self, attrs=None):
+        super().__init__(attrs)
+        self.choices = [('Yes', 'Yes'), ('No', 'No')]
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        context['widget']['name'] = name
+        context['widget']['value'] = value
+        context['widget']['choices'] = self.choices
+        return context
+
+class form24_form2(forms.Form):
+    date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'class': 'form-control input-large'
+            }
+        ), 
+        required=True
+    )
+    observer = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-large',
+            'placeholder': 'Observer Name'
+        }),
+        max_length=255, 
+        required=True
+    )
+
+    # Dynamically add Q fields
+    QUESTION_CHOICES = [
+        ('Yes', 'Yes'),
+        ('No', 'No')
+    ]
+
+    for i in range(1, 10):
+        locals()[f'q_{i}'] = forms.ChoiceField(
+            choices=QUESTION_CHOICES,
+            widget=YesNoToggleWidget(),
+            required=True
+        )
+
+    comments = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control textarea-large',
+            'placeholder': 'Comments',
+            'rows': 4
+        }), 
+        required=True
+    )
+    actions_taken = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control textarea-large',
+            'placeholder': 'Actions Taken',
+            'rows': 4
+        }),
+        required=True
+    )
+
 class form24_form(ModelForm):
     class Meta:
         model = form24_model
@@ -2216,6 +2279,55 @@ class form24_form(ModelForm):
             raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
         """ Extract JSON values and create dynamic form fields with the correct styles. """
         super().__init__(*args, **kwargs)
+
+class form25_form2(forms.Form):
+    date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'class': 'form-control input-large'
+            }
+        ), 
+        required=True
+    )
+    observer = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control input-large',
+            'placeholder': 'Observer Name'
+        }),
+        max_length=255, 
+        required=True
+    )
+
+    # Dynamically add Q fields
+    QUESTION_CHOICES = [
+        ('Yes', 'Yes'),
+        ('No', 'No')
+    ]
+
+    for i in range(1, 10):
+        locals()[f'q_{i}'] = forms.ChoiceField(
+            choices=QUESTION_CHOICES,
+            widget=YesNoToggleWidget(),
+            required=True
+        )
+
+    comments = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control textarea-large',
+            'placeholder': 'Comments',
+            'rows': 4
+        }), 
+        required=True
+    )
+    actions_taken = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control textarea-large',
+            'placeholder': 'Actions Taken',
+            'rows': 4
+        }),
+        required=True
+    )
 
 class form25_form(ModelForm):
     class Meta:

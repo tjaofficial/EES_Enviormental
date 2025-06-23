@@ -1,0 +1,12 @@
+<div class="toggle-buttons">
+    {% for val, label in widget.choices %}
+        <input type="radio"
+               name="{{ widget.name }}"
+               id="{{ widget.name }}_{{ val|lower }}"
+               value="{{ val }}"
+               {% if widget.value == val %}checked{% endif %}>
+        <label for="{{ widget.name }}_{{ val|lower }}" class="{% if val == 'Yes' %}yes-btn{% else %}no-btn{% endif %}">
+            {{ label }}
+        </label>
+    {% endfor %}
+</div>

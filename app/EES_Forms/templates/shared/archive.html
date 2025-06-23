@@ -1,86 +1,259 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list %}{% load static %}{% load archive_tags %}
-<link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
-{% if not unlock %}
-    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-{% endif %}
+{% load static %}{% load archive_tags %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/corrective_actions.css' %}" rel="stylesheet">
+    <link href="{% static 'ees_forms/style/archive.css' %}" rel="stylesheet">
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+{% block list %}
 {% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
-<div class="mainCont mainContCenter" style="width: 845px; align-items:unset; position:relative; padding-bottom: 48px; left:unset; overflow: unset;">
-    <div style="width: 55rem;">
-        <div class="card">
-            <div class="cardHeader methodPlusBlue"> 
-                {% include "shared/components/backArrow.html" with destination="dashboard"%}
-                Archive Search
-            </div>
-            <div class='contentCont'>
-                <form method="GET" action="{% url 'archive' %}" style="text-align: center;">
-                    <div class="CR_dataCont">
+    <div class="mainCont mainContCenter" style="align-items:unset; position:relative; padding-bottom: 48px; left:unset; overflow: unset;">
+        <div style="width: 64rem;">
+            <div class="card">
+                <div class="cardHeader methodPlusBlue"> 
+                    {% include "shared/components/backArrow.html" with destination="dashboard"%}
+                    Archive Search
+                </div>
+                <div class='contentCont'>
+                    <div class="search-bar">
                         <div class="inputCont">
                             Search Form ID {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
-                            <input type="number" name="archiveFormID" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                            <input type="number" id="formID" placeholder="Form ID">
                         </div>
                         <div class="inputCont">
                             Search Form Label {% include 'shared/components/helpPack.html' with data="searchLabel" popupCounter=1 %}<br>
-                            <input type="search" name="archiveFormLabel" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                            <input type="text" id="formLabel" placeholder="Form Label">
                         </div>
                         <div class="inputCont">
                             Search Month/Year {% include 'shared/components/helpPack.html' with data="searchMonthYear" popupCounter=2 %}<br>
-                            <input type="month" name="archiveMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
+                            <input type="month" id="formMonth">
                         </div>
                         <div class="inputCont">
                             Search Date {% include 'shared/components/helpPack.html' with data="searchDate" popupCounter=3 %}<br>
-                            <input type="date" name="archiveDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
+                            <input type="date" id="formDate">
                         </div>
+                        <button class="methodPlusBlue" onclick="performSearch()">Search</button>
                     </div>
-                    <div style="text-align: right;">
-                        {% include "shared/components/submitButton.html" with label="search" %}
+                    {% comment %} <form method="GET" action="{% url 'archive' %}" style="text-align: center;">
+                        <div class="CR_dataCont">
+                            <div class="inputCont">
+                                Search Form ID {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
+                                <input type="number" name="archiveFormID" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                            </div>
+                            <div class="inputCont">
+                                Search Form Label {% include 'shared/components/helpPack.html' with data="searchLabel" popupCounter=1 %}<br>
+                                <input type="search" name="archiveFormLabel" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
+                            </div>
+                            <div class="inputCont">
+                                Search Month/Year {% include 'shared/components/helpPack.html' with data="searchMonthYear" popupCounter=2 %}<br>
+                                <input type="month" name="archiveMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
+                            </div>
+                            <div class="inputCont">
+                                Search Date {% include 'shared/components/helpPack.html' with data="searchDate" popupCounter=3 %}<br>
+                                <input type="date" name="archiveDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            {% include "shared/components/submitButton.html" with label="search" %}
+                        </div>
+                    </form> {% endcomment %}
+                </div>
+                <div class="contentCont" style="min-width: 400px; min-height: 500px;">
+                    <div style="position: relative;">
+                        <div class="loading-overlay" id="loadingOverlay">Loading...</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="methodPlusBlue">Form ID</th>
+                                    <th class="methodPlusBlue">Form Label(s)</th>
+                                    <th class="methodPlusBlue">Form Title</th>
+                                    <th class="methodPlusBlue">Form Header</th>
+                                    <th class="methodPlusBlue">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody">
+                                <tr><td colspan="5" style="text-align:center;">Start a search to see results</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                </form>
-            </div>
-        </div><br>
-        <div class="card">
-            <div class="cardHeader methodPlusBlue">
-                {% if facility != 'supervisor' %}
-                    Searched Forms
-                {% else %}
-                    NO FACILITY SELECTED
-                {% endif %}
-            </div>
-            <div class="contentCont" style="min-width: 400px; min-height: 500px;">
-                <ul style="text-align: left;">
-                {% for items in finalList %}
-                    <li style="list-style-type: disc;">
-                        - 
-                        <a href="
-                            {% if items.formSettings.formChoice.form == '24' or items.formSettings.formChoice.form == '25' %}
-                                {% url items.formSettings.formChoice.link items.formSettings.id items.date items.weekend_day %}
-                            {% elif items.formSettings.formChoice.form == '20' or items.formSettings.formChoice.form == '6' or items.formSettings.formChoice.form == '21' or items.formSettings.formChoice.form == '8'%}
-                                {% url items.formSettings.formChoice.link items.formSettings.id items.week_start %}
-                            {% else %}
-                                {% url items.formSettings.formChoice.link items.formSettings.id items.date %}
-                            {% endif %}
-                        ">
-                            {{items.formSettings.id}} - 
-                            ({% for key, label in items.formSettings.settings.packets.items %}
-                                {% if forloop.last %}
-                                    {{label}}
+                    <ul style="text-align: left;">
+                    {% for items in finalList %}
+                        <li style="list-style-type: disc;">
+                            - 
+                            <a href="
+                                {% if items.formSettings.formChoice.form == '20' or items.formSettings.formChoice.form == '6' or items.formSettings.formChoice.form == '21' or items.formSettings.formChoice.form == '8'%}
+                                    {% url items.formSettings.formChoice.link items.formSettings.id items.week_start %}
                                 {% else %}
-                                    {{label}}, 
+                                    {% url items.formSettings.formChoice.link items.formSettings.id items.date %}
                                 {% endif %}
-                            {% endfor %}) - 
-                            {{items.formSettings.formChoice.header}} - 
-                            {% if items.formSettings.settings.settings.custom_name %}
-                                {{items.formSettings.settings.settings.custom_name}}
-                            {% else %}
-                                {{items.formSettings.formChoice.title}}
-                            {% endif %} - 
-                            {% if items.date %}{{items.date}}{% else %}{{items.week_end}}{% endif %}
-                        </a>
-                    </li>
-                {% endfor %}
-                </ul>
+                            ">
+                                {{items.formSettings.id}} - 
+                                ({% for key, label in items.formSettings.settings.packets.items %}
+                                    {% if forloop.last %}
+                                        {{label}}
+                                    {% else %}
+                                        {{label}}, 
+                                    {% endif %}
+                                {% endfor %}) - 
+                                {{items.formSettings.formChoice.header}} - 
+                                {% if items.formSettings.settings.settings.custom_name %}
+                                    {{items.formSettings.settings.settings.custom_name}}
+                                {% else %}
+                                    {{items.formSettings.formChoice.title}}
+                                {% endif %} - 
+                                {% if items.date %}{{items.date}}{% else %}{{items.week_end}}{% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <script>
+        let currentResults = [];
+        let sortDirections = [0, 0, 0, 0, 0];  // 1 for ascending, -1 for descending for each column
+
+        function performSearch() {
+            const formID = document.getElementById("formID").value;
+            const formLabel = document.getElementById("formLabel").value;
+            const formMonth = document.getElementById("formMonth").value;
+            const formDate = document.getElementById("formDate").value;
+            
+            document.getElementById("loadingOverlay").style.display = "flex";
+
+            fetch("{% url 'archive_search_api' %}?formID=" + formID + "&formLabel=" + formLabel + "&formMonth=" + formMonth + "&formDate=" + formDate + "&facility={{ facility }}")
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Data received:", data.results);
+                const tbody = document.getElementById("resultsBody");
+                tbody.innerHTML = "";
+                currentResults = data.results;
+                if (currentResults.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No results found</td></tr>`;
+                } else {
+                    renderTable(currentResults);
+                }
+                document.getElementById("loadingOverlay").style.display = "none";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showError(error.error);
+                document.getElementById("loadingOverlay").style.display = "none";
+            });
+        }
+
+        function renderTable(results) {
+            const tbody = document.getElementById("resultsBody");
+            tbody.innerHTML = "";
+
+            if (results.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No results found</td></tr>`;
+                return;
+            }
+
+            results.forEach(item => {
+                let labelList = item.form_labels.join(", ");
+                let row = `
+                    <tr class="clickable-row" data-url="${item.url}" style="cursor: pointer;">
+                        <td><a href="${item.url}">${item.form_id}</a></td>
+                        <td>${labelList}</td>
+                        <td>${item.form_title}</td>
+                        <td>${item.form_header}</td>
+                        <td>${item.date}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            bindRowClicks();
+        }
+
+        function sortTable(columnIndex) {
+            const sortKeys = ['form_id', 'form_labels', 'form_title', 'form_header', 'date'];
+            const key = sortKeys[columnIndex];
+
+            // Flip sort direction for this column
+            if (sortDirections[columnIndex] == 0){
+                sortDirections = [0, 0, 0, 0, 0];
+                sortDirections[columnIndex] = 1;
+                
+            } else {
+                sortDirections[columnIndex] *= -1;
+            }
+            const direction = sortDirections[columnIndex];
+            updateHeaderArrows(columnIndex, direction);
+
+            const sortedResults = [...currentResults].sort((a, b) => {
+                let valA = (a[key] || "").toString();
+                let valB = (b[key] || "").toString();
+
+                if (key === 'date') {
+                    const dateA = new Date(valA);
+                    const dateB = new Date(valB);
+                    return (dateA - dateB) * direction;
+                }
+
+                return valA.toLowerCase().localeCompare(valB.toLowerCase()) * direction;
+            });
+
+            renderTable(sortedResults);
+        }
+        function updateHeaderArrows(activeColumnIndex, direction) {
+            const headers = document.querySelectorAll("table thead th");
+            headers.forEach((header, index) => {
+                if (index === activeColumnIndex) {
+                    header.innerText = header.innerText.replace(/ ▲| ▼/g, '');  // remove existing arrows
+                    header.innerText += direction === 1 ? ' ▲' : ' ▼';
+                } else {
+                    header.innerText = header.innerText.replace(/ ▲| ▼/g, '');  // clear other arrows
+                }
+            });
+        }
+
+        function showError(message) {
+            let messagesContainer = document.querySelector("ul.messages");
+            if (!messagesContainer) {
+                messagesContainer = document.createElement("ul");
+                messagesContainer.className = "messages";
+                document.querySelector(".mainContentContainer").prepend(messagesContainer);
+            }
+
+            const li = document.createElement("li");
+            li.className = "error";
+            li.style.display = "block";
+
+            const closeBtn = document.createElement("span");
+            closeBtn.className = "closeAdd";
+            closeBtn.innerHTML = "&times;";
+            closeBtn.onclick = function() { remove_messages(this); };
+            li.appendChild(closeBtn);
+            li.appendChild(document.createTextNode(message));
+            messagesContainer.appendChild(li);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const headers = document.querySelectorAll("table thead th");
+            headers.forEach((header, index) => {
+                header.addEventListener("click", function() {
+                    sortTable(index);
+                });
+            });
+        });
+
+        function bindRowClicks() {
+            document.querySelectorAll(".clickable-row").forEach(row => {
+                row.addEventListener("click", () => {
+                    window.location.href = row.dataset.url;
+                });
+            });
+        }
+
+    </script>
 {% endblock %}

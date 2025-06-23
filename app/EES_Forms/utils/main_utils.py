@@ -1396,13 +1396,7 @@ def distributeNotifications(facility, request, fsID, date, notifKeywordList, iss
             #notifCount = len(notifQuery.filter(user=receivingUser, hovered=False, clicked=False, facilityChoice__company=userProf.company))
             channel_layer = get_channel_layer()
 
-            if newNotification.formSettings.formChoice.form in ['24', '25']:
-                formModelName = newNotification.formSettings.formChoice.link
-                local_dt = localtime(newNotification.created_at)
-                formModel = apps.get_model('EES_Forms', f"{formModelName}_model")
-                variables['day_select'] = formModel.objects.get(date=local_dt.date()).weekend_day
-                #messages.error(request,'ERROR: ID-11850007 Contact Support Team')
-            elif newNotification.formSettings.formChoice.form in ['26']:
+            if newNotification.formSettings.formChoice.form in ['26']:
                 variables['month'] = date.month
                 variables['skNumber'] = savedForm.skID
             
@@ -2513,5 +2507,11 @@ defaultDataForm20 = {
     "Friday": False,
     "Saturday": False,
     "Sunday": False
+}
+
+form24build = {
+    "q1": "yes",
+    "comments": "ceooments",
+    "actions_taken": "blah blah blah"
 }
 

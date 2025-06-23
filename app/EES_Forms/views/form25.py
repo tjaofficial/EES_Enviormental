@@ -3,26 +3,29 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from EES_Enviormental.settings import CLIENT_VAR, OBSER_VAR, SUPER_VAR
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form25_model
-from ..forms import form25_form
-from ..utils.main_utils import fix_data, get_initial_data
+from ..forms import form25_form, form25_form2
+from ..utils.main_utils import get_initial_data
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import calendar
 
 lock = login_required(login_url='Login')
 
 @lock
-def form25(request, fsID, selector, weekend_day):
-    fix_data(fsID)
+def form25(request, fsID, selector):
     # -----SET MAIN VARIABLES------------
     form_variables = initiate_form_variables(fsID, request.user, selector)
     facility = form_variables['facilityName']
-    month_name = calendar.month_name[form_variables['now'].month]
-    if weekend_day == 'saturday':
-        ss_filler = 5
-    elif weekend_day == 'sunday':
-        ss_filler = 6
-    else:
-        ss_filler = ''
+    questionLabels = {
+        'q_1': 'Flow observed at monitoring location?',
+        'q_2': 'Does the observed flow have an unnatural turbidity',
+        'q_3': 'Does the observed flow have an unnatural color?',
+        'q_4': 'Does the observed flow have an oil film?',
+        'q_5': 'Does the observed flow have floating solids?',
+        'q_6': 'Does the observed flow have foams?',
+        'q_7': 'Does the observed flow have settleable solids?',
+        'q_8': 'Does the observed flow have suspended solids?',
+        'q_9': 'Does the observed flow have deposits?',
+    }
     # -----CHECK DAILY_BATTERY_PROF OR REDIRECT------------
     if request.user.user_profile.position == "observer": 
         if form_variables['daily_prof'].exists():
@@ -44,14 +47,15 @@ def form25(request, fsID, selector, weekend_day):
     else:
         if existing:
             initial_data = get_initial_data(form25_model, database_form)
+            additonal_data = {key: extra for key, extra in initial_data['data'].items()}
+            initial_data = initial_data | additonal_data
+            print(initial_data)
         else:
             initial_data = {
                 'date': form_variables['now'],
                 'observer': form_variables['full_name'],
-                'month': month_name,
-                'weekend_day': ss_filler,
             }
-        data = form25_form(initial=initial_data, form_settings=form_variables['freq'])
+        data = form25_form2(initial=initial_data)
     # -----IF REQUEST.POST------------
     if request.method == "POST":
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
@@ -59,11 +63,18 @@ def form25(request, fsID, selector, weekend_day):
             form_settings = form_variables['freq']
         except form_settings_model.DoesNotExist:
             raise ValueError(f"Error: form_settings_model with ID {fsID} does not exist.")
+        copyPOST = request.POST.copy()
+        requestQuestions = {f"q_{i}": request.POST.get(f"q_{i}") for i in range(1, 10)}
+        copyPOST['data'] = {
+            **requestQuestions,
+            "comments": request.POST['comments'],
+            "actions_taken": request.POST['actions_taken']
+        }
     # -----SET FORM VARIABLE IN RESPONSE TO DECIDING VARIABLES------------
         if existing:
-            form = form25_form(request.POST, instance=database_form, form_settings=form_settings)
+            form = form25_form(copyPOST, instance=database_form, form_settings=form_settings)
         else:
-            form = form25_form(request.POST, form_settings=form_settings)
+            form = form25_form(copyPOST, form_settings=form_settings)
     # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
         exportVariables = (request, selector, facility, database_form, fsID)
         return redirect(*template_validate_save(form, form_variables, *exportVariables))
@@ -79,6 +90,6 @@ def form25(request, fsID, selector, weekend_day):
         'unlock': form_variables['unlock'], 
         'supervisor': form_variables['supervisor'], 
         'formName': form_variables['formName'], 
-        'selector': selector, 
-        'weekend_day': weekend_day
+        'selector': selector,
+        'questionLabels': questionLabels
     })

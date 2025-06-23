@@ -1,8 +1,6 @@
 {% load static %}
 <a href="
-    {% if notif.formSettings.formChoice.link == 'form24' or notif.formSettings.formChoice.link == 'form25'%}
-        {% url notif.formSettings.formChoice.link notif.formSettings.id notif.formData.date day_select|lower %}
-    {% elif notif.formSettings.formChoice.link == 'form26' %}
+    {% if notif.formSettings.formChoice.link == 'form26' %}
         {% url notif.formSettings.formChoice.link notif.formSettings.id month skNumber notif.formData.date %}
     {% else %}
         {% url notif.formSettings.formChoice.link notif.formSettings.id notif.formData.date %}

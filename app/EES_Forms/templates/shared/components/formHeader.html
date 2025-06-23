@@ -1,12 +1,18 @@
 {% load static %}
 <script defer src="{% static 'ees_forms/script/changeFormName.js' %}"></script>
-{% if freq.formChoice.id == 1 or freq.formChoice.id == 2 or freq.formChoice.id == 3 or freq.formChoice.id == 4 %}
-{{freq.formChoice.header}} - (<span id="formCustomName"></span>)<br>
-{% if freq.settings.settings.custom_name %}{{freq.settings.settings.custom_name}}{% endif %}
-{% else %}
-{{freq.formChoice.header}}<br>
-{{main}} - (<span id="formCustomName"></span>)<br>
-{% if freq.settings.settings.custom_name %}{{freq.settings.settings.custom_name}}{% endif %}
-{% endif %}
-<div id="fsData" style="display:none;" data-data="{{freq.settings.packets}}"></div>
-<div id="fsID" style="display:none;" data-data="{{freq.id}}"></div>
+<div style="font-weight: bold;text-align: center; font-size: 1.3rem;margin-bottom: 20px;">
+    {% if freq.formChoice.id == 1 or freq.formChoice.id == 2 or freq.formChoice.id == 3 or freq.formChoice.id == 4 %}
+        {{freq.formChoice.header}} - (<span id="formCustomName"></span>)<br>
+        {% if freq.settings.settings.custom_name %}
+            {{freq.settings.settings.custom_name}}
+        {% endif %}
+    {% else %}
+        {{freq.formChoice.header}}<br>
+        {{main}} - (<span id="formCustomName"></span>)<br>
+        {% if freq.settings.settings.custom_name %}
+            {{freq.settings.settings.custom_name}}
+        {% endif %}
+    {% endif %}
+    <div id="fsData" style="display:none;" data-data="{{freq.settings.packets}}"></div>
+    <div id="fsID" style="display:none;" data-data="{{freq.id}}"></div>
+</div>

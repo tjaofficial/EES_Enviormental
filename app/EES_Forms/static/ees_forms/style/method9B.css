@@ -111,6 +111,7 @@
 #newName{
   width: auto;
   display: inline-flex;
+  text-align: center;
 }
 #boxa4{
   border: 1px solid black;
@@ -151,7 +152,7 @@ span.sideWord{
   font-size: 15px;
 }
 #ptInfoInner2{
-  text-align: center;
+  text-align: left;
   display: inline-flex;
 }
 #tableSize5{
@@ -161,4 +162,7 @@ span.sideWord{
 #tableSize6{
    width: 50px;
   font-size: 15px;
+}
+#pushTravels table {
+  text-align: left;
 }

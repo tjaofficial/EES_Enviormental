@@ -423,8 +423,9 @@ def form24_issue_check(savedForm, form_variables, request, selector, facility, d
     finder = issues_model.objects.filter(date=savedForm.date, formChoice=savedForm.formSettings).exists()
     issueFound = False
     compliance = False
+    answersInForm = {savedForm.data[f"q_{i}"] for i in range(2,10)}
     #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
-    if 'Yes' in {savedForm.Q_2,savedForm.Q_3,savedForm.Q_4,savedForm.Q_5,savedForm.Q_6,savedForm.Q_7,savedForm.Q_8,savedForm.Q_9}:
+    if 'Yes' in answersInForm:
         issueFound = True
     #--------^^^^^^^ INSERT ANY CHECKS HERE ^^^^^^^^----------------
     if issueFound:
@@ -449,8 +450,9 @@ def form25_issue_check(savedForm, form_variables, request, selector, facility, d
     finder = issues_model.objects.filter(date=savedForm.date, formChoice=savedForm.formSettings).exists()
     issueFound = False
     compliance = False
+    answersInForm = {savedForm.data[f"q_{i}"] for i in range(2,10)}
     #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
-    if 'Yes' in {savedForm.Q_2,savedForm.Q_3,savedForm.Q_4,savedForm.Q_5,savedForm.Q_6,savedForm.Q_7,savedForm.Q_8,savedForm.Q_9}:
+    if 'Yes' in answersInForm:
         issueFound = True
     #--------^^^^^^^ INSERT ANY CHECKS HERE ^^^^^^^^----------------
     if issueFound:

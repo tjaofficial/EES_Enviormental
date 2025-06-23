@@ -287,7 +287,7 @@ def schedule_view(request):
     # })
 
 @lock
-def archive_view(request):
+def archive(request):
     facility = getattr(request, 'facility', None)
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)

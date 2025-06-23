@@ -66,13 +66,19 @@ function fillForm(tempSaveKey){
         for(let key in dataObject) {
             if(dataObject[key]){ 
                 let element = document.getElementById(key);
-                console.log(element)
+                if (!element){
+                    //console.log(dataObject[key].toLowerCase())
+                    element = document.getElementById(`${key}_${dataObject[key].toLowerCase()}`);
+                }
+                //console.log(element)
                 if (element) {
                     if(element.type === "radio") {
-                        let baseName = key.replace(/_\d+$/, '').replace("id_",""); // 🔥 Remove trailing _0, _1, _2
+                        if (['24', '25'].includes(formName)){
+                            var baseName = key;
+                        } else {
+                            var baseName = key.replace(/_\d+$/, '').replace("id_",""); // 🔥 Remove trailing _0, _1, _2
+                        }
                         let radios = document.getElementsByName(baseName);
-
-                        console.log(baseName)
                         radios.forEach(radio => {
                             if (radio.value === dataObject[key]) {
                                 radio.checked = true;

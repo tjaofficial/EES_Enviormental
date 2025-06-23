@@ -1,5 +1,13 @@
 .submit_button{
-    font-size: 1.8rem;
+    width: 100%;
+    padding: 1rem;
+    background: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    cursor: pointer;
 }
 .primaryButtonStyle{
     width: 100%;

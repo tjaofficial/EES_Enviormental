@@ -1042,6 +1042,7 @@ def pdf_template_9(primaryData, title, subTitle):
         count = len(allLeaks)
         rowCount = 0
         for leak in allLeaks:
+            print(leak)
             tableData.insert(8 + rowCount, ['', leak['oven'], time_change(leak['time']), leak['source'], Paragraph('<para align=center>' + leak['comment'] + '</para>', styles['Normal']), ''],)
             rowCount += 1
     else:
@@ -1948,20 +1949,20 @@ def pdf_template_24(primaryData, title, subTitle):
         [title],
         [subTitle],
         ['', Paragraph('<para align=center><b>Date:&#160;</b>' + date_change(primaryData.date) + '</para>', styles['Normal']), '', '', '', ''],
+        ['', Paragraph('<para align=center><b>Observer:&#160;</b>' + primaryData.observer + '</para>', styles['Normal']), '', '', '', ''],
         ['', '', '', '', '', ''],
+        ['', '', Paragraph('<para><b>Flow observed at monitoring location?</b></para>', styles['Normal']), primaryData.data['q_1'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural turbidity?</b></para>', styles['Normal']), primaryData.data['q_2'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural color?</b></para>', styles['Normal']), primaryData.data['q_3'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have an oil film?</b></para>', styles['Normal']), primaryData.data['q_4'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have floating solids?</b></para>', styles['Normal']), primaryData.data['q_5'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have foams?</b></para>', styles['Normal']), primaryData.data['q_6'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have settleable solids?</b></para>', styles['Normal']), primaryData.data['q_7'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have suspended solids?</b></para>', styles['Normal']), primaryData.data['q_8'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have deposits?</b></para>', styles['Normal']), primaryData.data['q_9'], '', ''],
         ['', '', '', '', '', ''],
-        ['', '', Paragraph('<para><b>Flow observed at monitoring location?</b></para>', styles['Normal']), primaryData.Q_1, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural turbidity?</b></para>', styles['Normal']), primaryData.Q_2, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural color?</b></para>', styles['Normal']), primaryData.Q_3, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have an oil film?</b></para>', styles['Normal']), primaryData.Q_4, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have floating solids?</b></para>', styles['Normal']), primaryData.Q_5, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have foams?</b></para>', styles['Normal']), primaryData.Q_6, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have settleable solids?</b></para>', styles['Normal']), primaryData.Q_7, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have suspended solids?</b></para>', styles['Normal']), primaryData.Q_8, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have deposits?</b></para>', styles['Normal']), primaryData.Q_9, '', ''],
-        ['', '', '', '', '', ''],
-        ['', Paragraph('<para><b>Comments (Describe any problemsor conditions found during inspections)</b></para>', styles['Normal']), '', primaryData.comments, '', ''],
-        ['', Paragraph('<para><b>Actions Taken (Include date mitigated)</b></para>', styles['Normal']), '', primaryData.actions_taken, '', ''],
+        ['', Paragraph('<para><b>Comments (Describe any problemsor conditions found during inspections)</b></para>', styles['Normal']), '', primaryData.data['comments'], '', ''],
+        ['', Paragraph('<para><b>Actions Taken (Include date mitigated)</b></para>', styles['Normal']), '', primaryData.data['actions_taken'], '', ''],
     ]
     tableColWidths = (40,50,270,80,50,40)
 
@@ -1974,6 +1975,7 @@ def pdf_template_24(primaryData, title, subTitle):
         ('SPAN', (0,1), (-1,1)),
         ('BOTTOMPADDING',(0,1), (-1,1), 15),
         ('SPAN', (1,2), (4,2)),
+        ('SPAN', (1,3), (4,3)),
         ('ALIGN', (0,0), (-1,2), 'CENTER'),
         
         #table
@@ -1997,20 +1999,20 @@ def pdf_template_25(primaryData, title, subTitle):
         [title],
         [subTitle],
         ['', Paragraph('<para align=center><b>Date:&#160;</b>' + date_change(primaryData.date) + '</para>', styles['Normal']), '', '', '', ''],
+        ['', Paragraph('<para align=center><b>Observer:&#160;</b>' + primaryData.observer + '</para>', styles['Normal']), '', '', '', ''],
         ['', '', '', '', '', ''],
+        ['', '', Paragraph('<para><b>Flow observed at monitoring location?</b></para>', styles['Normal']), primaryData.data['q_1'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural turbidity?</b></para>', styles['Normal']), primaryData.data['q_2'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural color?</b></para>', styles['Normal']), primaryData.data['q_3'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have an oil film?</b></para>', styles['Normal']), primaryData.data['q_4'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have floating solids?</b></para>', styles['Normal']), primaryData.data['q_5'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have foams?</b></para>', styles['Normal']), primaryData.data['q_6'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have settleable solids?</b></para>', styles['Normal']), primaryData.data['q_7'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have suspended solids?</b></para>', styles['Normal']), primaryData.data['q_8'], '', ''],
+        ['', '', Paragraph('<para><b>Does the observed flow have deposits?</b></para>', styles['Normal']), primaryData.data['q_9'], '', ''],
         ['', '', '', '', '', ''],
-        ['', '', Paragraph('<para><b>Flow observed at monitoring location?</b></para>', styles['Normal']), primaryData.Q_1, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural turbidity?</b></para>', styles['Normal']), primaryData.Q_2, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have an unnatural color?</b></para>', styles['Normal']), primaryData.Q_3, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have an oil film?</b></para>', styles['Normal']), primaryData.Q_4, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have floating solids?</b></para>', styles['Normal']), primaryData.Q_5, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have foams?</b></para>', styles['Normal']), primaryData.Q_6, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have settleable solids?</b></para>', styles['Normal']), primaryData.Q_7, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have suspended solids?</b></para>', styles['Normal']), primaryData.Q_8, '', ''],
-        ['', '', Paragraph('<para><b>Does the observed flow have deposits?</b></para>', styles['Normal']), primaryData.Q_9, '', ''],
-        ['', '', '', '', '', ''],
-        ['', Paragraph('<para><b>Comments (Describe any problemsor conditions found during inspections)</b></para>', styles['Normal']), '', primaryData.comments, '', ''],
-        ['', Paragraph('<para><b>Actions Taken (Include date mitigated)</b></para>', styles['Normal']), '', primaryData.actions_taken, '', ''],
+        ['', Paragraph('<para><b>Comments (Describe any problemsor conditions found during inspections)</b></para>', styles['Normal']), '', primaryData.data['comments'], '', ''],
+        ['', Paragraph('<para><b>Actions Taken (Include date mitigated)</b></para>', styles['Normal']), '', primaryData.data['actions_taken'], '', ''],
     ]
     tableColWidths = (40,50,270,80,50,40)
 
@@ -2023,6 +2025,7 @@ def pdf_template_25(primaryData, title, subTitle):
         ('SPAN', (0,1), (-1,1)),
         ('BOTTOMPADDING',(0,1), (-1,1), 15),
         ('SPAN', (1,2), (4,2)),
+        ('SPAN', (1,3), (4,3)),
         ('ALIGN', (0,0), (-1,2), 'CENTER'),
         
         #table

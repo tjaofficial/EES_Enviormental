@@ -1,9 +1,9 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
 {% block list%}{% load static %}
-<link href="{% static 'ees_forms/style/formI.css' %}" rel="stylesheet" />
+<link href="{% static 'ees_forms/style/form20.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
 <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/formI.js' %}"></script>
+<script defer src="{% static 'ees_forms/script/form20.js' %}"></script>
 {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
 {% endif %}
