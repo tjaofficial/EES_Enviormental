@@ -5,7 +5,7 @@ from ..utils.main_utils import parsePhone, setDefaultSettings, dashDictOptions, 
 from ..models import user_profile_model, company_model, User, braintree_model, braintreePlans, facility_model, account_reactivation_model
 from ..forms import CreateUserForm, user_profile_form, company_Update_form, bat_info_form
 from EES_Enviormental.settings import SUPER_VAR
-import datetime
+from datetime import datetime
 import json
 from ..decor import group_required
 
@@ -25,8 +25,8 @@ def sup_account_view(request):
     userCompany = accountData.company
     listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany)
     companyStatus = stripeData.status
-    current_date = datetime.datetime.today().date()
-    end_of_billing_date = datetime.datetime.strptime(stripeData.settings['next_billing_date'], "%Y-%m-%d").date() if stripeData.settings['next_billing_date'] else False
+    current_date = datetime.today().date()
+    end_of_billing_date = datetime.strptime(stripeData.settings['next_billing_date'], "%Y-%m-%d").date() if stripeData.settings['next_billing_date'] and stripeData.settings['next_billing_date'] not in ['None', 'none'] else False
     if companyStatus == 'active' or companyStatus == 'canceled' and end_of_billing_date and current_date <= end_of_billing_date:
         active_registrations = len(listOfEmployees.filter(user__is_active=True))
     else:
@@ -179,7 +179,7 @@ def sup_facility_settings(request, facilityID, selector):
     active_registrations = len(listOfEmployees.filter(company__braintree__settings__account__status='active'))
 
     dateStart = "1900-01-01"
-    dateStart = datetime.datetime.strptime(dateStart, "%Y-%m-%d")
+    dateStart = datetime.strptime(dateStart, "%Y-%m-%d")
         
     if request.method == "POST":
         answer = request.POST
