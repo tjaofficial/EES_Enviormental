@@ -46,6 +46,14 @@ def stripe_subscription_view(request):
         if "extra_users" in addons and extra_users_count > 0:
             line_items.append({"price": price_map["extra_users"], "quantity": extra_users_count})
 
+        # newSubscription = subscription(
+        #     companyChoice=request.user.user_profile.company
+        #     subscriptionID=
+        #     planstatus=
+        #     customerID=
+        #     settings=
+        # )
+
         try:
             session = stripe.checkout.Session.create(
                 payment_method_types=["card"],
@@ -58,6 +66,13 @@ def stripe_subscription_view(request):
                     "plan": plan,
                     "extra_users_count": str(extra_users_count),
                     "userID": str(request.user.id)  # optional
+                },
+                subscription_data={
+                    "metadata": {  # this metadata will live directly on the subscription object
+                        "plan": plan,
+                        "extra_users_count": str(extra_users_count),
+                        "userID": str(request.user.id)
+                    }
                 }
             )
             return redirect(session.url)
@@ -85,43 +100,26 @@ def stripe_webhook(request):
         return HttpResponse(status=400)  # invalid signature
 
     # 🔥 Handle subscription
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
+    if event["type"] == "customer.session.created":
+        subscription_data = event["data"]["object"]
 
+        subscription_id = subscription_data["id"]
+        customer_id = subscription_data["customer"]
+        current_period_end = subscription_data.get("current_period_end")
+        cancel_at_period_end = subscription_data.get("cancel_at_period_end", False)
+        
+        metadata = subscription_data.get("metadata", {})
+        plan = metadata.get("plan", "unknown")
+        extra_users = metadata.get("extra_users_count", "0")
+        user_id = metadata.get("userID")
 
-        plan = session["metadata"].get("plan", "unknown")
+        user = User.objects.filter(id=user_id).first()
+        if not user:
+            print("⚠️ User not found, cannot create subscription")
+            return HttpResponse(status=200)
+
+        company = user.user_profile.company
         planSelection = braintreePlans.objects.get(name=plan)
-        extra_users = session["metadata"].get("extra_users_count", "0")
-        customer_email = session.get("customer_email")
-        subscription_id = session.get("subscription")
-        customer_id = session.get("customer")
-        user_id = session["metadata"].get("userID")
-        cancel_at_period_end = session.get("cancel_at_period_end", False)
-
-        stripe_subscription = stripe.Subscription.retrieve(subscription_id)
-        print("Stripe Subscription status:", stripe_subscription.get("status"))
-
-        next_billing_date = stripe_subscription.get("current_period_end")
-        if next_billing_date:
-            billing_date = datetime.fromtimestamp(next_billing_date)
-        else:
-            billing_date = None
-            print("⚠️ Subscription has no current_period_end set yet.")
-
-        print("✅ Stripe Checkout completed:")
-        print("Plan:", plan)
-        print("Seats:", extra_users)
-        print("Sub ID:", subscription_id)
-
-
-        user = User.objects.filter(id=user_id)
-        if user.exists():
-            user = user.first()
-            company = user.user_profile.company
-        else:
-            print("No company on file, redirect to company register")
-            return redirect('companyReg')
-
 
         subscription.objects.create(
             companyChoice=company,
@@ -131,7 +129,7 @@ def stripe_webhook(request):
             customerID=customer_id,
             settings={
                 "extra_users": extra_users, 
-                "next_billing_date": str(billing_date),
+                "next_billing_date": str(datetime.fromtimestamp(current_period_end)),
                 "cancel_at_period_end": cancel_at_period_end
             }
         )
@@ -164,12 +162,13 @@ def stripe_webhook(request):
         cancel_at_period_end = subscription_data.get("cancel_at_period_end", False)
         current_period_end = subscription_data.get("current_period_end")
 
-        #metadata = subscription_data.get("metadata", {})
-        extra_users = session["metadata"].get("extra_users_count", "0")
+        metadata = subscription_data.get("metadata", {})
+        extra_users = metadata.get("extra_users_count", "0")
+
         subscription.objects.filter(subscriptionID=subscription_id).update(
             status=status,
             settings__extra_user=extra_users,
-            next_billing_date=datetime.fromtimestamp(current_period_end),
+            next_billing_date=str(datetime.fromtimestamp(current_period_end)),
             settings__cancel_at_period_end=cancel_at_period_end
         )
     # elif event["type"] == "invoice.payment_succeeded":
