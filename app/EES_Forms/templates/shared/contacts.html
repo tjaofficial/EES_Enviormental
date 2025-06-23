@@ -156,9 +156,9 @@
             {% else %}
                 <div class="contentCont">
                     No employees or clients have been created:<br><br>
-                    <a href="{% url 'Register' facility 'form' %}">Click here</a> to add an employee.
+                    <a href="{% url 'Register' 'form' %}">Click here</a> to add an employee.
                     <p>- or -</p>
-                    <a href="{% url 'Register' facility 'client' %}">Click here</a> to add a client.
+                    <a href="{% url 'Register' 'client' %}">Click here</a> to add a client.
                 </div>
             {% endif %}
             </div>
