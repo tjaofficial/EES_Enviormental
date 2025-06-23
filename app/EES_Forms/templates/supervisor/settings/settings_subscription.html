@@ -52,7 +52,7 @@
             {% if not stripeData.settings.cancel_at_period_end %}
                 <tr class='tableSpacer'>
                     <td class="labelClass">Next Billing Date:</td>
-                    <td class="labelClass2">{% if stripeData.settings.next_billing_date %}{{stripeData.settings.next_billing_date|dateParse|date:"N j, Y"}}{% else %}INSERT NEXT BILLING DATE{% endif %}</td>
+                    <td class="labelClass2">{% if stripeData.settings.next_billing_date and stripeData.settings.next_billing_date != "None" %}{{stripeData.settings.next_billing_date|dateParse|date:"N j, Y"}}{% else %}INSERT NEXT BILLING DATE{% endif %}</td>
                 </tr>
             {% else %}
                 <tr class='tableSpacer'>

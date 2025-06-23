@@ -1,5 +1,5 @@
 {% extends "supervisor/components/sup_layout.html" %}
-{% block list%}{% load static %}
+{% load static %}
 {% block extra_head %}
     {% comment %} <link href="{% static 'ees_forms/login_style.css' %}" rel="stylesheet"> {% endcomment %}
     <link href="{% static 'ees_forms/style/register.css' %}" rel="stylesheet">
@@ -7,7 +7,8 @@
     <script defer src="{% static 'ees_forms/script/register.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
 {% endblock %}
-    <input id='access_page' type='hidden' value={{access_page}} />
+{% block list %}
+    <input id='access_page' type='hidden' value={{access_page}}>
     <div id='addMoreRegistrations' style='display:none;' data-registrations={{addMoreRegistrations}}></div>
     {% if access_page == 'form' or access_page == 'facility' or access_page == 'client' or access_page == 'observer'%}
         <div class="mainCont" style="width: 43rem;">
@@ -87,9 +88,6 @@
                             </div>
                             <input type="submit" name="create_user" value="submit">
                         </form>
-                        {% for message in messages %}
-                            <p>{{message}}</p>
-                        {% endfor%}
                     {% else %}
                         You have used all of your registrations available within your plan. If you would like to upgrade to a larger plan or add more registrations <a href="{% url 'Account' 'supervisor' %}#subscription" style="text-decoration: underline;">click here</a>
                     {% endif %}

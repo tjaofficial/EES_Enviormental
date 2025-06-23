@@ -46,6 +46,7 @@ ul.messages li .closeAdd {
     font-weight: bold;
     padding-right: 4px;
     margin-top: -7px;
+    cursor: pointer;
 }
 ul.messages{
     position: absolute;
