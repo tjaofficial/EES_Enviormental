@@ -88,75 +88,15 @@ def stripe_webhook(request):
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
 
-
-        plan = session["metadata"].get("plan", "unknown")
-        planSelection = braintreePlans.objects.get(name=plan)
-        extra_users = session["metadata"].get("extra_users_count", "0")
-        customer_email = session.get("customer_email")
-        subscription_id = session.get("subscription")
-        customer_id = session.get("customer")
-        user_id = session["metadata"].get("userID")
-        cancel_at_period_end = session.get("cancel_at_period_end", False)
-
-        stripe_subscription = stripe.Subscription.retrieve(subscription_id)
-        print("Stripe Subscription status:", stripe_subscription.get("status"))
-
-        next_billing_date = stripe_subscription.get("current_period_end")
-        if next_billing_date:
-            billing_date = datetime.fromtimestamp(next_billing_date)
-        else:
-            billing_date = None
-            print("⚠️ Subscription has no current_period_end set yet.")
-
         print("✅ Stripe Checkout completed:")
-        print("Plan:", plan)
-        print("Seats:", extra_users)
-        print("Sub ID:", subscription_id)
-
-
-        user = User.objects.filter(id=user_id)
-        if user.exists():
-            user = user.first()
-            company = user.user_profile.company
-        else:
-            print("No company on file, redirect to company register")
-            return redirect('companyReg')
-
-
-        subscription.objects.create(
-            companyChoice=company,
-            subscriptionID=subscription_id,
-            plan=planSelection,
-            status="active",
-            customerID=customer_id,
-            settings={
-                "extra_users": extra_users, 
-                "next_billing_date": str(billing_date),
-                "cancel_at_period_end": cancel_at_period_end
-            }
-        )
-
-        mail_subject = 'MethodPlus: Welcome to MethodPlus+. Your account has been activated.'   
-        current_site = get_current_site(request)
-        html_message = render_to_string('email/acc_welcome_email.html', {  
-            'user': user,
-            'domain': current_site.domain,
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-        })
-        plain_message = strip_tags(html_message)
-        to_email = user.email 
-        send_mail(
-            mail_subject,
-            plain_message,
-            settings.EMAIL_HOST_USER,
-            [to_email],
-            html_message=html_message,
-            fail_silently=False
-        )
-        print('MADE IT TO FUCKING Email and Save')
+        print("Session ID:", session.get("id"))
+        print("Subscription ID:", session.get("subscription"))
+        print("Customer ID:", session.get("customer"))
     elif event["type"] == "customer.subscription.deleted":
         subID = event["data"]["object"]["id"]
-        subscription.objects.get(subscriptionID=subID).update(status="canceled")
+        subscription_obj = subscription.objects.get(subscriptionID=subID)
+        subscription_obj.status = "canceled"
+        subscription_obj.save()
     elif event["type"] == "customer.subscription.updated":
         subscription_data = event["data"]["object"]
         subscription_id = subscription_data["id"]
@@ -172,6 +112,73 @@ def stripe_webhook(request):
             next_billing_date=datetime.fromtimestamp(current_period_end),
             settings__cancel_at_period_end=cancel_at_period_end
         )
+    elif event["type"] == "customer.subscription.created":
+        subscription_data = event["data"]["object"]
+
+        subscription_id = subscription_data["id"]
+        customer_id = subscription_data["customer"]
+        status = subscription_data["status"]
+        cancel_at_period_end = subscription_data.get("cancel_at_period_end", False)
+        current_period_end = subscription_data.get("current_period_end")
+
+        metadata = subscription_data.get("metadata", {})
+        plan = metadata.get("plan", "unknown")
+        extra_users = metadata.get("extra_users_count", "0")
+        user_id = metadata.get("userID")
+
+        # Safety checks
+        if not user_id:
+            print("⚠️ No userID found in metadata!")
+            return HttpResponse(status=200)
+
+        user = User.objects.filter(id=user_id).first()
+        if not user:
+            print(f"⚠️ User with ID {user_id} not found!")
+            return HttpResponse(status=200)
+
+        company = user.user_profile.company
+
+        try:
+            planSelection = braintreePlans.objects.get(name=plan)
+        except braintreePlans.DoesNotExist:
+            print(f"⚠️ Plan {plan} not found in braintreePlans!")
+            return HttpResponse(status=200)
+
+        # Create subscription in your DB
+        subscription.objects.create(
+            companyChoice=company,
+            subscriptionID=subscription_id,
+            plan=planSelection,
+            status=status,
+            customerID=customer_id,
+            settings={
+                "extra_users": extra_users,
+                "next_billing_date": str(datetime.fromtimestamp(current_period_end)),
+                "cancel_at_period_end": cancel_at_period_end
+            }
+        )
+
+        # Send Welcome Email
+        mail_subject = 'MethodPlus: Welcome to MethodPlus+. Your account has been activated.'   
+        current_site = get_current_site(request)
+        html_message = render_to_string('email/acc_welcome_email.html', {  
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        })
+        plain_message = strip_tags(html_message)
+        to_email = user.email 
+        send_mail(
+            mail_subject,
+            plain_message,
+            settings.EMAIL_HOST_USER,
+            [to_email],
+            html_message=html_message,
+            fail_silently=False
+        )
+
+        print(f"✅ Subscription {subscription_id} created and welcome email sent.")
+            
     # elif event["type"] == "invoice.payment_succeeded":
     #     invoice = event["data"]["object"]
     #     subscription_id = invoice.get("subscription")
