@@ -71,7 +71,7 @@ def login_view(request):
                             if len(facility_model.objects.all()) > 0:
                                 return redirect('sup_dashboard')
                             else:
-                                return redirect('Register', SUPER_VAR, 'facility')
+                                return redirect('Register', 'facility')
                         else:
                             return redirect('PasswordChange', SUPER_VAR)
                     elif request.user.groups.filter(name=CLIENT_VAR):
@@ -341,7 +341,7 @@ def verify_2fa(request):
                         if len(facility_model.objects.all()) > 0:
                             return redirect('sup_dashboard', SUPER_VAR)
                         else:
-                            return redirect('Register', SUPER_VAR, 'facility')
+                            return redirect('Register', 'facility')
                     else:
                         return redirect('PasswordChange', SUPER_VAR)
                 elif request.user.groups.filter(name=CLIENT_VAR):

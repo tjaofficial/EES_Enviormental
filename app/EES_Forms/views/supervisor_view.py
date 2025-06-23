@@ -249,7 +249,7 @@ def register_view(request, access_page):
                     messages.error(request, "The facility name you have entered is taken, please choose different name")
                     print('need error message response for matching Facility names, choose different name')
                     print(messages)
-                    return redirect('Register', facility, 'facility')
+                    return redirect('Register', 'facility')
         elif check_3:
             print('CHECK 3')
             finalPhone = parsePhone(request.POST['phone'])
