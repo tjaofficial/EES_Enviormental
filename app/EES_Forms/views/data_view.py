@@ -11,7 +11,7 @@ profile = user_profile_model.objects.all()
 lock = login_required(login_url='Login')
 
 @lock
-def pt_admin1_view(request, facility):
+def pt_admin1_view(request):
     facility = getattr(request, 'facility', None)
     print(facility)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)

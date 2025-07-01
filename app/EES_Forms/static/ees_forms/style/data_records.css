@@ -1,0 +1,56 @@
+.data-records-container {
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.page-description {
+  font-size: 1rem;
+  color: #9ca3af;
+  margin-bottom: 2rem;
+}
+.record-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+.record-card {
+    background: #1e253347;
+    border: 1px solid #2e3748;
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.25s ease-in-out;
+    text-decoration: none;
+    /* color: #f0f4f8; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 180px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.record-card:hover {
+    background-color: #2955736b;
+    border-color: #3b4c63;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
+.record-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.record-card .title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.record-card .desc {
+  font-size: 0.9rem;
+  color: #000000b3;
+  margin-top: 0.5rem;
+}

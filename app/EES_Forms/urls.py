@@ -71,6 +71,9 @@ urlpatterns = [
     path('print-index/<str:type>/<str:formGroup>/<str:formIdentity>/<str:formDate>', views.form_PDF, name='printIndex'),
     path("profile/<str:access_page>", views.profile, name="profile"),
     path("add_event/", views.event_add_view, name="Add Event"),
+    path("data-records/rolling-average/", views.rolling_average_page, name="rolling_average"),
+    path("api/rolling-average/", views.rolling_average_api, name="rolling_average_api"),
+    path("data-records/", views.data_records, name="data_records"),
     ##------AJAX
     path('ajax/card/progress/', views.card_progress_bar, name='card_progress_bar'),
     path('ajax/card/daily-forms/', views.card_daily_battery_forms, name='card_daily_battery_forms'),
@@ -121,7 +124,7 @@ urlpatterns = [
     path("get-existing-form/", views.get_existing_form, name="get_existing_form"),
     path("get-submitted-areas/", views.get_submitted_areas, name="get_submitted_areas"),
     ##---COKE_BATTERY_DATA
-    path("analytics/battery/push-travel-90-days/<str:facility>", views.pt_admin1_view, name="pt_admin1"),
+    path("analytics/battery/push-travel-90-days/", views.pt_admin1_view, name="pt_admin1"),
     path("method303-rolling-avg/", views.method303_rolling_avg, name="rolling_avg"),
     
 

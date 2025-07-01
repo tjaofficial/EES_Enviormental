@@ -1,0 +1,122 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% load static %}
+{% block extra_head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'ees_forms/style/rolling_average.css' %}">
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+{% block list %}
+
+    <div class="rolling-page-container card">
+        <h2 class="page-title">30-Day Rolling Average Dashboard</h2>
+
+        <div class="card-rolling rolling-avg-card">
+            <h3>Rolling Averages (Past 30 Days)</h3>
+            <div class="avg-grid">
+            <div class="avg-box doors">
+                <p class="label">Door Leaks</p>
+                <p class="value" id="avg-doors">--%</p>
+            </div>
+            <div class="avg-box lids">
+                <p class="label">Lid Leaks</p>
+                <p class="value" id="avg-lids">--%</p>
+            </div>
+            <div class="avg-box offtakes">
+                <p class="label">Offtake Leaks</p>
+                <p class="value" id="avg-offtakes">--%</p>
+            </div>
+            <div class="avg-box charges">
+                <p class="label">Charge Avg</p>
+                <p class="value" id="avg-charges">--</p>
+            </div>
+            </div>
+        </div>
+
+        <div class="date-selector">
+            <label for="select-date">Select Date:</label>
+            <input type="date" id="select-date">
+        </div>
+
+        <div class="card-rolling chart-card">
+            <h3>Leak % Trend</h3>
+            <canvas id="leakChart"></canvas>
+        </div>
+
+        <div class="card-rolling daily-breakdown">
+            <h3>Selected Day Overview</h3>
+            <div id="daily-stats" class="daily-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const updateDashboard = (selectedDate) => {
+        fetch(`/api/rolling-average/?date=${selectedDate}`)
+            .then(res => res.json())
+            .then(data => {
+            document.getElementById("avg-doors").innerText = `${data.rolling_avg.doors_avg?.toFixed(2) ?? '--'}%`;
+            document.getElementById("avg-lids").innerText = `${data.rolling_avg.lids_avg?.toFixed(2) ?? '--'}%`;
+            document.getElementById("avg-offtakes").innerText = `${data.rolling_avg.offtakes_avg?.toFixed(2) ?? '--'}%`;
+            document.getElementById("avg-charges").innerText = `${data.rolling_avg.charges_avg?.toFixed(2) ?? '--'}`;
+            
+            const safeFixed = (value, digits = 2) =>
+                isNaN(Number(value)) ? '--' : Number(value).toFixed(digits);
+            
+            const day = data.selected_day;
+            if (day) {
+                const daily = `
+                <div class="daily-box doors">
+                    <p class="label">Door Leaks</p>
+                    <p class="value">${day.doors?.leaks} / ${day.doors?.not_observed} (${safeFixed(day.doors?.door_percent_leaking)}%)</p>
+                </div>
+                <div class="daily-box lids">
+                    <p class="label">Lid Leaks</p>
+                    <p class="value">${day.lids_offtakes?.lid_leaks} / ${day.lids_offtakes?.lids_not_observed} (${safeFixed(day.lids_offtakes?.lids_percent_leaking)}%)</p>
+                </div>
+                <div class="daily-box offtakes">
+                    <p class="label">Offtake Leaks</p>
+                    <p class="value">${day.lids_offtakes?.offtake_leaks} / ${day.lids_offtakes?.offtakes_not_observed} (${safeFixed(day.lids_offtakes?.offtakes_percent_leaking)}%)</p>
+                </div>`;
+                document.getElementById("daily-stats").innerHTML = daily;
+            } else {
+                document.getElementById("daily-stats").innerHTML = `<p>No data for selected date.</p>`;
+            }
+
+            const labels = Object.keys(data.history);
+            const doors = labels.map(d => data.history[d].doors?.door_percent_leaking || 0);
+            const lids = labels.map(d => data.history[d].lids_offtakes?.lids_percent_leaking || 0);
+            const offs = labels.map(d => data.history[d].lids_offtakes?.offtakes_percent_leaking || 0);
+
+            if (window.leakChart && typeof window.leakChart.destroy === 'function') {
+                window.leakChart.destroy();
+            }
+            const ctx = document.getElementById("leakChart").getContext("2d");
+            window.leakChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                labels: labels,
+                datasets: [
+                    { label: 'Doors %', data: doors, borderColor: 'red', fill: false },
+                    { label: 'Lids %', data: lids, borderColor: 'blue', fill: false },
+                    { label: 'Offtakes %', data: offs, borderColor: 'green', fill: false },
+                ]
+                },
+                options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#fff' } } },
+                scales: {
+                    x: { ticks: { color: '#ccc' } },
+                    y: { ticks: { color: '#ccc' }, beginAtZero: true }
+                }
+                }
+            });
+            });
+        };
+
+        const dateInput = document.getElementById("select-date");
+        dateInput.valueAsDate = new Date();
+        dateInput.addEventListener("change", () => updateDashboard(dateInput.value));
+        updateDashboard(dateInput.value);
+    </script>
+{% endblock %}

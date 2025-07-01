@@ -1,0 +1,47 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% load static %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'ees_forms/style/data_records.css' %}">
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+{% block list %}
+    <div class="card data-records-container">
+        <h2 class="page-title">📊 Data Records Overview</h2>
+        <p class="page-description">Explore various dashboards and reports across the facility. Click a category to view its data and visualizations.</p>
+
+        <div class="record-grid">
+            <a href="{% url 'rolling_average' %}" class="record-card">
+                <div class="icon">📈</div>
+                <div class="title">30-Day Rolling Average</div>
+                <div class="desc">Leak trends, charges, and compliance snapshots</div>
+            </a>
+            <a href="{% url 'pt_admin1' %}" class="record-card">
+                <div class="icon">📝</div>
+                <div class="title">90-Day Push Schedule</div>
+                <div class="desc">Sorted push travel data displaying when specific ovens need to be read</div>
+            </a>
+            {% comment %} <a href="/form-24-insights/" class="record-card">
+                <div class="icon">📝</div>
+                <div class="title">Form 24 Insights</div>
+                <div class="desc">Daily inspection breakdowns and metrics</div>
+            </a> {% endcomment %}
+            {% comment %} <a href="/charge-delay-metrics/" class="record-card">
+                <div class="icon">⏱️</div>
+                <div class="title">Charge Delay Metrics</div>
+                <div class="desc">Analyze delays, pushes, and battery timing</div>
+            </a> {% endcomment %}
+            {% comment %} <a href="/opacity-reports/" class="record-card">
+                <div class="icon">🌫️</div>
+                <div class="title">Opacity Reports</div>
+                <div class="desc">Fugitive emissions trends and visual compliance</div>
+            </a> {% endcomment %}
+            {% comment %} <a href="/battery-profile/" class="record-card">
+                <div class="icon">🏭</div>
+                <div class="title">Battery Profile</div>
+                <div class="desc">Daily oven performance, inoperables, and status</div>
+            </a> {% endcomment %}
+        </div>
+    </div>
+{% endblock %}

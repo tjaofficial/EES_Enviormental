@@ -51,4 +51,5 @@ from .weekly_enviornmental_inspections import *
 from .form30 import *
 from .form31 import *
 from .admin_ajax_call import *
+from .rolling_avg_view import *
 

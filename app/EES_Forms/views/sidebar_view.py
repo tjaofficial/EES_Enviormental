@@ -1149,3 +1149,15 @@ def formsProgress(request, section):
         'sortedFacilityData': sortedFacilityData,
         'freqList': freqList
     })
+
+@lock
+def data_records(request):
+    facility = getattr(request, 'facility', None)
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
+
+    return render(request, "shared/data/data_records.html", {
+        'facility': facility, 
+        'supervisor': supervisor, 
+        "client": client, 
+        'unlock': unlock,
+    })

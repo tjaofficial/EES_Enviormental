@@ -68,11 +68,10 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice__facility_name=facility)
     packetBeingPrinted = ''
     if type == 'single':
-        if formGroup in ['Daily', 'Weekly', 'Monthly']:
+        if formGroup in ['Daily', 'Weekly', 'Monthly', 'Quarterly']:
             fsID, label = map(lambda x: int(x) if x.isdigit() else x, formIdentity.split('-'))
             formSettingsEntry = form_settings_model.objects.get(id=fsID)
             formsBeingUsed = [(label,formSettingsEntry)]
-
     elif formGroup == 'Daily' and type == 'group':
         formsBeingUsed = []
         packetBeingPrinted = the_packets_model.objects.get(id=formIdentity)
@@ -204,11 +203,11 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
                 fileName = "form_1_packet.pdf"
                 documentTitle = "form_1_packet"
             elif type == 'single':
-                if formGroup in ['Daily', "Weekly", "Monthly"]:
+                if formGroup in ['Daily', "Weekly", "Monthly", "Quarterly"]:
                     fileName = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)+".pdf"
                     documentTitle = "form" + str(fsIDPackage[0]) + "_" + str(formDateParsed)
             elif type == "group":
-                if formGroup in ['Daily', "Weekly", "Monthly"]:
+                if formGroup in ['Daily', "Weekly", "Monthly", "Quarterly"]:
                     fileName = str(packetBeingPrinted.name) + "_" + str(formDateParsed)+"_packet.pdf"
                     documentTitle = str(packetBeingPrinted.name)
             title = formInformation.header
