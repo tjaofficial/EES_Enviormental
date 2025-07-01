@@ -93,12 +93,13 @@ def rolling_average_api(request):
     offtakes_30day_list = []
 
     for data_date, data_content in daily_data_list.items():
-        ln_charge_list = []
-        for charge in data_content['charges']:
-            ln_charge_list.append(math.log(charge))
-        sum_ln_charges = sum(ln_charge_list)
-        #ln_avg_charge = math.exp(sum_ln_charges/len(ln_charge_list))-1
-        ln_30day_charges_list.append(sum_ln_charges)
+        if 'charges' in data_content:
+            ln_charge_list = []
+            for charge in data_content['charges']:
+                ln_charge_list.append(math.log(charge))
+            sum_ln_charges = sum(ln_charge_list)
+            #ln_avg_charge = math.exp(sum_ln_charges/len(ln_charge_list))-1
+            ln_30day_charges_list.append(sum_ln_charges)
         if 'doors' in data_content:
             doors_30day_list.append(float(data_content['doors']['door_percent_leaking']))
         if 'lids_offtakes' in data_content:
