@@ -86,42 +86,6 @@
 #boxTitle{
     font-size: 30px;
 }
-/*
-#boxa1{
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 150px;
-    max-width: 150px;
-    height: 35px;
-}
-#boxa2{
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 80px;
-    height: 35px;
-}
-#boxa3{
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 300px;
-    max-width: 300px;
-    height: 35px;
-}
-#boxa13{
-    align-content: center;
-    text-align: center;
-    border: 1px solid black;
-    min-width: 150px;
-    max-width: 150px;
-    height: 35px;
-}
-*/
-#datetime {
-    width: 203px;
-}
 .noteSpace {
     background-color: #0000002e;
     border-radius: 6px;
@@ -129,7 +93,6 @@
     text-align: left;
     padding: 10px;
 }
-
 #readingsTable {
     width: 100%;
     border-collapse: collapse;
@@ -138,7 +101,6 @@
     overflow: hidden;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 }
-
 #readingsTable th {
     background-color: #263544;
     color: white;
@@ -179,7 +141,7 @@
 #boxa3 { min-width: 300px; max-width: 300px; }
 #boxa13 { min-width: 150px; max-width: 150px; }
 
-input[type="text"], input[type="number"], input[type="time"] {
+/* input[type="text"], input[type="number"], input[type="time"] {
     width: 100%;
     padding: 8px;
     border: 1px solid #b0bec5;
@@ -187,10 +149,10 @@ input[type="text"], input[type="number"], input[type="time"] {
     text-align: center;
     font-size: 16px;
     background-color: white;
-}
+} */
 
 /* Style for select inputs */
-select {
+/* select {
     width: 100%;
     padding: 8px;
     border: 1px solid #b0bec5;
@@ -199,8 +161,8 @@ select {
     background-color: white;
     cursor: pointer;
     text-align: center;
-    appearance: none; /* Removes default dropdown arrow in some browsers */
-}
+    appearance: none;
+} */
 
 /* Add a custom dropdown arrow */
 select::after {
@@ -210,30 +172,6 @@ select::after {
     position: absolute;
     right: 10px;
     pointer-events: none;
-}
-
-/* Style for date inputs */
-input[type="date"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #b0bec5;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 16px;
-    background-color: white;
-    cursor: pointer;
-}
-textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #b0bec5;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: white;
-    text-align: left;
-    line-height: 1.5;
-    resize: none; /* Prevents manual resizing */
-    height: 100px; /* Default height */
 }
 
 /* Highlight on focus */

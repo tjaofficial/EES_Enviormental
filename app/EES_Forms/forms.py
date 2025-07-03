@@ -198,11 +198,11 @@ class form1_form(ModelForm):
         fields = ('__all__')
         widgets = {
             'observer': forms.TextInput(attrs={'style': 'width: 180px;'}),
-            'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
-            'crew': forms.Select(attrs={'style': 'width:40px;'}),
-            'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
-            'start': forms.TimeInput(attrs={'id': 'main_start', 'type': 'time', 'style': 'width: 120px;', "required": True}),
-            'stop': forms.TimeInput(attrs={'id': 'main_stop', 'type': 'time', 'style': 'width: 120px;', "required": True}),
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'crew': forms.Select(attrs={'style': 'width:60px;'}),
+            'foreman': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'start': forms.TimeInput(attrs={'id': 'main_start', 'type': 'time', "required": True}),
+            'stop': forms.TimeInput(attrs={'id': 'main_stop', 'type': 'time', "required": True}),
         }
 
     DEFAULT_OVENS_FIELDS = {
@@ -253,17 +253,17 @@ class form1_form(ModelForm):
         'c5_sec': forms.NumberInput(attrs={'id': 'c5_sec', 'oninput': 'sumTime()','min': "0", 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
         'c5_comments': forms.TextInput(attrs={'type': 'text', 'style': 'width: 275px;'}),
         'comments': Textarea(attrs={'id': 'comments', 'rows': 7, 'cols': 125, 'oninput': 'check_oven_numb()'}),
-        'c1_start': forms.TimeInput(attrs={'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c2_start': forms.TimeInput(attrs={'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c3_start': forms.TimeInput(attrs={'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c4_start': forms.TimeInput(attrs={'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c5_start': forms.TimeInput(attrs={'oninput': 'timecheck_c5()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c1_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c1()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c2_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c2()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c3_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c3()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'c4_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c4()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
+        'c1_start': forms.TimeInput(attrs={'oninput': 'timecheck_c1()', 'type': 'time', "required": True}),
+        'c2_start': forms.TimeInput(attrs={'oninput': 'timecheck_c2()', 'type': 'time', "required": True}),
+        'c3_start': forms.TimeInput(attrs={'oninput': 'timecheck_c3()', 'type': 'time', "required": True}),
+        'c4_start': forms.TimeInput(attrs={'oninput': 'timecheck_c4()', 'type': 'time', "required": True}),
+        'c5_start': forms.TimeInput(attrs={'oninput': 'timecheck_c5()', 'type': 'time', "required": True}),
+        'c1_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c1()', 'type': 'time', "required": True}),
+        'c2_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c2()', 'type': 'time', "required": True}),
+        'c3_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c3()', 'type': 'time', "required": True}),
+        'c4_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c4()', 'type': 'time', "required": True}),
         'c5_stop': forms.TimeInput(attrs={'oninput': 'timecheck_c5()', 'onchange': 'equal_start_stop()', 'type': 'time', 'style': 'width: 130px;', "required": True}),
-        'larry_car': forms.Select(attrs={'style': 'width: 60px;'}),
+        'larry_car': forms.Select(attrs={'style': 'width: 190px; text-align: unset;'}),
         'total_seconds': forms.NumberInput(attrs={'id': 'total_seconds', 'oninput': 'sumTime()', 'min': '0', 'readonly': True, 'type': 'number', 'step': '0.5', 'style': 'width: 60px; text-align: center;'}),
     }
 
@@ -359,48 +359,46 @@ class form2_form(ModelForm):
                 'oninput': 'total_traverse()',
                 'id': 'id_p_traverse_time_min',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;',
-                'min': '0'
+                'min': '0',
+                'placeholder': 'minutes'
             }),
             'p_traverse_time_sec': forms.NumberInput(attrs={
                 'oninput': 'total_traverse()',
                 'id': 'id_p_traverse_time_sec',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;',
-                'min': '0'
+                'min': '0',
+                'placeholder': 'seconds'
             }),
             'c_traverse_time_min': forms.NumberInput(attrs={
                 'oninput': 'total_traverse()',
                 'id': 'id_c_traverse_time_min',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;',
-                'min': '0'
+                'min': '0',
+                'placeholder': 'minutes'
             }),
             'c_traverse_time_sec': forms.NumberInput(attrs={
                 'oninput': 'total_traverse()',
                 'id': 'id_c_traverse_time_sec',
                 'type': 'number',
-                'style': 'width:50px; text-align: center;',
-                'min': '0'
+                'min': '0',
+                'placeholder': 'seconds'
             }),
-            'observer': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'observer': forms.TextInput(attrs={'style': 'width: 180px;'}),
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'inop_ovens': forms.NumberInput(attrs={'oninput': 'inoperable_ovens()', 'id': 'inop_ovens', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
             'inop_numbs': forms.TextInput(attrs={'onchange': 'pc_doors_not_observed()', 'oninput':'inoperable_ovens()', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
-            'crew': forms.Select(attrs={'style': 'width:40px;'}),
-            'foreman': forms.TextInput(attrs={'style': 'width: 80px;'}),
-            'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
-            'p_stop': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'style': 'width: 120px;', 'required': True}),
+            'crew': forms.Select(attrs={'style': 'width:60px;'}),
+            'foreman': forms.TextInput(attrs={'style': 'width: 150px;'}),
+            'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'required': True}),
+            'p_stop': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'required': True}),
             'c_start': forms.TimeInput(attrs={
                 'oninput': 'timecheck_cokeDoors()',
-                'type': 'time',
-                'style': 'width: 120px;', 
+                'type': 'time', 
                 'required': True
             }),
             'c_stop': forms.TimeInput(attrs={
                 'oninput': 'timecheck_cokeDoors()',
                 'type': 'time',
-                'style': 'width: 120px;',
                 'required': True
             }),
             'p_temp_block_from': forms.NumberInput(attrs={
@@ -2062,33 +2060,70 @@ class form19_form(ModelForm):
             widget=self.JSON_WIDGET_STYLES.get("comb_stop")
         )
 
-class form20_form(ModelForm):
+class form20_form(forms.ModelForm):
     class Meta:
         model = form20_model
-        fields = ('__all__')
-        
-        widgets = {
-            'week_start': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'week_end': forms.DateInput(attrs={'type':'date', 'style':'width: 140px;'}),
-            'time_0' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_1' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_2' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_3' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'time_4' : forms.TimeInput(attrs={'type':'time', 'style':'width: 120px;'}),
-            'obser_0' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'obser_1' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'obser_2' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'obser_3' : forms.TextInput(attrs={'style':'width: 150px;'}),
-            'obser_4' : forms.TextInput(attrs={'style':'width: 150px;'}),
-        }
-        
-    def __init__(self, *args, **kwargs):
-        form_settings = kwargs.pop("form_settings", None)
+        fields = ['week_start', 'week_end', 'formSettings']  # 'data' will be handled manually
 
-        if not form_settings:
-            raise ValueError("Error: `form_settings` must be provided when initializing form1_form.")
-        """ Extract JSON values and create dynamic form fields with the correct styles. """
+        widgets = {
+            'week_start': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+            'week_end': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.form_settings = kwargs.pop("form_settings", None)
+        self.saved_instance = kwargs.get("instance", None)  # available for editing
+
+        if not self.form_settings:
+            raise ValueError("Error: `form_settings` must be provided when initializing form20_form.")
+
         super().__init__(*args, **kwargs)
+
+        # Dynamically add observer/time fields (for Monday–Friday)
+        for i in range(5):
+            self.fields[f"time_{i}"] = forms.TimeField(
+                required=False,
+                widget=forms.TimeInput(attrs={'type': 'time'})
+            )
+            self.fields[f"obser_{i}"] = forms.CharField(
+                required=False,
+                widget=forms.TextInput(attrs={'placeholder': 'Inspector Name'})
+            )
+
+        # Pre-fill dynamic fields from instance.data if editing
+        if self.saved_instance and self.saved_instance.data:
+            weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+            for i, day in enumerate(weekdays):
+                value = self.saved_instance.data.get(day)
+                if isinstance(value, dict):
+                    self.fields[f"time_{i}"].initial = value.get("time", "")
+                    self.fields[f"obser_{i}"].initial = value.get("observer", "")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        data = {}
+        weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+        for i, day in enumerate(weekdays):
+            observer = cleaned_data.get(f'obser_{i}', '').strip()
+            time = cleaned_data.get(f'time_{i}')
+            if observer or time:
+                data[day] = {
+                    "observer": observer,
+                    "time": str(time) if time else "",
+                }
+            else:
+                data[day] = False
+
+        cleaned_data["data"] = data  # manually attach to model's JSONField
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.data = self.cleaned_data["data"]
+        if commit:
+            instance.save()
+        return instance
 
 class form21_form(ModelForm):
     class Meta:

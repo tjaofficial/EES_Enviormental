@@ -127,3 +127,7 @@
     padding: 0px 10px 35px 10px;
     width: 100%;
 }
+select {
+    width: unset;
+    appearance: auto;
+}

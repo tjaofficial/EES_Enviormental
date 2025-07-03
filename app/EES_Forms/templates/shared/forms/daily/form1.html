@@ -1,223 +1,223 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%} {% load static %}
-<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/fullFormCheck.js' %}"></script>
-<link href="{% static 'ees_forms/style/formA1.css' %}" rel="stylesheet" />
-<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
-
-
-{% if not unlock %}
-	<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-{% endif %}
-<div id="selector" data-selector="{{selector}}"></div>
-<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
-<div class="mainCont gap" style="max-width:none;padding-top:2rem;">
-	<form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px">
-		{% csrf_token %}
-		<div class="card" id="card_fitter">
-			{% include "shared/components/print_button.html" with formGroup=freq %}
-			<div class="paper_fitter" style="padding: 3rem">
-				{% include "shared/components/backArrow.html" with destination="form" %}
-				<table style="border-collapse: collapse; margin: auto">
-					<tr>
-						<th id="boxTitle" colspan="6" style="text-align: center">
-							{% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
-						</th>
-						<th></th>
-					</tr>
-					<tr>
-						<td colspan="6" style="text-align: center">
-							<strong>Facility Name:</strong> {{facility}}
-						</td>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-					</tr>
-					<tr>
-						<td style="height: 25px"></td>
-					</tr>
-					<tr>
-						<td colspan="6" style="text-align: center;">
-							<strong>Inspectors Name:</strong> &nbsp; {{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; 
-							<strong>Date:</strong>&nbsp; {{ data.date }}
-						</td>
-					</tr>
-					<tr>
-						<td style="height: 25px"></td>
-					</tr>
-					<tr>
-						<td colspan="6" style="text-align: center;">
-							<strong>Battery No.:</strong> &nbsp;{{data.facilityChoice.bat_num}} &nbsp; &nbsp; &nbsp;
-							<strong>Crew:</strong> &nbsp; {{ data.crew }} &nbsp; &nbsp; &nbsp; &nbsp;
-							<strong>Battery Foreman:</strong> &nbsp; {{ data.foreman }}
-						</td>
-					</tr>
-					<tr>
-						<td style="height: 25px"></td>
-					</tr>
-					<tr>
-						<td colspan="6" style="text-align: center;">
-							<strong>Start Time:</strong> &nbsp; {% if selector != "form" %}{{ data.start|time:"h:i A" }}{% else %}{{ data.start }}{% endif %} &nbsp; &nbsp; &nbsp; &nbsp;
-							<strong>End Time:</strong> &nbsp; {% if selector != "form" %}{{ data.stop|time:"h:i A" }}{% else %}{{ data.stop }}{% endif %}
-						</td>
-					</tr>
-					<tr>
-						<td style="height: 25px"></td>
-					</tr>
-					<tr>
-						<td colspan="6">
-						{% include "shared/components/stopWatchToggle.html" %}
-						</td>
-					</tr>
-					<tr>
-						<td style="height: 25px">
-						<div style="position: relative;">
-							<span class="c1_popup_class" id="inop_ovenPopup" style="top: -43px; left: -165px;">
-							Remove the inoperable oven listed below
-							</span>
-						</div>
-						</td>
-					</tr>
-				</table>
-				<table id="readingsTable">
-					<thead>
+{% load static %}
+{% block extra_head %}
+	<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+	<script defer src="{% static 'ees_forms/script/formA1.js' %}"></script>
+	<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+	<script defer src="{% static 'ees_forms/script/fullFormCheck.js' %}"></script>
+	<link href="{% static 'ees_forms/style/formA1.css' %}" rel="stylesheet" />
+	<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+	{% if not unlock %}
+		<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+	{% endif %}
+{% endblock %}
+{% block list %} 
+	<div id="selector" data-selector="{{selector}}"></div>
+	<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+	<div class="mainCont gap" style="max-width:none;padding-top:2rem;">
+		<form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px">
+			{% csrf_token %}
+			<div class="card" id="card_fitter">
+				<div class="paper_fitter" style="padding: 3rem">
+					{% include "shared/components/print_button.html" with formGroup=freq %}
+					{% include "shared/components/backArrow.html" with destination="form" %}
+					<table style="border-collapse: collapse; margin: auto">
 						<tr>
-						<th id="boxa2" style="width: 130px;">Charge Number</th>
-						<th id="boxa2" style="width: 113px;">Oven Number</th>
-						<th id="boxa1">Start Time</th>
-						<th id="boxa1">Stop Time</th>
-						<th id="boxa1">Visible Emissions (sec)</th>
-						<th id="boxa3">Comments</th>
+							<th id="boxTitle" colspan="6" style="text-align: center">
+								{% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
+							</th>
+							<th></th>
 						</tr>
-					</thead>
-					<tr>
-						<td id="boxa2" style="text-align: center">1</td>
-						<td id="boxa2">{% if search %}{{ data.ovens_data.charge_1.c1_no }}{% else %}{{ data.c1_no }}{% endif %}</td>
-						<td id="boxa1">
-						{% if search %}{{ data.ovens_data.charge_1.c1_start }}{% else %}{% if selector != "form" %}{{ data.c1_start|time:"h:i A" }}{% else %}{{ data.c1_start }}{% endif %}{% endif %}
-						<div style="position: relative;">
-							<span class="c1_popup_class" id="c1_timePopup">Please Change Time</span>
-						</div>
-						</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_1.c1_stop }}{% else %}{% if selector != "form" %}{{ data.c1_stop|time:"h:i A" }}{% else %}{{ data.c1_stop }}{% endif %}{% endif %}</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_1.c1_sec }}{% else %}{{ data.c1_sec }}{% endif %}</td>
-						<td id="boxa3">{% if search %}{{ data.ovens_data.charge_1.c1_comments }}{% else %}{{ data.c1_comments }}{% endif %}</td>
-					</tr>
-					<tr>
-						<td id="boxa2" style="text-align: center">2</td>
-						<td id="boxa2">
-						{% if search %}{{ data.ovens_data.charge_2.c2_no }}{% else %}{{ data.c2_no }}{% endif %}
-						<div style="position: relative;">
-							<span class="c_popup_oven_class" id="c2_popup_oven">Please Change Oven No.</span>
-						</div>
-						</td>
-						<td id="boxa1">
-						{% if search %}{{ data.ovens_data.charge_2.c2_start }}{% else %}{% if selector != "form" %}{{ data.c2_start|time:"h:i A" }}{% else %}{{ data.c2_start }}{% endif %}{% endif %}
-						<div style="position: relative;">
-							<span class="c1_popup_class" id="c2_timePopup">Please Change Time</span>
-						</div>
-						</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_2.c2_stop }}{% else %}{% if selector != "form" %}{{ data.c2_stop|time:"h:i A" }}{% else %}{{ data.c2_stop }}{% endif %}{% endif %}</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_2.c2_sec }}{% else %}{{ data.c2_sec }}{% endif %}</td>
-						<td id="boxa3">{% if search %}{{ data.ovens_data.charge_2.c2_comments }}{% else %}{{ data.c2_comments }}{% endif %}</td>
-					</tr>
-					<tr>
-						<td id="boxa2" style="text-align: center">3</td>
-						<td id="boxa2">
-						{% if search %}{{ data.ovens_data.charge_3.c3_no }}{% else %}{{ data.c3_no }}{% endif %}
-						<div style="position: relative;">
-							<span class="c_popup_oven_class" id="c3_popup_oven">Please Change Oven No.</span>
-						</div>
-						</td>
-						<td id="boxa1">
-						{% if search %}{{ data.ovens_data.charge_3.c3_start }}{% else %}{% if selector != "form" %}{{ data.c3_start|time:"h:i A" }}{% else %}{{ data.c3_start }}{% endif %}{% endif %}
-						<div style="position: relative;">
-							<span class="c1_popup_class" id="c3_timePopup">Please Change Time</span>
-						</div>
-						</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_3.c3_stop }}{% else %}{% if selector != "form" %}{{ data.c3_stop|time:"h:i A" }}{% else %}{{ data.c3_stop }}{% endif %}{% endif %}</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_3.c3_sec }}{% else %}{{ data.c3_sec }}{% endif %}</td>
-						<td id="boxa3">{% if search %}{{ data.ovens_data.charge_3.c3_comments }}{% else %}{{ data.c3_comments }}{% endif %}</td>
-					</tr>
-					<tr>
-						<td id="boxa2" style="text-align: center">4</td>
-						<td id="boxa2">
-						{% if search %}{{ data.ovens_data.charge_4.c4_no }}{% else %}{{ data.c4_no }}{% endif %}
-						<div style="position: relative;">
-							<span class="c_popup_oven_class" id="c4_popup_oven">Please Change Oven No.</span>
-						</div>
-						</td>
-						<td id="boxa1">
-						{% if search %}{{ data.ovens_data.charge_4.c4_start }}{% else %}{% if selector != "form" %}{{ data.c4_start|time:"h:i A" }}{% else %}{{ data.c4_start }}{% endif %}{% endif %}
-						<div style="position: relative;">
-							<span class="c1_popup_class" id="c4_timePopup">Please Change Time</span>
-						</div>
-						</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_4.c4_stop }}{% else %}{% if selector != "form" %}{{ data.c4_stop|time:"h:i A" }}{% else %}{{ data.c4_stop }}{% endif %}{% endif %}</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_4.c4_sec }}{% else %}{{ data.c4_sec }}{% endif %}</td>
-						<td id="boxa3">{% if search %}{{ data.ovens_data.charge_4.c4_comments }}{% else %}{{ data.c4_comments }}{% endif %}</td>
-					</tr>
-					<tr>
-						<td id="boxa2" style="text-align: center">5</td>
-						<td id="boxa2">
-						{% if search %}{{ data.ovens_data.charge_5.c5_no }}{% else %}{{ data.c5_no }}{% endif %}
-						<div style="position: relative;">
-							<span class="c_popup_oven_class" id="c5_popup_oven">Please Change Oven No.</span>
-						</div>
-						</td>
-						<td id="boxa1">
-						{% if search %}{{ data.ovens_data.charge_5.c5_start }}{% else %}{% if selector != "form" %}{{ data.c5_start|time:"h:i A" }}{% else %}{{ data.c5_start }}{% endif %}{% endif %}
-						<div style="position: relative;">
-							<span class="c1_popup_class" id="c5_timePopup">Please Change Time</span>
-						</div>
-						</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_5.c5_stop }}{% else %}{% if selector != "form" %}{{ data.c5_stop|time:"h:i A" }}{% else %}{{ data.c5_stop }}{% endif %}{% endif %}</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.charge_5.c5_sec }}{% else %}{{ data.c5_sec }}{% endif %}</td>
-						<td id="boxa3">{% if search %}{{ data.ovens_data.charge_5.c5_comments }}{% else %}{{ data.c5_comments }}{% endif %}</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td id="boxa1">Total(Seconds):</td>
-						<td id="boxa1">{% if search %}{{ data.ovens_data.total_seconds }}{% else %}{{data.total_seconds}}{% endif %}</td>
-						<td></td>
-					</tr>
-				</table>
-				<table class="lowerTable">
-					<tr>
-						<td style="height: 40px">Larry Car Number: {% if search %}{{ data.ovens_data.larry_car }}{% else %}{{ data.larry_car }}{% endif %}</td>
-					</tr>
-					<tr style="font-size: 20px">
-						<td>Comments:</td>
-					</tr>
-					<tr style="font-size: 20px; text-align: center">
-						<td colspan="6" class="noteSpace">
-						{% if search %}{{ data.ovens_data.comments }}{% else %}{{ data.comments }}{% endif %}
-						<div style="position: relative;">
-							<span class="comment_skip_class" id="comment_skip_id1" data-inputValue1='' data-inputValue2=''></span>
-							<span class="comment_skip_class" id="comment_skip_id2" data-inputValue1='' data-inputValue2=''></span>
-							<span class="comment_skip_class" id="comment_skip_id3" data-inputValue1='' data-inputValue2=''></span>
-							<span class="comment_skip_class" id="comment_skip_id4" data-inputValue1='' data-inputValue2=''></span>
-						</div>
-						</td>
-					</tr>
-					<tr>
-						<td style="height: 40px"></td>
-					</tr>
-				</table>
-				{% if supervisor or client %} {% elif unlock and not search %}
-				{% include "shared/components/submitButton.html" with label="form" %}
-				{% endif %}
+						<tr>
+							<td colspan="6" style="text-align: center">
+								<strong>Facility Name:</strong> {{facility}}
+							</td>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+						<tr>
+							<td style="height: 25px"></td>
+						</tr>
+						<tr>
+							<td colspan="6" style="text-align: center;">
+								<strong>Inspectors Name:</strong> &nbsp; {{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; 
+								<strong>Date:</strong>&nbsp; {{ data.date }}
+							</td>
+						</tr>
+						<tr>
+							<td style="height: 25px"></td>
+						</tr>
+						<tr>
+							<td colspan="6" style="text-align: center;">
+								<strong>Battery No.:</strong> &nbsp;{{data.facilityChoice.bat_num}} &nbsp; &nbsp; &nbsp;
+								<strong>Crew:</strong> &nbsp; {{ data.crew }} &nbsp; &nbsp; &nbsp; &nbsp;
+								<strong>Battery Foreman:</strong> &nbsp; {{ data.foreman }}
+							</td>
+						</tr>
+						<tr>
+							<td style="height: 25px"></td>
+						</tr>
+						<tr>
+							<td colspan="6" style="text-align: center;">
+								<strong>Start Time:</strong> &nbsp; {% if selector != "form" %}{{ data.start|time:"h:i A" }}{% else %}{{ data.start }}{% endif %} &nbsp; &nbsp; &nbsp; &nbsp;
+								<strong>End Time:</strong> &nbsp; {% if selector != "form" %}{{ data.stop|time:"h:i A" }}{% else %}{{ data.stop }}{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<td style="height: 25px"></td>
+						</tr>
+						<tr>
+							<td colspan="6">
+							{% include "shared/components/stopWatchToggle.html" %}
+							</td>
+						</tr>
+						<tr>
+							<td style="height: 25px">
+							<div style="position: relative;">
+								<span class="c1_popup_class" id="inop_ovenPopup" style="top: -43px; left: -165px;">
+								Remove the inoperable oven listed below
+								</span>
+							</div>
+							</td>
+						</tr>
+					</table>
+					<table id="readingsTable">
+						<thead>
+							<tr>
+							<th id="boxa2" style="width: 130px;">Charge Number</th>
+							<th id="boxa2" style="width: 113px;">Oven Number</th>
+							<th id="boxa1">Start Time</th>
+							<th id="boxa1">Stop Time</th>
+							<th id="boxa1">Visible Emissions (sec)</th>
+							<th id="boxa3">Comments</th>
+							</tr>
+						</thead>
+						<tr>
+							<td id="boxa2" style="text-align: center">1</td>
+							<td id="boxa2">{% if search %}{{ data.ovens_data.charge_1.c1_no }}{% else %}{{ data.c1_no }}{% endif %}</td>
+							<td id="boxa1">
+							{% if search %}{{ data.ovens_data.charge_1.c1_start }}{% else %}{% if selector != "form" %}{{ data.c1_start|time:"h:i A" }}{% else %}{{ data.c1_start }}{% endif %}{% endif %}
+							<div style="position: relative;">
+								<span class="c1_popup_class" id="c1_timePopup">Please Change Time</span>
+							</div>
+							</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_1.c1_stop }}{% else %}{% if selector != "form" %}{{ data.c1_stop|time:"h:i A" }}{% else %}{{ data.c1_stop }}{% endif %}{% endif %}</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_1.c1_sec }}{% else %}{{ data.c1_sec }}{% endif %}</td>
+							<td id="boxa3">{% if search %}{{ data.ovens_data.charge_1.c1_comments }}{% else %}{{ data.c1_comments }}{% endif %}</td>
+						</tr>
+						<tr>
+							<td id="boxa2" style="text-align: center">2</td>
+							<td id="boxa2">
+							{% if search %}{{ data.ovens_data.charge_2.c2_no }}{% else %}{{ data.c2_no }}{% endif %}
+							<div style="position: relative;">
+								<span class="c_popup_oven_class" id="c2_popup_oven">Please Change Oven No.</span>
+							</div>
+							</td>
+							<td id="boxa1">
+							{% if search %}{{ data.ovens_data.charge_2.c2_start }}{% else %}{% if selector != "form" %}{{ data.c2_start|time:"h:i A" }}{% else %}{{ data.c2_start }}{% endif %}{% endif %}
+							<div style="position: relative;">
+								<span class="c1_popup_class" id="c2_timePopup">Please Change Time</span>
+							</div>
+							</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_2.c2_stop }}{% else %}{% if selector != "form" %}{{ data.c2_stop|time:"h:i A" }}{% else %}{{ data.c2_stop }}{% endif %}{% endif %}</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_2.c2_sec }}{% else %}{{ data.c2_sec }}{% endif %}</td>
+							<td id="boxa3">{% if search %}{{ data.ovens_data.charge_2.c2_comments }}{% else %}{{ data.c2_comments }}{% endif %}</td>
+						</tr>
+						<tr>
+							<td id="boxa2" style="text-align: center">3</td>
+							<td id="boxa2">
+							{% if search %}{{ data.ovens_data.charge_3.c3_no }}{% else %}{{ data.c3_no }}{% endif %}
+							<div style="position: relative;">
+								<span class="c_popup_oven_class" id="c3_popup_oven">Please Change Oven No.</span>
+							</div>
+							</td>
+							<td id="boxa1">
+							{% if search %}{{ data.ovens_data.charge_3.c3_start }}{% else %}{% if selector != "form" %}{{ data.c3_start|time:"h:i A" }}{% else %}{{ data.c3_start }}{% endif %}{% endif %}
+							<div style="position: relative;">
+								<span class="c1_popup_class" id="c3_timePopup">Please Change Time</span>
+							</div>
+							</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_3.c3_stop }}{% else %}{% if selector != "form" %}{{ data.c3_stop|time:"h:i A" }}{% else %}{{ data.c3_stop }}{% endif %}{% endif %}</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_3.c3_sec }}{% else %}{{ data.c3_sec }}{% endif %}</td>
+							<td id="boxa3">{% if search %}{{ data.ovens_data.charge_3.c3_comments }}{% else %}{{ data.c3_comments }}{% endif %}</td>
+						</tr>
+						<tr>
+							<td id="boxa2" style="text-align: center">4</td>
+							<td id="boxa2">
+							{% if search %}{{ data.ovens_data.charge_4.c4_no }}{% else %}{{ data.c4_no }}{% endif %}
+							<div style="position: relative;">
+								<span class="c_popup_oven_class" id="c4_popup_oven">Please Change Oven No.</span>
+							</div>
+							</td>
+							<td id="boxa1">
+							{% if search %}{{ data.ovens_data.charge_4.c4_start }}{% else %}{% if selector != "form" %}{{ data.c4_start|time:"h:i A" }}{% else %}{{ data.c4_start }}{% endif %}{% endif %}
+							<div style="position: relative;">
+								<span class="c1_popup_class" id="c4_timePopup">Please Change Time</span>
+							</div>
+							</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_4.c4_stop }}{% else %}{% if selector != "form" %}{{ data.c4_stop|time:"h:i A" }}{% else %}{{ data.c4_stop }}{% endif %}{% endif %}</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_4.c4_sec }}{% else %}{{ data.c4_sec }}{% endif %}</td>
+							<td id="boxa3">{% if search %}{{ data.ovens_data.charge_4.c4_comments }}{% else %}{{ data.c4_comments }}{% endif %}</td>
+						</tr>
+						<tr>
+							<td id="boxa2" style="text-align: center">5</td>
+							<td id="boxa2">
+							{% if search %}{{ data.ovens_data.charge_5.c5_no }}{% else %}{{ data.c5_no }}{% endif %}
+							<div style="position: relative;">
+								<span class="c_popup_oven_class" id="c5_popup_oven">Please Change Oven No.</span>
+							</div>
+							</td>
+							<td id="boxa1">
+							{% if search %}{{ data.ovens_data.charge_5.c5_start }}{% else %}{% if selector != "form" %}{{ data.c5_start|time:"h:i A" }}{% else %}{{ data.c5_start }}{% endif %}{% endif %}
+							<div style="position: relative;">
+								<span class="c1_popup_class" id="c5_timePopup">Please Change Time</span>
+							</div>
+							</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_5.c5_stop }}{% else %}{% if selector != "form" %}{{ data.c5_stop|time:"h:i A" }}{% else %}{{ data.c5_stop }}{% endif %}{% endif %}</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.charge_5.c5_sec }}{% else %}{{ data.c5_sec }}{% endif %}</td>
+							<td id="boxa3">{% if search %}{{ data.ovens_data.charge_5.c5_comments }}{% else %}{{ data.c5_comments }}{% endif %}</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td id="boxa1">Total(Seconds):</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.total_seconds }}{% else %}{{data.total_seconds}}{% endif %}</td>
+							<td></td>
+						</tr>
+					</table>
+					<table class="lowerTable">
+						<tr>
+							<td style="height: 40px">Larry Car Number: {% if search %}{{ data.ovens_data.larry_car }}{% else %}{{ data.larry_car }}{% endif %}</td>
+						</tr>
+						<tr style="font-size: 20px">
+							<td>Comments:</td>
+						</tr>
+						<tr style="font-size: 20px; text-align: center">
+							<td colspan="6" class="noteSpace">
+							{% if search %}{{ data.ovens_data.comments }}{% else %}{{ data.comments }}{% endif %}
+							<div style="position: relative;">
+								<span class="comment_skip_class" id="comment_skip_id1" data-inputValue1='' data-inputValue2=''></span>
+								<span class="comment_skip_class" id="comment_skip_id2" data-inputValue1='' data-inputValue2=''></span>
+								<span class="comment_skip_class" id="comment_skip_id3" data-inputValue1='' data-inputValue2=''></span>
+								<span class="comment_skip_class" id="comment_skip_id4" data-inputValue1='' data-inputValue2=''></span>
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td style="height: 40px"></td>
+						</tr>
+					</table>
+					{% if supervisor or client %} {% elif unlock and not search %}
+					{% include "shared/components/submitButton.html" with label="form" %}
+					{% endif %}
+				</div>
+				{% include "shared/components/stopWatch.html" %}
 			</div>
-			{% include "shared/components/stopWatch.html" %}
-		</div>
-		<br>
-		{% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
-	</form>
-</div>
-
-	{% endblock %}
+			<br>
+			{% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
+		</form>
+	</div>
+{% endblock %}

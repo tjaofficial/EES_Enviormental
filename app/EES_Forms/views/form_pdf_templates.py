@@ -1603,12 +1603,25 @@ def pdf_template_20(primaryData, title, subTitle):
         [title],
         [subTitle],
         ['', Paragraph('<para align=center><b>Week of:&#160;</b>' + date_change(primaryData.week_start) + '&#160;&#160;to&#160;&#160;' + date_change(primaryData.week_end) + '</para>', styles['Normal']), '', '', '', ''],
-        ['', '', '', '', '', ''],
-        ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        [Paragraph('<para align=center><b>Sampling Time</b></para>', styles['Normal']), time_change(primaryData.time_0), time_change(primaryData.time_1), time_change(primaryData.time_2), time_change(primaryData.time_3), time_change(primaryData.time_4)],
-        [Paragraph("<para align=center><b>Inspector's Signature</b></para>", styles['Normal']), primaryData.obser_0, primaryData.obser_1, primaryData.obser_2, primaryData.obser_3, primaryData.obser_4],
-        ['', '*Collect 100 mL each day (Monday - Friday)', '', '', '', ''],
+        ['', '', '', '', '', '']
     ]
+    daysWeekly = primaryData.formSettings.settings['settings']['days_weekly']
+    dynamic_days_insert = ['']
+    dynamic_time_insert = [Paragraph('<para align=center><b>Sampling Time</b></para>', styles['Normal'])]
+    dynamic_observer_insert = [Paragraph("<para align=center><b>Inspector's Signature</b></para>", styles['Normal'])]
+    for day_numb in daysWeekly:
+        day_numb = int(day_numb)
+        dayName = calendar.day_name[day_numb]
+        dayTime = time_change(primaryData.data[dayName][f'time']) if primaryData.data[dayName] else ""
+        dayObser = primaryData.data[dayName][f'observer'] if primaryData.data[dayName] else ""
+        dynamic_days_insert.append(dayName)
+        dynamic_time_insert.append(dayTime)
+        dynamic_observer_insert.append(dayObser)
+    tableData.append(dynamic_days_insert)
+    tableData.append(dynamic_time_insert)
+    tableData.append(dynamic_observer_insert)
+    tableData.append(['', '*Collect 100 mL each day (Monday - Friday)', '', '', '', ''])
+
     tableColWidths = (70,80,80,80,80,80)
 
     style = [

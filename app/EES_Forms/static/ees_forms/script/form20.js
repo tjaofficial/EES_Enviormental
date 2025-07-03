@@ -1,5 +1,4 @@
 const settingsDays = JSON.parse(document.getElementById('settings-days-json').textContent);
-
 function individual_day() {
     const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     function dayNameToNumber(dayName) {
@@ -16,27 +15,34 @@ function individual_day() {
         document.getElementById(`id_time_${day_num}`).closest('.day-card').style.backgroundColor = '#F49B9B';
     })
 }
-
-const container = document.getElementById('daysContainer');
-let i = 0;
-settingsDays.forEach(day => {
-    const card = document.createElement('div');
-    card.className = 'day-card';
-    card.innerHTML = `
-        <div class="day-title">
-            ${day}
-            <button class="toggle-btn" aria-label="Toggle Inputs" type="button">+</button>
-        </div>
-        <div class="field-group">
-            <input type="text" placeholder="Inspector Name" name="obser_${i}" id="id_obser_${i}">
-            <input type="time" placeholder="Sample Time" name="time_${i}" id="id_time_${i}">
-        </div>
-    `;
-    container.appendChild(card);
-    i++;
-});
-
 individual_day();
+
+function initial_set() {
+    const daysContainer = document.getElementById('daysContainer').children;
+    Array.from(daysContainer).forEach((cluster) => {
+        const instance = cluster.querySelector('.field-group');
+        console.log(instance);
+        const inspector = instance.querySelector("input[type='text']").value;
+        const sample = instance.querySelector("input[type='time']").value;
+        const toggleBtn = instance.parentElement.querySelector('.toggle-btn');
+        const title = instance.parentElement.querySelector('.day-title');
+        const weekDayIndex = this.name.slice(-1);
+        if (inspector && sample) {
+            toggleBtn.style.display = 'inline';
+            instance.style.display = 'none';
+            title.style.marginBottom = 'unset';
+            instance.parentElement.style.backgroundColor = '#3c983c85';
+        } else {
+            toggleBtn.style.display = 'none';
+            const today = new Date();
+            const dayIndex = today.getDay();
+            if (Number(weekDayIndex) <= (dayIndex - 1)) {
+                instance.parentElement.style.backgroundColor = '#F49B9B';
+            }
+        }
+    })
+}
+initial_set();
 
 document.querySelectorAll('.field-group input').forEach(input => {
     input.addEventListener('change', function() {
@@ -76,9 +82,4 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
             title.style.marginBottom = 'unset';
         }
     });
-});
-
-document.getElementById('submitBtn').addEventListener('click', () => {
-    // handle submission logic here
-    alert("Form submitted (mockup)");
 });

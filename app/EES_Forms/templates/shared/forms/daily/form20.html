@@ -1,71 +1,81 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%}{% load static %}
-<link href="{% static 'ees_forms/style/form20.css' %}" rel="stylesheet" />
-<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
-<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/form20.js' %}"></script>
-{% if not unlock %}
+{% load static %}{% load form20_tags %}
+{% block extra_head %}
+    <link href="{% static 'ees_forms/style/form20.css' %}" rel="stylesheet" />
+    <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+    <script defer src="{% static 'ees_forms/script/form20.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    {% if not unlock %}
     <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-{% endif %}
-{{ settings_days|json_script:"settings-days-json" }}
-<div id="formName" style="display: hidden" data-form="{{formName}}"></div>
-<div class="mainCont">
-    <form action="" method="POST" style="margin: auto;">
-        {% csrf_token %}
-        <div class="card" id="card_fitter">
-            {% include "shared/components/print_button.html" with formGroup=freq %}
-            <div class="paper_fitter" style="padding: 3rem;">
-                {% include "shared/components/backArrow.html" with destination="form" %}
-                <table style="border-collapse: collapse; margin: auto;">
-                <tr>
-                    <th id="boxTitle" colspan="5" style="text-align: center;">
-                        {% include "shared/components/formHeader.html" with main="Weekly Water Sample Form"%}
-                    </th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th colspan="3" style="text-align: center;">
-                        Facility Name: {{facility}}
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td style="height: 15px;" ></td>
-                </tr>
-                <tr>
-                    <th colspan="3" style="text-align: center;">
-                    Week Of:    
-                        {{ empty.week_start }} - {{ empty.week_end }}
-                                
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <td style="height: 25px;" ></td>
-                </tr>
-            </table>
-            <div class="container">
-                <div id="daysContainer">
-                    <!-- Days will be dynamically injected here -->
+    {% endif %}
+{% endblock %}
+{% block list%}
+    {{ settings_days|json_script:"settings-days-json" }}
+    <div id="formName" style="display: hidden" data-form="{{formName}}"></div>
+    <div class="mainCont">
+        <form action="" method="POST" style="margin: auto;">
+            {% csrf_token %}
+            <div class="card" id="card_fitter" style="width: 570px;">
+                <div class="paper_fitter" style="padding: 3rem;">
+                    {% include "shared/components/print_button.html" with formGroup=freq %}
+                    {% include "shared/components/backArrow.html" with destination="form" %}
+                    <table style="border-collapse: collapse; margin: auto;">
+                    <tr>
+                        <th id="boxTitle" colspan="5" style="text-align: center;">
+                            {% include "shared/components/formHeader.html" with main="Weekly Water Sample Form"%}
+                        </th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: center;">
+                            Facility Name: {{facility}}
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td style="height: 15px;" ></td>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: center;">
+                            Week Of:    
+                            {{ empty.week_start }} - {{ empty.week_end }}  
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td style="height: 25px;" ></td>
+                    </tr>
+                </table>
+                <div class="container">
+                    <div id="daysContainer">
+                        {% for day in settings_days %}
+                            <div class="day-card">
+                                <div class="day-title">
+                                    {{day}}
+                                    <button class="toggle-btn" aria-label="Toggle Inputs" type="button">+</button>
+                                </div>
+                                <div class="field-group">
+                                    <span>{{empty|get_obser_input:day}}</span><span>{{empty|get_time_input:day}}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-
-                <button id="submitBtn">Submit</button>
+                {% if unlock and not search %}
+                    {% include "shared/components/submitButton.html" with label="form" %}
+                {% endif %}
+                </div>
             </div>
-            {% if unlock and not search %}
-                {% include "shared/components/submitButton.html" with label="form" %}
+            <br>
+            {% if picker %}
+                {% include 'shared/formIssueData.html' %}
             {% endif %}
-            </div>
-        </div>
-        <br>
-        {% if picker %}
-            {% include 'shared/formIssueData.html' %}
-        {% endif %}
-    </form>
-</div>    
+        </form>
+    </div>
 {% endblock %}

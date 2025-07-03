@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required # type: ignore
 from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form20_model
 from ..forms import form20_form
-from ..utils.main_utils import get_initial_data, defaultDataForm20
+from ..utils.main_utils import get_initial_data, defaultDataForm20, get_day_number_from_name
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
-from datetime import timedelta
+from datetime import timedelta, datetime
 import calendar
 import json
 
@@ -43,6 +43,14 @@ def form20(request, fsID, selector):
         if existing:
             print('Check 2.1')
             initial_data = get_initial_data(form20_model, database_form)
+            initial_data2 = {}
+            for key, item in database_form.data.items():
+                if item:
+                    initial_data2[f"obser_{get_day_number_from_name(key)}"] = item['observer']
+                    initial_data2[f"time_{get_day_number_from_name(key)}"] = item['time']
+            initial_data = initial_data | initial_data2
+            print(initial_data)
+            
         else:
             initial_data = {
                 'week_start': starting_monday,

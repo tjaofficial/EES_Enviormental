@@ -51,7 +51,7 @@ class PageNumCanvas(canvas.Canvas):
 
         # Center bottom: MethodPlus info
         if self.form_label and self.fs_id:
-            footer_text = f"MethodPlus+: Form {self.form_label} (fsID: {self.fs_id})"
+            footer_text = f"MethodPlus+, Form {self.form_label}, fsID: {self.fs_id}"
             self.drawCentredString(105 * mm, 10 * mm, footer_text)
       
 @lock

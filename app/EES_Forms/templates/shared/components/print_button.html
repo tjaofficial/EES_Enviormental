@@ -4,7 +4,7 @@
 {% if selector == 'form' or selector == 'formL' %}
 {% else %}
 <script defer src="{% static 'ees_forms/script/print_modal.js' %}"></script>
-    <div style='width: 100%; height: 25px; text-align: right; padding-top: 22px; padding-right: 22px;'>
+    <div style='float: right;'>
         <div id="printButton" onclick="openClose_modal()" class="button-8" role="button" style='height:25px;'>PRINT</div>
     </div>
     <div id="print_modal" style="display: none;">

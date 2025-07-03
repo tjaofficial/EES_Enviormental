@@ -2515,3 +2515,22 @@ form24build = {
     "actions_taken": "blah blah blah"
 }
 
+def get_day_number_from_name(day_name):
+    """
+    Converts a weekday name (e.g. 'Monday') to its corresponding integer (0=Monday, ..., 6=Sunday).
+    Returns -1 if the input is invalid or not a recognized day name.
+    """
+    weekday_map = {
+        "Monday": 0,
+        "Tuesday": 1,
+        "Wednesday": 2,
+        "Thursday": 3,
+        "Friday": 4,
+        "Saturday": 5,
+        "Sunday": 6,
+    }
+
+    # Normalize the input: strip whitespace and capitalize
+    normalized = day_name.strip().capitalize() if isinstance(day_name, str) else ''
+    return weekday_map.get(normalized, -1)
+

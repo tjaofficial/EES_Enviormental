@@ -129,8 +129,18 @@
 }
 
 .no_forms{
-  text-align: center;
-  padding: 30px;
+  	text-align: center;
+  	padding: 30px;
+}
+#packetSelect {
+    position: absolute; 
+	margin-right: 25rem;
+	padding: 4px;
+    width: unset;
+	font-size: unset;
+	appearance: auto;
+	font-size: 13px;
+	text-align: unset;
 }
 
 @media only screen and (max-width: 1290px) {

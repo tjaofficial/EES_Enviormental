@@ -3259,11 +3259,23 @@ class form20_model(models.Model):
     )
 
     def is_fully_filled(self):
-        """Check if all days (0-4) have both time and observer fields filled."""
-        for i in range(5):  # Weekdays (Monday-Friday)
-            if not getattr(self, f"time_{i}") or not getattr(self, f"obser_{i}"):
-                return False  # Missing a field → Not fully filled
-        return True  # Everything is filled
+        """Check if Monday–Friday have both 'time' and 'observer' filled in the JSON `data` field."""
+        weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        
+        if not self.data:
+            return False
+
+        for day in weekdays:
+            day_data = self.data.get(day)
+
+            if isinstance(day_data, dict):
+                time = day_data.get("time", "").strip()
+                observer = day_data.get("observer", "").strip()
+
+                if not time or not observer:
+                    return False
+
+        return True
     
     def __str__(self):
         return str(self.week_start)

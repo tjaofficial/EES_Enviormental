@@ -147,7 +147,7 @@
     <section class="mainCont forms">
         <div class="card" style="width: 600px;margin: 10px;margin-top: 0px;">
             <span style="float: left; position: relative; left: 22px; top: 16px;">
-                <select id="packetSelect" name="formsDisplayed" onchange='packetChange(this)' style="position: absolute; margin-right: 25rem;" data-allpackets="{{listOfAllPacketIDs}}">
+                <select id="packetSelect" name="formsDisplayed" onchange='packetChange(this)' style="" class="" data-allpackets="{{listOfAllPacketIDs}}">
                     <option value="0">Facility Forms</option>
                     {% for pack in facPackets %}
                         <option value="{{pack.id}}">{{pack.name}}</option>
