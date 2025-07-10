@@ -5,7 +5,7 @@ import datetime
 import time
 from ..models import user_profile_model, daily_battery_profile_model, facility_model, company_model, User
 from ..forms import CreateUserForm, user_profile_form, company_form
-from ..utils.main_utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor
+from ..utils.main_utils import parsePhone, setDefaultSettings, setUnlockClientSupervisor, getCompanyFacilities
 from django.contrib.auth import logout # type: ignore
 from django.contrib.auth.forms import PasswordChangeForm # type: ignore
 from django.contrib.auth import update_session_auth_hash, get_user_model # type: ignore
@@ -68,30 +68,27 @@ def login_view(request):
                         return redirect('companyReg')
                     if request.user.groups.filter(name=SUPER_VAR):
                         if userProf.settings['profile']['first_login']:
-                            if len(facility_model.objects.all()) > 0:
+                            if getCompanyFacilities(userProf.company.company_name).exists():
                                 return redirect('sup_dashboard')
                             else:
                                 return redirect('Register', 'facility')
                         else:
-                            return redirect('PasswordChange', SUPER_VAR)
+                            return redirect('PasswordChange')
                     elif request.user.groups.filter(name=CLIENT_VAR):
-                        facility = request.user.user_profile.facilityChoice
+                        facility = userProf.facilityChoice
                         request.session['selected_facility'] = facility.id
                         if userProf.settings['profile']['first_login']:
                             return redirect('c_dashboard')
                         else:
-                            return redirect('PasswordChange', facility)
+                            return redirect('PasswordChange')
                     elif request.user.groups.filter(name=OBSER_VAR):
                         if userProf.settings['profile']['first_login']:
                             return redirect('facilitySelect')
                         else:
-                            return redirect('PasswordChange', OBSER_VAR)
+                            return redirect('PasswordChange')
                     else:
                         messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
                         return redirect('Login')
-                # else:
-                #     messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
-                #     return redirect('Login')
         else:
             messages.error(request,"Incorrect username or password")
             return redirect('Login')
@@ -327,39 +324,38 @@ def verify_2fa(request):
             login(request, user)
             request.session.pop("2fa_user_id", None)
             messages.success(request, "2FA verification successful!")
-            #return redirect("dashboard")
-            userProf = user_profile_model.objects.filter(user__id=request.user.id)
-        
+
+            try:
+                userProf = request.user.user_profile
+            except:
+                messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
+                return redirect('Login')
+            
             if request.user.is_superuser:
                 return redirect('adminDash', "overview")
-            elif userProf.exists():
-                userProf = userProf[0]
-                if not userProf.company and userProf.is_active:
-                    return redirect('companyReg')
-                if request.user.groups.filter(name=SUPER_VAR):
-                    if userProf.settings['profile']['first_login']:
-                        if len(facility_model.objects.all()) > 0:
-                            return redirect('sup_dashboard', SUPER_VAR)
-                        else:
-                            return redirect('Register', 'facility')
+
+            if not userProf.company and userProf.is_active:
+                return redirect('companyReg')
+            if request.user.groups.filter(name=SUPER_VAR):
+                if userProf.settings['profile']['first_login']:
+                    if getCompanyFacilities(userProf.company.company_name).exists():
+                        return redirect('sup_dashboard')
                     else:
-                        return redirect('PasswordChange', SUPER_VAR)
-                elif request.user.groups.filter(name=CLIENT_VAR):
-                    facility = user_profile_model.objects.all().filter(user__username=request.user.username)[0].facilityChoice.facility_name
-                    if userProf.settings['profile']['first_login']:
-                        return redirect('c_dashboard', facility)
-                    else:
-                        return redirect('PasswordChange', facility)
-                elif request.user.groups.filter(name=OBSER_VAR):
-                    if userProf.settings['profile']['first_login']:
-                        return redirect('facilitySelect', 'observer')
-                    else:
-                        return redirect('PasswordChange', OBSER_VAR)
+                        return redirect('Register', 'facility')
                 else:
-                    messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
-                    return redirect('Login')
+                    return redirect('PasswordChange')
+            elif request.user.groups.filter(name=CLIENT_VAR):
+                if userProf.settings['profile']['first_login']:
+                    return redirect('c_dashboard')
+                else:
+                    return redirect('PasswordChange')
+            elif request.user.groups.filter(name=OBSER_VAR):
+                if userProf.settings['profile']['first_login']:
+                    return redirect('facilitySelect')
+                else:
+                    return redirect('PasswordChange')
             else:
-                messages.error(request,"ERROR: ID-11850004. Contact Support Team.")
+                messages.error(request,"User has not been assigned a group. Please contact MethodPlus help for further assistance.")
                 return redirect('Login')
         else:
             messages.error(request, "Invalid verification code. Please try again.")

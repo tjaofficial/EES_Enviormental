@@ -1,5 +1,5 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% load static %}{% block list%}
+{% load static %}
 {% block extra_head %}
     <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet" />
     <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet" />
@@ -7,6 +7,7 @@
     <script defer src="{% static 'ees_forms/script/accountSettings.js' %}"></script>
     <script defer src="{% static 'ees_forms/script/process_phone.js' %}"></script>
 {% endblock %}
+{% block list%}
 <div style='margin:auto; width: 42rem;'>
     <div class="card" style='margin-bottom: 50px;'>
         <div class="cardHeader methodPlusBlue">

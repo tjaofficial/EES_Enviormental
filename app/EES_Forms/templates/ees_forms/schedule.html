@@ -70,7 +70,7 @@
                                     .then(data => successCallback(data))
                                     .catch(err => failureCallback(err));
                                 },
-                                eventColor: '#378006',
+                                //eventColor: '#378006',
                                 eventContent: function(info) {
                                     console.log(calendarGroups)
                                     console.log(info.event.extendedProps.group)
@@ -80,11 +80,19 @@
                                         html: `
                                             <div class="fc-event-custom" style="background-color:${bgColor}">
                                                 <small>${info.timeText}</small>
-                                                <strong>${info.event.extendedProps.observer} - ${info.event.title}</strong>
+                                                <strong class="calText">${info.event.title} - ${info.event.extendedProps.observer}</strong>
                                             </div>
                                         `
                                     };
                                     
+                                },
+                                eventDidMount: function(info) {
+                                    const group = calendarGroups.find(group => group.name === info.event.extendedProps.group);
+                                    const bgColor = group ? group.color : 'yellow';
+                                    
+                                    info.el.style.backgroundColor = 'unset';
+                                    info.el.style.borderColor = 'unset';
+                                    info.el.style.color = 'white'; // Optional: ensure text is readable
                                 },
                                 viewDidMount: function () {
                                     document.querySelectorAll('.fc-daygrid-day').forEach(day => {
@@ -136,7 +144,21 @@
                                 newOther.innerHTML = `<h3>Scheduled Events</h3>`;
                             
                                 events.forEach(e => {
+                                    console.log("start_time:", e.start);
+                                    console.log("end_time:", e.end);
+
+                                    if (e.repeat && typeof e.repeat === 'object' && Object.keys(e.repeat).length === 0) {
+                                        var repeat = 'None';
+                                    } else {
+                                        var repeat = JSON.stringify(e.repeat);
+                                    }
+                                    if (e.alerts && typeof e.alerts === 'object' && Object.keys(e.alerts).length === 0) {
+                                        var alerts = 'None';
+                                    } else {
+                                        var alerts = JSON.stringify(e.alerts);
+                                    }
                                     if (e.allDay){
+                                        console.log(e);
                                         const tempDiv = document.createElement("div");
                                         tempDiv.classList.add("event-block");
                                         tempDiv.dataset.eventid = `${e.id}`;
@@ -147,8 +169,8 @@
                                             <div id="event-body-${e.id}" class="event-meta" style="display: none;">
                                                 <div><strong>Observer:</strong> ${e.observer}</div>
                                                 <div><strong>Location:</strong> ${e.location || 'Unknown'}</div>
-                                                <div><strong>Repeat:</strong> ${e.repeat || 'None'}</div>
-                                                <div><strong>Alerts:</strong> ${e.alerts || 'None'}</div>
+                                                <div><strong>Repeat:</strong> ${repeat}</div>
+                                                <div><strong>Alerts:</strong> ${alerts}</div>
                                             </div>
                                         `;
                                         newAllDay.appendChild(tempDiv);
@@ -158,14 +180,14 @@
                                         tempDiv2.dataset.eventid = `${e.id}`;
                                         tempDiv2.innerHTML += `
                                             <div class="event-title" onclick="toggleEventBody(${e.id})">
-                                                ${formatTimeTo12Hour(e.start_time)} - ${e.title} - ${e.observer}
+                                                ${formatTimeTo12Hour(e.start)} - ${e.title} - ${e.observer}
                                             </div>
                                             <div id="event-body-${e.id}" class="event-meta" style="display: none;">
-                                                <div><strong>Time:</strong> ${formatTimeTo12Hour(e.start_time)} - ${formatTimeTo12Hour(e.end_time)}</div>
+                                                <div><strong>Time:</strong> ${formatTimeTo12Hour(e.start)} - ${formatTimeTo12Hour(e.end)}</div>
                                                 <div><strong>Observer:</strong> ${e.observer}</div>
                                                 <div><strong>Location:</strong> ${e.location || 'Unknown'}</div>
-                                                <div><strong>Repeat:</strong> ${e.repeat || 'None'}</div>
-                                                <div><strong>Alerts:</strong> ${e.alerts || 'None'}</div>
+                                                <div><strong>Repeat:</strong> ${repeat}</div>
+                                                <div><strong>Alerts:</strong> ${alerts}</div>
                                             </div>
                                         `;
                                         newOther.appendChild(tempDiv2);
@@ -181,9 +203,10 @@
                             el.style.display = el.style.display === 'none' ? 'block' : 'none';
                         }
                         function formatTimeTo12Hour(timeString) {
-                            const [hours, minutes] = timeString.split(":");
-                            const date = new Date();
-                            date.setHours(hours, minutes);
+                            if (!timeString) return "Invalid time";
+
+                            const date = new Date(timeString);
+                            if (isNaN(date)) return "Invalid date";
                         
                             return date.toLocaleTimeString('en-US', {
                                 hour: 'numeric',
@@ -215,7 +238,7 @@
         <div id="main-side" class="card">
             <div class="headerCont">
                 <div class="cardHeader methodPlusBlue">
-                    <a href="{% url 'Calendar' prev_year prev_month %}">
+                    {% comment %} <a href="{% url 'Calendar' prev_year prev_month %}">
                         <svg id="previous-month" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
                         </svg>
@@ -224,19 +247,21 @@
                         <svg id="next-month" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-double-left" class="svg-inline--fa fa-angle-double-left fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path fill="currentColor" d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"></path>
                         </svg>
-                    </a>
+                    </a> {% endcomment %}
                 </div>
             </div>
             <div id="sideBarBody" class="contentCont" style="padding: 20px 0px;">
                 <section style="height: 100%;">
-                    <div id="date-header">
+                    {% comment %} <div id="date-header">
                         <span>{{month.upper|slice:":3"}}</span>
                         <span>{{year}}</span>
-                    </div>
+                    </div> {% endcomment %}
                     <div id="add-event-cont">
                         <div id="add-event">ADD EVENT</div>
                         <a href="{% url 'Add Event' %}" style="display: flex;">
-                            <span id="plus-button"></span>
+                            <span id="plus-button">
+                                <span id="plus">+</span>
+                            </span>
                         </a>
                     </div>
                     <div id="calendar-cont">

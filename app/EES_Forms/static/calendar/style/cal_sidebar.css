@@ -153,6 +153,10 @@
     border-radius: 47px;
     width: 47px;
     height: 47px;
+    box-shadow: black 0 0 10px -3px;
+}
+#plus-button:hover{
+    transform: scale(1.1);
 }
 #add-event-cont {
     display: flex;

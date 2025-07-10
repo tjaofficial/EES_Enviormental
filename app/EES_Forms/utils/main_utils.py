@@ -2142,12 +2142,11 @@ def change_dashboard_setting(dashChoice, position):
     }
     return setFacilityDash
 
-def setDefaultSettings(profile, superUsername):
+def setDefaultSettings(profile, supUserProf):
     today = datetime.datetime.now()
     createSettings = {'facilities': {}, 'profile': {}, 'calendar': {}}
-    ## SET SETTINGS FOR FACILITIES
-    try:
-        companyFacilities = getCompanyFacilities(superUsername)
+    companyFacilities = getCompanyFacilities(supUserProf.company.company_name)
+    if companyFacilities.exists():
         for facility in companyFacilities:
             createSettings['facilities'][str(facility.id)] = dashDict
             if facility.is_battery == 'Yes':
@@ -2155,7 +2154,7 @@ def setDefaultSettings(profile, superUsername):
             else:
                 dashChoice = 'Default'
             createSettings['facilities'][str(facility.id)] = change_dashboard_setting(dashChoice, profile.position)
-    except:
+    else:
         createSettings['facilities'] = {}
     
     ## SET SETTINGS FOR PROFILE

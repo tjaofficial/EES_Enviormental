@@ -122,3 +122,15 @@ button{
 .headerCont{
   height: 55px;
 }
+
+.calText {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+#plus {
+	font-size: 47px;
+    position: relative;
+    top: -7px;
+    color: #1a3b52;
+}

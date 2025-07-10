@@ -91,7 +91,6 @@ def sup_update_account(request, selector):
         'selector': selector
     }
     if selector == "account":
-        primaryModel = ""
         initial_data = {
             'username': user.username,
             'first_name': user.first_name,
@@ -121,17 +120,19 @@ def sup_update_account(request, selector):
         print(request.POST)
         dataFromForm = request.POST
         if selector == "account":
-            primaryModel.first_name = dataFromForm['first_name']
-            primaryModel.last_name = dataFromForm['last_name']
-            primaryModel.username = dataFromForm['username']
-            primaryModel.email = dataFromForm['email']
+            userProf = user.user_profile
+            user.first_name = dataFromForm['first_name']
+            user.last_name = dataFromForm['last_name']
+            user.username = dataFromForm['username']
+            user.email = dataFromForm['email']
             if unlock:
-                user.cert_date = dataFromForm['cert_date']
-            user.phone = parsePhone(dataFromForm['phone'])
+                userProf.cert_date = dataFromForm['cert_date']
+            userProf.phone = parsePhone(dataFromForm['phone'])
             if dataFromForm['two_factor_enabled'] == "no":
-                user.settings['profile']['two_factor_enabled'] = False
+                userProf.settings['profile']['two_factor_enabled'] = False
             else:
-                user.settings['profile']['two_factor_enabled'] = True
+                userProf.settings['profile']['two_factor_enabled'] = True
+            userProf.save()
             user.save()
         elif selector == "company":
             formFill = company_Update_form(request.POST, request.FILES, instance=primaryModel)
@@ -175,7 +176,7 @@ def sup_facility_settings(request, facilityID, selector):
     userProfileQuery = user_profile_model.objects.all()
     accountData = userProfileQuery.get(user__id=request.user.id)
     userCompany = accountData.company
-    listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany, )
+    listOfEmployees = userProfileQuery.filter(~Q(position="client"), company=userCompany)
     active_registrations = len(listOfEmployees.filter(company__braintree__settings__account__status='active'))
 
     dateStart = "1900-01-01"
@@ -274,8 +275,9 @@ def sup_facility_settings(request, facilityID, selector):
             return redirect('selectedFacilitySettings', facilityID, 'main')
         elif 'defaultBatteryDash' in answer:
             if answer['defaultBatteryDash'] == 'true':
-                A  = accountData
-                A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.username)['facilities']))
+                A = accountData
+                print(json.loads(json.dumps(setDefaultSettings(accountData, request.user.user_profile)['facilities'])))
+                A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.user_profile)['facilities']))
                 A.save()
                 return redirect('selectedFacilitySettings', facilityID, 'main')
         elif 'defaultNotif' in answer:

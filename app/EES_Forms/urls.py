@@ -5,7 +5,7 @@ urlpatterns = [
     ##---MAIN DASHBOARDS----
     path("obs-dashboard/", views.IncompleteForms, name="IncompleteForms"),
     path("sup-dashboard/", views.sup_dashboard_view, name='sup_dashboard'),
-    path("client-dashboard", views.client_dashboard_view, name="c_dashboard"),
+    path("client-dashboard/", views.client_dashboard_view, name="c_dashboard"),
     path("adminDash/<str:selector>", views.adminDash, name="adminDash"),
     
     path("<str:facility>/default-dashboard", views.default_dashboard, name="defaultDash"),

@@ -261,7 +261,7 @@ def events_for_day(request):
             'start': datetime.combine(e.date, e.start_time).isoformat() if e.start_time else e.date.isoformat(),
             'end':  datetime.combine(e.date, e.end_time).isoformat() if e.end_time else None,
             'group': e.calendarChoice,
-            'allDay': True,
+            'allDay': e.allDay,
             'observer': e.observer,
             'repeat': e.repeat,
             'alerts': e.alerts,
@@ -780,7 +780,7 @@ def event_add_view(request):
         request_form = events_form(request.POST)
         if request_form.is_valid():
             selected_days = request_form.cleaned_data['selected_days'].split(',')
-            allDay = True if answer.get('all_day') else False
+            allDay = True if answer.get('allDay') else False
             calendarChoice = answer['calendarChoice']
             if facility == "supervisor":
                 personal = True
