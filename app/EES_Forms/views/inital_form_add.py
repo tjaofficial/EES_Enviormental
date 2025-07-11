@@ -37,34 +37,26 @@ def add_forms_to_database():
     
     if not braintreePlans.objects.all().exists():
         newPlan1 = braintreePlans(
-            planID='prod_S7vHowgpKXFyoW',
-            priceID='price_1RDfQb4SO9L4wW3IuYiT5MVk',
+            planID='prod_SLIRV6ib2zYLW1',
+            priceID='price_1RQbqHG3aFwevvRDxuhnKPA5',
             name='MethodPro+',
-            price=250.0,
+            price=250.00,
             description='Registration for one (1) supervisor and one (1) observer.'
         )
         newPlan2 = braintreePlans(
-            planID='prod_S7vHNl3m2si6f3',
-            priceID='price_1RDfQz4SO9L4wW3Ihw4yqNE9',
+            planID='prod_SLIR4o0rd3VEtv',
+            priceID='price_1RQbqLG3aFwevvRDtUeQs9Dj',
             name='MethodPremium+',
-            price=300.0,
+            price=300.00,
             description='Registration for one (1) supervisor and one (1) observer.'
         )
         newPlan3 = braintreePlans(
-            planID='prod_S7v5DsOU0LUxM0',
-            priceID='price_1RDfFM4SO9L4wW3IBTyiv1nE',
+            planID='prod_SLIRRYnXCQlyXn',
+            priceID='price_1RQbq8G3aFwevvRDy7Lyh9Ds',
             name='MethodPlus+',
-            price=199.0,
+            price=199.00,
             description='Registration for one (1) supervisor and one (1) observer.'
-        )
-        test = braintreePlans(
-            planID='prod_SLIU6peYFES7MA',
-            priceID='price_1RQbtAG3aFwevvRDl3drrctk',
-            name='Test',
-            price=2.0,
-            description='test'
         )
         newPlan1.save()
         newPlan2.save()
         newPlan3.save()
-        test.save()

@@ -161,7 +161,7 @@ def register_view(request, access_page):
                 profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userCompany
-                profile.settings = setDefaultSettings(profile, request.user.username)
+                profile.settings = setDefaultSettings(profile)
                 for f in sortedFacilityData:
                     if f.facility_name not in [x['name'] for x in profile.settings['calendar']['calendars']['default']]:
                         profile.settings["calendar"]['calendars']['default'].append(
@@ -231,16 +231,16 @@ def register_view(request, access_page):
                                 "color": "#0000ff63"
                             }
                         )
-                        if 'dashboard' in ups.settings.keys():
-                            if ups.settings['dashboard']:
-                                ups.settings['dashboard'][str(A.id)] = dashDict
+                        if 'facilities' in ups.settings.keys():
+                            if ups.settings['facilities']:
+                                ups.settings['facilities'][str(A.id)] = dashDict
                             else:
-                                ups.settings['dashboard'] = {str(A.id): dashDict}
+                                ups.settings['facilities'] = {str(A.id): dashDict}
                         else:
                             print("ERROR")
                         if request.POST['cokeBattery'] == 'Yes':
-                            ups.settings['dashboard'][str(A.id)]['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
-                            ups.settings['dashboard'][str(A.id)]['formsDash'] = False
+                            ups.settings['facilities'][str(A.id)]['batteryDash'] = json.loads(json.dumps(defaultBatteryDashSettings))
+                            ups.settings['facilities'][str(A.id)]['formsDash'] = False
                         ups.save()
                     
                     messages.success(request, 'Facility Created')
@@ -279,7 +279,7 @@ def register_view(request, access_page):
                 profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userProf.company
-                profile.settings = setDefaultSettings(profile, request.user.username)
+                profile.settings = setDefaultSettings(profile)
 
                 profile.settings["calendar"]['calendars']['default'].append(
                     {

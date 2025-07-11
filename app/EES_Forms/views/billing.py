@@ -32,7 +32,7 @@ def stripe_subscription_view(request):
         # Match plan/add-ons to Stripe Price IDs
         price_map = {
             **{f"{sub.name}": f"{sub.priceID}" for sub in plansQuery},
-            "extra_users": "price_1RDfPF4SO9L4wW3Id0wHM37O"
+            "extra_users": "price_1RQbqCG3aFwevvRDkG83BVZ8"
         }
         print(price_map)
 

@@ -276,13 +276,12 @@ def sup_facility_settings(request, facilityID, selector):
         elif 'defaultBatteryDash' in answer:
             if answer['defaultBatteryDash'] == 'true':
                 A = accountData
-                print(json.loads(json.dumps(setDefaultSettings(accountData, request.user.user_profile)['facilities'])))
-                A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData, request.user.user_profile)['facilities']))
+                A.settings['facilities'] = json.loads(json.dumps(setDefaultSettings(accountData)['facilities']))
                 A.save()
                 return redirect('selectedFacilitySettings', facilityID, 'main')
         elif 'defaultNotif' in answer:
             if answer['defaultNotif'] == 'true':
-                A  = accountData
+                A = accountData
                 A.settings['facilities'][str(facilityID)]['notifications'] = json.loads(json.dumps(defaultNotifications))
                 A.save()
                 return redirect('selectedFacilitySettings', facilityID, 'main')
