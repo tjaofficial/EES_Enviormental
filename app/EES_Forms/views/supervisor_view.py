@@ -197,7 +197,7 @@ def register_view(request, access_page):
                     fail_silently=False
                 )
                 messages.success(request, 'Account was created for ' + username + ". An activation link has been sent to their email.")
-                return redirect('sup_dashboard', facility)
+                return redirect('sup_dashboard')
             else:
                 if 'username' in form.errors:
                     messages.error(request, form.errors['username'][0])
@@ -244,7 +244,7 @@ def register_view(request, access_page):
                         ups.save()
                     
                     messages.success(request, 'Facility Created')
-                    return redirect('sup_dashboard', facility)
+                    return redirect('sup_dashboard')
                 else:
                     messages.error(request, "The facility name you have entered is taken, please choose different name")
                     print('need error message response for matching Facility names, choose different name')
@@ -359,7 +359,7 @@ def form_request_view(request):
             A.save()
             print('SAVED IT')
             messages.success(request, 'Your request has been submitted. MethodPlus will contact you within 1-2 business days.')
-            return redirect('sup_dashboard', 'supervisor')
+            return redirect('sup_dashboard')
     return render(request, 'supervisor/request_form.html', {
         'supervisor': supervisor, 
         "client": client, 

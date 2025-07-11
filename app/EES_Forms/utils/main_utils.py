@@ -1139,7 +1139,7 @@ def userGroupRedirect(user, permissions):
             userProfile = user_profile_model.objects.get(user=user)
             return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
         elif userGroup == SUPER_VAR:
-            return redirect('sup_dashboard', SUPER_VAR)
+            return redirect('sup_dashboard')
 
 def sendToDash(user):
     userGroup = str(user.groups.all()[0])
@@ -1150,7 +1150,7 @@ def sendToDash(user):
         print('doskdhjflksdjflksfj')
         return redirect('c_dashboard', userProfile.facilityChoice.facility_name)
     elif userGroup == SUPER_VAR:
-        return redirect('sup_dashboard', SUPER_VAR)
+        return redirect('sup_dashboard')
 
 def tryExceptFormDatabases(formID, model, facility):
     if len(model) > 0:

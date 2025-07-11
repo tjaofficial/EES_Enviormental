@@ -38,7 +38,7 @@ def sup_account_view(request):
         data = request.POST
         if 'facilitySelect' in data.keys():
             if data['facilitySelect'] != '':
-                return redirect('sup_dashboard', data['facilitySelect'])
+                return redirect('sup_dashboard')
         elif 'cancelReg' in data.keys():
             print(data)
             selectedRegister = userProfileQuery.get(id=int(data['registerID'])).user

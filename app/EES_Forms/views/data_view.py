@@ -38,7 +38,7 @@ def pt_admin1_view(request):
         answer = request.POST
         if 'facilitySelect' in answer.keys():
             if answer['facilitySelect'] != '':
-                return redirect('sup_dashboard', answer['facilitySelect'])
+                return redirect('sup_dashboard')
 
     return render(request, "shared/PushTravels.html", {
         'facility': facility, 

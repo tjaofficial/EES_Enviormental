@@ -202,7 +202,7 @@ def calendar_view(request, year, month):
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
-            return redirect('sup_dashboard', answer['facilitySelect'])
+            return redirect('sup_dashboard')
     return render(request, "ees_forms/schedule.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
@@ -995,7 +995,7 @@ def shared_contacts_view(request):
         answer = request.POST
         if 'facilitySelect' in request.POST.keys():
             if answer['facilitySelect'] != '':
-                return redirect('sup_dashboard', answer['facilitySelect'])
+                return redirect('sup_dashboard')
     return render(request, "shared/contacts.html", {
         'notifs': notifs, 
         'sortedFacilityData': sortedFacilityData, 
@@ -1045,7 +1045,7 @@ def sop_view(request):
     if request.method == 'POST':
         if 'facilitySelect' in request.POST.keys():
             if request.POST['facilitySelect'] != '':
-                return redirect('sup_dashboard', request.POST['facilitySelect'])
+                return redirect('sup_dashboard')
         # copyPost = request.POST.copy()
         # copyPost['facilityChoice'] = options
         # # print(request.FILES.url)
@@ -1138,7 +1138,7 @@ def formsProgress(request, section):
     if request.method == 'POST':
         answer = request.POST
         if answer['facilitySelect'] != '':
-            return redirect('sup_dashboard', answer['facilitySelect'])
+            return redirect('sup_dashboard')
     return render(request, 'supervisor/formsProgress.html', {
         'notifs': notifs, 
         'finalList': finalList, 
