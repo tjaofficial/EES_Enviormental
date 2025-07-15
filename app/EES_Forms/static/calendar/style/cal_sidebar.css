@@ -195,6 +195,7 @@
 #main-side {
     width: 340px; 
     display: block;
+    min-width: 340px; 
 }
 .fc-scroller-harness-liquid{
     overflow: visible !important;
