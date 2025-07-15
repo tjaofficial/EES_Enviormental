@@ -7,8 +7,9 @@ from ..forms import CreateUserForm, user_profile_form, company_Update_form, bat_
 from EES_Enviormental.settings import SUPER_VAR
 from datetime import datetime
 import json
+import stripe # type: ignore
 from ..decor import group_required
-
+from django.conf import settings # type: ignore
 
 lock = login_required(login_url='Login')
 
@@ -34,6 +35,26 @@ def sup_account_view(request):
     print(str(current_date))
     reactivationQuery = account_reactivation_model.objects.all()
         
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    # Step 1: Get the subscription
+    subscription_id = stripeData.subscriptionID
+    subscription = stripe.Subscription.retrieve(subscription_id)
+
+    # Step 2: Get the latest invoice (from the subscription object)
+    invoice_id = subscription.get("latest_invoice")
+
+    if invoice_id:
+        invoice = stripe.Invoice.retrieve(invoice_id)
+
+        amount_paid = invoice.get("amount_paid", 0)  # in cents
+        amount_paid_dollars = amount_paid / 100.0
+
+        print(f"✅ Total Paid: ${amount_paid_dollars:.2f}")
+    else:
+        amount_paid_dollars = 0
+        print("⚠️ No invoice found for this subscription.")
+
     if request.method == "POST":
         data = request.POST
         if 'facilitySelect' in data.keys():
@@ -75,7 +96,8 @@ def sup_account_view(request):
         'active_registrations': active_registrations,
         'userProfileQuery': userProfileQuery,
         'today': (current_date, end_of_billing_date),
-        'reactivationQuery': reactivationQuery
+        'reactivationQuery': reactivationQuery,
+        'amount_paid_dollars': amount_paid_dollars
     })
 
 @lock

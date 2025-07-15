@@ -43,7 +43,7 @@
         {% if stripeData.status == "active" %}
             <tr class='tableSpacer'>
                 <td class="labelClass">Monthly Amount:</td>
-                <td class="labelClass2">${{stripeData.plan.price|floatformat:"2"}}</td>
+                <td class="labelClass2">${{amount_paid_dollars|floatformat:"2"}}</td>
             </tr>
             <tr class='tableSpacer'>
                 <td class="labelClass">Status:</td>
