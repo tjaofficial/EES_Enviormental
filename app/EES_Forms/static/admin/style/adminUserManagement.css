@@ -1,0 +1,41 @@
+.archive-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-primary);
+  color: var(--methodPlusText);
+  background-color: var(--methodPlusWhite);
+  border: 1px solid var(--methodPlusBorder);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.archive-table th,
+.archive-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--methodPlusLightGray);
+}
+
+.archive-table th {
+  cursor: pointer;
+  background-color: var(--methodPlusBlue);
+  color: white;
+  user-select: none;
+}
+
+#user-search {
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  border: 1px solid var(--methodPlusBorder);
+  border-radius: 5px;
+}
+
+.options-menu {
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.5rem;
+  user-select: none;
+}
+svg {
+    width: 13px;
+}

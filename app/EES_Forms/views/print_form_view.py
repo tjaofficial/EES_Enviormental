@@ -58,7 +58,7 @@ class PageNumCanvas(canvas.Canvas):
 def form_PDF(request, type, formGroup, formIdentity, formDate):
     print(f"This a '{type}' form")
     print(f"Frequency: {formGroup}")
-    startingDayNumb = int(request.user.user_profile.company.settings.weekly_start_day)
+    startingDayNumb = int(request.user.user_profile.company.settings['weekly_start_day'])
     if "-" in formIdentity:
         fsID = formIdentity.split('-')[0]
         facility = form_settings_model.objects.get(id=int(fsID)).facilityChoice.facility_name

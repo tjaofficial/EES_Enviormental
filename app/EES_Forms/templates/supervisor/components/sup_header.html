@@ -1,7 +1,13 @@
 {% load static %}
 <link href="{% static 'ees_forms/style/sup_header.css' %}" rel="stylesheet">
 {{ notifSettings|json_script:"notifSettings" }}
-<div id="topBar" class="methodPlusBlue">
+{% if request.session.impersonating %}
+    <div class="impersonation-banner">
+        ⚠️ You are impersonating {{ request.user.get_full_name|default:request.user.username }}.
+        <a href="{% url 'return_to_admin' %}" class="return-link">Return to Admin</a>
+    </div><br>
+{% endif %}
+<div id="topBar" class="methodPlusBlue" style="{% if request.session.impersonating %}top: 3rem{% endif %}">
     <div id="companyBox">
         <img class="icon" src="{% if company.icon %}{{ company.icon.url }}{% else %}{% static 'logo/logo_main_white_transparent.png' %}{% endif %}" alt="Company Icon">
         <h2 class="companyName">{{company.company_name}}</h2>

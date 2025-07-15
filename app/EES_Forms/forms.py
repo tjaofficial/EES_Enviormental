@@ -35,8 +35,41 @@ class UpdateUserForm(UserChangeForm):
         self.fields['username'].widget.attrs.update({'autofocus': False})
 
 class CreateUserForm(UserCreationForm):
-    password1 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    password2 = forms.CharField(max_length=16, widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'}))
+    password1 = forms.CharField(
+        max_length=16,
+        min_length=8,
+        error_messages={
+            "required": "Password is required.",
+            "min_length": "Password must be at least 8 characters.",
+        },
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
+    )
+    password2 = forms.CharField(
+        max_length=16,
+        min_length=8,
+        error_messages={
+            "required": "Please confirm your password.",
+            "min_length": "Password must be at least 8 characters.",
+        },
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Confirm Password'
+            }
+        )
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'input', 
+                'placeholder': 'E-mail', 
+                'style':'width: 15rem;'
+            }
+        ),
+        error_messages={
+            "required": "Email is required.",
+            "invalid": "Enter a valid email address."
+        }
+    )
     class Meta:
         model = User
         fields = (
@@ -50,9 +83,6 @@ class CreateUserForm(UserCreationForm):
         
         widgets = {
             'username': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Username', 'autofocus': False }),
-            'email': forms.EmailInput(attrs={'class': 'input', 'placeholder': 'E-mail', 'style':'width: 15rem;'}),
-            'password1': forms.TextInput(attrs={'class': 'input', 'type': 'password', 'placeholder': 'Password'}),
-            'password2': forms.PasswordInput(attrs={'class': 'input', 'placeholder': 'Confirm Password'}),
             'first_name': forms.TextInput(attrs={'class': 'input', 'placeholder': 'First Name'}),
             'last_name': forms.TextInput(attrs={'class': 'input', 'placeholder': 'Last Name'}),
         }
@@ -74,6 +104,14 @@ class CreateUserForm(UserCreationForm):
             raise ValidationError("This username already exists. Please enter a different username.")
         
         return username
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            self.add_error("password2", "Passwords do not match.")
 
 class daily_battery_profile_form(ModelForm):
     class Meta:

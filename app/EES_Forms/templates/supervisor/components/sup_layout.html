@@ -36,8 +36,8 @@
             
         </header>
         
-        <nav id="sideBar" class="methodPlusBlue"></nav>
-        <main class="mainContentContainer">
+        <nav id="sideBar" class="methodPlusBlue" style="{% if request.session.impersonating %}margin-top: 3rem{% endif %}"></nav>
+        <main class="mainContentContainer" style="{% if request.session.impersonating %}margin-top: 6rem{% endif %}">
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}

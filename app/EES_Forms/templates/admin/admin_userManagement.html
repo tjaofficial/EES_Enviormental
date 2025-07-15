@@ -1,10 +1,26 @@
 {% load static %}
 <link href="{% static 'admin/style/adminUserManagement.css' %}" rel="stylesheet">
 <script defer src="{% static 'admin/script/adminUserManagement.js' %}"></script>
+
 <section id="users" class="panel active">
     <h1>User Management</h1>
-    <input type="text" id="user-search" placeholder="Search Users..." oninput="filterUsers()">
-    <ul id="user-list">
-        <!-- User List Populated by JS -->
-    </ul>
-</section>
+    <input type="text" id="user-search" placeholder="Search by Name or Company..." />
+
+    <table id="user-table" class="archive-table">
+        <thead>
+        <tr class="methodPlusBlue">
+            <th onclick="sortTable(0)">Full Name</th>
+            <th onclick="sortTable(1)">Company</th>
+            <th onclick="sortTable(2)">Position</th>
+            <th onclick="sortTable(3)">Number</th>
+            <th onclick="sortTable(4)">Email</th>
+            <th>Settings</th>
+            <th onclick="sortTable(6)">Status</th>
+            <th></th> <!-- For three-dot menu -->
+        </tr>
+        </thead>
+        <tbody id="user-table-body">
+        <!-- Populated via JS -->
+        </tbody>
+    </table>
+    </section>

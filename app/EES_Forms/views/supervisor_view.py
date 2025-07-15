@@ -37,7 +37,11 @@ def sup_dashboard_view(request):
             print(answer['colorMode'])
             colorModeSwitch(request)    
             return redirect(request.META['HTTP_REFERER'])
-        
+    # request.session.pop("original_user_id", None)
+    # request.session.pop("impersonating", None)
+    print("🧠 Current user:", request.user)
+    print("🧩 Impersonating:", request.session.get("impersonating"))
+
     return render(request, "supervisor/sup_dashboard.html", {
         'facility': facility,
         'colorMode': colorMode,

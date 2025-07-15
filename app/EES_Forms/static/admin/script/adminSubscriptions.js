@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Fetch and display metrics
-    fetchMetrics();
-
     // Initialize subscription trends chart
     initializeSubscriptionTrendsChart();
 
@@ -11,18 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
         fetchFilteredSubscriptions();
     });
 });
-
-function fetchMetrics() {
-    var active_users = document.getElementById("active_users").dataset.activeusers;
-    var past_due = document.getElementById("past_due").dataset.pastdue;
-    document.getElementById("filterForm")
-    // Simulate an API call to fetch metrics
-    setTimeout(() => {
-        document.getElementById("active-subscriptions").innerText = "active_users";
-        document.getElementById("past-due-subscriptions").innerText = "past_due";
-        document.getElementById("monthly-revenue").innerText = "$get new category";
-    }, 1000);
-}
 
 function initializeSubscriptionTrendsChart() {
     const ctx = document.getElementById("subscriptionTrendsChart").getContext("2d");
@@ -58,47 +43,42 @@ function initializeSubscriptionTrendsChart() {
 
 async function fetchFilteredSubscriptions() {
     const subscriptionContainer = document.getElementById("subscriptionContainer");
-    subscriptionContainer.innerHTML = `<div class="loading">Loading subscriptions...</div>`;
-    
+    subscriptionContainer.innerHTML = `<tr><td colspan="7" class="loading">Loading subscriptions...</td></tr>`;
+
     try {
-        const response = await fetch('/api/get_subscriptions/');
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetch("/admin-pages/api/get_subscriptions/");
+        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
         const data = await response.json();
 
-        if (data.error) {
-            subscriptionContainer.innerHTML = `<div class="error">Error: ${data.error}</div>`;
-            return;
-        }
+        // Update metrics
+        document.getElementById("active-subscriptions").innerText = data.active_users;
+        document.getElementById("past-due-subscriptions").innerText = data.past_due;
+        document.getElementById("monthly-revenue").innerText = data.monthly_revenue;
 
-        // Populate the subscription data
-        subscriptionContainer.innerHTML = '';
+        // Populate subscription table
+        subscriptionContainer.innerHTML = "";
         const subscriptions = data.subscriptions;
 
-        subscriptions.forEach(subscription => {
-            const subscriptionDiv = document.createElement('tr');
-            subscriptionDiv.classList.add('subscription');
-            subscriptionDiv.innerHTML = `
-                <td>${subscription.id}</td>
-                <td>${subscription.customer_name}</td>
-                <td>${subscription.status}</td>
-                <td>${subscription.plan_id}</td>
-                <td>${subscription.start_date}</td>
-                <td>${subscription.next_billing_date}</td>
+        subscriptions.forEach(sub => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${sub.id}</td>
+                <td>${sub.customer_name}</td>
+                <td>${sub.status}</td>
+                <td>${sub.plan_id}</td>
+                <td>${sub.start_date}</td>
+                <td>${sub.next_billing_date}</td>
+                <td><button>${sub.status === "Past_due" ? "Retry Payment" : "View"}</button></td>
             `;
-            if (subscription.status != "Past Due"){
-                subscriptionDiv.innerHTML += `<td><button>View</button></td>`
-            } else {
-                subscriptionDiv.innerHTML += `<td><button>Retry Payment</button></td>`
-            }
-            subscriptionContainer.appendChild(subscriptionDiv);
+            subscriptionContainer.appendChild(row);
         });
-    } catch (error) {
-        console.error('Error fetching subscriptions:', error);
-        subscriptionContainer.innerHTML = `<div class="error">Failed to load subscriptions.</div>`;
+
+    } catch (err) {
+        console.error("Error fetching subscriptions:", err);
+        subscriptionContainer.innerHTML = `<tr><td colspan="7">Failed to load subscriptions.</td></tr>`;
     }
 }
+
 
 // Call the function on page load
 document.addEventListener('DOMContentLoaded', () => {

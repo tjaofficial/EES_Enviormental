@@ -49,6 +49,9 @@ def login_view(request):
         user = authenticate(request, username=username.lower(), password=password)
         
         if user is not None:
+            if user.is_superuser:
+                login(request, user)
+                return redirect('adminDash', "overview")
             if user.user_profile.settings['profile']['two_factor_enabled']:
                 request.session["2fa_user_id"] = user.id
                 status = send_verification_code(user.user_profile.phone)

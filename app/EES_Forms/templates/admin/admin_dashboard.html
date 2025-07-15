@@ -1,97 +1,98 @@
 {% extends 'admin/components/admin_layout.html' %}{% load static %}
+{% block extra_head %}
+    <link href="{% static 'admin/style/adminDash.css' %}" rel="stylesheet">
+    <script defer src="{% static 'admin/script/adminLayout.js' %}"></script>
+{% endblock %}
 {% block body %}
-<link href="{% static 'admin/style/adminDash.css' %}" rel="stylesheet">
-<script defer src="{% static 'admin/script/adminLayout.js' %}"></script>
-<div class='topCont dataBG' style="height:100%;">
-    <div class="headerSpace"></div>
-    <div class='topSection'>
-        <div id='cover1' style=''>
-            <div class="main-content">
-                {% if selector == "overview" %}
-                    <!-- Overview Panel -->
-                    {% include "admin/admin_overview.html" %}
-                {% elif selector == "users" %}
-                    <!-- User Management Panel -->
-                    {% include "admin/admin_userManagement.html" %}
-                {% elif selector == "subscriptions" %}
-                    <!-- Subscriptions Panel -->
-                    {% include "admin/admin_subscriptions.html" %}
-                {% elif selector == "reports" %}
-                    <!-- Reports Panel -->
-                    {% include "admin/admin_reports.html" %}
-                {% elif selector == "settings" %}
-                    <!-- Settings Panel -->
-                    {% include "admin/admin_settings.html" %}
-                {% endif %}
-            </div>
-            {% comment %} <div>
-                <br><br>
-                <center>
-                    <table>
-                        <tr>
-                            <td>Subscription ID:</td>
-                            <td>Status:</td>
-                            <td>Plan ID:</td>
-                        </tr>
-                        <tr><td></td></tr>
-                        {% for x in search_results %}
-                        <tr>
-                            <td class="center">{{x.id}}</td>
-                            <td class="center">{{x.status}}</td>
-                            <td class="center">{{x.plan_id}}</td>
-                            <td class="center">{{x.price}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table><br>
-                    <table>    
-                        {% for x in search_results %}
-                        <tr>
-                            <td>{{x}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </center>
-            </div>
-            <div class='coverMedia'>
-                <img src=''/>
-            </div>
-        </div>
-        <div id='cover2' style='display:none;'>
-            <div>
-                <div class='coverTitle'>DATA AT YOUR FINGER TIPS</div>
-                <div class='coverBody'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    <div class='topCont dataBG' style="height:100%;">
+        <div class="headerSpace"></div>
+        <div class='topSection'>
+            <div id='cover1' style=''>
+                <div class="main-content">
+                    {% if selector == "overview" %}
+                        <!-- Overview Panel -->
+                        {% include "admin/admin_overview.html" %}
+                    {% elif selector == "users" %}
+                        <!-- User Management Panel -->
+                        {% include "admin/admin_userManagement.html" %}
+                    {% elif selector == "subscriptions" %}
+                        <!-- Subscriptions Panel -->
+                        {% include "admin/admin_subscriptions.html" %}
+                    {% elif selector == "reports" %}
+                        <!-- Reports Panel -->
+                        {% include "admin/admin_reports.html" %}
+                    {% elif selector == "settings" %}
+                        <!-- Settings Panel -->
+                        {% include "admin/admin_settings.html" %}
+                    {% endif %}
+                </div>
+                {% comment %} <div>
+                    <br><br>
+                    <center>
+                        <table>
+                            <tr>
+                                <td>Subscription ID:</td>
+                                <td>Status:</td>
+                                <td>Plan ID:</td>
+                            </tr>
+                            <tr><td></td></tr>
+                            {% for x in search_results %}
+                            <tr>
+                                <td class="center">{{x.id}}</td>
+                                <td class="center">{{x.status}}</td>
+                                <td class="center">{{x.plan_id}}</td>
+                                <td class="center">{{x.price}}</td>
+                            </tr>
+                            {% endfor %}
+                        </table><br>
+                        <table>    
+                            {% for x in search_results %}
+                            <tr>
+                                <td>{{x}}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </center>
+                </div>
+                <div class='coverMedia'>
+                    <img src=''/>
                 </div>
             </div>
-            <div class='coverMedia'>
-                <img src=''/>
-            </div>
-        </div>
-        <div id='cover3' style='display:none;'>
-            <div>
-                <div class='coverTitle'>EASY AND AFFORDABLE</div>
-                <div class='coverBody'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            <div id='cover2' style='display:none;'>
+                <div>
+                    <div class='coverTitle'>DATA AT YOUR FINGER TIPS</div>
+                    <div class='coverBody'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    </div>
+                </div>
+                <div class='coverMedia'>
+                    <img src=''/>
                 </div>
             </div>
-            <div class='coverMedia'>
-                <img src=''/>
+            <div id='cover3' style='display:none;'>
+                <div>
+                    <div class='coverTitle'>EASY AND AFFORDABLE</div>
+                    <div class='coverBody'>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    </div>
+                </div>
+                <div class='coverMedia'>
+                    <img src=''/>
+                </div>
             </div>
+        </div> 
+
+        <div class='dotHolder'>
+            <div id='dot1' class='selectedDot'></div>
+            <div id='dot2' class='unselectedDot'></div>
+            <div id='dot3' class='unselectedDot'></div>
         </div>
-    </div> 
-
-    <div class='dotHolder'>
-        <div id='dot1' class='selectedDot'></div>
-        <div id='dot2' class='unselectedDot'></div>
-        <div id='dot3' class='unselectedDot'></div>
-    </div>
-</div> {% endcomment %}
-{% comment %} <div class="dashboard">
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- ALL PANEL DATA-->
-    </main>
-</div> {% endcomment %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    </div> {% endcomment %}
+    {% comment %} <div class="dashboard">
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- ALL PANEL DATA-->
+        </main>
+    </div> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}

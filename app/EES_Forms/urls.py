@@ -13,7 +13,12 @@ urlpatterns = [
     ##---ADMIN PAGES -------
     path("admin-pages/addFAQ", views.admin_add_FAQ_view, name="adminFAQ"),
     path('api/get_revenue', views.get_monthly_revenue, name='get_revenue'),
-    path('api/get_subscriptions/', views.get_subscriptions, name='get_subscriptions'),
+    path('admin-pages/api/get_subscriptions/', views.get_subscriptions, name='get_subscriptions'),
+    path("admin-pages/users/json/", views.get_users_json, name="get_users_json"),
+    path("admin-pages/login-as/<int:user_id>/", views.login_as_user, name="login_as_user"),
+    path("admin-pages/return-to-admin/", views.return_to_admin, name="return_to_admin"),
+
+    path('admin-pages/support/companies/', views.admin_user_companies, name="userSupport"),
     
     ##---LANDNG PAGES-----
     path("FAQ", views.FAQ_view, name="FAQ"),
