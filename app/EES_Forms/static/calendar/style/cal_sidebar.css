@@ -177,6 +177,20 @@
     right: -7px;
     cursor: pointer;
 }
+.closeAdd2 {
+    float: right;
+    position: relative;
+    top: -13px;
+    right: 10px;
+    cursor: pointer;
+}
+.closeAdd3 {
+    float: right;
+    position: relative;
+    top: -13px;
+    right: 23px;
+    cursor: pointer;
+}
 #next-month {
     rotate: 180deg;
     height: 32px;

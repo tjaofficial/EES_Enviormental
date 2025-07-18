@@ -74,7 +74,7 @@ def formSettingsFunc(keysList, requestPost, formID):
                 if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2']:
                     defaultDictUpdate = True
             elif formID == 17:
-                if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2']:
+                if mainLabel in ['custom_name', 'height_above_ground_level', 'describe_emissions_point_start', 'describe_emissions_point_stop', 'process_equip1', 'operating_mode1', 'process_equip2', 'operating_mode2']:
                     defaultDictUpdate = True
             elif formID == 8:
                 if mainLabel == 'custom_name':
@@ -107,7 +107,22 @@ def formSettingsFunc(keysList, requestPost, formID):
                             if requestPost[key]:
                                 settings[mainLabel]['options'][str(secondaryLabel[6:])] = str(requestPost[key])
             elif formID == 5:
-                if mainLabel in ['custom_name', 'larry_car_quantity']:
+                labelList = [
+                    'custom_name',
+                    'describe_emissions_point_start',
+                    'describe_emissions_point_stop',
+                    'process_equip1',
+                    'process_equip2',
+                    'operating_mode1',
+                    'operating_mode2',
+                    'water_drolet_present',
+                    'water_droplet_plume',
+                    'plume_opacity_determined_start',
+                    'plume_opacity_determined_stop',
+                    'describe_background_start',
+                    'describe_background_stop'
+                ]
+                if mainLabel in labelList:
                     defaultDictUpdate = True
             elif formID == 3:
                 if mainLabel in ['custom_name','one_pass']:

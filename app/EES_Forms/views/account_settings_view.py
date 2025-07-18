@@ -147,8 +147,8 @@ def sup_update_account(request, selector):
             user.last_name = dataFromForm['last_name']
             user.username = dataFromForm['username']
             user.email = dataFromForm['email']
-            if unlock:
-                userProf.cert_date = dataFromForm['cert_date']
+            # if unlock:
+            #     userProf.cert_date = dataFromForm['cert_date']
             userProf.phone = parsePhone(dataFromForm['phone'])
             if dataFromForm['two_factor_enabled'] == "no":
                 userProf.settings['profile']['two_factor_enabled'] = False

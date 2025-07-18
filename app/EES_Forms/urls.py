@@ -79,6 +79,9 @@ urlpatterns = [
     path("data-records/rolling-average/", views.rolling_average_page, name="rolling_average"),
     path("api/rolling-average/", views.rolling_average_api, name="rolling_average_api"),
     path("data-records/", views.data_records, name="data_records"),
+    path('calendar/delete-event/<int:event_id>/', views.delete_event, name='delete_event'),
+    path("schedule/event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
+
     ##------AJAX
     path('ajax/card/progress/', views.card_progress_bar, name='card_progress_bar'),
     path('ajax/card/daily-forms/', views.card_daily_battery_forms, name='card_daily_battery_forms'),
@@ -94,6 +97,7 @@ urlpatterns = [
     path("ajax/events-for-day/", views.events_for_day, name="events_for_day"),
     path("ajax/print-label-request/", views.print_label_request, name="print-label-request"),
     path('ajax/archive/search/', views.archive_search_api, name='archive_search_api'),
+    path('ajax/corrective_action/search/', views.corrective_action_search_api, name='corrective_action_search_api'),
     ##---FORMS
     path("form/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("form/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),
@@ -144,7 +148,7 @@ urlpatterns = [
     path('<str:facility>/settings', views.settings_view, name='settings'),
     ##---SHARED PAGES-----NOT CHANGED
     
-    path("<str:facility>/event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
+    
     path('delete_selected_sops/<str:facility>/', views.delete_selected_sops, name='delete_selected_sops'),
     path("<str:facility>/DeleteSop/<str:sop_id>", views.delete_sop_view, name="DeleteSop"),
     path("<str:facility>/UpdateSop/<str:sop_id>", views.update_sop_view, name="UpdateSop"),

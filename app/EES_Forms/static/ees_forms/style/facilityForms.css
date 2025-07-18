@@ -27,16 +27,6 @@
 .center{
     text-align: center;
 }
-.cardHeader{
-    font-size: 20px;
-    font-weight: bolder;
-    padding: 1rem;
-    background-color: #253544;
-    color: white;
-    border-radius: 13px 13px 0px 0px;
-    text-align: center;
-    font-family: sans-serif;
-}
 .categoryStyle{
     padding-bottom: 7px;
 }

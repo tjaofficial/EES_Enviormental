@@ -15,7 +15,9 @@
                     Form ID: {{formID}}
                 </div><br>        
                 <h4>Form Settings</h4>
-                {% include 'supervisor/components/form_settings_insert.html' with formID=formID count="" selector="single-form"%}
+                {% with defaultTitle=formData.title %}
+                    {% include 'supervisor/components/form_settings_insert.html' with formID=formID count="" selector="single-form"%}
+                {% endwith %}
                 {% include 'shared/components/submitButton.html' with label='update' %}
             </form>
         </div>

@@ -1,5 +1,5 @@
 {% load static %}{% load sup_tags %}
-<script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
+{% comment %} <script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script> {% endcomment %}
 <link href="{% static 'ees_forms/style/forms_settings.css' %}" rel="stylesheet" />
 <link href="{% static 'ees_forms/style/secondary_form.css' %}" rel="stylesheet" />
 {% comment %} {% with isBreak=1 %}{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{{ isBreak|add:'1' }}{% endif %}{% endfor %}{% if isBreak == 2 %}display:block;{% else %}display:none;{% endif %}{% endwith %} {% endcomment %}
@@ -8,22 +8,22 @@
     <div class="innerFormCont">
         {% if formID == "1" %}
             <li class="form-line">    
-                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
+                Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{defaultTitle}}" class="customName" name="{{formID}}-custom_name" value="{% if formSettings.settings.custom_name %}{{formSettings.settings.custom_name}}{% endif %}"><br>
             </li>
             <li class="form-line">
-                Larry Car quantity: <input name="{{formID}}-larry_car_quantity" value="{% if formSettings.settings.larry_car_quantity %}{{formSettings.settings.larry_car_quantity}}{% endif %}" type="number"><br>
+                Larry Car quantity*: <input name="{{formID}}-larry_car_quantity" value="{% if formSettings.settings.larry_car_quantity %}{{formSettings.settings.larry_car_quantity}}{% endif %}" type="number" required><br>
             </li>
             <li class="form-line">
-                Larry Car organized by: 
-                <select name="{{formID}}-organize_larry_car">
+                Larry Car organized by*: 
+                <select name="{{formID}}-organize_larry_car" required>
                     <option value="">------</option>
                     <option value="numbered" {% if formSettings.settings.organize_larry_car == "numbered"  %}selected{% endif %}>Numbered</option>
                     <option value="lettered" {% if formSettings.settings.organize_larry_car == "lettered" %}selected{% endif %}>Lettered</option>
                 </select><br>
             </li>
             <li class="form-line">
-                Order of ovens: <select name="{{formID}}-organize_ovens">
-                    <option value="">------</option>
+                Order of ovens*: <select name="{{formID}}-organize_ovens">
+                    <option value="">------</option required>
                     <option value="sequential" {% if formSettings.settings.organize_ovens == "sequential"  %}selected{% endif %}>Sequential</option>
                     <option value="every_other" {% if formSettings.settings.organize_ovens == "every_other"  %}selected{% endif %}>Every-Other</option>
                     <option value="alternating" {% if formSettings.settings.organize_ovens == "alternating"  %}selected{% endif %}>Alternating</option>
@@ -35,7 +35,7 @@
             </li>
         {% elif formID == "3" %}
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
-                One pass option: <select name="{{formID}}-one_pass">
+                One pass option: <select name="{{formID}}-one_pass" required>
                     <option value="">------</option>
                     <option value="yes" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'yes' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>Yes</option>
                     <option value="no" {% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{% if settings.settings.one_pass == 'no' %}selected{% endif %}{% endif %}{% endfor %}{% endif %}{% endfor %}>No</option>
@@ -49,7 +49,47 @@
                 Custom Title:{% include 'shared/components/helpPack.html' with data="customTitleInput" popupCounter=0 %} <input type='text' placeholder="{{formData.title}}" class="customName" name="{{formID}}-custom_name" value="{% for key, x in packetQuery.items %}{% if x.formID == form.id %}{% for settings in formSettingsModel %}{% if settings.id == x.settingsID %}{{settings.settings.custom_name}}{% endif %}{% endfor %}{% endif %}{% endfor %}"><br>
             </li>
             <li class="form-line">
-                Larry Car Quantity: <input name="{{formID}}-larry_car_quantity" type="number"><br>
+                Process equipment*: <input name="{{formID}}-process_equip1" type="text" value="{% if formSettings.settings.process_equip1 %}{{formSettings.settings.process_equip1}}{% endif %}" required><br>
+                Operating Mode*: <input name="{{formID}}-operating_mode1" type="text" value="{% if formSettings.settings.operating_mode1 %}{{formSettings.settings.operating_mode1}}{% endif %}" required><br>
+            </li>
+            <li class="form-line">
+                Process equipment: <input name="{{formID}}-process_equip2" type="text" value="{% if formSettings.settings.process_equip2 %}{{formSettings.settings.process_equip2}}{% endif %}"><br>
+                Operating Mode: <input name="{{formID}}-operating_mode2" type="text" value="{% if formSettings.settings.operating_mode2 %}{{formSettings.settings.operating_mode2}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Decribe emissions point start*: <input name="{{formID}}-describe_emissions_point_start" type="text" value="{% if formSettings.settings.describe_emissions_point_start %}{{formSettings.settings.describe_emissions_point_start}}{% endif %}" required><br>
+                Decribe emissions point stop*:  <input name="{{formID}}-describe_emissions_point_stop" type="text" value="{% if formSettings.settings.describe_emissions_point_stop %}{{formSettings.settings.describe_emissions_point_stop}}{% endif %}" required><br>
+            </li>
+            <li class="form-line">
+                Plume opacity determined start: <input name="{{formID}}-plume_opacity_determined_start" type="text" value="{% if formSettings.settings.plume_opacity_determined_start %}{{formSettings.settings.plume_opacity_determined_start}}{% endif %}"><br>
+                Plume opacity determined stop:  <input name="{{formID}}-plume_opacity_determined_stop" type="text" value="{% if formSettings.settings.plume_opacity_determined_stop %}{{formSettings.settings.plume_opacity_determined_stop}}{% endif %}"><br>
+            </li>
+            <li class="form-line">
+                Describe background start: <input name="{{formID}}-describe_background_start" type="text" value="{% if formSettings.settings.describe_background_start %}{{formSettings.settings.describe_background_start}}{% endif %}"><br>
+                Describe background stop: <input name="{{formID}}-describe_background_stop" type="text" value="{% if formSettings.settings.describe_background_stop %}{{formSettings.settings.describe_background_stop}}{% endif %}"><br>
+            </li>
+            {% comment %} <li class="form-line">
+                Plume Type: <select name="{{formID}}-plume_type">
+                    <option value="">-----</option>
+                    <option value="fugitive" {% if formSettings.settings.plume_type == 'fugitive' %}selected{% endif %}>Fugitive</option>
+                    <option value="continuous" {% if formSettings.settings.plume_type == 'continuous' %}selected{% endif %}>Continuous</option>
+                    <option value="intermittent" {% if formSettings.settings.plume_type == 'intermittent' %}selected{% endif %}>Intermittent</option>
+                </select><br>
+            </li> {% endcomment %}
+            <li class="form-line">
+                Water droplet present*: <select name="{{formID}}-water_drolet_present" required>
+                    <option value="">-----</option>
+                    <option value="Yes" {% if formSettings.settings.water_drolet_present == 'Yes' %}selected{% endif %}>Yes</option>
+                    <option value="No" {% if formSettings.settings.water_drolet_present == 'No' %}selected{% endif %}>No</option>
+                </select><br>
+            </li>
+            <li class="form-line">
+                Water droplet plume*: <select name="{{formID}}-water_droplet_plume" required>
+                    <option value="">-----</option>
+                    <option value="N/A" {% if formSettings.settings.water_droplet_plume == 'N/A' %}selected{% endif %}>N/A</option>
+                    <option value="attached" {% if formSettings.settings.water_droplet_plume == 'attached' %}selected{% endif %}>Attached</option>
+                    <option value="detached" {% if formSettings.settings.water_droplet_plume == 'detached' %}selected{% endif %}>Detached</option>
+                </select><br>
             </li>
         {% elif formID == "6" %}
             <li class="form-line">
@@ -646,5 +686,6 @@
                 }
             </script>
         {% endif %}
+        <div style="width: 100%; text-align: center;font-size: 12px;">*required</div>
     </div>
 </div>

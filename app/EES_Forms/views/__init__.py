@@ -24,6 +24,8 @@ from .method303_rolling_avg_view import *
 from .profile_view import *
 from .admin_data_view import *
 from .archive_view import *
+from .corrective_action_view import *
+from .schedule_view import *
 
 from .form1 import *
 from .form2 import *

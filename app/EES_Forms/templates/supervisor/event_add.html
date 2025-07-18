@@ -1,125 +1,110 @@
-{% extends "supervisor/components/sup_layout.html" %}{% block list%}{% load static %}
+{% extends "supervisor/components/sup_layout.html" %}
+{% load static %}
 {% block extra_head %}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <link href="{% static 'ees_forms/style/date_picker.css' %}" rel="stylesheet">
-  <link href="{% static 'ees_forms/style/universal_inputs.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<link href="{% static 'ees_forms/style/date_picker.css' %}" rel="stylesheet">
+	<link href="{% static 'ees_forms/style/universal_inputs.css' %}" rel="stylesheet">
 {% endblock %}
-<div class="mainCont" style="width:20rem; min-width: unset;">
-    <div class="card">
-        <div class="cardHeader methodPlusBlue">
-            {% include "shared/components/backArrow.html" with destination="calendar"%}
-            Create New Event
-        </div>
-        <div class="contentCont" style="text-align: left;">
-            <form action="" method="POST">
-                {% csrf_token %}
-                <span class="input-package" style="width: 100%;">
-                    {{form.title}}
-                    <label for="id_title">Title</label>
-                </span>
-                <br>
-                <span class="input-package" style="width: 100%;">
-                    <select name="calendarChoice" maxlength="50" id="id_calendarChoice">
-                        <option value="">-------</option>
-                        {% for items in cal_select_choices %}
-                            <option value="{{items}}">{{items}}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="id_calendarChoice">Calendar</label>
-                </span>
-                <br>
-                <span class="input-package" style="width: 100%;">
-                    <input type="text" id="date-picker" placeholder="Pick your days" />
-                    <label for="date-picker">Select Dates</label>
-                    {{ form.selected_days }}
-                    
-                    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-                    <script>
-                        const dateInput = document.getElementById("date-picker");
-                        const hiddenInput = document.getElementById("id_selected_days");
-                        
-                        flatpickr(dateInput, {
-                            mode: "multiple",
-                            dateFormat: "Y-m-d",
-                            onChange: function(selectedDates, dateStr) {
-                                hiddenInput.value = dateStr; // Send as comma-separated
-                            }
-                        });
-                    </script>
-                </span>
-                <br>
-                <span class="input-flex-package">
-                    <label for="id_allDay">All-day:</label>
-                    {{form.allDay }}
-                    <script>
-                        const allDay = document.getElementById('id_allDay');
-                        allDay.addEventListener('change', function (){
-                            const start_time = document.getElementById('id_start_time');
-                            const end_time = document.getElementById('id_end_time');
-                            start_time.disable = allDay.checked? true:false;
-                            startTimeContainer.style.display = allDay.checked? 'none':'inline-block';
-                            end_time.disable = allDay.checked? true:false;
-                            endTimeContainer.style.display = allDay.checked? 'none':'inline-block';
-                        })
-                    </script>
-                </span>
-                <div style="width:100%;">
-                    <span id="startTimeContainer" class="input-package">
-                        {{ form.start_time }}
-                        <label for="id_start_time">Starting Time</label>
-                    </span>
-                    <span id="endTimeContainer" class="input-package">
-                        {{ form.end_time }}
-                        <label for="id_end_time">Final Time</label>
-                    </span>
-                </div>
-                <br>
-                {% if facility %}
-                    <span class="input-package" style="width: 100%;">
-                        <select name="observer" id="observers">
-                            <option value="">-----</option>
-                            {% for observer in listOfObservers %}
-                                <option value="{{observer.user.last_name}}">{{observer.user.last_name}}</option>
-                            {% endfor %}
-                        </select>
-                        <label for="observers">Observer</label>
-                    </span>
-                {% endif %}
-                {% comment %} <br><br>
-                Title: 
-                {% if facility %}
-                    <select name="title" id="id_title" required>
-                        <option value="" selected="">---------</option>
-                        <option value="P">Primary</option>
-                        <option value="BU">Back Up</option>
-                        <option value="Off">Off</option>
-                        <option value="Office">Office </option>
-                        <option value="BH">BagHouses</option>
-                        <option value="QT">Quarterly Trucks</option>
-                        <option value="BH2-S">Boilerhouse Stacks</option>
-                        <option value="T">Training</option>
-                    </select>
-                {% else %}
-                    {{ form.title }}
-                {% endif %} {% endcomment %}
-                <br>
-                
-                <br>
-                <span class="input-package" style="width: 100%;">
-                    {{ form.notes }}
-                    <label for="id_notes">Description</label>
-                </span>
-                <span class="input-flex-package">
-                    <label for="id_repeat">Repeat:</label>
-                    {{ form.repeat }}
-                </span>
-                <span class="input-flex-package">
-                    <label for="id_alert">Alerts:</label>
-                    {{ form.alerts }}
-                </span>
-                <input type="submit" value="Request">
-            </form>
-        </div>
-    </div>
-</div>
+{% block list %}
+	<div class="mainCont" style="width:20rem; min-width: unset;">
+		<div class="card">
+			<div class="cardHeader methodPlusBlue">
+				{% include "shared/components/backArrow.html" with destination="calendar"%}
+				Create New Event
+			</div>
+			<div class="contentCont" style="text-align: left;">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<span class="input-package" style="width: 100%;">
+						{{form.title}}
+						<label for="id_title">Title</label>
+					</span>
+					<br>
+					<span class="input-package" style="width: 100%;">
+						<select name="calendarChoice" maxlength="50" id="id_calendarChoice">
+							<option value="">-------</option>
+							{% for items in cal_select_choices %}
+								<option value="{{items}}">{{items}}</option>
+							{% endfor %}
+						</select>
+						<label for="id_calendarChoice">Calendar</label>
+					</span>
+					<br>
+					<span class="input-package" style="width: 100%;">
+						<input type="text" id="date-picker" placeholder="Pick your days" />
+						<label for="date-picker">Select Dates</label>
+						{{ form.selected_days }}
+						
+						<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+						<script>
+							const dateInput = document.getElementById("date-picker");
+							const hiddenInput = document.getElementById("id_selected_days");
+							
+							flatpickr(dateInput, {
+								mode: "multiple",
+								dateFormat: "Y-m-d",
+								onChange: function(selectedDates, dateStr) {
+									hiddenInput.value = dateStr; // Send as comma-separated
+								}
+							});
+						</script>
+					</span>
+					<br>
+					<span class="input-flex-package">
+						<label for="id_allDay">All-day:</label>
+						{{form.allDay }}
+						<script>
+							const allDay = document.getElementById('id_allDay');
+							allDay.addEventListener('change', function (){
+								const start_time = document.getElementById('id_start_time');
+								const end_time = document.getElementById('id_end_time');
+								start_time.disable = allDay.checked? true:false;
+								startTimeContainer.style.display = allDay.checked? 'none':'inline-block';
+								end_time.disable = allDay.checked? true:false;
+								endTimeContainer.style.display = allDay.checked? 'none':'inline-block';
+							})
+						</script>
+					</span>
+					<div style="width:100%;">
+						<span id="startTimeContainer" class="input-package">
+							{{ form.start_time }}
+							<label for="id_start_time">Starting Time</label>
+						</span>
+						<span id="endTimeContainer" class="input-package">
+							{{ form.end_time }}
+							<label for="id_end_time">Final Time</label>
+						</span>
+					</div>
+					<br>
+					{% if facility %}
+						<span class="input-package" style="width: 100%;">
+							<select name="observer" id="observers">
+								<option value="">-----</option>
+								{% for observer in listOfObservers %}
+									<option value="{{observer.user.last_name}}">{{observer.user.last_name}}</option>
+								{% endfor %}
+							</select>
+							<label for="observers">Observer</label>
+						</span>
+					{% endif %}
+					<br>
+					
+					<br>
+					<span class="input-package" style="width: 100%;">
+						{{ form.notes }}
+						<label for="id_notes">Description</label>
+					</span>
+					<span class="input-flex-package">
+						<label for="id_repeat">Repeat:</label>
+						{{ form.repeat }}
+					</span>
+					<span class="input-flex-package">
+						<label for="id_alert">Alerts:</label>
+						{{ form.alerts }}
+					</span>
+					<input type="submit" value="Request">
+				</form>
+			</div>
+		</div>
+	</div>
 {% endblock %}

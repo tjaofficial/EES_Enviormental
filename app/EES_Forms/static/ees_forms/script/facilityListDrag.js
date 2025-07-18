@@ -5,9 +5,9 @@ fetch('/ajax/facilityList/companyFacilityInfo/')
     .then(data => {
         //console.log('Facilities:', data);
         data.forEach((item) => {
+            //console.log(data)
             let facilityDiv = document.getElementById('facility' + String(item.facility_id))
             //console.log(facilityDiv)
-            let totalForms = facilityDiv.dataset.totalforms;//29
             let facilityNumber = facilityDiv.dataset.facid;
             let packetIDList = JSON.parse(facilityDiv.dataset.packlist);
             item.fsIDList.forEach((fsID) => {
@@ -25,10 +25,13 @@ fetch('/ajax/facilityList/companyFacilityInfo/')
                         if (elemn.facility_id!=item.facility_id){
                             //console.log('CHeck 1')
                             let facilityDivBlock = document.getElementById('facility'+String(elemn.facility_id))
+                            //console.log(facilityDivBlock)
                             let packetIDList = JSON.parse(facilityDivBlock.dataset.packlist);
+                            //console.log(packetIDList)
                             for (let q=0;q<packetIDList.length;q++){
                                 let packetID = packetIDList[q]
                                 let dropZone = document.getElementById('dropZone'+String(packetID));
+                                //console.log(dropZone);
                                 let dropZoneFacID = dropZone.dataset.facid;
                                 let dragFacID = event.dataTransfer.getData("Text").split('-');
                                 //console.log(dropZoneFacID)

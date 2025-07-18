@@ -14,6 +14,8 @@ lock = login_required(login_url='Login')
 def IncompleteForms(request):
     formName = "obs_dash"
     facility = getattr(request, 'facility', None)
+    if not facility:
+        return redirect('facilitySelect')
     today = datetime.date.today()
     todays_num = today.weekday()
     now = datetime.datetime.now().date()

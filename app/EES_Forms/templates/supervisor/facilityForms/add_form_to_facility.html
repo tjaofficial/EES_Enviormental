@@ -1,10 +1,11 @@
 {% extends "supervisor/components/sup_layout.html" %}
-{% load static %}{% block list%}
+{% load static %}
 {% block extra_head %}
     <link href="{% static 'ees_forms/style/facilityForms.css' %}" rel="stylesheet" />
     <link href="{% static 'ees_forms/style/add_to_facility_forms.css' %}" rel="stylesheet" />
     <script defer src="{% static 'ees_forms/script/formSettings.js' %}"></script>
 {% endblock %}
+{% block list %}
 <div class='mainCont' style="width:1000px; max-width:unset;">
     <div class="card bottomOfPageMargin">
         <div class="cardHeader methodPlusBlue">
@@ -47,7 +48,11 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{% include 'supervisor/components/form_settings_insert.html' with formID=form.form count=form.form form_add='true'%}</td>
+                            <td>
+                                {% with defaultTitle=form.title %}
+                                    {% include 'supervisor/components/form_settings_insert.html' with formID=form.form count=form.form form_add='true'%}
+                                {% endwith %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -78,6 +83,11 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let CHECKBOX_KEY = "selectedForms";
+        const firstLoad = {{ first_load|yesno:"true,false" }};
+        if (firstLoad) {
+            localStorage.removeItem(CHECKBOX_KEY);
+            console.log("🧹 Cleared localStorage on first load");
+        }
         //console.log(CHECKBOX_KEY)
         // Load existing selections on page load
         let formTempData = localStorage.getItem(CHECKBOX_KEY)? JSON.parse(localStorage.getItem(CHECKBOX_KEY) || "{}"): {};
@@ -97,12 +107,13 @@
                     let parsedInputName = `${id}-${inputName}`;
                     let singleInput = document.querySelector(`[name="${parsedInputName}"]`)
                     if (!singleInput) return;
-
+                    
                     if (singleInput.type === "checkbox") {
                         singleInput.checked = saveFormSettings[inputName] === "true";
                     } else {
                         singleInput.value = saveFormSettings[inputName];
                     }
+                    //singleInput.disabled = false;
                     //console.log(document.getElementById("29-input_tag_on").outerHTML);
                 })
 

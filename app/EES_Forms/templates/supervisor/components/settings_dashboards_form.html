@@ -7,12 +7,12 @@
             <td colspan="2" class="labelClass"><hr></td>
         </tr>
         <tr class='tableSpacer'>
-            <th colspan="2" style="width: 30%;">
+            <th colspan="2" style="text-align: left;">
                 Dashboard Settings:
             </th>
         </tr>
         <tr class='tableSpacer'>
-            <td class="labelClass">
+            <td class="labelClass" style="padding: 0px 55px;">
                 Choose dashboard:
                 <select id="dashSelect" onchange="changeOptions(this)" name="dashSelect" data-dashops="{{dashDict}}" {% if selector == "main" %}disabled{% endif %}>
                     {% for key, name in dashDict.items %}
@@ -28,4 +28,8 @@
     <div id="formsDashCont" style="display:none;">
         {% include '../components/settings_formsDash_form.html' with page=page %}
     </div>
+    {% comment %} <div style="text-align:right;">
+        <button type="button" class="input">Cancel</button>
+        <input type="submit" class="input" name="batteryDashSave" value="save">
+    </div> {% endcomment %}
 </form>

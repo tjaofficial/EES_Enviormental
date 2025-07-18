@@ -2913,7 +2913,7 @@ class events_form(ModelForm):
 
     class Meta:
         model = Event
-        fields = ['title', 'observer', 'notes', 'start_time','end_time','allDay', 'facilityChoice', 'calendarChoice', 'repeat', 'alerts']
+        fields = ['title', 'observer', 'notes', 'start_time','end_time','allDay', 'facilityChoice', 'calendarChoice', 'repeat', 'alerts', 'date']
         widgets = {
             'facilityChoice': forms.Select(attrs={}),
             'observer' : forms.TextInput(attrs={}),

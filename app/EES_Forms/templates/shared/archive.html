@@ -8,12 +8,11 @@
     {% endif %}
 {% endblock %}
 {% block list %}
-{% comment %} style="text-align: center; display: flex; justify-content: center;" {% endcomment %}
     <div class="mainCont mainContCenter" style="align-items:unset; position:relative; padding-bottom: 48px; left:unset; overflow: unset;">
         <div style="width: 64rem;">
             <div class="card">
                 <div class="cardHeader methodPlusBlue"> 
-                    {% include "shared/components/backArrow.html" with destination="dashboard"%}
+                    {% include "shared/components/backArrow.html" with destination="dashboard" %}
                     Archive Search
                 </div>
                 <div class='contentCont'>
@@ -36,29 +35,6 @@
                         </div>
                         <button class="methodPlusBlue" onclick="performSearch()">Search</button>
                     </div>
-                    {% comment %} <form method="GET" action="{% url 'archive' %}" style="text-align: center;">
-                        <div class="CR_dataCont">
-                            <div class="inputCont">
-                                Search Form ID {% include 'shared/components/helpPack.html' with data="searchID" popupCounter=0 %}<br>
-                                <input type="number" name="archiveFormID" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
-                            </div>
-                            <div class="inputCont">
-                                Search Form Label {% include 'shared/components/helpPack.html' with data="searchLabel" popupCounter=1 %}<br>
-                                <input type="search" name="archiveFormLabel" placeholder="Form Name..." value="{% if varPull.0 %}{{varPull.0}}{% endif %}"/>
-                            </div>
-                            <div class="inputCont">
-                                Search Month/Year {% include 'shared/components/helpPack.html' with data="searchMonthYear" popupCounter=2 %}<br>
-                                <input type="month" name="archiveMonth" value="{% if varPull.1 %}{{varPull.1}}{% endif %}"/>
-                            </div>
-                            <div class="inputCont">
-                                Search Date {% include 'shared/components/helpPack.html' with data="searchDate" popupCounter=3 %}<br>
-                                <input type="date" name="archiveDate" value="{% if varPull.2 %}{{varPull.2}}{% endif %}"/>
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            {% include "shared/components/submitButton.html" with label="search" %}
-                        </div>
-                    </form> {% endcomment %}
                 </div>
                 <div class="contentCont" style="min-width: 400px; min-height: 500px;">
                     <div style="position: relative;">
@@ -78,36 +54,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <ul style="text-align: left;">
-                    {% for items in finalList %}
-                        <li style="list-style-type: disc;">
-                            - 
-                            <a href="
-                                {% if items.formSettings.formChoice.form == '20' or items.formSettings.formChoice.form == '6' or items.formSettings.formChoice.form == '21' or items.formSettings.formChoice.form == '8'%}
-                                    {% url items.formSettings.formChoice.link items.formSettings.id items.week_start %}
-                                {% else %}
-                                    {% url items.formSettings.formChoice.link items.formSettings.id items.date %}
-                                {% endif %}
-                            ">
-                                {{items.formSettings.id}} - 
-                                ({% for key, label in items.formSettings.settings.packets.items %}
-                                    {% if forloop.last %}
-                                        {{label}}
-                                    {% else %}
-                                        {{label}}, 
-                                    {% endif %}
-                                {% endfor %}) - 
-                                {{items.formSettings.formChoice.header}} - 
-                                {% if items.formSettings.settings.settings.custom_name %}
-                                    {{items.formSettings.settings.settings.custom_name}}
-                                {% else %}
-                                    {{items.formSettings.formChoice.title}}
-                                {% endif %} - 
-                                {% if items.date %}{{items.date}}{% else %}{{items.week_end}}{% endif %}
-                            </a>
-                        </li>
-                    {% endfor %}
-                    </ul>
                 </div>
             </div>
         </div>
@@ -125,29 +71,29 @@
             document.getElementById("loadingOverlay").style.display = "flex";
 
             fetch("{% url 'archive_search_api' %}?formID=" + formID + "&formLabel=" + formLabel + "&formMonth=" + formMonth + "&formDate=" + formDate + "&facility={{ facility }}")
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw err; });
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Data received:", data.results);
-                const tbody = document.getElementById("resultsBody");
-                tbody.innerHTML = "";
-                currentResults = data.results;
-                if (currentResults.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No results found</td></tr>`;
-                } else {
-                    renderTable(currentResults);
-                }
-                document.getElementById("loadingOverlay").style.display = "none";
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                showError(error.error);
-                document.getElementById("loadingOverlay").style.display = "none";
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw err; });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Data received:", data.results);
+                    const tbody = document.getElementById("resultsBody");
+                    tbody.innerHTML = "";
+                    currentResults = data.results;
+                    if (currentResults.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No results found</td></tr>`;
+                    } else {
+                        renderTable(currentResults);
+                    }
+                    document.getElementById("loadingOverlay").style.display = "none";
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    showError(error.error);
+                    document.getElementById("loadingOverlay").style.display = "none";
+                });
         }
 
         function renderTable(results) {
@@ -163,7 +109,7 @@
                 let labelList = item.form_labels.join(", ");
                 let row = `
                     <tr class="clickable-row" data-url="${item.url}" style="cursor: pointer;">
-                        <td><a href="${item.url}">${item.form_id}</a></td>
+                        <td>${item.form_id}</td>
                         <td>${labelList}</td>
                         <td>${item.form_title}</td>
                         <td>${item.form_header}</td>

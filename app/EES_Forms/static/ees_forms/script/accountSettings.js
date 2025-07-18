@@ -48,7 +48,8 @@ function initial_tabs() {
         const arrowDown = document.getElementById(`${tabID}_down`);
         const arrowUp = document.getElementById(`${tabID}_up`);
         console.log(tabID)
-        let elem = document.getElementById(tabID)
+        let elem = document.getElementById(tabID);
+        if (!elem) continue;
         let chilElem = elem.parentElement.children[1];
         if (stateOf == "close"){
             chilElem.style.height = '0px';

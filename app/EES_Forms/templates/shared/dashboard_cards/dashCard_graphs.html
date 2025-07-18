@@ -22,6 +22,7 @@
         </div>
     </div>
     <script>
+        const chartInstances = {};
         function initGraphCard() {
             const canvasData = JSON.parse(document.getElementById('today').value).canvasData;
             for (var i in canvasData){
@@ -132,8 +133,16 @@
                 options: chartOptions,
                 plugins: [chartAreaBackgroundColor]
             }
-            new Chart(
-                String(selector.graphID) + "-chart",
+            const canvasId = String(selector.graphID) + "-chart";
+
+            // ✅ Destroy the chart if it already exists
+            if (chartInstances[canvasId]) {
+                chartInstances[canvasId].destroy();
+            }
+
+            // ✅ Create and store new chart
+            chartInstances[canvasId] = new Chart(
+                document.getElementById(canvasId),
                 chargesConfig
             );
         }

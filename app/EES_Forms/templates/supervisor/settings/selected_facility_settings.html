@@ -1,5 +1,5 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% load static %}{% block list%}{% load formC_tags %}
+{% load static %}{% load formC_tags %}
 {% block extra_head %}
     <link href="{% static 'ees_forms/style/contacts.css' %}" rel="stylesheet">
     <link href="{% static 'ees_forms/style/accountSettings.css' %}" rel="stylesheet">
@@ -31,22 +31,23 @@
     </style>
     {% endif %}
 {% endblock %}
-<div style='margin:auto; width: 42rem;'>
-    <div class="card" style='margin-bottom: 50px;'>
-        <div class="cardHeader methodPlusBlue">
-            {% include "shared/components/backArrow.html" with destination="accountSettings"%}
-            {{facInfoMain}} Settings
-        </div>
-        <div style="padding: 15px 32px;">
-            <div class="centerFlex" style="height:unset;">
-                {% include '../components/settings_facilityInfo_form.html' with page=selector %}
-                {% include '../components/settings_dashboards_form.html' with page=selector %}
-                {% include '../components/settings_notif_form.html' with page=selector %}
-                {% if supervisor %}
-                    {% include '../components/settings_facilitySettings_form.html' with page=selector %}
-                {% endif %}
+{% block list%}
+    <div style='margin:auto; width: 42rem;'>
+        <div class="card" style='margin-bottom: 50px;'>
+            <div class="cardHeader methodPlusBlue">
+                {% include "shared/components/backArrow.html" with destination="accountSettings"%}
+                {{facInfoMain}} Settings
+            </div>
+            <div style="padding: 15px 32px;">
+                <div class="centerFlex" style="height:unset;">
+                    {% include '../components/settings_facilityInfo_form.html' with page=selector %}
+                    {% include '../components/settings_dashboards_form.html' with page=selector %}
+                    {% include '../components/settings_notif_form.html' with page=selector %}
+                    {% if supervisor %}
+                        {% include '../components/settings_facilitySettings_form.html' with page=selector %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

@@ -1,9 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll('.formCont input, .formCont select').forEach((item) =>{
-        const formIDGrab = document.querySelector('#formID').dataset.formid;
-        const settingsCont = document.getElementById('settings' + String(formIDGrab));
-        if (!settingsCont.dataset.selector){
-            item.disabled = true;
+    document.querySelectorAll(".formCheckBox").forEach(cb => {
+        const id = cb.dataset.count;
+        const settingsCont = document.getElementById('settings' + id);
+        const inputs = settingsCont.querySelectorAll('input, select');
+        if (cb.checked) {
+            settingsCont.style.display = 'block';
+            inputs.forEach((input) => {
+                input.disabled = false;
+                input.required = input.name.includes("custom_name")? false:true;
+            });
+        } else {
+            settingsCont.style.display = 'none';
+            inputs.forEach((input) => {
+                input.disabled = true;
+                input.required = false;
+            });
         }
     });
 });
@@ -18,7 +29,7 @@ toggleSettings = (checkbox) => {
     if (checkbox.checked == true){
         settingsCont.style.display = 'block';
         inputs.forEach((input) => {
-            input.required = true;
+            input.required = input.name.includes("custom_name")? false:true;
             input.disabled = false;
         });
     } else {

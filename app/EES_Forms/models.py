@@ -274,32 +274,6 @@ class braintree_model(models.Model):
     def __str__(self):
         return str(self.id) + "-" + str(self.user.last_name)
     
-class settings_model(models.Model):
-    measurement_choices = (
-        ('metric', 'Metric'),
-        ('imperial', 'Imperial')
-    )
-    dashboard_template_choices = (
-        ('Default','Default'),
-        ('Coke Battery Dashboard','Coke Battery Dashboard')
-    )
-    
-    company = models.CharField(max_length=100)
-    weekly_start_day = models.CharField(
-        max_length=2,
-        choices=weekly_range_choices
-    )
-    units_measurements = models.CharField(
-        max_length=10,
-        choices=measurement_choices
-    )
-    dashboard_template = models.CharField(
-        max_length=30,
-        choices=dashboard_template_choices
-    )
-    def __str__(self):
-        return self.company
-    
 class company_model(models.Model):
     company_name = models.CharField(
         max_length=60
@@ -321,12 +295,6 @@ class company_model(models.Model):
     )
     braintree = models.OneToOneField(
         braintree_model, 
-        on_delete=models.CASCADE, 
-        blank=True, 
-        null=True
-    )
-    settings = models.OneToOneField(
-        settings_model, 
         on_delete=models.CASCADE, 
         blank=True, 
         null=True

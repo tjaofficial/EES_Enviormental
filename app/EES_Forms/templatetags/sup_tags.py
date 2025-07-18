@@ -18,7 +18,7 @@ def to_int(number):
 
 @register.filter(name='list_of_packets') 
 def list_of_packets(facility):
-    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility)
+    packetQuery = the_packets_model.objects.filter(facilityChoice__facility_name=facility, formList__settings__active=True)
     listOfPacketIDs = []
     for allPacs in packetQuery:
         listOfPacketIDs.append(allPacs.id)

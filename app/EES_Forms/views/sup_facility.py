@@ -154,15 +154,16 @@ def get_facility_form_data(request):
     facList = []
     
     facilities_qs = getCompanyFacilities(request.user.user_profile.company.company_name)
+    
     for facility in facilities_qs:
         fsForms = form_settings_model.objects.filter(facilityChoice=facility, settings__active=True)
         globalActiveForms = [fsSelect.id for fsSelect in fsForms]
         facList.append({
             "facility_name": facility.facility_name,
             "facility_id": facility.id,
-            "fsIDList": globalActiveForms
+            "fsIDList": globalActiveForms,
         })
-
+    print(facList)
     return JsonResponse(facList, safe=False)
 
 @lock
@@ -313,7 +314,10 @@ def Add_Forms(request):
     notifs = checkIfFacilitySelected(request.user)
     unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     today = datetime.date.today()
-    formList = Forms.objects.all().order_by('form')
+    formList = sorted(
+        Forms.objects.all(),
+        key=lambda f: int(f.form) if f.form.isdigit() else float('inf')
+    )
     q = request.GET.get('q')
     if q:
         formList = formList.filter(
@@ -323,9 +327,10 @@ def Add_Forms(request):
     formSettingsQuery = form_settings_model.objects.filter(facilityChoice=facilitySelect)
     print("-------------------------")
     print(formList[0].form)
-    p = Paginator(formList, 15)
+    p = Paginator(formList, 20)
     page = request.GET.get('page')
     pageData = p.get_page(page)
+    first_load = not page and not q
     
     if request.method == 'POST':
         answer = request.POST
@@ -370,7 +375,7 @@ def Add_Forms(request):
             if not likeFormsList:
                 newSettings = form_settings_model(
                     facilityChoice = facilitySelect,
-                    formChoice = formList.get(form=formID),
+                    formChoice = Forms.objects.get(form=formID),
                     settings = settingsDict,
                 )
                 newSub = formSubmissionRecords_model(
@@ -395,7 +400,8 @@ def Add_Forms(request):
         'supervisor': supervisor, 
         'formList': formList,
         'pageData': pageData,
-        'query': q
+        'query': q,
+        'first_load': first_load,
     })
 
 @lock
