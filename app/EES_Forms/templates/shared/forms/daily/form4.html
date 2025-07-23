@@ -14,8 +14,8 @@
         <form action="" method="POST" style="margin: auto; margin-bottom: 100px">
             {% csrf_token %}
                 <div class="card" id="card_fitter">
-                    {% include "shared/components/print_button.html" with formGroup=freq %}
                     <div class="paper_fitter" style="padding: 3rem">
+                        {% include "shared/components/print_button.html" with formGroup=freq %}
                         {% include "shared/components/backArrow.html" with destination="form" %}
                         <table style="border-collapse: collapse; margin: auto">
                             <tr>

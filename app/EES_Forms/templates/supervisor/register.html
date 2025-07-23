@@ -86,7 +86,7 @@
                                 </li>
                                 <div id='facilityNameDiv' style='display: none;'>{{ profile_form.facilityChoice }}</div>
                             </div>
-                            <input type="submit" name="create_user" value="submit">
+                            <input type="submit" name="create_user" value="create">
                         </form>
                     {% else %}
                         You have used all of your registrations available within your plan. If you would like to upgrade to a larger plan or add more registrations <a href="{% url 'Account' %}#subscription" style="text-decoration: underline;">click here</a>
@@ -232,7 +232,7 @@
                                 </div>
                             </li>
                         </div>
-                        <center><input type="submit" name="create_facility"></center>
+                        <center><input type="submit" name="create_facility" value="create"></center>
                     </form>
                 </div>
                 <div id="newClient" class='contentCont' style='display: none;'>
@@ -309,7 +309,7 @@
                                     </div>
                                 </li>
                             </div>           
-                            <center><input type="submit" name="create_client"></center>
+                            <center><input type="submit" name="create_client" value="create"></center>
                         </form>
                     {% else %}
                         <h1>No Facility in database</h1>

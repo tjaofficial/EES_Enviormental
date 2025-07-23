@@ -9,8 +9,8 @@
 {% endif %}
 <div id="topBar" class="methodPlusBlue" style="{% if request.session.impersonating %}top: 3rem{% endif %}">
     <div id="companyBox">
-        <img class="icon" src="{% if company.icon %}{{ company.icon.url }}{% else %}{% static 'logo/logo_main_white_transparent.png' %}{% endif %}" alt="Company Icon">
-        <h2 class="companyName">{{company.company_name}}</h2>
+        <img class="icon" src="{% if client %}{% static 'logo/logo_main_white_transparent.png' %}{% else %}{% if company.icon %}{{ company.icon.url }}{% else %}{% static 'logo/logo_main_white_transparent.png' %}{% endif %}{% endif %}" alt="Company Icon">
+        <h2 class="companyName">{% if client %}{{request.facility.facility_name}}{% else %}{{company.company_name}}{% endif %}</h2>
     </div>
     {% if selector or facility == 'register' or client %}
     {% else %}

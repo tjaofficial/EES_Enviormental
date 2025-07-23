@@ -2,8 +2,8 @@
     color: black;   
 }
 .modeBackGround{
-    background-color: #dfe5e9;
+    background: linear-gradient(to bottom, #dfe5e9, #e0ecff);
 }
 .modeMainBackground{
-    background-color: #dfe5e9;
+    background: linear-gradient(to bottom, #dfe5e9, #e0ecff);
 }

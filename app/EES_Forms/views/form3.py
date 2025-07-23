@@ -90,7 +90,6 @@ def form3(request, fsID, selector):
         "unlock": form_variables['unlock'],
         "search": search, 
         "supervisor": form_variables['supervisor'], 
-         
         'todays_log': todays_log, 
         'data': data, 
         'formName': form_variables['formName'], 

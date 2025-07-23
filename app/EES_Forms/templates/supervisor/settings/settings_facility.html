@@ -7,7 +7,7 @@
             <td colspan="2" class="cellData">
                 {% for facilities in sortedFacilityData %}
                     {% if client %}
-                        {% if facility == facilities.facility_name %}
+                        {% if facility|lower == facilities.facility_name|lower %}
                             <a href="{% url 'selectedFacilitySettings' facilities.id 'main' %}" style="text-decoration: underline;">{{ facilities.facility_name }} - {{ facilities.city|title }}, {{ facilities.state|title }}</a><br>
                         {% endif %}
                     {% else %}

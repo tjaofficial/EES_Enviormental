@@ -1,20 +1,22 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%}{% load static %}   
-<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
-<link href="{% static 'ees_forms/style/formE.css' %}" rel="stylesheet" />
-<link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
-{% if not unlock %}
-<link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-{% endif %}
-<div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
-<div id="paperSize">
-    <div class="mainCont" style="padding-top: 75px;">
-        <form action="" method="POST">
+{% load static %}
+{% block extra_head %}
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formE.js' %}"></script>
+    <link href="{% static 'ees_forms/style/formE.css' %}" rel="stylesheet" />
+    <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+{% block list %}
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+    <div class="mainCont gap" style="max-width:none;padding-top:2rem;">
+        <form action="" method="POST" style="margin: auto; margin-bottom: 100px">
             {% csrf_token %}
             <div class="card" id="card_fitter">
-                {% include "shared/components/print_button.html" with formGroup=freq %}
                 <div class="paper_fitter" style="padding: 3rem;">
+                    {% include "shared/components/print_button.html" with formGroup=freq %}
                     {% include "shared/components/backArrow.html" with destination="form" %}
                     <table style="border-collapse: collapse; margin: auto;">
                         <tr>
@@ -61,10 +63,10 @@
                         </tr>
                         <tr>
                             <td style="height: 25px"></td>
-                          </tr>
+                        </tr>
                         <tr>
                             <td colspan="6">
-                              {% include "shared/components/stopWatchToggle.html" %}
+                            {% include "shared/components/stopWatchToggle.html" %}
                             </td>
                         </tr>
                         <tr>
@@ -172,5 +174,4 @@
             {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
         </form> 
     </div>    
-</div>
 {% endblock %}

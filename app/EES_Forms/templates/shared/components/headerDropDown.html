@@ -61,7 +61,7 @@
                 Account Settings
             </div>
         </a>
-        <a href=#>
+        <a href="{% url 'help_center' %}">
             <div class="sidebar_item modeTextColor">
                 <div class="sidebar_svg">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -98,30 +98,12 @@
 </div>
 <div id="notifDropdown" class="profileDropdown" style="display: none; max-height: 41rem; overflow: scroll;">
     {% for key, fac in notifs.items %}
-        <div>
-            <div id="facilityID_{{fac.facName.id}}" class="methodPlusBlue" style="padding: 3px 21px; font-size: 14px; font-weight: bold; color: white;">{{key}}</div>
-            {% if fac.notifData.unRead|length > 0 %}
-                {% for notif in fac.notifData.unRead %}
-                <a href="{% if notif.formSettings.formChoice.link == 'form26' %}{% url notif.formSettings.formChoice.link notif.formSettings.id notif.formData.date|get_month_from_date_string notif.formData.spillKitID notif.formData.date %}{% else %}{% url notif.formSettings.formChoice.link notif.formData.settingsID notif.formData.date %}{% endif %}" onmouseover="setNotificationHover(this)" onclick="setNotificationClick(this)" id="{{notif.id}}">  
-                    <div id="notifColor" class="notifCont" style="{% if notif.header == 'compliance' %}{% if not notif.hovered %}background-color: #ff6868{% else %}background-color: #d28d8d{% endif %}{% elif not notif.hovered %}background-color: #ffff00ad;{% endif %}">
-                        <div class="notifHeader">
-                            {{notif.get_header_display}}<br>
-                            {{notif.formSettings.formChoice.title}}
-                        </div>
-                        <div class="notifNote">
-                            {{notif.notes}}{{notif.body}}
-                        </div>
-                        <div class='notifTimeMarker'>
-                            {{notif.created_at|localtime}}
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-            {% else %}
-                <div class="notifCont">
-                    No Notifications
-                </div>
+        {% if client %}
+            {% if key == request.facility.facility_name %}
+                {% include "./notification_block.html" %}
             {% endif %}
-        </div>
+        {% else %}
+            {% include "./notification_block.html" %}
+        {% endif %}
     {% endfor %}
 </div>

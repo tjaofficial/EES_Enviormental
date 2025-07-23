@@ -32,8 +32,8 @@
                 {% csrf_token %}
                 <input id="fsID" type='hidden' data-fsid="{{fsID}}">
                 <div class="card" id="card_fitter">
-                    {% include "shared/components/print_button.html" with formGroup=freq %}
                     <div class="paper_fitter" style="padding: 3rem;">
+                        {% include "shared/components/print_button.html" with formGroup=freq %}
                         {% include "shared/components/backArrow.html" with destination="form" %}
                         <table style="border-collapse: collapse; margin: auto;">
                             <tr>

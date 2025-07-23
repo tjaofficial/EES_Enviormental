@@ -64,10 +64,12 @@ def calendar_view(request, year, month):
 
 @lock
 def ajax_calendar(request):
+    print(request.user)
+    print(request.body)
     facility = getattr(request, 'facility', None)
     data = json.loads(request.body)
     groups = data.get("groups", [])
-    events = Event.objects.filter(facilityChoice=facility, calendarChoice__in=groups) if groups else Event.objects.filter(facilityChoice=facility)
+    events = Event.objects.filter(userProf=request.user.user_profile, calendarChoice__in=groups) if groups else Event.objects.filter(userProf=request.user.user_profile)
     print(f"These are the event in the filter: {events}")
     data = [
         {
@@ -81,7 +83,7 @@ def ajax_calendar(request):
                 'observer': e.observer,
                 'repeat': e.repeat,
                 'alerts': e.alerts,
-                'location': e.facilityChoice.facility_name
+                'location': e.facilityChoice.facility_name if e.facilityChoice else "None"
             }
         }
         for e in events
@@ -93,7 +95,7 @@ def events_for_day(request):
     facility = getattr(request, 'facility', None)
     date_str = request.GET.get('date')
     date = parse_date(date_str)
-    events = Event.objects.filter(facilityChoice=facility, date=date)
+    events = Event.objects.filter(userProf=request.user.user_profile, date=date)
     data = [
         {
             'id': e.id,
@@ -105,7 +107,7 @@ def events_for_day(request):
             'observer': e.observer,
             'repeat': e.repeat,
             'alerts': e.alerts,
-            'location': e.facilityChoice.facility_name
+            'location': e.facilityChoice.facility_name if e.facilityChoice else "None"
         }
         for e in events
     ]
@@ -143,14 +145,14 @@ def event_add_view(request):
 
     facilities = getCompanyFacilities(request.user.user_profile.company.company_name)
     userCalendars = request.user.user_profile.settings['calendar']['calendars']['default']
-    cal_select_choices = [group['name'] for group in userCalendars] + [f.facility_name for f in facilities]
+    cal_select_choices = [group['name'] for group in userCalendars]
 
 
     if request.method == "POST":
         answer = request.POST
         request_form = events_form(request.POST)
         if request_form.is_valid():
-            selected_days = request_form.cleaned_data['selected_days'].split(',')
+            selected_days = answer['selected_days'].split(',')
             allDay = True if answer.get('allDay') else False
             calendarChoice = answer['calendarChoice']
             if facility == "supervisor":
@@ -189,7 +191,8 @@ def event_add_view(request):
         "client": client, 
         'unlock': unlock, 
         'listOfObservers': listOfObservers,
-        'cal_select_choices': cal_select_choices
+        'cal_select_choices': cal_select_choices,
+        "weekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     })
 
 @lock
@@ -206,7 +209,7 @@ def event_detail_view(request, access_page, event_id):
     
     facilities = getCompanyFacilities(request.user.user_profile.company.company_name)
     userCalendars = request.user.user_profile.settings['calendar']['calendars']['default']
-    cal_select_choices = [group['name'] for group in userCalendars] + [f.facility_name for f in facilities]
+    cal_select_choices = [group['name'] for group in userCalendars]
 
     context = {}
     if supervisor:
@@ -241,18 +244,42 @@ def event_detail_view(request, access_page, event_id):
 
         if request.method == 'POST':
             print(request.POST)
-            data = events_form(request.POST, instance=data_pull)
+            copyPOST = request.POST.copy()
+            if request.POST.get("repeat") is not None:
+                repeat_type = request.POST.get("repeat_type")
+                repeat_data = {"type": repeat_type}
+
+                if repeat_type == "weekly":
+                    repeat_data["days"] = request.POST.getlist("repeat_days")
+                elif repeat_type == "monthly":
+                    repeat_data["day"] = request.POST.get("monthly_day")
+                elif repeat_type == "annually":
+                    repeat_data["date"] = request.POST.get("annual_date")
+
+                copyPOST['repeat'] = json.dumps(repeat_data)
+            else:
+                copyPOST['repeat'] = json.dumps({})
+
+            if request.POST.get("alerts") is not None:
+                alerts_meta = {}
+                alert_time = request.POST.get("alert_time")
+                alerts_meta['time'] = alert_time
+                alerts_meta['type'] = request.POST.getlist('event_alerts')
+
+                copyPOST['alerts'] = json.dumps(alerts_meta)
+            else:
+                copyPOST['alerts'] = json.dumps({})
+
+            data = events_form(copyPOST, instance=data_pull)
+            print(copyPOST)
             print(data)
             print(data.errors)
             if data.is_valid():
                 A = data.save(commit=False)
-                A.enteredBy = request.user.last_name
-                if facility == "supervisor":
-                    A.personal = True
                 print('chicken')
                 A.save()
 
-                #return redirect('../../event_detail/' + str(event_id) + '/view')
+                return redirect('Schedule')
 
     
     return render(request, "shared/event_detail.html", {
@@ -270,7 +297,8 @@ def event_detail_view(request, access_page, event_id):
         'event_id': event_id, 
         'access_page': access_page,
         'listOfObservers': listOfObservers,
-        'cal_select_choices': cal_select_choices
+        'cal_select_choices': cal_select_choices,
+        "weekdays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
     })
 
 @lock

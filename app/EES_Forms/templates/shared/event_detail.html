@@ -49,7 +49,7 @@
 					</span>
 					<br>
 					<span class="input-package" style="width: 100%;">
-						<select name="calendarChoice" maxlength="50" id="id_calendarChoice">
+						<select name="calendarChoice" maxlength="50" id="id_calendarChoice" onchange="toggleObserverInput()">
 							<option value="">-------</option>
 							{% for items in cal_select_choices %}
 								<option value="{{items}}" {% if my_event.calendarChoice.value|lower == items %}selected{% endif %}>{{items}}</option>
@@ -78,36 +78,131 @@
 						</span>
 					</div>
 					<br>
-					{% if facility %}
-						<span class="input-package" style="width: 100%;">
-							<select name="observer" id="observers">
-								<option value="">-----</option>
-								{% for observer in listOfObservers %}
-									<option value="{{observer.user.last_name}}" {% if my_event.observer.value|lower == observer.user.last_name|lower %}selected{% endif %}>{{observer.user.last_name}}</option>
-								{% endfor %}
-							</select>
-							<label for="observers">Observer</label>
-						</span>
-					{% endif %}
+                    <span class="input-package" style="width: 100%;">
+                        <select name="observer" id="observers" required>
+                            <option value="">-----</option>
+                            {% for observer in listOfObservers %}
+                                <option value="{{observer.user.last_name}}" {% if my_event.observer.value|lower == observer.user.last_name|lower %}selected{% endif %}>{{observer.user.last_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="observers">Observer</label>
+                    </span>
                     <br>
-					
-					<br>
 					<span class="input-package" style="width: 100%;">
 						{{ my_event.notes }}
 						<label for="id_notes">Description</label>
 					</span>
-					<span class="input-flex-package">
-						<label for="id_repeat">Repeat:</label>
-						{{ my_event.repeat }}
-					</span>
-					<span class="input-flex-package">
-						<label for="id_alert">Alerts:</label>
-						{{ my_event.alerts }}
-					</span>
+
+                    <label><input type="checkbox" id="repeatToggle" name="repeat"> Repeat:</label>
+                    <div id="repeatSettings" style="display: none; margin-top: 10px;">
+                        <select name="repeat_type" id="repeat_type">
+                            <option value="">Select Type</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="annually">Annually</option>
+                        </select>
+                        <label>Repeat Type</label><br>
+
+                        <!-- Weekly Options -->
+                        <div id="weekly_settings" style="display: none;">
+                            <label>Select Days:</label><br>
+                            <div style="margin-left: 40px;">
+                            {% for day in weekdays %}
+                                <label><input type="checkbox" name="repeat_days" value="{{ day }}">{{ day }}</label><br>
+                            {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Monthly Options -->
+                        <div id="monthly_settings" style="display: none;">
+                            <input type="number" name="monthly_day" min="1" max="31" /><br>
+                            <label>Day of month</label><br>
+                        </div>
+                    </div>
+
+                    <label><input type="checkbox" name="alerts" id="alertsToggle"> Enable Alert</label>
+                    <div id="alertOptions" style="display: none; margin-top: 10px;">
+                        <select name="alert_time">
+                            <option value="">Select Option</option>
+                            <option value="30_minutes_before">30 minutes before</option>
+                            <option value="same_day">On day of event</option>
+                            <option value="1_day_before">1 day before</option>
+                            <option value="2_days_before">2 days before</option>
+                            <option value="1_week_before">1 week before</option>
+                        </select><br>
+                    </div><br>
+                    <div id="alertTypes" style="display: none;">
+                        <label>Select Alert Type:</label><br>
+                        <div style="margin-left: 40px;">
+                            <label for="event-methodplus">
+                                <input id="event-methodplus" type="checkbox" value="methodplus" name="event_alerts">
+                                MethodPlus
+                            </label><br>
+                            <label for="event-email">
+                                <input id="event-email" type="checkbox" value="email" name="event_alerts">
+                                Email
+                            </label><br>
+                            <label for="event-sms">
+                                <input id="event-sms" type="checkbox" value="sms" name="event_alerts">
+                                SMS(Text)
+                            </label>
+                        </div>
+                    </div><br>
 					<input type="submit" value="Save">
                 </form>
             </div>
             <script>
+                function toggleObserverInput(){
+                    const observersInput = document.getElementById('observers');
+                    const calendarSelect = document.getElementById('id_calendarChoice');
+                    if (calendarSelect.value != "personal") {
+                        observersInput.parentElement.style.display =  'block';
+                        observersInput.disabled = false;
+                    } else {
+                        console.log(observersInput)
+                        observersInput.parentElement.style.display =  'none';
+                        observersInput.disabled = true;
+                    }
+                }
+                toggleObserverInput();
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    const repeatToggle = document.getElementById("repeatToggle");
+                    const repeatSettings = document.getElementById("repeatSettings");
+                    const repeatType = document.getElementById("repeat_type");
+
+                    const weeklySettings = document.getElementById("weekly_settings");
+                    const monthlySettings = document.getElementById("monthly_settings");
+        
+                    repeatToggle.addEventListener("change", () => {
+                        repeatSettings.style.display = repeatToggle.checked ? "block" : "none";
+                        repeatType.required = repeatToggle.checked ? true : false;
+                    });
+
+                    repeatType.addEventListener("change", () => {
+                        const value = repeatType.value;
+                        weeklySettings.style.display = value === "weekly" ? "block" : "none";
+                        monthlySettings.style.display = value === "monthly" ? "block" : "none";
+                    });
+                });
+                document.addEventListener("DOMContentLoaded", function () {
+                    const alertsToggle = document.getElementById("alertsToggle");
+                    const alertOptions = document.getElementById("alertOptions");
+                    const alertTypes = document.getElementById("alertTypes");
+
+                    function toggleAlertsUI() {
+                        alertOptions.style.display = alertsToggle.checked? "block" : "none";
+                        alertOptions.required = alertsToggle.checked? true : false;
+                        alertTypes.style.display = alertsToggle.checked? "block" : "none";
+                        alertTypes.required = alertsToggle.checked? true : false;
+                    }
+
+                    alertsToggle.addEventListener("change", toggleAlertsUI);
+
+                    // Initialize if already checked (e.g., on form resubmission)
+                    toggleAlertsUI();
+                });
                 const allDay = document.getElementById('id_allDay');
                 allDay.addEventListener('change', timeToggle())
                 

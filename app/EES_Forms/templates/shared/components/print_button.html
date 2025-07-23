@@ -3,7 +3,7 @@
 <link href="{% static 'ees_forms/style/facilityList.css' %}" rel="stylesheet" />
 {% if selector == 'form' or selector == 'formL' %}
 {% else %}
-<script defer src="{% static 'ees_forms/script/print_modal.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/print_modal.js' %}"></script>
     <div style='float: right;'>
         <div id="printButton" onclick="openClose_modal()" class="button-8" role="button" style='height:25px;'>PRINT</div>
     </div>

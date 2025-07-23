@@ -1,0 +1,38 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% load static %}
+{% block extra_head %}
+    <link href="{% static 'admin/style/help_center.css' %}" rel="stylesheet">
+{% endblock %}
+{% block list %}
+
+  <div class="help-center">
+    <h1 class="help-header">🆘 Help Center</h1>
+    <p class="help-subtitle">Find answers to common questions and get help using MethodPlus+</p>
+
+    <form method="get" action="" class="search-form">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search help articles..." class="search-input" />
+    </form>
+
+    {% for cat in categories %}
+    <section class="help-category">
+      <h2 class="category-name">{{ cat.name }}</h2>
+      <div class="article-list">
+        {% for article in articles %}
+          {% if article.category == cat %}
+          <div class="article-box">
+            <a href="{% url 'help_article' article.id %}" class="article-title">{{ article.title }}</a>
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+
+    {% if not articles %}
+      <p class="no-articles-msg">No help articles found. Try a different search term.</p>
+    {% endif %}
+  </div>
+
+
+
+{% endblock %}

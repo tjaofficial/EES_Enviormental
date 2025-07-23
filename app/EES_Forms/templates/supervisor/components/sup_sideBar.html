@@ -54,25 +54,17 @@
                     </ul>
                 </li>
             {% endif %}
-            {% comment %} <li><a id='calendarLabel' href=#>Schedule</a>
-                <ul id='calendarGroup' style='display: block;'>
-                    <li><a href="{% url 'Schedule' facility %}">Calendar</a></li>
-                    {% if client %}{% elif supervisor %}<li><a href="{% url 'Add Event' facility %}">Add Events</a></li>{% endif %}
-                </ul>
-            </li> {% endcomment %}
             {% if client %}
                 <li>
                     <a href=#>
                         Records/Data
                     </a>
                     <ul style='display: block;'>
-                        {% comment %} <li><a href="{% url 'archive' facility %}">Archive</a></li>
-                        <li><a href="{% url 'Corrective-Action' facility %}">Corrective Actions</a></li>
-                        <li><a href="{% url 'PrintSelect' facility %}">Print Forms</a></li>{% endcomment %}
-                        {% comment %} <li><a href=#>Weekly Reports</a></li>
-                        <li><a href="{% url 'rolling_avg' facility %}">Rolling Averages</a></li> {% endcomment %}
-                        {% comment %}<li><a href="{% url 'Sop' facility %}">SOP's</a></li>
-                        <li><a href="{% url 'pt_admin1' facility %}">90 Day Push/Travel</a></li> {% endcomment %}
+                        <li><a href="{% url 'archive' %}">Archive</a></li>
+                        <li><a href="{% url 'Corrective-Action' %}">Corrective Actions</a></li>
+                        <li><a href="{% url 'data_records' %}">Data Records</a></li>
+                        <li><a href="{% url 'PrintSelect' %}">Print Forms</a></li>
+                        <li><a href="{% url 'Sop' %}">SOP's</a></li>
                     </ul>
                 </li>
             {% elif supervisor %}

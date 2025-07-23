@@ -4836,6 +4836,24 @@ class subscription(models.Model):
     def __str__(self):
         return f"{self.companyChoice.company_name} - {self.plan}"
     
+class HelpCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class HelpArticle(models.Model):
+    category = models.ForeignKey('HelpCategory', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    tags = models.CharField(max_length=200, blank=True)
+    is_popular = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
 # class tank_library(models.Model):
 #     title = models.CharField(max_length=40)
 #     description = models.TextField()

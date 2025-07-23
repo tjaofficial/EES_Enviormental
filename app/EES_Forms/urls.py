@@ -81,6 +81,8 @@ urlpatterns = [
     path("data-records/", views.data_records, name="data_records"),
     path('calendar/delete-event/<int:event_id>/', views.delete_event, name='delete_event'),
     path("schedule/event_detail/<int:event_id>/<str:access_page>", views.event_detail_view, name="Event Details"),
+    path('help/', views.help_center, name='help_center'),
+    path('help/article/<int:article_id>/', views.help_article, name='help_article'),
 
     ##------AJAX
     path('ajax/card/progress/', views.card_progress_bar, name='card_progress_bar'),

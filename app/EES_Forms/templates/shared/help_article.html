@@ -1,0 +1,15 @@
+{% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
+{% load static %}
+{% block extra_head %}
+    <link href="{% static 'admin/style/help_article.css' %}" rel="stylesheet" />
+{% endblock %}
+{% block list %}
+    <div class="article-container">
+        <a href="{% url 'help_center' %}" class="back-link">&larr; Back to Help Center</a>
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-content">
+            {{ article.content|safe }}
+        </div>
+    </div>
+
+{% endblock %}

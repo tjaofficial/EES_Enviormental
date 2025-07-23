@@ -1,0 +1,111 @@
+[
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 1,
+    "fields": {
+      "name": "Forms"
+    }
+  },
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 2,
+    "fields": {
+      "name": "Dashboard"
+    }
+  },
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 3,
+    "fields": {
+      "name": "User Management"
+    }
+  },
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 4,
+    "fields": {
+      "name": "Subscriptions & Billing"
+    }
+  },
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 5,
+    "fields": {
+      "name": "Supervisor Tools"
+    }
+  },
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 6,
+    "fields": {
+      "name": "Troubleshooting"
+    }
+  },
+  {
+    "model": "yourapp.helpcategory",
+    "pk": 7,
+    "fields": {
+      "name": "Mobile Experience"
+    }
+  },
+  {
+    "model": "yourapp.helparticle",
+    "pk": 1,
+    "fields": {
+      "category": 1,
+      "title": "How to Submit a Form",
+      "content": "<ol><li>Navigate to your facility's form list.</li><li>Click on the form you wish to fill out.</li><li>Complete all required fields marked with an asterisk (*).</li><li>Click the <strong>Submit</strong> button at the bottom.</li></ol>",
+      "tags": "forms, submission",
+      "is_popular": true,
+      "date_created": "2025-07-22T12:00:00Z"
+    }
+  },
+  {
+    "model": "yourapp.helparticle",
+    "pk": 2,
+    "fields": {
+      "category": 1,
+      "title": "Can I Edit a Submitted Form?",
+      "content": "<p>In most cases, only supervisors can edit submitted forms.</p><ol><li>Contact your supervisor or administrator.</li><li>Alternatively, submit a new version and reference the old one.</li></ol>",
+      "tags": "forms, edit, permissions",
+      "is_popular": false,
+      "date_created": "2025-07-22T12:01:00Z"
+    }
+  },
+  {
+    "model": "yourapp.helparticle",
+    "pk": 3,
+    "fields": {
+      "category": 2,
+      "title": "How to Customize My Dashboard",
+      "content": "<ol><li>Click the gear icon ⚙️ in the top right of your dashboard.</li><li>Toggle which cards you want visible.</li><li>Drag and drop cards to reorder them.</li></ol>",
+      "tags": "dashboard, customization, widgets",
+      "is_popular": true,
+      "date_created": "2025-07-22T12:02:00Z"
+    }
+  },
+  {
+    "model": "yourapp.helparticle",
+    "pk": 4,
+    "fields": {
+      "category": 3,
+      "title": "How to Add a New User",
+      "content": "<ol><li>Go to the Admin > User Management page.</li><li>Click “Add New User”.</li><li>Enter the required info and choose their permission level.</li><li>Click “Create User”. They’ll receive an email invite.</li></ol>",
+      "tags": "admin, user management, onboarding",
+      "is_popular": true,
+      "date_created": "2025-07-22T12:03:00Z"
+    }
+  },
+  {
+    "model": "yourapp.helparticle",
+    "pk": 5,
+    "fields": {
+      "category": 4,
+      "title": "How to Update My Payment Method",
+      "content": "<ol><li>Go to the Billing page in the sidebar.</li><li>Click “Update Card” under Payment Method.</li><li>Enter your new card details and save.</li></ol>",
+      "tags": "billing, payments, subscriptions",
+      "is_popular": false,
+      "date_created": "2025-07-22T12:04:00Z"
+    }
+  }
+]

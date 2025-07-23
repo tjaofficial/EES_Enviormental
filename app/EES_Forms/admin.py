@@ -61,6 +61,8 @@ admin.site.register(account_reactivation_model)
 admin.site.register(form30_model)
 admin.site.register(form31_model)
 admin.site.register(SpillKit_model)
+admin.site.register(HelpArticle)
+admin.site.register(HelpCategory)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']

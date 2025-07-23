@@ -29,14 +29,14 @@
         {% endif %}
         {% block extra_head %}{% endblock %}
     </head>
-    <body class="modeMainBackground">
+    <body>
         {{ facility.facility_name|json_script:"facility" }}
         <header id="headerContainer">
             
         </header>
         
         <nav id="sideBar" class="methodPlusBlue" style="{% if request.session.impersonating %}margin-top: 3rem{% endif %}"></nav>
-        <main class="mainContentContainer" style="{% if request.session.impersonating %}margin-top: 6rem{% endif %}">
+        <main class="mainContentContainer modeMainBackground" style="{% if request.session.impersonating %}margin-top: 6rem{% endif %}">
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}

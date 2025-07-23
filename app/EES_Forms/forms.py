@@ -2909,8 +2909,6 @@ class issues_form(ModelForm):
         }
 
 class events_form(ModelForm):
-    selected_days = forms.CharField(widget=forms.HiddenInput())
-
     class Meta:
         model = Event
         fields = ['title', 'observer', 'notes', 'start_time','end_time','allDay', 'facilityChoice', 'calendarChoice', 'repeat', 'alerts', 'date']
@@ -2923,8 +2921,8 @@ class events_form(ModelForm):
             'start_time' : forms.TimeInput(attrs={'type':'time'}),
             'end_time' : forms.TimeInput(attrs={'type':'time'}),
             'allDay' : forms.CheckboxInput(attrs={}),
-            'repeat' : forms.CheckboxInput(attrs={}),
-            'alerts' : forms.CheckboxInput(attrs={}),
+            'repeat' : forms.HiddenInput(), 
+            'alerts' : forms.HiddenInput()
         }
 
 class sop_form(ModelForm):
