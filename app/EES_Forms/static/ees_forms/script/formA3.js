@@ -143,8 +143,6 @@ function handle_Table_Input(event){
 }
 
 
-
-
 /*****************************************
 Updates the HTML based on the stored JSON
 *****************************************/

@@ -159,5 +159,18 @@
             This input lets users specify the categories that each waste container can be sorted into. The number entered will determine how many input 
             fields appear to name each area.
         </p>
+    {% elif selector == "form2LeakLocation" %}
+        <h5 class="left">HELP: Locations</h5><br>
+        <p class="left description">
+            Locations are the areas on a door that leaks could potentially be coming from. You can
+            select more than one area that visible emission are leaking from. Here are the options:
+        </p>
+        <p>
+            <ul>
+                <li>D: Door Leak</li>
+                <li>C: Chuck Door Leak</li>
+                <li>M: Masonry</li>
+            </ul>
+        </p>
     {% endif %}
 </div>

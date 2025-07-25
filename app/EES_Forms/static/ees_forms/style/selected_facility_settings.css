@@ -99,10 +99,12 @@
     transform: rotate(45deg);
   }
 
-form{
+.card form{
     width: 100%;
 }
-
+/* .card label {
+  color: black;
+} */
 .subContHolder {
   display: flex;
   margin-left: 40px;

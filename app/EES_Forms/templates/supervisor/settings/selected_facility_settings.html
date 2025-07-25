@@ -13,22 +13,37 @@
         .sub-container input:checked ~ .checkmark {
             background-color: gray;
         }
+        label {
+            color: gray;
+        }
+        label {
+            color: gray;
+        }
     </style>
     {% if selector == 'batd' %}
-    <style>
-        #batteryDashSettings .container input:checked ~ .checkmark {
-            background-color: #2196F3;
-        }
-    </style>
+        <style>
+            #batteryDashSettings .container input:checked ~ .checkmark {
+                background-color: #2196F3;
+            }
+            #batteryDashSettings label {
+                color: black;
+            }
+        </style>
     {% elif selector == 'noti' %}
-    <style>
-        #notifSettings .container input:checked ~ .checkmark {
-            background-color: #2196F3;
-        }
-        #notifSettings .sub-container input:checked ~ .checkmark {
-            background-color: #2196F3;
-        }
-    </style>
+        <style>
+            #notifSettings .container input:checked ~ .checkmark {
+                background-color: #2196F3;
+            }
+            #notifSettings .sub-container input:checked ~ .checkmark {
+                background-color: #2196F3;
+            }
+            #notifSettings label {
+                color: black;
+            }
+            #notifSettings label {
+                color: black;
+            }
+        </style>
     {% endif %}
 {% endblock %}
 {% block list%}

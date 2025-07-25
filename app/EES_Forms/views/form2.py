@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect # type: ignore
 from ..models import form_settings_model, form2_model 
 from ..forms import form2_form
 from ..utils.main_utils import get_initial_data
+from collections import defaultdict
 
 from ..initial_form_variables import initiate_form_variables, existing_or_new_form, template_validate_save
 import json
@@ -34,16 +35,8 @@ def form2(request, fsID, selector):
     # -----SET RESPONSES TO DECIDING VARIABLES------------
     if search:
         database_form = ''
-        pSide_Raw_JSON = json.loads(data.p_leak_data)
-        cSide_Raw_JSON = json.loads(data.c_leak_data)
-        if len(pSide_Raw_JSON) > 0:
-            pSide_json = pSide_Raw_JSON['data']
-        else:
-            pSide_json = ''
-        if len(cSide_Raw_JSON) > 0:
-            cSide_json = cSide_Raw_JSON['data']
-        else:
-            cSide_json = ''
+        pSide_json = data.p_leak_data
+        cSide_json = data.c_leak_data
     else:
         if existing:
             initial_data = get_initial_data(form2_model, database_form)
@@ -64,6 +57,7 @@ def form2(request, fsID, selector):
         cSide_json = ''
     # -----IF REQUEST.POST------------
     if request.method == "POST":
+        print(request.POST)
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS/VARIABLES------------
         try:
             form_settings = form_variables['freq']
@@ -76,6 +70,7 @@ def form2(request, fsID, selector):
             form = form2_form(request.POST, form_settings=form_settings)
     # -----VALIDATE, CHECK FOR ISSUES, CREATE NOTIF, UPDATE SUBMISSION FORM------------
         exportVariables = (request, selector, facility, database_form, fsID)
+        print(*template_validate_save(form, form_variables, *exportVariables))
         return redirect(*template_validate_save(form, form_variables, *exportVariables))
     return render(request, "shared/forms/daily/form2.html", {
         'picker': form_variables['picker'], 

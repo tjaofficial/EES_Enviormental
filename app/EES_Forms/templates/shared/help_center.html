@@ -4,34 +4,104 @@
     <link href="{% static 'admin/style/help_center.css' %}" rel="stylesheet">
 {% endblock %}
 {% block list %}
+    <div class="help-center">
+        <h1 class="help-header">Help Center</h1>
+        <p class="help-subtitle">Find answers to common questions and get help using MethodPlus+</p>
 
-  <div class="help-center">
-    <h1 class="help-header">🆘 Help Center</h1>
-    <p class="help-subtitle">Find answers to common questions and get help using MethodPlus+</p>
+        <form method="get" action="" class="search-form">
+            <div class="search-wrapper">
+                <input type="text" name="q" value="{{ query }}" id="helpSearch" placeholder="Search help articles..." class="search-input" autocomplete="off">
+                <div id="searchSuggestions" class="suggestion-box" style="display: none;"></div>
+            </div>
+        </form>
 
-    <form method="get" action="" class="search-form">
-      <input type="text" name="q" value="{{ query }}" placeholder="Search help articles..." class="search-input" />
-    </form>
-
-    {% for cat in categories %}
-    <section class="help-category">
-      <h2 class="category-name">{{ cat.name }}</h2>
-      <div class="article-list">
-        {% for article in articles %}
-          {% if article.category == cat %}
-          <div class="article-box">
-            <a href="{% url 'help_article' article.id %}" class="article-title">{{ article.title }}</a>
-          </div>
-          {% endif %}
+        {% for cat in categories %}
+            <section class="help-category" data-category="{{ cat.name }}">
+                <h2 class="category-name">{{ cat.name }}</h2>
+                <div class="article-list">
+                    {% for article in articles %}
+                        {% if article.category == cat %}
+                            <div class="article-box" data-title="{{ article.title|lower }}" data-tags="{{ article.tags|lower }}">
+                                <a href="{% url 'help_article' article.id %}" class="article-title">{{ article.title }}</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
         {% endfor %}
-      </div>
-    </section>
-    {% endfor %}
 
-    {% if not articles %}
-      <p class="no-articles-msg">No help articles found. Try a different search term.</p>
-    {% endif %}
-  </div>
+        {% if not articles %}
+        <p class="no-articles-msg">No help articles found. Try a different search term.</p>
+        {% endif %}
+    </div>
+    <script>
+        const searchInput = document.getElementById('helpSearch');
+        const suggestionsBox = document.getElementById('searchSuggestions');
+
+        searchInput.addEventListener('input', function () {
+            const query = this.value.trim();
+
+            if (query.length === 0) {
+                suggestionsBox.style.display = 'none';
+                suggestionsBox.innerHTML = '';
+                return;
+            }
+
+            fetch(`/ajax/search-suggestions/?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    suggestionsBox.innerHTML = '';
+                    if (data.results.length > 0) {
+                        data.results.forEach(result => {
+                            const item = document.createElement('div');
+                            item.classList.add('suggestion-item');
+                            item.innerHTML = result.title;
+                            item.addEventListener('click', () => {
+                                window.location.href = result.url;
+                            });
+                            suggestionsBox.appendChild(item);
+                        });
+                        suggestionsBox.style.display = 'block';
+                    } else {
+                        suggestionsBox.style.display = 'none';
+                    }
+                });
+        });
+
+        // Optional: hide box if clicked outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-wrapper')) {
+            suggestionsBox.style.display = 'none';
+            }
+        });
+
+        const searchInputField = document.getElementById('helpSearch');
+
+        searchInputField.addEventListener('input', () => {
+            const query = searchInputField.value.toLowerCase().trim();
+            const allCategories = document.querySelectorAll('.help-category');
+
+            allCategories.forEach(category => {
+                const articles = category.querySelectorAll('.article-box');
+                let anyVisible = false;
+
+                articles.forEach(article => {
+                    const title = article.dataset.title;
+                    const tags = article.dataset.tags;
+                    const match = title.includes(query) || tags.includes(query);
+
+                    if (match || query === '') {
+                        article.style.display = '';
+                        anyVisible = true;
+                    } else {
+                        article.style.display = 'none';
+                    }
+                });
+
+                category.style.display = anyVisible ? '' : 'none';
+            });
+        });
+    </script>
 
 
 

@@ -9,7 +9,50 @@
         <h1 class="article-title">{{ article.title }}</h1>
         <div class="article-content">
             {{ article.content|safe }}
+            <div class="article-feedback">
+                <p>Was this article helpful?</p>
+                <div class="feedback-buttons">
+                    <button class="feedback-btn" data-value="yes">👍 Yes</button>
+                    <button class="feedback-btn" data-value="no">👎 No</button>
+                </div>
+                <div class="feedback-thankyou" style="display: none;">
+                    <p>Thank you for your feedback!</p>
+                </div>
+            </div>
         </div>
     </div>
+    <script>
+        document.querySelectorAll('.feedback-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const value = btn.dataset.value;
+                const articleId = {{ article.id }};
+
+                fetch("{% url 'submit_feedback' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify({
+                        article_id: articleId,
+                        value: value
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.querySelector('.feedback-buttons').style.display = 'none';
+                        document.querySelector('.feedback-thankyou').style.display = 'block';
+                    } else {
+                        alert('There was an error submitting feedback.');
+                    }
+                })
+                .catch(err => {
+                    console.error('AJAX error:', err);
+                    alert('There was an issue. Try again later.');
+                });
+            });
+        });
+    </script>
 
 {% endblock %}

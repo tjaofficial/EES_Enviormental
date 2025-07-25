@@ -45,13 +45,13 @@ urlpatterns = [
     path("facility-form-settings/<str:fsID>/<str:packetID>/<str:formLabel>", views.facility_form_settings, name="facilityFormSettings"),
     path('form-select/add-forms', views.Add_Forms, name='addingForms'),
     path("profileEdits/<str:userID>", views.profile_edit_view, name="profileEdits"),
-    path("password/", views.change_password, name='PasswordChange'),
     path('packet-form-select/<str:packet>', views.facilityForm, name='facilityForms'),
     path('ajax/packets/update-label/', views.update_packet_form_label, name="updateFormLabel"),
     ##--ACCOUNT SETTINGS-----
     path("account/", views.sup_account_view, name="Account"),
     path("account/update/<str:selector>", views.sup_update_account, name="accountUpdate"),
     path("account/facility-settings/<int:facilityID>/<str:selector>", views.sup_facility_settings, name="selectedFacilitySettings"),
+    path("account/password/", views.change_password, name='PasswordChange'),
     ##---BILLING
     path("billing/subscribe/", views.stripe_subscription_view, name="stripe_subscribe"),
     path('stripe/webhook/', views.stripe_webhook, name='stripe_webhook'),
@@ -100,6 +100,8 @@ urlpatterns = [
     path("ajax/print-label-request/", views.print_label_request, name="print-label-request"),
     path('ajax/archive/search/', views.archive_search_api, name='archive_search_api'),
     path('ajax/corrective_action/search/', views.corrective_action_search_api, name='corrective_action_search_api'),
+    path('ajax/submit-feedback/', views.submit_feedback, name='submit_feedback'),
+    path('ajax/search-suggestions/', views.search_suggestions, name='search_suggestions'),
     ##---FORMS
     path("form/Daily/1/<int:fsID>/<str:selector>", views.form1, name="form1"),
     path("form/Daily/2/<int:fsID>/<str:selector>", views.form2, name="form2"),

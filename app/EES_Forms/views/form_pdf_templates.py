@@ -108,12 +108,12 @@ def pdf_template_A2(primaryData, title, subTitle):
     crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + primaryData.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + primaryData.foreman + '</para>', styles['Normal'])
 
     if primaryData.p_leak_data != '{}':
-        p_leaks = json.loads(primaryData.p_leak_data)['data']
+        p_leaks = primaryData.p_leak_data
         print(p_leaks)
     else:
         p_leaks = ''
     if primaryData.c_leak_data != '{}':
-        c_leaks = json.loads(primaryData.c_leak_data)['data']
+        c_leaks = primaryData.c_leak_data
     else:
         c_leaks = ''
     tableData = [
@@ -187,15 +187,15 @@ def pdf_template_A2(primaryData, title, subTitle):
         ['', '', '', str(primaryData.p_temp_block_from) + ' to ' + str(primaryData.p_temp_block_to), '', '', '', '', str(primaryData.c_temp_block_from) + ' to ' + str(primaryData.c_temp_block_to), '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', Paragraph('<para align=center><b>Push Side Travel Time:</b></para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Coke Side Travel Time:</b></para>', styles['Normal']), '', ''],
-        ['', '', '', str(primaryData.p_traverse_time_min) + 'min ' + str(primaryData.p_traverse_time_sec) + 'sec', '', '', '', '', str(primaryData.c_traverse_time_min) + 'min ' + str(primaryData.c_traverse_time_sec) + 'sec', '', '', ''],
+        ['', '', '', str(primaryData.p_traverse_time_min) + ' min ' + str(primaryData.p_traverse_time_sec) + ' sec', '', '', '', '', str(primaryData.c_traverse_time_min) + ' min ' + str(primaryData.c_traverse_time_sec) + ' sec', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', 'D = Door', '', '', Paragraph('<para align=center><b>Total Traverse Time:</b>&#160;&#160;' + primaryData.total_traverse_time + '</para>', styles['Normal']), '', '', '', '', '', '', ''],
+        ['', 'D = Door', '', '', Paragraph('<para align=center><b>Total Traverse Time:</b>&#160;&#160;' + primaryData.total_traverse_time + ' sec</para>', styles['Normal']), '', '', '', '', '', '', ''],
         ['', 'C = Chuck Door', '', '', Paragraph('<para align=center><b>Allowed Traverse Time:</b></para>', styles['Normal']), '', '', '', '', Paragraph('<para align=center><b>Valid Run?</b></para>', styles['Normal']), '', ''],
-        ['', 'M = Masonry', '', '', 'T = 680 + (10sec x #leaks) =  ' + str(primaryData.allowed_traverse_time), '', '', '', '', primaryData.valid_run, '', ''],
+        ['', 'M = Masonry', '', '', f'T = 680 + (10 sec x #leaks) =  {str(primaryData.allowed_traverse_time)} sec', '', '', '', '', primaryData.valid_run, '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '                               ly X 100                     ' + str(primaryData.leaking_doors) + ' X 100', '', '', '', '', '', '', '', ''],
-        ['', 'Percent Leaking Doors = ---------------------- = ------------------------ = ' + primaryData.percent_leaking, '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '', '  Dt - Di - Dno              170 - ' + str(primaryData.inop_doors_eq) + ' - ' + str(primaryData.doors_not_observed), '', '', '', '', '', ''],
+        ['', '', '', '                          ly X 100                   ' + str(primaryData.leaking_doors) + ' X 100', '', '', '', '', '', '', '', ''],
+        ['', f'Percent Leaking Doors = ---------------------- = ------------------------ = {primaryData.percent_leaking}%', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', f'  Dt - Di - Dno            170 - {str(primaryData.inop_doors_eq)} - {str(primaryData.doors_not_observed)}', '', '', '', '', '', ''],
         ['', 'Where: Ly = Leaking Doors Observed, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + primaryData.notes + '</para>', styles['Normal'])]
@@ -378,9 +378,9 @@ def pdf_template_A3(primaryData, title, subTitle):
         ['', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', ''],
         ['', '', str(primaryData.om_traverse_time_min) + 'min  ' + str(primaryData.om_traverse_time_sec) + 'sec = ' + str(primaryData.om_total_sec) + ' sec', '', '', '', '', str(primaryData.l_traverse_time_min) + 'min  ' + str(primaryData.l_traverse_time_sec) + 'sec = ' + str(primaryData.l_total_sec) + ' sec', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
-        ['', Paragraph('<para align=left>D = Dampered Off<br/>C = Cap</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time: (Offtakes)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + primaryData.om_allowed_traverse_time, '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(primaryData.om_valid_run) + '</para>', styles['Normal']), ''],
+        ['', Paragraph('<para align=left>D = Dampered Off<br/>C = Cap</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time (Offtakes)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + primaryData.om_allowed_traverse_time + ' sec', '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(primaryData.om_valid_run) + '</para>', styles['Normal']), ''],
         ['', 'F = Flange', '', '', '', '', '', '', '', '', '', ''],
-        ['', Paragraph('<para align=left>S = Slip Joint<br/>B = Base</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time:<br/>(lids)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + primaryData.l_allowed_traverse_time, '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(primaryData.l_valid_run) + '</para>', styles['Normal']), ''],
+        ['', Paragraph('<para align=left>S = Slip Joint<br/>B = Base</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time<br/>(lids)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + primaryData.l_allowed_traverse_time + ' sec', '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(primaryData.l_valid_run) + '</para>', styles['Normal']), ''],
         ['', 'P = Piping', '', '', '', '', '', '', '', '', '', ''],
         ['', 'O = Other', '', '', '', '', '', '', '', '', '', ''],
         ['', 'MS = Mini Standpipe', '', '', '', '', '', '', '', '', '', ''],
@@ -570,10 +570,10 @@ def pdf_template_A4(primaryData, title, subTitle):
 
 def pdf_template_A5(primaryData, title, subTitle, formInformation):
     marginSet = 0.3
-    o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven1']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven1']['start']) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(primaryData.ovens_data['oven1']['stop']) + '</para>', styles['Normal'])
-    o2NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven2']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven2']['start']) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(primaryData.ovens_data['oven2']['stop']) + '</para>', styles['Normal'])
-    o3NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven3']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven3']['start']) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(primaryData.ovens_data['oven3']['stop']) + '</para>', styles['Normal'])
-    o4NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven4']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven4']['start']) + '&#160;&#160;&#160;<b>Stop:</b>' + time_change(primaryData.ovens_data['oven4']['stop']) + '</para>', styles['Normal'])
+    o1NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven1']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven1']['start']) + '&#160;&#160;&#160;<b>Stop:</b>&#160;' + time_change(primaryData.ovens_data['oven1']['stop']) + '</para>', styles['Normal'])
+    o2NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven2']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven2']['start']) + '&#160;&#160;&#160;<b>Stop:</b>&#160;' + time_change(primaryData.ovens_data['oven2']['stop']) + '</para>', styles['Normal'])
+    o3NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven3']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven3']['start']) + '&#160;&#160;&#160;<b>Stop:</b>&#160;' + time_change(primaryData.ovens_data['oven3']['stop']) + '</para>', styles['Normal'])
+    o4NumberTime = Paragraph('<para fontSize=8 align=center><b>Oven No:</b>&#160;' + primaryData.ovens_data['oven4']['oven_number'] + '&#160;&#160;&#160; <b>Start:</b>&#160;' + time_change(primaryData.ovens_data['oven4']['start']) + '&#160;&#160;&#160;<b>Stop:</b>&#160;' + time_change(primaryData.ovens_data['oven4']['stop']) + '</para>', styles['Normal'])
     suffix = '' if primaryData.reading_data['wind_speed_stop'] == 'same' else ' mph'
     suffix2 = '' if primaryData.reading_data['ambient_temp_stop'] == 'same' else '<sup>o</sup>'
 
@@ -596,7 +596,7 @@ def pdf_template_A5(primaryData, title, subTitle, formInformation):
         [Paragraph('<para fontSize=7><b>DESCRIBE BACKGROUND</b><br/></para><para fontSize=7><b>Start:</b>&#160;' + primaryData.reading_data['describe_background_start'] + '&#160;&#160;&#160;&#160;<b>Stop:</b>&#160;' + primaryData.reading_data['describe_background_stop'] + '</para>', styles['Normal']), '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         # bottom data starts at (0,17)
-        ['', '', o1NumberTime, '', '', '', '', '', '', '', o2NumberTime, '', '', '', '', '', ''],
+        ['', o1NumberTime, '', '', '', '', '', '', '', o2NumberTime, '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', '', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', ''],
         ['', '', '', '0', primaryData.ovens_data['oven1']['readings']['push']['1'], primaryData.ovens_data['oven1']['readings']['push']['2'], primaryData.ovens_data['oven1']['readings']['push']['3'], primaryData.ovens_data['oven1']['readings']['push']['4'], '', '', '', '0', primaryData.ovens_data['oven2']['readings']['push']['1'], primaryData.ovens_data['oven2']['readings']['push']['2'], primaryData.ovens_data['oven2']['readings']['push']['3'], primaryData.ovens_data['oven2']['readings']['push']['4'], ''],
@@ -610,7 +610,7 @@ def pdf_template_A5(primaryData, title, subTitle, formInformation):
         ['', '', Paragraph('<para fontSize=9>Average Opacity of 6 Highest Readings:&#160;' + str(primaryData.ovens_data['oven1']['average_6_opacity']) + '%</para>', styles['Normal']), '', '', '', '', '', '', '', Paragraph('<para fontSize=9>Average Opacity of 6 Highest Readings:&#160;' + str(primaryData.ovens_data['oven2']['average_6_opacity']) + '%</para>', styles['Normal']), '', '', '', '', '', ''],
         ['', '', Paragraph('<para fontSize=9>Average Opacity of 6 Highest Readings Over 35%?&#160;' + str(primaryData.ovens_data['oven1']['average_6_over_35']) + '</para>', styles['Normal']), '', '', '', '', '', '', '', Paragraph('<para fontSize=9>Average Opacity of 6 Highest Readings Over 35%?&#160;' + str(primaryData.ovens_data['oven2']['average_6_over_35']) + '</para>', styles['Normal']), '', '', '', '', '', ''],
         # bottom data starts at (0,30)
-        ['', '', o3NumberTime, '', '', '', '', '', '', '', o4NumberTime, '', '', '', '', '', ''],
+        ['', o3NumberTime, '', '', '', '', '', '', '', o4NumberTime, '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', '', '', Paragraph('<para fontSize=10 leading=9><b>P</b></para>',styles['Normal']), '', '0', '15', '30', '45', ''],
         ['', '', '', '0', primaryData.ovens_data['oven3']['readings']['push']['1'], primaryData.ovens_data['oven3']['readings']['push']['2'], primaryData.ovens_data['oven3']['readings']['push']['3'], primaryData.ovens_data['oven3']['readings']['push']['4'], '', '', '', '0', primaryData.ovens_data['oven4']['readings']['push']['1'], primaryData.ovens_data['oven4']['readings']['push']['2'], primaryData.ovens_data['oven4']['readings']['push']['3'], primaryData.ovens_data['oven4']['readings']['push']['4'], ''],
@@ -648,8 +648,8 @@ def pdf_template_A5(primaryData, title, subTitle, formInformation):
         ('GRID', (10,19), (15,21), 0.5, colors.black),
         ('BACKGROUND', (3,19), (7,19),'(.6,.7,.8)'),
         ('BACKGROUND', (11,19), (15,19),'(.6,.7,.8)'),
-        ('SPAN', (2,17), (8,17)),
-        ('SPAN', (10,17), (16,17)),
+        ('SPAN', (1,17), (8,17)),
+        ('SPAN', (9,17), (16,17)),
         ('SPAN', (2,19), (2,21)),
         ('SPAN', (10,19), (10,21)),
         ('SPAN', (2,26), (9,26)),
@@ -678,8 +678,8 @@ def pdf_template_A5(primaryData, title, subTitle, formInformation):
         ('GRID', (10,32), (15,34), 0.5, colors.black),
         ('BACKGROUND', (3,32), (7,32),'(.6,.7,.8)'),
         ('BACKGROUND', (11,32), (15,32),'(.6,.7,.8)'),
-        ('SPAN', (2,30), (8,30)),
-        ('SPAN', (10,30), (16,30)),
+        ('SPAN', (1,30), (8,30)),
+        ('SPAN', (9,30), (16,30)),
         ('SPAN', (2,32), (2,34)),
         ('SPAN', (10,32), (10,34)),
         ('SPAN', (2,39), (9,39)),

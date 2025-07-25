@@ -686,20 +686,36 @@ class form2_model(models.Model):
         blank=True
     )
 
-    p_leak_data = models.CharField(
-        max_length=1000,
+    p_leak_data = models.JSONField(
+        default=list,
         blank=True,
         null=True
     )
-    c_leak_data = models.CharField(
-        max_length=1000,
+    c_leak_data = models.JSONField(
+        default=list,
         blank=True,
         null=True
     )
-    p_temp_block_from = models.CharField(max_length=30)
-    p_temp_block_to = models.CharField(max_length=30)
-    c_temp_block_from = models.CharField(max_length=30)
-    c_temp_block_to = models.CharField(max_length=30)
+    p_temp_block_from = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    p_temp_block_to = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    c_temp_block_from = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    c_temp_block_to = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True
+    )
     p_traverse_time_min = models.CharField(max_length=30)
     p_traverse_time_sec = models.CharField(max_length=30)
     c_traverse_time_min = models.CharField(max_length=30)
@@ -4852,6 +4868,15 @@ class HelpArticle(models.Model):
 
     def __str__(self):
         return self.title
+
+class ArticleFeedback(models.Model):
+    article = models.ForeignKey('HelpArticle', on_delete=models.CASCADE, related_name='feedback')
+    was_helpful = models.BooleanField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    user_ip = models.GenericIPAddressField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{'Helpful' if self.was_helpful else 'Not helpful'} for {self.article.title}"
 
 
 # class tank_library(models.Model):

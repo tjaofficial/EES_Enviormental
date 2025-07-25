@@ -63,6 +63,7 @@ admin.site.register(form31_model)
 admin.site.register(SpillKit_model)
 admin.site.register(HelpArticle)
 admin.site.register(HelpCategory)
+admin.site.register(ArticleFeedback)
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['observer', 'date', 'start_time', 'end_time', 'notes']

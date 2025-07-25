@@ -37,23 +37,22 @@
                                 <td style="height: 25px" > </td>
                             </tr> 
                             <tr>
-                                <th colspan="6">Inspectors Name:&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Date:&nbsp; &nbsp;{{ data.date }}
+                                <td colspan="6">
+                                    <strong>Inspectors Name:</strong>&nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong>Date:</strong>&nbsp;{{ data.date }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <strong>Battery No.</strong> {{options.bat_num}} &nbsp; &nbsp; &nbsp; 
+                                    <strong>Total No. Ovens:</strong> {{options.total_ovens}} &nbsp; &nbsp; &nbsp;
+                                    <strong>Total No. of Inoperable Ovens:</strong>&nbsp;{{ data.inop_ovens }} <br>
+                                    <strong>Inoperable Oven Number(s):</strong>&nbsp;{{ data.inop_numbs }}
+                                </td>
                             </tr>
                             <tr>
                                 <th colspan="6">
-                                    Battery No. {{option.bat_num}} &nbsp; &nbsp; &nbsp; 
-                                    Total No. Ovens: {{options.total_ovens}} &nbsp; &nbsp; &nbsp;
-                                    Total No. of Inoperable Ovens &nbsp; &nbsp;{{ data.inop_ovens }} <br>
-                                    Inoperable Oven Number(s)&nbsp; &nbsp;{{ data.inop_numbs }}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="6">
-                                    Crew:
-                                    &nbsp; &nbsp;{{ data.crew }}
-                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                                    Battery Foreman:
-                                    &nbsp; &nbsp;{{ data.foreman }}
+                                    <strong>Crew:</strong>&nbsp;{{ data.crew }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                    <strong>Battery Foreman:</strong>&nbsp;{{ data.foreman }}
                                 </th>
                             </tr>
                             <tr>
@@ -69,8 +68,8 @@
                     </section>
                     <section class="resultTables">
                         <div class="resultTables_container">
-                            <div>Start Time:{{ data.om_start }}</div>
-                            <div>End Time:{{ data.om_stop }}</div>
+                            <div><strong>Start Time:</strong> {{ data.om_start }}</div>
+                            <div><strong>End Time:</strong> {{ data.om_stop }}</div>
                             <div style="position: relative;">
                                 <span class="popup_class" id="om_timePopup">
                                     Please Change End Time
@@ -97,10 +96,10 @@
                                     </tr>
                                     {% for item in omSide_json %}
                                         <tr>
-                                            <th id="boxa6" colspan="1">
+                                            <td id="boxa6" colspan="1">
                                                 {{ item.oven }}
-                                            </th>
-                                            <th id="boxa6" colspan="2">
+                                            </td>
+                                            <td id="boxa6" colspan="2">
                                                 {% for loc in item.location %}
                                                     {% if forloop.last %}
                                                         {{ loc }}
@@ -108,21 +107,21 @@
                                                         {{ loc }},
                                                     {% endif %}
                                                 {% endfor %}
-                                            </th>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     <tbody id="offtakes_tableBody" data-numRows="1">
                                 </table>
                             </div>
-                            <div>Traverse Time: {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec = {{data.om_total_sec}}sec</div>
+                            <div><strong>Traverse Time:</strong> {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec = {{data.om_total_sec}}sec</div>
                             <div style='margin-top: 15px;'>
                                 One Pass ({{ data.one_pass }})
                             </div>
                         </div>
 
                         <div class="resultTables_container">
-                            <div> Start Time:{{ data.l_start }} </div>
-                            <div> End Time:{{ data.l_stop }} </div>
+                            <div><strong>Start Time:</strong> {{ data.l_start }}</div>
+                            <div><strong>End Time:</strong> {{ data.l_stop }}</div>
                             <div style="position: relative;">
                                 <span class="popup_class" id="l_timePopup">
                                     Please Change End Time
@@ -149,10 +148,10 @@
                                     </tr>
                                     {% for item in lSide_json %}
                                         <tr>
-                                            <th id="boxa6" colspan="1">
+                                            <td id="boxa6" colspan="1">
                                                 {{ item.oven }}
-                                            </th>
-                                            <th id="boxa6" colspan="2">
+                                            </td>
+                                            <td id="boxa6" colspan="2">
                                                 {% for loc in item.location %}
                                                     {% if forloop.last %}
                                                         {{ loc }}
@@ -160,14 +159,14 @@
                                                         {{ loc }},
                                                     {% endif %}
                                                 {% endfor %}
-                                            </th>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     <tbody id="lids_tableBody" data-numRows="1">
                                     </tbody>
                                 </table>
                             </div>
-                            <div>Traverse Time: {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec = {{data.l_total_sec}}sec</div>
+                            <div><strong>Traverse Time:</strong> {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec = {{data.l_total_sec}}sec</div>
                         </div>
                     </section>
                     <section>
@@ -177,13 +176,13 @@
                                     D = Dampered off
                                 </td>
                                 <td style="width: 254px; text-align: center;">
-                                    Allowed Traverse Time:
+                                    <strong>Allowed Traverse Time:</strong>
                                 </td>
                                 <td rowspan="2" style="width: 354px; text-align: left;">
-                                    = 340 + 10 sec * # of leaks) = {{ data.om_allowed_traverse_time }}sec
+                                    = 340 + (10 sec * # of leaks) = {{ data.om_allowed_traverse_time }} sec
                                 </td>
                                 <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
-                                    Valid Run?
+                                    <strong>Valid Run?</strong>
                                 </td>
                                 <td></td>
                             </tr>    
@@ -192,7 +191,7 @@
                                     C = Cap
                                 </td>
                                 <td style="text-align: center;">
-                                    (Offtakes)
+                                    <strong>(Offtakes)</strong>
                                 </td>
                                 <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
                                     {{ data.om_valid_run }}
@@ -210,13 +209,13 @@
                                     S = Slip Joint
                                 </td>
                                 <td style="text-align: center;">
-                                    Allowed Traverse Time:
+                                    <strong>Allowed Traverse Time:</strong>
                                 </td>
                                 <td rowspan="2" style="width: 354px; text-align: left;">
-                                    = 340 + 10 sec * # of leaks) = {{ data.l_allowed_traverse_time }}sec
+                                    = 340 + (10 sec * # of leaks) = {{ data.l_allowed_traverse_time }} sec
                                 </td>
                                 <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
-                                    Valid Run?
+                                    <strong>Valid Run?</strong>
                                 </td>
                             </tr>
                             <tr> 
@@ -224,7 +223,7 @@
                                     B = Base
                                 </td>
                                 <td style="text-align: center;">
-                                    (Lids)
+                                    <strong>(Lids)</strong>
                                 </td>
                                 <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
                                     {{ data.l_valid_run }}
@@ -242,7 +241,7 @@
                                     O = Other
                                 </td>
                                 <td colspan="3" style="text-align: center;">
-                                    Total Offtake Leaks: {{ data.om_leaks }} Total Leaking Lids: {{ data.l_leaks }}
+                                    <strong>Total Offtake Leaks:</strong> {{ data.om_leaks }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>Total Leaking Lids:</strong> {{ data.l_leaks }}
                                 </td>
                             </tr>    
                             <tr>  
@@ -264,7 +263,7 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.l_leaks2 }} x 100
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.l_leaks2 }} x 100
                                 </td>
                                 <td></td>
                                 <td style="width: 75px"></td>
@@ -272,7 +271,7 @@
                             <tr>
                                 <td></td>
                                 <td style="text-align: center; margin: auto; width: 133px;">
-                                    % Leaking Lids = 
+                                    <strong>% Leaking Lids = </strong>
                                 </td>
                                 <td>
                                     ---------------------- = 
@@ -285,14 +284,14 @@
                                 </td>
                                 <td></td>
                             </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
+                            <tr>
+                                <td></td>
+                                <td></td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - 
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - 
                                     {% if selector == 'form' %}
                                     <input type="number" name="inop_ovens" value="" oninput="inoperable_ovens()" id="om_inop_ovens" class="input" style="width:35px; text-align: center;" required="">
                                     {% else %}
@@ -300,8 +299,8 @@
                                     {% endif %}
                                     ) - {{ data.l_not_observed }}
                                 </td>
-                                    <td></td>
-                                    <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                                 <tr>
                                 <td style="height: 25px" > </td>
@@ -313,7 +312,7 @@
                                     T<sub>ve</sub> x 100
                                 </td>
                                 <td style="padding-left: 40px;">
-                                    {{ data.om_leaks2 }} x 100
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.om_leaks2 }} x 100
                                 </td>
                                 <td></td>
                                 <td style="width: 75px"></td>
@@ -321,7 +320,7 @@
                             <tr>
                                 <td></td>
                                 <td style="text-align: center; margin: auto; width: 168px;">
-                                    % Leaking Offtakes = 
+                                    <strong>% Leaking Offtakes = </strong>
                                 </td>
                                 <td>
                                     ---------------------------- = 
@@ -341,7 +340,7 @@
                                     &nbsp;T<sub>ovn</sub>(N - N<sub>i</sub>) + J - T<sub>no</sub>
                                 </td>
                                 <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 (85 - 
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 (85 - 
                                     {% if selector == 'form' %}
                                     <input type="number" name="inop_ovens" value="" oninput="inoperable_ovens()" id="l_inop_ovens" class="input" style="width:35px; text-align: center;" required="">
                                     {% else %}

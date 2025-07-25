@@ -1,0 +1,82 @@
+{% load static %}
+<div class="leaks-table-wrapper">
+    <div class="methodplus-header" style="background-color: #ffffff; color: black; font-size: 1rem;">Leaks</div>
+    <table class="methodplus-table" id="{{sideLetter}}LeaksTable">
+        <thead id="{{sideLetter}}LeaksSubHeader">
+            <tr class="methodplus-subheader">
+                <th>Oven</th>
+                <th>Location{% include 'shared/components/helpPack.html' with data="form2LeakLocation" popupCounter=0 %}</th>
+                <th>Zone</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="{{sideLetter}}LeaksTableBody">
+            {% if not search %}
+                <tr id="{{sideLetter}}_leakRow_0">
+                    <td style="width: 122px;">
+                            <input type="number" id="{{sideLetter}}_oven_0" name="{{sideLetter}}_oven_0" placeholder="Oven #" style="width:90px;" required>
+                    </td>
+                    <td>
+                        <select id="{{sideLetter}}_zoneSelect_0" name="{{sideLetter}}_location_0" placeholder="Location" multiple required>
+                            {% comment %} <option value="">Location</option> {% endcomment %}
+                            <option value="D">D</option>
+                            <option value="C">C</option>
+                            <option value="M">M</option>
+                        </select>
+                        <script>
+                            var selectElem = document.getElementById('{{sideLetter}}_zoneSelect_0');
+                            var zoneChoices = new Choices(selectElem, {
+                                removeItemButton: true,
+                                placeholderValue: 'Location',
+                                searchEnabled: false,
+                                shouldSort: false,
+                                duplicateItemsAllowed: false,
+                                itemSelectText: '',
+                            });
+
+                            // Save instance on the element for access in fillForm
+                            selectElem.choicesInstance = zoneChoices;
+                        </script>
+                    </td>
+                    <td>
+                        <input type="text" id="{{sideLetter}}_zone_0" name="{{sideLetter}}_zone_0" placeholder="Select Zone" style="width: 175px;" onclick="zoneSelectors(0, '{{sideLetter}}'); document.getElementById('{{sideLetter}}_zoneModal_0').style.display='flex'" required>
+                        <input type="hidden" id="{{sideLetter}}_selectedZones_0" name="{{sideLetter}}_selected_zones_0" value="">
+                        {% include 'shared/components/zoneModal.html' with ovenIndex="0" %}
+                    </td>
+                    <td>
+                        {% if not search %}
+                            <span class="remove-row-btn" onclick="removeLeakRow(this)" data-side="{{sideLetter}}">✖</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                {% for row in data.p_leak_data %}
+                    <tr id="{{sideLetter}}_leakRow_0">
+                        <td style="width: 122px;">
+                            {{row.oven}}
+                        </td>
+                        <td>
+                            {{row.location}}
+                        </td>
+                        <td>
+                            {{row.zone}}
+                        </td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="no-leaks-message" id="no{{sideLetter}}LeaksMsg" style="display: none;">
+        No Leaks Found
+    </div>
+    {% if not search %}
+        <div class="methodplus-controls">
+            <button type="button" class="add-row-btn" onclick="addLeakRow(this)" data-side="{{sideLetter}}">+ Add Row</button>
+            <label>
+                <input type="checkbox" id="no{{sideLetter}}LeaksCheckbox" onchange="toggleLeaksMode(this); total_leaking_doors();" data-side="{{sideLetter}}"> No Leaks Found
+            </label>
+        </div>
+    {% endif %}
+</div>

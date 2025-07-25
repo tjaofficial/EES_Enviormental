@@ -1,5 +1,6 @@
 from .models import issues_model
 from .utils import createNotification, updateSubmissionForm
+from collections import defaultdict
 
 def call_dynamic_function(form_number, *args, **kwargs):
     if form_number in FUNCTION_MAP:
@@ -49,6 +50,35 @@ def form2_issue_check(savedForm, form_variables, request, selector, facility, da
     issueFound = False
     compliance = False
     #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
+    def leakDictBuild(letter):
+        grouped = defaultdict(dict)
+        print(letter)
+        valid_prefixes = [f'{letter}_oven', f'{letter}_location', f'{letter}_zone']
+        print(valid_prefixes)
+        for key, value in request.POST.lists():
+            for prefix in valid_prefixes:
+                if key.startswith(prefix + '_'):
+                    print(key.startswith(prefix + '_'))
+                    try:
+                        index = key.split('_')[-1]
+                        print(key)
+                        print(value)
+                        if prefix == f'{letter}_zone':
+                            grouped[index]['zone'] = list(map(int, value[0].split(',')))
+                            print(grouped[index]['zone'])
+                        elif prefix == f'{letter}_oven':
+                            grouped[index]['oven'] = int(value[0])
+                        elif prefix == f'{letter}_location':
+                            grouped[index]['location'] = value[0]
+                    except Exception as e:
+                        print(f"Skipping {key}: {e}")
+                    break  # once matched, no need to check other prefixes
+        return list(grouped.values())
+
+    savedForm.p_leak_data = leakDictBuild('p')
+    savedForm.c_leak_data = leakDictBuild('c')
+    savedForm.save()
+
     if savedForm.notes not in {'-', 'n/a', 'N/A'} or savedForm.leaking_doors != 0:
         issueFound = True
         if savedForm.leaking_doors > 8:

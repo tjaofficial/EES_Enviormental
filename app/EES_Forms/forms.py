@@ -424,7 +424,7 @@ class form2_form(ModelForm):
             'observer': forms.TextInput(attrs={'style': 'width: 180px;'}),
             'date': forms.DateInput(attrs={'type': 'date', 'style': 'width: 140px;'}),
             'inop_ovens': forms.NumberInput(attrs={'oninput': 'inoperable_ovens()', 'id': 'inop_ovens', 'class': 'input', 'type': 'number', 'style': 'width:50px; text-align: center;'}),
-            'inop_numbs': forms.TextInput(attrs={'onchange': 'pc_doors_not_observed()', 'oninput':'inoperable_ovens()', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
+            'inop_numbs': forms.TextInput(attrs={'onchange': 'total_doors_not_obs()', 'oninput':'inoperable_ovens()', 'id': 'inop_numbs', 'class': 'input', 'style': 'width:150px; text-align: center;'}),
             'crew': forms.Select(attrs={'style': 'width:60px;'}),
             'foreman': forms.TextInput(attrs={'style': 'width: 150px;'}),
             'p_start': forms.TimeInput(attrs={'oninput': 'timecheck_pushDoors()', 'type': 'time', 'required': True}),
@@ -442,55 +442,51 @@ class form2_form(ModelForm):
             'p_temp_block_from': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'p_temp_block_from',
-                'class': 'input',
-                'type': 'text',
-                'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()',
+                'type': 'number',
+                'oninput': 'total_doors_not_obs()',
                 'min': "1",
                 'max': "85"
             }),
-            'p_temp_block_to': forms.TextInput(attrs={
+            'p_temp_block_to': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'p_temp_block_to',
-                'class': 'input',
-                'type': 'text',
-                'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()',
+                'type': 'number',
+                'oninput': 'total_doors_not_obs()',
                 'min': "1",
                 'max': "85"
             }),
-            'c_temp_block_from': forms.TextInput(attrs={
+            'c_temp_block_from': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'c_temp_block_from',
-                'class': 'input',
-                'type': 'text',
-                'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()',
+                'type': 'number',
+                'oninput': 'total_doors_not_obs()',
                 'min': "1",
-                'max': "85"
+                'max': "85",
+                'placeholder': 'From Oven #',
+                'required': True
             }),
-            'c_temp_block_to': forms.TextInput(attrs={
+            'c_temp_block_to': forms.NumberInput(attrs={
                 'onchange': 'equation()',
                 'id': 'c_temp_block_to',
-                'class': 'input',
-                'type': 'text',
-                'style': 'width:50px; text-align: center;',
-                'oninput': 'pc_doors_not_observed()',
+                'type': 'number',
+                'oninput': 'total_doors_not_obs()',
                 'min': "1",
-                'max': "85"
+                'max': "85",
+                'placeholder': 'To Oven #',
+                'required': True
             }),
             'total_traverse_time': forms.NumberInput(attrs={
                 'id': 'total_traverse_time', 
                 'class': 'input', 
                 'type': 'number', 
-                'style': 'width:50px; text-align: center;',
+                'style': 'width:80px; text-align: center;',
                 'min': '0'
             }),
             'allowed_traverse_time': forms.NumberInput(attrs={
                 'id': 'allowed_traverse_time', 
                 'class': 'input', 
                 'type': 'number', 
-                'style': 'width:50px; text-align: center;', 
+                'style': 'width:80px; text-align: center;', 
                 'min': '0'
             }),
             'valid_run': forms.CheckboxInput(attrs={'style': 'width: 50px;'}),
@@ -511,7 +507,11 @@ class form2_form(ModelForm):
                 'style': 'width:50px; text-align: center;',
                 'min': '0'
             }),
-            'percent_leaking': forms.TextInput(attrs={'type': 'text', 'style': 'width: 50px; text-align: center;', 'min': '0'}),
+            'percent_leaking': forms.NumberInput(attrs={
+                'type': 'float', 
+                'style': 'width: 80px; text-align: center;', 
+                'min': '0'
+            }),
             'notes': Textarea(attrs={'rows': 7, 'style': 'width: 805px;'}),
             'p_leak_data': forms.TextInput(attrs={'id': "pushSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),
             'c_leak_data': forms.TextInput(attrs={'id': "cokeSide", 'type': "hidden", 'value': "{}", 'data-resulttable': ""}),

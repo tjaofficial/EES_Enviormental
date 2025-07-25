@@ -1,28 +1,23 @@
-const arrayOfInputs = Array.prototype.slice.call(document.getElementsByTagName('input'),0);
-const arrayOfRadios = Array.from(document.querySelectorAll("input[type=radio]"));
-const arrayOfSelects = Array.prototype.slice.call(document.getElementsByTagName('select'),0);
-const arrayOfTextareas = Array.prototype.slice.call(document.getElementsByTagName('textarea'),0);
-const input_select_textarea_combined_array = arrayOfInputs.concat(arrayOfSelects, arrayOfTextareas, arrayOfRadios);
-//console.log(input_select_textarea_combined_array)
-
-const formName = document.getElementById('formName').dataset.form
-const tempSaveKey = formName+"_tempFormData";
-const currentDate = Date.now();
-
-clearStorage(currentDate, tempSaveKey);
-inputEventListener(input_select_textarea_combined_array);
-//fillForm(tempSaveKey);
-
-function inputEventListener(array) {
-    if (!Array.isArray(array)) {
-        console.error("inputEventListener was passed a non-array value:", array);
-        return;
+document.addEventListener('input', e => {
+    const el = e.target;
+    if (shouldTrack(el)) {
+        saveToLocal({ target: el });
     }
-    array.forEach(item => {
-        if (item.id || item.type === "radio") { // Handle radios properly
-            item.addEventListener("input", saveToLocal);
-        }
-    });
+}, true);
+
+document.addEventListener('change', e => {
+    const el = e.target;
+    if (shouldTrack(el)) {
+        saveToLocal({ target: el });
+    }
+}, true);
+
+// Optional helper to avoid csrf or hidden fields, etc.
+function shouldTrack(el) {
+    if (!el.tagName) return false;
+    if (el.type === 'hidden' || el.name === 'csrfmiddlewaretoken') return false;
+    if (el.disabled || el.readOnly) return false;
+    return ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName);
 }
 
 function saveToLocal(event){
@@ -32,16 +27,20 @@ function saveToLocal(event){
     const formTempData = localStorage.getItem(tempSaveKey)?JSON.parse(localStorage.getItem(tempSaveKey)): {"Experation":currentDate, data:{}};
     const elem = event.target;
 
-    if (elem.type === "radio") {
+    if (elem.tagName === 'SELECT' && elem.multiple) {
+        const selectedValues = Array.from(elem.selectedOptions).map(opt => opt.value);
+        formTempData.data[elem.id] = selectedValues;
+    } else if (elem.type === "radio") {
         let baseName = elem.name;  // Use `name` instead of `id` to get the whole group
         formTempData.data[baseName] = elem.value; // Store by name, not full ID
+    } else if (elem.type === "checkbox"){
+        formTempData.data[elem.id] = elem.checked;
     } else {
         formTempData.data[elem.id] = elem.value;
     }
 
     //formTempData.data[elem.id] = elem.value;
-    console.log(formTempData.data[elem.id])
-    console.log(elem.id)
+    console.log("Saved field:", elem.id || elem.name, elem.value);
     localStorage.setItem(tempSaveKey, JSON.stringify(formTempData));
 }
 
@@ -67,12 +66,28 @@ function fillForm(tempSaveKey){
             if(dataObject[key]){ 
                 let element = document.getElementById(key);
                 if (!element){
-                    //console.log(dataObject[key].toLowerCase())
-                    element = document.getElementById(`${key}_${dataObject[key].toLowerCase()}`);
+                    const val = dataObject[key];
+                    let element = document.getElementById(key);
+                    if (!element && typeof val === 'string') {
+                        element = document.getElementById(`${key}_${val.toLowerCase()}`);
+                    }
                 }
                 //console.log(element)
                 if (element) {
-                    if(element.type === "radio") {
+                    if (element.tagName === 'SELECT' && element.multiple) {
+                        const savedValues = dataObject[key];
+
+                        if (element.choicesInstance && Array.isArray(savedValues)) {
+                            element.choicesInstance.setChoiceByValue(savedValues);
+                        } else {
+                            // fallback for plain selects
+                            Array.from(element.options).forEach(opt => {
+                                opt.selected = savedValues.includes(opt.value);
+                            });
+                        }
+                    } else if (element.type === "checkbox"){
+                        element.checked = dataObject[key];
+                    } else if(element.type === "radio") {
                         if (['24', '25'].includes(formName)){
                             var baseName = key;
                         } else {
@@ -120,25 +135,8 @@ function intiate_TempSave(){
     const currentDate = Date.now();
 
     clearStorage(tempSaveKey, currentDate);
-    inputEventListener(input_select_textarea_combined_array);
     fillForm(tempSaveKey);
     
 }
 
 intiate_TempSave()
-//for testing set exporation
-// function setExperation(tempSaveKey){
-//     const datevalue = document.getElementsByClassName('dateChanger')[0].value;
-//     const dateArray = datevalue.split('-');
-//     console.log(dateArray[0]+" "+dateArray[1]+" "+dateArray[2])
-//     const date = new Date(parseInt(dateArray[0]), parseInt(dateArray[1])-1, parseInt(dateArray[2]));
-//     const formTempData = localStorage.getItem(tempSaveKey);
-//     if(formTempData){
-//         const object = JSON.parse(formTempData);
-//         console.log(date);
-//         object.Experation = date;
-//         localStorage.setItem(tempSaveKey, JSON.stringify(object));
-//     }
-// }
-
-// document.getElementsByClassName('dateChanger')[0].addEventListener('change', ()=>{ setExperation(tempSaveKey)});

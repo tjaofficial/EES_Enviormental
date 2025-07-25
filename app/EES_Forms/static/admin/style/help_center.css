@@ -103,3 +103,34 @@
   font-style: italic;
   margin-top: 40px;
 }
+.search-wrapper {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.suggestion-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  z-index: 10;
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.suggestion-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.suggestion-item:hover {
+  background-color: #f1f5f9;
+}

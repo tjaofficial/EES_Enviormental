@@ -51,7 +51,7 @@
 						</tr>
 						<tr>
 							<td colspan="6" style="text-align: center;">
-								<strong>Battery No.:</strong> &nbsp;{{data.facilityChoice.bat_num}} &nbsp; &nbsp; &nbsp;
+								<strong>Battery No.</strong> &nbsp;{{ options.bat_num }} &nbsp; &nbsp; &nbsp;
 								<strong>Crew:</strong> &nbsp; {{ data.crew }} &nbsp; &nbsp; &nbsp; &nbsp;
 								<strong>Battery Foreman:</strong> &nbsp; {{ data.foreman }}
 							</td>
@@ -184,7 +184,7 @@
 							<td></td>
 							<td></td>
 							<td id="boxa1">Total(Seconds):</td>
-							<td id="boxa1">{% if search %}{{ data.ovens_data.total_seconds }}{% else %}{{data.total_seconds}}{% endif %}</td>
+							<td id="boxa1">{% if search %}{{ data.ovens_data.total_seconds|floatformat:1 }}{% else %}{{data.total_seconds|floatformat:1}}{% endif %}</td>
 							<td></td>
 						</tr>
 					</table>
