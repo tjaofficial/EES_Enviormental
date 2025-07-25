@@ -225,8 +225,10 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
             stream = io.BytesIO()
             if formID == 1:
                 tableData, tableColWidths, style = pdf_template_A1(formData, title, subTitle)
+                debug_table_data(tableData)
             if formID == 2:
                 tableData, tableColWidths, style = pdf_template_A2(formData, title, subTitle)
+                debug_table_data(tableData)
             if formID == 3:
                 tableData, tableColWidths, style = pdf_template_A3(formData, title, subTitle)
             if formID == 4:
@@ -342,3 +344,15 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
         return HttpResponseNotFound("No Forms Found")
     
     return response
+
+def debug_table_data(tableData):
+    for r, row in enumerate(tableData):
+        for c, cell in enumerate(row):
+            if isinstance(cell, (list, tuple)):
+                for i, v in enumerate(cell):
+                    if not hasattr(v, "wrapOn") and not isinstance(v, str):
+                        print(f"❌ Bad nested item @ row {r}, col {c}, idx {i}: {type(v)} -> {v!r}")
+            elif isinstance(cell, dict):
+                print(f"❌ Dict @ row {r}, col {c} — should not be here: {cell}")
+            elif not hasattr(cell, "wrapOn") and not isinstance(cell, str):
+                print(f"⚠️ Scalar @ row {r}, col {c}: {type(cell)} -> {cell!r}")

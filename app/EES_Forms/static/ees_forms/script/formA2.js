@@ -31,8 +31,8 @@ function toggleBlockedInputs(elem) {
     } else {
         start.disabled = false;
         end.disabled = false;
-        start.setAttribute("required", "required");
-        end.setAttribute("required", "required");
+        start.setAttribute("required", true);
+        end.setAttribute("required", true);
         start.style.backgroundColor = "white";
         end.style.backgroundColor = "white";
     }
@@ -48,10 +48,18 @@ function toggleLeaksMode(elem) {
         table.style.display = "none";
         header.style.display = "none";
         noLeaksMsg.style.display = "block";
+        const allAreaLeaks = table.querySelectorAll(`[id*="${side}_zone_"], [id*="${side}_location_"], [id*="${side}_oven_"], [id*="${side}_zoneSelect_"]`)
+        allAreaLeaks.forEach((el) => {
+            el.removeAttribute("required");
+        })
     } else {
         table.style.display = "table";
         header.style.display = "table-header-group";
         noLeaksMsg.style.display = "none";
+        const allAreaLeaks = table.querySelectorAll(`[id*="${side}_zone_"], [id*="${side}_location_"], [id*="${side}_oven_"], [id*="${side}_zoneSelect_"]`)
+        allAreaLeaks.forEach((el) => {
+            el.setAttribute("required", true);
+        })
     }
 }
 //Get total of doors not observed
