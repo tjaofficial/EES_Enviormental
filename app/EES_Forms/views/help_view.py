@@ -5,11 +5,13 @@ from django.http import JsonResponse # type: ignore
 from django.db.models import Q # type: ignore
 from ..models import HelpArticle, HelpCategory, ArticleFeedback
 import json
+from ..utils.main_utils import setUnlockClientSupervisor
 
 lock = login_required(login_url='Login')
 
 @lock
 def help_center(request):
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     query = request.GET.get('q', '')
     categories = HelpCategory.objects.all()
     if query:
@@ -19,13 +21,22 @@ def help_center(request):
     return render(request, 'shared/help_center.html', {
         'categories': categories,
         'articles': articles,
-        'query': query
+        'query': query,
+        "unlock": unlock, 
+        'supervisor': supervisor,
+        'client': client
     })
 
 @lock
 def help_article(request, article_id):
+    unlock, client, supervisor = setUnlockClientSupervisor(request.user)
     article = get_object_or_404(HelpArticle, id=article_id)
-    return render(request, 'shared/help_article.html', {'article': article})
+    return render(request, 'shared/help_article.html', {
+        'article': article,
+        "unlock": unlock, 
+        'supervisor': supervisor,
+        'client': client
+    })
 
 @lock
 @csrf_exempt
