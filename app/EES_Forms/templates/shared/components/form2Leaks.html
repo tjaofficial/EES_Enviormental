@@ -50,20 +50,37 @@
                     </td>
                 </tr>
             {% else %}
-                {% for row in data.p_leak_data %}
-                    <tr id="{{sideLetter}}_leakRow_0">
-                        <td style="width: 122px;">
-                            {{row.oven}}
-                        </td>
-                        <td>
-                            {{row.location}}
-                        </td>
-                        <td>
-                            {{row.zone}}
-                        </td>
-                        <td></td>
-                    </tr>
-                {% endfor %}
+                {% if sideLetter == 'p' %}
+                    {% for row in data.p_leak_data %}
+                        <tr id="{{sideLetter}}_leakRow_0">
+                            <td style="width: 122px;">
+                                {{row.oven}}
+                            </td>
+                            <td>
+                                {{row.location}}
+                            </td>
+                            <td>
+                                {{row.zone}}
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                {% elif sideLetter == 'c' %}
+                    {% for row in data.c_leak_data %}
+                        <tr id="{{sideLetter}}_leakRow_0">
+                            <td style="width: 122px;">
+                                {{row.oven}}
+                            </td>
+                            <td>
+                                {{row.location}}
+                            </td>
+                            <td>
+                                {{row.zone}}
+                            </td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         </tbody>
     </table>
