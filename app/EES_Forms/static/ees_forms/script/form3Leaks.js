@@ -120,7 +120,7 @@ function initial_leak_add_rows() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (!searchVar) {
+    if (searchVar == "False") {
         initial_leak_add_rows();
     }
     intiate_TempSave(); // this runs fillForm from temp_save.js
