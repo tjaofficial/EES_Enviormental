@@ -162,7 +162,7 @@
     {% elif selector == "form2LeakLocation" %}
         <h5 class="left">HELP: Locations</h5><br>
         <p class="left description">
-            Locations are the areas on a door that leaks could potentially be coming from. You can
+            Locations are the areas on a door where leaks could potentially be coming from. You can
             select more than one area that visible emission are leaking from. Here are the options:
         </p>
         <p>
@@ -170,6 +170,24 @@
                 <li>D: Door Leak</li>
                 <li>C: Chuck Door Leak</li>
                 <li>M: Masonry</li>
+            </ul>
+        </p>
+    {% elif selector == "form3LeakLocation" %}
+        <h5 class="left">HELP: Locations</h5><br>
+        <p class="left description">
+            Locations are the areas on the Offtakes or Mini Standpipes where leaks could potentially be coming from. You can
+            select more than one area that visible emission are leaking from. Here are the options:
+        </p>
+        <p>
+            <ul>
+                <li>D: Dampered off</li>
+                <li>C: Cap</li>
+                <li>F: Flange</li>
+                <li>S: Slip Joint</li>
+                <li>B: Base</li>
+                <li>P: Piping</li>
+                <li>O: Other</li>
+                <li>MS: Mini Standpipe</li>
             </ul>
         </p>
     {% endif %}

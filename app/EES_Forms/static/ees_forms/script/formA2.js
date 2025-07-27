@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function toggleBlockedInputs(elem) {
+    if (!elem) return;
     const side = elem.dataset.side;
     const checkbox = document.getElementById(`no${side}BlockedCheckbox`);
     const start = document.getElementById(`${side}_temp_block_from`);
@@ -38,6 +39,7 @@ function toggleBlockedInputs(elem) {
     }
 }
 function toggleLeaksMode(elem) {
+    if (!elem) return;
     const side = elem.dataset.side;
     const checked = document.getElementById(`no${side}LeaksCheckbox`).checked;
     const table = document.getElementById(`${side}LeaksTable`);
@@ -64,6 +66,7 @@ function toggleLeaksMode(elem) {
 }
 //Get total of doors not observed
 function pc_doors_not_observed(side) {
+    if (!document.getElementById(`${side}_temp_block_from`)) return;
     console.log(side);
     const doors_from = document.getElementById(`${side}_temp_block_from`).value,
           doors_to = document.getElementById(`${side}_temp_block_to`).value,
@@ -107,6 +110,7 @@ function pc_doors_not_observed(side) {
 }
 
 function inoperable_ovens() {
+    if (!document.getElementById('inop_ovens')) return;
     const inop = document.getElementById('inop_ovens').value;
     
     document.getElementById('inop_doors_eq').value = parseInt(inop) * 2;
@@ -137,6 +141,7 @@ function inoperable_ovens() {
 }
 
 function total_leaking_doors() {
+    if (!document.getElementById(`nopLeaksCheckbox`)) return;
     let allLeakElements = document.querySelectorAll('[id*="_leakRow_"]');
     
     const checkedPush = document.getElementById(`nopLeaksCheckbox`).checked;
@@ -159,6 +164,7 @@ function total_leaking_doors() {
 }
 
 function total_traverse() {
+    if (!document.getElementById('id_p_traverse_time_min')) return;
     const push_traverse_min = document.getElementById('id_p_traverse_time_min').value,
           push_traverse_sec = document.getElementById('id_p_traverse_time_sec').value,
           coke_traverse_min = document.getElementById('id_c_traverse_time_min').value,
@@ -201,6 +207,7 @@ function total_traverse() {
 }
 
 function equation() {
+    if (!document.getElementById('leaking_doors')) return;
     const leaks = document.getElementById('leaking_doors').value,
           inops = document.getElementById('inop_doors_eq').value,
           not_obs = document.getElementById('doors_not_observed').value;
@@ -214,6 +221,7 @@ function equation() {
 }
 
 function allowed_time() {
+    if (!document.getElementById('leaking_doors')) return;
     const leaks = document.getElementById('leaking_doors').value;
     
     const equate_time = 680 + (10 * parseInt(leaks));
@@ -222,6 +230,7 @@ function allowed_time() {
 }
 
 function total_doors_not_obs(){
+    if (!document.getElementById('doors_not_observed')) return;
     const total_not_obs = pc_doors_not_observed('p') + pc_doors_not_observed('c');
     document.getElementById('doors_not_observed').value = total_not_obs;
     equation();

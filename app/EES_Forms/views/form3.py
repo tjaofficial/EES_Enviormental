@@ -34,22 +34,8 @@ def form3(request, fsID, selector):
     # -----SET RESPONSES TO DECIDING VARIABLES------------
     if search:
         database_form = ''
-        if data.om_leak_json:
-            omSide_Raw_JSON = json.loads(data.om_leak_json)
-            if len(omSide_Raw_JSON) > 0:
-                omSide_json = omSide_Raw_JSON['data']
-            else:
-                omSide_json = ''
-        else:
-            omSide_json = ''
-        if data.l_leak_json:
-            lSide_Raw_JSON = json.loads(data.l_leak_json)
-            if len(lSide_Raw_JSON) > 0:
-                lSide_json = lSide_Raw_JSON['data']
-            else:
-                lSide_json = ''
-        else:
-            lSide_json = ''
+        omSide_json = data.om_leak_json
+        lSide_json = data.l_leak_json
     else:
         if existing:
             initial_data = get_initial_data(form3_model, database_form)
@@ -95,10 +81,10 @@ def form3(request, fsID, selector):
         'formName': form_variables['formName'], 
         'selector': selector, 
         'client': form_variables['client'], 
+        'notifs': form_variables['notifs'],
+        'freq': form_variables['freq'],
         'omSide_json': omSide_json, 
         'lSide_json': lSide_json, 
         'facility': facility,
-        'notifs': form_variables['notifs'],
-        'freq': form_variables['freq'],
         'fsID': fsID
     })

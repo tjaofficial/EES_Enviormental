@@ -5,8 +5,7 @@
         <thead id="{{sideLetter}}LeaksSubHeader">
             <tr class="methodplus-subheader">
                 <th>Oven</th>
-                <th>Location{% include 'shared/components/helpPack.html' with data="form2LeakLocation" popupCounter=0 %}</th>
-                <th>Zone</th>
+                <th>Location{% if sideLetter != 'l' %}{% include 'shared/components/helpPack.html' with data="form3LeakLocation" popupCounter=0 %}{% endif %}</th>
                 <th></th>
             </tr>
         </thead>
@@ -14,14 +13,18 @@
             {% if not search %}
                 <tr id="{{sideLetter}}_leakRow_0">
                     <td style="width: 122px;">
-                            <input type="number" id="{{sideLetter}}_oven_0" name="{{sideLetter}}_oven_0" placeholder="Oven #" style="width:90px;" required>
+                            <input type="number" id="{{sideLetter}}_oven_0" name="{{sideLetter}}_oven_0" placeholder="Oven #" style="width:90px;" required oninput="check_dampered_inoperable('{{sideLetter}}')">
                     </td>
                     <td>
-                        <select id="{{sideLetter}}_zoneSelect_0" name="{{sideLetter}}_location_0" placeholder="Location" multiple required>
-                            {% comment %} <option value="">Location</option> {% endcomment %}
+                        <select id="{{sideLetter}}_zoneSelect_0" name="{{sideLetter}}_location_0" placeholder="Location" multiple required onchange="set_not_observed('{{sideLetter}}'); total_leaking_doors('{{sideLetter}}')">
                             <option value="D">D</option>
                             <option value="C">C</option>
-                            <option value="M">M</option>
+                            <option value="F">F</option>
+                            <option value="S">S</option>
+                            <option value="B">B</option>
+                            <option value="P">P</option>
+                            <option value="O">O</option>
+                            <option value="MS">MS</option>
                         </select>
                         <script>
                             var selectElem = document.getElementById('{{sideLetter}}_zoneSelect_0');
@@ -39,43 +42,32 @@
                         </script>
                     </td>
                     <td>
-                        <input type="text" id="{{sideLetter}}_zone_0" name="{{sideLetter}}_zone_0" placeholder="Select Zone" style="width: 175px;" onclick="zoneSelectors(0, '{{sideLetter}}'); document.getElementById('{{sideLetter}}_zoneModal_0').style.display='flex'" required>
-                        <input type="hidden" id="{{sideLetter}}_selectedZones_0" name="{{sideLetter}}_selected_zones_0" value="">
-                        {% include 'shared/components/zoneModal.html' with ovenIndex="0" %}
-                    </td>
-                    <td>
                         {% if not search %}
-                            <span class="remove-row-btn" onclick="removeLeakRow(this)" data-side="{{sideLetter}}">✖</span>
+                            <span class="remove-row-btn" onclick="removeLeakRow(this);" data-side="{{sideLetter}}">✖</span>
                         {% endif %}
                     </td>
                 </tr>
             {% else %}
-                {% if sideLetter == 'p' %}
-                    {% for row in data.p_leak_data %}
+                {% if sideLetter == 'om' %}
+                    {% for row in data.om_leak_json %}
                         <tr id="{{sideLetter}}_leakRow_0">
                             <td style="width: 122px;">
                                 {{row.oven}}
                             </td>
                             <td>
                                 {{row.location}}
-                            </td>
-                            <td>
-                                {{row.zone}}
                             </td>
                             <td></td>
                         </tr>
                     {% endfor %}
-                {% elif sideLetter == 'c' %}
-                    {% for row in data.c_leak_data %}
+                {% elif sideLetter == 'l' %}
+                    {% for row in data.l_leak_json %}
                         <tr id="{{sideLetter}}_leakRow_0">
                             <td style="width: 122px;">
                                 {{row.oven}}
                             </td>
                             <td>
                                 {{row.location}}
-                            </td>
-                            <td>
-                                {{row.zone}}
                             </td>
                             <td></td>
                         </tr>
@@ -92,7 +84,7 @@
         <div class="methodplus-controls">
             <button type="button" class="add-row-btn" onclick="addLeakRow(this)" data-side="{{sideLetter}}">+ Add Row</button>
             <label>
-                <input type="checkbox" id="no{{sideLetter}}LeaksCheckbox" onchange="toggleLeaksMode(this); total_leaking_doors();" data-side="{{sideLetter}}"> No Leaks Found
+                <input type="checkbox" id="no{{sideLetter}}LeaksCheckbox" onchange="toggleLeaksMode(this); total_leaking_doors('{{sideLetter}}')" data-side="{{sideLetter}}"> No Leaks Found
             </label>
         </div>
     {% endif %}

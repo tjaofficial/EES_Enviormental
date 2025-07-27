@@ -45,18 +45,12 @@ def pdf_template_A1(primaryData, title, subTitle):
     inspectorDate = Paragraph('<para align=center><b>Inspectors Name:</b>&#160;&#160;' + primaryData.observer + '&#160;&#160;&#160;&#160;&#160;<b>Date:</b>&#160;&#160;' + date_change(primaryData.date) + '</para>', styles['Normal'])
     batNumCrewForeman = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Crew:</b>&#160;&#160;' + primaryData.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + primaryData.foreman + '</para>', styles['Normal'])
     startEnd = Paragraph('<para align=center><b>Start Time:</b>&#160;&#160;' + time_change(primaryData.start) + '&#160;&#160;&#160;&#160;&#160;<b>End Time:</b>&#160;&#160;' + time_change(primaryData.stop) + '</para>', styles['Normal'])
-    text1 = Paragraph(primaryData.ovens_data['charge_1']['c1_comments'],
-            styles['Normal'])
-    text2 = Paragraph(primaryData.ovens_data['charge_2']['c2_comments'],
-            styles['Normal'])
-    text3 = Paragraph(primaryData.ovens_data['charge_3']['c3_comments'],
-            styles['Normal'])
-    text4 = Paragraph(primaryData.ovens_data['charge_4']['c4_comments'],
-            styles['Normal'])
-    text5 = Paragraph(primaryData.ovens_data['charge_5']['c5_comments'],
-            styles['Normal'])
-    comments = Paragraph('<b>Comments:</b>    ' + primaryData.ovens_data['comments'],
-            styles['Normal'])
+    text1 = Paragraph(primaryData.ovens_data['charge_1']['c1_comments'],styles['Normal'])
+    text2 = Paragraph(primaryData.ovens_data['charge_2']['c2_comments'],styles['Normal'])
+    text3 = Paragraph(primaryData.ovens_data['charge_3']['c3_comments'],styles['Normal'])
+    text4 = Paragraph(primaryData.ovens_data['charge_4']['c4_comments'],styles['Normal'])
+    text5 = Paragraph(primaryData.ovens_data['charge_5']['c5_comments'],styles['Normal'])
+    comments = Paragraph('<b>Comments:</b>    ' + primaryData.ovens_data['comments'],styles['Normal'])
     print(primaryData.start)
     tableData = [
             [title],
@@ -66,12 +60,12 @@ def pdf_template_A1(primaryData, title, subTitle):
             [startEnd],
             ['', '', '', '', '', ''],
             ['', Paragraph('<para align=center><b>Oven Number</b></para>', styles['Normal']), 'Start Time', 'Stop Time', Paragraph('<para align=center><b>Visible Emissions (sec)</b></para>',styles['Normal']), 'Comments'],
-            [1, primaryData.ovens_data['charge_1']['c1_no'], time_change(primaryData.ovens_data['charge_1']['c1_start']), time_change(primaryData.ovens_data['charge_1']['c1_stop']), f"{float(primaryData.ovens_data['charge_1']['c1_sec']):.1f}", text1],
-            [2, primaryData.ovens_data['charge_2']['c2_no'], time_change(primaryData.ovens_data['charge_2']['c2_start']), time_change(primaryData.ovens_data['charge_2']['c2_stop']), f"{float(primaryData.ovens_data['charge_2']['c2_sec']):.1f}", text2],
-            [3, primaryData.ovens_data['charge_3']['c3_no'], time_change(primaryData.ovens_data['charge_3']['c3_start']), time_change(primaryData.ovens_data['charge_3']['c3_stop']), f"{float(primaryData.ovens_data['charge_3']['c3_sec']):.1f}", text3],
-            [4, primaryData.ovens_data['charge_4']['c4_no'], time_change(primaryData.ovens_data['charge_4']['c4_start']), time_change(primaryData.ovens_data['charge_4']['c4_stop']), f"{float(primaryData.ovens_data['charge_4']['c4_sec']):.1f}", text4],
-            [5, primaryData.ovens_data['charge_5']['c5_no'], time_change(primaryData.ovens_data['charge_5']['c5_start']), time_change(primaryData.ovens_data['charge_5']['c5_stop']), f"{float(primaryData.ovens_data['charge_5']['c5_sec']):.1f}", text5],
-            ['', '', '', 'Total Seconds:', f"{float(primaryData.ovens_data['total_seconds']):.1f}"],
+            ['1', primaryData.ovens_data['charge_1']['c1_no'], time_change(primaryData.ovens_data['charge_1']['c1_start']), time_change(primaryData.ovens_data['charge_1']['c1_stop']), f"{float(primaryData.ovens_data['charge_1']['c1_sec']):.1f}", text1],
+            ['2', primaryData.ovens_data['charge_2']['c2_no'], time_change(primaryData.ovens_data['charge_2']['c2_start']), time_change(primaryData.ovens_data['charge_2']['c2_stop']), f"{float(primaryData.ovens_data['charge_2']['c2_sec']):.1f}", text2],
+            ['3', primaryData.ovens_data['charge_3']['c3_no'], time_change(primaryData.ovens_data['charge_3']['c3_start']), time_change(primaryData.ovens_data['charge_3']['c3_stop']), f"{float(primaryData.ovens_data['charge_3']['c3_sec']):.1f}", text3],
+            ['4', primaryData.ovens_data['charge_4']['c4_no'], time_change(primaryData.ovens_data['charge_4']['c4_start']), time_change(primaryData.ovens_data['charge_4']['c4_stop']), f"{float(primaryData.ovens_data['charge_4']['c4_sec']):.1f}", text4],
+            ['5', primaryData.ovens_data['charge_5']['c5_no'], time_change(primaryData.ovens_data['charge_5']['c5_start']), time_change(primaryData.ovens_data['charge_5']['c5_stop']), f"{float(primaryData.ovens_data['charge_5']['c5_sec']):.1f}", text5],
+            ['', '', '', 'Total Seconds:', f"{primaryData.ovens_data['total_seconds']:.1f}"],
             [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + primaryData.ovens_data['larry_car'], styles['Normal'])],
             [comments],
         ]
@@ -108,12 +102,12 @@ def pdf_template_A2(primaryData, title, subTitle):
     crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + primaryData.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + primaryData.foreman + '</para>', styles['Normal'])
 
     if primaryData.p_leak_data != '{}':
-        p_leaks = primaryData.p_leak_data
+        p_leaks = len(primaryData.p_leak_data)
         print(p_leaks)
     else:
         p_leaks = ''
     if primaryData.c_leak_data != '{}':
-        c_leaks = primaryData.c_leak_data
+        c_leaks = len(primaryData.c_leak_data)
     else:
         c_leaks = ''
     tableData = [
@@ -127,41 +121,41 @@ def pdf_template_A2(primaryData, title, subTitle):
         ['', '', Paragraph('<para align=center><b>Stop Time:</b>&#160;&#160;' + time_change(primaryData.p_stop) + '</para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Stop Time:</b>&#160;&#160;' + time_change(primaryData.c_stop) + '</para>', styles['Normal']), '', ''],
         ['', '','Oven', 'Location', 'Zone', '', '', 'Oven', 'Location', 'Zone'],
     ]
-    if p_leaks == '' and c_leaks == '':
+    if p_leaks == 0 and c_leaks == 0:
         tableData.insert(9,['', '', 'No Leaks', '', '', '', '', 'No Leaks', '', '', '', ''],)
         spaced = 1
         spacedP = 1
         spacedC = 1
-    elif p_leaks != '' and c_leaks == '':
+    elif p_leaks != 0 and c_leaks == 0:
         count = 1
-        for pleak in p_leaks:
-            if count == len(p_leaks):
-                tableData.insert(9,['', '', pleak['oven'], pleak['location'], pleak['zone'], '', '', 'No Leaks', '', '', '', ''],)
+        for pleak in primaryData.p_leak_data:
+            if count == p_leaks:
+                tableData.insert(9,['', '', pleak['oven'], pleak['location'], f"{pleak['zone']}", '', '', 'No Leaks', '', '', '', ''],)
             else:
-                tableData.insert(9,['', '', pleak['oven'], pleak['location'], pleak['zone'], '', '', '', '', '', '', ''],)
+                tableData.insert(9,['', '', pleak['oven'], pleak['location'], f"{pleak['zone']}", '', '', '', '', '', '', ''],)
             count += 1
-        spaced = len(p_leaks) 
-        spacedP = len(p_leaks)
+        spaced = p_leaks
+        spacedP = p_leaks
         spacedC = 1
-    elif c_leaks != '' and p_leaks == '':
+    elif c_leaks != 0 and p_leaks == 0:
         count = 1
-        for cleak in c_leaks:
-            if count == len(c_leaks):
-                tableData.insert(9,['', '', 'No Leaks', '', '', '', '', cleak['oven'], cleak['location'], cleak['zone'],'', ''],)
+        for cleak in primaryData.c_leak_data:
+            if count == c_leaks:
+                tableData.insert(9,['', '', 'No Leaks', '', '', '', '', cleak['oven'], cleak['location'], f"{cleak['zone']}",'', ''],)
             else:
-                tableData.insert(9,['', '', '', '', '', '', '', cleak['oven'], cleak['location'], cleak['zone'],'', ''],)
+                tableData.insert(9,['', '', '', '', '', '', '', cleak['oven'], cleak['location'], f"{cleak['zone']}",'', ''],)
             count += 1
-        spaced = len(c_leaks)
+        spaced = c_leaks
         spacedP = 1
-        spacedC = len(c_leaks)
-    elif p_leaks != '' and c_leaks != '' :
-        pLen = len(p_leaks)
-        cLen = len(c_leaks)
+        spacedC = c_leaks
+    elif p_leaks != 0 and c_leaks != 0 :
+        pLen = p_leaks
+        cLen = c_leaks
         for x in range(pLen):
             try:
-                tableData.insert(9,['', '', p_leaks[x]['oven'], p_leaks[x]['location'], p_leaks[x]['zone'], '', '', '', '', '', '', ''],)
+                tableData.insert(9,['', '', primaryData.p_leak_data[x]['oven'], primaryData.p_leak_data[x]['location'], f"{primaryData.p_leak_data[x]['zone']}", '', '', '', '', '', '', ''],)
             except:
-                tableData.insert(9,['', '', p_leaks[x]['oven'], p_leaks[x]['location'], "N/A", '', '', '', '', '', '', ''],)
+                tableData.insert(9,['', '', primaryData.p_leak_data[x]['oven'], primaryData.p_leak_data[x]['location'], "N/A", '', '', '', '', '', '', ''],)
                 print("The leaks were submitted without a zone being selected. Please revisit form and add 'Zone' to the specific leak")
         if pLen < cLen:
             for rest in range(cLen - pLen):
@@ -174,10 +168,10 @@ def pdf_template_A2(primaryData, title, subTitle):
             spacedP = pLen
             spacedC = cLen
         for y in range(cLen):
-            tableData[9 + y][7] = c_leaks[y]['oven']
-            tableData[9 + y][8] = c_leaks[y]['location']
+            tableData[9 + y][7] = primaryData.c_leak_data[y]['oven']
+            tableData[9 + y][8] = primaryData.c_leak_data[y]['location']
             try:
-                tableData[9 + y][9] = c_leaks[y]['zone']
+                tableData[9 + y][9] = f"{primaryData.c_leak_data[y]['zone']}"
             except:
                 tableData[9 + y][9] = 'N/A'
         
@@ -270,12 +264,12 @@ def pdf_template_A2(primaryData, title, subTitle):
         ('ALIGN', (9,18 + spaced), (10,18 + spaced), 'CENTER'),
         ('BOX', (9,17 + spaced), (10,18 + spaced), 1, colors.black),
     ]
-    if p_leaks == '':
+    if p_leaks == 0:
         style.append(('SPAN', (2,9), (4,8 + spacedP)),)
-    if c_leaks == '':
+    if c_leaks == 0:
         style.append(('SPAN', (7,9), (9,8 + spacedC)),)
 
-    if p_leaks != '' and c_leaks != '':
+    if p_leaks != 0 and c_leaks != 0:
         del style[19]
         del style[20]
         style.append(('BOX', (2,9), (4,8 + spacedP), 1, colors.black),)
@@ -287,14 +281,9 @@ def pdf_template_A3(primaryData, title, subTitle):
     batOvenInop = Paragraph('<para align=center><b>Battery No.:</b> 5&#160;&#160;&#160;&#160;&#160;<b>Total No. Ovens:</b>&#160;&#160;85&#160;&#160;&#160;&#160;&#160;<b>Total No. Inoperable Ovens:</b>&#160;&#160;' + str(primaryData.inop_ovens) + '&#160;(' + str(primaryData.inop_numbs) + ')'  + '</para>', styles['Normal'])
     crewBat = Paragraph('<para align=center><b>Crew:</b>&#160;&#160;' + primaryData.crew + '&#160;&#160;&#160;&#160;&#160;<b>Battery Forman:</b>&#160;&#160;' + primaryData.foreman + '</para>', styles['Normal'])
     
-    if primaryData.om_leak_json != '{}':
-        om_leaks = json.loads(primaryData.om_leak_json)['data']
-    else:
-        om_leaks = ''
-    if primaryData.l_leak_json != '{}':
-        l_leaks = json.loads(primaryData.l_leak_json)['data']
-    else:
-        l_leaks = ''
+    om_leaks = len(primaryData.om_leak_json)
+    l_leaks = len(primaryData.l_leak_json)
+
     tableData = [
         [title],
         [subTitle],
@@ -307,26 +296,25 @@ def pdf_template_A3(primaryData, title, subTitle):
         ['', '','Oven', 'Location', '', '', '', 'Oven', 'Location', ''],
     ]
     
-    if om_leaks == '' and l_leaks == '':
+    if om_leaks == 0 and l_leaks == 0:
         tableData.insert(9,['', '', 'N/A', '', '', '', '', 'N/A', '', '', '', ''],)
         spaced = 1
         spacedOm = 1
         spacedL = 1
-    elif om_leaks != '' and l_leaks != '' :
-        omLen = len(om_leaks)
-        lLen = len(l_leaks)
+    elif om_leaks != 0 and l_leaks != 0 :
+        omLen = om_leaks
+        lLen = l_leaks
         for x in range(omLen):
             text = ''
-            om_leak_len = len(om_leaks[x]['location'])
+            om_leak_len = len(primaryData.om_leak_json[x]['location'])
             omCount = 0
-            for letters in om_leaks[x]['location']:
+            for letters in primaryData.om_leak_json[x]['location']:
                 omCount += 1
-                if letters == 'dampered_off':
-                    omNewLetter = 'D'
+                omNewLetter = 'D' if letters == 'D' else letters
                 text += omNewLetter + ','
                 if omCount == om_leak_len:
                     text = text[:-1]
-            tableData.insert(9,['', '', om_leaks[x]['oven'], text, '', '', '', '', '', '', '', ''],)
+            tableData.insert(9,['', '', primaryData.om_leak_json[x]['oven'], text, '', '', '', '', '', '', '', ''],)
         if omLen < lLen:
             for rest in range(lLen - omLen):
                 tableData.insert((9 + omLen),['', '', '', '', '', '', '', '', '', '', '', ''],)
@@ -339,44 +327,42 @@ def pdf_template_A3(primaryData, title, subTitle):
             spacedL = lLen
         for y in range(lLen):
             textl = ''
-            l_leak_len = len(om_leaks[x]['location'])
+            l_leak_len = len(primaryData.om_leak_json[x]['location'])
             lCount = 0
-            for letterL in l_leaks[y]['location']:
+            for letterL in primaryData.l_leak_json[y]['location']:
                 lCount += 1
-                if letters == 'dampered_off':
-                    lNewLetter = 'D'
+                lNewLetter = 'D' if letterL == 'D' else letterL
                 textl += lNewLetter + ','
                 if lCount == l_leak_len:
                     textl = textl[:-1]
-            tableData[9 + y][7] = l_leaks[y]['oven']
+            tableData[9 + y][7] = primaryData.l_leak_json[y]['oven']
             tableData[9 + y][8] = textl
-    elif om_leaks != '' and l_leaks == '':
-        for omleak in om_leaks:
+    elif om_leaks != 0 and l_leaks == 0:
+        for omleak in primaryData.om_leak_json:
             text = ''
             for letters in omleak['location']:
-                if letters == 'dampered_off':
-                    letters = 'dampered'
+                letters = 'dampered' if letters == 'D' else letters
                 text += letters + ','
             if text != '':
                 text = text[:-1]
             tableData.insert(9,['', '', omleak['oven'], text, '', '', '', '', '', '', '', ''],),
-        spaced = len(om_leaks) 
-        spacedOm = len(om_leaks)
+        spaced = om_leaks
+        spacedOm = om_leaks
         spacedL = 1
-    elif l_leaks != '' and om_leaks == '':
-        for lleak in l_leaks:
+    elif l_leaks != 0 and om_leaks == 0:
+        for lleak in primaryData.l_leak_json:
             textl = ''
             for letterL in lleak['location']:
                 textl += letterL + ','
             tableData.insert(9,['', '', '', '', '', '', '', lleak['oven'], textl, '','', '', '', ''],),
-        spaced = len(l_leaks)
+        spaced = l_leaks
         spacedOm = 1
-        spacedL = len(l_leaks)
+        spacedL = l_leaks
 
     tableInsert = [
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', '','', '', Paragraph('<para align=center><b>Traverse Time:</b></para>', styles['Normal']), '', ''],
-        ['', '', str(primaryData.om_traverse_time_min) + 'min  ' + str(primaryData.om_traverse_time_sec) + 'sec = ' + str(primaryData.om_total_sec) + ' sec', '', '', '', '', str(primaryData.l_traverse_time_min) + 'min  ' + str(primaryData.l_traverse_time_sec) + 'sec = ' + str(primaryData.l_total_sec) + ' sec', '', '', ''],
+        ['', '', str(primaryData.om_traverse_time_min) + ' min  ' + str(primaryData.om_traverse_time_sec) + ' sec = ' + str(primaryData.om_total_sec) + ' sec', '', '', '', '', str(primaryData.l_traverse_time_min) + ' min  ' + str(primaryData.l_traverse_time_sec) + ' sec = ' + str(primaryData.l_total_sec) + ' sec', '', '', ''],
         ['', '', '', '', '', '', '', '', '', '', '', ''],
         ['', Paragraph('<para align=left>D = Dampered Off<br/>C = Cap</para>', styles['Normal']), '', Paragraph('<para align=center><b>Allowed Traverse Time (Offtakes)</b></para>', styles['Normal']), '', '', '= 340 + (10 sec * # of leaks) =  ' + primaryData.om_allowed_traverse_time + ' sec', '', '', '', Paragraph('<para align=center><b>Valid Run?</b><br/>' + str(primaryData.om_valid_run) + '</para>', styles['Normal']), ''],
         ['', 'F = Flange', '', '', '', '', '', '', '', '', '', ''],
@@ -384,14 +370,14 @@ def pdf_template_A3(primaryData, title, subTitle):
         ['', 'P = Piping', '', '', '', '', '', '', '', '', '', ''],
         ['', 'O = Other', '', '', '', '', '', '', '', '', '', ''],
         ['', 'MS = Mini Standpipe', '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '                              Pve X 100                      ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
-        ['', 'Percent Leaking Lids = ---------------------------  =  ------------------------ = ' + str(primaryData.l_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '    Povn(N - Ni) - Pno            4(85 - ' + str(primaryData.inop_ovens) + ') - ' + str(primaryData.l_not_observed), '', '', '', '', '', '', ''],
-        ['', '', '', '                               Pve X 100                       ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
-        ['', 'Percent Leaking Offtakes = --------------------------  =  --------------------------- = ' + str(primaryData.om_percent_leaking), '', '', '', '', '', '', '', '', '', ''],
-        ['', '', '', '', '     Povn(N - Ni) - Pno           2(85 - ' + str(primaryData.inop_ovens) + ') + 0 - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
-        ['', 'Where: Ly = Leaking Doors Observed, Di = Inoperable Oven x 2, and Dno = Door not observed', '', ''],
-        ['', '', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '                                 Pve X 100                      ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
+        ['', f'Percent Leaking Lids = ---------------------------  =  ------------------------ = {str(primaryData.l_percent_leaking)}%', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', f'       Povn(N - Ni) - Pno            4(85 - {str(primaryData.inop_ovens)}) - {str(primaryData.l_not_observed)}', '', '', '', '', '', '', ''],
+        ['', '', '', '                               Tve X 100                         ' + str(primaryData.l_leaks) + ' X 100', '', '', '', '', '', '', '', ''],
+        ['', f'Percent Leaking Offtakes = ---------------------------------  =  --------------------------- = {str(primaryData.om_percent_leaking)}%', '', '', '', '', '', '', '', '', '', ''],
+        ['', '', '', '', '  Tovn(N - Ni) + J - Tno          2(85 - ' + str(primaryData.inop_ovens) + ') + 0 - ' + str(primaryData.om_not_observed), '', '', '', '', '', '', ''],
+        ['', 'Where: Pve = Leaking lids observed, Povn = Lids per oven, Pno = Lids not observed, N = Number of ovens, Ni = inoperable ovens,', '', ''],
+        ['Tve = Leaking offtakes observed, Tovn = Offtakes per oven, J = Permanent jumper pipe, Tno = Offtakes not observed', '', ''],
         ['', Paragraph('<para align=left><b>Notes:</b>&#160;&#160;' + primaryData.notes + '</para>', styles['Normal'])]
     ]
     for lines in tableInsert:

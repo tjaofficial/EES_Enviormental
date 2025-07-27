@@ -1,379 +1,362 @@
 {% extends unlock|yesno:"observer/components/obs_layout.html,supervisor/components/sup_layout.html" %}
-{% block list%}{% load static %}
-
-<script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
-<link href="{% static 'ees_forms/style/formA3/formA3.css' %}" rel="stylesheet">
+{% load static %}
+{% block extra_head %}
 <link href="{% static 'ees_forms/style/primaryForm.css' %}" rel="stylesheet" />
-<script defer src="{% static 'ees_forms/script/formA3.js' %}"></script>
-<script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
-<div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
-{% if not unlock %}
-    <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
-{% endif %}
-<div id="paperSize">
-    <div class="mainCont">
-        <form action="" method="POST" style="margin: auto; margin-bottom: 100px;">
-            {% csrf_token %}
-            <div class="card" id="card_fitter">
-                <div class="paper_fitter" style="padding: 3rem;"> 
-                    {% include "shared/components/print_button.html" with formGroup=freq %}
-                    {% include "shared/components/backArrow.html" with destination="form" %}  
-                    <section>
-                        <table style="border-collapse: collapse; margin: auto;">
-                            <tr>
-                                <th id="boxTitle" colspan="5" style="text-align: center;">
-                                    {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
-                                </th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <th colspan="3" style="text-align: center;">Facility Name: {{facility}}</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <td style="height: 25px" > </td>
-                            </tr> 
-                            <tr>
-                                <td colspan="6">
-                                    <strong>Inspectors Name:</strong>&nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong>Date:</strong>&nbsp;{{ data.date }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6">
-                                    <strong>Battery No.</strong> {{options.bat_num}} &nbsp; &nbsp; &nbsp; 
-                                    <strong>Total No. Ovens:</strong> {{options.total_ovens}} &nbsp; &nbsp; &nbsp;
-                                    <strong>Total No. of Inoperable Ovens:</strong>&nbsp;{{ data.inop_ovens }} <br>
-                                    <strong>Inoperable Oven Number(s):</strong>&nbsp;{{ data.inop_numbs }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th colspan="6">
-                                    <strong>Crew:</strong>&nbsp;{{ data.crew }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                                    <strong>Battery Foreman:</strong>&nbsp;{{ data.foreman }}
-                                </th>
-                            </tr>
-                            <tr>
-                                <td style="height: 25px"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="6">
-                                    {% include "shared/components/stopWatchToggle.html" %}
-                                </td>
-                            </tr>
-                        </table>
-                        {% include 'observer/components/inop_message.html' %}
-                    </section>
-                    <section class="resultTables">
-                        <div class="resultTables_container">
-                            <div><strong>Start Time:</strong> {{ data.om_start }}</div>
-                            <div><strong>End Time:</strong> {{ data.om_stop }}</div>
-                            <div style="position: relative;">
-                                <span class="popup_class" id="om_timePopup">
-                                    Please Change End Time
-                                </span>
-                            </div>
-                            <div hidden="true">{{ data.om_leak_json }}</div>
-                            <div style="position: relative;">
+    <script defer src="{% static 'ees_forms/script/tempSave.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/formA3.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/check_time.js' %}"></script>
+    <script defer src="{% static 'ees_forms/script/form3Leaks.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <link href="{% static 'ees_forms/style/formA3/formA3.css' %}" rel="stylesheet">
+    {% if not unlock %}
+        <link href="{% static 'ees_forms/style/style.css' %}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+{% block list %}
+    <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
+    <div id="paperSize">
+        <div class="mainCont">
+            <form action="" method="POST" style="margin: auto; margin-bottom: 100px;" data-search="{{search}}">
+                {% csrf_token %}
+                <div class="card" id="card_fitter">
+                    <div class="paper_fitter" style="padding: 3rem;"> 
+                        {% include "shared/components/print_button.html" with formGroup=freq %}
+                        {% include "shared/components/backArrow.html" with destination="form" %}  
+                        <section>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th id="boxTitle" colspan="5" style="text-align: center;">
+                                        {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">
+                                        <strong>Facility Name:</strong> {{facility}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 25px" > </td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="6">
+                                        <strong>Inspectors Name:</strong>&nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong>Date:</strong>&nbsp;{{ data.date }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        <strong>Battery No.</strong> {{options.bat_num}} &nbsp; &nbsp; &nbsp; 
+                                        <strong>Total No. Ovens:</strong> {{options.total_ovens}} &nbsp; &nbsp; &nbsp;
+                                        <strong>Total No. of Inoperable Ovens:</strong>&nbsp;{{ data.inop_ovens }} <br>
+                                        <strong>Inoperable Oven Number(s):</strong>&nbsp;{{ data.inop_numbs }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="6">
+                                        <strong>Crew:</strong>
+                                        &nbsp;{{ data.crew }}
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                        <strong>Battery Foreman:</strong>&nbsp;{{ data.foreman }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td style="height: 25px"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        {% include "shared/components/stopWatchToggle.html" %}
+                                        <div>
+                                            One Pass: {{data.one_pass}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            {% include 'observer/components/inop_message.html' %}
+                        </section>
+                        <section class="areaCont">
+                            <div class="methodplus-header methodPlusBlue">Offtakes and Mini Standpipes</div>
+                            <div style="padding: 25px; position: relative;">
+                                <div class="time-holder">
+                                    <div>
+                                        <strong>Start Time:</strong> {{ data.om_start }}
+                                        <div style="position: relative;">
+                                            <span class="popup_class" id="om_timePopup">
+                                                Please Change End Time
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <strong>End Time:</strong> {{ data.om_stop }}
+                                    </div>
+                                    <div hidden="true">{{ data.om_leak_json }}</div>
+                                </div>
                                 <span class="popup_damperClass" id="om_damperPopup" style="display:none;">
-                                    Dampered ovens and inoperable ovens overlap.
+                                    Dampered ovens and inoperable ovens overlap, please change.
                                 </span>
-                                <table style="border-collapse: collapse;">
-                                    <tr>
-                                        <th id="boxa5" colspan="3">
-                                            OFFTAKES AND MINI STANDPIPES
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th id="boxa6" colspan="1">
-                                            Oven
-                                        </th>
-                                        <th id="boxa6" colspan="2">
-                                            Location
-                                        </th>
-                                    </tr>
-                                    {% for item in omSide_json %}
-                                        <tr>
-                                            <td id="boxa6" colspan="1">
-                                                {{ item.oven }}
-                                            </td>
-                                            <td id="boxa6" colspan="2">
-                                                {% for loc in item.location %}
-                                                    {% if forloop.last %}
-                                                        {{ loc }}
-                                                    {% else %}
-                                                        {{ loc }},
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    <tbody id="offtakes_tableBody" data-numRows="1">
-                                </table>
+                                {% include 'shared/components/form3Leaks.html' with sideLetter="om" search=search %}
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; gap: 45px;">
+                                    <div class="sub-box-cont">
+                                        <div style="text-align: center;">
+                                            {% if search %}
+                                                <strong>Traverse Time:</strong> {{ data.om_traverse_time_min }} min {{ data.om_traverse_time_sec }} sec
+                                            {% else %}
+                                                <h4>Traverse Time:</h4>
+                                                <div style="display: flex; align-items: center; gap: 12px; margin-top: 0.5rem;">
+                                                    <strong>Traverse Time:</strong> {{ data.om_traverse_time_min }} min  {{ data.om_traverse_time_sec }} sec = {{data.om_total_sec}} sec
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div><strong>Traverse Time:</strong> {{ data.om_traverse_time_min }}min  {{ data.om_traverse_time_sec }}sec = {{data.om_total_sec}}sec</div>
-                            <div style='margin-top: 15px;'>
-                                One Pass ({{ data.one_pass }})
-                            </div>
-                        </div>
-
-                        <div class="resultTables_container">
-                            <div><strong>Start Time:</strong> {{ data.l_start }}</div>
-                            <div><strong>End Time:</strong> {{ data.l_stop }}</div>
-                            <div style="position: relative;">
-                                <span class="popup_class" id="l_timePopup">
-                                    Please Change End Time
-                                </span>
-                            </div>
-                            <div hidden="true">{{ data.l_leak_json }}</div>
-                            <div style="position: relative;">
+                        </section>
+                        <section class="areaCont">
+                            <div class="methodplus-header methodPlusBlue">Lids</div>
+                            <div style="padding: 25px; position: relative;">
+                                <div class="time-holder">
+                                    <div>
+                                        <strong>Start Time:</strong> {{ data.l_start }}
+                                        <div style="position: relative;">
+                                            <span class="popup_class" id="om_timePopup">
+                                                Please Change End Time
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <strong>End Time:</strong> {{ data.l_stop }}
+                                    </div>
+                                    <div hidden="true">{{ data.l_leak_json }}</div>
+                                </div>
                                 <span class="popup_damperClass" id="l_damperPopup" style="display:none;">
-                                    Dampered ovens and inoperable ovens overlap.
+                                    Dampered ovens and inoperable ovens overlap, please change.
                                 </span>
-                                <table style="border-collapse: collapse;">
-                                    <tr>
-                                        <th id="boxa5" colspan="6">
-                                            LIDS
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th id="boxa6" colspan="1">
-                                            Oven
-                                        </th>
-                                        <th id="boxa6" colspan="8">
-                                            Location
-                                        </th>
-                                    </tr>
-                                    {% for item in lSide_json %}
-                                        <tr>
-                                            <td id="boxa6" colspan="1">
-                                                {{ item.oven }}
-                                            </td>
-                                            <td id="boxa6" colspan="2">
-                                                {% for loc in item.location %}
-                                                    {% if forloop.last %}
-                                                        {{ loc }}
-                                                    {% else %}
-                                                        {{ loc }},
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    <tbody id="lids_tableBody" data-numRows="1">
-                                    </tbody>
-                                </table>
+                                {% include 'shared/components/form3Leaks.html' with sideLetter="l" search=search %}
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px; gap: 45px;">
+                                    <div class="sub-box-cont">
+                                        <div style="text-align: center;">
+                                            {% if search %}
+                                                <strong>Traverse Time:</strong> {{ data.l_traverse_time_min }} min {{ data.l_traverse_time_sec }} sec
+                                            {% else %}
+                                                <h4>Traverse Time:</h4>
+                                                <div style="display: flex; align-items: center; gap: 12px; margin-top: 0.5rem;">
+                                                    <strong>Traverse Time:</strong> {{ data.l_traverse_time_min }} min  {{ data.l_traverse_time_sec }} sec = {{data.l_total_sec}} sec
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div><strong>Traverse Time:</strong> {{ data.l_traverse_time_min }}min  {{ data.l_traverse_time_sec }}sec = {{data.l_total_sec}}sec</div>
-                        </div>
-                    </section>
-                    <section>
-                        <table style="border-collapse: collapse; margin: auto;">
-                            <tr>
-                                <td style="width: 150px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
-                                    D = Dampered off
-                                </td>
-                                <td style="width: 254px; text-align: center;">
-                                    <strong>Allowed Traverse Time:</strong>
-                                </td>
-                                <td rowspan="2" style="width: 354px; text-align: left;">
-                                    = 340 + (10 sec * # of leaks) = {{ data.om_allowed_traverse_time }} sec
-                                </td>
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
-                                    <strong>Valid Run?</strong>
-                                </td>
-                                <td></td>
-                            </tr>    
-                            <tr> 
-                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                    C = Cap
-                                </td>
-                                <td style="text-align: center;">
-                                    <strong>(Offtakes)</strong>
-                                </td>
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
-                                    {{ data.om_valid_run }}
-                                </td>
-                            </tr>
-                            <tr> 
-                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                    F = Flange
-                                </td>
-                                <td style="text-align: center;"></td>
-                                <td></td>
-                            </tr>
-                            <tr> 
-                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                    S = Slip Joint
-                                </td>
-                                <td style="text-align: center;">
-                                    <strong>Allowed Traverse Time:</strong>
-                                </td>
-                                <td rowspan="2" style="width: 354px; text-align: left;">
-                                    = 340 + (10 sec * # of leaks) = {{ data.l_allowed_traverse_time }} sec
-                                </td>
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
-                                    <strong>Valid Run?</strong>
-                                </td>
-                            </tr>
-                            <tr> 
-                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                    B = Base
-                                </td>
-                                <td style="text-align: center;">
-                                    <strong>(Lids)</strong>
-                                </td>
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
-                                    {{ data.l_valid_run }}
-                                </td>
-                            </tr> 
-                            <tr> 
-                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                    P = Piping
-                                </td>
-                                <td style="text-align: center;"></td>
-                                <td></td>
-                            </tr> 
-                            <tr> 
-                                <td style="border-left: 1px solid black; border-right: 1px solid black;">
-                                    O = Other
-                                </td>
-                                <td colspan="3" style="text-align: center;">
-                                    <strong>Total Offtake Leaks:</strong> {{ data.om_leaks }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>Total Leaking Lids:</strong> {{ data.l_leaks }}
-                                </td>
-                            </tr>    
-                            <tr>  
-                                <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
-                                    MS = Mini Standpipe
-                                </td>
-                                <td style="text-align: center;"></td>
-                                <td></td>
-                            </tr>
-                        </table>    
-                        <table style="border-collapse: collapse; margin: auto;">    
-                                <tr>
-                                <td style="height: 25px" > </td>
-                            </tr> 
-                            <tr>
-                                <td style="width: 100px;"></td>
-                                <td></td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
-                                </td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.l_leaks2 }} x 100
-                                </td>
-                                <td></td>
-                                <td style="width: 75px"></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td style="text-align: center; margin: auto; width: 133px;">
-                                    <strong>% Leaking Lids = </strong>
-                                </td>
-                                <td>
-                                    ---------------------- = 
-                                </td>
-                                <td>
-                                    --------------------------------- = 
-                                </td>
-                                <td>
-                                    {{ data.l_percent_leaking }}%
-                                </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
-                                </td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - 
-                                    {% if selector == 'form' %}
-                                    <input type="number" name="inop_ovens" value="" oninput="inoperable_ovens()" id="om_inop_ovens" class="input" style="width:35px; text-align: center;" required="">
-                                    {% else %}
-                                    {{data.inop_ovens}}
-                                    {% endif %}
-                                    ) - {{ data.l_not_observed }}
-                                </td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                                <tr>
-                                <td style="height: 25px" > </td>
-                            </tr> 
-                            <tr>
-                                <td style="width: 100px;"></td>
-                                <td></td>
-                                <td style="padding-left: 40px;">
-                                    T<sub>ve</sub> x 100
-                                </td>
-                                <td style="padding-left: 40px;">
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.om_leaks2 }} x 100
-                                </td>
-                                <td></td>
-                                <td style="width: 75px"></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td style="text-align: center; margin: auto; width: 168px;">
-                                    <strong>% Leaking Offtakes = </strong>
-                                </td>
-                                <td>
-                                    ---------------------------- = 
-                                </td>
-                                <td>
-                                    --------------------------------- = 
-                                </td>
-                                <td>
-                                    {{ data.om_percent_leaking }}%
-                                </td>
-                                <td></td>
-                            </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                <td>
-                                    &nbsp;T<sub>ovn</sub>(N - N<sub>i</sub>) + J - T<sub>no</sub>
-                                </td>
-                                <td>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 (85 - 
-                                    {% if selector == 'form' %}
-                                    <input type="number" name="inop_ovens" value="" oninput="inoperable_ovens()" id="l_inop_ovens" class="input" style="width:35px; text-align: center;" required="">
-                                    {% else %}
-                                    {{data.inop_ovens}}
-                                    {% endif %}
-                                    ) + 0 - {{ data.om_not_observed }}
-                                </td>
-                                    <td></td>
-                                    <td></td>
-                            </tr>
-                            <tr>
-                                <td style="height: 25px" > </td>
-                            </tr> 
-                            <tr>
-                                <td style="text-align: center; margin: auto; " colspan="6">
-                                    Where: P<sub>ve</sub> = Leaking Lids Observed, P<sub>ovn</sub> = Lids Per Oven, P<sub>no</sub> = Lids Not Observed, N = Number of Ovens, N<sub>i</sub> = Inoperable Oven,<br> T<sub>ve</sub> = Leaking Offtakes Observed, T<sub>ovn</sub> = Ofttakes Per Oven, J = Permanent Jumper Pipes, T<sub>no</sub> = Offtakes Not Observed
-                                </td>
-                            </tr> 
-                        </table>
-                    </section>
-                    <div id="noteBox">
-                        Notes: <br>
-                        {{ data.notes }}
+                        </section>
+                        
+                        <section class="areaCont">
+                            <div class="methodplus-header methodPlusBlue">Calculations</div>
+                            <div style="padding: 25px;">
+                                <table style="border-collapse: collapse; margin: auto;">
+                                    <tr>
+                                        <td style="width: 150px; border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                                            D = Dampered off
+                                        </td>
+                                        <td style="width: 254px; text-align: center;">
+                                            <strong>Allowed Traverse Time:</strong>
+                                        </td>
+                                        <td rowspan="2" style="width: 354px; text-align: left;">
+                                            = 340 + (10 sec * # of leaks) = {{ data.om_allowed_traverse_time }} sec
+                                        </td>
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                                            <strong>Valid Run?</strong>
+                                        </td>
+                                        <td></td>
+                                    </tr>    
+                                    <tr> 
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                            C = Cap
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <strong>(Offtakes)</strong>
+                                        </td>
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            {{ data.om_valid_run }}
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                            F = Flange
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr> 
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                            S = Slip Joint
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <strong>Allowed Traverse Time:</strong>
+                                        </td>
+                                        <td rowspan="2" style="width: 354px; text-align: left;">
+                                            = 340 + (10 sec * # of leaks) = {{ data.l_allowed_traverse_time }} sec
+                                        </td>
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; text-align: center; width: 120px">
+                                            <strong>Valid Run?</strong>
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                            B = Base
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <strong>(Lids)</strong>
+                                        </td>
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center;">
+                                            {{ data.l_valid_run }}
+                                        </td>
+                                    </tr> 
+                                    <tr> 
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                            P = Piping
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                        <td></td>
+                                    </tr> 
+                                    <tr> 
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black;">
+                                            O = Other
+                                        </td>
+                                        <td colspan="3" style="text-align: center;">
+                                            <strong>Total Offtake Leaks:</strong> {{ data.om_leaks }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>Total Leaking Lids:</strong> {{ data.l_leaks }}
+                                        </td>
+                                    </tr>    
+                                    <tr>  
+                                        <td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            MS = Mini Standpipe
+                                        </td>
+                                        <td style="text-align: center;"></td>
+                                        <td></td>
+                                    </tr>
+                                </table>    
+                                <table style="border-collapse: collapse; margin: auto;">    
+                                        <tr>
+                                        <td style="height: 25px" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <td style="width: 100px;"></td>
+                                        <td></td>
+                                        <td>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P<sub>ve</sub> x 100
+                                        </td>
+                                        <td>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.l_leaks2 }} x 100
+                                        </td>
+                                        <td></td>
+                                        <td style="width: 75px"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td style="text-align: center; margin: auto; width: 133px;">
+                                            <strong>% Leaking Lids = </strong>
+                                        </td>
+                                        <td>
+                                            ---------------------- = 
+                                        </td>
+                                        <td>
+                                            --------------------------------- = 
+                                        </td>
+                                        <td>
+                                            {{ data.l_percent_leaking }}%
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            &nbsp;&nbsp;&nbsp; Po<sub>vn</sub>(N - N<sub>i</sub>) - P<sub>no</sub>
+                                        </td>
+                                        <td>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4 (85 - 
+                                            {% if selector == 'form' %}
+                                                <input type="number" name="inop_ovens" value="" oninput="inoperable_ovens()" id="om_inop_ovens" class="input" style="width:55px; text-align: center;" required="">
+                                            {% else %}
+                                                {{data.inop_ovens}}
+                                            {% endif %}
+                                            ) - {{ data.l_not_observed }}
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                        <tr>
+                                        <td style="height: 25px" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <td style="width: 100px;"></td>
+                                        <td></td>
+                                        <td style="padding-left: 40px;">
+                                            T<sub>ve</sub> x 100
+                                        </td>
+                                        <td style="padding-left: 40px;">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ data.om_leaks2 }} x 100
+                                        </td>
+                                        <td></td>
+                                        <td style="width: 75px"></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td style="text-align: center; margin: auto; width: 168px;">
+                                            <strong>% Leaking Offtakes = </strong>
+                                        </td>
+                                        <td>
+                                            ---------------------------- = 
+                                        </td>
+                                        <td>
+                                            --------------------------------- = 
+                                        </td>
+                                        <td>
+                                            {{ data.om_percent_leaking }}%
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                        <td>
+                                            &nbsp;T<sub>ovn</sub>(N - N<sub>i</sub>) + J - T<sub>no</sub>
+                                        </td>
+                                        <td>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 (85 - 
+                                            {% if selector == 'form' %}
+                                            <input type="number" name="inop_ovens" value="" oninput="inoperable_ovens()" id="l_inop_ovens" class="input" style="width:55px; text-align: center;" required="">
+                                            {% else %}
+                                            {{data.inop_ovens}}
+                                            {% endif %}
+                                            ) + 0 - {{ data.om_not_observed }}
+                                        </td>
+                                            <td></td>
+                                            <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 25px" > </td>
+                                    </tr> 
+                                    <tr>
+                                        <td style="text-align: center; margin: auto; " colspan="6">
+                                            Where: P<sub>ve</sub> = Leaking Lids Observed, P<sub>ovn</sub> = Lids Per Oven, P<sub>no</sub> = Lids Not Observed, N = Number of Ovens, N<sub>i</sub> = Inoperable Oven,<br> T<sub>ve</sub> = Leaking Offtakes Observed, T<sub>ovn</sub> = Ofttakes Per Oven, J = Permanent Jumper Pipes, T<sub>no</sub> = Offtakes Not Observed
+                                        </td>
+                                    </tr> 
+                                </table>
+                                <div id="noteBox">
+                                    Notes: <br>
+                                    {{ data.notes }}
+                                </div>
+                            </div>
+                        </section>
+                        {% if supervisor or client %} {% elif unlock and not search %}
+                            {% include "shared/components/submitButton.html" with label="form" %}
+                        {% endif %}
                     </div>
-                    {% if supervisor or client %} {% elif unlock and not search %}
-                        {% include "shared/components/submitButton.html" with label="form" %}
-                    {% endif %}
+                    {% include "shared/components/stopWatch.html" %}
                 </div>
-                {% include "shared/components/stopWatch.html" %}
-            </div>
-            <br>
-            {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
-        </form> 
-    </div>    
-</div>
+                <br>
+                {% if picker %}{% include 'shared/formIssueData.html' %}{% endif %}
+            </form> 
+        </div>    
+    </div>
 {% endblock %}

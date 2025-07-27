@@ -1,3 +1,4 @@
+const searchVar = document.getElementById('formID').dataset.search;
 function addLeakRow(elem, forcedIndex = null) {
     const side = elem.dataset.side
     const tableBody = document.getElementById(`${side}LeaksTableBody`);
@@ -165,9 +166,16 @@ function initial_leak_add_rows() {
             }
         });
     });
+    console.log(`sd;lgks;dglsdflk=-----------------${Object.keys(indexMap).length}`)
+    if (Object.keys(indexMap).length === 0) {
+        document.getElementById('nopLeaksMsg').style.display = 'block';
+        document.getElementById('nocLeaksMsg').style.display = 'block';
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initial_leak_add_rows();
+    if (!searchVar) {
+        initial_leak_add_rows();
+    }
     intiate_TempSave(); // this runs fillForm from temp_save.js
 });

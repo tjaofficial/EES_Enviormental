@@ -782,21 +782,21 @@ class form3_model(models.Model):
         auto_now=False,
         blank=True
     )
-    om_leak_json = models.CharField(
-        max_length=500,
+    om_leak_json = models.JSONField(
+        default=list,
         blank=True,
         null=True
     )
-    om_leaks2 = models.CharField(
-        max_length=30,
+    om_leaks2 = models.IntegerField(
+        default=0
     )
-    l_leak_json = models.CharField(
-        max_length=500,
+    l_leak_json = models.JSONField(
+        default=list,
         blank=True,
         null=True
     )
-    l_leaks2 = models.CharField(
-        max_length=30,
+    l_leaks2 = models.IntegerField(
+        default=0
     )
     om_traverse_time_min = models.CharField(max_length=30)
     om_traverse_time_sec = models.CharField(max_length=30)

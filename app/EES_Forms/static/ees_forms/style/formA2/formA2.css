@@ -137,8 +137,9 @@
 
 .leaks-table-wrapper {
 	box-shadow: 0 0 8px rgb(0 0 0 / 31%);
-    border-radius: 8px;
+    /* border-radius: 8px; */
 	margin-top: 25px;
+  border: black solid 1px;
 }
 .sub-box-cont {
     border: #0000002e solid 1px;
@@ -239,7 +240,6 @@
 	color: white;
 	font-weight: bold;
 }
-
 .choices__inner {
 	border-radius: 7px;
 	height: 35px;

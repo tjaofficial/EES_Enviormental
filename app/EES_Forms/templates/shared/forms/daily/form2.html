@@ -16,62 +16,62 @@
     {% endif %}
 {% endblock %}
 {% block list %} 
-    {{ BASE_DIR }}
     <div id="formName" style="display: hidden;" data-form="{{formName}}"></div>
     <div id="paperSize">
         <div class="mainCont">
-            <form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px;">
+            <form id="formID" action="" method="POST" style="margin: auto; margin-bottom: 100px;" data-search="{{search}}">
                 {% csrf_token %}
                 <div class="card" id="card_fitter">
                     <div class="paper_fitter" style="padding: 3rem;">
                         {% include "shared/components/print_button.html" with formGroup=freq %}
                         {% include "shared/components/backArrow.html" with destination="form" %}
-                        <table style="border-collapse: collapse; margin: auto;">
-                            <tr>
-                                <th class="boxTitle" colspan="6" style="text-align: center;">
-                                    {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
-                                </th>
-                            </tr>
-                            <tr>
-                                <td colspan="6" style="text-align: center;">
-                                    <strong>Facility Name:</strong> {{facility}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="height: 25px" > </td>
-                            </tr> 
-                            <tr>
-                                <td colspan="6" style="text-align: center;">
-                                    <strong>Inspectors Name:</strong>&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                                    <strong>Date:</strong>&nbsp; &nbsp;{{ data.date }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" style="text-align: center;">
-                                    <strong>Battery No.</strong> {{ options.bat_num }} &nbsp; &nbsp; &nbsp; 
-                                    <strong>Total No. Ovens:</strong> {{ options.total_ovens }} &nbsp; &nbsp; &nbsp;
-                                    <strong>Total No. of Inoperable Ovens:</strong> &nbsp; &nbsp;{{ data.inop_ovens }} <br>
-                                    <strong>Inoperable Oven Number(s):</strong>&nbsp; &nbsp;{{ data.inop_numbs }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" style="text-align: center;">
-                                    <strong>Crew:</strong>
-                                    &nbsp; &nbsp;{{ data.crew }}
-                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                                    <strong>Battery Foreman:</strong>
-                                    &nbsp; &nbsp;{{ data.foreman }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="height: 25px"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="6">
-                                    {% include "shared/components/stopWatchToggle.html" %}
-                                </td>
-                            </tr>
-                        </table>
+                        <section>
+                            <table style="border-collapse: collapse; margin: auto;">
+                                <tr>
+                                    <th class="boxTitle" colspan="6" style="text-align: center;">
+                                        {% include "shared/components/formHeader.html" with main="Visible Emission Observation Form"%}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">
+                                        <strong>Facility Name:</strong> {{facility}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 25px" > </td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">
+                                        <strong>Inspectors Name:</strong>&nbsp; &nbsp;{{ data.observer }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                        <strong>Date:</strong>&nbsp; &nbsp;{{ data.date }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">
+                                        <strong>Battery No.</strong> {{ options.bat_num }} &nbsp; &nbsp; &nbsp; 
+                                        <strong>Total No. Ovens:</strong> {{ options.total_ovens }} &nbsp; &nbsp; &nbsp;
+                                        <strong>Total No. of Inoperable Ovens:</strong> &nbsp; &nbsp;{{ data.inop_ovens }} <br>
+                                        <strong>Inoperable Oven Number(s):</strong>&nbsp; &nbsp;{{ data.inop_numbs }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">
+                                        <strong>Crew:</strong>
+                                        &nbsp;{{ data.crew }}
+                                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                        <strong>Battery Foreman:</strong>&nbsp;{{ data.foreman }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height: 25px"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+                                        {% include "shared/components/stopWatchToggle.html" %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </section>
                         <section class="areaCont">
                             <div class="methodplus-header methodPlusBlue">Push Side Traverse</div>
                             <div style="padding: 25px;">

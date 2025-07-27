@@ -80,7 +80,6 @@ def form2(request, fsID, selector):
         'supervisor': form_variables['supervisor'], 
         'notifs': form_variables['notifs'],
         'freq': form_variables['freq'],
-         
         'todays_log': todays_log, 
         'data': data, 
         'formName': form_variables['formName'],
