@@ -1,3 +1,4 @@
+const searchVar = document.getElementById('formID').dataset.search;
 function addLeakRow(elem, forcedIndex = null) {
     const side = elem.dataset.side
     const tableBody = document.getElementById(`${side}LeaksTableBody`);
