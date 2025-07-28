@@ -1,4 +1,3 @@
-const searchVar = document.getElementById('formID').dataset.search;
 function addLeakRow(elem, forcedIndex = null) {
     const side = elem.dataset.side
     const tableBody = document.getElementById(`${side}LeaksTableBody`);
@@ -172,7 +171,7 @@ function initial_leak_add_rows() {
         document.getElementById('nocLeaksMsg').style.display = 'block';
     }
 }
-
+const searchVar = document.getElementById('formID').dataset.search;
 document.addEventListener('DOMContentLoaded', () => {
     if (searchVar == "False") {
         initial_leak_add_rows();
