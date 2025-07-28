@@ -15,8 +15,8 @@
                     {% with freqData=finalList|get_category:freq %}
                         {% if not freqData|is_string %}
                             {% for form in freqData %}
-                                <input type="checkbox" id="{{form.0}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
-                                {{ form.0 }} - {{ form.1 }}
+                                <input type="checkbox" id="{{form.0.id}}" onclick="return false;" {% if form.2 %}checked{% endif %}>
+                                {{ form.0.form_settings.formChoice.form }} - {{ form.1 }}
                                 <br>
                             {% endfor %}
                         {% else %}

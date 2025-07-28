@@ -12,7 +12,7 @@
         <div id="data_5Day" class="tab" style='display:block;'>
             <div class='dataPT'>
                 {% for x in od_5 %}
-                    <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                    <div class='dataStyle'>Oven #{{ x.oven_number }}&nbsp;-&nbsp;{% if x.deadline == 0 %}NO DATA FOUND{% else %}{{ x.deadline }}{% endif %}</div>
                 {% endfor %}
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div id="data_10Day" class="tab" style='display:none;'>
             <div class='dataPT'>
                 {% for x in od_10 %}
-                <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                    <div class='dataStyle'>Oven #{{ x.oven_number }}&nbsp;-&nbsp;{% if x.deadline == 0 %}NO DATA FOUND{% else %}{{ x.deadline }}{% endif %}</div>
                 {% endfor %}
             </div>
         </div>
@@ -30,7 +30,7 @@
         <div id="data_30Day" class="tab" style='display:none;'>
             <div class='dataPT'>
                 {% for x in od_30 %}
-                <div class='dataStyle'>Oven #{{ x.0 }}&nbsp;-&nbsp;{% if x.2 == 0 %}NO DATA FOUND{% else %}{{ x.2 }}{% endif %}</div>
+                    <div class='dataStyle'>Oven #{{ x.oven_number }}&nbsp;-&nbsp;{% if x.deadline == 0 %}NO DATA FOUND{% else %}{{ x.deadline }}{% endif %}</div>
                 {% endfor %}
             </div>
         </div>

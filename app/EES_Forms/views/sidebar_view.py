@@ -448,11 +448,13 @@ def formsProgress(request, section):
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
     if unlock:
         return redirect('IncompleteForms')
-    formSettingsModel = form_settings_model.objects.filter(facilityChoice=facility)
+    formSettingsModel = form_settings_model.objects.filter(facilityChoice=facility, settings__active=True)
     finalList = {'Daily':[], 'Weekly':[], 'Monthly':[], 'Quarterly':[], 'Annually':[]}
     freqList = ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually']
     for x in formSettingsModel:
-        formTitle = x.formChoice.header + ' - ' + x.formChoice.title
+        print(x)
+        customOrOriginal = x.settings['settings']['custom_name'] if x.settings['settings']['custom_name'] else x.formChoice.title
+        formTitle = x.formChoice.header + ' - ' + customOrOriginal
         if x.formChoice.frequency == 'Daily':
             finalList['Daily'].append((x.subChoice, formTitle, x.subChoice.submitted))
         elif x.formChoice.frequency == 'Weekly':
@@ -461,14 +463,14 @@ def formsProgress(request, section):
             finalList['Monthly'].append((x.subChoice, formTitle, x.subChoice.submitted))
         elif x.formChoice.frequency == 'Quarterly':
             finalList['Quarterly'].append((x.subChoice, formTitle, x.subChoice.submitted))
-        elif x.formChoice.frequency == 'Anually':
+        elif x.formChoice.frequency == 'Annually':
             finalList['Annually'].append((x.subChoice, formTitle, x.subChoice.submitted))
     for each in finalList:
         if len(finalList[each]) == 0:
             finalList[each] = 'No forms added'
         else:
             def myFunc(e):
-                return e[0]
+                return e[0].id
             finalList[each].sort(key=myFunc)          
     print(finalList)
     if request.method == 'POST':
