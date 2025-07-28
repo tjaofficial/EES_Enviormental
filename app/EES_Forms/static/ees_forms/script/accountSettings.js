@@ -20,6 +20,7 @@ openInformation = (ele) => {
     var heightChange = 'fit-content';
     console.log(childElem.style.height)
     let localStore = localDataSetup();
+    
     const arrowDown = document.getElementById(`${elemID}_down`);
     const arrowUp = document.getElementById(`${elemID}_up`);
     if (childElem.style.height == heightChange){

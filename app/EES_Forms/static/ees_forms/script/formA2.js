@@ -38,6 +38,7 @@ function toggleBlockedInputs(elem) {
         end.style.backgroundColor = "white";
     }
 }
+
 function toggleLeaksMode(elem) {
     if (!elem) return;
     const side = elem.dataset.side;
@@ -67,7 +68,7 @@ function toggleLeaksMode(elem) {
 //Get total of doors not observed
 function pc_doors_not_observed(side) {
     if (!document.getElementById(`${side}_temp_block_from`)) return;
-    console.log(side);
+    //console.log(side);
     const doors_from = document.getElementById(`${side}_temp_block_from`).value,
           doors_to = document.getElementById(`${side}_temp_block_to`).value,
           noBlock = document.getElementById(`no${side}BlockedCheckbox`).checked;
@@ -157,7 +158,7 @@ function total_leaking_doors() {
     //---------------------------------------------------------------
 
     const total_doors = allLeakElements.length
-    console.log(total_doors);
+    //console.log(total_doors);
     document.getElementById('leaking_doors').value = total_doors;
     allowed_time();
     equation();

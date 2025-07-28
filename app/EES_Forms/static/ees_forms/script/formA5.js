@@ -249,6 +249,8 @@ function validateOvens() {
 
 // **Attach event listener to all oven inputs**
 document.addEventListener("DOMContentLoaded", function () {
+
+
     for (let i = 1; i <= 4; i++) {
         let input = document.getElementById("o" + i);
         if (input) {
@@ -258,7 +260,13 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
+function open_close_section(elem){
+    const splitID = elem.id.split('_')
+    const selector = splitID[0];
+    document.getElementById(`${selector}-display`).style.display = splitID[1] == 'down'? 'block': 'none';
+    document.getElementById(`${selector}_down`).style.display = splitID[1] == 'down'? 'none': 'block';
+    document.getElementById(`${selector}_up`).style.display = splitID[1] == 'up'? 'none': 'block';
+}
 
 
 

@@ -12,7 +12,7 @@ function addLeakRow(elem, forcedIndex = null) {
         const elements = document.querySelectorAll(`[id^="${side}_zoneSelect_"]`);
         let count = 0;
         elements.forEach(el => {
-            console.log(el.id.replace('${side}_zoneSelect_', ''))
+            //console.log(el.id.replace('${side}_zoneSelect_', ''))
             const suffix = Number(el.id.replace(`${side}_zoneSelect_`, ''));
             if (suffix > count){
                 count = suffix;
@@ -99,7 +99,7 @@ function removeLeakRow(btn) {
 }
 let zones;
 function zoneSelectors(zoneIndex, sideLetter){
-    console.log('chienc')
+    //console.log('chienc')
     zones = document.querySelectorAll(`.${sideLetter}_zone_${zoneIndex}`);
     zones.forEach(zone => {
         zone.addEventListener('click', () => {
@@ -111,19 +111,19 @@ function zoneSelectors(zoneIndex, sideLetter){
 function saveZoneSelection(zoneIndex, sideLetter) {
     const hiddenInput = document.getElementById(`${sideLetter}_selectedZones_${zoneIndex}`);
     const shownInput = document.getElementById(`${sideLetter}_zone_${zoneIndex}`)
-    console.log(shownInput)
-    console.log(zoneIndex)
-    console.log(zones)
+    //console.log(shownInput)
+    //console.log(zoneIndex)
+    //console.log(zones)
     const selected = [...zones]
         .filter(z => z.classList.contains('selected'))
         .map(z => z.dataset.zone);
-    console.log(selected)
+    //console.log(selected)
     const joined = selected.join(',');
     hiddenInput.value = joined;
     shownInput.value = joined;
     shownInput.dispatchEvent(new Event('input', { bubbles: true }));
     document.getElementById(`${sideLetter}_zoneModal_${zoneIndex}`).style.display = 'none';
-    console.log('Selected zones:', hiddenInput.value);
+    //console.log('Selected zones:', hiddenInput.value);
 }
 
 function initial_leak_add_rows() {
@@ -166,7 +166,7 @@ function initial_leak_add_rows() {
             }
         });
     });
-    console.log(`sd;lgks;dglsdflk=-----------------${Object.keys(indexMap).length}`)
+    //console.log(`sd;lgks;dglsdflk=-----------------${Object.keys(indexMap).length}`)
     if (Object.keys(indexMap).length === 0) {
         document.getElementById('nopLeaksMsg').style.display = 'block';
         document.getElementById('nocLeaksMsg').style.display = 'block';

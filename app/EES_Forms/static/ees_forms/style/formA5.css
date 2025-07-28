@@ -4,21 +4,21 @@
     overflow-clip-margin: unset;
 }
 .comment_skip_class {
-  width: 379px;
-  background-color: #ff6666;
-  color: black;
-  text-align: center;
-  border-radius: 6px;
-  padding: 16px 0;
-  position: absolute;
-  z-index: 1;
-  font-size: 1rem;
-  padding-top: 18px;
-  top: -29px;
-  right: 269px;
+	width: 379px;
+	background-color: #ff6666;
+	color: black;
+	text-align: center;
+	border-radius: 6px;
+	padding: 16px 0;
+	position: absolute;
+	z-index: 1;
+	font-size: 1rem;
+	padding-top: 18px;
+	top: -29px;
+	right: 269px;
 }
 .comment_skip_class::after {
-  content: "";
+  	content: "";
     position: absolute;
     top: 70px;
     left: 189px;
@@ -52,10 +52,10 @@
     margin-left: -156px;
     margin-top: -43px;
     opacity: 75%;
-  }
+}
   
   /* Popup arrow */
-  .popuptext2::after {
+.popuptext2::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -64,7 +64,7 @@
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
-  }
+}
   /* The actual popup (appears on top) */
 .popuptext1 {
     visibility: hidden;
@@ -83,7 +83,7 @@
   }
   
   /* Popup arrow */
-  .popuptext1::after {
+.popuptext1::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -94,33 +94,129 @@
     border-color: #555 transparent transparent transparent;
   }
 .formImageContainer{
-width:100%;
+	width:100%;
 }
 .formImageContainer > img{
     width:100%;
 }
 
 .tableReadingWidth{
-  width: 100px;
+  	width: 100px;
 }
 .notesCont{
-  font-size: 20px; 
-  width: 80%; 
-  margin: auto;
-  position: relative;
+	font-size: 20px; 
+	width: 80%; 
+	margin: auto;
+	position: relative;
 }
 .noteSpace{
-  background-color: #0000002e;
-  border-radius: 6px;
-  min-height: 100px;
-  text-align: left;
-  padding: 10px;
+	background-color: #0000002e;
+	border-radius: 6px;
+	min-height: 100px;
+	text-align: left;
+	padding: 10px;
 }
 .minSecSpace{
-  width: 42px;
-  font-size: 10px;
+	width: 42px;
+	font-size: 10px;
 }
 .pushTravelLabel {
-  width: 29px;
-  border: 1px solid black;
+	width: 29px;
+	border: 1px solid black;
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+
+.areaCont {
+    background-color: #dfe5e9;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 2px 2px 17px 0px #8080804a;
+    border: #0000002e solid 1px;
+    margin-top: 50px;
+    width: 850px;
+    overflow: hidden;
+}
+.methodplus-header {
+    color: white;
+    padding: 0.75rem 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.notes-area {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    font-size: 0.95rem;
+    color: #1a202c;
+}
+.notes-area p {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #718096;
+}
+.form-section {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-left: 5px solid #007BBD;
+}
+.form-section.green {
+    border-left-color: #38a169;
+}
+.form-section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2d3d;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+.field-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.field-card {
+    background: #f8fafc;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    flex: 1 1 calc(50% - 1rem);
+    padding: 1rem;
+    min-width: 260px;
+    max-width: 100%;
+}
+@media (max-width: 600px) {
+    .field-card {
+      	flex: 1 1 100%;
+    }
+}
+.field-card label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 0.25rem;
+}
+.field-card span {
+    font-size: 1rem;
+    color: #2d3748;
 }

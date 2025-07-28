@@ -11,7 +11,7 @@ function addLeakRow(elem, forcedIndex = null) {
         const elements = document.querySelectorAll(`[id^="${side}_zoneSelect_"]`);
         let count = 0;
         elements.forEach(el => {
-            console.log(el.id.replace('${side}_zoneSelect_', ''))
+            //console.log(el.id.replace('${side}_zoneSelect_', ''))
             const suffix = Number(el.id.replace(`${side}_zoneSelect_`, ''));
             if (suffix > count){
                 count = suffix;
