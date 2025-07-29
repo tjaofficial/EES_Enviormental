@@ -40,6 +40,8 @@ def form2(request, fsID, selector):
     else:
         if existing:
             initial_data = get_initial_data(form2_model, database_form)
+            pSide_json = database_form.p_leak_data
+            cSide_json = database_form.c_leak_data
         else:
             inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
             initial_data = {
@@ -52,9 +54,9 @@ def form2(request, fsID, selector):
                 'notes': 'N/A',
                 'facility_name': facility,
             }
+            pSide_json = ''
+            cSide_json = ''
         data = form2_form(initial=initial_data, form_settings=form_variables['freq'])
-        pSide_json = ''
-        cSide_json = ''
     # -----IF REQUEST.POST------------
     if request.method == "POST":
         print(request.POST)

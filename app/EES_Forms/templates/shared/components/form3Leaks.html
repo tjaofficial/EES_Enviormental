@@ -1,4 +1,9 @@
 {% load static %}
+{% if sideLetter == "om" %}
+    {{ omSide_json|json_script:"omSide_json" }}
+{% else %}
+    {{ lSide_json|json_script:"lSide_json" }}
+{% endif %}
 <div class="leaks-table-wrapper">
     <div class="methodplus-header" style="background-color: #ffffff; color: black; font-size: 1rem;">Leaks</div>
     <table class="methodplus-table" id="{{sideLetter}}LeaksTable">
@@ -9,7 +14,7 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody id="{{sideLetter}}LeaksTableBody">
+        <tbody id="{{sideLetter}}LeaksTableBody" {% if exisiting %}data-leaklist="{{sideLetter}}Side_json"{% endif %}>
             {% if not search %}
                 <tr id="{{sideLetter}}_leakRow_0">
                     <td style="width: 122px;">
@@ -84,7 +89,7 @@
         <div class="methodplus-controls">
             <button type="button" class="add-row-btn" onclick="addLeakRow(this)" data-side="{{sideLetter}}">+ Add Row</button>
             <label>
-                <input type="checkbox" id="no{{sideLetter}}LeaksCheckbox" onchange="toggleLeaksMode(this); total_leaking_doors('{{sideLetter}}')" data-side="{{sideLetter}}"> No Leaks Found
+                <input type="checkbox" id="no{{sideLetter}}LeaksCheckbox" onchange="toggleLeaksMode(this); total_leaking_doors('{{sideLetter}}'); set_not_observed('{{sideLetter}}');" data-side="{{sideLetter}}"> No Leaks Found
             </label>
         </div>
     {% endif %}

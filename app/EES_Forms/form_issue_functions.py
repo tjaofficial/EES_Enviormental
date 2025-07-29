@@ -109,9 +109,9 @@ def form3_issue_check(savedForm, form_variables, request, selector, facility, da
     #--------vvvvvvv INSERT ANY CHECKS HERE vvvvvv----------------
     def leakDictBuild(letter):
         grouped = defaultdict(dict)
-        print(letter)
+        #print(letter)
         valid_prefixes = [f'{letter}_oven', f'{letter}_location']
-        print(valid_prefixes)
+        #print(valid_prefixes)
         for key, value in request.POST.lists():
             for prefix in valid_prefixes:
                 if key.startswith(prefix + '_'):
@@ -123,7 +123,7 @@ def form3_issue_check(savedForm, form_variables, request, selector, facility, da
                         if prefix == f'{letter}_oven':
                             grouped[index]['oven'] = int(value[0])
                         elif prefix == f'{letter}_location':
-                            grouped[index]['location'] = value[0]
+                            grouped[index]['location'] = value
                     except Exception as e:
                         print(f"Skipping {key}: {e}")
                     break  # once matched, no need to check other prefixes

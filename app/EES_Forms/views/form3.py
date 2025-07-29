@@ -39,6 +39,10 @@ def form3(request, fsID, selector):
     else:
         if existing:
             initial_data = get_initial_data(form3_model, database_form)
+            print(f"Thsi sis what im looiing {database_form.om_leak_json}")
+
+            omSide_json = database_form.om_leak_json
+            lSide_json = database_form.l_leak_json
         else:
             inopNumbsParse = todays_log.inop_numbs.replace("'","").replace("[","").replace("]","")
             initial_data = {
@@ -51,10 +55,10 @@ def form3(request, fsID, selector):
                 'notes': 'N/A',
                 'facility_name': facility,
             }
+            omSide_json = ''
+            lSide_json = ''
 
         data = form3_form(initial=initial_data, form_settings=form_variables['freq'])
-        omSide_json = ''
-        lSide_json = ''
     # -----IF REQUEST.POST------------
     if request.method == "POST":
     # -----CREATE COPYPOST FOR ANY ADDITIONAL INPUTS------------

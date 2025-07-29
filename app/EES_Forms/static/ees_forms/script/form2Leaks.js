@@ -171,10 +171,57 @@ function initial_leak_add_rows() {
         document.getElementById('nocLeaksMsg').style.display = 'block';
     }
 }
+
+function initial_leak_add_rows_exisiting(side) {
+    if (!document.getElementById(`${side}Side_json`)) {
+        initial_leak_add_rows();
+    } else {
+        const side_json = JSON.parse(document.getElementById(`${side}Side_json`).textContent);
+        console.log(side_json); // Now usable as a JS object
+
+        side_json.forEach((leakLine, index) => {
+            const addBtn = document.querySelector(`.add-row-btn[data-side="${side}"]`);
+            if (!addBtn) return;
+
+            const existingIndexes = Array.from(document.querySelectorAll(`[id^="${side}_oven_"]`))
+                .map(el => parseInt(el.id.replace(`${side}_oven_`, '')))
+                .filter(i => !isNaN(i));
+            console.log(existingIndexes);
+
+            if (!existingIndexes.includes(index)) {
+                // Keep calling addLeakRow until this index is created
+                while (!document.getElementById(`${side}_oven_${index}`)) {
+                    addLeakRow(addBtn, index);
+                }
+            }
+        });
+        side_json.forEach((lineItem, idx) => {
+            const oven = document.getElementById(`${side}_oven_${idx}`);
+            const zoneSelect = document.getElementById(`${side}_zoneSelect_${idx}`);
+            const zone = document.getElementById(`${side}_zoneSelect_${idx}`);
+
+            oven.value = lineItem['oven'];
+            zone.value = lineItem['zone'];
+            const instance = zoneSelect.choicesInstance;
+            if (instance && lineItem['location']) {
+                instance.setChoiceByValue(lineItem['location']);
+            }
+        })
+        if (side_json.length === 0) {
+            document.getElementById(`no${side}LeaksMsg`).style.display = 'block';
+            document.getElementById(`no${side}LeaksCheckbox`).checked = true;
+        }
+    }
+    total_leaking_doors(side);
+    toggleLeaksMode(document.getElementById(`no${side}LeaksCheckbox`));
+}
+
 const searchVar = document.getElementById('formID').dataset.search;
 document.addEventListener('DOMContentLoaded', () => {
-    if (searchVar == "False") {
-        initial_leak_add_rows();
-    }
+    // if (searchVar == "False") {
+    //     initial_leak_add_rows();
+    // }
     intiate_TempSave(); // this runs fillForm from temp_save.js
+    initial_leak_add_rows_exisiting('p');
+    initial_leak_add_rows_exisiting('c');
 });

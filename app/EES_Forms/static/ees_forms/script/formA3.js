@@ -36,6 +36,7 @@ function toggleLeaksMode(elem) {
         const allAreaLeaks = table.querySelectorAll(`[id*="${side}_location_"], [id*="${side}_oven_"]`)
         allAreaLeaks.forEach((el) => {
             el.removeAttribute("required");
+            el.setAttribute("disabled", true);
         })
     } else {
         table.style.display = "table";
@@ -44,6 +45,7 @@ function toggleLeaksMode(elem) {
         const allAreaLeaks = table.querySelectorAll(`[id*="${side}_location_"], [id*="${side}_oven_"]`)
         allAreaLeaks.forEach((el) => {
             el.setAttribute("required", true);
+            el.removeAttribute("disabled");
         })
     }
 }
@@ -117,25 +119,30 @@ function equation(side) {
 
 function set_not_observed(side) {
     if (!document.getElementById(`${side}_not_observed`)) return;
+    if (!document.getElementById(`no${side}LeaksCheckbox`)) return;
+    const checked = document.getElementById(`no${side}LeaksCheckbox`).checked;
     const allLeakElements = document.querySelectorAll(`[id*="${side}_leakRow_"]`);
     let dampered_count = 0;
-    allLeakElements.forEach((el) => {
-        //console.log(el)
-        const rowID = el.id.replace(`${side}_leakRow_`, "");
-        const selectInput = document.getElementById(`${side}_zoneSelect_${rowID}`)
-        //console.log(`${side}_zoneSelect_${rowID}`)
-        //console.log(selectInput)
-        const optionList = [...selectInput.options];
-        optionList.forEach(option => {
-            if (option.value == "D" && option.selected) {
-                dampered_count++;
-            }
-        });
-    })
+    if (!checked) {
+        allLeakElements.forEach((el) => {
+            //console.log(el)
+            const rowID = el.id.replace(`${side}_leakRow_`, "");
+            const selectInput = document.getElementById(`${side}_zoneSelect_${rowID}`)
+            //console.log(`${side}_zoneSelect_${rowID}`)
+            //console.log(selectInput)
+            const optionList = [...selectInput.options];
+            optionList.forEach(option => {
+                if (option.value == "D" && option.selected) {
+                    dampered_count++;
+                }
+            });
+        })
+    }
     //console.log(dampered_count)
     const totalDampered = side == "om"? dampered_count * 2: dampered_count * 4;
     //console.log(totalDampered)
     document.getElementById(`${side}_not_observed`).value = totalDampered;
+    total_leaking_doors(side);
 }
 
 function check_dampered_inoperable(side) {

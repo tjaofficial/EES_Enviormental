@@ -46,10 +46,13 @@ function toggleLeaksMode(elem) {
     const table = document.getElementById(`${side}LeaksTable`);
     const header = document.getElementById(`${side}LeaksSubHeader`);
     const noLeaksMsg = document.getElementById(`no${side}LeaksMsg`);
+    const addBtn = document.getElementById(`${side}_add_btn`);
 
     if (checked) {
         table.style.display = "none";
         header.style.display = "none";
+        addBtn.style.display = 'none';
+        document.getElementById(`no${side}LeaksCheckbox`).parentElement.parentElement.style.justifyContent = 'flex-end';
         noLeaksMsg.style.display = "block";
         const allAreaLeaks = table.querySelectorAll(`[id*="${side}_zone_"], [id*="${side}_location_"], [id*="${side}_oven_"], [id*="${side}_zoneSelect_"]`)
         allAreaLeaks.forEach((el) => {
@@ -58,6 +61,8 @@ function toggleLeaksMode(elem) {
     } else {
         table.style.display = "table";
         header.style.display = "table-header-group";
+        addBtn.style.display = 'block';
+        document.getElementById(`no${side}LeaksCheckbox`).parentElement.parentElement.style.justifyContent = 'space-between';
         noLeaksMsg.style.display = "none";
         const allAreaLeaks = table.querySelectorAll(`[id*="${side}_zone_"], [id*="${side}_location_"], [id*="${side}_oven_"], [id*="${side}_zoneSelect_"]`)
         allAreaLeaks.forEach((el) => {
