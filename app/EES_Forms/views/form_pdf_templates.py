@@ -65,7 +65,7 @@ def pdf_template_A1(primaryData, title, subTitle):
             ['3', primaryData.ovens_data['charge_3']['c3_no'], time_change(primaryData.ovens_data['charge_3']['c3_start']), time_change(primaryData.ovens_data['charge_3']['c3_stop']), f"{float(primaryData.ovens_data['charge_3']['c3_sec']):.1f}", text3],
             ['4', primaryData.ovens_data['charge_4']['c4_no'], time_change(primaryData.ovens_data['charge_4']['c4_start']), time_change(primaryData.ovens_data['charge_4']['c4_stop']), f"{float(primaryData.ovens_data['charge_4']['c4_sec']):.1f}", text4],
             ['5', primaryData.ovens_data['charge_5']['c5_no'], time_change(primaryData.ovens_data['charge_5']['c5_start']), time_change(primaryData.ovens_data['charge_5']['c5_stop']), f"{float(primaryData.ovens_data['charge_5']['c5_sec']):.1f}", text5],
-            ['', '', '', 'Total Seconds:', f"{primaryData.ovens_data['total_seconds']:.1f}"],
+            ['', '', '', 'Total Seconds:', f"{float(primaryData.ovens_data['total_seconds']):.1f}"],
             [Paragraph('<b>Larry Car:</b>&#160;&#160;#' + primaryData.ovens_data['larry_car'], styles['Normal'])],
             [comments],
         ]

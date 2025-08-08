@@ -29,3 +29,13 @@
     position: static;
     clear: both;
 }
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    color: white;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
