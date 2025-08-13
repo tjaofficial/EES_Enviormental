@@ -9,7 +9,8 @@ from reportlab.lib import colors # type: ignore
 from reportlab.lib.styles import getSampleStyleSheet # type: ignore
 from reportlab.lib.units import inch, mm # type: ignore
 from reportlab.pdfgen import canvas # type: ignore
-from ..models import issues_model, user_profile_model,form_settings_model, the_packets_model
+from reportlab.platypus import Flowable # type: ignore
+from ..models import issues_model,form_settings_model, the_packets_model, FormSettingsRevision
 from ..utils.main_utils import date_change, time_change
 import io
 from django.contrib import messages # type: ignore
@@ -20,39 +21,54 @@ from .form_pdf_templates import *
 
 lock = login_required(login_url='Login')
 
-    
+class SetFooterMeta(Flowable):
+    """
+    Zero-height flowable that sets the current footer context for all
+    following pages until the next SetFooterMeta appears.
+    """
+    def __init__(self, form_label, fs_id, rev_text):
+        super().__init__()
+        self.meta = {
+            "form_label": str(form_label or ""), 
+            "fs_id": str(fs_id or ""), 
+            "rev_text": str(rev_text or "")}
+
+    def wrap(self, *args, **kwargs):
+        return (0, 0)  # takes no space
+
+    def draw(self):
+        # Store on the canvas; PageNumCanvas will snapshot it per page.
+        self.canv._current_meta = self.meta
+
 class PageNumCanvas(canvas.Canvas):
-    def __init__(self, *args, form_label=None, fs_id=None, **kwargs):
-        #Constructor
-        canvas.Canvas.__init__(self, *args, **kwargs)
-        self.pages = []
-        self.form_label = form_label
-        self.fs_id = fs_id
-    #----------------------------------------------------------------------
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pages = []           # page graphics states
+        self.page_metas = []      # meta per page (form_label/fs_id/rev_text)
+        self._current_meta = {"form_label": "", "fs_id": "", "rev_text": ""}
+
     def showPage(self):
-        #On a page break, add information to the list
+        # Snapshot meta for the page we just finished
+        self.page_metas.append(dict(self._current_meta))
         self.pages.append(dict(self.__dict__))
         self._startPage()
-    #----------------------------------------------------------------------
-    def save(self):
-        #Add the page number to each page (page x of y)
-        page_count = len(self.pages)
-        for page in self.pages:
-            self.__dict__.update(page)
-            self.draw_page_number(page_count)
-            canvas.Canvas.showPage(self)
-        canvas.Canvas.save(self)
-    #----------------------------------------------------------------------
-    def draw_page_number(self, page_count):
-        #Add the page number
-        page = "Page %s of %s" % (self._pageNumber, page_count)
-        self.setFont("Helvetica", 9)
-        self.drawRightString(200*mm, 10*mm, page)
 
-        # Center bottom: MethodPlus info
-        if self.form_label and self.fs_id:
-            footer_text = f"MethodPlus+, Form {self.form_label}, fsID: {self.fs_id}"
-            self.drawCentredString(105 * mm, 10 * mm, footer_text)
+    def save(self):
+        page_count = len(self.pages)
+        for i, page_state in enumerate(self.pages, start=1):
+            self.__dict__.update(page_state)
+            meta = self.page_metas[i-1] if i-1 < len(self.page_metas) else {"form_label": "", "fs_id": "", "rev_text": ""}
+            self._draw_footer(i, page_count, meta)
+            super().showPage()
+        super().save()
+
+    def _draw_footer(self, page_no, page_count, meta):
+        self.setFont("Helvetica", 9)
+        # Right: page x of y
+        self.drawRightString(200*mm, 10*mm, f"Page {page_no} of {page_count}")
+        # Center: MethodPlus footer w/ per-page meta
+        footer_text = f"MethodPlus+, Form {meta['form_label']}, fsID: {meta['fs_id']}, Revision: {meta['rev_text']}"
+        self.drawCentredString(105*mm, 10*mm, footer_text)
       
 @lock
 def form_PDF(request, type, formGroup, formIdentity, formDate):
@@ -100,6 +116,16 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
     formsBeingUsed = sorted(formsBeingUsed, key=lambda x: x[0])
     print(f"The same list is sorted by PacketID: {formsBeingUsed}")
     print("_________________________________")
+    
+    stream = io.BytesIO()
+    pdf = SimpleDocTemplate(
+        stream,
+        pagesize=letter,
+        topMargin=0.4*inch,
+        bottomMargin=0.3*inch,
+        title="MethodPlus Forms"
+    )
+    
     elems = []
     for fsIDPackage in formsBeingUsed:
         fsEntry = fsIDPackage[1]
@@ -109,6 +135,8 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
         formInformation = fsEntry.formChoice
         formSettings = fsEntry.settings['settings']
         formModelName = formInformation.link + '_model'
+        rev_obj = FormSettingsRevision.objects.filter(form_settings=fsEntry).order_by('-revision_date').first()
+        rev_text = rev_obj.revision_date.date() if rev_obj else ''
         print(f"Now running process for form {formID} with fsID {fsIDPackage[1].id}")
         if type == 'single':
             formLabel = fsEntry.settings['packets'].get(str(packetID), str(fsEntry.id))
@@ -222,7 +250,6 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
             dataList = []
             print('STARTING...')
             #create a stream
-            stream = io.BytesIO()
             if formID == 1:
                 tableData, tableColWidths, style = pdf_template_A1(formData, title, subTitle)
             if formID == 2:
@@ -313,7 +340,15 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
             style = TableStyle(dataList[0][2])
             
             table.setStyle(style)
+
+            if type == 'single':
+                formLabel = fsEntry.settings['packets'].get(str(packetID), str(fsEntry.id)) or (fsEntry.id if packetID == "fsID" else False)
+            else:
+                formLabel = packetID
+            footerLabel = formLabel
             
+            elems.append(SetFooterMeta(form_label=footerLabel, fs_id=footerFsID, rev_text=rev_text))
+
             elems.append(table)
             elems.append(PageBreak())
             print('FINISHED...')
@@ -324,17 +359,18 @@ def form_PDF(request, type, formGroup, formIdentity, formDate):
     print("_________________________________")
     print('Finished creating PDFs...')      
     try:
-        pdf_canvas = PageNumCanvas
+        # pdf_canvas = PageNumCanvas
 
-        pdf.build(
-            elems, 
-            canvasmaker=lambda *args, **kwargs: pdf_canvas(*args, form_label=footerLabel, fs_id=footerFsID, **kwargs)
-        )
+        # pdf.build(
+        #     elems, 
+        #     canvasmaker=lambda *args, **kwargs: pdf_canvas(*args, form_label=footerLabel, fs_id=footerFsID, **kwargs)
+        # )
             # get buffer
+        pdf.build(elems, canvasmaker=PageNumCanvas)
         stream.seek(0)
         pdf_buffer = stream.getbuffer()
         print(pdf_buffer)
-        response = HttpResponse(bytes(pdf_buffer), content_type='application/pdf')
+        response = HttpResponse(stream.getvalue(), content_type='application/pdf')
         print('Starting to Compile...')
     except UnboundLocalError as e:
         print(type)

@@ -165,7 +165,8 @@ def register_view(request, access_page):
                 profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userCompany
-                profile.settings = setDefaultSettings(profile)
+                profile.settings = setDefaultSettings(profile, 'company')
+                profile.settings['profile']['position'] = "observer-co"
                 for f in sortedFacilityData:
                     if f.facility_name not in [x['name'] for x in profile.settings['calendar']['calendars']['default']]:
                         profile.settings["calendar"]['calendars']['default'].append(
@@ -283,7 +284,7 @@ def register_view(request, access_page):
                 profile = B.save(commit=False)
                 profile.user = user
                 profile.company = userProf.company
-                profile.settings = setDefaultSettings(profile)
+                profile.settings = setDefaultSettings(profile, 'client')
 
                 profile.settings["calendar"]['calendars']['default'].append(
                     {

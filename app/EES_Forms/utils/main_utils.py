@@ -310,7 +310,6 @@ def parse_form7_oven_dict(area_json_1, area_json_2, area_json_3, area_json_4):
 
     return json.loads(json.dumps(ovens))
 
-
 def parse_form5_oven_dict(reading_data, ovens_data):
     ovens = {}
     for key1, oven in ovens_data.items():
@@ -2142,7 +2141,7 @@ def change_dashboard_setting(dashChoice, position):
     }
     return setFacilityDash
 
-def setDefaultSettings(profile):
+def setDefaultSettings(profile, place):
     today = datetime.datetime.now()
     createSettings = {'facilities': {}, 'profile': {}, 'calendar': {}}
     try:
@@ -2157,6 +2156,14 @@ def setDefaultSettings(profile):
     except:
         createSettings['facilities'] = {}
     
+    if place == 'company': 
+        pos_label = "co" 
+    elif place == 'client':
+        pos_label = "cl"
+    else:
+        pos_label = "com"
+    position = f"{profile.position}-{pos_label}"
+
     ## SET SETTINGS FOR PROFILE
     createSettings['profile'] = {
         'notifications': {
@@ -2167,7 +2174,7 @@ def setDefaultSettings(profile):
             }
         },
         'first_login': False,
-        'position': profile.position,
+        'position': position,
         'two_factor_enabled': True
     }
 

@@ -11,7 +11,7 @@ def add_forms_to_database():
         today = datetime.date.today()
         GROUP_LIST = ['supervisor', 'client', 'observer']
         MODEL_LIST = ContentType.objects.all()
-        PERMISSION_LIST = ['view','add', 'change', 'delete']
+        PERMISSION_LIST = ['view', 'add', 'change', 'delete']
         DONT_CHANGE = ['log entry', 'permission', 'group', 'user', 'content type', 'session', 'fa q_model']
 
         for group in GROUP_LIST:

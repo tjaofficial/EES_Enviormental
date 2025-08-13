@@ -9,6 +9,8 @@ from django.db.models import Q # type: ignore
 from django.core.paginator import Paginator # type: ignore
 from django.contrib import messages # type: ignore
 from django.http import JsonResponse # type: ignore
+from copy import deepcopy
+
 import datetime
 import json
 from ..decor import group_required
@@ -73,7 +75,7 @@ def facilityList(request):
             #-----Archives selected form from Global Forms-----
             formToArchive = formSettingsModelOG.get(id=fsID)
             formToArchive.settings['active'] = False
-            formToArchive.save()
+            formToArchive.save(changed_by=request.user, reason="archive")
             return redirect(facilityList)
         elif 'pacForm_delete' in answer.keys():
             fsIDDelte = answer['pacForm_delete'][14:]
@@ -128,7 +130,7 @@ def facilityList(request):
             A = thePacket
             B = theSettings
             A.save()
-            B.save()
+            B.save(changed_by=request.user, reason='packet_update')
             print('Updating Packet')
             messages.success(request,"The selected form has been added to the packet.")
         elif 'pack_settings' in answer.keys():
@@ -213,7 +215,7 @@ def facilityForm(request, packet):
             else:
                 settingsEntry.settings["packets"] = {str(packetQuery.id): label}
             A = settingsEntry
-            A.save()
+            A.save(changed_by=request.user, reason='packet_update')
                 
         packetQuery.formList["formsList"] = selectedList
         packetQuery.save()
@@ -272,7 +274,9 @@ def facility_form_settings(request, fsID, packetID, formLabel):
         formWData = form_settings_form(copyPOST, instance=selectedSettings)
         if formWData.is_valid():
             print('it fucking saved')
-            A = formWData.save()
+            A = formWData.save(commit=False)
+            A.save(changed_by=request.user, reason='update')
+            formWData.save_m2m()
             if packetSettings:
                 print('check 7')
                 packetInstance = packetSettings
@@ -341,8 +345,8 @@ def Add_Forms(request):
         for formID in selected_form_ids:
             formID = int(formID)
             sameForm = False
-            formSettingsQuery = formSettingsQuery.filter(formChoice__form=formID)
-            settingsDict = defaultGlobalFormSettingsDict
+            form_qs = formSettingsQuery.filter(formChoice__form=formID)
+            settingsDict = deepcopy(defaultGlobalFormSettingsDict)
             for x in settingsDictData[str(formID)].keys():
                 print("--------")
                 print(x)
@@ -354,7 +358,7 @@ def Add_Forms(request):
                 #     if requestFormID == str(formID):
                 settingsDict["settings"][x] = settingsDictData[str(formID)][x] if settingsDictData[str(formID)][x] else False
 
-            keysList = []
+            keysList = list
             for setts in answer.keys():
                 if len(setts.split("-")) > 1:
                     requestFormID = setts.split("-")[0]
@@ -367,7 +371,7 @@ def Add_Forms(request):
             settingsDict = json.loads(json.dumps(settingsDict))
 
             likeFormsList = []
-            for likeForms in formSettingsQuery:
+            for likeForms in form_qs:
                 oldSettings = likeForms.settings['settings']
                 if oldSettings == settingsDict["settings"]:
                     likeFormsList.append(f"fsID: {likeForms.id}")
@@ -385,7 +389,7 @@ def Add_Forms(request):
                 )
                 newSub.save()
                 newSettings.subChoice = newSub
-                newSettings.save()
+                newSettings.save(changed_by=request.user, reason='create')
 
                 messages.success(request,f"Form {formID} was added to {facilitySelect.facility_name}.")
                 print('Create new form setting')

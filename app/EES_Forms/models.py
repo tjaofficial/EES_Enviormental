@@ -7,6 +7,9 @@ import datetime
 import uuid
 import os
 from django.utils.text import slugify # type: ignore
+from django.utils import timezone # type: ignore
+from django.forms.models import model_to_dict # type: ignore
+from django.db import transaction # type: ignore
 
 quarter_choices = (
     ('1', '1st'),
@@ -439,8 +442,14 @@ class the_packets_model(models.Model):
         return str(self.id) + ' - ' + str(self.name) + ' - ' + str(self.facilityChoice)
     
 class form_settings_model(models.Model):
-    facilityChoice = models.ForeignKey(facility_model, on_delete=models.CASCADE)
-    formChoice = models.ForeignKey(Forms, on_delete=models.CASCADE)
+    facilityChoice = models.ForeignKey(
+        facility_model, 
+        on_delete=models.CASCADE
+    )
+    formChoice = models.ForeignKey(
+        Forms, 
+        on_delete=models.CASCADE
+    )
     subChoice = models.OneToOneField(
         'formSubmissionRecords_model', 
         on_delete=models.CASCADE,
@@ -455,6 +464,56 @@ class form_settings_model(models.Model):
     )
     def __str__(self):
         return str(self.id) + ' - ' + str(self.formChoice) + ' - ' + str(self.facilityChoice)
+    
+    def save(self, *args, changed_by=None, reason="", **kwargs):
+        is_update = self.pk is not None
+        type_change = reason
+        if type_change == "update":
+            reason_sentence = 'The settings for this form were updated.'
+        elif type_change == "archive":
+            reason_sentence = 'This form was archived and removed from facility forms.'
+        elif type_change == "create":
+            reason_sentence = 'Form settings created for new form.'
+        elif type_change == "packet_update":
+            reason_sentence = 'Packet Labels were updated.'
+        old_snapshot = None
+        if is_update:
+            old = type(self).objects.get(pk=self.pk)
+            old_snapshot = old.settings
+            if self.settings.get('version', False):
+                self.settings['version'] = self.settings['version'] + 1 
+            else:
+                self.settings['version'] = 1
+        else:
+            self.settings['version'] = 1
+
+        super().save(*args, **kwargs)
+
+        # after save, create revision if changed
+        if is_update:
+            new_snapshot = self.settings
+            def create_rev():
+                FormSettingsRevision.objects.create(
+                    form_settings=self,
+                    changed_by=changed_by,
+                    change_type=type_change,
+                    before=old_snapshot,
+                    after=new_snapshot,
+                    reason=reason_sentence,
+                    version=self.settings['version'],
+                )
+            transaction.on_commit(create_rev)
+        else:
+            # initial creation revision (optional)
+            FormSettingsRevision.objects.create(
+                form_settings=self,
+                changed_by=changed_by,
+                change_type=type_change,
+                before=None,
+                after=self.settings,
+                reason=reason_sentence,
+                version=self.settings['version'],
+            )
     
 class form7_model(models.Model):
     formSettings = models.ForeignKey(
@@ -4877,6 +4936,32 @@ class ArticleFeedback(models.Model):
 
     def __str__(self):
         return f"{'Helpful' if self.was_helpful else 'Not helpful'} for {self.article.title}"
+
+class FormSettingsRevision(models.Model):
+    form_settings = models.ForeignKey(
+        'form_settings_model', 
+        on_delete=models.CASCADE, 
+        related_name="revisions"
+    )
+    revision_date = models.DateTimeField(default=timezone.now, db_index=True)
+    changed_by = models.ForeignKey(
+        User, 
+        null=True, 
+        blank=True, 
+        on_delete=models.SET_NULL
+    )
+    change_type = models.CharField(
+        max_length=20, 
+        default="update"
+    )  # e.g., create/update/deactivate/reactivate
+    before = models.JSONField(null=True, blank=True)
+    after = models.JSONField(null=True, blank=True)
+    reason = models.CharField(max_length=512, blank=True)  # optional note typed by supervisor
+    request_id = models.CharField(max_length=64, blank=True)  # optional for tracing (middleware)
+    version = models.PositiveIntegerField()  # mirror FormSettings.version for easy browsing
+
+    class Meta:
+        ordering = ["-revision_date", "-id"]
 
 
 # class tank_library(models.Model):

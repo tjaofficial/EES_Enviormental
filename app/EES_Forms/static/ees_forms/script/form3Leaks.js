@@ -167,4 +167,18 @@ document.addEventListener('DOMContentLoaded', () => {
     check_dampered_inoperable('l');
     initial_leak_add_rows_exisiting('om');
     initial_leak_add_rows_exisiting('l');
+    
+    document.querySelector("form").addEventListener("submit", function(e) {
+        const selectElem = document.getElementById("{{sideLetter}}_zoneSelect_0");
+
+        // No options selected?
+        if ([...selectElem.selectedOptions].length === 0) {
+            selectElem.setCustomValidity("Please select at least one location.");
+            selectElem.reportValidity(); // show the browser's message
+            e.preventDefault(); // stop form submit
+        } else {
+            selectElem.setCustomValidity(""); // clear message if valid
+        }
+    });
+
 });

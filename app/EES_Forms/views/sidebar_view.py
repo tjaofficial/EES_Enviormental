@@ -311,10 +311,9 @@ def shared_contacts_view(request):
     options = facility_model.objects.all()
     companyOfUser = user_profile_model.objects.get(user=request.user).company
     sortedFacilityData = getCompanyFacilities(request.user.user_profile.company.company_name)
-    
     companyProfiles = user_profile_model.objects.filter(company=companyOfUser).order_by('user')
     userProfile = companyProfiles.get(user__id=request.user.id)
-    
+    print(companyProfiles)
     organized_list = []
     for index, user in enumerate(companyProfiles):
         if user.certs:

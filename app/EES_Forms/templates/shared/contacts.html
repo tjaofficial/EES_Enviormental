@@ -22,7 +22,7 @@
                             <th class="certColumn center">Certification Date</th>
                         </tr>
                         {% for person in organized_list %}
-                            {% if person.1.position == "observer" or person.1.position == "supervisor" %}
+                            {% if person.1.settings.profile.position == "observer-co" or person.1.settings.profile.position == "supervisor-co" or person.1.settings.profile.position == "supervisor-com" %}
                                 <tr class="contact_singles" id="{{ person.0 }}" onclick="getid(this);">
                                     <p id="name{{ person.0 }}" hidden=true>{{ person.1.user.first_name }} {{ person.1.user.last_name }}</p>
                                     <p id="email{{ person.0 }}" hidden=true>{{ person.1.user.email }}</p>
@@ -58,7 +58,7 @@
                     </table>
                     
                     {% for facil in sortedFacilityData %}
-                        {% if facility == "supervisor" %}
+                        {% if not facility %}
                             <div class="contact_group_header" onclick="">
                                 {{facil.facility_name}}
                             </div>
@@ -103,8 +103,8 @@
                                     {% endif %}
                                 {% endfor %}
                             </table>
-                        {% elif facility != "supervisor" %}
-                            {% if facil.facility_name == facility %}
+                        {% elif facility %}
+                            {% if facil.facility_name|lower == facility|lower %}
                                 <div class="contact_group_header" onclick="">
                                     {{facil.facility_name}}
                                 </div>

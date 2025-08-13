@@ -261,9 +261,8 @@ def landingRegister(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.is_active = False
-            profile.settings = setDefaultSettings(profile)
+            profile.settings = setDefaultSettings(profile, 'main')
             profile.settings['profile']['first_login'] = True
-            profile.settings['profile']['position'] = SUPER_VAR + "-m"
             
             profile.save()
             
