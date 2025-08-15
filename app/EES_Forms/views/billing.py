@@ -14,7 +14,7 @@ from django.core.mail import send_mail # type: ignore
 from django.conf import settings # type: ignore
 from ..decor import group_required
 from ..models import User
-from datetime import datetime
+from datetime import datetime, timezone
 from django.urls import reverse # type: ignore
 
 lock = login_required(login_url='Login')
@@ -70,178 +70,143 @@ def stripe_subscription_view(request):
         'jsPlansQuery': list(plansQuery.values('name', 'price', 'description'))
     })
 
+
+def _ts_to_dt(ts):
+    return datetime.fromtimestamp(ts, tz=timezone.utc) if ts else None
+
+def _extra_users_from_subscription(sub):
+    EXTRA_USERS_PRICE_IDS = {"price_1RDfPF4SO9L4wW3Id0wHM37O"}  # <-- your "extra users" Price ID(s)
+    """Prefer counting the 'extra users' subscription item quantity; fallback to metadata."""
+    try:
+        items = (sub.get("items") or {}).get("data", []) or []
+        for item in items:
+            price_id = (item.get("price") or {}).get("id")
+            if price_id in EXTRA_USERS_PRICE_IDS:
+                return int(item.get("quantity") or 0)
+    except Exception:
+        pass
+    # fallback to subscription metadata, if you ever mirror it there
+    return int((sub.get("metadata") or {}).get("extra_users_count", 0))
+
+
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
-    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
 
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError as e:
-        return HttpResponse(status=400)  # invalid payload
-    except stripe.error.SignatureVerificationError as e:
-        return HttpResponse(status=400)  # invalid signature
+        event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+    except ValueError:
+        return HttpResponseBadRequest("Invalid payload")
+    except stripe.error.SignatureVerificationError:
+        return HttpResponseBadRequest("Invalid signature")
 
-    # 🔥 Handle subscription
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
+    etype = event["type"]
+    obj = event["data"]["object"]
 
-        print("✅ Stripe Checkout completed:")
-        print("Session ID:", session.get("id"))
-        print("Subscription ID:", session.get("subscription"))
-        print("Customer ID:", session.get("customer"))
-    elif event["type"] == "customer.subscription.deleted":
-        subID = event["data"]["object"]["id"]
-        subscription_obj = subscription.objects.get(subscriptionID=subID)
-        subscription_obj.status = "canceled"
-        subscription_obj.save()
-    elif event["type"] == "customer.subscription.updated":
-        subscription_data = event["data"]["object"]
-        subscription_id = subscription_data["id"]
-        status = subscription_data["status"]
-        cancel_at_period_end = subscription_data.get("cancel_at_period_end", False)
-        current_period_end = subscription_data.get("current_period_end")
+    try:
+        if etype == "checkout.session.completed":
+            # Only logging here; DB work happens on subscription.created/updated
+            session = obj
+            print("✅ Stripe Checkout completed:",
+                  "Session:", session.get("id"),
+                  "Subscription:", session.get("subscription"),
+                  "Customer:", session.get("customer"))
 
-        #metadata = subscription_data.get("metadata", {})
-        extra_users = session["metadata"].get("extra_users_count", "0")
-        subscription.objects.filter(subscriptionID=subscription_id).update(
-            status=status,
-            settings__extra_user=extra_users,
-            next_billing_date=datetime.fromtimestamp(current_period_end),
-            settings__cancel_at_period_end=cancel_at_period_end
-        )
-    elif event["type"] == "customer.subscription.created":
-        subscription_data = event["data"]["object"]
+        elif etype == "customer.subscription.created":
+            sub = obj
+            subscription_id = sub["id"]
+            customer_id = sub.get("customer")
+            status = sub.get("status")
+            cancel_at_period_end = bool(sub.get("cancel_at_period_end", False))
+            next_billing_date = _ts_to_dt(sub.get("current_period_end"))
 
-        subscription_id = subscription_data["id"]
-        customer_id = subscription_data["customer"]
-        status = subscription_data["status"]
-        cancel_at_period_end = subscription_data.get("cancel_at_period_end", False)
-        current_period_end = subscription_data.get("current_period_end")
+            # You were expecting these in metadata (only reliable if you add them when creating the sub)
+            metadata = sub.get("metadata") or {}
+            plan_name = metadata.get("plan", "unknown")
+            extra_users = _extra_users_from_subscription(sub)
+            user_id = metadata.get("userID")
 
-        metadata = subscription_data.get("metadata", {})
-        plan = metadata.get("plan", "unknown")
-        extra_users = metadata.get("extra_users_count", "0")
-        user_id = metadata.get("userID")
+            if not user_id:
+                print("⚠️ No userID in subscription metadata; skipping welcome flow.")
+                # Still create/update the subscription record
+            user = User.objects.filter(id=user_id).first() if user_id else None
+            company = getattr(getattr(user, "user_profile", None), "company", None) if user else None
 
-        # Safety checks
-        if not user_id:
-            print("⚠️ No userID found in metadata!")
-            return HttpResponse(status=200)
+            # Plan lookup (your model is named braintreePlans)
+            plan_obj = None
+            try:
+                plan_obj = braintreePlans.objects.get(name=plan_name)
+            except braintreePlans.DoesNotExist:
+                print(f"⚠️ Plan '{plan_name}' not found in braintreePlans.")
 
-        user = User.objects.filter(id=user_id).first()
-        if not user:
-            print(f"⚠️ User with ID {user_id} not found!")
-            return HttpResponse(status=200)
-
-        company = user.user_profile.company
-
-        try:
-            planSelection = braintreePlans.objects.get(name=plan)
-        except braintreePlans.DoesNotExist:
-            print(f"⚠️ Plan {plan} not found in braintreePlans!")
-            return HttpResponse(status=200)
-
-        # Create subscription in your DB
-        subscription.objects.create(
-            companyChoice=company,
-            subscriptionID=subscription_id,
-            plan=planSelection,
-            status=status,
-            customerID=customer_id,
-            settings={
-                "extra_users": extra_users,
-                "next_billing_date": str(datetime.fromtimestamp(current_period_end)),
-                "cancel_at_period_end": cancel_at_period_end
+            # Create or update local subscription
+            sub_defaults = {
+                "companyChoice": company,
+                "plan": plan_obj,
+                "status": status,
+                "customerID": customer_id,
+                "next_billing_date": next_billing_date,
+                "settings": {
+                    "extra_users": extra_users,
+                    "cancel_at_period_end": cancel_at_period_end,
+                },
             }
-        )
+            sub_obj, created = subscription.objects.update_or_create(
+                subscriptionID=subscription_id,
+                defaults=sub_defaults,
+            )
 
-        # Send Welcome Email
-        mail_subject = 'MethodPlus: Welcome to MethodPlus+. Your account has been activated.'   
-        current_site = get_current_site(request)
-        html_message = render_to_string('email/acc_welcome_email.html', {  
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        })
-        plain_message = strip_tags(html_message)
-        to_email = user.email 
-        send_mail(
-            mail_subject,
-            plain_message,
-            settings.EMAIL_HOST_USER,
-            [to_email],
-            html_message=html_message,
-            fail_silently=False
-        )
+            # Welcome email only on first create and if we have a user
+            if created and user:
+                mail_subject = 'MethodPlus: Welcome to MethodPlus+. Your account has been activated.'
+                current_site = get_current_site(request)
+                html_message = render_to_string('email/acc_welcome_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                })
+                plain_message = strip_tags(html_message)
+                send_mail(
+                    mail_subject,
+                    plain_message,
+                    settings.EMAIL_HOST_USER,
+                    [user.email],
+                    html_message=html_message,
+                    fail_silently=False
+                )
+                print(f"✅ Subscription {subscription_id} created and welcome email sent.")
 
-        print(f"✅ Subscription {subscription_id} created and welcome email sent.")
-            
-    # elif event["type"] == "invoice.payment_succeeded":
-    #     invoice = event["data"]["object"]
-    #     subscription_id = invoice.get("subscription")
+        elif etype == "customer.subscription.updated":
+            sub = obj
+            subscription_id = sub["id"]
+            status = sub.get("status")
+            cancel_at_period_end = bool(sub.get("cancel_at_period_end", False))
+            next_billing_date = _ts_to_dt(sub.get("current_period_end"))
+            extra_users = _extra_users_from_subscription(sub)
 
-    #     print("🔥 invoice.payment_succeeded")
-    #     print("  invoice ID:", invoice.get("id"))
-    #     print("  subscription ID:", subscription_id)
+            # Keep schema consistent with 'created' block (plural 'extra_users')
+            subscription.objects.filter(subscriptionID=subscription_id).update(
+                status=status,
+                next_billing_date=next_billing_date,
+                settings__extra_users=extra_users,
+                settings__cancel_at_period_end=cancel_at_period_end,
+            )
 
-    #     if not subscription_id:
-    #         print("⚠️ Skipping invoice without subscription ID.")
-    #         return HttpResponse(status=200)
+        elif etype == "customer.subscription.deleted":
+            subID = obj["id"]
+            # Also set cancel flag in settings for consistency
+            subscription.objects.filter(subscriptionID=subID).update(
+                status="canceled",
+                settings__cancel_at_period_end=True,
+            )
 
-    #     stripe_subscription = stripe.Subscription.retrieve(subscription_id)
-    #     current_period_end = stripe_subscription.get("current_period_end")
-    #     print("  Stripe status:", stripe_subscription.get("status"))
-    #     print("  current_period_end:", current_period_end)
+        # (Optional) handle invoice.paid / invoice.payment_failed, etc.
 
-    #     if current_period_end:
-    #         billing_date = datetime.fromtimestamp(current_period_end)
-    #         subscription.objects.filter(subscriptionID=subscription_id).update(
-    #             settings__next_billing_date=str(billing_date)
-    #         )
-    #         print("✅ Updated next_billing_date to:", billing_date)
-    #     else:
-    #         print("⚠️ Stripe subscription has no current_period_end yet.")
-    # elif event["type"] == "customer.subscription.created":
-    #     subscription_obj = event["data"]["object"]
-    #     subscription_id = subscription_obj.get("id")
-    #     current_period_end = subscription_obj.get("current_period_end")
-
-    #     print("🔥 customer.subscription.created")
-    #     print("  Subscription ID:", subscription_id)
-    #     print("  current_period_end:", current_period_end)
-
-    #     if current_period_end:
-    #         billing_date = datetime.fromtimestamp(current_period_end)
-    #         subscription.objects.filter(subscriptionID=subscription_id).update(
-    #             settings__next_billing_date=str(billing_date)
-    #         )
-    #         print("✅ Updated next_billing_date from subscription.created:", billing_date)
-    #     else:
-    #         print("⚠️ Subscription still has no billing date in subscription.created.")
-    # elif event["type"] == "invoice.finalized":
-    #     invoice = event["data"]["object"]
-    #     subscription_id = invoice.get("subscription")
-
-    #     print("🔥 invoice.finalized")
-    #     print("  invoice ID:", invoice.get("id"))
-    #     print("  subscription ID:", subscription_id)
-
-    #     if subscription_id:
-    #         stripe_subscription = stripe.Subscription.retrieve(subscription_id)
-    #         current_period_end = stripe_subscription.get("current_period_end")
-
-    #         if current_period_end:
-    #             billing_date = datetime.fromtimestamp(current_period_end)
-    #             subscription.objects.filter(subscriptionID=subscription_id).update(
-    #                 settings__next_billing_date=str(billing_date)
-    #             )
-    #             print("✅ Updated next_billing_date from invoice.finalized:", billing_date)
-    #         else:
-    #             print("⚠️ Still no current_period_end in finalized invoice.")
-
+    except Exception as e:
+        # Log and return 500 so Stripe retries
+        print(f"❌ Webhook error on {etype}: {e}")
+        return HttpResponse(status=500)
 
     return HttpResponse(status=200)
 
